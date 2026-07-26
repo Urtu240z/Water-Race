@@ -23,7 +23,10 @@
 [ext_resource type="Texture2D" uid="uid://cexe4l4551x8v" path="res://assets/materials/terrain_master_textures/wet_sand_orm.png" id="22_cfiqe"]
 [ext_resource type="Texture2D" uid="uid://co0du6jbk56x6" path="res://assets/3D/Terrain/test_island_palm_billboard_continuous_atlas.png" id="24_wath7"]
 [ext_resource type="Material" uid="uid://dmj6dyip8ab0w" path="res://assets/materials/sand_02.res" id="34_h01lt"]
-[ext_resource type="Texture2D" uid="uid://cmg3mg3yih3d1" path="res://assets/environment/sky/polyhaven/kloofendal_43d_clear_puresky_4k.hdr" id="44_7fon7"]
+[ext_resource type="Texture2D" uid="uid://cq8kw5o6ssrwc" path="res://assets/environment/sky/aristea_wreck_puresky_4k.hdr" id="39_1y1wo"]
+[ext_resource type="Texture2D" uid="uid://dh4ygdetfbe7t" path="res://assets/environment/sky/kloofendal_48d_partly_cloudy_puresky_4k.hdr" id="40_armhu"]
+[ext_resource type="Texture2D" uid="uid://b7kfjl0vvcloa" path="res://assets/environment/sky/qwantani_dusk_1_puresky_4k.hdr" id="41_7fon7"]
+[ext_resource type="Texture2D" uid="uid://cmg3mg3yih3d1" path="res://assets/environment/sky/kloofendal_43d_clear_puresky_4k.hdr" id="42_1y1wo"]
 [ext_resource type="PackedScene" uid="uid://cfw7pu0e3ws7n" path="res://assets/3D/Rock2.glb" id="195_ox2y0"]
 [ext_resource type="PackedScene" uid="uid://bgpsiyc4tr47u" path="res://assets/3D/Rock1.glb" id="196_t7md2"]
 [ext_resource type="PackedScene" uid="uid://vls5xu5jnvyf" path="res://assets/3D/Rock3.glb" id="197_3j4p0"]
@@ -423,8 +426,26 @@ shader_parameter/breakup = 0.0
 material = ExtResource("34_h01lt")
 size = Vector2(10000, 10000)
 
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_f0815"]
+panorama = ExtResource("39_1y1wo")
+
+[sub_resource type="Sky" id="Sky_k0dft"]
+sky_material = SubResource("PanoramaSkyMaterial_f0815")
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_qid03"]
+panorama = ExtResource("40_armhu")
+
+[sub_resource type="Sky" id="Sky_s3uqp"]
+sky_material = SubResource("PanoramaSkyMaterial_qid03")
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_r1j62"]
+panorama = ExtResource("41_7fon7")
+
+[sub_resource type="Sky" id="Sky_e7rpt"]
+sky_material = SubResource("PanoramaSkyMaterial_r1j62")
+
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_kroct"]
-panorama = ExtResource("44_7fon7")
+panorama = ExtResource("42_1y1wo")
 
 [sub_resource type="Sky" id="Sky_lusr1"]
 sky_material = SubResource("PanoramaSkyMaterial_kroct")
@@ -465,7 +486,7 @@ transform = Transform3D(-0.9700894, 3.5165074, -7.616502, 0.44429702, 7.678032, 
 [node name="Rock1" parent="TerrainRoot" unique_id=682930074 instance=ExtResource("196_t7md2")]
 transform = Transform3D(2.5107322, 0, -1.5284142, 0, 2.3749998, 0, 1.3486009, 0, 2.8454967, 298.25534, -21.299038, 36.365036)
 
-[node name="Rock1_VIS" parent="TerrainRoot/Rock1" index="0" unique_id=1888137047]
+[node name="Rock1_VIS" parent="TerrainRoot/Rock1" index="0" unique_id=1504847107]
 mesh = SubResource("ArrayMesh_gdjv7")
 
 [node name="Rock6" parent="TerrainRoot" unique_id=712207501 instance=ExtResource("197_3j4p0")]
@@ -480,66 +501,66 @@ transform = Transform3D(-3.09367, 0, -10.243008, 2.198888, 10.4505415, -0.664124
 [node name="test_island" parent="TerrainRoot" unique_id=1352578102 instance=ExtResource("8_3whiu")]
 transform = Transform3D(0.86, 0, 0, 0, 0.86, 0, 0, 0, 0.86, 149, 1.8, 120.1001)
 
-[node name="Terrain_Master_VIS" parent="TerrainRoot/test_island" index="0" unique_id=568970336]
+[node name="Terrain_Master_VIS" parent="TerrainRoot/test_island" index="0" unique_id=54644689]
 material_override = SubResource("ShaderMaterial_tpwhi")
 
-[node name="Cave_01_VIS" parent="TerrainRoot/test_island" index="1" unique_id=933182352]
+[node name="Cave_01_VIS" parent="TerrainRoot/test_island" index="1" unique_id=533930559]
 mesh = SubResource("ArrayMesh_kmjc7")
 
-[node name="Cave_Entrance_Rock_A_VIS" parent="TerrainRoot/test_island" index="2" unique_id=2079646537]
+[node name="Cave_Entrance_Rock_A_VIS" parent="TerrainRoot/test_island" index="2" unique_id=577391258]
 mesh = SubResource("ArrayMesh_aegqm")
 
-[node name="Rock2_VIS" parent="TerrainRoot/test_island" index="3" unique_id=1171500862]
+[node name="Rock2_VIS" parent="TerrainRoot/test_island" index="3" unique_id=1772807064]
 mesh = SubResource("ArrayMesh_wath7")
 
-[node name="Rock3_VIS" parent="TerrainRoot/test_island" index="4" unique_id=187664380]
+[node name="Rock3_VIS" parent="TerrainRoot/test_island" index="4" unique_id=1832940039]
 mesh = SubResource("ArrayMesh_qfmt6")
 
-[node name="Cave_Entrance_Rock_B_VIS" parent="TerrainRoot/test_island" index="5" unique_id=514395781]
+[node name="Cave_Entrance_Rock_B_VIS" parent="TerrainRoot/test_island" index="5" unique_id=1920745572]
 mesh = SubResource("ArrayMesh_32dye")
 
-[node name="Cabana_4_VIS" parent="TerrainRoot/test_island" index="9" unique_id=1276982297]
+[node name="Cabana_4_VIS" parent="TerrainRoot/test_island" index="9" unique_id=1897932072]
 transform = Transform3D(1.3555894, 0, 0.07078268, 0, 1.3574358, 0, -0.07078268, 0, 1.3555894, 208.27293, -8.906912, 331.88815)
 
-[node name="Rock4_VIS" parent="TerrainRoot/test_island" index="14" unique_id=531395513]
+[node name="Rock4_VIS" parent="TerrainRoot/test_island" index="14" unique_id=20307674]
 mesh = SubResource("ArrayMesh_armhu")
 
-[node name="SM_Palm_Impostor_Zone_001_VIS" parent="TerrainRoot/test_island" index="15" unique_id=1013890436]
+[node name="SM_Palm_Impostor_Zone_001_VIS" parent="TerrainRoot/test_island" index="15" unique_id=624828935]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.3975904, 0)
 material_override = SubResource("StandardMaterial3D_7fon7")
 cast_shadow = 0
 
-[node name="SM_Palm_Impostor_Zone_002_VIS" parent="TerrainRoot/test_island" index="16" unique_id=1075789801]
+[node name="SM_Palm_Impostor_Zone_002_VIS" parent="TerrainRoot/test_island" index="16" unique_id=1204480568]
 material_override = SubResource("StandardMaterial3D_7fon7")
 cast_shadow = 0
 
-[node name="Rock2_COL" parent="TerrainRoot/test_island" index="18" unique_id=1881986823]
+[node name="Rock2_COL" parent="TerrainRoot/test_island" index="18" unique_id=217462672]
 visible = false
 
-[node name="Cabana_4_COL" parent="TerrainRoot/test_island" index="19" unique_id=763734569]
+[node name="Cabana_4_COL" parent="TerrainRoot/test_island" index="19" unique_id=431608127]
 visible = false
 
-[node name="Cave_Entrance_Rock_A_COL" parent="TerrainRoot/test_island" index="20" unique_id=525124767]
+[node name="Cave_Entrance_Rock_A_COL" parent="TerrainRoot/test_island" index="20" unique_id=2042247678]
 visible = false
 
-[node name="Cave_Entrance_Rock_B_COL" parent="TerrainRoot/test_island" index="21" unique_id=411660630]
+[node name="Cave_Entrance_Rock_B_COL" parent="TerrainRoot/test_island" index="21" unique_id=1813980395]
 visible = false
 
-[node name="Rock3_COL" parent="TerrainRoot/test_island" index="22" unique_id=1101841506]
+[node name="Rock3_COL" parent="TerrainRoot/test_island" index="22" unique_id=742967267]
 visible = false
 
-[node name="Terrain_Master_COL" parent="TerrainRoot/test_island" index="23" unique_id=57804134]
+[node name="Terrain_Master_COL" parent="TerrainRoot/test_island" index="23" unique_id=178894817]
 visible = false
 physics_material_override = SubResource("PhysicsMaterial_cfiqe")
 
 [node name="PalmImpostorGroundShadows" parent="TerrainRoot/test_island" unique_id=671848398 instance=ExtResource("222_palm_shadow")]
 
-[node name="SM_Palm_Impostor_Zone_001_SHADOW" parent="TerrainRoot/test_island/PalmImpostorGroundShadows" index="0" unique_id=714738133]
+[node name="SM_Palm_Impostor_Zone_001_SHADOW" parent="TerrainRoot/test_island/PalmImpostorGroundShadows" index="0" unique_id=237789087]
 material_override = SubResource("ShaderMaterial_palm_ground_shadow")
 cast_shadow = 0
 visibility_range_end = 4000.0
 
-[node name="SM_Palm_Impostor_Zone_002_SHADOW" parent="TerrainRoot/test_island/PalmImpostorGroundShadows" index="1" unique_id=2030249384]
+[node name="SM_Palm_Impostor_Zone_002_SHADOW" parent="TerrainRoot/test_island/PalmImpostorGroundShadows" index="1" unique_id=1554106140]
 material_override = SubResource("ShaderMaterial_palm_ground_shadow")
 cast_shadow = 0
 visibility_range_end = 4000.0
@@ -578,6 +599,15 @@ forward_engine_force = 16000.0
 forward_thrust_falloff_start_speed = 19.3
 forward_thrust_falloff_end_speed = 200.0
 
+[node name="LeftFootTarget" parent="Gameplay/JetSki/VisualRoot/RiderTargets" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.085, -0.022, 0.78)
+
+[node name="RightFootTarget" parent="Gameplay/JetSki/VisualRoot/RiderTargets" index="1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.085, -0.022, 0.94)
+
+[node name="RiderMount" parent="Gameplay/JetSki/VisualRoot" parent_id_path=PackedInt32Array(328650943, 1832404346) index="2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2428, 0.679)
+
 [node name="VehicleWaterEffects3D" parent="Gameplay/JetSki/Effects" parent_id_path=PackedInt32Array(328650943, 1733691099) index="0"]
 impact_particle_amount_multiplier = 5.8
 impact_maximum_velocity = 13.1
@@ -610,7 +640,10 @@ base_look_ahead = 7.0
 script = ExtResource("209_hytvj")
 world_environment_path = NodePath("../Environment/WorldEnvironment")
 original_sky = ExtResource("2_tfoy1")
-sky_preset = 4
+aristea_wreck_sky = SubResource("Sky_k0dft")
+kloofendal_48d_sky = SubResource("Sky_s3uqp")
+overcast_soil_sky = SubResource("Sky_e7rpt")
+sky_preset = 3
 custom_sky = SubResource("Sky_lusr1")
 sky_rotation_degrees = -37.0
 sky_energy_multiplier = 4.0
@@ -655,3 +688,4 @@ transform = Transform3D(0.42653722, 0, 0.90447, 0, 1, 0, -0.90447, 0, 0.42653722
 [editable path="TerrainRoot/test_island"]
 [editable path="TerrainRoot/test_island/PalmImpostorGroundShadows"]
 [editable path="Gameplay/JetSki"]
+[editable path="Gameplay/JetSki/VisualRoot/JetSkiVisual"]

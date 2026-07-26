@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://dpbrf2uq6o5xp"
-path="res://.godot/imported/Dolphin.glb-5db396196ffd2605a25bea96350830c7.scn"
+uid="uid://ckj1bk8y1ju46"
+path="res://.godot/imported/Seagull.glb-cb400aff7199e95d7d84c488f566f256.scn"
 
 [deps]
 
-source_file="res://Dolphin.glb"
-dest_files=["res://.godot/imported/Dolphin.glb-5db396196ffd2605a25bea96350830c7.scn"]
+source_file="res://assets/3D/wildlife/seagull/Seagull.glb"
+dest_files=["res://.godot/imported/Seagull.glb-cb400aff7199e95d7d84c488f566f256.scn"]
 
 [params]
 

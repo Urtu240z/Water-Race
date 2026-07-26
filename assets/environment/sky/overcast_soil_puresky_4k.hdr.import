@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cmg3mg3yih3d1"
-path="res://.godot/imported/kloofendal_43d_clear_puresky_4k.hdr-ed4a15500589ad427886c5c1a597a15f.ctex"
+uid="uid://fcr56s3xxdtg"
+path="res://.godot/imported/overcast_soil_puresky_4k.hdr-9538956108bea8bed5b9363ccdb4bc43.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/environment/sky/polyhaven/kloofendal_43d_clear_puresky_4k.hdr"
-dest_files=["res://.godot/imported/kloofendal_43d_clear_puresky_4k.hdr-ed4a15500589ad427886c5c1a597a15f.ctex"]
+source_file="res://assets/environment/sky/overcast_soil_puresky_4k.hdr"
+dest_files=["res://.godot/imported/overcast_soil_puresky_4k.hdr-9538956108bea8bed5b9363ccdb4bc43.ctex"]
 
 [params]
 

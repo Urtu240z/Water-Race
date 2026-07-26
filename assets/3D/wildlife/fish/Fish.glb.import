@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://ckj1bk8y1ju46"
-path="res://.godot/imported/Seagull.glb-001cfff4907dedec51ea74c3c65b8150.scn"
+uid="uid://brkqkf2ncrv33"
+path="res://.godot/imported/Fish.glb-152cf0b4c11a1a455ba1b24cc6ebff2d.scn"
 
 [deps]
 
-source_file="res://Seagull.glb"
-dest_files=["res://.godot/imported/Seagull.glb-001cfff4907dedec51ea74c3c65b8150.scn"]
+source_file="res://assets/3D/wildlife/fish/Fish.glb"
+dest_files=["res://.godot/imported/Fish.glb-152cf0b4c11a1a455ba1b24cc6ebff2d.scn"]
 
 [params]
 

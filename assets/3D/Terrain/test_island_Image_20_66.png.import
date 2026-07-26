@@ -3,9 +3,10 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://cjcfx4kjlh5nr"
-path="res://.godot/imported/test_island_Image_20_66.png-fbd604dac80013b8871d9ece1052acdf.ctex"
+path.s3tc="res://.godot/imported/test_island_Image_20_66.png-fbd604dac80013b8871d9ece1052acdf.s3tc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc"],
+"vram_texture": true
 }
 generator_parameters={
 "md5": "a3d4e6f1999037623eb543287ab791aa"
@@ -14,11 +15,11 @@ generator_parameters={
 [deps]
 
 source_file="res://assets/3D/Terrain/test_island_Image_20_66.png"
-dest_files=["res://.godot/imported/test_island_Image_20_66.png-fbd604dac80013b8871d9ece1052acdf.ctex"]
+dest_files=["res://.godot/imported/test_island_Image_20_66.png-fbd604dac80013b8871d9ece1052acdf.s3tc.ctex"]
 
 [params]
 
-compress/mode=0
+compress/mode=2
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0
@@ -40,4 +41,4 @@ process/normal_map_invert_y=false
 process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
-detect_3d/compress_to=1
+detect_3d/compress_to=0
