@@ -19,7 +19,7 @@ config/icon="res://icon.svg"
 
 [display]
 
-window/size/mode=3
+window/size/mode=4
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
 
@@ -105,6 +105,9 @@ common/physics_interpolation=true
 [rendering]
 
 rendering_device/driver.windows="d3d12"
+scaling_3d/mode=2
+scaling_3d/scale=0.5
+scaling_3d/fsr_sharpness=1.0
 
 [threading]
 
