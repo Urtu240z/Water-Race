@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://cisubjold2oac"]
+
+[ext_resource type="Script" uid="uid://cn5tfwpu4tojc" path="res://scripts/wildlife/ambient_wildlife_controller.gd" id="1_wildlife"]
+
+[node name="AmbientWildlife" type="Node3D" unique_id=2132751686]
+script = ExtResource("1_wildlife")
+water_body_path = NodePath("../WaterIntegration/PixelOceanSystem/Physics")
+player_path = NodePath("../Gameplay/JetSki")
+bird_visibility_distance = 1500.0
+fish_visibility_distance = 360.0
+dolphin_visibility_distance = 1080.0
+
+[node name="BirdFlocks" type="Node3D" parent="." unique_id=2059416249]
+
+[node name="FishSchools" type="Node3D" parent="." unique_id=2114138986]
+
+[node name="DolphinPods" type="Node3D" parent="." unique_id=1714666334]

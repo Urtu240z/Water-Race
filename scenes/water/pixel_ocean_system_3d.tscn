@@ -1,0 +1,143 @@
+[gd_scene load_steps=12 format=3]
+
+[ext_resource type="Script" path="res://scripts/water/pixel_ocean_system_3d.gd" id="1_system"]
+[ext_resource type="Script" path="res://scripts/water/pixel_ocean_water_3d.gd" id="2_physics"]
+[ext_resource type="PackedScene" path="res://scenes/water/ocean_clipmap_3d.tscn" id="3_clipmap"]
+[ext_resource type="Shader" path="res://shaders/pixel_ocean_water.gdshader" id="4_shader"]
+[ext_resource type="Texture2D" path="res://resources/water/pixel_ocean/macro_wave_a.png" id="5_wave_a"]
+[ext_resource type="Texture2D" path="res://resources/water/pixel_ocean/macro_wave_b.png" id="6_wave_b"]
+[ext_resource type="Texture2D" path="res://resources/water/organic_surface/surface_normal_a.tres" id="7_normal_a"]
+[ext_resource type="Texture2D" path="res://resources/water/organic_surface/surface_normal_b.tres" id="8_normal_b"]
+[ext_resource type="Texture2D" path="res://resources/water/organic_surface/surface_warp_noise.tres" id="9_warp"]
+[ext_resource type="Resource" path="res://resources/water/default_foam_settings.tres" id="10_foam_settings"]
+[ext_resource type="Texture2D" path="res://resources/water/foam_breakup_noise.tres" id="11_foam_noise"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_pixel_ocean"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("4_shader")
+shader_parameter/pixel_ocean_enabled = true
+shader_parameter/base_height = 0.0
+shader_parameter/simulation_time = 0.0
+shader_parameter/wave_height_texture_a = ExtResource("5_wave_a")
+shader_parameter/wave_height_texture_b = ExtResource("6_wave_b")
+shader_parameter/wave_world_size_a = 180.0
+shader_parameter/wave_world_size_b = 72.0
+shader_parameter/wave_amplitude_a = 1.35
+shader_parameter/wave_amplitude_b = 0.42
+shader_parameter/wave_direction_a = Vector2(0.86, 0.51)
+shader_parameter/wave_direction_b = Vector2(-0.38, 0.92)
+shader_parameter/wave_travel_speed_a = 4.6
+shader_parameter/wave_travel_speed_b = 2.3
+shader_parameter/wave_mean_a = 0.5
+shader_parameter/wave_mean_b = 0.47
+shader_parameter/geometry_normal_step = 0.4
+shader_parameter/surface_normal_texture_a = ExtResource("7_normal_a")
+shader_parameter/surface_normal_texture_b = ExtResource("8_normal_b")
+shader_parameter/surface_warp_texture = ExtResource("9_warp")
+shader_parameter/surface_normal_world_size_a = 7.5
+shader_parameter/surface_normal_world_size_b = 3.25
+shader_parameter/surface_normal_strength = 0.62
+shader_parameter/surface_flow_direction_a = Vector2(0.82, 0.57)
+shader_parameter/surface_flow_direction_b = Vector2(-0.46, 0.89)
+shader_parameter/surface_flow_speed_a = 0.24
+shader_parameter/surface_flow_speed_b = -0.17
+shader_parameter/surface_warp_world_size = 46.0
+shader_parameter/surface_warp_strength = 2.4
+shader_parameter/surface_detail_fade_start = 130.0
+shader_parameter/surface_detail_fade_end = 520.0
+shader_parameter/shallow_water_color = Color(0.035, 0.43, 0.55, 1)
+shader_parameter/deep_water_color = Color(0.004, 0.055, 0.115, 1)
+shader_parameter/horizon_water_color = Color(0.025, 0.22, 0.34, 1)
+shader_parameter/reflection_tint = Color(0.36, 0.7, 0.86, 1)
+shader_parameter/trough_tint = Color(0.002, 0.025, 0.075, 1)
+shader_parameter/crest_tint = Color(0.11, 0.62, 0.68, 1)
+shader_parameter/absorption_density = 0.13
+shader_parameter/maximum_optical_depth = 38.0
+shader_parameter/shallow_depth_range = 5.5
+shader_parameter/near_water_alpha = 0.77
+shader_parameter/deep_water_alpha = 0.92
+shader_parameter/horizon_water_alpha = 0.98
+shader_parameter/opacity_distance_start = 80.0
+shader_parameter/opacity_distance_end = 220.0
+shader_parameter/fresnel_power = 4.8
+shader_parameter/reflection_strength = 0.82
+shader_parameter/refraction_strength = 0.009
+shader_parameter/near_roughness = 0.055
+shader_parameter/horizon_roughness = 0.23
+shader_parameter/water_specular = 0.88
+shader_parameter/foam_enabled = true
+shader_parameter/foam_noise_texture = ExtResource("11_foam_noise")
+shader_parameter/foam_color = Color(0.82, 0.95, 1, 1)
+shader_parameter/shore_foam_width = 2.15
+shader_parameter/shore_foam_strength = 1.05
+shader_parameter/crest_foam_start = 0.46
+shader_parameter/crest_foam_end = 0.94
+shader_parameter/crest_foam_strength = 0.82
+shader_parameter/ripple_foam_strength = 0.18
+shader_parameter/foam_macro_scale = 0.055
+shader_parameter/foam_detail_scale = 0.19
+shader_parameter/foam_scroll_speed = 0.13
+shader_parameter/foam_roughness = 0.88
+shader_parameter/ocean_clipmap_enabled = true
+shader_parameter/ocean_snapped_origin_xz = Vector2(0, 0)
+shader_parameter/ocean_logical_origin_offset_xz = Vector2(0, 0)
+shader_parameter/ocean_detail_center_xz = Vector2(0, 0)
+shader_parameter/ocean_detailed_wave_fade_start = 190.0
+shader_parameter/ocean_detailed_wave_fade_end = 330.0
+shader_parameter/ocean_medium_wave_fade_end = 760.0
+shader_parameter/ocean_middle_wave_amplitude_ratio = 0.58
+shader_parameter/ocean_far_wave_amplitude_ratio = 0.1
+shader_parameter/ocean_debug_show_rings = false
+
+[node name="PixelOceanSystem3D" type="Node3D"]
+script = ExtResource("1_system")
+
+[node name="Physics" type="Node3D" parent="."]
+process_priority = -100
+process_physics_priority = -100
+visible = false
+script = ExtResource("2_physics")
+pixel_ocean_material = SubResource("ShaderMaterial_pixel_ocean")
+wave_height_texture_a = ExtResource("5_wave_a")
+wave_height_texture_b = ExtResource("6_wave_b")
+wave_world_size_a = 180.0
+wave_world_size_b = 72.0
+wave_amplitude_a = 1.35
+wave_amplitude_b = 0.42
+wave_direction_a = Vector2(0.86, 0.51)
+wave_direction_b = Vector2(-0.38, 0.92)
+wave_travel_speed_a = 4.6
+wave_travel_speed_b = 2.3
+wave_mean_a = 0.5
+wave_mean_b = 0.47
+normal_sample_step = 0.4
+wake_ripple_spacing = 2.8
+wake_minimum_speed = 2.0
+wake_ripple_amplitude = 0.075
+ripple_speed = 3.4
+ripple_wavelength = 2.6
+ripple_decay = 0.72
+ripple_lifetime = 4.6
+ripple_contact_height = 2.4
+wake_rear_offset = 1.15
+wake_lateral_offset = 0.58
+foam_settings = ExtResource("10_foam_settings")
+foam_noise_texture = ExtResource("11_foam_noise")
+
+[node name="Surface" parent="." node_paths=PackedStringArray("physical_water") instance=ExtResource("3_clipmap")]
+physical_water = NodePath("../Physics")
+legacy_visual_water_material = SubResource("ShaderMaterial_pixel_ocean")
+near_radius = 240.0
+middle_radius = 720.0
+far_radius = 3000.0
+near_cell_size = 1.5
+middle_cell_size = 6.0
+far_cell_size = 30.0
+snap_step = 1.5
+detailed_wave_fade_start = 190.0
+detailed_wave_fade_end = 330.0
+middle_wave_amplitude_ratio = 0.58
+far_wave_amplitude_ratio = 0.1
+cast_shadows = false
+extra_cull_margin = 10.0

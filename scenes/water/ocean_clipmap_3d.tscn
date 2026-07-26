@@ -1,0 +1,54 @@
+[gd_scene format=3 uid="uid://cl2gccrkv5gra"]
+
+[ext_resource type="Script" uid="uid://bdbvc4137b4ve" path="res://scripts/water/ocean_clipmap_3d.gd" id="1_ocean"]
+[ext_resource type="Shader" path="res://shaders/water_transparent_legacy.gdshader" id="3_legacy_shader"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ocean_legacy"]
+resource_local_to_scene = true
+shader = ExtResource("3_legacy_shader")
+shader_parameter/base_height = 0.0
+shader_parameter/simulation_time = 0.0
+shader_parameter/active_wave_count = 0
+shader_parameter/shallow_water_color = Color(0.055, 0.42, 0.56, 1)
+shader_parameter/deep_water_color = Color(0.012, 0.085, 0.15, 1)
+shader_parameter/horizon_water_color = Color(0.12, 0.46, 0.62, 1)
+shader_parameter/reflection_tint = Color(0.62, 0.82, 0.96, 1)
+shader_parameter/near_water_alpha = 0.84
+shader_parameter/deep_water_alpha = 0.98
+shader_parameter/horizon_water_alpha = 1.0
+shader_parameter/absorption_density = 0.18
+shader_parameter/maximum_optical_depth = 25.0
+shader_parameter/shallow_depth_range = 5.0
+shader_parameter/opacity_distance_start = 10.0
+shader_parameter/opacity_distance_end = 45.0
+shader_parameter/fresnel_power = 3.5
+shader_parameter/fresnel_opacity_strength = 0.95
+shader_parameter/reflection_strength = 0.72
+shader_parameter/refraction_strength = 0.008
+shader_parameter/refraction_depth_range = 4.5
+shader_parameter/refraction_distance_fade = 0.9
+shader_parameter/refraction_fresnel_fade = 0.85
+shader_parameter/near_water_roughness = 0.12
+shader_parameter/horizon_water_roughness = 0.22
+shader_parameter/water_specular = 0.85
+
+[node name="OceanClipmap3D" type="Node3D" unique_id=610163468]
+script = ExtResource("1_ocean")
+legacy_visual_water_material = SubResource("ShaderMaterial_ocean_legacy")
+
+[node name="NearGrid" type="MeshInstance3D" parent="." unique_id=1639063293]
+layers = 129
+cast_shadow = 0
+
+[node name="MiddleRing" type="MeshInstance3D" parent="." unique_id=556902832]
+layers = 129
+cast_shadow = 0
+
+[node name="FarRing" type="MeshInstance3D" parent="." unique_id=1220134030]
+layers = 129
+cast_shadow = 0
+
+[node name="Debug" type="Node3D" parent="." unique_id=478437014]
+
+[node name="TransitionGuides" type="MeshInstance3D" parent="Debug" unique_id=1386046639]
+cast_shadow = 0

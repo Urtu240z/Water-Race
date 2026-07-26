@@ -1,0 +1,18 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scripts/effects/wake_trail_3d.gd" id="1_wake"]
+[ext_resource type="Shader" path="res://shaders/wake_foam.gdshader" id="2_shader"]
+[ext_resource type="Texture2D" path="res://resources/water/foam_breakup_noise.tres" id="3_noise"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wake"]
+render_priority = 4
+shader = ExtResource("2_shader")
+shader_parameter/foam_color = Color(0.82, 0.95, 1, 0.92)
+shader_parameter/foam_noise_texture = ExtResource("3_noise")
+
+[node name="WakeTrail3D" type="Node3D"]
+script = ExtResource("1_wake")
+
+[node name="WakeMesh" type="MeshInstance3D" parent="."]
+cast_shadow = 0
+material_override = SubResource("ShaderMaterial_wake")

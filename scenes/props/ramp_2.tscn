@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://c8qf6cnfoysg8"]
+
+[ext_resource type="PackedScene" uid="uid://c70bvyokp1i18" path="res://assets/3D/Ramp2.glb" id="2_model"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_tpwhi"]
+friction = 0.1
+
+[node name="Ramp2" type="Node3D" unique_id=915163340]
+
+[node name="RampVisual" parent="." unique_id=1569065180 instance=ExtResource("2_model")]
+
+[node name="Ramp_COL" parent="RampVisual" index="1" unique_id=612690766]
+physics_material_override = SubResource("PhysicsMaterial_tpwhi")
+
+[editable path="RampVisual"]

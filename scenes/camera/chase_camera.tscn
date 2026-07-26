@@ -1,0 +1,82 @@
+[gd_scene format=3 uid="uid://dewy0j55fasc8"]
+
+[ext_resource type="Script" uid="uid://bt8dcn7r2hxqv" path="res://scripts/camera/chase_camera.gd" id="1_chase"]
+[ext_resource type="Script" uid="uid://cqeki8dba3dyx" path="res://scripts/camera/underwater_effect_controller.gd" id="2_underwater"]
+[ext_resource type="Shader" uid="uid://clnbfhglt8pkp" path="res://shaders/effects/underwater_wave_post_process.gdshader" id="3_underwater_shader"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_underwater"]
+resource_local_to_scene = true
+render_priority = 127
+shader = ExtResource("3_underwater_shader")
+shader_parameter/base_height = 0.0
+shader_parameter/simulation_time = 0.0
+shader_parameter/active_wave_count = 0
+shader_parameter/wave_directions = PackedVector2Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/wave_amplitudes = PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/wave_numbers = PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/wave_angular_frequencies = PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/wave_effective_phases = PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/wave_crest_shapes = PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/wave_crest_normalizations = PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/natural_variation_enabled = false
+shader_parameter/phase_warp_strength = 0.0
+shader_parameter/wave_group_strength = 0.0
+shader_parameter/modulation_directions = PackedVector2Array(0, 0, 0, 0)
+shader_parameter/modulation_wave_numbers = PackedFloat32Array(0, 0)
+shader_parameter/modulation_angular_frequencies = PackedFloat32Array(0, 0)
+shader_parameter/modulation_effective_phases = PackedFloat32Array(0, 0)
+shader_parameter/wave_phase_warp_weights = PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/wave_group_weights = PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/wave_group_phase_offsets = PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/wave_set_active = PackedInt32Array(0, 0, 0)
+shader_parameter/wave_set_focus_positions = PackedVector2Array(0, 0, 0, 0, 0, 0)
+shader_parameter/wave_set_focus_times = PackedFloat32Array(0, 0, 0)
+shader_parameter/wave_set_directions = PackedVector2Array(0, 0, 0, 0, 0, 0)
+shader_parameter/wave_set_right_directions = PackedVector2Array(0, 0, 0, 0, 0, 0)
+shader_parameter/wave_set_group_speeds = PackedFloat32Array(0, 0, 0)
+shader_parameter/wave_set_packet_lengths = PackedFloat32Array(0, 0, 0)
+shader_parameter/wave_set_packet_widths = PackedFloat32Array(0, 0, 0)
+shader_parameter/wave_set_carrier_amplitudes = PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/wave_set_carrier_wave_numbers = PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/wave_set_carrier_angular_frequencies = PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/wave_set_carrier_phases = PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/wave_set_crest_sharpnesses = PackedFloat32Array(0, 0, 0)
+shader_parameter/wave_set_front_face_skews = PackedFloat32Array(0, 0, 0)
+shader_parameter/wave_set_third_harmonics = PackedFloat32Array(0, 0, 0)
+shader_parameter/wave_set_shape_normalizations = PackedFloat32Array(0, 0, 0)
+shader_parameter/camera_submersion = 0.0
+shader_parameter/camera_depth = -1.0
+shader_parameter/underwater_tint = Color(0.18, 0.58, 0.68, 1)
+shader_parameter/tint_strength = 0.24
+shader_parameter/contrast = 0.86
+shader_parameter/fog_color = Color(0.025, 0.22, 0.29, 1)
+shader_parameter/fog_density = 0.0325
+shader_parameter/absorption_density = 0.055
+shader_parameter/distortion_strength = 0.0014
+shader_parameter/distortion_speed = 0.7
+shader_parameter/waterline_blend_width = 0.12
+shader_parameter/maximum_effect_strength = 1.0
+shader_parameter/debug_mask_enabled = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_underwater"]
+flip_faces = true
+size = Vector2(2, 2)
+
+[node name="ChaseCamera" type="Node3D" unique_id=27337197]
+physics_interpolation_mode = 2
+script = ExtResource("1_chase")
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=1540503117]
+physics_interpolation_mode = 2
+current = true
+fov = 65.0
+
+[node name="UnderwaterEffect" type="Node3D" parent="Camera3D" unique_id=997962906]
+script = ExtResource("2_underwater")
+
+[node name="UnderwaterPostProcess" type="MeshInstance3D" parent="Camera3D/UnderwaterEffect" unique_id=1854893749]
+visible = false
+material_override = SubResource("ShaderMaterial_underwater")
+cast_shadow = 0
+extra_cull_margin = 16384.0
+mesh = SubResource("QuadMesh_underwater")

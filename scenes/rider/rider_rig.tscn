@@ -1,0 +1,42 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/rider/rider_rig.gd" id="1_4yq34"]
+[ext_resource type="PackedScene" path="res://assets/3D/Rider/Rider_Bot.glb" id="2_wrxx4"]
+[ext_resource type="AnimationLibrary" path="res://assets/3D/Rider/animations/rider_animation_library.res" id="3_ggf4l"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_n0p1g"]
+animation = &"mounted_breathing"
+
+[sub_resource type="AnimationNodeAdd2" id="AnimationNodeAdd2_eswg0"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_kh5xy"]
+resource_local_to_scene = true
+animation = &"Mounted_JetSki_Base_Corrected_v2"
+
+[sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_k73xc"]
+resource_local_to_scene = true
+nodes/mounted_base/node = SubResource("AnimationNodeAnimation_kh5xy")
+nodes/mounted_base/position = Vector2(-420, -80)
+nodes/breathing/node = SubResource("AnimationNodeAnimation_n0p1g")
+nodes/breathing/position = Vector2(-420, 90)
+nodes/mounted_add/node = SubResource("AnimationNodeAdd2_eswg0")
+nodes/mounted_add/position = Vector2(-160, 0)
+node_connections = [&"output", 0, &"mounted_add", &"mounted_add", 0, &"mounted_base", &"mounted_add", 1, &"breathing"]
+
+[node name="RiderRig" type="Node3D" unique_id=553895823]
+script = ExtResource("1_4yq34")
+
+[node name="RiderModelRoot" type="Node3D" parent="." unique_id=226906520]
+
+[node name="Rider_Bot" parent="RiderModelRoot" unique_id=1075285769 instance=ExtResource("2_wrxx4")]
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=785147574]
+root_node = NodePath("../RiderModelRoot/Rider_Bot")
+libraries/ = ExtResource("3_ggf4l")
+
+[node name="AnimationTree" type="AnimationTree" parent="." unique_id=187453891]
+active = false
+root_node = NodePath("../RiderModelRoot/Rider_Bot")
+tree_root = SubResource("AnimationNodeBlendTree_k73xc")
+anim_player = NodePath("../AnimationPlayer")
+parameters/mounted_add/add_amount = 0.0

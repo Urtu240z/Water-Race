@@ -1,0 +1,79 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="Script" path="res://scripts/effects/vehicle_water_effects_3d.gd" id="1_effects"]
+[ext_resource type="PackedScene" path="res://scenes/effects/wake_trail_3d.tscn" id="2_wake"]
+[ext_resource type="PackedScene" path="res://scenes/effects/hull_foam_3d.tscn" id="3_hull_foam"]
+[ext_resource type="Script" path="res://scripts/effects/hull_spray_sheet_3d.gd" id="4_spray_sheet"]
+[ext_resource type="Shader" path="res://shaders/water_stream.gdshader" id="5_stream_shader"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_spray_sheet"]
+render_priority = 4
+shader = ExtResource("5_stream_shader")
+shader_parameter/water_alpha = 0.32
+shader_parameter/roughness = 0.10
+shader_parameter/fresnel_power = 3.2
+shader_parameter/refraction_strength = 0.001
+shader_parameter/sheet_mode = true
+shader_parameter/foam_core_strength = 0.72
+shader_parameter/foam_core_opacity = 0.62
+shader_parameter/foam_emission_strength = 0.16
+
+[node name="VehicleWaterEffects3D" type="Node3D"]
+script = ExtResource("1_effects")
+
+[node name="BowDropletsLeft" type="GPUParticles3D" parent="."]
+cast_shadow = 0
+emitting = false
+local_coords = false
+
+[node name="BowDropletsRight" type="GPUParticles3D" parent="."]
+cast_shadow = 0
+emitting = false
+local_coords = false
+
+[node name="RailDropletsLeft" type="GPUParticles3D" parent="."]
+cast_shadow = 0
+emitting = false
+local_coords = false
+
+[node name="RailDropletsRight" type="GPUParticles3D" parent="."]
+cast_shadow = 0
+emitting = false
+local_coords = false
+
+[node name="HullSpraySheet3D" type="Node3D" parent="."]
+script = ExtResource("4_spray_sheet")
+
+[node name="SprayMesh" type="MeshInstance3D" parent="HullSpraySheet3D"]
+cast_shadow = 0
+material_override = SubResource("ShaderMaterial_spray_sheet")
+
+[node name="ImpactSplashPool" type="Node3D" parent="."]
+
+[node name="ImpactSplash0" type="GPUParticles3D" parent="ImpactSplashPool"]
+cast_shadow = 0
+emitting = false
+one_shot = true
+local_coords = false
+
+[node name="ImpactSplash1" type="GPUParticles3D" parent="ImpactSplashPool"]
+cast_shadow = 0
+emitting = false
+one_shot = true
+local_coords = false
+
+[node name="ImpactSplash2" type="GPUParticles3D" parent="ImpactSplashPool"]
+cast_shadow = 0
+emitting = false
+one_shot = true
+local_coords = false
+
+[node name="ImpactSplash3" type="GPUParticles3D" parent="ImpactSplashPool"]
+cast_shadow = 0
+emitting = false
+one_shot = true
+local_coords = false
+
+[node name="WakeTrail3D" parent="." instance=ExtResource("2_wake")]
+
+[node name="HullFoam3D" parent="." instance=ExtResource("3_hull_foam")]

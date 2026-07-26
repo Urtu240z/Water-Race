@@ -1,0 +1,23 @@
+[gd_scene format=3 uid="uid://dmqcpj4cfigqe"]
+
+[ext_resource type="Script" uid="uid://b5kbcibppj4n4" path="res://scripts/vehicle/jet_ski_visual_controller.gd" id="1_controller"]
+[ext_resource type="PackedScene" uid="uid://bfdfllkchuttq" path="res://assets/3D/Hull.glb" id="2_hull"]
+[ext_resource type="PackedScene" uid="uid://c0hougvfmuunm" path="res://assets/3D/Handle.glb" id="3_handle"]
+
+[node name="JetSkiVisual" type="Node3D" unique_id=1835512432]
+script = ExtResource("1_controller")
+
+[node name="HullModel" type="Node3D" parent="." unique_id=2052411101]
+unique_name_in_owner = true
+
+[node name="Hull" parent="HullModel" unique_id=1635276613 instance=ExtResource("2_hull")]
+
+[node name="HandlePivot" type="Node3D" parent="." unique_id=1724927576]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.37203, 0.456944, -0.33678)
+
+[node name="HandleModel" type="Node3D" parent="HandlePivot" unique_id=99318137]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.264548, 0, 0.018117)
+
+[node name="Handle" parent="HandlePivot/HandleModel" unique_id=771268882 instance=ExtResource("3_handle")]
