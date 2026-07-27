@@ -1,15 +1,18 @@
 [gd_resource type="Environment" format=3 uid="uid://dxw5rtrc0obhl"]
 
-[ext_resource type="Sky" uid="uid://bhe1h7h061jon" path="res://resources/environment/sky/sky_original.tres" id="1_ndf22"]
+[ext_resource type="Texture2D" uid="uid://cmg3mg3yih3d1" path="res://assets/environment/sky/kloofendal_43d_clear_puresky_4k.hdr" id="1_ndf22"]
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_kroct"]
+panorama = ExtResource("1_ndf22")
+
+[sub_resource type="Sky" id="Sky_lusr1"]
+sky_material = SubResource("PanoramaSkyMaterial_kroct")
 
 [resource]
 background_mode = 2
-background_energy_multiplier = 3.0
-sky = ExtResource("1_ndf22")
+sky = SubResource("Sky_lusr1")
 ambient_light_source = 3
-ambient_light_color = Color(0.9303179, 0.60265046, 5.77569e-06, 1)
-ambient_light_sky_contribution = 0.8
-ambient_light_energy = 1.35
+ambient_light_sky_contribution = 0.85
 reflected_light_source = 2
 tonemap_mode = 3
 tonemap_exposure = 0.6
@@ -26,13 +29,13 @@ glow_intensity = 0.67
 glow_strength = 0.83
 fog_enabled = true
 fog_mode = 1
-fog_light_color = Color(0.99327177, 0.8602038, 0.79064494, 1)
-fog_density = 0.4667
+fog_light_color = Color(0.95749074, 0.8738861, 0.7971696, 1)
+fog_density = 0.2636
 fog_sky_affect = 0.331
 fog_depth_curve = 0.5946027
 fog_depth_begin = 0.0
 fog_depth_end = 1939.9
 adjustment_enabled = true
-adjustment_brightness = 0.82
-adjustment_contrast = 0.995
-adjustment_saturation = 0.71
+adjustment_brightness = 0.9
+adjustment_contrast = 1.02
+adjustment_saturation = 0.87

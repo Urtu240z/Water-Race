@@ -1,3 +1,4 @@
+@tool
 class_name SkyEnvironmentController
 extends Node
 
@@ -124,13 +125,36 @@ var sky_reference_valid: bool:
 
 
 func _ready() -> void:
-	_world_environment = get_node_or_null(world_environment_path) as WorldEnvironment
-	if _world_environment == null or _world_environment.environment == null:
+	_world_environment = get_node_or_null(
+		world_environment_path
+	) as WorldEnvironment
+
+	if (
+		_world_environment == null
+		or _world_environment.environment == null
+	):
 		_sky_reference_valid_value = false
-		push_error("SkyEnvironmentController requires a WorldEnvironment with an Environment resource.")
+		push_error(
+			"SkyEnvironmentController requires a "
+			+ "WorldEnvironment with an Environment resource."
+		)
 		return
+
 	_environment = _world_environment.environment
-	_original_sky_reference = original_sky if original_sky != null else _environment.sky
+
+	_original_sky_reference = (
+		original_sky
+		if original_sky != null
+		else _environment.sky
+	)
+
+	_original_sky_energy = (
+		_environment.background_energy_multiplier
+	)
+	_original_ambient_sky_contribution = (
+		_environment.ambient_light_sky_contribution
+	)
+
 	_apply_active_preset()
 
 
@@ -141,27 +165,31 @@ func _request_sky_update() -> void:
 
 
 func _apply_active_preset() -> void:
+	if _environment == null:
+		return
+
 	var selected_sky: Sky
 	var selected_energy := sky_energy_multiplier
 	var selected_ambient_contribution := ambient_sky_contribution
 	var active_reference_is_valid := true
+
 	match sky_preset:
 		SkyEnvironmentPreset.ORIGINAL:
 			selected_sky = _original_sky_reference
 			selected_energy = _original_sky_energy
-			selected_ambient_contribution = _original_ambient_sky_contribution
+			selected_ambient_contribution = (
+				_original_ambient_sky_contribution
+			)
+
 		SkyEnvironmentPreset.ARISTEA_WRECK:
 			selected_sky = aristea_wreck_sky
-			selected_energy = 1.0
-			selected_ambient_contribution = 0.85
+
 		SkyEnvironmentPreset.KLOOFENDAL_48D:
 			selected_sky = kloofendal_48d_sky
-			selected_energy = 0.90
-			selected_ambient_contribution = 0.80
+
 		SkyEnvironmentPreset.OVERCAST_SOIL:
 			selected_sky = overcast_soil_sky
-			selected_energy = 1.05
-			selected_ambient_contribution = 0.95
+
 		SkyEnvironmentPreset.CUSTOM:
 			selected_sky = custom_sky
 			active_reference_is_valid = custom_sky != null
@@ -169,22 +197,36 @@ func _apply_active_preset() -> void:
 	if selected_sky == null:
 		active_reference_is_valid = false
 		selected_sky = _original_sky_reference
+
 	_environment.background_mode = Environment.BG_SKY
 	_environment.sky = selected_sky
-	_environment.sky_rotation = Vector3(0.0, deg_to_rad(sky_rotation_degrees), 0.0)
+	_environment.sky_rotation = Vector3(
+		0.0,
+		deg_to_rad(sky_rotation_degrees),
+		0.0
+	)
 	_environment.background_energy_multiplier = selected_energy
-	_environment.ambient_light_source = Environment.AMBIENT_SOURCE_SKY
-	_environment.reflected_light_source = Environment.REFLECTION_SOURCE_SKY
-	_environment.ambient_light_sky_contribution = selected_ambient_contribution
+	_environment.ambient_light_source = (
+		Environment.AMBIENT_SOURCE_SKY
+	)
+	_environment.reflected_light_source = (
+		Environment.REFLECTION_SOURCE_SKY
+	)
+	_environment.ambient_light_sky_contribution = (
+		selected_ambient_contribution
+	)
 
 	_effective_sky_energy_value = selected_energy
-	_effective_ambient_sky_contribution_value = selected_ambient_contribution
+	_effective_ambient_sky_contribution_value = (
+		selected_ambient_contribution
+	)
 	_sky_reference_valid_value = (
 		active_reference_is_valid
 		and _world_environment != null
 		and _environment != null
 		and selected_sky != null
 	)
+
 	_update_observational_sky_state(selected_sky)
 	_sky_change_count_value += 1
 

@@ -31,6 +31,7 @@
 [ext_resource type="Texture2D" uid="uid://bs48vn7ihhfp" path="res://resources/water/ocean/macro_wave_b.png" id="35_0pibt"]
 [ext_resource type="Texture2D" uid="uid://cdlm681krlrvi" path="res://resources/water/organic_surface/surface_normal_a.tres" id="35_g6vww"]
 [ext_resource type="Texture2D" uid="uid://biv8w5n57xhjr" path="res://resources/water/organic_surface/surface_normal_b.tres" id="36_a0jux"]
+[ext_resource type="PackedScene" uid="uid://byqrxgrtjkcgm" path="res://assets/3D/buildings/beach_hotel.glb" id="36_kotkt"]
 [ext_resource type="PackedScene" uid="uid://dmqjonl673mxd" path="res://scenes/course/buoy.tscn" id="37_armhu"]
 [ext_resource type="Texture2D" uid="uid://bblan7rbfrudb" path="res://resources/water/organic_surface/surface_warp_noise.tres" id="37_vkhvf"]
 [ext_resource type="AudioStream" uid="uid://j7rnutr7c4dx" path="res://assets/audio/Motor_1.ogg" id="38_jrck1"]
@@ -162,7 +163,7 @@ shader_parameter/breakup = 0.0
 material = ExtResource("34_h01lt")
 size = Vector2(10000, 10000)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_0pibt"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_oieqv"]
 resource_local_to_scene = true
 render_priority = 0
 shader = ExtResource("33_8ypm4")
@@ -206,24 +207,24 @@ shader_parameter/surface_detail_fade_start = 130.0
 shader_parameter/surface_detail_fade_end = 520.0
 shader_parameter/shallow_water_color = Color(0.035, 0.43, 0.55, 1)
 shader_parameter/deep_water_color = Color(0.004, 0.055, 0.115, 1)
-shader_parameter/horizon_water_color = Color(0.025, 0.22, 0.34, 1)
-shader_parameter/reflection_tint = Color(0.36, 0.7, 0.86, 1)
+shader_parameter/horizon_water_color = Color(0.35543057, 0.11965982, 0.044872828, 1)
+shader_parameter/reflection_tint = Color(0.99999994, 0.97761196, 0.96643454, 1)
 shader_parameter/trough_tint = Color(0.002, 0.025, 0.075, 1)
 shader_parameter/crest_tint = Color(0.11, 0.62, 0.68, 1)
-shader_parameter/absorption_density = 0.13
-shader_parameter/maximum_optical_depth = 38.0
-shader_parameter/shallow_depth_range = 5.5
-shader_parameter/near_water_alpha = 0.77
-shader_parameter/deep_water_alpha = 0.92
-shader_parameter/horizon_water_alpha = 0.98
+shader_parameter/absorption_density = 0.06999999843536
+shader_parameter/maximum_optical_depth = 73.0
+shader_parameter/shallow_depth_range = 10.30000015348236
+shader_parameter/near_water_alpha = 0.5
+shader_parameter/deep_water_alpha = 0.95999998971808
+shader_parameter/horizon_water_alpha = 1.0
 shader_parameter/opacity_distance_start = 80.0
 shader_parameter/opacity_distance_end = 220.0
-shader_parameter/fresnel_power = 4.8
-shader_parameter/reflection_strength = 0.82
-shader_parameter/refraction_strength = 0.009
-shader_parameter/near_roughness = 0.055
-shader_parameter/horizon_roughness = 0.23
-shader_parameter/water_specular = 0.88
+shader_parameter/fresnel_power = 12.0
+shader_parameter/reflection_strength = 0.999999977648
+shader_parameter/refraction_strength = 0.01550000073625
+shader_parameter/near_roughness = 0.0
+shader_parameter/horizon_roughness = 0.28999999351792
+shader_parameter/water_specular = 0.23999999463552
 shader_parameter/foam_enabled = true
 shader_parameter/foam_noise_texture = ExtResource("34_cowfl")
 shader_parameter/foam_color = Color(0.5921569, 0.8901961, 1, 1)
@@ -241,12 +242,26 @@ shader_parameter/ocean_surface_enabled = true
 shader_parameter/ocean_snapped_origin_xz = Vector2(0, 0)
 shader_parameter/ocean_logical_origin_offset_xz = Vector2(0, 0)
 shader_parameter/ocean_detail_center_xz = Vector2(0, 0)
-shader_parameter/ocean_detailed_wave_fade_start = 190.0
-shader_parameter/ocean_detailed_wave_fade_end = 330.0
+shader_parameter/ocean_detailed_wave_fade_start = 170.0
+shader_parameter/ocean_detailed_wave_fade_end = 280.0
 shader_parameter/ocean_medium_wave_fade_end = 700.0
-shader_parameter/ocean_middle_wave_amplitude_ratio = 0.58
-shader_parameter/ocean_far_wave_amplitude_ratio = 0.1
+shader_parameter/ocean_middle_wave_amplitude_ratio = 0.55
+shader_parameter/ocean_far_wave_amplitude_ratio = 0.08
 shader_parameter/ocean_debug_show_rings = false
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4sljt"]
+albedo_color = Color(0.39688927, 0.39688927, 0.39688924, 1)
+metallic = 1.0
+metallic_specular = 1.0
+roughness = 0.2
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dbb74"]
+albedo_color = Color(0.3188584, 0.4243178, 0.49546707, 1)
+metallic = 1.0
+metallic_specular = 1.0
+roughness = 0.0
+clearcoat = 0.0
+clearcoat_roughness = 1.0
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_f0815"]
 panorama = ExtResource("39_1y1wo")
@@ -385,7 +400,7 @@ mesh = SubResource("PlaneMesh_tpwhi")
 [node name="WaterIntegration" type="Node3D" parent="." unique_id=1889730552]
 
 [node name="Ocean" parent="WaterIntegration" unique_id=1340264265 instance=ExtResource("32_wfhwd")]
-ocean_material = SubResource("ShaderMaterial_0pibt")
+ocean_material = SubResource("ShaderMaterial_oieqv")
 wave_world_size_a = 276.0
 wave_world_size_b = 163.0
 wave_amplitude_a = 1.02999997697744
@@ -395,6 +410,13 @@ wave_travel_speed_b = 4.0000003576287995
 wave_mean_a = 0.2070000098325
 wave_mean_b = 0.2350000111625
 normal_sample_step = 2.0
+
+[node name="beach_hotel" parent="WaterIntegration" unique_id=240417991 instance=ExtResource("36_kotkt")]
+transform = Transform3D(0.07044011, 0, 0.4495144, 0, 0.455, 0, -0.4495144, 0, 0.07044011, -123.22586, 30.086075, -150.12727)
+
+[node name="beach_hotel_VIS" parent="WaterIntegration/beach_hotel" index="0" unique_id=1447352137]
+surface_material_override/1 = SubResource("StandardMaterial3D_4sljt")
+surface_material_override/4 = SubResource("StandardMaterial3D_dbb74")
 
 [node name="AmbientWildlife" parent="." unique_id=1482046972 instance=ExtResource("224_wildlife")]
 ocean_path = NodePath("")
@@ -410,16 +432,13 @@ dolphin_breach_duration_max = 0.9
 transform = Transform3D(0.9811287, 0, 0.19335571, 0, 1, 0, -0.19335571, 0, 0.9811287, 596.97815, 1.98, 464.24957)
 
 [node name="JetSki" parent="Gameplay" unique_id=328650943 instance=ExtResource("203_nrhvk")]
-transform = Transform3D(-1, 0, -1.509958e-07, 0, 1, 0, 1.509958e-07, 0, -1, 132.69096, 0.71555996, -133.7861)
-mass = 480.0
-center_of_mass = Vector3(0, -0.22, 0.22)
+transform = Transform3D(-1.5, 0, -2.2649371e-07, 0, 1.5, 0, 2.2649371e-07, 0, -1.5, 132.69096, 0.71555996, -133.7861)
+gravity_scale = 1.4
+center_of_mass = Vector3(0, -0.28, 0)
 ocean_path = NodePath("../../WaterIntegration/Ocean")
-forward_drag_linear_per_point = 10.0
-forward_drag_quadratic_per_point = 0.4
-forward_engine_force = 6500.0
+forward_engine_force = 15000.0
 reverse_engine_force = 4500.0
-forward_thrust_falloff_start_speed = 30.0
-forward_thrust_falloff_end_speed = 80.0
+forward_thrust_falloff_end_speed = 150.0
 reverse_thrust_falloff_end_speed = 14.2
 
 [node name="EngineAudio" parent="Gameplay/JetSki" index="0" unique_id=1603778743]
@@ -451,13 +470,16 @@ autoplay = true
 [node name="ChaseCamera" parent="CameraSystem" unique_id=931334509 instance=ExtResource("206_ckn4c")]
 vehicle_body_path = NodePath("../../Gameplay/JetSki")
 camera_target_path = NodePath("../../Gameplay/JetSki/CameraTarget")
-base_distance = 2.0
+base_distance = 3.0
 base_height = 1.0
 base_look_ahead = 3.0
 look_height_offset = 0.0
+position_sharpness = 6.109999999999999
+rotation_sharpness = 9.01
+distance_sharpness = 2.01
 maximum_speed_distance_extension = 0.0
-base_fov = 41.0
-maximum_speed_fov = 43.0
+base_fov = 45.0
+maximum_speed_fov = 48.0
 
 [node name="Debug" type="Node" parent="." unique_id=1303880580]
 
@@ -468,11 +490,8 @@ original_sky = ExtResource("2_tfoy1")
 aristea_wreck_sky = SubResource("Sky_k0dft")
 kloofendal_48d_sky = SubResource("Sky_s3uqp")
 overcast_soil_sky = SubResource("Sky_e7rpt")
-sky_preset = 2
+sky_preset = 4
 custom_sky = SubResource("Sky_lusr1")
-sky_rotation_degrees = -37.0
-sky_energy_multiplier = 4.0
-ambient_sky_contribution = 1.0
 
 [node name="Atrezzo" type="Node3D" parent="." unique_id=1365592301]
 
@@ -596,6 +615,7 @@ buoy_clearance = 20.0
 
 [editable path="TerrainRoot/test_island"]
 [editable path="TerrainRoot/test_island/PalmImpostorGroundShadows"]
+[editable path="WaterIntegration/beach_hotel"]
 [editable path="Gameplay/JetSki"]
 [editable path="Gameplay/JetSki/VisualRoot/JetSkiVisual"]
 [editable path="Atrezzo/Boat_3"]
