@@ -1733,9 +1733,6 @@ ocean_material = SubResource("ShaderMaterial_a0jux")
 wave_world_size_a = 190.0
 wave_world_size_b = 120.0
 
-[node name="Surface" parent="WaterIntegration/Ocean" index="0" unique_id=527780220]
-ocean_material = SubResource("ShaderMaterial_a0jux")
-
 [node name="AmbientWildlife" parent="." unique_id=1482046972 instance=ExtResource("224_wildlife")]
 ocean_path = NodePath("")
 animation_speed_multiplier = 2.25
@@ -1912,7 +1909,6 @@ buoy_clearance = 20.0
 [editable path="TerrainRoot/Rock1"]
 [editable path="TerrainRoot/test_island"]
 [editable path="TerrainRoot/test_island/PalmImpostorGroundShadows"]
-[editable path="WaterIntegration/Ocean"]
 [editable path="Gameplay/JetSki"]
 [editable path="Gameplay/JetSki/VisualRoot/JetSkiVisual"]
 [editable path="Atrezzo/Boat_3"]

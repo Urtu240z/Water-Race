@@ -188,6 +188,7 @@ var detail_center_xz := Vector2.ZERO
 var effective_near_radius: float = 0.0
 var effective_middle_radius: float = 0.0
 var effective_far_radius: float = 0.0
+var _surface_static_uniform_signature: int = -1
 
 @onready var _near_grid: MeshInstance3D = get_node("NearGrid") as MeshInstance3D
 @onready var _middle_ring: MeshInstance3D = get_node("MiddleRing") as MeshInstance3D
@@ -387,7 +388,7 @@ func _ensure_meshes() -> void:
 
 func _flush_uniform_update() -> void:
 	_uniform_update_queued = false
-	_update_material_uniforms()
+	_update_material_uniforms(true)
 	_build_debug_guides()
 
 
@@ -474,10 +475,10 @@ func _rebuild_meshes() -> void:
 
 	_apply_rendering_settings()
 	_bind_visual_material()
+	_update_material_uniforms(true)
 	_build_debug_guides()
 	if debug_show_rings:
 		_print_mesh_statistics()
-
 
 func _append_full_grid(
 	buffers: MeshBuffers,
@@ -683,23 +684,34 @@ func _bind_visual_material() -> void:
 			)
 		_warned_missing_material = true
 		return
+
 	_warned_missing_material = false
-	if candidate != _visual_material:
-		if is_instance_valid(_registered_ocean) and _visual_material != null:
-			_registered_ocean.unregister_external_water_material(_visual_material)
+
+	var material_changed := candidate != _visual_material
+	var ocean_changed := _registered_ocean != ocean
+	if not material_changed and not ocean_changed:
+		return
+
+	if is_instance_valid(_registered_ocean) and _visual_material != null:
+		_registered_ocean.unregister_external_water_material(_visual_material)
+
+	if material_changed:
 		if _visual_material != null:
 			_visual_material.set_shader_parameter(&"ocean_surface_enabled", false)
 			_visual_material.set_shader_parameter(&"ocean_debug_show_rings", false)
+
 		_visual_material = candidate
+		_surface_static_uniform_signature = -1
+
 		for mesh_instance in _ocean_mesh_instances():
 			mesh_instance.material_override = _visual_material
-	if _registered_ocean != ocean:
-		if is_instance_valid(_registered_ocean) and _visual_material != null:
-			_registered_ocean.unregister_external_water_material(_visual_material)
-		_registered_ocean = ocean
+
+	_registered_ocean = ocean
+
 	if is_instance_valid(_registered_ocean):
 		_registered_ocean.register_external_water_material(_visual_material)
-	_update_material_uniforms()
+
+	_update_material_uniforms(true)
 
 
 func _resolve_visual_material() -> ShaderMaterial:
@@ -781,20 +793,17 @@ func _resolve_center_node() -> Node3D:
 	return null
 
 
-func _update_material_uniforms() -> void:
+func _update_material_uniforms(force_static: bool = false) -> void:
 	_uniform_update_queued = false
 	if _visual_material == null:
 		return
+
 	var resolved_water_level := water_level
 	if is_instance_valid(ocean):
 		resolved_water_level = ocean.water_level
+
+	# Parámetros dinámicos de la superficie.
 	_visual_material.set_shader_parameter(&"water_level", resolved_water_level)
-	if is_instance_valid(ocean):
-		_visual_material.set_shader_parameter(
-			&"simulation_time",
-			ocean.get_simulation_time()
-		)
-	_visual_material.set_shader_parameter(&"ocean_surface_enabled", true)
 	_visual_material.set_shader_parameter(
 		&"ocean_snapped_origin_xz",
 		snapped_origin_xz
@@ -807,6 +816,25 @@ func _update_material_uniforms() -> void:
 		&"ocean_detail_center_xz",
 		detail_center_xz
 	)
+
+	var static_signature := hash([
+		detailed_wave_fade_start,
+		detailed_wave_fade_end,
+		effective_middle_radius,
+		middle_wave_amplitude_ratio,
+		far_wave_amplitude_ratio,
+		debug_show_rings,
+	])
+
+	if (
+		not force_static
+		and static_signature == _surface_static_uniform_signature
+	):
+		return
+
+	_surface_static_uniform_signature = static_signature
+
+	_visual_material.set_shader_parameter(&"ocean_surface_enabled", true)
 	_visual_material.set_shader_parameter(
 		&"ocean_detailed_wave_fade_start",
 		detailed_wave_fade_start
