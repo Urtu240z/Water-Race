@@ -2,6 +2,26 @@
 
 [ext_resource type="PackedScene" uid="uid://qiqduyrfwah7" path="res://scenes/vehicle/jet_ski.tscn" id="1_base"]
 [ext_resource type="PackedScene" path="res://scenes/rider/rider_rig.tscn" id="2_rider"]
+[ext_resource type="Script" path="res://scripts/rider/rider_grip_orientation_modifier_3d.gd" id="3_grip_orientation"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_n0p1g"]
+animation = &"mounted_breathing"
+
+[sub_resource type="AnimationNodeAdd2" id="AnimationNodeAdd2_eswg0"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_65bka"]
+resource_local_to_scene = true
+animation = &"Mounted_JetSki_Base_Corrected_v2"
+
+[sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_2v7mb"]
+resource_local_to_scene = true
+nodes/mounted_base/node = SubResource("AnimationNodeAnimation_65bka")
+nodes/mounted_base/position = Vector2(-420, -80)
+nodes/breathing/node = SubResource("AnimationNodeAnimation_n0p1g")
+nodes/breathing/position = Vector2(-420, 90)
+nodes/mounted_add/node = SubResource("AnimationNodeAdd2_eswg0")
+nodes/mounted_add/position = Vector2(-160, 0)
+node_connections = [&"output", 0, &"mounted_add", &"mounted_add", 0, &"mounted_base", &"mounted_add", 1, &"breathing"]
 
 [node name="JetSki" unique_id=117969959 instance=ExtResource("1_base")]
 
@@ -11,24 +31,35 @@ free_rev_pitch = 4.5
 idle_volume_db = 0.0
 speed_for_full_load = 42.0
 
-[node name="RiderHandTargets" type="Node3D" parent="VisualRoot/JetSkiVisual/HandlePivot" parent_id_path=PackedInt32Array(556077452, 1724927576) index="1" unique_id=1552986585]
+[node name="JetSkiVisual" parent="VisualRoot" index="0" unique_id=556077452]
+handle_low_angle_degrees = -3.0
 
-[node name="LeftHandTarget" type="Marker3D" parent="VisualRoot/JetSkiVisual/HandlePivot/RiderHandTargets" index="0" unique_id=133906918]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0.2545, 0.6306, -1.441)
+[node name="GripTargets" type="Node3D" parent="VisualRoot/JetSkiVisual/HandlePivot" parent_id_path=PackedInt32Array(556077452, 1724927576) index="1" unique_id=1552986585]
+
+[node name="LeftGripTarget" type="Marker3D" parent="VisualRoot/JetSkiVisual/HandlePivot/GripTargets" index="0" unique_id=133906918]
+transform = Transform3D(0.742512, -0.654444, 0.142752, -0.562383, -0.724853, -0.397885, 0.363869, 0.215153, -0.90626, 0.250358, 0.630563, -1.441818)
 gizmo_extents = 0.09
 
-[node name="RightHandTarget" type="Marker3D" parent="VisualRoot/JetSkiVisual/HandlePivot/RiderHandTargets" index="1" unique_id=1399651623]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -0.2545, 0.6306, -1.441)
+[node name="RightGripTarget" type="Marker3D" parent="VisualRoot/JetSkiVisual/HandlePivot/GripTargets" index="1" unique_id=1399651623]
+transform = Transform3D(0.800577, 0.351224, 0.485508, 0.555191, -0.739619, -0.380428, 0.225476, 0.574111, -0.787118, -0.250172, 0.630574, -1.441818)
+gizmo_extents = 0.09
+
+[node name="LeftElbowPole" type="Marker3D" parent="VisualRoot/JetSkiVisual/HandlePivot/GripTargets" index="2"]
+position = Vector3(0.65, 0.72, -1.58)
+gizmo_extents = 0.09
+
+[node name="RightElbowPole" type="Marker3D" parent="VisualRoot/JetSkiVisual/HandlePivot/GripTargets" index="3"]
+position = Vector3(-0.65, 0.72, -1.58)
 gizmo_extents = 0.09
 
 [node name="RiderTargets" type="Node3D" parent="VisualRoot" parent_id_path=PackedInt32Array(1832404346) index="1" unique_id=1856867832]
 
 [node name="LeftFootTarget" type="Marker3D" parent="VisualRoot/RiderTargets" index="0" unique_id=843894663]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.085, -0.022, 0.78)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.085, -0.022, 0.9203998)
 gizmo_extents = 0.09
 
 [node name="RightFootTarget" type="Marker3D" parent="VisualRoot/RiderTargets" index="1" unique_id=1336667131]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.085, -0.022, 0.94)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.085, -0.022, 1.0660982)
 gizmo_extents = 0.09
 
 [node name="RiderMount" type="Node3D" parent="VisualRoot" parent_id_path=PackedInt32Array(1832404346) index="2" unique_id=189811698]
@@ -39,4 +70,37 @@ transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 
 
 [node name="RiderRig" parent="VisualRoot/RiderMount/RiderAssetRoot" index="0" unique_id=2001770911 instance=ExtResource("2_rider")]
 
+[node name="LeftArmIK" type="TwoBoneIK3D" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D" index="0"]
+influence = 1.0
+setting_count = 1
+settings/0/target_node = NodePath("../../../../../../../../JetSkiVisual/HandlePivot/GripTargets/LeftGripTarget")
+settings/0/pole_node = NodePath("../../../../../../../../JetSkiVisual/HandlePivot/GripTargets/LeftElbowPole")
+settings/0/root_bone_name = "mixamorig_LeftArm"
+settings/0/middle_bone_name = "mixamorig_LeftForeArm"
+settings/0/pole_direction = 7
+settings/0/pole_direction_vector = Vector3(0.937, 0, -0.35)
+settings/0/end_bone_name = "mixamorig_LeftHand"
+
+[node name="RightArmIK" type="TwoBoneIK3D" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D" index="1"]
+influence = 1.0
+setting_count = 1
+settings/0/target_node = NodePath("../../../../../../../../JetSkiVisual/HandlePivot/GripTargets/RightGripTarget")
+settings/0/pole_node = NodePath("../../../../../../../../JetSkiVisual/HandlePivot/GripTargets/RightElbowPole")
+settings/0/root_bone_name = "mixamorig_RightArm"
+settings/0/middle_bone_name = "mixamorig_RightForeArm"
+settings/0/pole_direction = 7
+settings/0/pole_direction_vector = Vector3(-0.767, 0, -0.642)
+settings/0/end_bone_name = "mixamorig_RightHand"
+
+[node name="GripOrientation" type="SkeletonModifier3D" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D" index="2"]
+influence = 1.0
+script = ExtResource("3_grip_orientation")
+left_hand_target = NodePath("../../../../../../../../JetSkiVisual/HandlePivot/GripTargets/LeftGripTarget")
+right_hand_target = NodePath("../../../../../../../../JetSkiVisual/HandlePivot/GripTargets/RightGripTarget")
+
+[node name="AnimationTree" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig" index="2" unique_id=187453891]
+tree_root = SubResource("AnimationNodeBlendTree_2v7mb")
+
 [editable path="VisualRoot/JetSkiVisual"]
+[editable path="VisualRoot/RiderMount/RiderAssetRoot/RiderRig"]
+[editable path="VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/Rider_Bot"]
