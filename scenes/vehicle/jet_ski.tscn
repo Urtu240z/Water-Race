@@ -6,6 +6,7 @@
 [ext_resource type="AudioStream" uid="uid://c5bbvguxmykwh" path="res://assets/audio/Motor.ogg" id="4_motor"]
 [ext_resource type="Script" uid="uid://ccpq0is7w8h55" path="res://scripts/effects/turbine_exhaust_controller.gd" id="5_turbine_exhaust"]
 [ext_resource type="PackedScene" path="res://scenes/effects/vehicle_water_effects_3d.tscn" id="6_water_effects"]
+[ext_resource type="Script" path="res://scripts/vehicle/jet_ski_arcade_handling.gd" id="7_arcade_handling"]
 
 [sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_hull"]
 points = PackedVector3Array(0, 0.22, -1.55, 0.071, 0.185, -1.55, 0.1, 0.1, -1.55, 0.071, 0.015, -1.55, 0, -0.02, -1.55, -0.071, 0.015, -1.55, -0.1, 0.1, -1.55, -0.071, 0.185, -1.55, 0, 0.28, -1.15, 0.325, 0.198, -1.15, 0.46, 0, -1.15, 0.325, -0.198, -1.15, 0, -0.28, -1.15, -0.325, -0.198, -1.15, -0.46, 0, -1.15, -0.325, 0.198, -1.15, 0, 0.3, 0.55, 0.424, 0.212, 0.55, 0.6, 0, 0.55, 0.424, -0.212, 0.55, 0, -0.3, 0.55, -0.424, -0.212, 0.55, -0.6, 0, 0.55, -0.424, 0.212, 0.55, 0, 0.26, 1.55, 0.311, 0.19, 1.55, 0.44, 0.02, 1.55, 0.311, -0.15, 1.55, 0, -0.22, 1.55, -0.311, -0.15, 1.55, -0.44, 0.02, 1.55, -0.311, 0.19, 1.55)
@@ -38,6 +39,9 @@ free_rev_rise_speed = 6.1
 free_rev_fall_speed = 18.700000000000003
 nose_down_pitch_boost = 0.125
 nose_up_pitch_drop = 0.135
+
+[node name="ArcadeHandling" type="Node" parent="."]
+script = ExtResource("7_arcade_handling")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=2026230859]
 shape = SubResource("ConvexPolygonShape3D_hull")
@@ -82,7 +86,7 @@ turbine_controller_path = NodePath("../TurbineExhaust")
 [node name="TurbineExhaust" type="Node3D" parent="Effects" unique_id=1478477575]
 script = ExtResource("5_turbine_exhaust")
 
-[node name="TurbineOutlet" type="Marker3D" parent="Effects/TurbineExhaust" unique_id=1826081341]
+[node name="TurbineOutlet" type="Marker3D" parent="Effects/TurbineExhaust" unique_id=1829776583]
 transform = Transform3D(1, 0, 0, 0, 0.43973684, 0.8981266, 0, -0.8981266, 0.43973684, 0, -0.18, 1.34)
 
 [node name="JetCore" type="MeshInstance3D" parent="Effects/TurbineExhaust/TurbineOutlet" unique_id=1314280869]
