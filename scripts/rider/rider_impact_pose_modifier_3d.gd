@@ -118,16 +118,16 @@ func _apply_position_offset(
 func _apply_local_rotation(
 	skeleton: Skeleton3D,
 	bone_name: StringName,
-	rotation_degrees: Vector3
+	local_rotation_degrees: Vector3
 ) -> void:
 	var bone_index := skeleton.find_bone(bone_name)
 	if bone_index < 0:
 		return
-	var rotation_radians := Vector3(
-		deg_to_rad(rotation_degrees.x),
-		deg_to_rad(rotation_degrees.y),
-		deg_to_rad(rotation_degrees.z)
+	var local_rotation_radians := Vector3(
+		deg_to_rad(local_rotation_degrees.x),
+		deg_to_rad(local_rotation_degrees.y),
+		deg_to_rad(local_rotation_degrees.z)
 	)
 	var pose := skeleton.get_bone_pose(bone_index)
-	pose.basis *= Basis.from_euler(rotation_radians)
+	pose.basis *= Basis.from_euler(local_rotation_radians)
 	skeleton.set_bone_pose(bone_index, pose)
