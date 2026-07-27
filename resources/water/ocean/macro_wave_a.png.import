@@ -3,20 +3,19 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://c0kex04xga83k"
-path.s3tc="res://.godot/imported/macro_wave_a.png-34acf49615f2af3bd923e9838b56d9d1.s3tc.ctex"
+path="res://.godot/imported/macro_wave_a.png-34acf49615f2af3bd923e9838b56d9d1.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://resources/water/ocean/macro_wave_a.png"
-dest_files=["res://.godot/imported/macro_wave_a.png-34acf49615f2af3bd923e9838b56d9d1.s3tc.ctex"]
+dest_files=["res://.godot/imported/macro_wave_a.png-34acf49615f2af3bd923e9838b56d9d1.ctex"]
 
 [params]
 
-compress/mode=2
+compress/mode=0
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0
@@ -24,7 +23,7 @@ compress/rdo_quality_loss=0.0
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0
-mipmaps/generate=true
+mipmaps/generate=false
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""
