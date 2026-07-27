@@ -2,23 +2,25 @@
 
 [ext_resource type="PackedScene" uid="uid://qiqduyrfwah7" path="res://scenes/vehicle/jet_ski.tscn" id="1_base"]
 [ext_resource type="PackedScene" path="res://scenes/rider/rider_rig.tscn" id="2_rider"]
-[ext_resource type="Script" path="res://scripts/rider/rider_grip_orientation_modifier_3d.gd" id="3_grip_orientation"]
-[ext_resource type="Script" path="res://scripts/rider/rider_impact_pose_modifier_3d.gd" id="4_impact_pose"]
-[ext_resource type="Script" path="res://scripts/rider/rider_foot_orientation_modifier_3d.gd" id="5_foot_orientation"]
-[ext_resource type="Script" path="res://scripts/rider/rider_impact_response_controller.gd" id="6_impact_response"]
+[ext_resource type="Script" uid="uid://bk28pr20t1b8q" path="res://scripts/rider/rider_grip_orientation_modifier_3d.gd" id="3_grip_orientation"]
+[ext_resource type="Script" uid="uid://dbqp5gmdnuxmf" path="res://scripts/rider/rider_impact_pose_modifier_3d.gd" id="4_impact_pose"]
+[ext_resource type="Script" uid="uid://1mx1c4y02pnl" path="res://scripts/rider/rider_foot_orientation_modifier_3d.gd" id="5_foot_orientation"]
+[ext_resource type="Script" uid="uid://b3kfrm0a2yu83" path="res://scripts/rider/rider_impact_response_controller.gd" id="6_impact_response"]
+[ext_resource type="Script" uid="uid://clycxmofcu2k5" path="res://scripts/rider/rider_grip_finger_modifier_3d.gd" id="7_grip_fingers"]
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_n0p1g"]
 animation = &"mounted_breathing"
 
 [sub_resource type="AnimationNodeAdd2" id="AnimationNodeAdd2_eswg0"]
 
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_65bka"]
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_jh5lk"]
 resource_local_to_scene = true
 animation = &"Mounted_JetSki_Base_Corrected_v2"
 
-[sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_2v7mb"]
+[sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_bn8gx"]
 resource_local_to_scene = true
-nodes/mounted_base/node = SubResource("AnimationNodeAnimation_65bka")
+graph_offset = Vector2(-434.6533, -37.701797)
+nodes/mounted_base/node = SubResource("AnimationNodeAnimation_jh5lk")
 nodes/mounted_base/position = Vector2(-420, -80)
 nodes/breathing/node = SubResource("AnimationNodeAnimation_n0p1g")
 nodes/breathing/position = Vector2(-420, 90)
@@ -34,46 +36,51 @@ free_rev_pitch = 4.5
 idle_volume_db = 0.0
 speed_for_full_load = 42.0
 
-[node name="RiderImpactResponse" type="Node" parent="."]
-script = ExtResource("6_impact_response")
-
-[node name="JetSkiVisual" parent="VisualRoot" index="0" unique_id=556077452]
+[node name="JetSkiVisual" parent="VisualRoot" parent_id_path=PackedInt32Array(1832404346) index="0" unique_id=556077452]
 handle_low_angle_degrees = -3.0
 
 [node name="GripTargets" type="Node3D" parent="VisualRoot/JetSkiVisual/HandlePivot" parent_id_path=PackedInt32Array(556077452, 1724927576) index="1" unique_id=1552986585]
 
 [node name="LeftGripTarget" type="Marker3D" parent="VisualRoot/JetSkiVisual/HandlePivot/GripTargets" index="0" unique_id=133906918]
-transform = Transform3D(0.742512, -0.654444, 0.142752, -0.562383, -0.724853, -0.397885, 0.363869, 0.215153, -0.90626, 0.250358, 0.630563, -1.441818)
+transform = Transform3D(0.80945057, -0.38433683, -0.4439311, -0.562383, -0.724853, -0.39788496, -0.1688622, 0.57172793, -0.8028763, 0.23569667, 0.6851984, -1.4330194)
 gizmo_extents = 0.09
 
 [node name="RightGripTarget" type="Marker3D" parent="VisualRoot/JetSkiVisual/HandlePivot/GripTargets" index="1" unique_id=1399651623]
-transform = Transform3D(0.800577, 0.351224, 0.485508, 0.555191, -0.739619, -0.380428, 0.225476, 0.574111, -0.787118, -0.250172, 0.630574, -1.441818)
+transform = Transform3D(0.8147076, 0.39156362, 0.42770252, 0.55519104, -0.7396191, -0.38042808, 0.16737556, 0.5473936, -0.8199654, -0.20712315, 0.6983707, -1.4514726)
 gizmo_extents = 0.09
 
-[node name="LeftElbowPole" type="Marker3D" parent="VisualRoot/JetSkiVisual/HandlePivot/GripTargets" index="2"]
-position = Vector3(0.65, 0.72, -1.58)
+[node name="LeftElbowPole" type="Marker3D" parent="VisualRoot/JetSkiVisual/HandlePivot/GripTargets" index="2" unique_id=1972306506]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.65, 0.72, -1.58)
 gizmo_extents = 0.09
 
-[node name="RightElbowPole" type="Marker3D" parent="VisualRoot/JetSkiVisual/HandlePivot/GripTargets" index="3"]
-position = Vector3(-0.65, 0.72, -1.58)
+[node name="RightElbowPole" type="Marker3D" parent="VisualRoot/JetSkiVisual/HandlePivot/GripTargets" index="3" unique_id=548776459]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.65, 0.72, -1.58)
 gizmo_extents = 0.09
 
 [node name="RiderTargets" type="Node3D" parent="VisualRoot" parent_id_path=PackedInt32Array(1832404346) index="1" unique_id=1856867832]
 
 [node name="LeftFootTarget" type="Marker3D" parent="VisualRoot/RiderTargets" index="0" unique_id=843894663]
-transform = Transform3D(0.951892, -0.062977, -0.299892, -0.283627, -0.55155, -0.784441, -0.116004, 0.831761, -0.542878, -0.064047, 0.08192, 0.838286)
+transform = Transform3D(0.951892, -0.062977, -0.299892, -0.283627, -0.55155, -0.784441, -0.116004, 0.831761, -0.542878, -0.064047, 0.08192, 0.9595921)
 gizmo_extents = 0.09
 
 [node name="RightFootTarget" type="Marker3D" parent="VisualRoot/RiderTargets" index="1" unique_id=1336667131]
-transform = Transform3D(0.97483, -0.00625, 0.222863, 0.169776, -0.627105, -0.760207, 0.144509, 0.778909, -0.61026, 0.072476, 0.08051, 0.996216)
+transform = Transform3D(0.97483, -0.00625, 0.222863, 0.169776, -0.627105, -0.760207, 0.144509, 0.778909, -0.61026, 0.072476, 0.08051, 1.1618845)
 gizmo_extents = 0.09
 
-[node name="LeftKneePole" type="Marker3D" parent="VisualRoot/RiderTargets" index="2"]
-position = Vector3(-0.297241, 0.465705, 0.252035)
+[node name="LeftSoleTarget" type="Marker3D" parent="VisualRoot/RiderTargets" index="2" unique_id=208059727]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.064047, 0.02, 0.913286)
 gizmo_extents = 0.09
 
-[node name="RightKneePole" type="Marker3D" parent="VisualRoot/RiderTargets" index="3"]
-position = Vector3(0.254358, 0.360448, 0.337251)
+[node name="RightSoleTarget" type="Marker3D" parent="VisualRoot/RiderTargets" index="3" unique_id=2079191997]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.072476, 0.02, 1.071216)
+gizmo_extents = 0.09
+
+[node name="LeftKneePole" type="Marker3D" parent="VisualRoot/RiderTargets" index="4" unique_id=1917218786]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.297241, 0.465705, 0.252035)
+gizmo_extents = 0.09
+
+[node name="RightKneePole" type="Marker3D" parent="VisualRoot/RiderTargets" index="5" unique_id=401377401]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.254358, 0.360448, 0.337251)
 gizmo_extents = 0.09
 
 [node name="RiderMount" type="Node3D" parent="VisualRoot" parent_id_path=PackedInt32Array(1832404346) index="2" unique_id=189811698]
@@ -84,68 +91,253 @@ transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 
 
 [node name="RiderRig" parent="VisualRoot/RiderMount/RiderAssetRoot" index="0" unique_id=2001770911 instance=ExtResource("2_rider")]
 
-[node name="RiderImpactPose" type="SkeletonModifier3D" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D" index="0"]
+[node name="Rider_Bot" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot" parent_id_path=PackedInt32Array(2001770911, 226906520) index="0" unique_id=1075285769]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.18724537, 0)
+
+[node name="SKEL_Rider" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/Rider_Bot" index="0" unique_id=1348584656]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.1578315e-08, 0.11282855, -0.13244057)
+
+[node name="Skeleton3D" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/Rider_Bot/SKEL_Rider" index="0" unique_id=426480764]
+bones/0/position = Vector3(0.048459, 0.6, -0.19)
+bones/0/rotation = Quaternion(0.100194216, -0.014087973, 0.014438142, 0.9947634)
+bones/1/position = Vector3(-4.8316906e-12, 0.101824485, 1.9628956e-09)
+bones/1/rotation = Quaternion(0.21804944, -0.0118857045, 0.01643765, 0.97572696)
+bones/2/position = Vector3(0, 0.10002686, 8.381903e-09)
+bones/2/rotation = Quaternion(0.018652719, -0.0022232372, -0.0023279968, 0.9998208)
+bones/3/position = Vector3(3.637979e-12, 0.10010648, -2.0489097e-08)
+bones/3/rotation = Quaternion(0.18507753, -0.0024844566, -0.0027379189, 0.98271704)
+bones/4/position = Vector3(-3.710018e-06, 0.16292441, -0.002570657)
+bones/4/rotation = Quaternion(-0.39016733, 0.012584886, -0.016081987, 0.92051756)
+bones/5/rotation = Quaternion(-0.13167384, 0.008950856, -0.009989283, 0.9912024)
+bones/6/rotation = Quaternion(-0.4742514, 0.57118, -0.52213025, -0.41978452)
+bones/7/position = Vector3(-1.1920929e-07, 0.111160755, 0)
+bones/7/rotation = Quaternion(0.16943951, 0.34417683, -0.41202778, 0.82647794)
+bones/8/position = Vector3(-1.1920929e-07, 0.27867126, -1.7881393e-07)
+bones/8/rotation = Quaternion(0.36329192, 0.026918234, -0.40888417, 0.8367246)
+bones/9/rotation = Quaternion(0.43222886, -0.07382996, 0.14132361, 0.8875556)
+bones/10/position = Vector3(0.026818521, 0.024648042, 0.015739925)
+bones/10/rotation = Quaternion(0.19800949, 0.20662756, -0.3447518, 0.8940042)
+bones/11/position = Vector3(-3.934838e-08, 0.04188987, -2.1097367e-07)
+bones/11/rotation = Quaternion(-0.007850693, -0.0009172554, 0.094569325, 0.9954869)
+bones/12/position = Vector3(1.3504177e-08, 0.034162637, 8.7558874e-08)
+bones/12/rotation = Quaternion(-0.018831512, -0.008552975, -0.04915381, 0.99857706)
+bones/13/rotation = Quaternion(-0.05223062, -0.06553571, 0.0024048914, 0.99647945)
+bones/14/rotation = Quaternion(0.22078636, 0.025909543, -0.13648, 0.96537834)
+bones/15/position = Vector3(-3.7252903e-09, 0.028500233, -4.8894435e-08)
+bones/15/rotation = Quaternion(0.28613347, 0.059110463, -0.1748744, 0.94024074)
+bones/16/position = Vector3(-2.682209e-07, 0.09532508, 4.917383e-07)
+bones/16/rotation = Quaternion(-0.07374893, -0.06055414, 0.101439945, 0.99025464)
+bones/17/rotation = Quaternion(0.29897436, 0.0126611, -0.12801093, 0.94555134)
+bones/18/position = Vector3(-9.313226e-10, 0.029499862, 8.8475645e-08)
+bones/18/rotation = Quaternion(0.3835674, 0.032238614, -0.1574322, 0.9094239)
+bones/19/position = Vector3(-0.018651372, 0.091035925, 0.00043072272)
+bones/19/rotation = Quaternion(-0.13063502, -0.05922846, 0.23100723, 0.9623213)
+bones/20/rotation = Quaternion(0.35972387, 0.0016893812, -0.13633013, 0.92304385)
+bones/21/position = Vector3(0, 0.028896932, -1.3038516e-08)
+bones/21/rotation = Quaternion(0.38520885, 0.04149648, -0.17664964, 0.90481323)
+bones/22/position = Vector3(-0.038062822, 0.08076676, 0.004867101)
+bones/22/rotation = Quaternion(0.034815516, -0.0431307, 0.25800112, 0.9645533)
+bones/23/rotation = Quaternion(0.2805919, 0.01612477, -0.13405642, 0.95028263)
+bones/24/position = Vector3(-9.313226e-10, 0.020999873, 6.239861e-08)
+bones/24/rotation = Quaternion(0.33244422, 0.07809518, -0.22287567, 0.91307634)
+bones/25/position = Vector3(0.04570663, 0.10576442, -0.00600845)
+bones/25/rotation = Quaternion(0.46587157, 0.57551175, -0.5358458, 0.40573293)
+bones/26/position = Vector3(0, 0.11112893, 1.7881393e-07)
+bones/26/rotation = Quaternion(0.1795778, -0.18684863, 0.47049692, 0.84348804)
+bones/27/position = Vector3(-5.9604645e-08, 0.27841508, 5.9604645e-08)
+bones/27/rotation = Quaternion(0.22262521, -0.03464038, 0.5128321, 0.8283969)
+bones/28/rotation = Quaternion(0.4241649, 0.247073, 0.04833192, 0.8698869)
+bones/29/position = Vector3(-0.026817312, 0.024661455, 0.01576186)
+bones/29/rotation = Quaternion(0.081582494, -0.16406189, 0.22663234, 0.9565907)
+bones/30/position = Vector3(-3.958121e-09, 0.04187095, 1.1143857e-07)
+bones/30/rotation = Quaternion(-0.014058116, -0.017745785, -0.13741094, 0.99025536)
+bones/31/position = Vector3(1.6298145e-08, 0.034183986, 7.6324795e-09)
+bones/31/rotation = Quaternion(-0.03553935, 0.04340373, 0.115869716, 0.991679)
+bones/32/position = Vector3(-0.022598632, 0.091093086, 0.005180273)
+bones/32/rotation = Quaternion(-0.11591299, 0.08265455, -0.008068652, 0.98978144)
+bones/33/rotation = Quaternion(0.23593858, -0.023299305, 0.13568813, 0.96196616)
+bones/34/position = Vector3(-2.7939677e-09, 0.028500063, 6.984919e-08)
+bones/34/rotation = Quaternion(0.27822006, -0.06072026, 0.17505552, 0.9424767)
+bones/35/position = Vector3(-3.594905e-07, 0.09533393, -4.4796616e-07)
+bones/35/rotation = Quaternion(0.016885092, 0.041743983, -0.13654858, 0.9896094)
+bones/36/rotation = Quaternion(0.20666039, -0.028262442, 0.13834968, 0.96816957)
+bones/37/position = Vector3(-3.7252903e-09, 0.029499896, -3.3527613e-08)
+bones/37/rotation = Quaternion(0.26037365, -0.05868901, 0.16568853, 0.9493727)
+bones/38/position = Vector3(0.018650819, 0.091045246, 0.00043014344)
+bones/38/rotation = Quaternion(-0.0851346, 0.059080016, -0.2376482, 0.9658079)
+bones/39/rotation = Quaternion(0.5012435, 0.02864104, 0.12916885, 0.8551317)
+bones/40/position = Vector3(-7.450581e-09, 0.0294999, 6.472692e-08)
+bones/40/rotation = Quaternion(0.55123806, 0.0030513476, 0.16031879, 0.81879497)
+bones/41/rotation = Quaternion(0.028797727, 0.043102663, -0.23566452, 0.970451)
+bones/42/rotation = Quaternion(0.21113315, -0.024339667, 0.17710394, 0.96097064)
+bones/43/position = Vector3(2.7939677e-09, 0.021000098, 2.9336661e-08)
+bones/43/rotation = Quaternion(0.28190535, -0.092108965, 0.22240652, 0.9287522)
+bones/44/position = Vector3(-0.082077906, -0.06771749, -0.015122205)
+bones/44/rotation = Quaternion(-0.15616556, 0.35645112, 0.9182961, 0.07271365)
+bones/45/position = Vector3(0, 0.43905494, 5.9604645e-08)
+bones/45/rotation = Quaternion(-0.5981688, 0.060707595, -0.084787495, 0.7945564)
+bones/46/position = Vector3(1.4901161e-08, 0.4452782, -2.2351742e-08)
+bones/46/rotation = Quaternion(0.7235507, -0.11176829, 0.13424385, 0.66780305)
+bones/47/position = Vector3(-1.2781129e-08, 0.14997412, -9.313226e-09)
+bones/47/rotation = Quaternion(0.35451728, -0.00014738289, 4.7525277e-06, 0.93504953)
+bones/48/position = Vector3(0.08207788, -0.06771797, -0.0151221305)
+bones/48/rotation = Quaternion(0.06345732, 0.4348132, 0.8977873, -0.029812576)
+bones/49/position = Vector3(0, 0.43905365, 5.9604645e-08)
+bones/49/rotation = Quaternion(-0.60251784, -0.1696106, -0.028568985, 0.7793512)
+bones/50/position = Vector3(0, 0.44527858, 4.4703484e-08)
+bones/50/rotation = Quaternion(0.7125594, 0.07650568, 0.029117562, 0.69682014)
+bones/51/position = Vector3(-6.2773324e-09, 0.1499741, 9.546056e-09)
+bones/51/rotation = Quaternion(0.35248864, -0.00014723821, 4.045581e-06, 0.93581617)
+
+[node name="RiderImpactPose" type="SkeletonModifier3D" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D" index="0" unique_id=1959462542]
+unique_name_in_owner = false
+process_mode = 0
+process_priority = 0
+process_physics_priority = 0
+process_thread_group = 0
+physics_interpolation_mode = 0
+auto_translate_mode = 0
+editor_description = ""
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+rotation_edit_mode = 0
+rotation_order = 2
+top_level = false
+visible = true
+visibility_parent = NodePath("")
+active = true
 influence = 1.0
 script = ExtResource("4_impact_pose")
 
-[node name="LeftLegIK" type="TwoBoneIK3D" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D" index="1"]
-influence = 1.0
+[node name="LeftLegIK" type="TwoBoneIK3D" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D" index="1" unique_id=1661474148]
 setting_count = 1
 settings/0/target_node = NodePath("../../../../../../../../RiderTargets/LeftFootTarget")
 settings/0/pole_node = NodePath("../../../../../../../../RiderTargets/LeftKneePole")
 settings/0/root_bone_name = "mixamorig_LeftUpLeg"
+settings/0/root_bone = 48
 settings/0/middle_bone_name = "mixamorig_LeftLeg"
+settings/0/middle_bone = 49
 settings/0/pole_direction = 7
 settings/0/pole_direction_vector = Vector3(0.1664, 0, 0.9861)
 settings/0/end_bone_name = "mixamorig_LeftFoot"
+settings/0/end_bone = 50
+settings/0/use_virtual_end = false
+settings/0/extend_end_bone = false
 
-[node name="RightLegIK" type="TwoBoneIK3D" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D" index="2"]
-influence = 1.0
+[node name="RightLegIK" type="TwoBoneIK3D" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D" index="2" unique_id=852699806]
 setting_count = 1
 settings/0/target_node = NodePath("../../../../../../../../RiderTargets/RightFootTarget")
 settings/0/pole_node = NodePath("../../../../../../../../RiderTargets/RightKneePole")
 settings/0/root_bone_name = "mixamorig_RightUpLeg"
+settings/0/root_bone = 44
 settings/0/middle_bone_name = "mixamorig_RightLeg"
+settings/0/middle_bone = 45
 settings/0/pole_direction = 7
 settings/0/pole_direction_vector = Vector3(-0.215, 0, 0.977)
 settings/0/end_bone_name = "mixamorig_RightFoot"
+settings/0/end_bone = 46
+settings/0/use_virtual_end = false
+settings/0/extend_end_bone = false
 
-[node name="FootOrientation" type="SkeletonModifier3D" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D" index="3"]
+[node name="FootOrientation" type="SkeletonModifier3D" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D" index="3" unique_id=1357917683]
+unique_name_in_owner = false
+process_mode = 0
+process_priority = 0
+process_physics_priority = 0
+process_thread_group = 0
+physics_interpolation_mode = 0
+auto_translate_mode = 0
+editor_description = ""
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+rotation_edit_mode = 0
+rotation_order = 2
+top_level = false
+visible = true
+visibility_parent = NodePath("")
+active = true
 influence = 1.0
 script = ExtResource("5_foot_orientation")
 left_foot_target = NodePath("../../../../../../../../RiderTargets/LeftFootTarget")
 right_foot_target = NodePath("../../../../../../../../RiderTargets/RightFootTarget")
+left_sole_target = NodePath("../../../../../../../../RiderTargets/LeftSoleTarget")
+right_sole_target = NodePath("../../../../../../../../RiderTargets/RightSoleTarget")
+left_foot_rotation_correction_degrees = Vector3(240.325, 0, 0)
+right_foot_rotation_correction_degrees = Vector3(240, 0, 0)
 
-[node name="LeftArmIK" type="TwoBoneIK3D" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D" index="4"]
-influence = 1.0
+[node name="LeftArmIK" type="TwoBoneIK3D" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D" index="4" unique_id=621313630]
 setting_count = 1
 settings/0/target_node = NodePath("../../../../../../../../JetSkiVisual/HandlePivot/GripTargets/LeftGripTarget")
 settings/0/pole_node = NodePath("../../../../../../../../JetSkiVisual/HandlePivot/GripTargets/LeftElbowPole")
 settings/0/root_bone_name = "mixamorig_LeftArm"
+settings/0/root_bone = 26
 settings/0/middle_bone_name = "mixamorig_LeftForeArm"
+settings/0/middle_bone = 27
 settings/0/pole_direction = 7
 settings/0/pole_direction_vector = Vector3(0.937, 0, -0.35)
 settings/0/end_bone_name = "mixamorig_LeftHand"
+settings/0/end_bone = 28
+settings/0/use_virtual_end = false
+settings/0/extend_end_bone = false
 
-[node name="RightArmIK" type="TwoBoneIK3D" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D" index="5"]
-influence = 1.0
+[node name="RightArmIK" type="TwoBoneIK3D" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D" index="5" unique_id=1497179900]
 setting_count = 1
 settings/0/target_node = NodePath("../../../../../../../../JetSkiVisual/HandlePivot/GripTargets/RightGripTarget")
 settings/0/pole_node = NodePath("../../../../../../../../JetSkiVisual/HandlePivot/GripTargets/RightElbowPole")
 settings/0/root_bone_name = "mixamorig_RightArm"
+settings/0/root_bone = 7
 settings/0/middle_bone_name = "mixamorig_RightForeArm"
+settings/0/middle_bone = 8
 settings/0/pole_direction = 7
 settings/0/pole_direction_vector = Vector3(-0.767, 0, -0.642)
 settings/0/end_bone_name = "mixamorig_RightHand"
+settings/0/end_bone = 9
+settings/0/use_virtual_end = false
+settings/0/extend_end_bone = false
 
-[node name="GripOrientation" type="SkeletonModifier3D" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D" index="6"]
+[node name="GripOrientation" type="SkeletonModifier3D" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D" index="6" unique_id=1612949557]
+unique_name_in_owner = false
+process_mode = 0
+process_priority = 0
+process_physics_priority = 0
+process_thread_group = 0
+physics_interpolation_mode = 0
+auto_translate_mode = 0
+editor_description = ""
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+rotation_edit_mode = 0
+rotation_order = 2
+top_level = false
+visible = true
+visibility_parent = NodePath("")
+active = true
 influence = 1.0
 script = ExtResource("3_grip_orientation")
 left_hand_target = NodePath("../../../../../../../../JetSkiVisual/HandlePivot/GripTargets/LeftGripTarget")
 right_hand_target = NodePath("../../../../../../../../JetSkiVisual/HandlePivot/GripTargets/RightGripTarget")
 
+[node name="GripFingers" type="SkeletonModifier3D" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D" index="7" unique_id=940560861]
+unique_name_in_owner = false
+process_mode = 0
+process_priority = 0
+process_physics_priority = 0
+process_thread_group = 0
+physics_interpolation_mode = 0
+auto_translate_mode = 0
+editor_description = ""
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+rotation_edit_mode = 0
+rotation_order = 2
+top_level = false
+visible = true
+visibility_parent = NodePath("")
+active = true
+influence = 1.0
+script = ExtResource("7_grip_fingers")
+
 [node name="AnimationTree" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig" index="2" unique_id=187453891]
-tree_root = SubResource("AnimationNodeBlendTree_2v7mb")
+tree_root = SubResource("AnimationNodeBlendTree_bn8gx")
+
+[node name="RiderImpactResponse" type="Node" parent="." index="8" unique_id=966370299]
+script = ExtResource("6_impact_response")
 
 [editable path="VisualRoot/JetSkiVisual"]
 [editable path="VisualRoot/RiderMount/RiderAssetRoot/RiderRig"]
