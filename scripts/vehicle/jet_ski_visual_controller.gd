@@ -32,25 +32,37 @@ extends Node3D
 
 var handle_pole_normalized: float:
 	get:
-		return _angle_to_normalized(rad_to_deg(_target_angle_radians))
+		return _angle_to_normalized(rad_to_deg(_base_target_angle_radians))
 
 var handle_pole_angle_degrees: float:
 	get:
 		return rad_to_deg(_current_angle_radians)
 
+var handle_pole_base_angle_degrees: float:
+	get:
+		return rad_to_deg(_base_target_angle_radians)
+
+var handle_impact_offset_degrees: float:
+	get:
+		return rad_to_deg(_impact_offset_radians)
+
 @onready var _handle_pivot: Node3D = %HandlePivot
 
-var _target_angle_radians: float = 0.0
+var _base_target_angle_radians: float = 0.0
+var _impact_offset_radians: float = 0.0
 var _current_angle_radians: float = 0.0
 
 
 func _ready() -> void:
 	_register_anime_toon_targets()
 	if Engine.is_editor_hint():
-		_apply_angle_immediately(deg_to_rad(_normalized_to_angle(handle_pole_preview)))
+		_base_target_angle_radians = deg_to_rad(
+			_normalized_to_angle(handle_pole_preview)
+		)
+		_apply_angle_immediately(_get_final_target_angle_radians())
 		return
-	_target_angle_radians = deg_to_rad(handle_rest_angle_degrees)
-	_apply_angle_immediately(_target_angle_radians)
+	_base_target_angle_radians = deg_to_rad(handle_rest_angle_degrees)
+	_apply_angle_immediately(_get_final_target_angle_radians())
 	_connect_vehicle_reset()
 
 
@@ -63,14 +75,17 @@ func _register_anime_toon_targets() -> void:
 
 func _process(delta: float) -> void:
 	if Engine.is_editor_hint():
-		_apply_angle_immediately(deg_to_rad(_normalized_to_angle(handle_pole_preview)))
+		_base_target_angle_radians = deg_to_rad(
+			_normalized_to_angle(handle_pole_preview)
+		)
+		_apply_angle_immediately(_get_final_target_angle_radians())
 		return
 	if not handle_pole_enabled or not is_instance_valid(_handle_pivot):
 		return
 	var factor := 1.0 - exp(-handle_pole_sharpness * maxf(delta, 0.0))
 	_current_angle_radians = lerp_angle(
 		_current_angle_radians,
-		_target_angle_radians,
+		_get_final_target_angle_radians(),
 		factor
 	)
 	_apply_pivot_rotation(_current_angle_radians)
@@ -88,15 +103,24 @@ func set_handle_pole_angle_degrees(
 ) -> void:
 	var minimum_angle := minf(handle_low_angle_degrees, handle_high_angle_degrees)
 	var maximum_angle := maxf(handle_low_angle_degrees, handle_high_angle_degrees)
-	_target_angle_radians = deg_to_rad(clampf(angle_degrees, minimum_angle, maximum_angle))
+	_base_target_angle_radians = deg_to_rad(
+		clampf(angle_degrees, minimum_angle, maximum_angle)
+	)
 	if immediate or Engine.is_editor_hint():
-		_apply_angle_immediately(_target_angle_radians)
+		_apply_angle_immediately(_get_final_target_angle_radians())
+
+
+func set_handle_impact_offset_degrees(value: float) -> void:
+	_impact_offset_radians = deg_to_rad(value)
+	if Engine.is_editor_hint():
+		_apply_angle_immediately(_get_final_target_angle_radians())
 
 
 func snap_handle_to_rest() -> void:
 	handle_pole_preview = 0.5
-	_target_angle_radians = deg_to_rad(handle_rest_angle_degrees)
-	_apply_angle_immediately(_target_angle_radians)
+	_base_target_angle_radians = deg_to_rad(handle_rest_angle_degrees)
+	_impact_offset_radians = 0.0
+	_apply_angle_immediately(_get_final_target_angle_radians())
 
 
 func _normalized_to_angle(value: float) -> float:
@@ -132,8 +156,21 @@ func _angle_to_normalized(angle_degrees: float) -> float:
 
 func _apply_angle_immediately(angle_radians: float) -> void:
 	_current_angle_radians = angle_radians
-	_target_angle_radians = angle_radians
 	_apply_pivot_rotation(angle_radians)
+
+
+func _get_final_target_angle_radians() -> float:
+	var minimum_angle := deg_to_rad(
+		minf(handle_low_angle_degrees, handle_high_angle_degrees)
+	)
+	var maximum_angle := deg_to_rad(
+		maxf(handle_low_angle_degrees, handle_high_angle_degrees)
+	)
+	return clampf(
+		_base_target_angle_radians + _impact_offset_radians,
+		minimum_angle,
+		maximum_angle
+	)
 
 
 func _apply_pivot_rotation(angle_radians: float) -> void:
@@ -146,7 +183,10 @@ func _apply_pivot_rotation(angle_radians: float) -> void:
 
 func _refresh_editor_preview() -> void:
 	if Engine.is_editor_hint() and is_node_ready():
-		_apply_angle_immediately(deg_to_rad(_normalized_to_angle(handle_pole_preview)))
+		_base_target_angle_radians = deg_to_rad(
+			_normalized_to_angle(handle_pole_preview)
+		)
+		_apply_angle_immediately(_get_final_target_angle_radians())
 
 
 func _connect_vehicle_reset() -> void:
