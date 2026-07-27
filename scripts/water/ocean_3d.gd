@@ -126,9 +126,11 @@ func _ready() -> void:
 	configure_ripple_emitter(ripple_emitter_target)
 	set_process(Engine.is_editor_hint())
 	set_physics_process(not Engine.is_editor_hint())
-	_build_runtime_height_maps_when_ready()
 	_push_all_shader_parameters()
-	if Engine.is_editor_hint():
+
+	if not Engine.is_editor_hint():
+		_build_runtime_height_maps_when_ready()
+	else:
 		update_configuration_warnings()
 
 
@@ -367,10 +369,10 @@ func apply_world_rebase(
 func _refresh_editor_preview() -> void:
 	if not Engine.is_editor_hint() or not is_node_ready():
 		return
+
 	_surface = get_node_or_null("Surface") as OceanSurface3D
 	_resolve_targets()
 	_configure_surface()
-	rebuild_height_maps()
 	apply_ocean_settings()
 
 
@@ -589,8 +591,12 @@ func _build_runtime_height_maps_when_ready() -> void:
 
 
 func _build_runtime_height_maps() -> bool:
-	var image_a := _generate_height_image(wave_height_texture_a)
-	var image_b := _generate_height_image(wave_height_texture_b)
+	var image_a := _get_cpu_readable_image(wave_height_texture_a)
+	var image_b := _get_cpu_readable_image(wave_height_texture_b)
+
+	if image_a == null or image_b == null:
+		return false
+
 	if (
 		image_a == null
 		or image_a.is_empty()
@@ -602,9 +608,62 @@ func _build_runtime_height_maps() -> bool:
 		return false
 	_wave_image_a = image_a
 	_wave_image_b = image_b
-	_runtime_wave_texture_a = ImageTexture.create_from_image(_wave_image_a)
-	_runtime_wave_texture_b = ImageTexture.create_from_image(_wave_image_b)
-	return _runtime_wave_texture_a != null and _runtime_wave_texture_b != null
+
+	_runtime_wave_texture_a = _resolve_runtime_wave_texture(
+		wave_height_texture_a,
+		_wave_image_a
+	)
+	_runtime_wave_texture_b = _resolve_runtime_wave_texture(
+		wave_height_texture_b,
+		_wave_image_b
+	)
+
+	return (
+		_runtime_wave_texture_a != null
+		and _runtime_wave_texture_b != null
+	)
+
+
+func _get_cpu_readable_image(texture: Texture2D) -> Image:
+	if texture == null:
+		return null
+
+	var image := texture.get_image()
+	if image == null or image.is_empty():
+		return null
+
+	if image.is_compressed():
+		var decompress_error := image.decompress()
+
+		if decompress_error != OK:
+			push_warning(
+				"Ocean3D could not decompress a wave height image "
+				+ "for CPU sampling. Error: %s"
+				% error_string(decompress_error)
+			)
+			return null
+
+	return image
+
+
+func _resolve_runtime_wave_texture(
+	source_texture: Texture2D,
+	generated_image: Image
+) -> Texture2D:
+	if source_texture == null:
+		return null
+
+	# Las texturas importadas, como PNG o JPG, ya son el recurso
+	# que debe utilizar el shader. No hay que duplicarlas.
+	if source_texture is not NoiseTexture2D:
+		return source_texture
+
+	# Una NoiseTexture2D sí necesita convertirse a una imagen concreta
+	# para que la física CPU y el shader GPU usen exactamente los mismos datos.
+	if generated_image == null or generated_image.is_empty():
+		return source_texture
+
+	return ImageTexture.create_from_image(generated_image)
 
 
 func _generate_height_image(source: Texture2D) -> Image:
@@ -723,13 +782,22 @@ func _push_static_parameters(material: ShaderMaterial) -> void:
 		return
 	material.set_shader_parameter(&"ocean_enabled", true)
 	material.set_shader_parameter(&"water_level", water_level)
+	var shader_wave_texture_a: Texture2D = wave_height_texture_a
+	var shader_wave_texture_b: Texture2D = wave_height_texture_b
+
+	if not Engine.is_editor_hint():
+		if _runtime_wave_texture_a != null:
+			shader_wave_texture_a = _runtime_wave_texture_a
+		if _runtime_wave_texture_b != null:
+			shader_wave_texture_b = _runtime_wave_texture_b
+
 	material.set_shader_parameter(
 		&"wave_height_texture_a",
-		_runtime_wave_texture_a if _runtime_wave_texture_a != null else wave_height_texture_a
+		shader_wave_texture_a
 	)
 	material.set_shader_parameter(
 		&"wave_height_texture_b",
-		_runtime_wave_texture_b if _runtime_wave_texture_b != null else wave_height_texture_b
+		shader_wave_texture_b
 	)
 	material.set_shader_parameter(&"wave_world_size_a", wave_world_size_a)
 	material.set_shader_parameter(&"wave_world_size_b", wave_world_size_b)
