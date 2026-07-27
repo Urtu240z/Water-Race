@@ -1,0 +1,38 @@
+[gd_resource type="Environment" format=3 uid="uid://dxw5rtrc0obhl"]
+
+[ext_resource type="Sky" uid="uid://bhe1h7h061jon" path="res://resources/environment/sky/sky_original.tres" id="1_ndf22"]
+
+[resource]
+background_mode = 2
+background_energy_multiplier = 3.0
+sky = ExtResource("1_ndf22")
+ambient_light_source = 3
+ambient_light_color = Color(0.9303179, 0.60265046, 5.77569e-06, 1)
+ambient_light_sky_contribution = 0.8
+ambient_light_energy = 1.35
+reflected_light_source = 2
+tonemap_mode = 3
+tonemap_exposure = 0.6
+ssr_enabled = true
+ssao_enabled = true
+ssao_radius = 2.5
+ssao_power = 1.35
+ssao_detail = 0.7
+ssao_horizon = 0.08
+ssao_sharpness = 0.85
+glow_enabled = true
+glow_normalized = true
+glow_intensity = 0.67
+glow_strength = 0.83
+fog_enabled = true
+fog_mode = 1
+fog_light_color = Color(0.99327177, 0.8602038, 0.79064494, 1)
+fog_density = 0.4667
+fog_sky_affect = 0.331
+fog_depth_curve = 0.5946027
+fog_depth_begin = 0.0
+fog_depth_end = 1939.9
+adjustment_enabled = true
+adjustment_brightness = 0.82
+adjustment_contrast = 0.995
+adjustment_saturation = 0.71

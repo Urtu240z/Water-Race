@@ -4,8 +4,8 @@ extends AudioStreamPlayer3D
 
 @export_group("Engine Response")
 @export_range(0.25, 2.0, 0.01) var idle_pitch: float = 0.72
-@export_range(0.25, 2.0, 0.01) var full_throttle_pitch: float = 1.38
-@export_range(0.25, 2.5, 0.01) var free_rev_pitch: float = 1.90
+@export_range(0.25, 3.5, 0.01) var full_throttle_pitch: float = 1.38
+@export_range(0.25, 4.5, 0.01) var free_rev_pitch: float = 1.90
 @export_range(-40.0, 6.0, 0.5) var idle_volume_db: float = -14.0
 @export_range(-40.0, 6.0, 0.5) var full_throttle_volume_db: float = -2.0
 @export_range(1.0, 50.0, 0.5) var speed_for_full_load: float = 24.0
@@ -30,7 +30,6 @@ var _vehicle: RigidBody3D
 var _free_rev_blend: float = 0.0
 var _base_pitch: float = 1.0
 var _wave_load_pitch_offset: float = 0.0
-
 
 func _ready() -> void:
 	_vehicle = get_parent() as RigidBody3D
@@ -65,11 +64,11 @@ func _physics_process(delta: float) -> void:
 	).length()
 	var speed_load := clampf(horizontal_speed / maxf(speed_for_full_load, 0.001), 0.0, 1.0)
 	var control_load := maxf(throttle, reverse * reverse_load_scale)
-	var engine_load := clampf(
-		maxf(control_load, speed_load * coasting_speed_influence),
-		0.0,
-		1.0
-	)
+	var throttle_rev_floor := control_load * 0.32
+	var speed_pitch_influence := lerpf(coasting_speed_influence, 1.0, control_load)
+	var speed_rev_load := speed_load * speed_pitch_influence
+	var engine_load := clampf(maxf(throttle_rev_floor, speed_rev_load), 0.0, 1.0)
+
 	var hull_has_contact := float(_vehicle.get("submerged_ratio")) > 0.0
 	var turbine_has_contact := (
 		float(_vehicle.get("propulsion_contact_factor")) > turbine_contact_threshold

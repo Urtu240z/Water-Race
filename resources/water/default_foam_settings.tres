@@ -4,6 +4,7 @@
 
 [resource]
 script = ExtResource("1_settings")
+foam_amount = 0.41
 wake_foam_opacity_boost = 1.15
 wake_foam_core_opacity = 0.52
 wake_foam_emission = 0.1

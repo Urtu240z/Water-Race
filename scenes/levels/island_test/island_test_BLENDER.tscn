@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://cf71so1prahki"]
 
 [ext_resource type="Script" uid="uid://8h4lqtd66nw0" path="res://scripts/levels/island_test_blender_bootstrap.gd" id="1_yqko0"]
+[ext_resource type="Environment" uid="uid://dxw5rtrc0obhl" path="res://resources/environment/environment_1.tres" id="2_0pibt"]
 [ext_resource type="Sky" uid="uid://bhe1h7h061jon" path="res://resources/environment/sky/sky_original.tres" id="2_tfoy1"]
 [ext_resource type="PackedScene" uid="uid://cilidnwjw2dt" path="res://scenes/vegetation/palms_multimesh.scn" id="3_un2uv"]
 [ext_resource type="Material" uid="uid://cwtgldc4ahbeu" path="res://assets/materials/aerial_rocks_02.res" id="5_kmjc7"]
@@ -32,6 +33,7 @@
 [ext_resource type="Texture2D" uid="uid://biv8w5n57xhjr" path="res://resources/water/organic_surface/surface_normal_b.tres" id="36_a0jux"]
 [ext_resource type="PackedScene" uid="uid://dmqjonl673mxd" path="res://scenes/course/buoy.tscn" id="37_armhu"]
 [ext_resource type="Texture2D" uid="uid://bblan7rbfrudb" path="res://resources/water/organic_surface/surface_warp_noise.tres" id="37_vkhvf"]
+[ext_resource type="AudioStream" uid="uid://j7rnutr7c4dx" path="res://assets/audio/Motor_1.ogg" id="38_jrck1"]
 [ext_resource type="Texture2D" uid="uid://cq8kw5o6ssrwc" path="res://assets/environment/sky/aristea_wreck_puresky_4k.hdr" id="39_1y1wo"]
 [ext_resource type="Texture2D" uid="uid://dh4ygdetfbe7t" path="res://assets/environment/sky/kloofendal_48d_partly_cloudy_puresky_4k.hdr" id="40_armhu"]
 [ext_resource type="Texture2D" uid="uid://b7kfjl0vvcloa" path="res://assets/environment/sky/qwantani_dusk_1_puresky_4k.hdr" id="41_7fon7"]
@@ -39,7 +41,7 @@
 [ext_resource type="PackedScene" uid="uid://cfw7pu0e3ws7n" path="res://assets/3D/Rock2.glb" id="195_ox2y0"]
 [ext_resource type="PackedScene" uid="uid://bgpsiyc4tr47u" path="res://assets/3D/Rock1.glb" id="196_t7md2"]
 [ext_resource type="PackedScene" uid="uid://vls5xu5jnvyf" path="res://assets/3D/Rock3.glb" id="197_3j4p0"]
-[ext_resource type="PackedScene" path="res://scenes/vehicle/jet_ski_with_rider.tscn" id="203_nrhvk"]
+[ext_resource type="PackedScene" uid="uid://tl6lotex1356" path="res://scenes/vehicle/jet_ski_with_rider.tscn" id="203_nrhvk"]
 [ext_resource type="AudioStream" uid="uid://doxjcciq5t4q3" path="res://assets/audio/Ocean_Waves.ogg" id="204_4tj3w"]
 [ext_resource type="AudioStream" uid="uid://cioy3ls4ryjq2" path="res://assets/audio/Ocean_Wind.ogg" id="205_wm0j8"]
 [ext_resource type="PackedScene" uid="uid://dewy0j55fasc8" path="res://scenes/camera/chase_camera.tscn" id="206_ckn4c"]
@@ -55,41 +57,6 @@
 [ext_resource type="PackedScene" uid="uid://c08rfa066ud8" path="res://assets/3D/Terrain/palm_impostor_ground_shadows.glb" id="222_palm_shadow"]
 [ext_resource type="Shader" uid="uid://cmnqja2yvxste" path="res://shaders/vegetation/palm_impostor_ground_shadow.gdshader" id="223_palm_shadow_shader"]
 [ext_resource type="PackedScene" uid="uid://cisubjold2oac" path="res://scenes/wildlife/ambient_wildlife.tscn" id="224_wildlife"]
-
-[sub_resource type="Environment" id="Environment_fhw81"]
-background_mode = 2
-background_energy_multiplier = 3.0
-sky = ExtResource("2_tfoy1")
-ambient_light_source = 3
-ambient_light_color = Color(0.9303179, 0.60265046, 5.77569e-06, 1)
-ambient_light_sky_contribution = 0.8
-ambient_light_energy = 1.35
-reflected_light_source = 2
-tonemap_mode = 3
-tonemap_exposure = 0.6
-ssr_enabled = true
-ssao_enabled = true
-ssao_radius = 2.5
-ssao_power = 1.35
-ssao_detail = 0.7
-ssao_horizon = 0.08
-ssao_sharpness = 0.85
-glow_enabled = true
-glow_normalized = true
-glow_intensity = 0.67
-glow_strength = 0.83
-fog_enabled = true
-fog_mode = 1
-fog_light_color = Color(0.99327177, 0.8602038, 0.79064494, 1)
-fog_density = 0.4667
-fog_sky_affect = 0.331
-fog_depth_curve = 0.5946027
-fog_depth_begin = 0.0
-fog_depth_end = 1939.9
-adjustment_enabled = true
-adjustment_brightness = 0.82
-adjustment_contrast = 0.995
-adjustment_saturation = 0.71
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_tpwhi"]
 render_priority = 0
@@ -195,7 +162,7 @@ shader_parameter/breakup = 0.0
 material = ExtResource("34_h01lt")
 size = Vector2(10000, 10000)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_cfiqe"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0pibt"]
 resource_local_to_scene = true
 render_priority = 0
 shader = ExtResource("33_8ypm4")
@@ -204,17 +171,17 @@ shader_parameter/water_level = 0.0
 shader_parameter/simulation_time = 0.0
 shader_parameter/wave_height_texture_a = ExtResource("34_cfiqe")
 shader_parameter/wave_height_texture_b = ExtResource("35_0pibt")
-shader_parameter/wave_world_size_a = 289.0
-shader_parameter/wave_world_size_b = 171.5
-shader_parameter/wave_amplitude_a = 1.25
-shader_parameter/wave_amplitude_b = 0.42
+shader_parameter/wave_world_size_a = 276.0
+shader_parameter/wave_world_size_b = 163.0
+shader_parameter/wave_amplitude_a = 1.02999997697744
+shader_parameter/wave_amplitude_b = 0.37999999150624
 shader_parameter/wave_direction_a = Vector2(0.86012906, 0.5100765)
-shader_parameter/wave_direction_b = Vector2(-0.38176015, 0.9242614)
-shader_parameter/wave_travel_speed_a = 6.399999999999999
-shader_parameter/wave_travel_speed_b = 3.6000000000000014
-shader_parameter/wave_mean_a = 0.5
-shader_parameter/wave_mean_b = 0.47
-shader_parameter/geometry_normal_step = 0.4
+shader_parameter/wave_direction_b = Vector2(-0.38176018, 0.92426145)
+shader_parameter/wave_travel_speed_a = 9.0000004321348
+shader_parameter/wave_travel_speed_b = 4.0000003576287995
+shader_parameter/wave_mean_a = 0.2070000098325
+shader_parameter/wave_mean_b = 0.2350000111625
+shader_parameter/geometry_normal_step = 2.0
 shader_parameter/ripple_active = PackedInt32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 shader_parameter/ripple_positions = PackedVector2Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 shader_parameter/ripple_start_times = PackedFloat32Array(inf_neg, inf_neg, inf_neg, inf_neg, inf_neg, inf_neg, inf_neg, inf_neg, inf_neg, inf_neg, inf_neg, inf_neg)
@@ -226,9 +193,9 @@ shader_parameter/ripple_lifetimes = PackedFloat32Array(4.6, 4.6, 4.6, 4.6, 4.6, 
 shader_parameter/surface_normal_texture_a = ExtResource("35_g6vww")
 shader_parameter/surface_normal_texture_b = ExtResource("36_a0jux")
 shader_parameter/surface_warp_texture = ExtResource("37_vkhvf")
-shader_parameter/surface_normal_world_size_a = 7.5
-shader_parameter/surface_normal_world_size_b = 3.25
-shader_parameter/surface_normal_strength = 0.62
+shader_parameter/surface_normal_world_size_a = 5.85000008344672
+shader_parameter/surface_normal_world_size_b = 1.0000000111759
+shader_parameter/surface_normal_strength = 0.25999999418848
 shader_parameter/surface_flow_direction_a = Vector2(0.82, 0.57)
 shader_parameter/surface_flow_direction_b = Vector2(-0.46, 0.89)
 shader_parameter/surface_flow_speed_a = 0.24
@@ -259,16 +226,16 @@ shader_parameter/horizon_roughness = 0.23
 shader_parameter/water_specular = 0.88
 shader_parameter/foam_enabled = true
 shader_parameter/foam_noise_texture = ExtResource("34_cowfl")
-shader_parameter/foam_color = Color(0.82, 0.95, 1, 1)
-shader_parameter/shore_foam_width = 5.000000074506
-shader_parameter/shore_foam_strength = 0.249999994412
-shader_parameter/crest_foam_start = 0.3999999910592
-shader_parameter/crest_foam_end = 0.94
-shader_parameter/crest_foam_strength = 0.82
+shader_parameter/foam_color = Color(0.5921569, 0.8901961, 1, 1)
+shader_parameter/shore_foam_width = 5.55000008270166
+shader_parameter/shore_foam_strength = 1.05
+shader_parameter/crest_foam_start = 0.46
+shader_parameter/crest_foam_end = 0.96999997831856
+shader_parameter/crest_foam_strength = 0.62999998591824
 shader_parameter/ripple_foam_strength = 0.18
-shader_parameter/foam_macro_scale = 0.055
-shader_parameter/foam_detail_scale = 1.2000000569999998
-shader_parameter/foam_scroll_speed = 0.13
+shader_parameter/foam_macro_scale = 0.3450000163875
+shader_parameter/foam_detail_scale = 1.2560000596599998
+shader_parameter/foam_scroll_speed = 0.58999998681232
 shader_parameter/foam_roughness = 0.88
 shader_parameter/ocean_surface_enabled = true
 shader_parameter/ocean_snapped_origin_xz = Vector2(0, 0)
@@ -315,7 +282,7 @@ chase_camera_path = NodePath("CameraSystem/ChaseCamera")
 [node name="Environment" type="Node3D" parent="." unique_id=366055671]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="Environment" unique_id=951090327]
-environment = SubResource("Environment_fhw81")
+environment = ExtResource("2_0pibt")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="Environment" unique_id=1488093793]
 transform = Transform3D(0.88294756, 0.3488854, -0.3141378, 0, 0.66913056, 0.74314487, 0.46947157, -0.656158, 0.5908072, 0, 0, 0)
@@ -326,6 +293,18 @@ shadow_blur = 1.16
 directional_shadow_mode = 1
 directional_shadow_fade_start = 0.85
 directional_shadow_max_distance = 500.0
+
+[node name="DirectionalLight3D2" type="DirectionalLight3D" parent="Environment" unique_id=1424115820]
+transform = Transform3D(0.5065836, 0.570615, -0.6463525, 3.9991328e-08, 0.74966294, 0.6618198, 0.86219084, -0.335267, 0.37976694, 0, 0, 0)
+visible = false
+light_color = Color(0.82647467, 0.6933553, 0.57007265, 1)
+light_energy = 0.4
+light_specular = 10.0
+shadow_enabled = true
+directional_shadow_mode = 1
+directional_shadow_split_1 = 0.15
+directional_shadow_fade_start = 0.85
+directional_shadow_max_distance = 600.0
 
 [node name="TerrainRoot" type="Node3D" parent="." unique_id=432130367]
 
@@ -406,7 +385,16 @@ mesh = SubResource("PlaneMesh_tpwhi")
 [node name="WaterIntegration" type="Node3D" parent="." unique_id=1889730552]
 
 [node name="Ocean" parent="WaterIntegration" unique_id=1340264265 instance=ExtResource("32_wfhwd")]
-ocean_material = SubResource("ShaderMaterial_cfiqe")
+ocean_material = SubResource("ShaderMaterial_0pibt")
+wave_world_size_a = 276.0
+wave_world_size_b = 163.0
+wave_amplitude_a = 1.02999997697744
+wave_amplitude_b = 0.37999999150624
+wave_travel_speed_a = 9.0000004321348
+wave_travel_speed_b = 4.0000003576287995
+wave_mean_a = 0.2070000098325
+wave_mean_b = 0.2350000111625
+normal_sample_step = 2.0
 
 [node name="AmbientWildlife" parent="." unique_id=1482046972 instance=ExtResource("224_wildlife")]
 ocean_path = NodePath("")
@@ -422,23 +410,24 @@ dolphin_breach_duration_max = 0.9
 transform = Transform3D(0.9811287, 0, 0.19335571, 0, 1, 0, -0.19335571, 0, 0.9811287, 596.97815, 1.98, 464.24957)
 
 [node name="JetSki" parent="Gameplay" unique_id=328650943 instance=ExtResource("203_nrhvk")]
-transform = Transform3D(-1.5, 0, -2.2649371e-07, 0, 1.5, 0, 2.2649371e-07, 0, -1.5, 132.69096, 0.71555996, -133.7861)
-gravity_scale = 1.9
+transform = Transform3D(-1, 0, -1.509958e-07, 0, 1, 0, 1.509958e-07, 0, -1, 132.69096, 0.71555996, -133.7861)
+mass = 480.0
+center_of_mass = Vector3(0, -0.22, 0.22)
 ocean_path = NodePath("../../WaterIntegration/Ocean")
-forward_engine_force = 10000.0
+forward_drag_linear_per_point = 10.0
+forward_drag_quadratic_per_point = 0.4
+forward_engine_force = 6500.0
 reverse_engine_force = 4500.0
-forward_thrust_falloff_start_speed = 19.3
-forward_thrust_falloff_end_speed = 150.0
+forward_thrust_falloff_start_speed = 30.0
+forward_thrust_falloff_end_speed = 80.0
 reverse_thrust_falloff_end_speed = 14.2
 
-[node name="LeftFootTarget" parent="Gameplay/JetSki/VisualRoot/RiderTargets" index="0"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.085, -0.022, 0.78)
-
-[node name="RightFootTarget" parent="Gameplay/JetSki/VisualRoot/RiderTargets" index="1"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.085, -0.022, 0.94)
-
-[node name="RiderMount" parent="Gameplay/JetSki/VisualRoot" parent_id_path=PackedInt32Array(328650943, 1832404346) index="2"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2428, 0.679)
+[node name="EngineAudio" parent="Gameplay/JetSki" index="0" unique_id=1603778743]
+stream = ExtResource("38_jrck1")
+full_throttle_pitch = 3.0
+speed_for_full_load = 50.0
+wave_load_activation_throttle = 0.91
+wave_load_response_speed = 17.8
 
 [node name="VehicleWaterEffects3D" parent="Gameplay/JetSki/Effects" parent_id_path=PackedInt32Array(328650943, 1733691099) index="0"]
 impact_particle_amount_multiplier = 5.8
@@ -467,8 +456,8 @@ base_height = 1.0
 base_look_ahead = 3.0
 look_height_offset = 0.0
 maximum_speed_distance_extension = 0.0
-base_fov = 60.0
-maximum_speed_fov = 65.0
+base_fov = 41.0
+maximum_speed_fov = 43.0
 
 [node name="Debug" type="Node" parent="." unique_id=1303880580]
 

@@ -10,6 +10,7 @@ extends Node3D
 
 const MAX_RIPPLES: int = 12
 const MIN_SAMPLE_STEP: float = 0.05
+const MACRO_MATERIAL_SYNC_INTERVAL: float = 0.25
 
 @export_group("Targets")
 @export_node_path("Node3D") var follow_target_path: NodePath
@@ -27,7 +28,9 @@ const MIN_SAMPLE_STEP: float = 0.05
 @export var ocean_material: ShaderMaterial:
 	set(value):
 		ocean_material = value
+		_macro_material_signature = -1
 		_static_parameters_dirty = true
+
 		if is_inside_tree():
 			_configure_surface()
 			_push_all_shader_parameters()
@@ -110,6 +113,9 @@ var _static_parameters_dirty: bool = true
 var _ripple_parameters_dirty: bool = true
 var _editor_refresh_elapsed: float = 0.0
 
+var _macro_material_sync_elapsed: float = 0.0
+var _macro_material_signature: int = -1
+
 
 func _enter_tree() -> void:
 	if Engine.is_editor_hint():
@@ -120,6 +126,7 @@ func _ready() -> void:
 	process_priority = -100
 	process_physics_priority = -100
 	_surface = get_node_or_null("Surface") as OceanSurface3D
+	_sync_macro_waves_from_material(true)
 	_initialize_ripples()
 	_resolve_targets()
 	_configure_surface()
@@ -141,6 +148,7 @@ func _process(delta: float) -> void:
 	if _editor_refresh_elapsed < 0.25:
 		return
 	_editor_refresh_elapsed = 0.0
+	_sync_macro_waves_from_material()
 	_resolve_targets()
 	_configure_surface()
 	_push_time_parameter_to_all_materials()
@@ -152,6 +160,18 @@ func _process(delta: float) -> void:
 
 func _physics_process(delta: float) -> void:
 	var safe_delta := maxf(delta, 0.0)
+	_macro_material_sync_elapsed += safe_delta
+	if (
+		_macro_material_sync_elapsed
+		>= MACRO_MATERIAL_SYNC_INTERVAL
+	):
+		_macro_material_sync_elapsed = 0.0
+		if _sync_macro_waves_from_material():
+			if (
+				_wave_image_a == null
+				or _wave_image_b == null
+			):
+				_build_runtime_height_maps()
 	_simulation_time += safe_delta
 	if _expire_ripples():
 		_ripple_parameters_dirty = true
@@ -739,6 +759,144 @@ func _image_has_variation(image: Image) -> bool:
 	var mean := value_sum / CHECK_SAMPLE_COUNT
 	var variance := squared_value_sum / CHECK_SAMPLE_COUNT - mean * mean
 	return maximum_value - minimum_value > 0.05 and variance > 0.0004
+
+
+func _sync_macro_waves_from_material(
+	force: bool = false
+) -> bool:
+	if ocean_material == null or ocean_material.shader == null:
+		return false
+
+	var texture_a := ocean_material.get_shader_parameter(
+		&"wave_height_texture_a"
+	) as Texture2D
+
+	var texture_b := ocean_material.get_shader_parameter(
+		&"wave_height_texture_b"
+	) as Texture2D
+
+	var world_size_a := float(
+		ocean_material.get_shader_parameter(
+			&"wave_world_size_a"
+		)
+	)
+
+	var world_size_b := float(
+		ocean_material.get_shader_parameter(
+			&"wave_world_size_b"
+		)
+	)
+
+	var amplitude_a := float(
+		ocean_material.get_shader_parameter(
+			&"wave_amplitude_a"
+		)
+	)
+
+	var amplitude_b := float(
+		ocean_material.get_shader_parameter(
+			&"wave_amplitude_b"
+		)
+	)
+
+	var direction_a: Vector2 = (
+		ocean_material.get_shader_parameter(
+			&"wave_direction_a"
+		)
+	)
+
+	var direction_b: Vector2 = (
+		ocean_material.get_shader_parameter(
+			&"wave_direction_b"
+		)
+	)
+
+	var travel_speed_a := float(
+		ocean_material.get_shader_parameter(
+			&"wave_travel_speed_a"
+		)
+	)
+
+	var travel_speed_b := float(
+		ocean_material.get_shader_parameter(
+			&"wave_travel_speed_b"
+		)
+	)
+
+	var mean_a := float(
+		ocean_material.get_shader_parameter(
+			&"wave_mean_a"
+		)
+	)
+
+	var mean_b := float(
+		ocean_material.get_shader_parameter(
+			&"wave_mean_b"
+		)
+	)
+
+	var geometry_step := float(
+		ocean_material.get_shader_parameter(
+			&"geometry_normal_step"
+		)
+	)
+
+	direction_a = _safe_direction(
+		direction_a,
+		Vector2.RIGHT
+	)
+	direction_b = _safe_direction(
+		direction_b,
+		Vector2.DOWN
+	)
+
+	var signature := hash([
+		texture_a,
+		texture_b,
+		world_size_a,
+		world_size_b,
+		amplitude_a,
+		amplitude_b,
+		direction_a,
+		direction_b,
+		travel_speed_a,
+		travel_speed_b,
+		mean_a,
+		mean_b,
+		geometry_step,
+	])
+
+	if (
+		not force
+		and signature == _macro_material_signature
+	):
+		return false
+
+	_macro_material_signature = signature
+
+	if texture_a != wave_height_texture_a:
+		wave_height_texture_a = texture_a
+
+	if texture_b != wave_height_texture_b:
+		wave_height_texture_b = texture_b
+
+	wave_world_size_a = maxf(world_size_a, 0.001)
+	wave_world_size_b = maxf(world_size_b, 0.001)
+	wave_amplitude_a = maxf(amplitude_a, 0.0)
+	wave_amplitude_b = maxf(amplitude_b, 0.0)
+	wave_direction_a = direction_a
+	wave_direction_b = direction_b
+	wave_travel_speed_a = travel_speed_a
+	wave_travel_speed_b = travel_speed_b
+	wave_mean_a = clampf(mean_a, 0.0, 1.0)
+	wave_mean_b = clampf(mean_b, 0.0, 1.0)
+	normal_sample_step = maxf(
+		geometry_step,
+		MIN_SAMPLE_STEP
+	)
+
+	_static_parameters_dirty = true
+	return true
 
 
 func _push_all_shader_parameters() -> void:

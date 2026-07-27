@@ -1,36 +1,42 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene format=3 uid="uid://tl6lotex1356"]
 
-[ext_resource type="PackedScene" path="res://scenes/vehicle/jet_ski.tscn" id="1_base"]
+[ext_resource type="PackedScene" uid="uid://qiqduyrfwah7" path="res://scenes/vehicle/jet_ski.tscn" id="1_base"]
 [ext_resource type="PackedScene" path="res://scenes/rider/rider_rig.tscn" id="2_rider"]
 
-[node name="JetSki" instance=ExtResource("1_base")]
+[node name="JetSki" unique_id=117969959 instance=ExtResource("1_base")]
 
-[node name="RiderTargets" type="Node3D" parent="VisualRoot" index="2"]
+[node name="EngineAudio" parent="." index="0" unique_id=1603778743]
+full_throttle_pitch = 3.5
+free_rev_pitch = 4.5
+idle_volume_db = 0.0
+speed_for_full_load = 42.0
 
-[node name="LeftFootTarget" type="Marker3D" parent="VisualRoot/RiderTargets" index="0"]
-position = Vector3(-0.085, -0.022, 0.78)
-gizmo_extents = 0.09
+[node name="RiderHandTargets" type="Node3D" parent="VisualRoot/JetSkiVisual/HandlePivot" parent_id_path=PackedInt32Array(556077452, 1724927576) index="1" unique_id=1552986585]
 
-[node name="RightFootTarget" type="Marker3D" parent="VisualRoot/RiderTargets" index="1"]
-position = Vector3(0.085, -0.022, 0.94)
-gizmo_extents = 0.09
-
-[node name="RiderMount" type="Node3D" parent="VisualRoot" index="3"]
-position = Vector3(0, 0.2428, 0.679)
-
-[node name="RiderAssetRoot" type="Node3D" parent="VisualRoot/RiderMount" index="0"]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
-
-[node name="RiderRig" parent="VisualRoot/RiderMount/RiderAssetRoot" index="0" instance=ExtResource("2_rider")]
-
-[node name="RiderHandTargets" type="Node3D" parent="VisualRoot/JetSkiVisual/HandlePivot" index="1"]
-
-[node name="LeftHandTarget" type="Marker3D" parent="VisualRoot/JetSkiVisual/HandlePivot/RiderHandTargets" index="0"]
+[node name="LeftHandTarget" type="Marker3D" parent="VisualRoot/JetSkiVisual/HandlePivot/RiderHandTargets" index="0" unique_id=133906918]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0.2545, 0.6306, -1.441)
 gizmo_extents = 0.09
 
-[node name="RightHandTarget" type="Marker3D" parent="VisualRoot/JetSkiVisual/HandlePivot/RiderHandTargets" index="1"]
+[node name="RightHandTarget" type="Marker3D" parent="VisualRoot/JetSkiVisual/HandlePivot/RiderHandTargets" index="1" unique_id=1399651623]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -0.2545, 0.6306, -1.441)
 gizmo_extents = 0.09
+
+[node name="RiderTargets" type="Node3D" parent="VisualRoot" parent_id_path=PackedInt32Array(1832404346) index="1" unique_id=1856867832]
+
+[node name="LeftFootTarget" type="Marker3D" parent="VisualRoot/RiderTargets" index="0" unique_id=843894663]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.085, -0.022, 0.78)
+gizmo_extents = 0.09
+
+[node name="RightFootTarget" type="Marker3D" parent="VisualRoot/RiderTargets" index="1" unique_id=1336667131]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.085, -0.022, 0.94)
+gizmo_extents = 0.09
+
+[node name="RiderMount" type="Node3D" parent="VisualRoot" parent_id_path=PackedInt32Array(1832404346) index="2" unique_id=189811698]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2428, 0.679)
+
+[node name="RiderAssetRoot" type="Node3D" parent="VisualRoot/RiderMount" index="0" unique_id=1312466662]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
+
+[node name="RiderRig" parent="VisualRoot/RiderMount/RiderAssetRoot" index="0" unique_id=2001770911 instance=ExtResource("2_rider")]
 
 [editable path="VisualRoot/JetSkiVisual"]
