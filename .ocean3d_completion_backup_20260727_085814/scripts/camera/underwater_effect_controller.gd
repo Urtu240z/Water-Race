@@ -8,7 +8,7 @@ enum DebugForceMode {
 }
 
 @export_group("References")
-@export_node_path("Ocean3D") var ocean_path: NodePath
+@export_node_path("WaterBody3D") var water_body_path: NodePath
 @export_node_path("MeshInstance3D") var post_process_path: NodePath = NodePath(
 	"UnderwaterPostProcess"
 )
@@ -54,7 +54,7 @@ var effect_strength: float:
 var _camera: Camera3D
 var _post_process: MeshInstance3D
 var _material: ShaderMaterial
-var _ocean: Ocean3D
+var _water_body: WaterBody3D
 var _is_underwater: bool = false
 var _camera_depth: float = -INF
 var _sampled_surface_height: float = -INF
@@ -77,11 +77,11 @@ func _ready() -> void:
 		set_process(false)
 		return
 	_push_look_parameters(true)
-	call_deferred("_resolve_ocean")
+	call_deferred("_resolve_water_body")
 
 
 func _exit_tree() -> void:
-	_unregister_ocean_material()
+	_unregister_water_material()
 
 
 func _process(delta: float) -> void:
@@ -90,18 +90,18 @@ func _process(delta: float) -> void:
 		if _post_process != null:
 			_post_process.visible = false
 		return
-	if not is_instance_valid(_ocean):
+	if not is_instance_valid(_water_body):
 		_resolve_retry_time -= delta
 		if _resolve_retry_time <= 0.0:
 			_resolve_retry_time = 1.0
-			_resolve_ocean()
-		if not is_instance_valid(_ocean):
+			_resolve_water_body()
+		if not is_instance_valid(_water_body):
 			if _post_process != null:
 				_post_process.visible = false
 			return
 
 	var camera_position := _camera.global_position
-	_sampled_surface_height = _ocean.sample_height(camera_position)
+	_sampled_surface_height = _water_body.sample_height(camera_position)
 	_camera_depth = _sampled_surface_height - camera_position.y
 	_update_detection_state()
 
@@ -140,43 +140,43 @@ func _update_detection_state() -> void:
 				_is_underwater = true
 
 
-func _resolve_ocean() -> void:
-	var resolved: Ocean3D
-	if not ocean_path.is_empty():
-		resolved = get_node_or_null(ocean_path) as Ocean3D
+func _resolve_water_body() -> void:
+	var resolved: WaterBody3D
+	if not water_body_path.is_empty():
+		resolved = get_node_or_null(water_body_path) as WaterBody3D
 	if resolved == null:
-		resolved = _find_matching_ocean()
-	if resolved == _ocean:
+		resolved = _find_matching_water_body()
+	if resolved == _water_body:
 		return
-	_unregister_ocean_material()
-	_ocean = resolved
-	if _ocean != null and _material != null:
-		_ocean.register_external_water_material(_material)
+	_unregister_water_material()
+	_water_body = resolved
+	if _water_body != null and _material != null:
+		_water_body.register_external_water_material(_material)
 
 
-func _find_matching_ocean() -> Ocean3D:
+func _find_matching_water_body() -> WaterBody3D:
 	var scene_root := get_tree().current_scene
 	if scene_root == null:
 		scene_root = get_tree().root
-	var fallback: Ocean3D = null
+	var fallback: WaterBody3D = null
 	var pending: Array[Node] = [scene_root]
 	while not pending.is_empty():
 		var candidate: Node = pending.pop_back()
-		if candidate is Ocean3D:
-			var ocean := candidate as Ocean3D
+		if candidate is WaterBody3D:
+			var water := candidate as WaterBody3D
 			if fallback == null:
-				fallback = ocean
-			if ocean.follow_camera == _camera:
-				return ocean
+				fallback = water
+			if water.follow_target == _camera:
+				return water
 		for child in candidate.get_children():
 			pending.append(child)
 	return fallback
 
 
-func _unregister_ocean_material() -> void:
-	if is_instance_valid(_ocean) and _material != null:
-		_ocean.unregister_external_water_material(_material)
-	_ocean = null
+func _unregister_water_material() -> void:
+	if is_instance_valid(_water_body) and _material != null:
+		_water_body.unregister_external_water_material(_material)
+	_water_body = null
 
 
 func _push_look_parameters(force_update: bool) -> void:

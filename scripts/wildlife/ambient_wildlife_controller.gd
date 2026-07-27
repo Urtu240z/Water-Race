@@ -67,7 +67,7 @@ const DOLPHIN_GROUPS := [
 ]
 
 @export_group("References")
-@export_node_path("PixelOceanWater3D") var water_body_path: NodePath
+@export_node_path("Ocean3D") var ocean_path: NodePath
 @export_node_path("Node3D") var player_path: NodePath
 
 @export_group("Population")
@@ -112,7 +112,7 @@ var visible_wildlife_actor_count: int:
 	get:
 		return _visible_actor_count
 
-var _water_body: PixelOceanWater3D
+var _ocean: Ocean3D
 var _player: Node3D
 var _actors: Array[Dictionary] = []
 var _elapsed_time: float = 0.0
@@ -121,7 +121,7 @@ var _random := RandomNumberGenerator.new()
 
 
 func _ready() -> void:
-	_water_body = get_node_or_null(water_body_path) as PixelOceanWater3D
+	_ocean = get_node_or_null(ocean_path) as Ocean3D
 	_player = get_node_or_null(player_path) as Node3D
 	if not wildlife_enabled:
 		set_process(false)
@@ -596,8 +596,8 @@ func _random_fish_target(state: Dictionary) -> Vector3:
 		float(state.radius_z)
 	)
 	var surface_level := (
-		_water_body.base_height
-		if is_instance_valid(_water_body)
+		_ocean.water_level
+		if is_instance_valid(_ocean)
 		else fallback_water_level
 	)
 	target_position.y = (
@@ -648,8 +648,8 @@ func _initial_velocity(
 
 
 func _sample_surface_height(world_position: Vector3) -> float:
-	if is_instance_valid(_water_body):
-		return _water_body.sample_height(world_position)
+	if is_instance_valid(_ocean):
+		return _ocean.sample_height(world_position)
 	return fallback_water_level
 
 

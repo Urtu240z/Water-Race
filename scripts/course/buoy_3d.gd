@@ -5,7 +5,7 @@ extends Node3D
 ## Course buoy with a side-specific passage area.
 ##
 ## The root remains fixed horizontally. At runtime it samples the active
-## WaterBody3D and follows only its surface height. The passage Area3D stays
+## Ocean3D and follows only its surface height. The passage Area3D stays
 ## upright and can be consumed later by a lap/checkpoint controller.
 
 signal valid_passage_entered(body: Node3D, required_side: int)
@@ -61,10 +61,10 @@ enum BuoySide {
 @export var required_body_group: StringName
 
 @export_group("Floating")
-@export_node_path("WaterBody3D") var water_body_path: NodePath:
+@export_node_path("Ocean3D") var ocean_path: NodePath:
 	set(value):
-		water_body_path = value
-		_water_body = null
+		ocean_path = value
+		_ocean = null
 @export var auto_find_water: bool = true
 @export_range(-10.0, 10.0, 0.01, "suffix:m") var waterline_offset: float = 0.0
 @export var snap_to_water_on_start: bool = true
@@ -79,7 +79,7 @@ enum BuoySide {
 @onready var _passage_area: Area3D = $PassageArea
 @onready var _passage_shape: CollisionShape3D = $PassageArea/CollisionShape3D
 
-var _water_body: WaterBody3D
+var _ocean: Ocean3D
 var _water_lookup_cooldown: float = 0.0
 var _editor_refresh_queued: bool = false
 
@@ -94,11 +94,11 @@ func _ready() -> void:
 	if Engine.is_editor_hint():
 		set_physics_process(false)
 		return
-	_resolve_water_body()
-	if snap_to_water_on_start and is_instance_valid(_water_body):
+	_resolve_ocean()
+	if snap_to_water_on_start and is_instance_valid(_ocean):
 		var start_position := global_position
 		start_position.y = (
-			_water_body.sample_height(start_position) + waterline_offset
+			_ocean.sample_height(start_position) + waterline_offset
 		)
 		global_position = start_position
 	_passage_area.body_entered.connect(_on_passage_body_entered)
@@ -106,16 +106,16 @@ func _ready() -> void:
 
 
 func _physics_process(delta: float) -> void:
-	if not is_instance_valid(_water_body):
+	if not is_instance_valid(_ocean):
 		_water_lookup_cooldown -= delta
 		if _water_lookup_cooldown <= 0.0:
 			_water_lookup_cooldown = 1.0
-			_resolve_water_body()
-		if not is_instance_valid(_water_body):
+			_resolve_ocean()
+		if not is_instance_valid(_ocean):
 			return
 	var sample_position := global_position
 	var target_height := (
-		_water_body.sample_height(sample_position) + waterline_offset
+		_ocean.sample_height(sample_position) + waterline_offset
 	)
 	var height_weight := 1.0 - exp(-maxf(vertical_follow_speed, 0.0) * delta)
 	var next_position := global_position
@@ -182,21 +182,21 @@ func _request_editor_refresh() -> void:
 	call_deferred(&"_refresh_configuration")
 
 
-func _resolve_water_body() -> void:
-	_water_body = null
-	if not water_body_path.is_empty():
-		_water_body = get_node_or_null(water_body_path) as WaterBody3D
-	if _water_body == null and auto_find_water and is_inside_tree():
-		_water_body = _find_water_body(get_tree().current_scene)
+func _resolve_ocean() -> void:
+	_ocean = null
+	if not ocean_path.is_empty():
+		_ocean = get_node_or_null(ocean_path) as Ocean3D
+	if _ocean == null and auto_find_water and is_inside_tree():
+		_ocean = _find_ocean(get_tree().current_scene)
 
 
-func _find_water_body(root: Node) -> WaterBody3D:
+func _find_ocean(root: Node) -> Ocean3D:
 	if root == null:
 		return null
-	if root is WaterBody3D:
-		return root as WaterBody3D
+	if root is Ocean3D:
+		return root as Ocean3D
 	for child in root.get_children():
-		var result := _find_water_body(child)
+		var result := _find_ocean(child)
 		if result != null:
 			return result
 	return null
@@ -207,7 +207,7 @@ func _update_visual_tilt(delta: float, sample_position: Vector3) -> void:
 		return
 	var target_basis := global_basis.orthonormalized()
 	if follow_water_normal:
-		var sampled_normal := _water_body.sample_normal(sample_position)
+		var sampled_normal := _ocean.sample_normal(sample_position)
 		var influenced_up := Vector3.UP.lerp(
 			sampled_normal,
 			clampf(water_normal_influence, 0.0, 1.0)

@@ -10,7 +10,7 @@ signal world_rebased(shift: Vector3)
 
 @export_group("References")
 @export_node_path("RigidBody3D") var vehicle_path: NodePath
-@export_node_path("WaterBody3D") var water_body_path: NodePath
+@export_node_path("Ocean3D") var ocean_path: NodePath
 @export_node_path("Node3D") var chase_camera_path: NodePath
 
 @export_group("Debug")
@@ -53,7 +53,7 @@ var maximum_local_distance_observed: float:
 		return _maximum_local_distance_observed
 
 var _vehicle: JetSkiController
-var _water_body: WaterBody3D
+var _ocean: Ocean3D
 var _chase_camera: ChaseCamera
 var _reference_warning_emitted: bool = false
 var _rebase_count: int = 0
@@ -122,8 +122,8 @@ func get_vehicle() -> JetSkiController:
 	return _vehicle
 
 
-func get_water_body() -> WaterBody3D:
-	return _water_body
+func get_ocean() -> Ocean3D:
+	return _ocean
 
 
 func get_chase_camera() -> ChaseCamera:
@@ -140,7 +140,7 @@ func _apply_world_rebase(shift: Vector3) -> bool:
 	_last_rebase_physics_frame = physics_frame
 	var next_logical_origin_x := _logical_origin_x + horizontal_shift.x
 	var next_logical_origin_z := _logical_origin_z + horizontal_shift.z
-	_water_body.apply_world_rebase(
+	_ocean.apply_world_rebase(
 		horizontal_shift,
 		next_logical_origin_x,
 		next_logical_origin_z
@@ -163,14 +163,14 @@ func _apply_world_rebase(shift: Vector3) -> bool:
 
 func _resolve_references() -> void:
 	_vehicle = get_node_or_null(vehicle_path) as JetSkiController
-	_water_body = get_node_or_null(water_body_path) as WaterBody3D
+	_ocean = get_node_or_null(ocean_path) as Ocean3D
 	_chase_camera = get_node_or_null(chase_camera_path) as ChaseCamera
 
 
 func _has_valid_references() -> bool:
 	return (
 		is_instance_valid(_vehicle)
-		and is_instance_valid(_water_body)
+		and is_instance_valid(_ocean)
 		and is_instance_valid(_chase_camera)
 	)
 
@@ -180,5 +180,5 @@ func _warn_about_invalid_references_once() -> void:
 		return
 	_reference_warning_emitted = true
 	push_warning(
-		"WorldOriginController is disabled because vehicle, water_body, or chase_camera is invalid."
+		"WorldOriginController is disabled because vehicle, ocean, or chase_camera is invalid."
 	)

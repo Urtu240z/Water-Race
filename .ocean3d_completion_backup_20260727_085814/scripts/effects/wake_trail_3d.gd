@@ -67,7 +67,7 @@ var vertex_count: int:
 var foam_intensity: float = 0.0
 
 var _vehicle: JetSkiController
-var _ocean: Ocean3D
+var _water: WaterBody3D
 var _propulsion_point: Marker3D
 var _rear_left: Marker3D
 var _rear_right: Marker3D
@@ -105,13 +105,13 @@ func _ready() -> void:
 
 func configure(
 	vehicle: JetSkiController,
-	ocean: Ocean3D,
+	water: WaterBody3D,
 	propulsion_point: Marker3D,
 	rear_left: Marker3D = null,
 	rear_right: Marker3D = null
 ) -> void:
 	_vehicle = vehicle
-	_ocean = ocean
+	_water = water
 	_propulsion_point = propulsion_point
 	_rear_left = rear_left
 	_rear_right = rear_right
@@ -246,7 +246,7 @@ func _can_add_sample() -> bool:
 	return (
 		wake_enabled
 		and is_instance_valid(_vehicle)
-		and is_instance_valid(_ocean)
+		and is_instance_valid(_water)
 		and is_instance_valid(_propulsion_point)
 		and _vehicle.navigation_state != JetSkiController.NavigationState.AIRBORNE
 		and _vehicle.rear_submerged_ratio > 0.0
@@ -259,7 +259,7 @@ func _rebuild_mesh() -> void:
 	_array_mesh.clear_surfaces()
 	_trail_length = 0.0
 	_current_width = 0.0
-	if _samples.size() < 2 or not is_instance_valid(_ocean):
+	if _samples.size() < 2 or not is_instance_valid(_water):
 		return
 	_vertices.clear()
 	_normals.clear()
@@ -277,10 +277,10 @@ func _rebuild_mesh() -> void:
 			).length()
 		var surface_position := Vector3(
 			sample.position.x,
-			_ocean.sample_height(sample.position) + wake_surface_offset,
+			_water.sample_height(sample.position) + wake_surface_offset,
 			sample.position.z
 		)
-		var water_normal := _ocean.sample_normal(sample.position)
+		var water_normal := _water.sample_normal(sample.position)
 		var tangent := _sample_tangent(index)
 		var right := tangent.cross(water_normal)
 		if right.length_squared() <= 0.000001:
@@ -460,10 +460,10 @@ func _update_foam_material(force_update: bool) -> void:
 	var signature := _foam_settings.configuration_signature() if _foam_settings != null else 0
 	if not force_update and signature == _foam_settings_signature:
 		var current_material := _wake_mesh.material_override as ShaderMaterial
-		if current_material != null and is_instance_valid(_ocean):
+		if current_material != null and is_instance_valid(_water):
 			current_material.set_shader_parameter(
 				&"simulation_time",
-				_ocean.get_simulation_time()
+				_water.get_simulation_time()
 			)
 			current_material.set_shader_parameter(&"foam_intensity", foam_intensity)
 		return

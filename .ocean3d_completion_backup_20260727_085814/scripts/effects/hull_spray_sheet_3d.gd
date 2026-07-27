@@ -7,7 +7,7 @@ var current_vertex_count: int:
 	get:
 		return _vertices.size()
 
-var _ocean: Ocean3D
+var _water: WaterBody3D
 var _array_mesh := ArrayMesh.new()
 var _vertices := PackedVector3Array()
 var _normals := PackedVector3Array()
@@ -27,15 +27,15 @@ func _ready() -> void:
 	_mesh_instance.visible = false
 
 
-func configure(ocean: Ocean3D, refraction_enabled: bool) -> void:
-	_ocean = ocean
+func configure(water: WaterBody3D, refraction_enabled: bool) -> void:
+	_water = water
 	set_refraction_enabled(refraction_enabled)
-	if _material == null or not is_instance_valid(_ocean):
+	if _material == null or not is_instance_valid(_water):
 		return
 	_material.set_shader_parameter(&"sheet_mode", true)
-	_material.set_shader_parameter(&"water_tint", _ocean.wave_crest_color)
-	if _ocean.foam_settings != null:
-		_material.set_shader_parameter(&"foam_tint", _ocean.foam_settings.foam_color)
+	_material.set_shader_parameter(&"water_tint", _water.wave_crest_color)
+	if _water.foam_settings != null:
+		_material.set_shader_parameter(&"foam_tint", _water.foam_settings.foam_color)
 
 
 func set_refraction_enabled(enabled: bool) -> void:
@@ -60,7 +60,7 @@ func update_sheets(
 	_colors.clear()
 	_uvs.clear()
 	_indices.clear()
-	if not is_instance_valid(_ocean):
+	if not is_instance_valid(_water):
 		_mesh_instance.visible = false
 		return
 	if left_intensity > 0.001:
@@ -91,7 +91,7 @@ func update_sheets(
 	_array_mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, _mesh_arrays)
 	_mesh_instance.visible = true
 	if _material != null:
-		_material.set_shader_parameter(&"simulation_time", _ocean.get_simulation_time())
+		_material.set_shader_parameter(&"simulation_time", _water.get_simulation_time())
 
 
 func clear_sheets() -> void:

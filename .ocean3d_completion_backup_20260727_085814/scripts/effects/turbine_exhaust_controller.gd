@@ -57,7 +57,7 @@ class JetSample:
 @export_range(0.1, 30.0, 0.1, "suffix:1/s") var core_shutdown_speed: float = 14.0
 
 @export_group("Jet Appearance")
-@export_range(0.0, 1.0, 0.01) var jet_ocean_alpha: float = 0.58
+@export_range(0.0, 1.0, 0.01) var jet_water_alpha: float = 0.58
 @export_range(0.0, 2.0, 0.01) var jet_foam_core_strength: float = 0.92
 @export_range(0.0, 1.0, 0.01) var jet_foam_core_opacity: float = 0.68
 @export_range(0.0, 2.0, 0.01) var jet_foam_emission: float = 0.18
@@ -72,7 +72,7 @@ class JetSample:
 @export_range(0.1, 30.0, 0.1, "suffix:1/s") var spray_response_speed: float = 10.0
 
 @export_group("Debug")
-@export var force_ocean_mode: bool = false
+@export var force_water_mode: bool = false
 @export var force_air_mode: bool = false
 
 var airborne_mode: bool:
@@ -106,7 +106,7 @@ var estimated_active_particle_count: int:
 		return roundi(float(_jet_spray.amount) * _jet_spray.amount_ratio)
 
 var _vehicle: JetSkiController
-var _ocean: Ocean3D
+var _water: WaterBody3D
 var _outlet: Marker3D
 var _jet_core: MeshInstance3D
 var _jet_spray: GPUParticles3D
@@ -203,7 +203,7 @@ func _cache_references() -> void:
 	_jet_core = get_node_or_null(jet_core_path) as MeshInstance3D
 	_jet_spray = get_node_or_null(jet_spray_path) as GPUParticles3D
 	if is_instance_valid(_vehicle):
-		_ocean = _vehicle.get_ocean()
+		_water = _vehicle.get_water_body()
 
 
 func _references_valid() -> bool:
@@ -226,7 +226,7 @@ func _configure_runtime_resources() -> void:
 	_stream_material.shader = STREAM_SHADER
 	_stream_material.render_priority = jet_render_priority
 	_stream_material.set_shader_parameter(&"sheet_mode", false)
-	_stream_material.set_shader_parameter(&"water_alpha", jet_ocean_alpha)
+	_stream_material.set_shader_parameter(&"water_alpha", jet_water_alpha)
 	_stream_material.set_shader_parameter(
 		&"foam_core_strength",
 		jet_foam_core_strength
@@ -239,17 +239,17 @@ func _configure_runtime_resources() -> void:
 		&"foam_emission_strength",
 		jet_foam_emission
 	)
-	if is_instance_valid(_ocean):
-		var stream_color := _ocean.wave_crest_color.lightened(0.66)
+	if is_instance_valid(_water):
+		var stream_color := _water.wave_crest_color.lightened(0.66)
 		stream_color.a = 1.0
 		_stream_material.set_shader_parameter(
 			&"water_tint",
 			stream_color
 		)
-		if _ocean.foam_settings != null:
+		if _water.foam_settings != null:
 			_stream_material.set_shader_parameter(
 				&"foam_tint",
-				_ocean.foam_settings.foam_color
+				_water.foam_settings.foam_color
 			)
 	_jet_core.top_level = true
 	_jet_core.global_transform = Transform3D.IDENTITY
@@ -260,8 +260,8 @@ func _configure_runtime_resources() -> void:
 	var droplet_material := ShaderMaterial.new()
 	droplet_material.shader = DROPLET_SHADER
 	droplet_material.render_priority = jet_render_priority + 1
-	if is_instance_valid(_ocean):
-		var droplet_color := _ocean.wave_crest_color
+	if is_instance_valid(_water):
+		var droplet_color := _water.wave_crest_color
 		droplet_color.a = 0.86
 		droplet_material.set_shader_parameter(&"particle_color", droplet_color)
 	var droplet_quad := QuadMesh.new()
@@ -314,10 +314,10 @@ func _apply_quality_profile() -> void:
 
 
 func _connect_vehicle_signals() -> void:
-	if not _vehicle.water_exited.is_connected(_on_vehicle_ocean_exited):
-		_vehicle.water_exited.connect(_on_vehicle_ocean_exited)
-	if not _vehicle.water_entered.is_connected(_on_vehicle_ocean_entered):
-		_vehicle.water_entered.connect(_on_vehicle_ocean_entered)
+	if not _vehicle.water_exited.is_connected(_on_vehicle_water_exited):
+		_vehicle.water_exited.connect(_on_vehicle_water_exited)
+	if not _vehicle.water_entered.is_connected(_on_vehicle_water_entered):
+		_vehicle.water_entered.connect(_on_vehicle_water_entered)
 	if not _vehicle.reset_completed.is_connected(_on_vehicle_reset_completed):
 		_vehicle.reset_completed.connect(_on_vehicle_reset_completed)
 	if not _vehicle.world_rebased.is_connected(_on_vehicle_world_rebased):
@@ -382,13 +382,13 @@ func _update_samples(delta: float) -> void:
 		sample.position += sample.velocity * delta
 	for index in range(_samples.size() - 1, -1, -1):
 		var sample := _samples[index]
-		var hit_ocean := false
-		if is_instance_valid(_ocean) and sample.age > 0.08:
-			hit_ocean = (
+		var hit_water := false
+		if is_instance_valid(_water) and sample.age > 0.08:
+			hit_water = (
 				sample.velocity.y < 0.0
-				and sample.position.y <= _ocean.sample_height(sample.position)
+				and sample.position.y <= _water.sample_height(sample.position)
 			)
-		if sample.age >= sample.lifetime or hit_ocean:
+		if sample.age >= sample.lifetime or hit_water:
 			_samples.remove_at(index)
 
 
@@ -549,16 +549,16 @@ func _stop_all_visuals() -> void:
 func _read_airborne_mode() -> bool:
 	if force_air_mode:
 		return true
-	if force_ocean_mode:
+	if force_water_mode:
 		return false
 	return _vehicle.navigation_state == JetSkiController.NavigationState.AIRBORNE
 
 
-func _on_vehicle_ocean_exited() -> void:
+func _on_vehicle_water_exited() -> void:
 	_airborne_mode = true
 
 
-func _on_vehicle_ocean_entered(_intensity: float, _position: Vector3) -> void:
+func _on_vehicle_water_entered(_intensity: float, _position: Vector3) -> void:
 	_airborne_mode = false
 
 

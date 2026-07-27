@@ -80,7 +80,7 @@ const TRICK_POST_TAKEOFF_OPTIMAL_TIME: float = 0.10
 const TRICK_POST_TAKEOFF_MINIMUM_TIMING: float = 0.50
 
 @export_group("Water")
-@export_node_path("WaterBody3D") var water_body_path: NodePath
+@export_node_path("Ocean3D") var ocean_path: NodePath
 
 @export_group("Buoyancy")
 @export_range(0.0, 50000.0, 10.0, "or_greater", "suffix:N/m") var buoyancy_strength_per_point: float = 5500.0
@@ -733,7 +733,7 @@ var last_propulsion_world_position: Vector3:
 
 var water_reference_valid: bool:
 	get:
-		return is_instance_valid(_water_body)
+		return is_instance_valid(_ocean)
 
 var is_propelling: bool:
 	get:
@@ -858,7 +858,7 @@ var last_reset_angular_velocity: Vector3 = Vector3.ZERO
 
 var _respawn_transform: Transform3D
 var _has_respawn_transform: bool = false
-var _water_body: WaterBody3D
+var _ocean: Ocean3D
 var _water_warning_emitted: bool = false
 var _point_warning_emitted: bool = false
 var _propulsion_warning_emitted: bool = false
@@ -1070,7 +1070,7 @@ func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 	_clear_turn_lean_frame_metrics()
 	_clear_rider_shift_frame_metrics()
 	_read_control_inputs(state.step)
-	if not is_instance_valid(_water_body):
+	if not is_instance_valid(_ocean):
 		_warn_about_missing_water_once()
 		return
 	if _buoyancy_local_points.size() != BUOYANCY_POINT_COUNT:
@@ -1088,7 +1088,7 @@ func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 		var world_point := state.transform * local_point
 		var world_offset := world_point - state.transform.origin
 		_point_world_positions[index] = world_point
-		var water_height := _water_body.sample_height(world_point)
+		var water_height := _ocean.sample_height(world_point)
 		_point_water_surface_positions[index] = Vector3(world_point.x, water_height, world_point.z)
 		var depth := water_height - world_point.y
 		_point_depths[index] = depth
@@ -1096,8 +1096,8 @@ func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 		if depth <= 0.0:
 			continue
 		raw_contact_mask |= 1 << index
-		var water_normal := _water_body.sample_normal(world_point)
-		var water_velocity := _water_body.sample_water_velocity(world_point)
+		var water_normal := _ocean.sample_normal(world_point)
+		var water_velocity := _ocean.sample_water_velocity(world_point)
 		if not water_normal.is_finite() or not water_velocity.is_finite():
 			continue
 		if water_normal.length_squared() <= 0.000001:
@@ -1202,8 +1202,8 @@ func get_respawn_transform() -> Transform3D:
 	return _respawn_transform
 
 
-func get_water_body() -> WaterBody3D:
-	return _water_body
+func get_ocean() -> Ocean3D:
+	return _ocean
 
 
 func apply_world_rebase(shift: Vector3) -> void:
@@ -1339,11 +1339,11 @@ func _has_finite_state() -> bool:
 
 
 func _resolve_water_reference() -> void:
-	if water_body_path.is_empty():
+	if ocean_path.is_empty():
 		_warn_about_missing_water_once()
 		return
-	_water_body = get_node_or_null(water_body_path) as WaterBody3D
-	if _water_body == null:
+	_ocean = get_node_or_null(ocean_path) as Ocean3D
+	if _ocean == null:
 		_warn_about_missing_water_once()
 
 
@@ -1842,9 +1842,9 @@ func _apply_propulsion(state: PhysicsDirectBodyState3D, body_forward: Vector3) -
 	var propulsion_world_position := state.transform * _propulsion_local_point
 	_last_propulsion_world_position = propulsion_world_position
 	var propulsion_world_offset := propulsion_world_position - state.transform.origin
-	var water_height := _water_body.sample_height(propulsion_world_position)
-	var water_normal := _water_body.sample_normal(propulsion_world_position)
-	var water_velocity := _water_body.sample_water_velocity(propulsion_world_position)
+	var water_height := _ocean.sample_height(propulsion_world_position)
+	var water_normal := _ocean.sample_normal(propulsion_world_position)
+	var water_velocity := _ocean.sample_water_velocity(propulsion_world_position)
 	if not water_normal.is_finite() or not water_velocity.is_finite():
 		return
 	if water_normal.length_squared() <= 0.000001:
@@ -3489,7 +3489,7 @@ func _warn_about_missing_water_once() -> void:
 	if _water_warning_emitted:
 		return
 	_water_warning_emitted = true
-	push_warning("JetSki buoyancy is disabled because its WaterBody3D reference is invalid.")
+	push_warning("JetSki buoyancy is disabled because its Ocean3D reference is invalid.")
 
 
 func _warn_about_missing_points_once() -> void:

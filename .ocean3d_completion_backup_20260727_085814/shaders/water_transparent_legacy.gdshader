@@ -134,9 +134,9 @@ uniform float wave_compression_color_strength : hint_range(0.0, 1.0, 0.01) = 0.1
 group_uniforms;
 
 // Optional geometry LOD used by OceanSurface3D. Disabled by default so the
-// original former generic water provider plane retains its exact rendering behavior.
+// original WaterBody3D plane retains its exact rendering behavior.
 // With world_vertex_coords, VERTEX.xz already contains local mesh coordinates
-// plus the snapped physical origin. former generic water provider folds the accumulated logical
+// plus the snapped physical origin. WaterBody3D folds the accumulated logical
 // origin into wave_effective_phases, so adding either origin here would double it.
 uniform bool ocean_surface_enabled = false;
 uniform vec2 ocean_snapped_origin_xz = vec2(0.0);

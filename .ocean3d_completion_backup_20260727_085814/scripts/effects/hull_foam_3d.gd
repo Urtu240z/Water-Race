@@ -14,7 +14,7 @@ var current_vertex_count: int:
 		)
 
 var _vehicle: JetSkiController
-var _ocean: Ocean3D
+var _water: WaterBody3D
 var _front_left: Marker3D
 var _front_right: Marker3D
 var _rear_left: Marker3D
@@ -46,7 +46,7 @@ func _ready() -> void:
 
 func configure(
 	vehicle: JetSkiController,
-	ocean: Ocean3D,
+	water: WaterBody3D,
 	front_left: Marker3D,
 	front_right: Marker3D,
 	rear_left: Marker3D,
@@ -56,7 +56,7 @@ func configure(
 	noise_texture: Texture2D
 ) -> void:
 	_vehicle = vehicle
-	_ocean = ocean
+	_water = water
 	_front_left = front_left
 	_front_right = front_right
 	_rear_left = rear_left
@@ -80,7 +80,7 @@ func _process(_delta: float) -> void:
 	_mesh_instance.visible = _array_mesh.get_surface_count() > 0
 	var material := _mesh_instance.material_override as ShaderMaterial
 	if material != null:
-		material.set_shader_parameter(&"simulation_time", _ocean.get_simulation_time())
+		material.set_shader_parameter(&"simulation_time", _water.get_simulation_time())
 		material.set_shader_parameter(&"foam_intensity", foam_intensity)
 		var backward := _horizontal_direction(_vehicle.global_basis.z, Vector3.BACK)
 		material.set_shader_parameter(
@@ -290,7 +290,7 @@ func _append_continuous_patch(
 
 func _append_patch_vertex(vertex_position: Vector3, patch_uv: Vector2, alpha: float) -> void:
 	_vertices.append(vertex_position)
-	_normals.append(_ocean.sample_normal(vertex_position))
+	_normals.append(_water.sample_normal(vertex_position))
 	_colors.append(Color(1.0, 1.0, 1.0, clampf(alpha, 0.0, 1.0)))
 	_uvs.append(Vector2(vertex_position.x, vertex_position.z))
 	_uv2s.append(patch_uv)
@@ -311,7 +311,7 @@ func _horizontal_distance(first: Vector3, second: Vector3) -> float:
 func _surface_position(source: Vector3) -> Vector3:
 	return Vector3(
 		source.x,
-		_ocean.sample_height(source) + SURFACE_OFFSET,
+		_water.sample_height(source) + SURFACE_OFFSET,
 		source.z
 	)
 
@@ -319,7 +319,7 @@ func _surface_position(source: Vector3) -> Vector3:
 func _references_valid() -> bool:
 	return (
 		is_instance_valid(_vehicle)
-		and is_instance_valid(_ocean)
+		and is_instance_valid(_water)
 		and is_instance_valid(_front_left)
 		and is_instance_valid(_front_right)
 		and is_instance_valid(_rear_left)

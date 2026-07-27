@@ -15,7 +15,7 @@ enum QualityLevel {
 
 @export_group("References")
 @export_node_path("RigidBody3D") var vehicle_path: NodePath
-@export_node_path("WaterBody3D") var water_body_path: NodePath
+@export_node_path("Ocean3D") var ocean_path: NodePath
 @export_node_path("Node") var world_origin_controller_path: NodePath
 @export_node_path("Marker3D") var front_left_marker_path: NodePath
 @export_node_path("Marker3D") var front_right_marker_path: NodePath
@@ -248,7 +248,7 @@ var wake_foam_intensity: float:
 		return _wake_trail.foam_intensity if is_instance_valid(_wake_trail) else 0.0
 
 var _vehicle: JetSkiController
-var _water: WaterBody3D
+var _ocean: Ocean3D
 var _world_origin: WorldOriginController
 var _front_left_marker: Marker3D
 var _front_right_marker: Marker3D
@@ -395,7 +395,7 @@ func set_quality_level(level: int) -> void:
 
 func _resolve_references() -> void:
 	_vehicle = get_node_or_null(vehicle_path) as JetSkiController
-	_water = get_node_or_null(water_body_path) as WaterBody3D
+	_ocean = get_node_or_null(ocean_path) as Ocean3D
 	_world_origin = get_node_or_null(world_origin_controller_path) as WorldOriginController
 	_rear_left_marker = get_node_or_null(rear_left_marker_path) as Marker3D
 	_rear_right_marker = get_node_or_null(rear_right_marker_path) as Marker3D
@@ -404,8 +404,8 @@ func _resolve_references() -> void:
 	_front_left_marker = get_node_or_null(front_left_marker_path) as Marker3D
 	_front_right_marker = get_node_or_null(front_right_marker_path) as Marker3D
 	if is_instance_valid(_vehicle):
-		if not is_instance_valid(_water):
-			_water = _vehicle.get_water_body()
+		if not is_instance_valid(_ocean):
+			_ocean = _vehicle.get_ocean()
 		if not is_instance_valid(_front_left_marker):
 			_front_left_marker = _vehicle.get_node_or_null(
 				"BuoyancyPoints/FrontLeft"
@@ -436,16 +436,16 @@ func _update_validity() -> void:
 	_spray_valid = false
 	_spray_valid = (
 		is_instance_valid(_vehicle)
-		and is_instance_valid(_water)
+		and is_instance_valid(_ocean)
 		and is_instance_valid(_front_left_marker)
 		and is_instance_valid(_front_right_marker)
 		and is_instance_valid(_rear_left_marker)
 		and is_instance_valid(_rear_right_marker)
 	)
-	_impact_valid = is_instance_valid(_vehicle) and is_instance_valid(_water) and not _impact_emitters.is_empty()
+	_impact_valid = is_instance_valid(_vehicle) and is_instance_valid(_ocean) and not _impact_emitters.is_empty()
 	_wake_valid = (
 		is_instance_valid(_vehicle)
-		and is_instance_valid(_water)
+		and is_instance_valid(_ocean)
 		and is_instance_valid(_propulsion_point)
 		and is_instance_valid(_wake_trail)
 	)
@@ -612,7 +612,7 @@ func _configure_wake() -> void:
 		return
 	_wake_trail.configure(
 		_vehicle,
-		_water,
+		_ocean,
 		_propulsion_point,
 		_rear_left_marker,
 		_rear_right_marker
@@ -629,8 +629,8 @@ func _configure_wake() -> void:
 	_wake_trail.wake_maximum_width_multiplier = wake_maximum_width_multiplier
 	_wake_trail.wake_opening_distance = wake_opening_distance
 	_wake_trail.configure_foam(
-		_water.foam_settings if is_instance_valid(_water) else null,
-		_water.foam_noise_texture if is_instance_valid(_water) else null
+		_ocean.foam_settings if is_instance_valid(_ocean) else null,
+		_ocean.foam_noise_texture if is_instance_valid(_ocean) else null
 	)
 
 
@@ -638,7 +638,7 @@ func _configure_spray_sheet() -> void:
 	if not is_instance_valid(_spray_sheet):
 		return
 	_spray_sheet.configure(
-		_water,
+		_ocean,
 		_quality_profile.refraction_enabled if _quality_profile != null else true
 	)
 
@@ -648,21 +648,21 @@ func _configure_hull_foam() -> void:
 		return
 	_hull_foam.configure(
 		_vehicle,
-		_water,
+		_ocean,
 		_front_left_marker,
 		_front_right_marker,
 		_rear_left_marker,
 		_rear_right_marker,
 		_propulsion_point,
-		_water.foam_settings if is_instance_valid(_water) else null,
-		_water.foam_noise_texture if is_instance_valid(_water) else null
+		_ocean.foam_settings if is_instance_valid(_ocean) else null,
+		_ocean.foam_noise_texture if is_instance_valid(_ocean) else null
 	)
 
 
 func _connect_signals() -> void:
 	if is_instance_valid(_vehicle):
-		if not _vehicle.water_entered.is_connected(_on_water_entered):
-			_vehicle.water_entered.connect(_on_water_entered)
+		if not _vehicle.water_entered.is_connected(_on_ocean_entered):
+			_vehicle.water_entered.connect(_on_ocean_entered)
 		if not _vehicle.hard_landing.is_connected(_on_hard_landing):
 			_vehicle.hard_landing.connect(_on_hard_landing)
 		if not _vehicle.reset_completed.is_connected(_on_reset_completed):
@@ -843,8 +843,8 @@ func _calculate_rail_contact(
 ) -> Dictionary:
 	var front_position := front_marker.get_global_transform_interpolated().origin
 	var rear_position := rear_marker.get_global_transform_interpolated().origin
-	var front_depth := _water.sample_height(front_position) - front_position.y
-	var rear_depth := _water.sample_height(rear_position) - rear_position.y
+	var front_depth := _ocean.sample_height(front_position) - front_position.y
+	var rear_depth := _ocean.sample_height(rear_position) - rear_position.y
 	var ratio := 0.0
 	if front_depth < 0.0 and rear_depth > 0.0:
 		ratio = clampf(
@@ -855,9 +855,9 @@ func _calculate_rail_contact(
 	elif front_depth <= 0.0 and rear_depth <= 0.0:
 		ratio = 1.0
 	var contact_position := front_position.lerp(rear_position, ratio)
-	var water_height := _water.sample_height(contact_position)
+	var water_height := _ocean.sample_height(contact_position)
 	contact_position.y = water_height + splash_surface_offset
-	var normal := _water.sample_normal(contact_position)
+	var normal := _ocean.sample_normal(contact_position)
 	if not normal.is_finite() or normal.length_squared() <= 0.000001:
 		normal = Vector3.UP
 	else:
@@ -888,7 +888,7 @@ func _stop_continuous_spray() -> void:
 		_spray_sheet.clear_sheets()
 
 
-func _on_water_entered(_signal_intensity: float, impact_position: Vector3) -> void:
+func _on_ocean_entered(_signal_intensity: float, impact_position: Vector3) -> void:
 	if not impact_splash_enabled or not _impact_valid:
 		return
 	var visual_intensity := clampf(_vehicle.last_landing_intensity, 0.0, 1.0)
@@ -933,10 +933,10 @@ func _on_water_entered(_signal_intensity: float, impact_position: Vector3) -> vo
 	var particle_spread := lerpf(35.0, 75.0, visual_intensity)
 	var water_position := Vector3(
 		impact_position.x,
-		_water.sample_height(impact_position) + splash_surface_offset,
+		_ocean.sample_height(impact_position) + splash_surface_offset,
 		impact_position.z
 	)
-	var water_normal := _water.sample_normal(impact_position)
+	var water_normal := _ocean.sample_normal(impact_position)
 	var biased_normal := _impact_direction(water_normal)
 	emitter.global_transform = Transform3D(
 		_basis_with_y(biased_normal, -_vehicle.global_basis.z),
