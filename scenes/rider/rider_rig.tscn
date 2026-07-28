@@ -3,135 +3,7 @@
 [ext_resource type="Script" uid="uid://dhk3hadcflm6w" path="res://scenes/rider/rider_rig.gd" id="1_4yq34"]
 [ext_resource type="PackedScene" uid="uid://bq2rcwy03sxmv" path="res://assets/3D/Rider/Rider_Bot.glb" id="2_wrxx4"]
 [ext_resource type="AnimationLibrary" path="res://assets/3D/Rider/animations/rider_animation_library.res" id="3_ggf4l"]
-
-[sub_resource type="AnimationNodeAdd3" id="AnimationNodeAdd3_automatic_turn"]
-
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_n0p1g"]
-animation = &"mounted_breathing"
-
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_lean_back"]
-animation = &"Mounted_Lean_Back"
-
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_lean_back_base"]
-animation = &"Mounted_Base"
-
-[sub_resource type="AnimationNodeSub2" id="AnimationNodeSub2_lean_back"]
-filter_enabled = true
-filters = ["SKEL_Rider/Skeleton3D:mixamorig_Head", "SKEL_Rider/Skeleton3D:mixamorig_Hips", "SKEL_Rider/Skeleton3D:mixamorig_LeftShoulder", "SKEL_Rider/Skeleton3D:mixamorig_Neck", "SKEL_Rider/Skeleton3D:mixamorig_RightShoulder", "SKEL_Rider/Skeleton3D:mixamorig_Spine", "SKEL_Rider/Skeleton3D:mixamorig_Spine1", "SKEL_Rider/Skeleton3D:mixamorig_Spine2"]
-
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_lean_forward"]
-animation = &"Mounted_Lean_Forward"
-
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_lean_forward_base"]
-animation = &"Mounted_Base"
-
-[sub_resource type="AnimationNodeSub2" id="AnimationNodeSub2_lean_forward"]
-filter_enabled = true
-filters = ["SKEL_Rider/Skeleton3D:mixamorig_Head", "SKEL_Rider/Skeleton3D:mixamorig_Hips", "SKEL_Rider/Skeleton3D:mixamorig_LeftShoulder", "SKEL_Rider/Skeleton3D:mixamorig_Neck", "SKEL_Rider/Skeleton3D:mixamorig_RightShoulder", "SKEL_Rider/Skeleton3D:mixamorig_Spine", "SKEL_Rider/Skeleton3D:mixamorig_Spine1", "SKEL_Rider/Skeleton3D:mixamorig_Spine2"]
-
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_lean_left"]
-animation = &"Mounted_Lean_Left"
-
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_lean_left_base"]
-animation = &"Mounted_Base"
-
-[sub_resource type="AnimationNodeSub2" id="AnimationNodeSub2_lean_left"]
-filter_enabled = true
-filters = ["SKEL_Rider/Skeleton3D:mixamorig_Head", "SKEL_Rider/Skeleton3D:mixamorig_Hips", "SKEL_Rider/Skeleton3D:mixamorig_LeftShoulder", "SKEL_Rider/Skeleton3D:mixamorig_Neck", "SKEL_Rider/Skeleton3D:mixamorig_RightShoulder", "SKEL_Rider/Skeleton3D:mixamorig_Spine", "SKEL_Rider/Skeleton3D:mixamorig_Spine1", "SKEL_Rider/Skeleton3D:mixamorig_Spine2"]
-
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_lean_right"]
-animation = &"Mounted_Lean_Right"
-
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_lean_right_base"]
-animation = &"Mounted_Base"
-
-[sub_resource type="AnimationNodeSub2" id="AnimationNodeSub2_lean_right"]
-filter_enabled = true
-filters = ["SKEL_Rider/Skeleton3D:mixamorig_Head", "SKEL_Rider/Skeleton3D:mixamorig_Hips", "SKEL_Rider/Skeleton3D:mixamorig_LeftShoulder", "SKEL_Rider/Skeleton3D:mixamorig_Neck", "SKEL_Rider/Skeleton3D:mixamorig_RightShoulder", "SKEL_Rider/Skeleton3D:mixamorig_Spine", "SKEL_Rider/Skeleton3D:mixamorig_Spine1", "SKEL_Rider/Skeleton3D:mixamorig_Spine2"]
-
-[sub_resource type="AnimationNodeAdd3" id="AnimationNodeAdd3_manual_pitch"]
-
-[sub_resource type="AnimationNodeAdd3" id="AnimationNodeAdd3_manual_roll"]
-
-[sub_resource type="AnimationNodeAdd2" id="AnimationNodeAdd2_eswg0"]
-
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_kh5xy"]
-resource_local_to_scene = true
-animation = &"Mounted_Base"
-
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_turn_left"]
-animation = &"Mounted_Turn_Left"
-
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_turn_left_base"]
-animation = &"Mounted_Base"
-
-[sub_resource type="AnimationNodeSub2" id="AnimationNodeSub2_turn_left"]
-filter_enabled = true
-filters = ["SKEL_Rider/Skeleton3D:mixamorig_Head", "SKEL_Rider/Skeleton3D:mixamorig_Hips", "SKEL_Rider/Skeleton3D:mixamorig_LeftShoulder", "SKEL_Rider/Skeleton3D:mixamorig_Neck", "SKEL_Rider/Skeleton3D:mixamorig_RightShoulder", "SKEL_Rider/Skeleton3D:mixamorig_Spine", "SKEL_Rider/Skeleton3D:mixamorig_Spine1", "SKEL_Rider/Skeleton3D:mixamorig_Spine2"]
-
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_turn_right"]
-animation = &"Mounted_Turn_Right"
-
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_turn_right_base"]
-animation = &"Mounted_Base"
-
-[sub_resource type="AnimationNodeSub2" id="AnimationNodeSub2_turn_right"]
-filter_enabled = true
-filters = ["SKEL_Rider/Skeleton3D:mixamorig_Head", "SKEL_Rider/Skeleton3D:mixamorig_Hips", "SKEL_Rider/Skeleton3D:mixamorig_LeftShoulder", "SKEL_Rider/Skeleton3D:mixamorig_Neck", "SKEL_Rider/Skeleton3D:mixamorig_RightShoulder", "SKEL_Rider/Skeleton3D:mixamorig_Spine", "SKEL_Rider/Skeleton3D:mixamorig_Spine1", "SKEL_Rider/Skeleton3D:mixamorig_Spine2"]
-
-[sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_k73xc"]
-resource_local_to_scene = true
-graph_offset = Vector2(-581, -186)
-nodes/output/position = Vector2(880, 0)
-nodes/mounted_base/node = SubResource("AnimationNodeAnimation_kh5xy")
-nodes/mounted_base/position = Vector2(-1180, -320)
-nodes/breathing/node = SubResource("AnimationNodeAnimation_n0p1g")
-nodes/breathing/position = Vector2(-1180, -180)
-nodes/mounted_add/node = SubResource("AnimationNodeAdd2_eswg0")
-nodes/mounted_add/position = Vector2(-900, -260)
-nodes/turn_left/node = SubResource("AnimationNodeAnimation_turn_left")
-nodes/turn_left/position = Vector2(-1180, -20)
-nodes/turn_left_base/node = SubResource("AnimationNodeAnimation_turn_left_base")
-nodes/turn_left_base/position = Vector2(-1180, 40)
-nodes/turn_right/node = SubResource("AnimationNodeAnimation_turn_right")
-nodes/turn_right/position = Vector2(-1180, 100)
-nodes/turn_right_base/node = SubResource("AnimationNodeAnimation_turn_right_base")
-nodes/turn_right_base/position = Vector2(-1180, 160)
-nodes/turn_left_delta/node = SubResource("AnimationNodeSub2_turn_left")
-nodes/turn_left_delta/position = Vector2(-900, -20)
-nodes/turn_right_delta/node = SubResource("AnimationNodeSub2_turn_right")
-nodes/turn_right_delta/position = Vector2(-900, 100)
-nodes/automatic_turn_add/node = SubResource("AnimationNodeAdd3_automatic_turn")
-nodes/automatic_turn_add/position = Vector2(-580, -160)
-nodes/lean_left/node = SubResource("AnimationNodeAnimation_lean_left")
-nodes/lean_left/position = Vector2(-1180, 250)
-nodes/lean_left_base/node = SubResource("AnimationNodeAnimation_lean_left_base")
-nodes/lean_left_base/position = Vector2(-1180, 310)
-nodes/lean_right/node = SubResource("AnimationNodeAnimation_lean_right")
-nodes/lean_right/position = Vector2(-1180, 370)
-nodes/lean_right_base/node = SubResource("AnimationNodeAnimation_lean_right_base")
-nodes/lean_right_base/position = Vector2(-1180, 430)
-nodes/lean_left_delta/node = SubResource("AnimationNodeSub2_lean_left")
-nodes/lean_left_delta/position = Vector2(-900, 250)
-nodes/lean_right_delta/node = SubResource("AnimationNodeSub2_lean_right")
-nodes/lean_right_delta/position = Vector2(-900, 370)
-nodes/manual_roll_add/node = SubResource("AnimationNodeAdd3_manual_roll")
-nodes/manual_roll_add/position = Vector2(-260, -80)
-nodes/lean_forward/node = SubResource("AnimationNodeAnimation_lean_forward")
-nodes/lean_forward/position = Vector2(-1180, 520)
-nodes/lean_forward_base/node = SubResource("AnimationNodeAnimation_lean_forward_base")
-nodes/lean_forward_base/position = Vector2(-1180, 580)
-nodes/lean_back/node = SubResource("AnimationNodeAnimation_lean_back")
-nodes/lean_back/position = Vector2(-1180, 640)
-nodes/lean_back_base/node = SubResource("AnimationNodeAnimation_lean_back_base")
-nodes/lean_back_base/position = Vector2(-1180, 700)
-nodes/lean_forward_delta/node = SubResource("AnimationNodeSub2_lean_forward")
-nodes/lean_forward_delta/position = Vector2(-900, 520)
-nodes/lean_back_delta/node = SubResource("AnimationNodeSub2_lean_back")
-nodes/lean_back_delta/position = Vector2(-900, 640)
-nodes/manual_pitch_add/node = SubResource("AnimationNodeAdd3_manual_pitch")
-nodes/manual_pitch_add/position = Vector2(100, 0)
-node_connections = [&"output", 0, &"manual_pitch_add", &"mounted_add", 0, &"mounted_base", &"mounted_add", 1, &"breathing", &"turn_left_delta", 0, &"turn_left", &"turn_left_delta", 1, &"turn_left_base", &"turn_right_delta", 0, &"turn_right", &"turn_right_delta", 1, &"turn_right_base", &"automatic_turn_add", 0, &"turn_left_delta", &"automatic_turn_add", 1, &"mounted_add", &"automatic_turn_add", 2, &"turn_right_delta", &"lean_left_delta", 0, &"lean_left", &"lean_left_delta", 1, &"lean_left_base", &"lean_right_delta", 0, &"lean_right", &"lean_right_delta", 1, &"lean_right_base", &"manual_roll_add", 0, &"lean_left_delta", &"manual_roll_add", 1, &"automatic_turn_add", &"manual_roll_add", 2, &"lean_right_delta", &"lean_forward_delta", 0, &"lean_forward", &"lean_forward_delta", 1, &"lean_forward_base", &"lean_back_delta", 0, &"lean_back", &"lean_back_delta", 1, &"lean_back_base", &"manual_pitch_add", 0, &"lean_forward_delta", &"manual_pitch_add", 1, &"manual_roll_add", &"manual_pitch_add", 2, &"lean_back_delta"]
+[ext_resource type="AnimationNodeBlendTree" path="res://assets/3D/Rider/animations/rider_mounted_blend_tree.tres" id="4_mounted_blend_tree"]
 
 [node name="RiderRig" type="Node3D" unique_id=553895823]
 script = ExtResource("1_4yq34")
@@ -145,8 +17,9 @@ root_node = NodePath("../RiderModelRoot/Rider_Bot")
 libraries/ = ExtResource("3_ggf4l")
 
 [node name="AnimationTree" type="AnimationTree" parent="." unique_id=187453891]
+active = true
 root_node = NodePath("../RiderModelRoot/Rider_Bot")
-tree_root = SubResource("AnimationNodeBlendTree_k73xc")
+tree_root = ExtResource("4_mounted_blend_tree")
 anim_player = NodePath("../AnimationPlayer")
 parameters/mounted_add/add_amount = 0.22
 parameters/turn_left_delta/sub_amount = 1.0
