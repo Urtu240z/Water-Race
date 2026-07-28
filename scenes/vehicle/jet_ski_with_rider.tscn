@@ -41,11 +41,11 @@ gizmo_extents = 0.09
 [node name="RiderTargets" type="Node3D" parent="VisualRoot" parent_id_path=PackedInt32Array(1832404346) index="1" unique_id=1856867832]
 
 [node name="LeftFootTarget" type="Marker3D" parent="VisualRoot/RiderTargets" index="0" unique_id=843894663]
-transform = Transform3D(0.951892, -0.062977, -0.299892, -0.283627, -0.55155, -0.784441, -0.116004, 0.831761, -0.542878, -0.14307228, 0.06351906, 0.9927325)
+transform = Transform3D(0.951892, -0.062977, -0.299892, -0.283627, -0.55155, -0.784441, -0.116004, 0.831761, -0.542878, -0.09519854, 0.06351906, 0.9927325)
 gizmo_extents = 0.09
 
 [node name="RightFootTarget" type="Marker3D" parent="VisualRoot/RiderTargets" index="1" unique_id=1336667131]
-transform = Transform3D(0.97483, -0.006249425, 0.22286251, 0.16977601, -0.62710494, -0.76020724, 0.1445091, 0.77890915, -0.6102598, 0.16361436, 0.06208829, 1.2059749)
+transform = Transform3D(0.97483, -0.006249425, 0.22286251, 0.16977601, -0.62710494, -0.76020724, 0.1445091, 0.77890915, -0.6102598, 0.10187334, 0.06208829, 1.2059749)
 gizmo_extents = 0.09
 
 [node name="LeftSoleTarget" type="Marker3D" parent="VisualRoot/RiderTargets" index="2" unique_id=208059727]
@@ -71,6 +71,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2428, 0.679)
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
 
 [node name="RiderRig" parent="VisualRoot/RiderMount/RiderAssetRoot" index="0" unique_id=2001770911 instance=ExtResource("2_rider")]
+rider_skin = 1
 
 [node name="Rider_Bot" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot" parent_id_path=PackedInt32Array(2001770911, 226906520) index="0" unique_id=1075285769]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.18724537, 0)
@@ -313,8 +314,9 @@ visibility_parent = NodePath("")
 active = true
 influence = 1.0
 script = ExtResource("7_grip_fingers")
-left_grip_strength = 0.7
-right_grip_strength = 0.7
+left_grip_strength = 0.87
+right_grip_strength = 0.93
+thumb_opposition_strength = 0.47
 
 [node name="RiderImpactResponse" type="Node" parent="." index="8" unique_id=966370299]
 script = ExtResource("6_impact_response")

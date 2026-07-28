@@ -4,6 +4,8 @@
 [ext_resource type="PackedScene" uid="uid://bq2rcwy03sxmv" path="res://assets/3D/Rider/Rider_Bot.glb" id="2_wrxx4"]
 [ext_resource type="AnimationLibrary" uid="uid://ccfkjaie8528m" path="res://assets/3D/Rider/animations/rider_animation_library.res" id="3_ggf4l"]
 [ext_resource type="AnimationNodeBlendTree" uid="uid://ddgxhrodm4n2q" path="res://assets/3D/Rider/animations/rider_mounted_blend_tree.tres" id="4_mounted_blend_tree"]
+[ext_resource type="ArrayMesh" path="res://assets/3D/Rider/skins/Racer/runtime/Racer_Mesh.res" id="5_racer_mesh"]
+[ext_resource type="Skin" path="res://assets/3D/Rider/skins/Racer/runtime/Racer_Skin.res" id="6_racer_skin"]
 
 [node name="RiderRig" type="Node3D" unique_id=553895823]
 script = ExtResource("1_4yq34")
@@ -11,6 +13,12 @@ script = ExtResource("1_4yq34")
 [node name="RiderModelRoot" type="Node3D" parent="." unique_id=226906520]
 
 [node name="Rider_Bot" parent="RiderModelRoot" unique_id=1075285769 instance=ExtResource("2_wrxx4")]
+
+[node name="RacerSkinMesh" type="MeshInstance3D" parent="RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D" groups=["rider_skin_racer"]]
+visible = false
+skin = ExtResource("6_racer_skin")
+skeleton = NodePath("..")
+mesh = ExtResource("5_racer_mesh")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=785147574]
 root_node = NodePath("../RiderModelRoot/Rider_Bot")
@@ -31,3 +39,5 @@ parameters/manual_roll_add/add_amount = 0.0
 parameters/lean_forward_delta/sub_amount = 1.0
 parameters/lean_back_delta/sub_amount = 1.0
 parameters/manual_pitch_add/add_amount = 0.0
+
+[editable path="RiderModelRoot/Rider_Bot"]

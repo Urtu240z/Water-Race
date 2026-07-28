@@ -8,6 +8,17 @@ const MOUNTED_LEAN_ADD_NODES: Array[StringName] = [
 	&"manual_pitch_add",
 ]
 
+enum RiderSkin {
+	# Serialized values: BOT = 0, RACER = 1.
+	BOT,
+	RACER,
+}
+
+@export var rider_skin: RiderSkin = RiderSkin.BOT:
+	set(value):
+		rider_skin = value
+		_apply_rider_skin()
+
 @export_range(0.0, 1.0, 0.01) var breathing_influence: float = 0.22:
 	set(value):
 		breathing_influence = clampf(value, 0.0, 1.0)
@@ -32,9 +43,13 @@ var _mounted_lean_blends_valid: bool = false
 var _automatic_turn_blend: float = 0.0
 var _manual_roll_blend: float = 0.0
 var _manual_pitch_blend: float = 0.0
+var _bot_skin_meshes: Array[MeshInstance3D] = []
+var _racer_skin_meshes: Array[MeshInstance3D] = []
 
 
 func _ready() -> void:
+	_resolve_rider_skin_meshes()
+	_apply_rider_skin()
 	_apply_mounted_base_animation()
 	_mounted_lean_blends_valid = _validate_mounted_lean_nodes()
 	_apply_animation_parameters()
@@ -48,6 +63,10 @@ func set_breathing_enabled(enabled: bool) -> void:
 
 func set_mounted_pose_enabled(enabled: bool) -> void:
 	mounted_pose_enabled = enabled
+
+
+func set_rider_skin(value: RiderSkin) -> void:
+	rider_skin = value
 
 
 func set_automatic_turn_blend(value: float) -> void:
@@ -83,6 +102,47 @@ func reset_mounted_lean_blends() -> void:
 
 func get_skeleton() -> Skeleton3D:
 	return _skeleton
+
+
+func _resolve_rider_skin_meshes() -> void:
+	_bot_skin_meshes.clear()
+	_racer_skin_meshes.clear()
+	var rider_bot := get_node_or_null("RiderModelRoot/Rider_Bot")
+	if rider_bot == null:
+		push_warning("RiderRig cannot resolve RiderModelRoot/Rider_Bot.")
+		return
+	var pending: Array[Node] = [rider_bot]
+	while not pending.is_empty():
+		var current: Node = pending.pop_back() as Node
+		if current is MeshInstance3D:
+			var mesh_instance := current as MeshInstance3D
+			if mesh_instance.is_in_group(&"rider_skin_racer"):
+				_racer_skin_meshes.append(mesh_instance)
+			elif mesh_instance.mesh != null:
+				_bot_skin_meshes.append(mesh_instance)
+		for child: Node in current.get_children():
+			pending.append(child)
+
+
+func _apply_rider_skin() -> void:
+	if not is_node_ready():
+		return
+	var racer_valid := not _racer_skin_meshes.is_empty()
+	for mesh_instance in _racer_skin_meshes:
+		racer_valid = (
+			racer_valid
+			and mesh_instance.mesh != null
+			and mesh_instance.skin != null
+		)
+	var show_racer := rider_skin == RiderSkin.RACER and racer_valid
+	if rider_skin == RiderSkin.RACER and not racer_valid:
+		push_warning(
+			"Racer skin resources are missing; RiderRig is showing BOT."
+		)
+	for mesh_instance in _bot_skin_meshes:
+		mesh_instance.visible = not show_racer
+	for mesh_instance in _racer_skin_meshes:
+		mesh_instance.visible = show_racer
 
 
 func _apply_animation_parameters() -> void:

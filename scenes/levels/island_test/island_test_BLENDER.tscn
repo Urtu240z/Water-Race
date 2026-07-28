@@ -442,7 +442,11 @@ visible = true
 [node name="LeftGripTarget" parent="Gameplay/JetSki/VisualRoot/JetSkiVisual/HandlePivot/GripTargets" parent_id_path=PackedInt32Array(328650943, 1552986585) index="0" unique_id=133906918]
 transform = Transform3D(0.80945057, -0.3843369, -0.4439311, -0.56238306, -0.724853, -0.39788496, -0.1688622, 0.57172793, -0.8028763, 0.19560242, 0.6935289, -1.4804459)
 
+[node name="RiderRig" parent="Gameplay/JetSki/VisualRoot/RiderMount/RiderAssetRoot" parent_id_path=PackedInt32Array(328650943, 1312466662) index="0" unique_id=2001770911]
+rider_skin = 0
+
 [node name="Skeleton3D" parent="Gameplay/JetSki/VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/Rider_Bot/SKEL_Rider" parent_id_path=PackedInt32Array(328650943, 2001770911, 1075285769, 1348584656) index="0" unique_id=426480764]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.081000924, 0.0069850683, 0)
 bones/0/rotation = Quaternion(0.0064583384, 1.6179755e-09, 2.5050662e-07, 0.99997914)
 bones/7/position = Vector3(-1.1175871e-08, 0.11116077, 2.3283064e-10)
 bones/25/rotation = Quaternion(0.43952805, 0.59007734, -0.55047023, 0.39446965)
@@ -496,7 +500,7 @@ autoplay = true
 [node name="ChaseCamera" parent="CameraSystem" unique_id=931334509 instance=ExtResource("206_ckn4c")]
 vehicle_body_path = NodePath("../../Gameplay/JetSki")
 camera_target_path = NodePath("../../Gameplay/JetSki/CameraTarget")
-base_distance = 4.0
+base_distance = 3.0
 base_height = 1.0
 base_look_ahead = 3.0
 look_height_offset = 0.0
@@ -506,7 +510,6 @@ distance_sharpness = 2.01
 maximum_speed_distance_extension = 0.0
 base_fov = 45.0
 maximum_speed_fov = 50.0
-fov_sharpness = 1.81
 
 [node name="Debug" type="Node" parent="." unique_id=1303880580]
 
