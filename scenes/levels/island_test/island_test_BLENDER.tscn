@@ -249,27 +249,6 @@ shader_parameter/ocean_middle_wave_amplitude_ratio = 0.55
 shader_parameter/ocean_far_wave_amplitude_ratio = 0.08
 shader_parameter/ocean_debug_show_rings = false
 
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_n0p1g"]
-animation = &"mounted_breathing"
-
-[sub_resource type="AnimationNodeAdd2" id="AnimationNodeAdd2_eswg0"]
-
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_oieqv"]
-resource_local_to_scene = true
-animation = &"Mounted_JetSki_Base_Corrected_v2"
-
-[sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_7gvnk"]
-resource_local_to_scene = true
-graph_offset = Vector2(-726.05884, -51.64583)
-nodes/output/position = Vector2(380, 120)
-nodes/mounted_base/node = SubResource("AnimationNodeAnimation_oieqv")
-nodes/mounted_base/position = Vector2(-460, 0)
-nodes/breathing/node = SubResource("AnimationNodeAnimation_n0p1g")
-nodes/breathing/position = Vector2(-500, 280)
-nodes/mounted_add/node = SubResource("AnimationNodeAdd2_eswg0")
-nodes/mounted_add/position = Vector2(-60, 120)
-node_connections = [&"output", 0, &"mounted_add", &"mounted_add", 0, &"mounted_base", &"mounted_add", 1, &"breathing"]
-
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_f0815"]
 panorama = ExtResource("39_1y1wo")
 
@@ -510,12 +489,6 @@ left_hand_rotation_correction_degrees = Vector3(-18.44, 32.09, -21.11)
 
 [node name="GripFingers" parent="Gameplay/JetSki/VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D" index="7" unique_id=940560861]
 left_grip_strength = 0.75
-
-[node name="AnimationPlayer" parent="Gameplay/JetSki/VisualRoot/RiderMount/RiderAssetRoot/RiderRig" parent_id_path=PackedInt32Array(328650943, 2001770911) index="1" unique_id=785147574]
-speed_scale = 0.368
-
-[node name="AnimationTree" parent="Gameplay/JetSki/VisualRoot/RiderMount/RiderAssetRoot/RiderRig" parent_id_path=PackedInt32Array(328650943, 2001770911) index="2" unique_id=187453891]
-tree_root = SubResource("AnimationNodeBlendTree_7gvnk")
 
 [node name="VehicleWaterEffects3D" parent="Gameplay/JetSki/Effects" parent_id_path=PackedInt32Array(328650943, 1733691099) index="0"]
 impact_particle_amount_multiplier = 5.8

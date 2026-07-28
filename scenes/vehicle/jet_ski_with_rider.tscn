@@ -7,31 +7,136 @@
 [ext_resource type="Script" uid="uid://1mx1c4y02pnl" path="res://scripts/rider/rider_foot_orientation_modifier_3d.gd" id="5_foot_orientation"]
 [ext_resource type="Script" uid="uid://b3kfrm0a2yu83" path="res://scripts/rider/rider_impact_response_controller.gd" id="6_impact_response"]
 [ext_resource type="Script" uid="uid://clycxmofcu2k5" path="res://scripts/rider/rider_grip_finger_modifier_3d.gd" id="7_grip_fingers"]
+[ext_resource type="Script" uid="uid://44vr286e106h" path="res://scripts/rider/rider_mounted_lean_controller.gd" id="8_mounted_lean"]
 
-[sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_jh5lk"]
+[sub_resource type="AnimationNodeAdd3" id="AnimationNodeAdd3_automatic_turn"]
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_n0p1g"]
 animation = &"mounted_breathing"
 
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_lean_back"]
+animation = &"Mounted_Lean_Back"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_lean_back_base"]
+animation = &"Mounted_Base"
+
+[sub_resource type="AnimationNodeSub2" id="AnimationNodeSub2_lean_back"]
+filter_enabled = true
+filters = ["SKEL_Rider/Skeleton3D:mixamorig_Head", "SKEL_Rider/Skeleton3D:mixamorig_Hips", "SKEL_Rider/Skeleton3D:mixamorig_LeftShoulder", "SKEL_Rider/Skeleton3D:mixamorig_Neck", "SKEL_Rider/Skeleton3D:mixamorig_RightShoulder", "SKEL_Rider/Skeleton3D:mixamorig_Spine", "SKEL_Rider/Skeleton3D:mixamorig_Spine1", "SKEL_Rider/Skeleton3D:mixamorig_Spine2"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_lean_forward"]
+animation = &"Mounted_Lean_Forward"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_lean_forward_base"]
+animation = &"Mounted_Base"
+
+[sub_resource type="AnimationNodeSub2" id="AnimationNodeSub2_lean_forward"]
+filter_enabled = true
+filters = ["SKEL_Rider/Skeleton3D:mixamorig_Head", "SKEL_Rider/Skeleton3D:mixamorig_Hips", "SKEL_Rider/Skeleton3D:mixamorig_LeftShoulder", "SKEL_Rider/Skeleton3D:mixamorig_Neck", "SKEL_Rider/Skeleton3D:mixamorig_RightShoulder", "SKEL_Rider/Skeleton3D:mixamorig_Spine", "SKEL_Rider/Skeleton3D:mixamorig_Spine1", "SKEL_Rider/Skeleton3D:mixamorig_Spine2"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_lean_left"]
+animation = &"Mounted_Lean_Left"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_lean_left_base"]
+animation = &"Mounted_Base"
+
+[sub_resource type="AnimationNodeSub2" id="AnimationNodeSub2_lean_left"]
+filter_enabled = true
+filters = ["SKEL_Rider/Skeleton3D:mixamorig_Head", "SKEL_Rider/Skeleton3D:mixamorig_Hips", "SKEL_Rider/Skeleton3D:mixamorig_LeftShoulder", "SKEL_Rider/Skeleton3D:mixamorig_Neck", "SKEL_Rider/Skeleton3D:mixamorig_RightShoulder", "SKEL_Rider/Skeleton3D:mixamorig_Spine", "SKEL_Rider/Skeleton3D:mixamorig_Spine1", "SKEL_Rider/Skeleton3D:mixamorig_Spine2"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_lean_right"]
+animation = &"Mounted_Lean_Right"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_lean_right_base"]
+animation = &"Mounted_Base"
+
+[sub_resource type="AnimationNodeSub2" id="AnimationNodeSub2_lean_right"]
+filter_enabled = true
+filters = ["SKEL_Rider/Skeleton3D:mixamorig_Head", "SKEL_Rider/Skeleton3D:mixamorig_Hips", "SKEL_Rider/Skeleton3D:mixamorig_LeftShoulder", "SKEL_Rider/Skeleton3D:mixamorig_Neck", "SKEL_Rider/Skeleton3D:mixamorig_RightShoulder", "SKEL_Rider/Skeleton3D:mixamorig_Spine", "SKEL_Rider/Skeleton3D:mixamorig_Spine1", "SKEL_Rider/Skeleton3D:mixamorig_Spine2"]
+
+[sub_resource type="AnimationNodeAdd3" id="AnimationNodeAdd3_manual_pitch"]
+
+[sub_resource type="AnimationNodeAdd3" id="AnimationNodeAdd3_manual_roll"]
+
 [sub_resource type="AnimationNodeAdd2" id="AnimationNodeAdd2_eswg0"]
 
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_jh5lk"]
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_bn8gx"]
 resource_local_to_scene = true
 animation = &"Mounted_Base"
 
-[sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_bn8gx"]
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_turn_left"]
+animation = &"Mounted_Turn_Left"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_turn_left_base"]
+animation = &"Mounted_Base"
+
+[sub_resource type="AnimationNodeSub2" id="AnimationNodeSub2_turn_left"]
+filter_enabled = true
+filters = ["SKEL_Rider/Skeleton3D:mixamorig_Head", "SKEL_Rider/Skeleton3D:mixamorig_Hips", "SKEL_Rider/Skeleton3D:mixamorig_LeftShoulder", "SKEL_Rider/Skeleton3D:mixamorig_Neck", "SKEL_Rider/Skeleton3D:mixamorig_RightShoulder", "SKEL_Rider/Skeleton3D:mixamorig_Spine", "SKEL_Rider/Skeleton3D:mixamorig_Spine1", "SKEL_Rider/Skeleton3D:mixamorig_Spine2"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_turn_right"]
+animation = &"Mounted_Turn_Right"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_turn_right_base"]
+animation = &"Mounted_Base"
+
+[sub_resource type="AnimationNodeSub2" id="AnimationNodeSub2_turn_right"]
+filter_enabled = true
+filters = ["SKEL_Rider/Skeleton3D:mixamorig_Head", "SKEL_Rider/Skeleton3D:mixamorig_Hips", "SKEL_Rider/Skeleton3D:mixamorig_LeftShoulder", "SKEL_Rider/Skeleton3D:mixamorig_Neck", "SKEL_Rider/Skeleton3D:mixamorig_RightShoulder", "SKEL_Rider/Skeleton3D:mixamorig_Spine", "SKEL_Rider/Skeleton3D:mixamorig_Spine1", "SKEL_Rider/Skeleton3D:mixamorig_Spine2"]
+
+[sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_5bkrj"]
 resource_local_to_scene = true
-graph_offset = Vector2(-545.35406, -175.00427)
-nodes/output/position = Vector2(120, 0)
-nodes/mounted_base/node = SubResource("AnimationNodeAnimation_jh5lk")
-nodes/mounted_base/position = Vector2(-440, -140)
+graph_offset = Vector2(-876.6594, -522.317)
+nodes/output/position = Vector2(880, 0)
+nodes/mounted_base/node = SubResource("AnimationNodeAnimation_bn8gx")
+nodes/mounted_base/position = Vector2(-1040, -740)
 nodes/breathing/node = SubResource("AnimationNodeAnimation_n0p1g")
-nodes/breathing/position = Vector2(-640, 140)
+nodes/breathing/position = Vector2(-1040, -520)
 nodes/mounted_add/node = SubResource("AnimationNodeAdd2_eswg0")
-nodes/mounted_add/position = Vector2(-140, 0)
-nodes/TimeScale/node = SubResource("AnimationNodeTimeScale_jh5lk")
-nodes/TimeScale/position = Vector2(-380, 120)
-node_connections = [&"output", 0, &"mounted_add", &"mounted_add", 0, &"mounted_base", &"mounted_add", 1, &"TimeScale", &"TimeScale", 0, &"breathing"]
+nodes/mounted_add/position = Vector2(-760, -680)
+nodes/turn_left/node = SubResource("AnimationNodeAnimation_turn_left")
+nodes/turn_left/position = Vector2(-1400, -440)
+nodes/turn_left_base/node = SubResource("AnimationNodeAnimation_turn_left_base")
+nodes/turn_left_base/position = Vector2(-1400, -200)
+nodes/turn_right/node = SubResource("AnimationNodeAnimation_turn_right")
+nodes/turn_right/position = Vector2(-1760, -140)
+nodes/turn_right_base/node = SubResource("AnimationNodeAnimation_turn_right_base")
+nodes/turn_right_base/position = Vector2(-1760, 80)
+nodes/turn_left_delta/node = SubResource("AnimationNodeSub2_turn_left")
+nodes/turn_left_delta/position = Vector2(-1120, -260)
+nodes/turn_right_delta/node = SubResource("AnimationNodeSub2_turn_right")
+nodes/turn_right_delta/position = Vector2(-1480, 20)
+nodes/automatic_turn_add/node = SubResource("AnimationNodeAdd3_automatic_turn")
+nodes/automatic_turn_add/position = Vector2(-540, -280)
+nodes/lean_left/node = SubResource("AnimationNodeAnimation_lean_left")
+nodes/lean_left/position = Vector2(-2020, 140)
+nodes/lean_left_base/node = SubResource("AnimationNodeAnimation_lean_left_base")
+nodes/lean_left_base/position = Vector2(-2020, 360)
+nodes/lean_right/node = SubResource("AnimationNodeAnimation_lean_right")
+nodes/lean_right/position = Vector2(-2040, 640)
+nodes/lean_right_base/node = SubResource("AnimationNodeAnimation_lean_right_base")
+nodes/lean_right_base/position = Vector2(-2040, 840)
+nodes/lean_left_delta/node = SubResource("AnimationNodeSub2_lean_left")
+nodes/lean_left_delta/position = Vector2(-1740, 300)
+nodes/lean_right_delta/node = SubResource("AnimationNodeSub2_lean_right")
+nodes/lean_right_delta/position = Vector2(-1760, 780)
+nodes/manual_roll_add/node = SubResource("AnimationNodeAdd3_manual_roll")
+nodes/manual_roll_add/position = Vector2(-260, -80)
+nodes/lean_forward/node = SubResource("AnimationNodeAnimation_lean_forward")
+nodes/lean_forward/position = Vector2(-1940, 1200)
+nodes/lean_forward_base/node = SubResource("AnimationNodeAnimation_lean_forward_base")
+nodes/lean_forward_base/position = Vector2(-1920, 1420)
+nodes/lean_back/node = SubResource("AnimationNodeAnimation_lean_back")
+nodes/lean_back/position = Vector2(-840, 1000)
+nodes/lean_back_base/node = SubResource("AnimationNodeAnimation_lean_back_base")
+nodes/lean_back_base/position = Vector2(-820, 1220)
+nodes/lean_forward_delta/node = SubResource("AnimationNodeSub2_lean_forward")
+nodes/lean_forward_delta/position = Vector2(-1660, 1200)
+nodes/lean_back_delta/node = SubResource("AnimationNodeSub2_lean_back")
+nodes/lean_back_delta/position = Vector2(-560, 1000)
+nodes/manual_pitch_add/node = SubResource("AnimationNodeAdd3_manual_pitch")
+nodes/manual_pitch_add/position = Vector2(100, 0)
+node_connections = [&"output", 0, &"manual_pitch_add", &"mounted_add", 0, &"mounted_base", &"mounted_add", 1, &"breathing", &"turn_left_delta", 0, &"turn_left", &"turn_left_delta", 1, &"turn_left_base", &"turn_right_delta", 0, &"turn_right", &"turn_right_delta", 1, &"turn_right_base", &"automatic_turn_add", 0, &"mounted_add", &"automatic_turn_add", 1, &"turn_left_delta", &"automatic_turn_add", 2, &"turn_right_delta", &"lean_left_delta", 0, &"lean_left", &"lean_left_delta", 1, &"lean_left_base", &"lean_right_delta", 0, &"lean_right", &"lean_right_delta", 1, &"lean_right_base", &"manual_roll_add", 0, &"automatic_turn_add", &"manual_roll_add", 1, &"lean_left_delta", &"manual_roll_add", 2, &"lean_right_delta", &"lean_forward_delta", 0, &"lean_forward", &"lean_forward_delta", 1, &"lean_forward_base", &"lean_back_delta", 0, &"lean_back", &"lean_back_delta", 1, &"lean_back_base", &"manual_pitch_add", 0, &"manual_roll_add", &"manual_pitch_add", 1, &"lean_forward_delta", &"manual_pitch_add", 2, &"lean_back_delta"]
 
 [node name="JetSki" unique_id=117969959 instance=ExtResource("1_base")]
 
@@ -105,96 +210,33 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.1578315e-08, 0.11282855, -0
 [node name="Skeleton3D" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/Rider_Bot/SKEL_Rider" index="0" unique_id=426480764]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5004954e-08, 0, 0.17163658)
 bones/0/position = Vector3(0.04845924, 0.66667527, -0.22242343)
-bones/0/rotation = Quaternion(0.10019423, -0.014087973, 0.014438142, 0.9947634)
+bones/0/rotation = Quaternion(0.006458344, 2.444722e-09, 2.5017656e-07, 0.9999792)
 bones/0/scale = Vector3(1, 0.9999999, 0.99999976)
-bones/1/position = Vector3(-4.8316906e-12, 0.101824485, 1.9628956e-09)
+bones/1/position = Vector3(-4.833369e-12, 0.1018245, 4.556175e-09)
 bones/1/rotation = Quaternion(0, 0, 0, 1)
 bones/1/scale = Vector3(1.0000002, 1.0000002, 1.0000005)
-bones/2/position = Vector3(0, 0.10002686, 8.381903e-09)
+bones/2/position = Vector3(-4.868883e-13, 0.10002686, 8.382884e-09)
 bones/2/rotation = Quaternion(-0.016251868, -0.0021406363, -0.002404168, 0.99986273)
-bones/3/position = Vector3(3.637979e-12, 0.10010648, -2.0489097e-08)
+bones/3/position = Vector3(-9.094947e-13, 0.10010646, -1.5699033e-08)
 bones/3/rotation = Quaternion(0, 0, 0, 1)
-bones/4/position = Vector3(-3.710018e-06, 0.16292441, -0.002570657)
+bones/4/position = Vector3(-3.710018e-06, 0.16292441, -0.0025706575)
 bones/4/rotation = Quaternion(0, 0, 0, 1)
 bones/4/scale = Vector3(0.99999994, 1.0000001, 1)
 bones/5/rotation = Quaternion(0, 0, 0, 1)
 bones/6/rotation = Quaternion(-0.4742514, 0.57118, -0.52213013, -0.41978464)
-bones/7/position = Vector3(-1.1175871e-08, 0.11116077, 0)
 bones/7/rotation = Quaternion(0.15787482, 0.34887832, -0.553626, 0.7394983)
 bones/8/rotation = Quaternion(0.09792477, -0.01995033, -0.28846452, 0.952261)
-bones/9/rotation = Quaternion(0.24257928, -0.11402829, 0.019074783, 0.96321815)
-bones/10/position = Vector3(0.026818521, 0.024648042, 0.015739925)
-bones/10/rotation = Quaternion(0.19800948, 0.2066275, -0.34475178, 0.8940042)
-bones/11/position = Vector3(-3.934838e-08, 0.04188987, -2.1097367e-07)
-bones/11/rotation = Quaternion(-0.0078506945, -0.0009172557, 0.09456938, 0.995487)
-bones/12/position = Vector3(1.3504177e-08, 0.034162637, 8.7558874e-08)
-bones/12/rotation = Quaternion(-0.018831516, -0.008552976, -0.049153816, 0.9985771)
-bones/13/rotation = Quaternion(-0.052230608, -0.06553572, 0.002404847, 0.99647945)
-bones/14/rotation = Quaternion(0.22078636, 0.025909532, -0.13648, 0.96537834)
-bones/15/position = Vector3(-3.7252903e-09, 0.028500233, -4.8894435e-08)
-bones/15/rotation = Quaternion(0.2861335, 0.05911048, -0.17487448, 0.94024074)
-bones/16/position = Vector3(-2.682209e-07, 0.09532508, 4.917383e-07)
-bones/16/rotation = Quaternion(-0.07374893, -0.06055414, 0.101439945, 0.99025464)
-bones/17/rotation = Quaternion(0.29897434, 0.012661098, -0.1280109, 0.9455513)
-bones/18/position = Vector3(-9.313226e-10, 0.029499862, 8.8475645e-08)
-bones/18/rotation = Quaternion(0.38356745, 0.0322386, -0.15743221, 0.90942395)
-bones/19/position = Vector3(-0.018651372, 0.091035925, 0.00043072272)
-bones/19/rotation = Quaternion(-0.13063502, -0.059228465, 0.23100723, 0.9623213)
-bones/20/rotation = Quaternion(0.35972384, 0.0016893724, -0.13633013, 0.92304397)
-bones/21/position = Vector3(0, 0.028896932, -1.3038516e-08)
-bones/21/rotation = Quaternion(0.3852089, 0.041496474, -0.17664963, 0.9048133)
-bones/22/position = Vector3(-0.038062822, 0.08076676, 0.004867101)
-bones/22/rotation = Quaternion(0.034815498, -0.04313068, 0.25800112, 0.9645533)
-bones/23/rotation = Quaternion(0.2805919, 0.016124768, -0.13405643, 0.9502827)
-bones/24/position = Vector3(-9.313226e-10, 0.020999873, 6.239861e-08)
-bones/24/rotation = Quaternion(0.33244422, 0.07809518, -0.22287567, 0.91307634)
 bones/25/position = Vector3(0.04570663, 0.10576442, -0.00600845)
-bones/25/rotation = Quaternion(0.46656862, 0.57515615, -0.5352972, 0.40616006)
+bones/25/rotation = Quaternion(0.43952808, 0.59007734, -0.5504703, 0.39446965)
 bones/26/rotation = Quaternion(0.13793367, -0.22017494, 0.55343336, 0.79133356)
-bones/27/position = Vector3(0, 0.27841514, 4.8428774e-08)
 bones/27/rotation = Quaternion(0.023832317, -0.009011945, 0.38891384, 0.92092174)
 bones/28/rotation = Quaternion(0.20657215, 0.3054246, 0.06616603, 0.92718166)
-bones/29/position = Vector3(-0.026817312, 0.024661455, 0.01576186)
-bones/29/rotation = Quaternion(0.08158254, -0.16406189, 0.22663237, 0.9565907)
-bones/30/position = Vector3(-3.958121e-09, 0.04187095, 1.1143857e-07)
-bones/30/rotation = Quaternion(-0.014058119, -0.017745785, -0.13741094, 0.99025536)
-bones/31/position = Vector3(1.6298145e-08, 0.034183986, 7.6324795e-09)
-bones/31/rotation = Quaternion(-0.035539363, 0.043403752, 0.11586974, 0.991679)
-bones/32/position = Vector3(-0.022598632, 0.091093086, 0.005180273)
-bones/32/rotation = Quaternion(-0.11591298, 0.08265456, -0.008068699, 0.98978144)
-bones/33/rotation = Quaternion(0.23593861, -0.023299297, 0.13568814, 0.9619662)
-bones/34/position = Vector3(-2.7939677e-09, 0.028500063, 6.984919e-08)
-bones/34/rotation = Quaternion(0.27822006, -0.06072026, 0.17505552, 0.9424767)
-bones/35/position = Vector3(-3.594905e-07, 0.09533393, -4.4796616e-07)
-bones/35/rotation = Quaternion(0.016885096, 0.04174399, -0.1365486, 0.98960954)
-bones/36/rotation = Quaternion(0.20666035, -0.02826243, 0.13834971, 0.96816945)
-bones/37/position = Vector3(-3.7252903e-09, 0.029499896, -3.3527613e-08)
-bones/37/rotation = Quaternion(0.26037362, -0.05868903, 0.16568848, 0.9493727)
-bones/38/position = Vector3(0.018650819, 0.091045246, 0.00043014344)
-bones/38/rotation = Quaternion(-0.085134596, 0.059080042, -0.2376482, 0.9658079)
-bones/39/rotation = Quaternion(0.50124335, 0.028641036, 0.12916884, 0.85513175)
-bones/40/position = Vector3(-7.450581e-09, 0.0294999, 6.472692e-08)
-bones/40/rotation = Quaternion(0.55123806, 0.0030513261, 0.16031879, 0.81879497)
-bones/41/rotation = Quaternion(0.028797736, 0.04310266, -0.23566449, 0.97045106)
-bones/42/rotation = Quaternion(0.21113315, -0.024339676, 0.17710394, 0.96097064)
-bones/43/position = Vector3(2.7939677e-09, 0.021000098, 2.9336661e-08)
-bones/43/rotation = Quaternion(0.28190538, -0.09210897, 0.22240655, 0.9287523)
-bones/44/position = Vector3(-0.0820779, -0.06771751, -0.01512219)
 bones/44/rotation = Quaternion(-0.08885999, 0.32234517, 0.9325319, 0.13631512)
-bones/45/position = Vector3(-6.982191e-09, 0.43905488, -2.7939677e-09)
 bones/45/rotation = Quaternion(-0.34899542, 0.025143337, 0.0048771836, 0.9367744)
-bones/46/position = Vector3(9.298674e-09, 0.4452782, 4.656613e-09)
 bones/46/rotation = Quaternion(0.526703, 0.0011147931, 0.11098215, 0.8427726)
-bones/47/position = Vector3(-1.2781129e-08, 0.14997412, -9.313226e-09)
-bones/47/rotation = Quaternion(0.3545172, -0.00014738289, 4.7525127e-06, 0.93504953)
-bones/48/position = Vector3(0.08207788, -0.06771799, -0.015122137)
 bones/48/rotation = Quaternion(0.05499214, 0.32198688, 0.94135964, -0.084513016)
-bones/49/position = Vector3(-1.2922101e-08, 0.43905368, -2.7939677e-09)
 bones/49/rotation = Quaternion(-0.3853179, -0.101622075, -0.03618283, 0.91645724)
-bones/50/position = Vector3(-1.0913936e-09, 0.44527856, 1.7695129e-08)
 bones/50/rotation = Quaternion(0.59821767, -0.006833869, -0.011269013, 0.80122524)
-bones/51/position = Vector3(-6.2773324e-09, 0.1499741, 9.546056e-09)
-bones/51/rotation = Quaternion(0.35248858, -0.00014723818, 4.045581e-06, 0.9358161)
 
 [node name="RiderImpactPose" type="SkeletonModifier3D" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D" index="0" unique_id=1959462542]
 unique_name_in_owner = false
@@ -344,17 +386,20 @@ script = ExtResource("7_grip_fingers")
 left_grip_strength = 0.7
 right_grip_strength = 0.7
 
-[node name="AnimationPlayer" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig" index="1" unique_id=785147574]
-speed_scale = 1.873
-
 [node name="AnimationTree" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig" index="2" unique_id=187453891]
-active = true
-tree_root = SubResource("AnimationNodeBlendTree_bn8gx")
-parameters/mounted_add/add_amount = 1.0
-parameters/TimeScale/scale = 4.109999999999999
+tree_root = SubResource("AnimationNodeBlendTree_5bkrj")
+parameters/turn_left_delta/sub_amount = 1.0
+parameters/turn_right_delta/sub_amount = 1.0
+parameters/lean_left_delta/sub_amount = 1.0
+parameters/lean_right_delta/sub_amount = 1.0
+parameters/lean_forward_delta/sub_amount = 1.0
+parameters/lean_back_delta/sub_amount = 0.0
 
 [node name="RiderImpactResponse" type="Node" parent="." index="8" unique_id=966370299]
 script = ExtResource("6_impact_response")
+
+[node name="RiderMountedLean" type="Node" parent="." index="9" unique_id=1839269125]
+script = ExtResource("8_mounted_lean")
 
 [editable path="VisualRoot/JetSkiVisual"]
 [editable path="VisualRoot/RiderMount/RiderAssetRoot/RiderRig"]
