@@ -1,4 +1,4 @@
-[gd_resource type="AnimationNodeBlendTree" format=3]
+[gd_resource type="AnimationNodeBlendTree" format=3 uid="uid://ddgxhrodm4n2q"]
 
 [sub_resource type="AnimationNodeAdd3" id="AnimationNodeAdd3_automatic_turn"]
 
@@ -75,7 +75,6 @@ filter_enabled = true
 filters = ["SKEL_Rider/Skeleton3D:mixamorig_Head", "SKEL_Rider/Skeleton3D:mixamorig_Hips", "SKEL_Rider/Skeleton3D:mixamorig_LeftShoulder", "SKEL_Rider/Skeleton3D:mixamorig_Neck", "SKEL_Rider/Skeleton3D:mixamorig_RightShoulder", "SKEL_Rider/Skeleton3D:mixamorig_Spine", "SKEL_Rider/Skeleton3D:mixamorig_Spine1", "SKEL_Rider/Skeleton3D:mixamorig_Spine2"]
 
 [resource]
-graph_offset = Vector2(-581, -186)
 nodes/output/position = Vector2(880, 0)
 nodes/mounted_base/node = SubResource("AnimationNodeAnimation_mounted_base")
 nodes/mounted_base/position = Vector2(-1180, -320)

@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://tl6lotex1356"]
 
 [ext_resource type="PackedScene" uid="uid://qiqduyrfwah7" path="res://scenes/vehicle/jet_ski.tscn" id="1_base"]
-[ext_resource type="PackedScene" path="res://scenes/rider/rider_rig.tscn" id="2_rider"]
+[ext_resource type="PackedScene" uid="uid://3htphu61qseo" path="res://scenes/rider/rider_rig.tscn" id="2_rider"]
 [ext_resource type="Script" uid="uid://bk28pr20t1b8q" path="res://scripts/rider/rider_grip_orientation_modifier_3d.gd" id="3_grip_orientation"]
 [ext_resource type="Script" uid="uid://dbqp5gmdnuxmf" path="res://scripts/rider/rider_impact_pose_modifier_3d.gd" id="4_impact_pose"]
 [ext_resource type="Script" uid="uid://1mx1c4y02pnl" path="res://scripts/rider/rider_foot_orientation_modifier_3d.gd" id="5_foot_orientation"]
@@ -79,9 +79,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.18724537, 0)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.1578315e-08, 0.11282855, -0.13244057)
 
 [node name="Skeleton3D" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/Rider_Bot/SKEL_Rider" index="0" unique_id=426480764]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5004954e-08, 0, 0.17163658)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.54146457, 0, 0.17163664)
 bones/0/position = Vector3(0.04845924, 0.66667527, -0.22242343)
-bones/0/rotation = Quaternion(0.10019423, -0.014087973, 0.014438142, 0.9947634)
+bones/0/rotation = Quaternion(0.100203976, -7.276683e-12, 0.0144394385, 0.99486214)
 bones/0/scale = Vector3(1, 0.9999999, 0.99999976)
 bones/1/position = Vector3(-4.8316906e-12, 0.101824485, 1.9628956e-09)
 bones/1/rotation = Quaternion(0, 0, 0, 1)
@@ -125,7 +125,7 @@ bones/23/rotation = Quaternion(0.2805919, 0.016124768, -0.13405643, 0.9502827)
 bones/24/position = Vector3(-9.313226e-10, 0.020999873, 6.239861e-08)
 bones/24/rotation = Quaternion(0.33244422, 0.07809518, -0.22287567, 0.91307634)
 bones/25/position = Vector3(0.04570663, 0.10576442, -0.00600845)
-bones/25/rotation = Quaternion(0.46612725, 0.57535076, -0.53577775, 0.40575734)
+bones/25/rotation = Quaternion(0.46587154, 0.57551175, -0.5358458, 0.40573296)
 bones/26/rotation = Quaternion(0.13793367, -0.22017494, 0.55343336, 0.79133356)
 bones/27/position = Vector3(0, 0.27841514, 4.8428774e-08)
 bones/27/rotation = Quaternion(0.023832317, -0.009011945, 0.38891384, 0.92092174)
