@@ -80,8 +80,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.1578315e-08, 0.11282855, -0
 
 [node name="Skeleton3D" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/Rider_Bot/SKEL_Rider" index="0" unique_id=426480764]
 bones/0/position = Vector3(0.04845924, 0.66667527, -0.22242343)
-bones/0/rotation = Quaternion(0, 0, 0, 1)
-bones/0/scale = Vector3(1, 0.9999999, 0.99999976)
+bones/0/rotation = Quaternion(0.1674714, -0.22102761, 0.018298935, 0.96060675)
+bones/0/scale = Vector3(1.0000001, 1, 0.9999998)
 bones/1/rotation = Quaternion(0, 0, 0, 1)
 bones/1/scale = Vector3(1.0000002, 1.0000002, 1.0000005)
 bones/2/rotation = Quaternion(-0.016251868, -0.0021406363, -0.002404168, 0.99986273)
@@ -314,6 +314,9 @@ influence = 1.0
 script = ExtResource("7_grip_fingers")
 left_grip_strength = 0.7
 right_grip_strength = 0.7
+
+[node name="AnimationTree" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig" index="2" unique_id=187453891]
+active = true
 
 [node name="RiderImpactResponse" type="Node" parent="." index="8" unique_id=966370299]
 script = ExtResource("6_impact_response")

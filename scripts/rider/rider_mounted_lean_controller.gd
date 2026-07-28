@@ -104,20 +104,12 @@ func _physics_process(delta: float) -> void:
 func _automatic_turn_target() -> float:
 	if (
 		_vehicle.navigation_state
-		== JetSkiController.NavigationState.AIRBORNE
-		or _vehicle.navigation_state
 		== JetSkiController.NavigationState.DEEP_SUBMERGED
 		or _vehicle.submarine_dive_active
 	):
 		return 0.0
-	var automatic_turn_raw := clampf(
-		_vehicle.turn_lean_target_roll_degrees
-		/ maxf(_vehicle.turn_lean_max_angle_degrees, 0.001),
-		-1.0,
-		1.0
-	)
 	return clampf(
-		automatic_turn_raw * automatic_turn_visual_scale,
+		_vehicle.steering_input * automatic_turn_visual_scale,
 		-1.0,
 		1.0
 	)

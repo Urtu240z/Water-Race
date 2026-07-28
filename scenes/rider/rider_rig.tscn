@@ -17,7 +17,6 @@ root_node = NodePath("../RiderModelRoot/Rider_Bot")
 libraries/ = ExtResource("3_ggf4l")
 
 [node name="AnimationTree" type="AnimationTree" parent="." unique_id=187453891]
-active = false
 root_node = NodePath("../RiderModelRoot/Rider_Bot")
 tree_root = ExtResource("4_mounted_blend_tree")
 anim_player = NodePath("../AnimationPlayer")
