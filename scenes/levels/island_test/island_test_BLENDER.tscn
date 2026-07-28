@@ -238,7 +238,7 @@ shader_parameter/foam_macro_scale = 0.055
 shader_parameter/foam_detail_scale = 0.19
 shader_parameter/foam_scroll_speed = 0.13
 shader_parameter/foam_roughness = 0.88
-shader_parameter/ocean_surface_enabled = false
+shader_parameter/ocean_surface_enabled = true
 shader_parameter/ocean_snapped_origin_xz = Vector2(0, 0)
 shader_parameter/ocean_logical_origin_offset_xz = Vector2(0, 0)
 shader_parameter/ocean_detail_center_xz = Vector2(0, 0)
@@ -443,12 +443,16 @@ visible = true
 transform = Transform3D(0.80945057, -0.3843369, -0.4439311, -0.56238306, -0.724853, -0.39788496, -0.1688622, 0.57172793, -0.8028763, 0.19560242, 0.6935289, -1.4804459)
 
 [node name="Skeleton3D" parent="Gameplay/JetSki/VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/Rider_Bot/SKEL_Rider" parent_id_path=PackedInt32Array(328650943, 2001770911, 1075285769, 1348584656) index="0" unique_id=426480764]
-bones/0/rotation = Quaternion(0.100203976, -7.276683e-12, 0.0144394385, 0.99486214)
-bones/1/position = Vector3(-4.8316906e-12, 0.101824485, 1.9628956e-09)
-bones/2/position = Vector3(0, 0.10002686, 8.381903e-09)
-bones/3/position = Vector3(3.637979e-12, 0.10010648, -2.0489097e-08)
-bones/4/position = Vector3(-3.710018e-06, 0.16292441, -0.002570657)
-bones/25/rotation = Quaternion(0.4660154, 0.57541853, -0.53581965, 0.40573472)
+bones/0/rotation = Quaternion(0.0064583384, 1.6179755e-09, 2.5050662e-07, 0.99997914)
+bones/7/position = Vector3(-1.1175871e-08, 0.11116077, 2.3283064e-10)
+bones/25/rotation = Quaternion(0.43952805, 0.59007734, -0.55047023, 0.39446965)
+bones/27/position = Vector3(-2.9825742e-10, 0.27841514, 4.8592856e-08)
+bones/44/position = Vector3(-0.0820779, -0.0677175, -0.01512219)
+bones/45/position = Vector3(-6.982418e-09, 0.43905485, -2.2728273e-09)
+bones/46/position = Vector3(9.280655e-09, 0.4452782, -2.0814248e-09)
+bones/48/position = Vector3(0.08207788, -0.067718, -0.015122137)
+bones/49/position = Vector3(-1.2923408e-08, 0.43905368, -2.2650966e-09)
+bones/50/position = Vector3(-1.0939593e-09, 0.44527858, 3.188938e-09)
 
 [node name="FootOrientation" parent="Gameplay/JetSki/VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D" index="3" unique_id=1357917683]
 left_foot_rotation_correction_degrees = Vector3(240, 0, 0)
