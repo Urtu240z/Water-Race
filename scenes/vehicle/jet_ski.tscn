@@ -7,6 +7,18 @@
 [ext_resource type="Script" uid="uid://ccpq0is7w8h55" path="res://scripts/effects/turbine_exhaust_controller.gd" id="5_turbine_exhaust"]
 [ext_resource type="PackedScene" path="res://scenes/effects/vehicle_water_effects_3d.tscn" id="6_water_effects"]
 [ext_resource type="Script" uid="uid://dn8rdqs3rho8l" path="res://scripts/vehicle/jet_ski_arcade_handling.gd" id="7_arcade_handling"]
+[ext_resource type="Script" path="res://scripts/vehicle/vehicle_water_audio.gd" id="8_water_audio"]
+[ext_resource type="AudioStream" uid="uid://f5c8o82uqp2u" path="res://assets/audio/Splash_1.ogg" id="9_splash_1"]
+[ext_resource type="AudioStream" uid="uid://n6ydetcej3es" path="res://assets/audio/Splash_2.ogg" id="10_splash_2"]
+[ext_resource type="AudioStream" uid="uid://ck3x5p2cabrpg" path="res://assets/audio/Splash_3.ogg" id="11_splash_3"]
+[ext_resource type="AudioStream" uid="uid://dco2xp7wdjpwq" path="res://assets/audio/Splash_Heavy_1.ogg" id="12_heavy_1"]
+[ext_resource type="AudioStream" uid="uid://ing22covlye8" path="res://assets/audio/Splash_Heavy_2.ogg" id="13_heavy_2"]
+[ext_resource type="AudioStream" uid="uid://bpwibglyb4koa" path="res://assets/audio/Splash_Heavy_3.ogg" id="14_heavy_3"]
+[ext_resource type="AudioStream" uid="uid://dqwxbrecfnfno" path="res://assets/audio/Splash_Heavy_4.ogg" id="15_heavy_4"]
+[ext_resource type="AudioStream" uid="uid://d0ew5y885bpwc" path="res://assets/audio/Running_Water_1.ogg" id="16_running_1"]
+[ext_resource type="AudioStream" uid="uid://41gs20c2usbp" path="res://assets/audio/Running_Water_2.ogg" id="17_running_2"]
+[ext_resource type="AudioStream" uid="uid://bk01pfc1hsy55" path="res://assets/audio/Running_Water_3.ogg" id="18_running_3"]
+[ext_resource type="AudioStream" uid="uid://4a4u6ec21n5a" path="res://assets/audio/Running_Water_4.ogg" id="19_running_4"]
 
 [sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_hull"]
 points = PackedVector3Array(0, 0.22, -1.55, 0.071, 0.185, -1.55, 0.1, 0.1, -1.55, 0.071, 0.015, -1.55, 0, -0.02, -1.55, -0.071, 0.015, -1.55, -0.1, 0.1, -1.55, -0.071, 0.185, -1.55, 0, 0.28, -1.15, 0.325, 0.198, -1.15, 0.46, 0, -1.15, 0.325, -0.198, -1.15, 0, -0.28, -1.15, -0.325, -0.198, -1.15, -0.46, 0, -1.15, -0.325, 0.198, -1.15, 0, 0.3, 0.55, 0.424, 0.212, 0.55, 0.6, 0, 0.55, 0.424, -0.212, 0.55, 0, -0.3, 0.55, -0.424, -0.212, 0.55, -0.6, 0, 0.55, -0.424, 0.212, 0.55, 0, 0.26, 1.55, 0.311, 0.19, 1.55, 0.44, 0.02, 1.55, 0.311, -0.15, 1.55, 0, -0.22, 1.55, -0.311, -0.15, 1.55, -0.44, 0.02, 1.55, -0.311, 0.19, 1.55)
@@ -43,6 +55,30 @@ nose_up_pitch_drop = 0.135
 
 [node name="ArcadeHandling" type="Node" parent="." unique_id=232523693]
 script = ExtResource("7_arcade_handling")
+
+[node name="WaterAudio" type="Node3D" parent="."]
+script = ExtResource("8_water_audio")
+normal_splash_streams = Array[AudioStream]([ExtResource("9_splash_1"), ExtResource("10_splash_2"), ExtResource("11_splash_3")])
+heavy_splash_streams = Array[AudioStream]([ExtResource("12_heavy_1"), ExtResource("13_heavy_2"), ExtResource("14_heavy_3"), ExtResource("15_heavy_4")])
+running_water_streams = Array[AudioStream]([ExtResource("16_running_1"), ExtResource("17_running_2"), ExtResource("18_running_3"), ExtResource("19_running_4")])
+
+[node name="ImpactPlayerA" type="AudioStreamPlayer3D" parent="WaterAudio"]
+top_level = true
+volume_db = -60.0
+max_distance = 85.0
+doppler_tracking = 2
+
+[node name="ImpactPlayerB" type="AudioStreamPlayer3D" parent="WaterAudio"]
+top_level = true
+volume_db = -60.0
+max_distance = 85.0
+doppler_tracking = 2
+
+[node name="RunningWaterPlayer" type="AudioStreamPlayer3D" parent="WaterAudio"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.12, 0.45)
+volume_db = -60.0
+max_distance = 85.0
+doppler_tracking = 2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=2026230859]
 visible = false

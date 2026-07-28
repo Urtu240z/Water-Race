@@ -34,7 +34,7 @@
 [ext_resource type="PackedScene" uid="uid://byqrxgrtjkcgm" path="res://assets/3D/buildings/beach_hotel.glb" id="36_kotkt"]
 [ext_resource type="PackedScene" uid="uid://dmqjonl673mxd" path="res://scenes/course/buoy.tscn" id="37_armhu"]
 [ext_resource type="Texture2D" uid="uid://bblan7rbfrudb" path="res://resources/water/organic_surface/surface_warp_noise.tres" id="37_vkhvf"]
-[ext_resource type="AudioStream" uid="uid://j7rnutr7c4dx" path="res://assets/audio/Motor_1.ogg" id="38_jrck1"]
+[ext_resource type="AudioStream" uid="uid://tn1we3rfc1hp" path="res://assets/audio/Motor_Idle.ogg" id="38_kotkt"]
 [ext_resource type="Texture2D" uid="uid://cq8kw5o6ssrwc" path="res://assets/environment/sky/aristea_wreck_puresky_4k.hdr" id="39_1y1wo"]
 [ext_resource type="Texture2D" uid="uid://dh4ygdetfbe7t" path="res://assets/environment/sky/kloofendal_48d_partly_cloudy_puresky_4k.hdr" id="40_armhu"]
 [ext_resource type="Texture2D" uid="uid://b7kfjl0vvcloa" path="res://assets/environment/sky/qwantani_dusk_1_puresky_4k.hdr" id="41_7fon7"]
@@ -172,9 +172,9 @@ shader_parameter/water_level = 0.0
 shader_parameter/simulation_time = 0.0
 shader_parameter/wave_height_texture_a = ExtResource("34_cfiqe")
 shader_parameter/wave_height_texture_b = ExtResource("35_0pibt")
-shader_parameter/wave_world_size_a = 180.0
-shader_parameter/wave_world_size_b = 72.0
-shader_parameter/wave_amplitude_a = 1.35
+shader_parameter/wave_world_size_a = 200.0
+shader_parameter/wave_world_size_b = 120.0
+shader_parameter/wave_amplitude_a = 0.999999977648
 shader_parameter/wave_amplitude_b = 0.42
 shader_parameter/wave_direction_a = Vector2(0.86012906, 0.5100765)
 shader_parameter/wave_direction_b = Vector2(-0.38176018, 0.92426145)
@@ -238,7 +238,7 @@ shader_parameter/foam_macro_scale = 0.055
 shader_parameter/foam_detail_scale = 0.19
 shader_parameter/foam_scroll_speed = 0.13
 shader_parameter/foam_roughness = 0.88
-shader_parameter/ocean_surface_enabled = true
+shader_parameter/ocean_surface_enabled = false
 shader_parameter/ocean_snapped_origin_xz = Vector2(0, 0)
 shader_parameter/ocean_logical_origin_offset_xz = Vector2(0, 0)
 shader_parameter/ocean_detail_center_xz = Vector2(0, 0)
@@ -401,6 +401,9 @@ mesh = SubResource("PlaneMesh_tpwhi")
 
 [node name="Ocean" parent="WaterIntegration" unique_id=1340264265 instance=ExtResource("32_wfhwd")]
 ocean_material = SubResource("ShaderMaterial_kotkt")
+wave_world_size_a = 200.0
+wave_world_size_b = 120.0
+wave_amplitude_a = 0.999999977648
 wave_travel_speed_a = 9.0000004321348
 wave_travel_speed_b = 4.0000003576287995
 normal_sample_step = 2.0
@@ -430,8 +433,12 @@ reverse_thrust_falloff_end_speed = 14.2
 
 [node name="EngineAudio" parent="Gameplay/JetSki" index="0" unique_id=1603778743]
 visible = true
-stream = ExtResource("38_jrck1")
-full_throttle_pitch = 3.0
+stream = ExtResource("38_kotkt")
+volume_db = -6.0
+pitch_scale = 0.6
+full_throttle_pitch = 1.6
+free_rev_pitch = 2.2
+idle_volume_db = 6.0
 speed_for_full_load = 50.0
 wave_load_activation_throttle = 0.91
 wave_load_response_speed = 17.8
@@ -443,7 +450,8 @@ visible = true
 transform = Transform3D(0.80945057, -0.3843369, -0.4439311, -0.56238306, -0.724853, -0.39788496, -0.1688622, 0.57172793, -0.8028763, 0.19560242, 0.6935289, -1.4804459)
 
 [node name="RiderRig" parent="Gameplay/JetSki/VisualRoot/RiderMount/RiderAssetRoot" parent_id_path=PackedInt32Array(328650943, 1312466662) index="0" unique_id=2001770911]
-rider_skin = 0
+rider_skin = 1
+breathing_influence = 1.0
 
 [node name="Skeleton3D" parent="Gameplay/JetSki/VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/Rider_Bot/SKEL_Rider" parent_id_path=PackedInt32Array(328650943, 2001770911, 1075285769, 1348584656) index="0" unique_id=426480764]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.081000924, 0.0069850683, 0)
@@ -487,12 +495,10 @@ grip_hard_extension_ratio = 1.1
 
 [node name="OceanWaves" type="AudioStreamPlayer" parent="Gameplay/JetSki" unique_id=1310889787]
 stream = ExtResource("204_4tj3w")
-volume_db = 0.769
 autoplay = true
 
 [node name="OceanWind" type="AudioStreamPlayer" parent="Gameplay/JetSki" unique_id=177552327]
 stream = ExtResource("205_wm0j8")
-volume_db = 0.217
 autoplay = true
 
 [node name="CameraSystem" type="Node3D" parent="." unique_id=1510457463]

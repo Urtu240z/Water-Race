@@ -1,0 +1,118 @@
+=== RIDER01 INTEGRATION VALIDATION ===
+Godot: 4.7.1-stable (official)
+PASS: Isolated RiderRig has one BOT mesh.
+PASS: Isolated RiderRig has one RACER mesh.
+PASS: Isolated RiderRig has ten RIDER01 meshes.
+PASS: Skin 0 visibility is exclusive.
+PASS: Skin 2 visibility is exclusive.
+PASS: Skin 0 visibility is exclusive.
+PASS: Skin 1 visibility is exclusive.
+PASS: Skin 2 visibility is exclusive.
+PASS: Skin 0 visibility is exclusive.
+PASS: Skin switching preserves the Skeleton3D instance.
+PASS: Skin switching preserves the AnimationTree instance.
+PASS: Skin switching creates no nodes.
+PASS: RiderRig returns reversibly to BOT.
+PASS: island_test_BLENDER loads.
+FAIL: island_test_BLENDER inherits RIDER01 from JetSkiWithRider.
+PASS: Exactly one Skeleton3D remains.
+PASS: Exactly one AnimationPlayer remains.
+PASS: Exactly one AnimationTree remains.
+PASS: Exactly one BOT mesh remains.
+PASS: Exactly one RACER mesh remains.
+PASS: Exactly ten RIDER01 meshes exist.
+PASS: Runtime skeleton has 52 bones.
+PASS: JetSkiWithRider selects RIDER01.
+PASS: JetSkiWithRider shows only RIDER01.
+PASS: Rider01_Tongue has a Mesh.
+PASS: Rider01_Tongue has a Skin.
+PASS: Rider01_Tongue targets the shared Skeleton3D.
+PASS: Rider01_Tongue has 52 binds.
+PASS: Rider01_Teeth has a Mesh.
+PASS: Rider01_Teeth has a Skin.
+PASS: Rider01_Teeth targets the shared Skeleton3D.
+PASS: Rider01_Teeth reuses the shared Rider01 Skin.
+PASS: Rider01_Teeth has 52 binds.
+PASS: Rider01_Tank has a Mesh.
+PASS: Rider01_Tank has a Skin.
+PASS: Rider01_Tank targets the shared Skeleton3D.
+PASS: Rider01_Tank reuses the shared Rider01 Skin.
+PASS: Rider01_Tank has 52 binds.
+PASS: Rider01_SwimShorts has a Mesh.
+PASS: Rider01_SwimShorts has a Skin.
+PASS: Rider01_SwimShorts targets the shared Skeleton3D.
+PASS: Rider01_SwimShorts reuses the shared Rider01 Skin.
+PASS: Rider01_SwimShorts has 52 binds.
+PASS: Rider01_HairMesh has a Mesh.
+PASS: Rider01_HairMesh has a Skin.
+PASS: Rider01_HairMesh targets the shared Skeleton3D.
+PASS: Rider01_HairMesh reuses the shared Rider01 Skin.
+PASS: Rider01_HairMesh has 52 binds.
+PASS: Rider01_Glasses has a Mesh.
+PASS: Rider01_Glasses has a Skin.
+PASS: Rider01_Glasses targets the shared Skeleton3D.
+PASS: Rider01_Glasses reuses the shared Rider01 Skin.
+PASS: Rider01_Glasses has 52 binds.
+PASS: Rider01_Eyes has a Mesh.
+PASS: Rider01_Eyes has a Skin.
+PASS: Rider01_Eyes targets the shared Skeleton3D.
+PASS: Rider01_Eyes reuses the shared Rider01 Skin.
+PASS: Rider01_Eyes has 52 binds.
+PASS: Rider01_Eyelashes has a Mesh.
+PASS: Rider01_Eyelashes has a Skin.
+PASS: Rider01_Eyelashes targets the shared Skeleton3D.
+PASS: Rider01_Eyelashes reuses the shared Rider01 Skin.
+PASS: Rider01_Eyelashes has 52 binds.
+PASS: Rider01_Eyebrows has a Mesh.
+PASS: Rider01_Eyebrows has a Skin.
+PASS: Rider01_Eyebrows targets the shared Skeleton3D.
+PASS: Rider01_Eyebrows reuses the shared Rider01 Skin.
+PASS: Rider01_Eyebrows has 52 binds.
+PASS: Rider01_Body has a Mesh.
+PASS: Rider01_Body has a Skin.
+PASS: Rider01_Body targets the shared Skeleton3D.
+PASS: Rider01_Body reuses the shared Rider01 Skin.
+PASS: Rider01_Body has 52 binds.
+PASS: All ten Rider01 materials resolve.
+PASS: AnimationTree is active after _ready().
+PASS: AnimationTree still uses its BlendTree.
+PASS: BlendTree node mounted_base remains available.
+PASS: BlendTree node mounted_add remains available.
+PASS: BlendTree node turn_left_delta remains available.
+PASS: BlendTree node turn_right_delta remains available.
+PASS: BlendTree node automatic_turn_add remains available.
+PASS: BlendTree node lean_left_delta remains available.
+PASS: BlendTree node lean_right_delta remains available.
+PASS: BlendTree node manual_roll_add remains available.
+PASS: BlendTree node lean_forward_delta remains available.
+PASS: BlendTree node lean_back_delta remains available.
+PASS: BlendTree node manual_pitch_add remains available.
+PASS: Animation Mounted_Base remains available.
+PASS: Animation mounted_breathing remains available.
+PASS: Animation Mounted_Turn_Left remains available.
+PASS: Animation Mounted_Turn_Right remains available.
+PASS: Animation Mounted_Lean_Left remains available.
+PASS: Animation Mounted_Lean_Right remains available.
+PASS: Animation Mounted_Lean_Forward remains available.
+PASS: Animation Mounted_Lean_Back remains available.
+Animation results:
+PASS: Modifier order remains [&"RiderImpactPose", &"LeftLegIK", &"RightLegIK", &"FootOrientation", &"LeftArmIK", &"RightArmIK", &"GripOrientation", &"GripFingers"].
+PASS: All eight modifiers are active.
+PASS: All four IK target/pole pairs resolve.
+PASS: Combined mounted animation and eight modifiers remain finite.
+Left hand/grip distance: 0.161835 m
+PASS: Left hand/grip remains within IK reach.
+Right hand/grip distance: 0.143904 m
+PASS: Right hand/grip remains within IK reach.
+Left foot/target distance: 0.162030 m
+PASS: Left foot/target remains within IK reach.
+Right foot/target distance: 0.258178 m
+PASS: Right foot/target remains within IK reach.
+BOT stats: { "draw_calls": 2, "triangles": 49112, "vertices": 28374, "materials": 2, "non_finite_vertices": 0 }
+RACER stats: { "draw_calls": 1, "triangles": 49867, "vertices": 27488, "materials": 1, "non_finite_vertices": 0 }
+RIDER01 stats: { "draw_calls": 10, "triangles": 155922, "vertices": 83010, "materials": 10, "non_finite_vertices": 0 }
+RIDER01 texture VRAM estimate (RGBA8+mips): 104.00 MiB
+Approximate draw calls BOT/RACER/RIDER01: 2/1/10
+RIDER01 static geometry: 83010 vertices, 155922 triangles, 10 materials.
+FPS note: headless validation cannot measure Forward+ GPU FPS; a focused graphical sample is recorded separately.
+INTEGRATION_STATUS=FAIL

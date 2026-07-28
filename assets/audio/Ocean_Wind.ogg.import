@@ -12,7 +12,7 @@ dest_files=["res://.godot/imported/Ocean_Wind.ogg-041a7d0eaad60729d557298fdbfe88
 
 [params]
 
-loop=false
+loop=true
 loop_offset=0
 bpm=0
 beat_count=0
