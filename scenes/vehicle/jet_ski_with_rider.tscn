@@ -8,6 +8,8 @@
 [ext_resource type="Script" uid="uid://b3kfrm0a2yu83" path="res://scripts/rider/rider_impact_response_controller.gd" id="6_impact_response"]
 [ext_resource type="Script" uid="uid://clycxmofcu2k5" path="res://scripts/rider/rider_grip_finger_modifier_3d.gd" id="7_grip_fingers"]
 
+[sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_jh5lk"]
+
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_n0p1g"]
 animation = &"mounted_breathing"
 
@@ -15,18 +17,21 @@ animation = &"mounted_breathing"
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_jh5lk"]
 resource_local_to_scene = true
-animation = &"Mounted_JetSki_Base_Corrected_v2"
+animation = &"Mounted_Base"
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_bn8gx"]
 resource_local_to_scene = true
-graph_offset = Vector2(-434.82208, -119.63643)
+graph_offset = Vector2(-545.35406, -175.00427)
+nodes/output/position = Vector2(120, 0)
 nodes/mounted_base/node = SubResource("AnimationNodeAnimation_jh5lk")
-nodes/mounted_base/position = Vector2(-420, -80)
+nodes/mounted_base/position = Vector2(-440, -140)
 nodes/breathing/node = SubResource("AnimationNodeAnimation_n0p1g")
-nodes/breathing/position = Vector2(-420, 90)
+nodes/breathing/position = Vector2(-640, 140)
 nodes/mounted_add/node = SubResource("AnimationNodeAdd2_eswg0")
-nodes/mounted_add/position = Vector2(-160, 0)
-node_connections = [&"output", 0, &"mounted_add", &"mounted_add", 0, &"mounted_base", &"mounted_add", 1, &"breathing"]
+nodes/mounted_add/position = Vector2(-140, 0)
+nodes/TimeScale/node = SubResource("AnimationNodeTimeScale_jh5lk")
+nodes/TimeScale/position = Vector2(-380, 120)
+node_connections = [&"output", 0, &"mounted_add", &"mounted_add", 0, &"mounted_base", &"mounted_add", 1, &"TimeScale", &"TimeScale", 0, &"breathing"]
 
 [node name="JetSki" unique_id=117969959 instance=ExtResource("1_base")]
 
@@ -144,7 +149,7 @@ bones/23/rotation = Quaternion(0.2805919, 0.016124768, -0.13405643, 0.9502827)
 bones/24/position = Vector3(-9.313226e-10, 0.020999873, 6.239861e-08)
 bones/24/rotation = Quaternion(0.33244422, 0.07809518, -0.22287567, 0.91307634)
 bones/25/position = Vector3(0.04570663, 0.10576442, -0.00600845)
-bones/25/rotation = Quaternion(0.46587154, 0.57551175, -0.5358458, 0.40573296)
+bones/25/rotation = Quaternion(0.46656862, 0.57515615, -0.5352972, 0.40616006)
 bones/26/rotation = Quaternion(0.13793367, -0.22017494, 0.55343336, 0.79133356)
 bones/27/position = Vector3(0, 0.27841514, 4.8428774e-08)
 bones/27/rotation = Quaternion(0.023832317, -0.009011945, 0.38891384, 0.92092174)
@@ -343,7 +348,10 @@ right_grip_strength = 0.7
 speed_scale = 1.873
 
 [node name="AnimationTree" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig" index="2" unique_id=187453891]
+active = true
 tree_root = SubResource("AnimationNodeBlendTree_bn8gx")
+parameters/mounted_add/add_amount = 1.0
+parameters/TimeScale/scale = 4.109999999999999
 
 [node name="RiderImpactResponse" type="Node" parent="." index="8" unique_id=966370299]
 script = ExtResource("6_impact_response")

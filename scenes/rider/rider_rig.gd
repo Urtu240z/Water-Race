@@ -2,9 +2,6 @@ class_name RiderRig
 extends Node3D
 
 const MOUNTED_BASE := &"Mounted_Base"
-const MOUNTED_JETSKI_BASE := &"Mounted_JetSki_Base"
-const MOUNTED_JETSKI_BASE_CORRECTED := &"Mounted_JetSki_Base_Corrected"
-const MOUNTED_JETSKI_BASE_CORRECTED_V2 := &"Mounted_JetSki_Base_Corrected_v2"
 
 @export_range(0.0, 1.0, 0.01) var breathing_influence: float = 0.22:
 	set(value):
@@ -21,11 +18,6 @@ const MOUNTED_JETSKI_BASE_CORRECTED_V2 := &"Mounted_JetSki_Base_Corrected_v2"
 		mounted_pose_enabled = value
 		_apply_animation_state()
 
-@export var mounted_pose_animation: StringName = MOUNTED_JETSKI_BASE_CORRECTED_V2:
-	set(value):
-		mounted_pose_animation = value
-		_apply_mounted_pose_animation()
-
 @onready var _animation_tree: AnimationTree = $AnimationTree
 @onready var _skeleton: Skeleton3D = (
 	$RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D as Skeleton3D
@@ -33,7 +25,7 @@ const MOUNTED_JETSKI_BASE_CORRECTED_V2 := &"Mounted_JetSki_Base_Corrected_v2"
 
 
 func _ready() -> void:
-	_apply_mounted_pose_animation()
+	_apply_mounted_base_animation()
 	_apply_animation_parameters()
 	_apply_animation_state()
 
@@ -46,22 +38,6 @@ func set_mounted_pose_enabled(enabled: bool) -> void:
 	mounted_pose_enabled = enabled
 
 
-func set_mounted_pose_animation(animation_name: StringName) -> void:
-	if animation_name not in [
-		MOUNTED_BASE,
-		MOUNTED_JETSKI_BASE,
-		MOUNTED_JETSKI_BASE_CORRECTED,
-		MOUNTED_JETSKI_BASE_CORRECTED_V2,
-	]:
-		push_error("Unsupported mounted rider pose: %s" % animation_name)
-		return
-	mounted_pose_animation = animation_name
-
-
-func get_mounted_pose_animation() -> StringName:
-	return mounted_pose_animation
-
-
 func get_skeleton() -> Skeleton3D:
 	return _skeleton
 
@@ -69,6 +45,7 @@ func get_skeleton() -> Skeleton3D:
 func _apply_animation_parameters() -> void:
 	if not is_node_ready():
 		return
+
 	var influence := breathing_influence if breathing_enabled else 0.0
 	_animation_tree.set("parameters/mounted_add/add_amount", influence)
 
@@ -76,20 +53,27 @@ func _apply_animation_parameters() -> void:
 func _apply_animation_state() -> void:
 	if not is_node_ready():
 		return
+
 	_animation_tree.active = mounted_pose_enabled
+
 	if not mounted_pose_enabled:
 		_skeleton.reset_bone_poses()
 
 
-func _apply_mounted_pose_animation() -> void:
+func _apply_mounted_base_animation() -> void:
 	if not is_node_ready():
 		return
+
 	var blend_tree := _animation_tree.tree_root as AnimationNodeBlendTree
+
 	if blend_tree == null:
-		push_error("RiderRig requires an AnimationNodeBlendTree")
+		push_error("RiderRig requires an AnimationNodeBlendTree.")
 		return
+
 	var mounted_node := blend_tree.get_node(&"mounted_base") as AnimationNodeAnimation
+
 	if mounted_node == null:
-		push_error("RiderRig is missing the mounted_base animation node")
+		push_error("RiderRig is missing the mounted_base animation node.")
 		return
-	mounted_node.animation = mounted_pose_animation
+
+	mounted_node.animation = MOUNTED_BASE
