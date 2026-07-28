@@ -1,0 +1,118 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/rider/rider_bot_rig.gd" id="1_script"]
+[ext_resource type="PackedScene" path="res://assets/3D/Rider/Rider_Bot.glb" id="2_bot"]
+[ext_resource type="AnimationLibrary" path="res://assets/3D/Rider/animations/rider_animation_library.res" id="3_library"]
+[ext_resource type="AnimationNodeBlendTree" path="res://assets/3D/Rider/animations/rider_mounted_blend_tree.tres" id="4_tree"]
+[ext_resource type="ArrayMesh" path="res://assets/3D/Rider/skins/Racer/runtime/Racer_Mesh.res" id="5_racer_mesh"]
+[ext_resource type="Skin" path="res://assets/3D/Rider/skins/Racer/runtime/Racer_Skin.res" id="6_racer_skin"]
+[ext_resource type="Script" path="res://scripts/rider/rider_impact_pose_modifier_3d.gd" id="7_impact"]
+[ext_resource type="Script" path="res://scripts/rider/rider_foot_orientation_modifier_3d.gd" id="8_foot"]
+[ext_resource type="Script" path="res://scripts/rider/rider_grip_orientation_modifier_3d.gd" id="9_grip"]
+[ext_resource type="Script" path="res://scripts/rider/rider_grip_finger_modifier_3d.gd" id="10_fingers"]
+
+[node name="RiderBotRig" type="Node3D"]
+script = ExtResource("1_script")
+
+[node name="RiderModelRoot" type="Node3D" parent="."]
+
+[node name="Rider_Bot" parent="RiderModelRoot" instance=ExtResource("2_bot")]
+
+[node name="RacerSkinMesh" type="MeshInstance3D" parent="RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D" groups=["rider_skin_racer"]]
+visible = false
+skin = ExtResource("6_racer_skin")
+skeleton = NodePath("..")
+mesh = ExtResource("5_racer_mesh")
+
+[node name="RiderImpactPose" type="SkeletonModifier3D" parent="RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D"]
+active = false
+script = ExtResource("7_impact")
+
+[node name="LeftLegIK" type="TwoBoneIK3D" parent="RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D"]
+active = false
+setting_count = 1
+settings/0/root_bone_name = "mixamorig_LeftUpLeg"
+settings/0/root_bone = 48
+settings/0/middle_bone_name = "mixamorig_LeftLeg"
+settings/0/middle_bone = 49
+settings/0/pole_direction = 7
+settings/0/pole_direction_vector = Vector3(0.1664, 0, 0.9861)
+settings/0/end_bone_name = "mixamorig_LeftFoot"
+settings/0/end_bone = 50
+
+[node name="RightLegIK" type="TwoBoneIK3D" parent="RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D"]
+active = false
+setting_count = 1
+settings/0/root_bone_name = "mixamorig_RightUpLeg"
+settings/0/root_bone = 44
+settings/0/middle_bone_name = "mixamorig_RightLeg"
+settings/0/middle_bone = 45
+settings/0/pole_direction = 7
+settings/0/pole_direction_vector = Vector3(-0.215, 0, 0.977)
+settings/0/end_bone_name = "mixamorig_RightFoot"
+settings/0/end_bone = 46
+
+[node name="FootOrientation" type="SkeletonModifier3D" parent="RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D"]
+active = false
+script = ExtResource("8_foot")
+left_foot_rotation_correction_degrees = Vector3(237.79, 0, 0)
+right_foot_rotation_correction_degrees = Vector3(245.78, 0, 0)
+
+[node name="LeftArmIK" type="TwoBoneIK3D" parent="RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D"]
+active = false
+setting_count = 1
+settings/0/root_bone_name = "mixamorig_LeftArm"
+settings/0/root_bone = 26
+settings/0/middle_bone_name = "mixamorig_LeftForeArm"
+settings/0/middle_bone = 27
+settings/0/pole_direction = 7
+settings/0/pole_direction_vector = Vector3(0.937, 0, -0.35)
+settings/0/end_bone_name = "mixamorig_LeftHand"
+settings/0/end_bone = 28
+
+[node name="RightArmIK" type="TwoBoneIK3D" parent="RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D"]
+active = false
+setting_count = 1
+settings/0/root_bone_name = "mixamorig_RightArm"
+settings/0/root_bone = 7
+settings/0/middle_bone_name = "mixamorig_RightForeArm"
+settings/0/middle_bone = 8
+settings/0/pole_direction = 7
+settings/0/pole_direction_vector = Vector3(-0.767, 0, -0.642)
+settings/0/end_bone_name = "mixamorig_RightHand"
+settings/0/end_bone = 9
+
+[node name="GripOrientation" type="SkeletonModifier3D" parent="RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D"]
+active = false
+script = ExtResource("9_grip")
+left_hand_rotation_correction_degrees = Vector3(-40.665, 44.98, -26.29)
+right_hand_rotation_correction_degrees = Vector3(-40.665, -44, 26)
+
+[node name="GripFingers" type="SkeletonModifier3D" parent="RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D"]
+active = false
+script = ExtResource("10_fingers")
+left_grip_strength = 0.87
+right_grip_strength = 0.93
+thumb_opposition_strength = 0.47
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+root_node = NodePath("../RiderModelRoot/Rider_Bot")
+libraries/ = ExtResource("3_library")
+
+[node name="AnimationTree" type="AnimationTree" parent="."]
+active = false
+root_node = NodePath("../RiderModelRoot/Rider_Bot")
+tree_root = ExtResource("4_tree")
+anim_player = NodePath("../AnimationPlayer")
+parameters/mounted_add/add_amount = 0.22
+parameters/turn_left_delta/sub_amount = 1.0
+parameters/turn_right_delta/sub_amount = 1.0
+parameters/automatic_turn_add/add_amount = 0.0
+parameters/lean_left_delta/sub_amount = 1.0
+parameters/lean_right_delta/sub_amount = 1.0
+parameters/manual_roll_add/add_amount = 0.0
+parameters/lean_forward_delta/sub_amount = 1.0
+parameters/lean_back_delta/sub_amount = 1.0
+parameters/manual_pitch_add/add_amount = 0.0
+
+[editable path="RiderModelRoot/Rider_Bot"]

@@ -590,6 +590,18 @@ var solid_support_contact_count: int:
 	get:
 		return _solid_support_contact_count
 
+var physical_contact_count: int:
+	get:
+		return _physical_contact_count
+
+var physical_contact_delta_velocity: float:
+	get:
+		return _physical_contact_delta_velocity
+
+var physical_contact_position: Vector3:
+	get:
+		return _physical_contact_position
+
 var has_solid_support: bool:
 	get:
 		return _has_solid_support
@@ -979,6 +991,9 @@ var _submarine_pre_contact_horizontal_speed: float = 0.0
 var _trick_preload_state: TrickPreloadState = TrickPreloadState.IDLE
 var _trick_support_state_initialized: bool = false
 var _solid_support_contact_count: int = 0
+var _physical_contact_count: int = 0
+var _physical_contact_delta_velocity: float = 0.0
+var _physical_contact_position := Vector3.ZERO
 var _has_solid_support: bool = false
 var _has_water_support: bool = false
 var _has_any_support: bool = false
@@ -2702,8 +2717,21 @@ func _update_trick_support_state(
 	var was_supported := _has_any_support
 	_has_water_support = (raw_water_contact_mask & ALL_CONTACT_MASK) != 0
 	_solid_support_contact_count = 0
+	_physical_contact_count = state.get_contact_count()
+	_physical_contact_delta_velocity = 0.0
+	_physical_contact_position = state.transform.origin
 	var body_basis := state.transform.basis.orthonormalized()
-	for contact_index in state.get_contact_count():
+	for contact_index in _physical_contact_count:
+		var contact_impulse := state.get_contact_impulse(contact_index)
+		if contact_impulse.is_finite():
+			var contact_delta_velocity := (
+				contact_impulse.length() * state.inverse_mass
+			)
+			if contact_delta_velocity > _physical_contact_delta_velocity:
+				_physical_contact_delta_velocity = contact_delta_velocity
+				_physical_contact_position = state.get_contact_local_position(
+					contact_index
+				)
 		var collider_object: Object = state.get_contact_collider_object(contact_index)
 		if not is_instance_valid(collider_object):
 			continue
@@ -2730,6 +2758,9 @@ func _update_trick_support_state(
 func _reset_trick_support_state() -> void:
 	_trick_support_state_initialized = false
 	_solid_support_contact_count = 0
+	_physical_contact_count = 0
+	_physical_contact_delta_velocity = 0.0
+	_physical_contact_position = Vector3.ZERO
 	_has_solid_support = false
 	_has_water_support = false
 	_has_any_support = false

@@ -55,6 +55,7 @@ uniform float surface_detail_fade_end : hint_range(1.0, 2000.0, 1.0) = 520.0;
 group_uniforms Optics;
 uniform sampler2D screen_texture : hint_screen_texture, repeat_disable, filter_linear_mipmap;
 uniform sampler2D depth_texture : hint_depth_texture, repeat_disable, filter_nearest;
+uniform sampler2D normal_roughness_texture : hint_normal_roughness_texture, repeat_disable, filter_nearest;
 uniform vec4 shallow_water_color : source_color = vec4(0.035, 0.43, 0.55, 1.0);
 uniform vec4 deep_water_color : source_color = vec4(0.004, 0.055, 0.115, 1.0);
 uniform vec4 horizon_water_color : source_color = vec4(0.025, 0.22, 0.34, 1.0);
@@ -82,6 +83,8 @@ uniform sampler2D foam_noise_texture : repeat_enable, filter_linear_mipmap;
 uniform vec4 foam_color : source_color = vec4(0.82, 0.95, 1.0, 1.0);
 uniform float shore_foam_width : hint_range(0.1, 8.0, 0.05) = 2.15;
 uniform float shore_foam_strength : hint_range(0.0, 2.0, 0.01) = 1.05;
+uniform float vehicle_material_tag_roughness : hint_range(0.0, 1.0, 0.001) = 0.019608;
+uniform float vehicle_material_tag_tolerance : hint_range(0.001, 0.05, 0.001) = 0.006;
 uniform float crest_foam_start : hint_range(0.0, 2.0, 0.01) = 0.46;
 uniform float crest_foam_end : hint_range(0.0, 3.0, 0.01) = 0.94;
 uniform float crest_foam_strength : hint_range(0.0, 2.0, 0.01) = 0.82;
@@ -416,10 +419,29 @@ void fragment() {
 		0.55 + noise_width,
 		foam_noise
 	);
+	float vehicle_material_mask = 0.0;
+	if (
+		!scene_is_sky
+		&& water_thickness < shore_foam_width
+	) {
+		float scene_roughness = texture(
+			normal_roughness_texture,
+			SCREEN_UV
+		).a;
+		float tag_distance = abs(
+			scene_roughness - vehicle_material_tag_roughness
+		);
+		vehicle_material_mask = 1.0 - smoothstep(
+			vehicle_material_tag_tolerance * 0.45,
+			vehicle_material_tag_tolerance,
+			tag_distance
+		);
+	}
 	float shoreline = scene_is_sky
 		? 0.0
 		: (1.0 - smoothstep(0.06, shore_foam_width, water_thickness))
-			* shore_foam_strength;
+			* shore_foam_strength
+			* (1.0 - vehicle_material_mask);
 	float crest_height = smoothstep(
 		crest_foam_start,
 		max(crest_foam_end, crest_foam_start + 0.001),
@@ -476,4 +498,3 @@ void fragment() {
 		ALPHA = 1.0;
 	}
 }
-

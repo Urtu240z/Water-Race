@@ -1,0 +1,129 @@
+=== RIDER01 ORIGINAL SKIN / SHARED SKELETON REST TEST ===
+Source Skeleton3D: /root/Rider01SharedSkeletonTest/OriginalRider/SKEL_Rider/Skeleton3D
+Target Skeleton3D: /root/Rider01SharedSkeletonTest/SharedRiderRig/RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D
+Source/target bones: 52/52
+Original skinned meshes: 10
+Temporary shared meshes: 10
+Source visual with own Skeleton3D: PASS
+Bone names match: YES
+MESH Rider01_Tongue | relative=[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (0.0, 0.0, 0.0)] | binds=52
+  bind_names=mixamorig_Hips,mixamorig_LeftUpLeg,mixamorig_LeftLeg,mixamorig_LeftFoot,mixamorig_LeftToeBase,mixamorig_RightUpLeg,mixamorig_RightLeg,mixamorig_RightFoot,mixamorig_RightToeBase,mixamorig_Spine,mixamorig_Spine1,mixamorig_Spine2,mixamorig_LeftShoulder,mixamorig_LeftArm,mixamorig_LeftForeArm,mixamorig_LeftHand,mixamorig_LeftHandIndex1,mixamorig_LeftHandIndex2,mixamorig_LeftHandIndex3,mixamorig_LeftHandMiddle1,mixamorig_LeftHandMiddle2,mixamorig_LeftHandMiddle3,mixamorig_LeftHandPinky1,mixamorig_LeftHandPinky2,mixamorig_LeftHandPinky3,mixamorig_LeftHandRing1,mixamorig_LeftHandRing2,mixamorig_LeftHandRing3,mixamorig_LeftHandThumb1,mixamorig_LeftHandThumb2,mixamorig_LeftHandThumb3,mixamorig_Neck,mixamorig_Head,mixamorig_RightShoulder,mixamorig_RightArm,mixamorig_RightForeArm,mixamorig_RightHand,mixamorig_RightHandIndex1,mixamorig_RightHandIndex2,mixamorig_RightHandIndex3,mixamorig_RightHandMiddle1,mixamorig_RightHandMiddle2,mixamorig_RightHandMiddle3,mixamorig_RightHandPinky1,mixamorig_RightHandPinky2,mixamorig_RightHandPinky3,mixamorig_RightHandRing1,mixamorig_RightHandRing2,mixamorig_RightHandRing3,mixamorig_RightHandThumb1,mixamorig_RightHandThumb2,mixamorig_RightHandThumb3
+  source_aabb center=(0.0, 1.566217, 0.105155) size=(0.044285, 0.026401, 0.070251)
+  shared_aabb center=(0.0, 1.566217, 0.105155) size=(0.044285, 0.026401, 0.070251)
+MESH Rider01_Teeth | relative=[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (0.0, 0.0, 0.0)] | binds=52
+  bind_names=mixamorig_Hips,mixamorig_LeftUpLeg,mixamorig_LeftLeg,mixamorig_LeftFoot,mixamorig_LeftToeBase,mixamorig_RightUpLeg,mixamorig_RightLeg,mixamorig_RightFoot,mixamorig_RightToeBase,mixamorig_Spine,mixamorig_Spine1,mixamorig_Spine2,mixamorig_LeftShoulder,mixamorig_LeftArm,mixamorig_LeftForeArm,mixamorig_LeftHand,mixamorig_LeftHandIndex1,mixamorig_LeftHandIndex2,mixamorig_LeftHandIndex3,mixamorig_LeftHandMiddle1,mixamorig_LeftHandMiddle2,mixamorig_LeftHandMiddle3,mixamorig_LeftHandPinky1,mixamorig_LeftHandPinky2,mixamorig_LeftHandPinky3,mixamorig_LeftHandRing1,mixamorig_LeftHandRing2,mixamorig_LeftHandRing3,mixamorig_LeftHandThumb1,mixamorig_LeftHandThumb2,mixamorig_LeftHandThumb3,mixamorig_Neck,mixamorig_Head,mixamorig_RightShoulder,mixamorig_RightArm,mixamorig_RightForeArm,mixamorig_RightHand,mixamorig_RightHandIndex1,mixamorig_RightHandIndex2,mixamorig_RightHandIndex3,mixamorig_RightHandMiddle1,mixamorig_RightHandMiddle2,mixamorig_RightHandMiddle3,mixamorig_RightHandPinky1,mixamorig_RightHandPinky2,mixamorig_RightHandPinky3,mixamorig_RightHandRing1,mixamorig_RightHandRing2,mixamorig_RightHandRing3,mixamorig_RightHandThumb1,mixamorig_RightHandThumb2,mixamorig_RightHandThumb3
+  source_aabb center=(-0.0, 1.56508, 0.114178) size=(0.061655, 0.049174, 0.074103)
+  shared_aabb center=(-0.0, 1.56508, 0.114178) size=(0.061655, 0.049174, 0.074103)
+MESH Rider01_Tank | relative=[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (0.0, 0.0, 0.0)] | binds=52
+  bind_names=mixamorig_Hips,mixamorig_LeftUpLeg,mixamorig_LeftLeg,mixamorig_LeftFoot,mixamorig_LeftToeBase,mixamorig_RightUpLeg,mixamorig_RightLeg,mixamorig_RightFoot,mixamorig_RightToeBase,mixamorig_Spine,mixamorig_Spine1,mixamorig_Spine2,mixamorig_LeftShoulder,mixamorig_LeftArm,mixamorig_LeftForeArm,mixamorig_LeftHand,mixamorig_LeftHandIndex1,mixamorig_LeftHandIndex2,mixamorig_LeftHandIndex3,mixamorig_LeftHandMiddle1,mixamorig_LeftHandMiddle2,mixamorig_LeftHandMiddle3,mixamorig_LeftHandPinky1,mixamorig_LeftHandPinky2,mixamorig_LeftHandPinky3,mixamorig_LeftHandRing1,mixamorig_LeftHandRing2,mixamorig_LeftHandRing3,mixamorig_LeftHandThumb1,mixamorig_LeftHandThumb2,mixamorig_LeftHandThumb3,mixamorig_Neck,mixamorig_Head,mixamorig_RightShoulder,mixamorig_RightArm,mixamorig_RightForeArm,mixamorig_RightHand,mixamorig_RightHandIndex1,mixamorig_RightHandIndex2,mixamorig_RightHandIndex3,mixamorig_RightHandMiddle1,mixamorig_RightHandMiddle2,mixamorig_RightHandMiddle3,mixamorig_RightHandPinky1,mixamorig_RightHandPinky2,mixamorig_RightHandPinky3,mixamorig_RightHandRing1,mixamorig_RightHandRing2,mixamorig_RightHandRing3,mixamorig_RightHandThumb1,mixamorig_RightHandThumb2,mixamorig_RightHandThumb3
+  source_aabb center=(-0.002747, 1.22461, 0.034237) size=(0.347796, 0.568995, 0.297637)
+  shared_aabb center=(-0.002747, 1.22461, 0.034237) size=(0.347796, 0.568995, 0.297637)
+MESH Rider01_SwimShorts | relative=[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (0.0, 0.0, 0.0)] | binds=52
+  bind_names=mixamorig_Hips,mixamorig_LeftUpLeg,mixamorig_LeftLeg,mixamorig_LeftFoot,mixamorig_LeftToeBase,mixamorig_RightUpLeg,mixamorig_RightLeg,mixamorig_RightFoot,mixamorig_RightToeBase,mixamorig_Spine,mixamorig_Spine1,mixamorig_Spine2,mixamorig_LeftShoulder,mixamorig_LeftArm,mixamorig_LeftForeArm,mixamorig_LeftHand,mixamorig_LeftHandIndex1,mixamorig_LeftHandIndex2,mixamorig_LeftHandIndex3,mixamorig_LeftHandMiddle1,mixamorig_LeftHandMiddle2,mixamorig_LeftHandMiddle3,mixamorig_LeftHandPinky1,mixamorig_LeftHandPinky2,mixamorig_LeftHandPinky3,mixamorig_LeftHandRing1,mixamorig_LeftHandRing2,mixamorig_LeftHandRing3,mixamorig_LeftHandThumb1,mixamorig_LeftHandThumb2,mixamorig_LeftHandThumb3,mixamorig_Neck,mixamorig_Head,mixamorig_RightShoulder,mixamorig_RightArm,mixamorig_RightForeArm,mixamorig_RightHand,mixamorig_RightHandIndex1,mixamorig_RightHandIndex2,mixamorig_RightHandIndex3,mixamorig_RightHandMiddle1,mixamorig_RightHandMiddle2,mixamorig_RightHandMiddle3,mixamorig_RightHandPinky1,mixamorig_RightHandPinky2,mixamorig_RightHandPinky3,mixamorig_RightHandRing1,mixamorig_RightHandRing2,mixamorig_RightHandRing3,mixamorig_RightHandThumb1,mixamorig_RightHandThumb2,mixamorig_RightHandThumb3
+  source_aabb center=(-0.0, 0.791892, 0.026583) size=(0.46946, 0.471165, 0.251893)
+  shared_aabb center=(-0.0, 0.791892, 0.026583) size=(0.46946, 0.471165, 0.251893)
+MESH Rider01_HairMesh | relative=[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (0.0, 0.0, 0.0)] | binds=52
+  bind_names=mixamorig_Hips,mixamorig_LeftUpLeg,mixamorig_LeftLeg,mixamorig_LeftFoot,mixamorig_LeftToeBase,mixamorig_RightUpLeg,mixamorig_RightLeg,mixamorig_RightFoot,mixamorig_RightToeBase,mixamorig_Spine,mixamorig_Spine1,mixamorig_Spine2,mixamorig_LeftShoulder,mixamorig_LeftArm,mixamorig_LeftForeArm,mixamorig_LeftHand,mixamorig_LeftHandIndex1,mixamorig_LeftHandIndex2,mixamorig_LeftHandIndex3,mixamorig_LeftHandMiddle1,mixamorig_LeftHandMiddle2,mixamorig_LeftHandMiddle3,mixamorig_LeftHandPinky1,mixamorig_LeftHandPinky2,mixamorig_LeftHandPinky3,mixamorig_LeftHandRing1,mixamorig_LeftHandRing2,mixamorig_LeftHandRing3,mixamorig_LeftHandThumb1,mixamorig_LeftHandThumb2,mixamorig_LeftHandThumb3,mixamorig_Neck,mixamorig_Head,mixamorig_RightShoulder,mixamorig_RightArm,mixamorig_RightForeArm,mixamorig_RightHand,mixamorig_RightHandIndex1,mixamorig_RightHandIndex2,mixamorig_RightHandIndex3,mixamorig_RightHandMiddle1,mixamorig_RightHandMiddle2,mixamorig_RightHandMiddle3,mixamorig_RightHandPinky1,mixamorig_RightHandPinky2,mixamorig_RightHandPinky3,mixamorig_RightHandRing1,mixamorig_RightHandRing2,mixamorig_RightHandRing3,mixamorig_RightHandThumb1,mixamorig_RightHandThumb2,mixamorig_RightHandThumb3
+  source_aabb center=(-0.002789, 1.661476, 0.061443) size=(0.175284, 0.20225, 0.217644)
+  shared_aabb center=(-0.002789, 1.661476, 0.061443) size=(0.175284, 0.20225, 0.217644)
+MESH Rider01_Glasses | relative=[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (0.0, 0.0, 0.0)] | binds=52
+  bind_names=mixamorig_Hips,mixamorig_LeftUpLeg,mixamorig_LeftLeg,mixamorig_LeftFoot,mixamorig_LeftToeBase,mixamorig_RightUpLeg,mixamorig_RightLeg,mixamorig_RightFoot,mixamorig_RightToeBase,mixamorig_Spine,mixamorig_Spine1,mixamorig_Spine2,mixamorig_LeftShoulder,mixamorig_LeftArm,mixamorig_LeftForeArm,mixamorig_LeftHand,mixamorig_LeftHandIndex1,mixamorig_LeftHandIndex2,mixamorig_LeftHandIndex3,mixamorig_LeftHandMiddle1,mixamorig_LeftHandMiddle2,mixamorig_LeftHandMiddle3,mixamorig_LeftHandPinky1,mixamorig_LeftHandPinky2,mixamorig_LeftHandPinky3,mixamorig_LeftHandRing1,mixamorig_LeftHandRing2,mixamorig_LeftHandRing3,mixamorig_LeftHandThumb1,mixamorig_LeftHandThumb2,mixamorig_LeftHandThumb3,mixamorig_Neck,mixamorig_Head,mixamorig_RightShoulder,mixamorig_RightArm,mixamorig_RightForeArm,mixamorig_RightHand,mixamorig_RightHandIndex1,mixamorig_RightHandIndex2,mixamorig_RightHandIndex3,mixamorig_RightHandMiddle1,mixamorig_RightHandMiddle2,mixamorig_RightHandMiddle3,mixamorig_RightHandPinky1,mixamorig_RightHandPinky2,mixamorig_RightHandPinky3,mixamorig_RightHandRing1,mixamorig_RightHandRing2,mixamorig_RightHandRing3,mixamorig_RightHandThumb1,mixamorig_RightHandThumb2,mixamorig_RightHandThumb3
+  source_aabb center=(0.0, 1.625619, 0.081051) size=(0.15377, 0.060229, 0.161989)
+  shared_aabb center=(0.0, 1.625619, 0.081051) size=(0.15377, 0.060229, 0.161989)
+MESH Rider01_Eyes | relative=[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (0.0, 0.0, 0.0)] | binds=52
+  bind_names=mixamorig_Hips,mixamorig_LeftUpLeg,mixamorig_LeftLeg,mixamorig_LeftFoot,mixamorig_LeftToeBase,mixamorig_RightUpLeg,mixamorig_RightLeg,mixamorig_RightFoot,mixamorig_RightToeBase,mixamorig_Spine,mixamorig_Spine1,mixamorig_Spine2,mixamorig_LeftShoulder,mixamorig_LeftArm,mixamorig_LeftForeArm,mixamorig_LeftHand,mixamorig_LeftHandIndex1,mixamorig_LeftHandIndex2,mixamorig_LeftHandIndex3,mixamorig_LeftHandMiddle1,mixamorig_LeftHandMiddle2,mixamorig_LeftHandMiddle3,mixamorig_LeftHandPinky1,mixamorig_LeftHandPinky2,mixamorig_LeftHandPinky3,mixamorig_LeftHandRing1,mixamorig_LeftHandRing2,mixamorig_LeftHandRing3,mixamorig_LeftHandThumb1,mixamorig_LeftHandThumb2,mixamorig_LeftHandThumb3,mixamorig_Neck,mixamorig_Head,mixamorig_RightShoulder,mixamorig_RightArm,mixamorig_RightForeArm,mixamorig_RightHand,mixamorig_RightHandIndex1,mixamorig_RightHandIndex2,mixamorig_RightHandIndex3,mixamorig_RightHandMiddle1,mixamorig_RightHandMiddle2,mixamorig_RightHandMiddle3,mixamorig_RightHandPinky1,mixamorig_RightHandPinky2,mixamorig_RightHandPinky3,mixamorig_RightHandRing1,mixamorig_RightHandRing2,mixamorig_RightHandRing3,mixamorig_RightHandThumb1,mixamorig_RightHandThumb2,mixamorig_RightHandThumb3
+  source_aabb center=(0.0, 1.639212, 0.134641) size=(0.090138, 0.030085, 0.025595)
+  shared_aabb center=(0.0, 1.639212, 0.134641) size=(0.090138, 0.030085, 0.025595)
+MESH Rider01_Eyelashes | relative=[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (0.0, 0.0, 0.0)] | binds=52
+  bind_names=mixamorig_Hips,mixamorig_LeftUpLeg,mixamorig_LeftLeg,mixamorig_LeftFoot,mixamorig_LeftToeBase,mixamorig_RightUpLeg,mixamorig_RightLeg,mixamorig_RightFoot,mixamorig_RightToeBase,mixamorig_Spine,mixamorig_Spine1,mixamorig_Spine2,mixamorig_LeftShoulder,mixamorig_LeftArm,mixamorig_LeftForeArm,mixamorig_LeftHand,mixamorig_LeftHandIndex1,mixamorig_LeftHandIndex2,mixamorig_LeftHandIndex3,mixamorig_LeftHandMiddle1,mixamorig_LeftHandMiddle2,mixamorig_LeftHandMiddle3,mixamorig_LeftHandPinky1,mixamorig_LeftHandPinky2,mixamorig_LeftHandPinky3,mixamorig_LeftHandRing1,mixamorig_LeftHandRing2,mixamorig_LeftHandRing3,mixamorig_LeftHandThumb1,mixamorig_LeftHandThumb2,mixamorig_LeftHandThumb3,mixamorig_Neck,mixamorig_Head,mixamorig_RightShoulder,mixamorig_RightArm,mixamorig_RightForeArm,mixamorig_RightHand,mixamorig_RightHandIndex1,mixamorig_RightHandIndex2,mixamorig_RightHandIndex3,mixamorig_RightHandMiddle1,mixamorig_RightHandMiddle2,mixamorig_RightHandMiddle3,mixamorig_RightHandPinky1,mixamorig_RightHandPinky2,mixamorig_RightHandPinky3,mixamorig_RightHandRing1,mixamorig_RightHandRing2,mixamorig_RightHandRing3,mixamorig_RightHandThumb1,mixamorig_RightHandThumb2,mixamorig_RightHandThumb3
+  source_aabb center=(0.0, 1.636081, 0.143317) size=(0.097989, 0.013987, 0.014697)
+  shared_aabb center=(0.0, 1.636081, 0.143317) size=(0.097989, 0.013987, 0.014697)
+MESH Rider01_Eyebrows | relative=[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (0.0, 0.0, 0.0)] | binds=52
+  bind_names=mixamorig_Hips,mixamorig_LeftUpLeg,mixamorig_LeftLeg,mixamorig_LeftFoot,mixamorig_LeftToeBase,mixamorig_RightUpLeg,mixamorig_RightLeg,mixamorig_RightFoot,mixamorig_RightToeBase,mixamorig_Spine,mixamorig_Spine1,mixamorig_Spine2,mixamorig_LeftShoulder,mixamorig_LeftArm,mixamorig_LeftForeArm,mixamorig_LeftHand,mixamorig_LeftHandIndex1,mixamorig_LeftHandIndex2,mixamorig_LeftHandIndex3,mixamorig_LeftHandMiddle1,mixamorig_LeftHandMiddle2,mixamorig_LeftHandMiddle3,mixamorig_LeftHandPinky1,mixamorig_LeftHandPinky2,mixamorig_LeftHandPinky3,mixamorig_LeftHandRing1,mixamorig_LeftHandRing2,mixamorig_LeftHandRing3,mixamorig_LeftHandThumb1,mixamorig_LeftHandThumb2,mixamorig_LeftHandThumb3,mixamorig_Neck,mixamorig_Head,mixamorig_RightShoulder,mixamorig_RightArm,mixamorig_RightForeArm,mixamorig_RightHand,mixamorig_RightHandIndex1,mixamorig_RightHandIndex2,mixamorig_RightHandIndex3,mixamorig_RightHandMiddle1,mixamorig_RightHandMiddle2,mixamorig_RightHandMiddle3,mixamorig_RightHandPinky1,mixamorig_RightHandPinky2,mixamorig_RightHandPinky3,mixamorig_RightHandRing1,mixamorig_RightHandRing2,mixamorig_RightHandRing3,mixamorig_RightHandThumb1,mixamorig_RightHandThumb2,mixamorig_RightHandThumb3
+  source_aabb center=(0.0, 1.647528, 0.141899) size=(0.11717, 0.012479, 0.028185)
+  shared_aabb center=(0.0, 1.647528, 0.141899) size=(0.11717, 0.012479, 0.028185)
+MESH Rider01_Body | relative=[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (0.0, 0.0, 0.0)] | binds=52
+  bind_names=mixamorig_Hips,mixamorig_LeftUpLeg,mixamorig_LeftLeg,mixamorig_LeftFoot,mixamorig_LeftToeBase,mixamorig_RightUpLeg,mixamorig_RightLeg,mixamorig_RightFoot,mixamorig_RightToeBase,mixamorig_Spine,mixamorig_Spine1,mixamorig_Spine2,mixamorig_LeftShoulder,mixamorig_LeftArm,mixamorig_LeftForeArm,mixamorig_LeftHand,mixamorig_LeftHandIndex1,mixamorig_LeftHandIndex2,mixamorig_LeftHandIndex3,mixamorig_LeftHandMiddle1,mixamorig_LeftHandMiddle2,mixamorig_LeftHandMiddle3,mixamorig_LeftHandPinky1,mixamorig_LeftHandPinky2,mixamorig_LeftHandPinky3,mixamorig_LeftHandRing1,mixamorig_LeftHandRing2,mixamorig_LeftHandRing3,mixamorig_LeftHandThumb1,mixamorig_LeftHandThumb2,mixamorig_LeftHandThumb3,mixamorig_Neck,mixamorig_Head,mixamorig_RightShoulder,mixamorig_RightArm,mixamorig_RightForeArm,mixamorig_RightHand,mixamorig_RightHandIndex1,mixamorig_RightHandIndex2,mixamorig_RightHandIndex3,mixamorig_RightHandMiddle1,mixamorig_RightHandMiddle2,mixamorig_RightHandMiddle3,mixamorig_RightHandPinky1,mixamorig_RightHandPinky2,mixamorig_RightHandPinky3,mixamorig_RightHandRing1,mixamorig_RightHandRing2,mixamorig_RightHandRing3,mixamorig_RightHandThumb1,mixamorig_RightHandThumb2,mixamorig_RightHandThumb3
+  source_aabb center=(0.0, 0.872259, 0.139834) size=(1.148058, 1.744519, 0.474967)
+  shared_aabb center=(0.0, 0.872259, 0.139834) size=(1.148058, 1.744519, 0.474967)
+Shared bind count: 52
+Bind names resolve on both skeletons: YES
+Own-skeleton bind residual max: 0.000001294
+Shared-skeleton bind residual max: 2.865389824
+Shared residual translation max: 2.865390 m
+Shared residual rotation max: 237.963108 deg
+=== KEY BONE RESIDUALS ON SHARED REST ===
+mixamorig_Hips | translation=0.125728 m | rotation=6.631995 deg | scale=(1.0, 1.0, 1.0)
+mixamorig_Spine2 | translation=0.443395 m | rotation=18.633593 deg | scale=(1.0, 1.0, 1.0)
+mixamorig_LeftArm | translation=1.605480 m | rotation=68.563563 deg | scale=(1.0, 1.0, 1.0)
+mixamorig_LeftForeArm | translation=1.708133 m | rotation=83.526397 deg | scale=(1.0, 1.0, 1.0)
+mixamorig_LeftHand | translation=1.854286 m | rotation=87.919356 deg | scale=(1.0, 1.0, 1.0)
+mixamorig_RightArm | translation=1.574153 m | rotation=67.837295 deg | scale=(1.0, 1.0, 1.0)
+mixamorig_RightForeArm | translation=1.709707 m | rotation=85.421822 deg | scale=(1.0, 1.0, 1.0)
+mixamorig_RightHand | translation=2.061317 m | rotation=98.437219 deg | scale=(1.0, 1.0, 1.0)
+mixamorig_LeftUpLeg | translation=0.160138 m | rotation=9.189480 deg | scale=(0.999999, 1.0, 0.999998)
+mixamorig_LeftLeg | translation=0.138301 m | rotation=9.836972 deg | scale=(0.999999, 1.0, 0.999998)
+mixamorig_LeftFoot | translation=0.161918 m | rotation=28.800217 deg | scale=(0.999999, 1.0, 0.999998)
+mixamorig_RightUpLeg | translation=0.160083 m | rotation=9.185216 deg | scale=(1.0, 1.0, 0.999999)
+mixamorig_RightLeg | translation=0.138251 m | rotation=9.836415 deg | scale=(1.0, 1.0, 0.999999)
+mixamorig_RightFoot | translation=0.188853 m | rotation=46.497138 deg | scale=(1.0, 1.0, 0.999999)
+REST_NUMERIC_RESULT=FAIL
+ANIMATION_RESULT=NOT_RUN_REST_FAILED
+MODIFIER_RESULT=NOT_RUN_REST_FAILED
+CONCLUSION=NOT_COMPATIBLE
+CAPTURE: res://assets/3D/Rider/skins/Rider01/runtime/original_skin_test_captures/rest_original_front.png
+CAPTURE: res://assets/3D/Rider/skins/Rider01/runtime/original_skin_test_captures/rest_shared_front.png
+CAPTURE: res://assets/3D/Rider/skins/Rider01/runtime/original_skin_test_captures/rest_original_lateral.png
+CAPTURE: res://assets/3D/Rider/skins/Rider01/runtime/original_skin_test_captures/rest_shared_lateral.png
+CAPTURE: res://assets/3D/Rider/skins/Rider01/runtime/original_skin_test_captures/rest_original_rear.png
+CAPTURE: res://assets/3D/Rider/skins/Rider01/runtime/original_skin_test_captures/rest_shared_rear.png
+CAPTURE: res://assets/3D/Rider/skins/Rider01/runtime/original_skin_test_captures/rest_original_hands.png
+CAPTURE: res://assets/3D/Rider/skins/Rider01/runtime/original_skin_test_captures/rest_shared_hands.png
+CAPTURE: res://assets/3D/Rider/skins/Rider01/runtime/original_skin_test_captures/rest_original_feet.png
+CAPTURE: res://assets/3D/Rider/skins/Rider01/runtime/original_skin_test_captures/rest_shared_feet.png
+TEST_STAGE=REST_CAPTURED
+
+=== VISUAL REST REVIEW ===
+Original source on its own Skeleton3D: PASS.
+Shared Skeleton3D: FAIL.
+- Arms jump from the source A-rest to a horizontal T-rest.
+- Tank top separates/tears around both shoulders, axillae, neckline and upper back.
+- Hands and fingers rotate away from the source rest alignment.
+- Both feet twist inward; toe and sole contact no longer match the original.
+- Lower legs become unnaturally narrow/vertical and the stance collapses.
+- Shorts remain broadly attached, but the body/clothing silhouette is not equivalent.
+
+The identical static mesh-resource AABBs do not validate deformation. The captures,
+bind residuals and visible shoulder/back/hand/foot failures determine the result.
+
+=== ANIMATION / MODIFIER GATE ===
+Mounted_Base: NOT_RUN_REST_FAILED
+mounted_breathing: NOT_RUN_REST_FAILED
+Mounted_Turn_Left: NOT_RUN_REST_FAILED
+Mounted_Turn_Right: NOT_RUN_REST_FAILED
+Mounted_Lean_Left: NOT_RUN_REST_FAILED
+Mounted_Lean_Right: NOT_RUN_REST_FAILED
+Mounted_Lean_Forward: NOT_RUN_REST_FAILED
+Mounted_Lean_Back: NOT_RUN_REST_FAILED
+RiderImpactPose: NOT_RUN_REST_FAILED
+LeftLegIK: NOT_RUN_REST_FAILED
+RightLegIK: NOT_RUN_REST_FAILED
+FootOrientation: NOT_RUN_REST_FAILED
+LeftArmIK: NOT_RUN_REST_FAILED
+RightArmIK: NOT_RUN_REST_FAILED
+GripOrientation: NOT_RUN_REST_FAILED
+GripFingers: NOT_RUN_REST_FAILED
+
+=== USER JOINED EXPORT NOTE ===
+The user-provided joined export is present as:
+res://assets/3D/Rider/skins/Rider01/Rider01_2.glb
+Audit: one skinned mesh, 83010 vertices, 155922 polygons, 10 materials,
+52 vertex groups and a 52-bone armature. Its imported internal mesh name is
+Rider_1.tongue01_export. This asset was deliberately excluded from this test,
+which exclusively exercised Rider01.glb and its ten original Mesh/Skin resources.
+Joining geometry with Ctrl+J does not by itself make the original Skin bind poses
+compatible with the shared Rider_Bot rest pose.
+
+FINAL_RESULT=NOT_COMPATIBLE
+No permanent RiderRig, animation, IK, physics, audio, import, Mesh or Skin changes
+were made by this test.

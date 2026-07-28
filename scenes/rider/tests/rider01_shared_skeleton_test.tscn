@@ -1,0 +1,52 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://tools/godot/test_rider01_original_skin.gd" id="1_test"]
+[ext_resource type="PackedScene" path="res://scenes/rider/rider_rig.tscn" id="2_rig"]
+[ext_resource type="PackedScene" path="res://assets/3D/Rider/skins/Rider01/Rider01.glb" id="3_original"]
+
+[sub_resource type="Environment" id="Environment_test"]
+background_mode = 1
+background_color = Color(0.025, 0.032, 0.045, 1)
+ambient_light_source = 3
+ambient_light_color = Color(0.72, 0.78, 0.9, 1)
+ambient_light_energy = 1.25
+reflected_light_source = 2
+tonemap_mode = 2
+
+[sub_resource type="StandardMaterial3D" id="Material_ground"]
+albedo_color = Color(0.12, 0.14, 0.18, 1)
+roughness = 0.82
+
+[sub_resource type="PlaneMesh" id="Plane_ground"]
+material = SubResource("Material_ground")
+size = Vector2(12, 12)
+
+[node name="Rider01SharedSkeletonTest" type="Node3D"]
+script = ExtResource("1_test")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_test")
+
+[node name="KeyLight" type="DirectionalLight3D" parent="."]
+rotation_degrees = Vector3(-42, -28, 0)
+light_color = Color(1, 0.9, 0.82, 1)
+light_energy = 2.4
+shadow_enabled = true
+
+[node name="FillLight" type="DirectionalLight3D" parent="."]
+rotation_degrees = Vector3(-18, 142, 0)
+light_color = Color(0.55, 0.7, 1, 1)
+light_energy = 1.4
+
+[node name="Ground" type="MeshInstance3D" parent="."]
+position = Vector3(0, -0.02, 0)
+mesh = SubResource("Plane_ground")
+
+[node name="OriginalRider" parent="." instance=ExtResource("3_original")]
+
+[node name="SharedRiderRig" parent="." instance=ExtResource("2_rig")]
+
+[node name="Camera3D" type="Camera3D" parent="."]
+current = true
+near = 0.02
+far = 50.0

@@ -1,0 +1,20 @@
+PASS: WaterAudio component exists.
+=== VEHICLE WATER AUDIO FOCUSED VALIDATION ===
+PASS: Exactly three WaterAudio players exist.
+PASS: Three normal splash variants resolve.
+PASS: Four heavy splash variants resolve.
+PASS: Four running-water variants resolve.
+PASS: All running-water OGG streams loop.
+PASS: Splash OGG streams do not loop.
+PASS: 1. Stopped on water: running water stays off.
+PASS: 2. Acceleration: running water starts with a progressive fade.
+PASS: 3. High speed: target volume and pitch increase smoothly.
+PASS: 4. Coasting: audio follows speed, not throttle.
+PASS: 5. Braking to rest: fade-out reaches stop.
+PASS: Contact grace bridges short wave gaps but not confirmed AIRBORNE.
+PASS: 6. Short jump: exactly one normal splash is selected.
+PASS: 7. High jump: exactly one heavy splash is selected.
+PASS: 8. Small post-impact bounce is suppressed by cooldown.
+PASS: 9. Deep submerged: surface running water is disabled.
+PASS: 10. Repeated starts use valid variants without node accumulation.
+VALIDATION_STATUS=PASS

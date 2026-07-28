@@ -10,7 +10,7 @@ const OUTPUT_DIR := \
 const SKIN_OUTPUT := OUTPUT_DIR + "/Rider01_Skin.res"
 const REPORT_OUTPUT := OUTPUT_DIR + "/Rider01_Extraction_Report.txt"
 const TRANSFORM_TOLERANCE := 0.0002
-const EXPECTED_MESHES := 10
+const EXPECTED_MESHES := 6
 
 var _report: PackedStringArray = []
 
@@ -149,7 +149,7 @@ func _extract_and_validate() -> int:
 	)
 	_report.append("Rider Skeleton3D: %s" % RIDER_SKELETON_PATH)
 	_report.append("Skeleton comparison: PASS")
-	_report.append("All ten Skin bind comparisons: PASS")
+	_report.append("All six Skin bind comparisons: PASS")
 	_report.append(
 		"Bone count: %d" % rider01_skeleton.get_bone_count()
 	)

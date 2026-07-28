@@ -28,6 +28,20 @@ enum ResponseMode {
 @export_range(0.0, 1.0, 0.01) var extension_strength: float = 0.50
 @export_range(0.1, 40.0, 0.1, "suffix:1/s") var acceleration_filter_speed: float = 16.0
 
+@export_group("Automatic Response - Solid Surfaces")
+@export_range(0.0, 20.0, 0.1, "suffix:m/s²") var solid_impact_dead_zone: float = 1.5
+@export_range(1.0, 60.0, 0.5, "suffix:m/s²") var solid_vertical_acceleration_for_full: float = 9.0
+@export_range(1.0, 60.0, 0.5, "suffix:m/s²") var solid_longitudinal_acceleration_for_full: float = 14.0
+@export_range(0.0, 1.5, 0.01) var solid_impact_strength: float = 1.0
+@export_range(0.1, 40.0, 0.1, "suffix:1/s") var solid_impact_filter_speed: float = 9.0
+@export_range(0.1, 30.0, 0.1, "suffix:1/s") var solid_impact_decay_speed: float = 4.0
+
+@export_group("Automatic Response - Physical Contacts")
+@export_range(0.0, 5.0, 0.01, "suffix:m/s") var physical_impact_minimum_delta_velocity: float = 0.25
+@export_range(0.1, 10.0, 0.05, "suffix:m/s") var physical_impact_delta_velocity_for_full: float = 2.0
+@export_range(0.0, 1.5, 0.01) var physical_impact_strength: float = 1.0
+@export_range(0.1, 30.0, 0.1, "suffix:1/s") var physical_impact_decay_speed: float = 4.0
+
 @export_group("Automatic Response - Airborne")
 @export_range(-1.0, 0.0, 0.01) var airborne_extension_target: float = -0.28
 
@@ -98,6 +112,14 @@ var landing_impulse_current: float:
 	get:
 		return _landing_impulse
 
+var solid_impact_impulse_current: float:
+	get:
+		return _solid_impact_impulse
+
+var physical_contact_impulse_current: float:
+	get:
+		return _physical_contact_impulse
+
 var target_compression: float:
 	get:
 		return _target_compression
@@ -123,6 +145,9 @@ var _raw_support_acceleration: float = 0.0
 var _filtered_support_acceleration: float = 0.0
 var _contact_authority: float = 0.0
 var _acceleration_compression: float = 0.0
+var _filtered_solid_longitudinal_deceleration: float = 0.0
+var _solid_impact_impulse: float = 0.0
+var _physical_contact_impulse: float = 0.0
 var _landing_impulse: float = 0.0
 var _target_compression: float = 0.0
 var _current_compression: float = 0.0
@@ -273,6 +298,8 @@ func _update_automatic(delta: float) -> void:
 		_filtered_support_acceleration
 	)
 	_contact_authority = _calculate_contact_authority()
+	_update_solid_surface_impact(delta)
+	_update_physical_contact_impact(delta)
 	_landing_impulse *= exp(-landing_impulse_decay_speed * delta)
 	_update_target_compression()
 	_smooth_current_compression(delta)
@@ -339,6 +366,82 @@ func _calculate_contact_authority() -> float:
 	return 0.0
 
 
+func _update_solid_surface_impact(delta: float) -> void:
+	_solid_impact_impulse *= exp(-solid_impact_decay_speed * delta)
+	if not _vehicle.has_solid_support:
+		_filtered_solid_longitudinal_deceleration = lerpf(
+			_filtered_solid_longitudinal_deceleration,
+			0.0,
+			1.0 - exp(-solid_impact_filter_speed * delta)
+		)
+		return
+
+	var forward := -_vehicle.global_basis.z
+	if not forward.is_finite() or forward.length_squared() <= 0.000001:
+		return
+	forward = forward.normalized()
+	var raw_longitudinal_deceleration := maxf(
+		-_raw_seat_acceleration.dot(forward),
+		0.0
+	)
+	var filter_weight := 1.0 - exp(-solid_impact_filter_speed * delta)
+	_filtered_solid_longitudinal_deceleration = lerpf(
+		_filtered_solid_longitudinal_deceleration,
+		raw_longitudinal_deceleration,
+		filter_weight
+	)
+
+	var vertical_acceleration := maxf(_filtered_support_acceleration, 0.0)
+	var vertical_response := clampf(
+		maxf(vertical_acceleration - solid_impact_dead_zone, 0.0)
+		/ maxf(solid_vertical_acceleration_for_full, 0.001),
+		0.0,
+		1.0
+	)
+	var longitudinal_response := clampf(
+		maxf(
+			_filtered_solid_longitudinal_deceleration
+				- solid_impact_dead_zone,
+			0.0
+		)
+		/ maxf(solid_longitudinal_acceleration_for_full, 0.001),
+		0.0,
+		1.0
+	)
+	var candidate := (
+		maxf(vertical_response, longitudinal_response)
+		* solid_impact_strength
+	)
+	_solid_impact_impulse = maxf(_solid_impact_impulse, candidate)
+
+
+func _update_physical_contact_impact(delta: float) -> void:
+	_physical_contact_impulse *= exp(-physical_impact_decay_speed * delta)
+	if _vehicle.physical_contact_count <= 0:
+		return
+	var effective_delta_velocity := maxf(
+		_vehicle.physical_contact_delta_velocity
+			- physical_impact_minimum_delta_velocity,
+		0.0
+	)
+	if effective_delta_velocity <= 0.0:
+		return
+	var full_response_span := maxf(
+		physical_impact_delta_velocity_for_full
+			- physical_impact_minimum_delta_velocity,
+		0.001
+	)
+	var candidate := clampf(
+		effective_delta_velocity / full_response_span,
+		0.0,
+		1.0
+	) * physical_impact_strength
+	_physical_contact_impulse = maxf(
+		_physical_contact_impulse,
+		candidate
+	)
+
+
 func _update_target_compression() -> void:
 	var deep_submerged := (
 		_vehicle.navigation_state == JetSkiController.NavigationState.DEEP_SUBMERGED
@@ -356,6 +459,8 @@ func _update_target_compression() -> void:
 	else:
 		_target_compression = clampf(
 			_acceleration_compression * _contact_authority
+			+ _solid_impact_impulse
+			+ _physical_contact_impulse
 			+ _landing_impulse,
 			-1.0,
 			1.0
@@ -395,6 +500,9 @@ func _reset_response_for_history_tick() -> void:
 	_filtered_support_acceleration = 0.0
 	_contact_authority = 0.0
 	_acceleration_compression = 0.0
+	_filtered_solid_longitudinal_deceleration = 0.0
+	_solid_impact_impulse = 0.0
+	_physical_contact_impulse = 0.0
 	_landing_impulse = 0.0
 	_target_compression = 0.0
 	_current_compression = 0.0
@@ -412,6 +520,9 @@ func _clear_automatic_transients() -> void:
 	_filtered_support_acceleration = 0.0
 	_contact_authority = 0.0
 	_acceleration_compression = 0.0
+	_filtered_solid_longitudinal_deceleration = 0.0
+	_solid_impact_impulse = 0.0
+	_physical_contact_impulse = 0.0
 	_landing_impulse = 0.0
 	_target_compression = 0.0
 	_airborne_extension_active = false

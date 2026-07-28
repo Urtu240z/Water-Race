@@ -3,18 +3,14 @@ Godot: 4.7.1-stable (official)
 Rider01 Skeleton3D: Rider01_RiderCompatible/SKEL_Rider_001/Skeleton3D
 Rider Skeleton3D: RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D
 Skeleton comparison: PASS
-All ten Skin bind comparisons: PASS
+All six Skin bind comparisons: PASS
 Bone count: 52
 Shared bind count: 52
 Shared Skin resource: res://assets/3D/Rider/skins/Rider01/runtime/Rider01_Skin.res
-Mesh resource: res://assets/3D/Rider/skins/Rider01/runtime/Rider01_Body_Mesh.res
-Mesh resource: res://assets/3D/Rider/skins/Rider01/runtime/Rider01_Eyebrows_Mesh.res
-Mesh resource: res://assets/3D/Rider/skins/Rider01/runtime/Rider01_Eyelashes_Mesh.res
-Mesh resource: res://assets/3D/Rider/skins/Rider01/runtime/Rider01_Eyes_Mesh.res
-Mesh resource: res://assets/3D/Rider/skins/Rider01/runtime/Rider01_Glasses_Mesh.res
-Mesh resource: res://assets/3D/Rider/skins/Rider01/runtime/Rider01_HairMesh_Mesh.res
-Mesh resource: res://assets/3D/Rider/skins/Rider01/runtime/Rider01_SwimShorts_Mesh.res
-Mesh resource: res://assets/3D/Rider/skins/Rider01/runtime/Rider01_Tank_Mesh.res
-Mesh resource: res://assets/3D/Rider/skins/Rider01/runtime/Rider01_Teeth_Mesh.res
-Mesh resource: res://assets/3D/Rider/skins/Rider01/runtime/Rider01_Tongue_Mesh.res
+Mesh resource: res://assets/3D/Rider/skins/Rider01/runtime/Rider01_Mesh_01_Mesh.res
+Mesh resource: res://assets/3D/Rider/skins/Rider01/runtime/Rider01_Mesh_02_Mesh.res
+Mesh resource: res://assets/3D/Rider/skins/Rider01/runtime/Rider01_Mesh_03_Mesh.res
+Mesh resource: res://assets/3D/Rider/skins/Rider01/runtime/Rider01_Mesh_04_Mesh.res
+Mesh resource: res://assets/3D/Rider/skins/Rider01/runtime/Rider01_Mesh_05_Mesh.res
+Mesh resource: res://assets/3D/Rider/skins/Rider01/runtime/Rider01_Mesh_06_Mesh.res
 EXTRACTION_STATUS=PASS

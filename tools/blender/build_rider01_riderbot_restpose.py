@@ -53,6 +53,8 @@ def parse_args():
     parser.add_argument("--input-glb")
     parser.add_argument("--json", required=True)
     parser.add_argument("--report", required=True)
+    parser.add_argument("--expected-meshes", type=int, default=10)
+    parser.add_argument("--max-influences", type=int, default=4)
     args = parser.parse_args(
         sys.argv[sys.argv.index("--") + 1 :] if "--" in sys.argv else []
     )
@@ -251,7 +253,7 @@ def armature_modifier(obj, armature=None):
     return modifiers[0] if len(modifiers) == 1 else None
 
 
-def find_source_character():
+def find_source_character(expected_meshes):
     armatures = [obj for obj in bpy.context.scene.objects if obj.type == "ARMATURE"]
     if len(armatures) != 1:
         raise RuntimeError(f"Source has {len(armatures)} armatures; expected 1")
@@ -264,8 +266,10 @@ def find_source_character():
         ),
         key=lambda item: item.name,
     )
-    if len(meshes) != 10:
-        raise RuntimeError(f"Source has {len(meshes)} skinned meshes; expected 10")
+    if len(meshes) != expected_meshes:
+        raise RuntimeError(
+            f"Source has {len(meshes)} skinned meshes; expected {expected_meshes}"
+        )
     return armature, meshes
 
 
@@ -454,6 +458,13 @@ def rebind_mesh(obj, target_armature):
     modifier.object = target_armature
 
 
+def bake_object_world_transform(obj):
+    world = obj.matrix_world.copy()
+    obj.data.transform(world)
+    obj.matrix_world = Matrix.Identity(4)
+    obj.data.update()
+
+
 def evaluated_positions(obj, maximum=None):
     depsgraph = bpy.context.evaluated_depsgraph_get()
     evaluated = obj.evaluated_get(depsgraph)
@@ -631,7 +642,7 @@ def build(args):
             raise FileNotFoundError(path)
 
     bpy.ops.wm.open_mainfile(filepath=str(source_path))
-    source_armature, meshes = find_source_character()
+    source_armature, meshes = find_source_character(args.expected_meshes)
     source_armature_name = source_armature.name
     source_armature.data.pose_position = "REST"
     source_bones = bone_records(source_armature)
@@ -645,7 +656,7 @@ def build(args):
     for mesh_name, stats in original_weight_stats.items():
         if (
             stats["unweighted"]
-            or stats["over_four"]
+            or stats["max_influences"] > args.max_influences
             or stats["invalid_groups"]
         ):
             raise RuntimeError(f"{mesh_name}: invalid source weights {stats}")
@@ -675,6 +686,7 @@ def build(args):
 
     source_armature.data.pose_position = "REST"
     for mesh in meshes:
+        bake_object_world_transform(mesh)
         rebind_mesh(mesh, target_armature)
     target_armature.data.pose_position = "REST"
     bpy.context.view_layer.update()
@@ -684,6 +696,23 @@ def build(args):
     if max(rest_errors.values(), default=0.0) > 0.00001:
         raise RuntimeError(f"Non-zero target rest deformation: {rest_errors}")
 
+    print(
+        "CODEX_RIDER01_PREPOSE="
+        + json.dumps(
+            {
+                "armature_matrix": [
+                    list(row) for row in target_armature.matrix_world
+                ],
+                "meshes": {
+                    mesh.name: {
+                        "matrix": [list(row) for row in mesh.matrix_world],
+                        "bounds": object_bounds(mesh),
+                    }
+                    for mesh in meshes
+                },
+            }
+        )
+    )
     pose_tests, pose_restore_error = deformation_tests(target_armature, meshes)
     actions_removed, nla_removed = clear_animation()
     target_armature.name = "SKEL_Rider"
@@ -695,8 +724,14 @@ def build(args):
 
     if len([obj for obj in bpy.context.scene.objects if obj.type == "ARMATURE"]) != 1:
         raise RuntimeError("Final blend does not contain exactly one armature")
-    if len([obj for obj in bpy.context.scene.objects if obj.type == "MESH"]) != 10:
-        raise RuntimeError("Final blend does not contain exactly ten meshes")
+    final_mesh_count = len(
+        [obj for obj in bpy.context.scene.objects if obj.type == "MESH"]
+    )
+    if final_mesh_count != args.expected_meshes:
+        raise RuntimeError(
+            "Final blend does not contain the expected mesh count: "
+            f"{final_mesh_count} != {args.expected_meshes}"
+        )
     if bpy.data.actions:
         raise RuntimeError("Final blend still contains actions")
 
@@ -837,15 +872,22 @@ def validate(args):
     import_glb(input_path)
     compatible_objects = list(bpy.context.scene.objects)
     armature, meshes = imported_character(compatible_objects)
-    if len(meshes) != 10:
-        raise RuntimeError(f"Compatible import has {len(meshes)} skinned meshes")
+    if len(meshes) != args.expected_meshes:
+        raise RuntimeError(
+            "Compatible import has an unexpected skinned mesh count: "
+            f"{len(meshes)} != {args.expected_meshes}"
+        )
     compatible_records = bone_records(armature)
     valid_bones = set(compatible_records)
     weight_stats = {
         mesh.name: weight_statistics(mesh, valid_bones) for mesh in meshes
     }
     for name, stats in weight_stats.items():
-        if stats["unweighted"] or stats["over_four"] or stats["invalid_groups"]:
+        if (
+            stats["unweighted"]
+            or stats["max_influences"] > args.max_influences
+            or stats["invalid_groups"]
+        ):
             raise RuntimeError(f"{name}: invalid imported weights {stats}")
     rest_errors = {mesh.name: rest_deformation_error(mesh) for mesh in meshes}
     if max(rest_errors.values(), default=0.0) > 0.00001:
@@ -958,7 +1000,10 @@ def validate(args):
             f"Final rest maximums: {maximums}",
             f"Target-rest deformation max: {max(rest_errors.values()):.9f}",
             f"Pose tests/restore error: {len(pose_tests)}/{restore_error:.12f}",
-            "Unweighted/over-four/invalid groups: 0/0/0",
+            (
+                "Unweighted/max-influences/invalid groups: "
+                f"0/{max((item['max_influences'] for item in weight_stats.values()), default=0)}/0"
+            ),
             "Animations: 0",
             "VALIDATION_STATUS=PASS",
         ],

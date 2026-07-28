@@ -159,6 +159,8 @@ shader_parameter/shadow_color = Color(0.03529412, 0.02745098, 0.015686275, 0.698
 shader_parameter/edge_softness = 0.11999999918042
 shader_parameter/breakup = 0.0
 
+[sub_resource type="ArrayMesh" id="ArrayMesh_tpwhi"]
+
 [sub_resource type="PlaneMesh" id="PlaneMesh_tpwhi"]
 material = ExtResource("34_h01lt")
 size = Vector2(10000, 10000)
@@ -230,6 +232,8 @@ shader_parameter/foam_noise_texture = ExtResource("34_cowfl")
 shader_parameter/foam_color = Color(0.82, 0.95, 1, 1)
 shader_parameter/shore_foam_width = 5.55000008270166
 shader_parameter/shore_foam_strength = 1.05
+shader_parameter/vehicle_material_tag_roughness = 0.019608
+shader_parameter/vehicle_material_tag_tolerance = 0.05000000074506
 shader_parameter/crest_foam_start = 0.46
 shader_parameter/crest_foam_end = 0.92999997921264
 shader_parameter/crest_foam_strength = 0.82
@@ -238,7 +242,7 @@ shader_parameter/foam_macro_scale = 0.055
 shader_parameter/foam_detail_scale = 0.19
 shader_parameter/foam_scroll_speed = 0.13
 shader_parameter/foam_roughness = 0.88
-shader_parameter/ocean_surface_enabled = false
+shader_parameter/ocean_surface_enabled = true
 shader_parameter/ocean_snapped_origin_xz = Vector2(0, 0)
 shader_parameter/ocean_logical_origin_offset_xz = Vector2(0, 0)
 shader_parameter/ocean_detail_center_xz = Vector2(0, 0)
@@ -329,6 +333,9 @@ transform = Transform3D(0.86, 0, 0, 0, 0.86, 0, 0, 0, 0.86, 149, 1.8, 120.1001)
 [node name="Terrain_Master_VIS" parent="TerrainRoot/test_island" index="0" unique_id=1375938674]
 material_override = SubResource("ShaderMaterial_tpwhi")
 
+[node name="Cave_01_VIS" parent="TerrainRoot/test_island" index="1" unique_id=1283060270]
+surface_material_override/0 = ExtResource("5_kmjc7")
+
 [node name="Cave_Entrance_Rock_A_VIS" parent="TerrainRoot/test_island" index="2" unique_id=841494517]
 surface_material_override/0 = ExtResource("5_kmjc7")
 
@@ -393,6 +400,9 @@ material_override = SubResource("ShaderMaterial_palm_ground_shadow")
 cast_shadow = 0
 visibility_range_end = 4000.0
 
+[node name="MeshInstance3D" type="MeshInstance3D" parent="TerrainRoot/test_island" unique_id=1861654783]
+mesh = SubResource("ArrayMesh_tpwhi")
+
 [node name="SeabedPlane" type="MeshInstance3D" parent="TerrainRoot" unique_id=1286908535]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -68.184326, 0)
 mesh = SubResource("PlaneMesh_tpwhi")
@@ -423,8 +433,8 @@ transform = Transform3D(0.9811287, 0, 0.19335571, 0, 1, 0, -0.19335571, 0, 0.981
 
 [node name="JetSki" parent="Gameplay" unique_id=328650943 instance=ExtResource("203_nrhvk")]
 transform = Transform3D(-1.5, 0, -2.2649371e-07, 0, 1.5, 0, 2.2649371e-07, 0, -1.5, 132.69096, 0.71555996, -133.7861)
-gravity_scale = 1.4
-center_of_mass = Vector3(0, -0.28, 0)
+gravity_scale = 1.5
+center_of_mass = Vector3(0, -0.22, 0.1)
 ocean_path = NodePath("../../WaterIntegration/Ocean")
 forward_engine_force = 15000.0
 reverse_engine_force = 4500.0
@@ -443,19 +453,34 @@ speed_for_full_load = 50.0
 wave_load_activation_throttle = 0.91
 wave_load_response_speed = 17.8
 
-[node name="CollisionShape3D" parent="Gameplay/JetSki" index="2" unique_id=2026230859]
+[node name="WaterAudio" parent="Gameplay/JetSki" index="2" unique_id=1620158886]
+running_water_start_speed = 0.0
+running_water_full_speed = 8.6
+maximum_distance = 197.0
+
+[node name="RunningWaterPlayer" parent="Gameplay/JetSki/WaterAudio" index="2" unique_id=140702410]
+volume_db = -60.0
+
+[node name="CollisionShape3D" parent="Gameplay/JetSki" index="3" unique_id=2026230859]
 visible = true
+
+[node name="HandlePivot" parent="Gameplay/JetSki/VisualRoot/JetSkiVisual" parent_id_path=PackedInt32Array(328650943, 556077452) index="1" unique_id=1724927576]
+transform = Transform3D(1, 0, 0, 0, 0.99904823, 0.043619387, 0, -0.043619387, 0.99904823, 0.37203, 0.456944, -0.33678)
 
 [node name="LeftGripTarget" parent="Gameplay/JetSki/VisualRoot/JetSkiVisual/HandlePivot/GripTargets" parent_id_path=PackedInt32Array(328650943, 1552986585) index="0" unique_id=133906918]
 transform = Transform3D(0.80945057, -0.3843369, -0.4439311, -0.56238306, -0.724853, -0.39788496, -0.1688622, 0.57172793, -0.8028763, 0.19560242, 0.6935289, -1.4804459)
 
 [node name="RiderRig" parent="Gameplay/JetSki/VisualRoot/RiderMount/RiderAssetRoot" parent_id_path=PackedInt32Array(328650943, 1312466662) index="0" unique_id=2001770911]
-rider_skin = 1
 breathing_influence = 1.0
 
 [node name="Skeleton3D" parent="Gameplay/JetSki/VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/Rider_Bot/SKEL_Rider" parent_id_path=PackedInt32Array(328650943, 2001770911, 1075285769, 1348584656) index="0" unique_id=426480764]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.081000924, 0.0069850683, 0)
 bones/0/rotation = Quaternion(0.0064583384, 1.6179755e-09, 2.5050662e-07, 0.99997914)
+bones/1/position = Vector3(-4.8325298e-12, 0.10182449, 3.2595353e-09)
+bones/2/position = Vector3(-2.4344415e-13, 0.10002686, 8.3823934e-09)
+bones/3/position = Vector3(1.364242e-12, 0.10010647, -1.8094065e-08)
+bones/4/position = Vector3(-3.710018e-06, 0.16292441, -0.0025706573)
+bones/5/position = Vector3(-1.0776875e-09, 0.09341913, 0.028410386)
 bones/7/position = Vector3(-1.1175871e-08, 0.11116077, 2.3283064e-10)
 bones/25/rotation = Quaternion(0.43952805, 0.59007734, -0.55047023, 0.39446965)
 bones/27/position = Vector3(-2.9825742e-10, 0.27841514, 4.8592856e-08)
@@ -475,30 +500,47 @@ left_hand_rotation_correction_degrees = Vector3(-18.44, 32.09, -21.11)
 [node name="GripFingers" parent="Gameplay/JetSki/VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D" index="7" unique_id=940560861]
 left_grip_strength = 0.75
 
-[node name="BuoyancyPoints" parent="Gameplay/JetSki" index="4" unique_id=1093517847]
+[node name="BuoyancyPoints" parent="Gameplay/JetSki" index="5" unique_id=1093517847]
 visible = true
 
-[node name="CameraTarget" parent="Gameplay/JetSki" index="6" unique_id=1770908444]
+[node name="CameraTarget" parent="Gameplay/JetSki" index="7" unique_id=1770908444]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0.35)
-
-[node name="VehicleWaterEffects3D" parent="Gameplay/JetSki/Effects" parent_id_path=PackedInt32Array(328650943, 1733691099) index="0" unique_id=1574631450]
-impact_particle_amount_multiplier = 5.8
-impact_maximum_velocity = 13.1
-impact_birth_scale = 0.64
-impact_edge_softness = 0.3
-impact_irregularity = 1.0
 
 [node name="RiderMountedLean" parent="Gameplay/JetSki" index="9" unique_id=1839269125]
 automatic_turn_response_speed = 3.0
-manual_lean_response_speed = 6.0
+manual_lean_response_speed = 3.0
 grip_hard_extension_ratio = 1.1
+
+[node name="VehicleWaterEffects3D" parent="Gameplay/JetSki/Effects" parent_id_path=PackedInt32Array(328650943, 1733691099) index="0" unique_id=1574631450]
+spray_minimum_scale = 0.001
+spray_maximum_scale = 0.748
+spray_growth_multiplier = 2.95
+spray_birth_scale = 0.1
+impact_particle_amount_multiplier = 6.0
+impact_maximum_velocity = 13.1
+impact_minimum_scale = 0.205
+impact_maximum_scale = 0.496
+impact_growth_multiplier = 1.55
+impact_birth_scale = 0.39
+impact_edge_softness = 0.3
+impact_irregularity = 1.0
+
+[node name="TurbineExhaust" parent="Gameplay/JetSki/Effects" parent_id_path=PackedInt32Array(328650943, 1733691099) index="1" unique_id=1478477575]
+full_core_length = 2.0
+jet_foam_core_strength = 2.0
+jet_foam_core_opacity = 1.0
+jet_foam_emission = 1.72
+jet_radius_multiplier = 0.5
+jet_droplet_quad_size = Vector2(0.01, 0.1)
 
 [node name="OceanWaves" type="AudioStreamPlayer" parent="Gameplay/JetSki" unique_id=1310889787]
 stream = ExtResource("204_4tj3w")
+volume_db = -6.0
 autoplay = true
 
 [node name="OceanWind" type="AudioStreamPlayer" parent="Gameplay/JetSki" unique_id=177552327]
 stream = ExtResource("205_wm0j8")
+volume_db = -8.0
 autoplay = true
 
 [node name="CameraSystem" type="Node3D" parent="." unique_id=1510457463]
@@ -660,6 +702,8 @@ buoy_clearance = 20.0
 [editable path="TerrainRoot/test_island/PalmImpostorGroundShadows"]
 [editable path="Gameplay/JetSki"]
 [editable path="Gameplay/JetSki/VisualRoot/JetSkiVisual"]
+[editable path="Gameplay/JetSki/VisualRoot/JetSkiVisual/HullModel/Hull"]
+[editable path="Gameplay/JetSki/VisualRoot/JetSkiVisual/HandlePivot/HandleModel/Handle"]
 [editable path="Gameplay/JetSki/VisualRoot/RiderMount/RiderAssetRoot/RiderRig"]
 [editable path="Gameplay/JetSki/VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/Rider_Bot"]
 [editable path="Atrezzo/beach_hotel"]

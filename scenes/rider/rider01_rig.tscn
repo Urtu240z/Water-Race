@@ -1,0 +1,33 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/rider/rider01_rig.gd" id="1_script"]
+[ext_resource type="PackedScene" path="res://assets/3D/Rider/skins/Rider01/Rider01.glb" id="2_rider01"]
+[ext_resource type="AnimationLibrary" path="res://assets/3D/Rider/animations/rider_animation_library.res" id="3_library"]
+[ext_resource type="AnimationNodeBlendTree" path="res://assets/3D/Rider/animations/rider_mounted_blend_tree.tres" id="4_tree"]
+
+[node name="Rider01Rig" type="Node3D"]
+script = ExtResource("1_script")
+
+[node name="Rider01" parent="." instance=ExtResource("2_rider01")]
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+root_node = NodePath("../Rider01")
+libraries/ = ExtResource("3_library")
+
+[node name="AnimationTree" type="AnimationTree" parent="."]
+active = false
+root_node = NodePath("../Rider01")
+tree_root = ExtResource("4_tree")
+anim_player = NodePath("../AnimationPlayer")
+parameters/mounted_add/add_amount = 0.22
+parameters/turn_left_delta/sub_amount = 1.0
+parameters/turn_right_delta/sub_amount = 1.0
+parameters/automatic_turn_add/add_amount = 0.0
+parameters/lean_left_delta/sub_amount = 1.0
+parameters/lean_right_delta/sub_amount = 1.0
+parameters/manual_roll_add/add_amount = 0.0
+parameters/lean_forward_delta/sub_amount = 1.0
+parameters/lean_back_delta/sub_amount = 1.0
+parameters/manual_pitch_add/add_amount = 0.0
+
+[editable path="Rider01"]

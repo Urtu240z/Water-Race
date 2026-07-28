@@ -1,0 +1,308 @@
+=== RIDER01 OWN SKELETON ANIMATION TEST ===
+Rider scene: res://scenes/rider/rider01_rig.tscn
+Source GLB: res://assets/3D/Rider/skins/Rider01/Rider01.glb
+Skeleton: /root/Rider01OwnSkeletonAnimationTest/Rider01Rig/Rider01/SKEL_Rider/Skeleton3D
+Skeleton bones: 52
+Original skinned meshes: 10
+=== ANIMATION TRACK AUDIT ===
+Mounted_Base | length=1.000000 | tracks=104
+  paths=SKEL_Rider/Skeleton3D:mixamorig_Hips,SKEL_Rider/Skeleton3D:mixamorig_Hips,SKEL_Rider/Skeleton3D:mixamorig_Spine,SKEL_Rider/Skeleton3D:mixamorig_Spine,SKEL_Rider/Skeleton3D:mixamorig_Spine1,SKEL_Rider/Skeleton3D:mixamorig_Spine1,SKEL_Rider/Skeleton3D:mixamorig_Spine2,SKEL_Rider/Skeleton3D:mixamorig_Spine2,SKEL_Rider/Skeleton3D:mixamorig_Neck,SKEL_Rider/Skeleton3D:mixamorig_Neck,SKEL_Rider/Skeleton3D:mixamorig_Head,SKEL_Rider/Skeleton3D:mixamorig_Head,SKEL_Rider/Skeleton3D:mixamorig_RightShoulder,SKEL_Rider/Skeleton3D:mixamorig_RightShoulder,SKEL_Rider/Skeleton3D:mixamorig_RightArm,SKEL_Rider/Skeleton3D:mixamorig_RightArm,SKEL_Rider/Skeleton3D:mixamorig_RightForeArm,SKEL_Rider/Skeleton3D:mixamorig_RightForeArm,SKEL_Rider/Skeleton3D:mixamorig_RightHand,SKEL_Rider/Skeleton3D:mixamorig_RightHand,SKEL_Rider/Skeleton3D:mixamorig_RightHandThumb1,SKEL_Rider/Skeleton3D:mixamorig_RightHandThumb1,SKEL_Rider/Skeleton3D:mixamorig_RightHandThumb2,SKEL_Rider/Skeleton3D:mixamorig_RightHandThumb2,SKEL_Rider/Skeleton3D:mixamorig_RightHandThumb3,SKEL_Rider/Skeleton3D:mixamorig_RightHandThumb3,SKEL_Rider/Skeleton3D:mixamorig_RightHandIndex1,SKEL_Rider/Skeleton3D:mixamorig_RightHandIndex1,SKEL_Rider/Skeleton3D:mixamorig_RightHandIndex2,SKEL_Rider/Skeleton3D:mixamorig_RightHandIndex2,SKEL_Rider/Skeleton3D:mixamorig_RightHandIndex3,SKEL_Rider/Skeleton3D:mixamorig_RightHandIndex3,SKEL_Rider/Skeleton3D:mixamorig_RightHandMiddle1,SKEL_Rider/Skeleton3D:mixamorig_RightHandMiddle1,SKEL_Rider/Skeleton3D:mixamorig_RightHandMiddle2,SKEL_Rider/Skeleton3D:mixamorig_RightHandMiddle2,SKEL_Rider/Skeleton3D:mixamorig_RightHandMiddle3,SKEL_Rider/Skeleton3D:mixamorig_RightHandMiddle3,SKEL_Rider/Skeleton3D:mixamorig_RightHandRing1,SKEL_Rider/Skeleton3D:mixamorig_RightHandRing1,SKEL_Rider/Skeleton3D:mixamorig_RightHandRing2,SKEL_Rider/Skeleton3D:mixamorig_RightHandRing2,SKEL_Rider/Skeleton3D:mixamorig_RightHandRing3,SKEL_Rider/Skeleton3D:mixamorig_RightHandRing3,SKEL_Rider/Skeleton3D:mixamorig_RightHandPinky1,SKEL_Rider/Skeleton3D:mixamorig_RightHandPinky1,SKEL_Rider/Skeleton3D:mixamorig_RightHandPinky2,SKEL_Rider/Skeleton3D:mixamorig_RightHandPinky2,SKEL_Rider/Skeleton3D:mixamorig_RightHandPinky3,SKEL_Rider/Skeleton3D:mixamorig_RightHandPinky3,SKEL_Rider/Skeleton3D:mixamorig_LeftShoulder,SKEL_Rider/Skeleton3D:mixamorig_LeftShoulder,SKEL_Rider/Skeleton3D:mixamorig_LeftArm,SKEL_Rider/Skeleton3D:mixamorig_LeftArm,SKEL_Rider/Skeleton3D:mixamorig_LeftForeArm,SKEL_Rider/Skeleton3D:mixamorig_LeftForeArm,SKEL_Rider/Skeleton3D:mixamorig_LeftHand,SKEL_Rider/Skeleton3D:mixamorig_LeftHand,SKEL_Rider/Skeleton3D:mixamorig_LeftHandThumb1,SKEL_Rider/Skeleton3D:mixamorig_LeftHandThumb1,SKEL_Rider/Skeleton3D:mixamorig_LeftHandThumb2,SKEL_Rider/Skeleton3D:mixamorig_LeftHandThumb2,SKEL_Rider/Skeleton3D:mixamorig_LeftHandThumb3,SKEL_Rider/Skeleton3D:mixamorig_LeftHandThumb3,SKEL_Rider/Skeleton3D:mixamorig_LeftHandIndex1,SKEL_Rider/Skeleton3D:mixamorig_LeftHandIndex1,SKEL_Rider/Skeleton3D:mixamorig_LeftHandIndex2,SKEL_Rider/Skeleton3D:mixamorig_LeftHandIndex2,SKEL_Rider/Skeleton3D:mixamorig_LeftHandIndex3,SKEL_Rider/Skeleton3D:mixamorig_LeftHandIndex3,SKEL_Rider/Skeleton3D:mixamorig_LeftHandMiddle1,SKEL_Rider/Skeleton3D:mixamorig_LeftHandMiddle1,SKEL_Rider/Skeleton3D:mixamorig_LeftHandMiddle2,SKEL_Rider/Skeleton3D:mixamorig_LeftHandMiddle2,SKEL_Rider/Skeleton3D:mixamorig_LeftHandMiddle3,SKEL_Rider/Skeleton3D:mixamorig_LeftHandMiddle3,SKEL_Rider/Skeleton3D:mixamorig_LeftHandRing1,SKEL_Rider/Skeleton3D:mixamorig_LeftHandRing1,SKEL_Rider/Skeleton3D:mixamorig_LeftHandRing2,SKEL_Rider/Skeleton3D:mixamorig_LeftHandRing2,SKEL_Rider/Skeleton3D:mixamorig_LeftHandRing3,SKEL_Rider/Skeleton3D:mixamorig_LeftHandRing3,SKEL_Rider/Skeleton3D:mixamorig_LeftHandPinky1,SKEL_Rider/Skeleton3D:mixamorig_LeftHandPinky1,SKEL_Rider/Skeleton3D:mixamorig_LeftHandPinky2,SKEL_Rider/Skeleton3D:mixamorig_LeftHandPinky2,SKEL_Rider/Skeleton3D:mixamorig_LeftHandPinky3,SKEL_Rider/Skeleton3D:mixamorig_LeftHandPinky3,SKEL_Rider/Skeleton3D:mixamorig_RightUpLeg,SKEL_Rider/Skeleton3D:mixamorig_RightUpLeg,SKEL_Rider/Skeleton3D:mixamorig_RightLeg,SKEL_Rider/Skeleton3D:mixamorig_RightLeg,SKEL_Rider/Skeleton3D:mixamorig_RightFoot,SKEL_Rider/Skeleton3D:mixamorig_RightFoot,SKEL_Rider/Skeleton3D:mixamorig_RightToeBase,SKEL_Rider/Skeleton3D:mixamorig_RightToeBase,SKEL_Rider/Skeleton3D:mixamorig_LeftUpLeg,SKEL_Rider/Skeleton3D:mixamorig_LeftUpLeg,SKEL_Rider/Skeleton3D:mixamorig_LeftLeg,SKEL_Rider/Skeleton3D:mixamorig_LeftLeg,SKEL_Rider/Skeleton3D:mixamorig_LeftFoot,SKEL_Rider/Skeleton3D:mixamorig_LeftFoot,SKEL_Rider/Skeleton3D:mixamorig_LeftToeBase,SKEL_Rider/Skeleton3D:mixamorig_LeftToeBase
+mounted_breathing | length=6.000000 | tracks=7
+  paths=SKEL_Rider/Skeleton3D:mixamorig_Spine,SKEL_Rider/Skeleton3D:mixamorig_Spine1,SKEL_Rider/Skeleton3D:mixamorig_Spine2,SKEL_Rider/Skeleton3D:mixamorig_Neck,SKEL_Rider/Skeleton3D:mixamorig_Head,SKEL_Rider/Skeleton3D:mixamorig_RightShoulder,SKEL_Rider/Skeleton3D:mixamorig_LeftShoulder
+Mounted_Turn_Left | length=1.000000 | tracks=9
+  paths=SKEL_Rider/Skeleton3D:mixamorig_Hips,SKEL_Rider/Skeleton3D:mixamorig_Hips,SKEL_Rider/Skeleton3D:mixamorig_Spine,SKEL_Rider/Skeleton3D:mixamorig_Spine1,SKEL_Rider/Skeleton3D:mixamorig_Spine2,SKEL_Rider/Skeleton3D:mixamorig_Neck,SKEL_Rider/Skeleton3D:mixamorig_Head,SKEL_Rider/Skeleton3D:mixamorig_LeftShoulder,SKEL_Rider/Skeleton3D:mixamorig_RightShoulder
+Mounted_Turn_Right | length=1.000000 | tracks=9
+  paths=SKEL_Rider/Skeleton3D:mixamorig_Hips,SKEL_Rider/Skeleton3D:mixamorig_Hips,SKEL_Rider/Skeleton3D:mixamorig_Spine,SKEL_Rider/Skeleton3D:mixamorig_Spine1,SKEL_Rider/Skeleton3D:mixamorig_Spine2,SKEL_Rider/Skeleton3D:mixamorig_Neck,SKEL_Rider/Skeleton3D:mixamorig_Head,SKEL_Rider/Skeleton3D:mixamorig_LeftShoulder,SKEL_Rider/Skeleton3D:mixamorig_RightShoulder
+Mounted_Lean_Left | length=1.000000 | tracks=9
+  paths=SKEL_Rider/Skeleton3D:mixamorig_Hips,SKEL_Rider/Skeleton3D:mixamorig_Hips,SKEL_Rider/Skeleton3D:mixamorig_Spine,SKEL_Rider/Skeleton3D:mixamorig_Spine1,SKEL_Rider/Skeleton3D:mixamorig_Spine2,SKEL_Rider/Skeleton3D:mixamorig_Neck,SKEL_Rider/Skeleton3D:mixamorig_Head,SKEL_Rider/Skeleton3D:mixamorig_LeftShoulder,SKEL_Rider/Skeleton3D:mixamorig_RightShoulder
+Mounted_Lean_Right | length=1.000000 | tracks=9
+  paths=SKEL_Rider/Skeleton3D:mixamorig_Hips,SKEL_Rider/Skeleton3D:mixamorig_Hips,SKEL_Rider/Skeleton3D:mixamorig_Spine,SKEL_Rider/Skeleton3D:mixamorig_Spine1,SKEL_Rider/Skeleton3D:mixamorig_Spine2,SKEL_Rider/Skeleton3D:mixamorig_Neck,SKEL_Rider/Skeleton3D:mixamorig_Head,SKEL_Rider/Skeleton3D:mixamorig_LeftShoulder,SKEL_Rider/Skeleton3D:mixamorig_RightShoulder
+Mounted_Lean_Forward | length=1.000000 | tracks=9
+  paths=SKEL_Rider/Skeleton3D:mixamorig_Hips,SKEL_Rider/Skeleton3D:mixamorig_Hips,SKEL_Rider/Skeleton3D:mixamorig_Spine,SKEL_Rider/Skeleton3D:mixamorig_Spine1,SKEL_Rider/Skeleton3D:mixamorig_Spine2,SKEL_Rider/Skeleton3D:mixamorig_Neck,SKEL_Rider/Skeleton3D:mixamorig_Head,SKEL_Rider/Skeleton3D:mixamorig_LeftShoulder,SKEL_Rider/Skeleton3D:mixamorig_RightShoulder
+Mounted_Lean_Back | length=1.000000 | tracks=9
+  paths=SKEL_Rider/Skeleton3D:mixamorig_Hips,SKEL_Rider/Skeleton3D:mixamorig_Hips,SKEL_Rider/Skeleton3D:mixamorig_Spine,SKEL_Rider/Skeleton3D:mixamorig_Spine1,SKEL_Rider/Skeleton3D:mixamorig_Spine2,SKEL_Rider/Skeleton3D:mixamorig_Neck,SKEL_Rider/Skeleton3D:mixamorig_Head,SKEL_Rider/Skeleton3D:mixamorig_LeftShoulder,SKEL_Rider/Skeleton3D:mixamorig_RightShoulder
+ANIMATION_CAPTURED=Mounted_Base | sample=0.500000
+CAPTURE=res://assets/3D/Rider/skins/Rider01/runtime/own_skeleton_animation_captures/mounted_base_front.png
+CAPTURE=res://assets/3D/Rider/skins/Rider01/runtime/own_skeleton_animation_captures/mounted_base_lateral.png
+CAPTURE=res://assets/3D/Rider/skins/Rider01/runtime/own_skeleton_animation_captures/mounted_base_rear.png
+CAPTURE=res://assets/3D/Rider/skins/Rider01/runtime/own_skeleton_animation_captures/mounted_base_shoulders.png
+CAPTURE=res://assets/3D/Rider/skins/Rider01/runtime/own_skeleton_animation_captures/mounted_base_hands.png
+CAPTURE=res://assets/3D/Rider/skins/Rider01/runtime/own_skeleton_animation_captures/mounted_base_feet.png
+ANIMATION_CAPTURED=mounted_breathing | sample=3.000000
+CAPTURE=res://assets/3D/Rider/skins/Rider01/runtime/own_skeleton_animation_captures/mounted_breathing_front.png
+CAPTURE=res://assets/3D/Rider/skins/Rider01/runtime/own_skeleton_animation_captures/mounted_breathing_lateral.png
+CAPTURE=res://assets/3D/Rider/skins/Rider01/runtime/own_skeleton_animation_captures/mounted_breathing_rear.png
+CAPTURE=res://assets/3D/Rider/skins/Rider01/runtime/own_skeleton_animation_captures/mounted_breathing_shoulders.png
+CAPTURE=res://assets/3D/Rider/skins/Rider01/runtime/own_skeleton_animation_captures/mounted_breathing_hands.png
+CAPTURE=res://assets/3D/Rider/skins/Rider01/runtime/own_skeleton_animation_captures/mounted_breathing_feet.png
+ANIMATION_CAPTURED=Mounted_Turn_Left | sample=0.500000
+CAPTURE=res://assets/3D/Rider/skins/Rider01/runtime/own_skeleton_animation_captures/mounted_turn_left_front.png
+CAPTURE=res://assets/3D/Rider/skins/Rider01/runtime/own_skeleton_animation_captures/mounted_turn_left_lateral.png
+CAPTURE=res://assets/3D/Rider/skins/Rider01/runtime/own_skeleton_animation_captures/mounted_turn_left_rear.png
+CAPTURE=res://assets/3D/Rider/skins/Rider01/runtime/own_skeleton_animation_captures/mounted_turn_left_shoulders.png
+CAPTURE=res://assets/3D/Rider/skins/Rider01/runtime/own_skeleton_animation_captures/mounted_turn_left_hands.png
+CAPTURE=res://assets/3D/Rider/skins/Rider01/runtime/own_skeleton_animation_captures/mounted_turn_left_feet.png
+ANIMATION_CAPTURED=Mounted_Turn_Right | sample=0.500000
+CAPTURE=res://assets/3D/Rider/skins/Rider01/runtime/own_skeleton_animation_captures/mounted_turn_right_front.png
+CAPTURE=res://assets/3D/Rider/skins/Rider01/runtime/own_skeleton_animation_captures/mounted_turn_right_lateral.png
+CAPTURE=res://assets/3D/Rider/skins/Rider01/runtime/own_skeleton_animation_captures/mounted_turn_right_rear.png
+CAPTURE=res://assets/3D/Rider/skins/Rider01/runtime/own_skeleton_animation_captures/mounted_turn_right_shoulders.png
+CAPTURE=res://assets/3D/Rider/skins/Rider01/runtime/own_skeleton_animation_captures/mounted_turn_right_hands.png
+CAPTURE=res://assets/3D/Rider/skins/Rider01/runtime/own_skeleton_animation_captures/mounted_turn_right_feet.png
+ANIMATION_CAPTURED=Mounted_Lean_Left | sample=0.500000
+CAPTURE=res://assets/3D/Rider/skins/Rider01/runtime/own_skeleton_animation_captures/mounted_lean_left_front.png
+CAPTURE=res://assets/3D/Rider/skins/Rider01/runtime/own_skeleton_animation_captures/mounted_lean_left_lateral.png
+CAPTURE=res://assets/3D/Rider/skins/Rider01/runtime/own_skeleton_animation_captures/mounted_lean_left_rear.png
+CAPTURE=res://assets/3D/Rider/skins/Rider01/runtime/own_skeleton_animation_captures/mounted_lean_left_shoulders.png
+CAPTURE=res://assets/3D/Rider/skins/Rider01/runtime/own_skeleton_animation_captures/mounted_lean_left_hands.png
+CAPTURE=res://assets/3D/Rider/skins/Rider01/runtime/own_skeleton_animation_captures/mounted_lean_left_feet.png
+ANIMATION_CAPTURED=Mounted_Lean_Right | sample=0.500000
+CAPTURE=res://assets/3D/Rider/skins/Rider01/runtime/own_skeleton_animation_captures/mounted_lean_right_front.png
+CAPTURE=res://assets/3D/Rider/skins/Rider01/runtime/own_skeleton_animation_captures/mounted_lean_right_lateral.png
+CAPTURE=res://assets/3D/Rider/skins/Rider01/runtime/own_skeleton_animation_captures/mounted_lean_right_rear.png
+CAPTURE=res://assets/3D/Rider/skins/Rider01/runtime/own_skeleton_animation_captures/mounted_lean_right_shoulders.png
+CAPTURE=res://assets/3D/Rider/skins/Rider01/runtime/own_skeleton_animation_captures/mounted_lean_right_hands.png
+CAPTURE=res://assets/3D/Rider/skins/Rider01/runtime/own_skeleton_animation_captures/mounted_lean_right_feet.png
+ANIMATION_CAPTURED=Mounted_Lean_Forward | sample=0.500000
+CAPTURE=res://assets/3D/Rider/skins/Rider01/runtime/own_skeleton_animation_captures/mounted_lean_forward_front.png
+CAPTURE=res://assets/3D/Rider/skins/Rider01/runtime/own_skeleton_animation_captures/mounted_lean_forward_lateral.png
+CAPTURE=res://assets/3D/Rider/skins/Rider01/runtime/own_skeleton_animation_captures/mounted_lean_forward_rear.png
+CAPTURE=res://assets/3D/Rider/skins/Rider01/runtime/own_skeleton_animation_captures/mounted_lean_forward_shoulders.png
+CAPTURE=res://assets/3D/Rider/skins/Rider01/runtime/own_skeleton_animation_captures/mounted_lean_forward_hands.png
+CAPTURE=res://assets/3D/Rider/skins/Rider01/runtime/own_skeleton_animation_captures/mounted_lean_forward_feet.png
+ANIMATION_CAPTURED=Mounted_Lean_Back | sample=0.500000
+CAPTURE=res://assets/3D/Rider/skins/Rider01/runtime/own_skeleton_animation_captures/mounted_lean_back_front.png
+CAPTURE=res://assets/3D/Rider/skins/Rider01/runtime/own_skeleton_animation_captures/mounted_lean_back_lateral.png
+CAPTURE=res://assets/3D/Rider/skins/Rider01/runtime/own_skeleton_animation_captures/mounted_lean_back_rear.png
+CAPTURE=res://assets/3D/Rider/skins/Rider01/runtime/own_skeleton_animation_captures/mounted_lean_back_shoulders.png
+CAPTURE=res://assets/3D/Rider/skins/Rider01/runtime/own_skeleton_animation_captures/mounted_lean_back_hands.png
+CAPTURE=res://assets/3D/Rider/skins/Rider01/runtime/own_skeleton_animation_captures/mounted_lean_back_feet.png
+TEST_STAGE=ANIMATION_TEST_COMPLETED_VISUAL_REVIEW_REQUIRED
+
+=== 1. PREVIOUS STRUCTURE ===
+RiderRig (public class and node)
+- RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D
+  - original BOT mesh
+  - RacerSkinMesh
+  - ten broken Rider01 runtime MeshInstance3D nodes
+- AnimationPlayer
+- AnimationTree
+
+The eight modifiers were not stored in rider_rig.tscn. They were overrides under
+the BOT Skeleton3D in jet_ski_with_rider.tscn. RiderMountedLean and
+RiderImpactResponse cached direct BOT Skeleton/modifier paths during _ready().
+The grip, elbow, foot, sole and knee targets belong to the JetSki scene.
+
+=== 2. STRUCTURE PRODUCED BEFORE THE REQUIRED GATE ===
+No runtime host replacement was performed.
+
+RiderBotRig (new isolated implementation)
+- RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D
+  - BOT
+  - RACER
+  - RiderImpactPose
+  - LeftLegIK
+  - RightLegIK
+  - FootOrientation
+  - LeftArmIK
+  - RightArmIK
+  - GripOrientation
+  - GripFingers
+- AnimationPlayer
+- AnimationTree
+
+Its modifier stack is inactive until external JetSki targets are supplied through
+configure_targets(). No Rider01 mesh or broken Rider01 runtime Skin is referenced.
+
+Rider01Rig (new isolated implementation)
+- Rider01 (direct instance of Rider01.glb)
+  - SKEL_Rider/Skeleton3D (original Rider01 Skeleton3D)
+  - ten original skinned meshes
+- AnimationPlayer
+- AnimationTree
+
+Rider01Rig does not extract or move meshes, replace Skin resources, modify weights,
+convert rest poses or use Rider01_RiderCompatible.glb.
+
+=== 3. FILES CREATED ===
+res://scenes/rider/rider_bot_rig.tscn
+res://scenes/rider/rider_bot_rig.gd
+res://scenes/rider/rider01_rig.tscn
+res://scenes/rider/rider01_rig.gd
+res://scenes/rider/tests/rider01_own_skeleton_animation_test.tscn
+res://tools/godot/test_rider01_own_skeleton_animations.gd
+res://assets/3D/Rider/skins/Rider01/runtime/own_skeleton_animation_captures/
+
+=== 4. FILES MODIFIED ===
+The only existing runtime change is the required safe BOT/RACER fallback:
+- jet_ski_with_rider.tscn no longer selects RIDER01 (2)
+- the current serialized value observed at completion is RACER (1)
+
+All other existing runtime files were deliberately not modified after the
+animation gate failed:
+- rider_rig.tscn: unchanged
+- rider_rig.gd: unchanged
+- Rider01.glb: unchanged by this block
+- rider_animation_library.res: unchanged
+- rider_mounted_blend_tree.tres: unchanged by this block
+- physics/audio/controllers/targets: unchanged
+
+Backups were stored outside runtime and Git at:
+C:/Users/ehort/AppData/Local/Temp/
+water_race_rider_architecture_backup_20260728_2100/
+
+=== 5. SKELETONS ===
+BOT/RACER isolated implementation:
+RiderBotRig/RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D
+
+Rider01 isolated implementation:
+Rider01Rig/Rider01/SKEL_Rider/Skeleton3D
+
+Rider01 used its own 52-bone Skeleton3D, ten original Mesh resources, original Skin
+resources, materials, weights, transforms and rest pose.
+
+=== 6. ANIMATION LIBRARY / TRACK ROUTES ===
+No duplicate Rider01 AnimationLibrary was needed merely to resolve node paths.
+All eight animations target SKEL_Rider/Skeleton3D, which exists relative to the
+Rider01 AnimationPlayer root. The original library loaded all eight clips.
+
+Path compatibility is not pose compatibility. The BOT-authored transform values do
+not preserve Rider01's original rest pose, proportions, clothing or extremities.
+A Rider01-specific retargeted library is required before integration can continue.
+
+=== 7. RESULT OF THE EIGHT ANIMATIONS ===
+Mounted_Base: FAIL
+- Tank top tears/collapses at neckline, straps, shoulders and axillae.
+- Shoulder volume is distorted.
+- Hands/fingers form an unusable claw-like pose without modifiers.
+- Both feet and toes twist severely and lose a plausible sole orientation.
+
+mounted_breathing: FAIL
+- The additive layer resolves and plays over Mounted_Base.
+- It inherits the failed base deformation and is not visually usable.
+- Must be revalidated after a Rider01-specific Mounted_Base retarget.
+
+Mounted_Turn_Left: FAIL
+- Severe lateral/vertical body displacement and near-fall pose.
+- Torso, clothing and limbs are not usable.
+
+Mounted_Turn_Right: FAIL
+- Severe opposite lateral/vertical displacement.
+- Torso, clothing and limbs are not usable.
+
+Mounted_Lean_Left: FAIL
+- Failed base shoulder, clothing, hand and foot deformation remains.
+- Result is not a credible isolated mounted lean for Rider01.
+
+Mounted_Lean_Right: FAIL
+- Failed base shoulder, clothing, hand and foot deformation remains.
+- Result is not a credible isolated mounted lean for Rider01.
+
+Mounted_Lean_Forward: FAIL
+- Extreme vertical displacement moves most of the body outside the full front view.
+- Pose cannot be used on the JetSki.
+
+Mounted_Lean_Back: FAIL
+- Pelvis/body sink and displacement are excessive.
+- Pose cannot be used on the JetSki.
+
+Animation gate: FAIL.
+Clips requiring Rider01-specific retarget:
+- Mounted_Base
+- Mounted_Turn_Left
+- Mounted_Turn_Right
+- Mounted_Lean_Left
+- Mounted_Lean_Right
+- Mounted_Lean_Forward
+- Mounted_Lean_Back
+- mounted_breathing must be revalidated and likely retargeted after the base pose.
+
+=== 8. RESULT OF THE EIGHT MODIFIERS ===
+RiderImpactPose: NOT_RUN_ANIMATION_GATE_FAILED
+LeftLegIK: NOT_RUN_ANIMATION_GATE_FAILED
+RightLegIK: NOT_RUN_ANIMATION_GATE_FAILED
+FootOrientation: NOT_RUN_ANIMATION_GATE_FAILED
+LeftArmIK: NOT_RUN_ANIMATION_GATE_FAILED
+RightArmIK: NOT_RUN_ANIMATION_GATE_FAILED
+GripOrientation: NOT_RUN_ANIMATION_GATE_FAILED
+GripFingers: NOT_RUN_ANIMATION_GATE_FAILED
+
+No Rider01 modifier nodes, target overrides or correction values were created.
+
+=== 9. TARGET ADJUSTMENTS ===
+None. Existing BOT/RACER targets and all JetSki target transforms remain unchanged.
+No RiderMount movement was used to disguise animation incompatibility.
+
+=== 10. SELECTOR RESULT ===
+NOT_CREATED_ANIMATION_GATE_FAILED
+
+The existing public RiderRig remains the runtime implementation. No new
+BOT/RACER/RIDER01 host switch was attempted. The JetSki's existing RiderRig selector
+remains on the safe BOT/RACER implementation and currently serializes RACER (1).
+
+=== 11. CAPTURES ===
+48 primary PNG captures were generated: six views for each of eight animation
+states (front, lateral, rear, shoulders, hands and feet).
+Eight contact sheets were also generated for visual review.
+
+Directory:
+res://assets/3D/Rider/skins/Rider01/runtime/
+own_skeleton_animation_captures/
+
+=== 12. BROKEN RUNTIME REFERENCES REMOVED ===
+None. The request requires preserving the current integration until the replacement
+passes. Since Rider01 failed the animation gate, the broken Rider01 mesh references
+inside the existing RiderRig were not removed.
+
+=== 13. FILES PENDING POSSIBLE LATER REMOVAL ===
+- Rider01_RiderCompatible.glb
+- Rider01_backup.gglb, if no longer needed
+- broken Rider01 runtime Mesh/Skin resources after a replacement passes
+- invalid Blender rest-pose baking scripts
+- related __pycache__ directories
+
+Nothing in this list was deleted.
+
+=== 14. FINAL STATE ===
+FINAL_RESULT=FAIL
+REASON=RIDER01_REQUIRES_ANIMATION_RETARGET
+
+Rider01 preserves its original geometry, weights and Skeleton3D correctly in the
+isolated rig, but the current BOT-authored mounted animations do not work directly
+on that rest pose. Per the mandatory gate, integration stopped before modifiers,
+host conversion, new selector architecture or runtime startup. The existing JetSki
+selector no longer uses the broken RIDER01 option and currently uses RACER (1).
+
+=== 15. FOCUSED TECHNICAL VALIDATION ===
+rider_bot_rig.tscn load: PASS
+rider01_rig.tscn load: PASS
+rider01_own_skeleton_animation_test.tscn load/run: PASS
+Animation states exercised through BlendTree: 8/8
+Primary captures written: 48
+Contact sheets written: 8
+jet_ski_with_rider.tscn with BOT fallback load: PASS
+
+The standalone JetSki load emitted expected missing Ocean3D/effect-context warnings
+because it was not inside the island scene. It emitted no RiderRig, Skeleton3D,
+animation, modifier or selector parse error.
+
+island_test_BLENDER startup: NOT_RUN_ANIMATION_GATE_FAILED
+Selector cycle: NOT_RUN_SELECTOR_NOT_CREATED
+
+=== 16. JOINED RIDER01_2 FOLLOW-UP ===
+The user-provided joined export was also tested in isolation:
+res://assets/3D/Rider/skins/Rider01/Rider01_2.glb
+
+It exposes one skinned mesh and its own 52-bone Skeleton3D. All eight existing
+animations resolved after normalizing only the armature container node name for the
+existing SKEL_Rider/Skeleton3D track paths.
+
+Result: FAIL.
+Mounted_Base retains the clothing, hand and foot deformation. Mounted_Turn_Left and
+Mounted_Turn_Right still produce severe body displacement/tilt. Joining geometry
+does not alter rest pose, bind pose, animation transforms or vertex weights, so it
+does not remove the Rider01-specific retarget requirement.
+
+Detailed report:
+res://assets/3D/Rider/skins/Rider01/runtime/
+Rider01_2_OwnSkeleton_Animation_Test.txt

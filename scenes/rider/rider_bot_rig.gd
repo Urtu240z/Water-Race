@@ -1,0 +1,295 @@
+@tool
+class_name RiderBotRig
+extends Node3D
+
+const MOUNTED_BASE := &"Mounted_Base"
+const MOUNTED_LEAN_ADD_NODES: Array[StringName] = [
+	&"automatic_turn_add",
+	&"manual_roll_add",
+	&"manual_pitch_add",
+]
+
+enum RiderSkin {
+	BOT,
+	RACER,
+}
+
+@export var rider_skin: RiderSkin = RiderSkin.BOT:
+	set(value):
+		rider_skin = value
+		_apply_rider_skin()
+
+@export_range(0.0, 1.0, 0.01) var breathing_influence: float = 0.22:
+	set(value):
+		breathing_influence = clampf(value, 0.0, 1.0)
+		_apply_animation_parameters()
+
+@export var breathing_enabled: bool = true:
+	set(value):
+		breathing_enabled = value
+		_apply_animation_parameters()
+
+@export var mounted_pose_enabled: bool = true:
+	set(value):
+		mounted_pose_enabled = value
+		_apply_animation_state()
+
+@onready var _animation_tree: AnimationTree = $AnimationTree
+@onready var _skeleton: Skeleton3D = (
+	$RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D as Skeleton3D
+)
+
+var _mounted_lean_blends_valid := false
+var _automatic_turn_blend := 0.0
+var _manual_roll_blend := 0.0
+var _manual_pitch_blend := 0.0
+var _bot_skin_meshes: Array[MeshInstance3D] = []
+var _racer_skin_meshes: Array[MeshInstance3D] = []
+
+
+func _ready() -> void:
+	_resolve_rider_skin_meshes()
+	_apply_rider_skin()
+	_set_modifiers_active(false)
+	if Engine.is_editor_hint():
+		return
+	_apply_mounted_base_animation()
+	_mounted_lean_blends_valid = _validate_mounted_lean_nodes()
+	_apply_animation_parameters()
+	_apply_mounted_lean_blends()
+	_apply_animation_state()
+
+
+func set_breathing_enabled(enabled: bool) -> void:
+	breathing_enabled = enabled
+
+
+func set_mounted_pose_enabled(enabled: bool) -> void:
+	mounted_pose_enabled = enabled
+
+
+func set_rider_skin(value: RiderSkin) -> void:
+	rider_skin = value
+
+
+func set_automatic_turn_blend(value: float) -> void:
+	_automatic_turn_blend = clampf(value, -1.0, 1.0)
+	_set_mounted_lean_parameter(&"automatic_turn_add", _automatic_turn_blend)
+
+
+func set_manual_roll_blend(value: float) -> void:
+	_manual_roll_blend = clampf(value, -1.0, 1.0)
+	_set_mounted_lean_parameter(&"manual_roll_add", _manual_roll_blend)
+
+
+func set_manual_pitch_blend(value: float) -> void:
+	_manual_pitch_blend = clampf(value, -1.0, 1.0)
+	_set_mounted_lean_parameter(&"manual_pitch_add", _manual_pitch_blend)
+
+
+func reset_mounted_lean_blends() -> void:
+	_automatic_turn_blend = 0.0
+	_manual_roll_blend = 0.0
+	_manual_pitch_blend = 0.0
+	_apply_mounted_lean_blends()
+
+
+func get_skeleton() -> Skeleton3D:
+	return _skeleton
+
+
+func set_modifiers_active(enabled: bool) -> void:
+	_set_modifiers_active(enabled)
+
+
+func configure_targets(targets: Dictionary) -> bool:
+	var required := [
+		&"LeftGripTarget",
+		&"RightGripTarget",
+		&"LeftElbowPole",
+		&"RightElbowPole",
+		&"LeftFootTarget",
+		&"RightFootTarget",
+		&"LeftSoleTarget",
+		&"RightSoleTarget",
+		&"LeftKneePole",
+		&"RightKneePole",
+	]
+	for target_name: StringName in required:
+		if not targets.has(target_name) or not is_instance_valid(targets[target_name]):
+			return false
+	var skeleton := get_skeleton()
+	var left_leg := skeleton.get_node("LeftLegIK") as SkeletonModifier3D
+	var right_leg := skeleton.get_node("RightLegIK") as SkeletonModifier3D
+	var left_arm := skeleton.get_node("LeftArmIK") as SkeletonModifier3D
+	var right_arm := skeleton.get_node("RightArmIK") as SkeletonModifier3D
+	var foot_orientation := (
+		skeleton.get_node("FootOrientation")
+		as RiderFootOrientationModifier3D
+	)
+	var grip_orientation := (
+		skeleton.get_node("GripOrientation")
+		as RiderGripOrientationModifier3D
+	)
+	left_leg.set(
+		"settings/0/target_node",
+		left_leg.get_path_to(targets[&"LeftFootTarget"])
+	)
+	left_leg.set(
+		"settings/0/pole_node",
+		left_leg.get_path_to(targets[&"LeftKneePole"])
+	)
+	right_leg.set(
+		"settings/0/target_node",
+		right_leg.get_path_to(targets[&"RightFootTarget"])
+	)
+	right_leg.set(
+		"settings/0/pole_node",
+		right_leg.get_path_to(targets[&"RightKneePole"])
+	)
+	left_arm.set(
+		"settings/0/target_node",
+		left_arm.get_path_to(targets[&"LeftGripTarget"])
+	)
+	left_arm.set(
+		"settings/0/pole_node",
+		left_arm.get_path_to(targets[&"LeftElbowPole"])
+	)
+	right_arm.set(
+		"settings/0/target_node",
+		right_arm.get_path_to(targets[&"RightGripTarget"])
+	)
+	right_arm.set(
+		"settings/0/pole_node",
+		right_arm.get_path_to(targets[&"RightElbowPole"])
+	)
+	foot_orientation.left_foot_target = (
+		foot_orientation.get_path_to(targets[&"LeftFootTarget"])
+	)
+	foot_orientation.right_foot_target = (
+		foot_orientation.get_path_to(targets[&"RightFootTarget"])
+	)
+	foot_orientation.left_sole_target = (
+		foot_orientation.get_path_to(targets[&"LeftSoleTarget"])
+	)
+	foot_orientation.right_sole_target = (
+		foot_orientation.get_path_to(targets[&"RightSoleTarget"])
+	)
+	grip_orientation.left_hand_target = (
+		grip_orientation.get_path_to(targets[&"LeftGripTarget"])
+	)
+	grip_orientation.right_hand_target = (
+		grip_orientation.get_path_to(targets[&"RightGripTarget"])
+	)
+	return true
+
+
+func _resolve_rider_skin_meshes() -> void:
+	_bot_skin_meshes.clear()
+	_racer_skin_meshes.clear()
+	var rider_bot := get_node_or_null("RiderModelRoot/Rider_Bot")
+	if rider_bot == null:
+		return
+	var pending: Array[Node] = [rider_bot]
+	while not pending.is_empty():
+		var current := pending.pop_back() as Node
+		if current is MeshInstance3D:
+			var mesh_instance := current as MeshInstance3D
+			if mesh_instance.is_in_group(&"rider_skin_racer"):
+				_racer_skin_meshes.append(mesh_instance)
+			elif mesh_instance.mesh != null:
+				_bot_skin_meshes.append(mesh_instance)
+		for child: Node in current.get_children():
+			pending.append(child)
+
+
+func _apply_rider_skin() -> void:
+	if not is_node_ready():
+		return
+	var racer_valid := _skin_meshes_valid(_racer_skin_meshes)
+	var show_racer := rider_skin == RiderSkin.RACER and racer_valid
+	for mesh_instance: MeshInstance3D in _bot_skin_meshes:
+		mesh_instance.visible = not show_racer
+	for mesh_instance: MeshInstance3D in _racer_skin_meshes:
+		mesh_instance.visible = show_racer
+
+
+func _skin_meshes_valid(meshes: Array[MeshInstance3D]) -> bool:
+	if meshes.is_empty():
+		return false
+	for mesh_instance: MeshInstance3D in meshes:
+		if mesh_instance.mesh == null or mesh_instance.skin == null:
+			return false
+	return true
+
+
+func _apply_animation_parameters() -> void:
+	if not is_node_ready():
+		return
+	var influence := breathing_influence if breathing_enabled else 0.0
+	_animation_tree.set("parameters/mounted_add/add_amount", influence)
+
+
+func _apply_animation_state() -> void:
+	if not is_node_ready():
+		return
+	_animation_tree.active = mounted_pose_enabled
+	if not mounted_pose_enabled:
+		_skeleton.reset_bone_poses()
+
+
+func _apply_mounted_lean_blends() -> void:
+	if not is_node_ready() or not _mounted_lean_blends_valid:
+		return
+	_animation_tree.set(
+		"parameters/automatic_turn_add/add_amount",
+		_automatic_turn_blend
+	)
+	_animation_tree.set(
+		"parameters/manual_roll_add/add_amount",
+		_manual_roll_blend
+	)
+	_animation_tree.set(
+		"parameters/manual_pitch_add/add_amount",
+		_manual_pitch_blend
+	)
+
+
+func _set_mounted_lean_parameter(node_name: StringName, value: float) -> void:
+	if not is_node_ready() or not _mounted_lean_blends_valid:
+		return
+	_animation_tree.set("parameters/%s/add_amount" % node_name, value)
+
+
+func _validate_mounted_lean_nodes() -> bool:
+	var blend_tree := _animation_tree.tree_root as AnimationNodeBlendTree
+	if blend_tree == null:
+		return false
+	var node_names := blend_tree.get_node_list()
+	for node_name: StringName in MOUNTED_LEAN_ADD_NODES:
+		if not node_names.has(node_name):
+			return false
+		if not blend_tree.get_node(node_name) is AnimationNodeAdd3:
+			return false
+	return true
+
+
+func _apply_mounted_base_animation() -> void:
+	if not is_node_ready():
+		return
+	var blend_tree := _animation_tree.tree_root as AnimationNodeBlendTree
+	if blend_tree == null:
+		return
+	var mounted_node := (
+		blend_tree.get_node(&"mounted_base") as AnimationNodeAnimation
+	)
+	if mounted_node != null:
+		mounted_node.animation = MOUNTED_BASE
+
+
+func _set_modifiers_active(enabled: bool) -> void:
+	if not is_node_ready():
+		return
+	for child: Node in _skeleton.get_children():
+		if child is SkeletonModifier3D:
+			(child as SkeletonModifier3D).active = enabled

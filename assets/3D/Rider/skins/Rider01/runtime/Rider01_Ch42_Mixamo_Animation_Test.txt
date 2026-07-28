@@ -1,0 +1,80 @@
+=== RIDER01 OWN SKELETON ANIMATION TEST ===
+Rider scene: res://scenes/rider/rider01_rig.tscn
+Source GLB: res://assets/3D/Rider/skins/Rider01/Rider01.glb
+Skeleton: /root/Rider01Ch42MixamoAnimationTest/Rider01Rig/Rider01/SKEL_Rider/Skeleton3D
+Skeleton bones: 52
+Original skinned meshes: 6
+=== ANIMATION TRACK AUDIT ===
+Mounted_Base | length=1.000000 | tracks=104
+  paths=SKEL_Rider/Skeleton3D:mixamorig_Hips,SKEL_Rider/Skeleton3D:mixamorig_Hips,SKEL_Rider/Skeleton3D:mixamorig_Spine,SKEL_Rider/Skeleton3D:mixamorig_Spine,SKEL_Rider/Skeleton3D:mixamorig_Spine1,SKEL_Rider/Skeleton3D:mixamorig_Spine1,SKEL_Rider/Skeleton3D:mixamorig_Spine2,SKEL_Rider/Skeleton3D:mixamorig_Spine2,SKEL_Rider/Skeleton3D:mixamorig_Neck,SKEL_Rider/Skeleton3D:mixamorig_Neck,SKEL_Rider/Skeleton3D:mixamorig_Head,SKEL_Rider/Skeleton3D:mixamorig_Head,SKEL_Rider/Skeleton3D:mixamorig_RightShoulder,SKEL_Rider/Skeleton3D:mixamorig_RightShoulder,SKEL_Rider/Skeleton3D:mixamorig_RightArm,SKEL_Rider/Skeleton3D:mixamorig_RightArm,SKEL_Rider/Skeleton3D:mixamorig_RightForeArm,SKEL_Rider/Skeleton3D:mixamorig_RightForeArm,SKEL_Rider/Skeleton3D:mixamorig_RightHand,SKEL_Rider/Skeleton3D:mixamorig_RightHand,SKEL_Rider/Skeleton3D:mixamorig_RightHandThumb1,SKEL_Rider/Skeleton3D:mixamorig_RightHandThumb1,SKEL_Rider/Skeleton3D:mixamorig_RightHandThumb2,SKEL_Rider/Skeleton3D:mixamorig_RightHandThumb2,SKEL_Rider/Skeleton3D:mixamorig_RightHandThumb3,SKEL_Rider/Skeleton3D:mixamorig_RightHandThumb3,SKEL_Rider/Skeleton3D:mixamorig_RightHandIndex1,SKEL_Rider/Skeleton3D:mixamorig_RightHandIndex1,SKEL_Rider/Skeleton3D:mixamorig_RightHandIndex2,SKEL_Rider/Skeleton3D:mixamorig_RightHandIndex2,SKEL_Rider/Skeleton3D:mixamorig_RightHandIndex3,SKEL_Rider/Skeleton3D:mixamorig_RightHandIndex3,SKEL_Rider/Skeleton3D:mixamorig_RightHandMiddle1,SKEL_Rider/Skeleton3D:mixamorig_RightHandMiddle1,SKEL_Rider/Skeleton3D:mixamorig_RightHandMiddle2,SKEL_Rider/Skeleton3D:mixamorig_RightHandMiddle2,SKEL_Rider/Skeleton3D:mixamorig_RightHandMiddle3,SKEL_Rider/Skeleton3D:mixamorig_RightHandMiddle3,SKEL_Rider/Skeleton3D:mixamorig_RightHandRing1,SKEL_Rider/Skeleton3D:mixamorig_RightHandRing1,SKEL_Rider/Skeleton3D:mixamorig_RightHandRing2,SKEL_Rider/Skeleton3D:mixamorig_RightHandRing2,SKEL_Rider/Skeleton3D:mixamorig_RightHandRing3,SKEL_Rider/Skeleton3D:mixamorig_RightHandRing3,SKEL_Rider/Skeleton3D:mixamorig_RightHandPinky1,SKEL_Rider/Skeleton3D:mixamorig_RightHandPinky1,SKEL_Rider/Skeleton3D:mixamorig_RightHandPinky2,SKEL_Rider/Skeleton3D:mixamorig_RightHandPinky2,SKEL_Rider/Skeleton3D:mixamorig_RightHandPinky3,SKEL_Rider/Skeleton3D:mixamorig_RightHandPinky3,SKEL_Rider/Skeleton3D:mixamorig_LeftShoulder,SKEL_Rider/Skeleton3D:mixamorig_LeftShoulder,SKEL_Rider/Skeleton3D:mixamorig_LeftArm,SKEL_Rider/Skeleton3D:mixamorig_LeftArm,SKEL_Rider/Skeleton3D:mixamorig_LeftForeArm,SKEL_Rider/Skeleton3D:mixamorig_LeftForeArm,SKEL_Rider/Skeleton3D:mixamorig_LeftHand,SKEL_Rider/Skeleton3D:mixamorig_LeftHand,SKEL_Rider/Skeleton3D:mixamorig_LeftHandThumb1,SKEL_Rider/Skeleton3D:mixamorig_LeftHandThumb1,SKEL_Rider/Skeleton3D:mixamorig_LeftHandThumb2,SKEL_Rider/Skeleton3D:mixamorig_LeftHandThumb2,SKEL_Rider/Skeleton3D:mixamorig_LeftHandThumb3,SKEL_Rider/Skeleton3D:mixamorig_LeftHandThumb3,SKEL_Rider/Skeleton3D:mixamorig_LeftHandIndex1,SKEL_Rider/Skeleton3D:mixamorig_LeftHandIndex1,SKEL_Rider/Skeleton3D:mixamorig_LeftHandIndex2,SKEL_Rider/Skeleton3D:mixamorig_LeftHandIndex2,SKEL_Rider/Skeleton3D:mixamorig_LeftHandIndex3,SKEL_Rider/Skeleton3D:mixamorig_LeftHandIndex3,SKEL_Rider/Skeleton3D:mixamorig_LeftHandMiddle1,SKEL_Rider/Skeleton3D:mixamorig_LeftHandMiddle1,SKEL_Rider/Skeleton3D:mixamorig_LeftHandMiddle2,SKEL_Rider/Skeleton3D:mixamorig_LeftHandMiddle2,SKEL_Rider/Skeleton3D:mixamorig_LeftHandMiddle3,SKEL_Rider/Skeleton3D:mixamorig_LeftHandMiddle3,SKEL_Rider/Skeleton3D:mixamorig_LeftHandRing1,SKEL_Rider/Skeleton3D:mixamorig_LeftHandRing1,SKEL_Rider/Skeleton3D:mixamorig_LeftHandRing2,SKEL_Rider/Skeleton3D:mixamorig_LeftHandRing2,SKEL_Rider/Skeleton3D:mixamorig_LeftHandRing3,SKEL_Rider/Skeleton3D:mixamorig_LeftHandRing3,SKEL_Rider/Skeleton3D:mixamorig_LeftHandPinky1,SKEL_Rider/Skeleton3D:mixamorig_LeftHandPinky1,SKEL_Rider/Skeleton3D:mixamorig_LeftHandPinky2,SKEL_Rider/Skeleton3D:mixamorig_LeftHandPinky2,SKEL_Rider/Skeleton3D:mixamorig_LeftHandPinky3,SKEL_Rider/Skeleton3D:mixamorig_LeftHandPinky3,SKEL_Rider/Skeleton3D:mixamorig_RightUpLeg,SKEL_Rider/Skeleton3D:mixamorig_RightUpLeg,SKEL_Rider/Skeleton3D:mixamorig_RightLeg,SKEL_Rider/Skeleton3D:mixamorig_RightLeg,SKEL_Rider/Skeleton3D:mixamorig_RightFoot,SKEL_Rider/Skeleton3D:mixamorig_RightFoot,SKEL_Rider/Skeleton3D:mixamorig_RightToeBase,SKEL_Rider/Skeleton3D:mixamorig_RightToeBase,SKEL_Rider/Skeleton3D:mixamorig_LeftUpLeg,SKEL_Rider/Skeleton3D:mixamorig_LeftUpLeg,SKEL_Rider/Skeleton3D:mixamorig_LeftLeg,SKEL_Rider/Skeleton3D:mixamorig_LeftLeg,SKEL_Rider/Skeleton3D:mixamorig_LeftFoot,SKEL_Rider/Skeleton3D:mixamorig_LeftFoot,SKEL_Rider/Skeleton3D:mixamorig_LeftToeBase,SKEL_Rider/Skeleton3D:mixamorig_LeftToeBase
+mounted_breathing | length=6.000000 | tracks=7
+  paths=SKEL_Rider/Skeleton3D:mixamorig_Spine,SKEL_Rider/Skeleton3D:mixamorig_Spine1,SKEL_Rider/Skeleton3D:mixamorig_Spine2,SKEL_Rider/Skeleton3D:mixamorig_Neck,SKEL_Rider/Skeleton3D:mixamorig_Head,SKEL_Rider/Skeleton3D:mixamorig_RightShoulder,SKEL_Rider/Skeleton3D:mixamorig_LeftShoulder
+Mounted_Turn_Left | length=1.000000 | tracks=9
+  paths=SKEL_Rider/Skeleton3D:mixamorig_Hips,SKEL_Rider/Skeleton3D:mixamorig_Hips,SKEL_Rider/Skeleton3D:mixamorig_Spine,SKEL_Rider/Skeleton3D:mixamorig_Spine1,SKEL_Rider/Skeleton3D:mixamorig_Spine2,SKEL_Rider/Skeleton3D:mixamorig_Neck,SKEL_Rider/Skeleton3D:mixamorig_Head,SKEL_Rider/Skeleton3D:mixamorig_LeftShoulder,SKEL_Rider/Skeleton3D:mixamorig_RightShoulder
+Mounted_Turn_Right | length=1.000000 | tracks=9
+  paths=SKEL_Rider/Skeleton3D:mixamorig_Hips,SKEL_Rider/Skeleton3D:mixamorig_Hips,SKEL_Rider/Skeleton3D:mixamorig_Spine,SKEL_Rider/Skeleton3D:mixamorig_Spine1,SKEL_Rider/Skeleton3D:mixamorig_Spine2,SKEL_Rider/Skeleton3D:mixamorig_Neck,SKEL_Rider/Skeleton3D:mixamorig_Head,SKEL_Rider/Skeleton3D:mixamorig_LeftShoulder,SKEL_Rider/Skeleton3D:mixamorig_RightShoulder
+Mounted_Lean_Left | length=1.000000 | tracks=9
+  paths=SKEL_Rider/Skeleton3D:mixamorig_Hips,SKEL_Rider/Skeleton3D:mixamorig_Hips,SKEL_Rider/Skeleton3D:mixamorig_Spine,SKEL_Rider/Skeleton3D:mixamorig_Spine1,SKEL_Rider/Skeleton3D:mixamorig_Spine2,SKEL_Rider/Skeleton3D:mixamorig_Neck,SKEL_Rider/Skeleton3D:mixamorig_Head,SKEL_Rider/Skeleton3D:mixamorig_LeftShoulder,SKEL_Rider/Skeleton3D:mixamorig_RightShoulder
+Mounted_Lean_Right | length=1.000000 | tracks=9
+  paths=SKEL_Rider/Skeleton3D:mixamorig_Hips,SKEL_Rider/Skeleton3D:mixamorig_Hips,SKEL_Rider/Skeleton3D:mixamorig_Spine,SKEL_Rider/Skeleton3D:mixamorig_Spine1,SKEL_Rider/Skeleton3D:mixamorig_Spine2,SKEL_Rider/Skeleton3D:mixamorig_Neck,SKEL_Rider/Skeleton3D:mixamorig_Head,SKEL_Rider/Skeleton3D:mixamorig_LeftShoulder,SKEL_Rider/Skeleton3D:mixamorig_RightShoulder
+Mounted_Lean_Forward | length=1.000000 | tracks=9
+  paths=SKEL_Rider/Skeleton3D:mixamorig_Hips,SKEL_Rider/Skeleton3D:mixamorig_Hips,SKEL_Rider/Skeleton3D:mixamorig_Spine,SKEL_Rider/Skeleton3D:mixamorig_Spine1,SKEL_Rider/Skeleton3D:mixamorig_Spine2,SKEL_Rider/Skeleton3D:mixamorig_Neck,SKEL_Rider/Skeleton3D:mixamorig_Head,SKEL_Rider/Skeleton3D:mixamorig_LeftShoulder,SKEL_Rider/Skeleton3D:mixamorig_RightShoulder
+Mounted_Lean_Back | length=1.000000 | tracks=9
+  paths=SKEL_Rider/Skeleton3D:mixamorig_Hips,SKEL_Rider/Skeleton3D:mixamorig_Hips,SKEL_Rider/Skeleton3D:mixamorig_Spine,SKEL_Rider/Skeleton3D:mixamorig_Spine1,SKEL_Rider/Skeleton3D:mixamorig_Spine2,SKEL_Rider/Skeleton3D:mixamorig_Neck,SKEL_Rider/Skeleton3D:mixamorig_Head,SKEL_Rider/Skeleton3D:mixamorig_LeftShoulder,SKEL_Rider/Skeleton3D:mixamorig_RightShoulder
+ANIMATION_CAPTURED=Mounted_Base | sample=0.500000
+CAPTURE=res://assets/3D/Rider/skins/Rider01/runtime/rider01_ch42_mixamo_animation_captures/mounted_base_front.png
+CAPTURE=res://assets/3D/Rider/skins/Rider01/runtime/rider01_ch42_mixamo_animation_captures/mounted_base_lateral.png
+CAPTURE=res://assets/3D/Rider/skins/Rider01/runtime/rider01_ch42_mixamo_animation_captures/mounted_base_rear.png
+CAPTURE=res://assets/3D/Rider/skins/Rider01/runtime/rider01_ch42_mixamo_animation_captures/mounted_base_shoulders.png
+CAPTURE=res://assets/3D/Rider/skins/Rider01/runtime/rider01_ch42_mixamo_animation_captures/mounted_base_hands.png
+CAPTURE=res://assets/3D/Rider/skins/Rider01/runtime/rider01_ch42_mixamo_animation_captures/mounted_base_feet.png
+ANIMATION_CAPTURED=mounted_breathing | sample=3.000000
+CAPTURE=res://assets/3D/Rider/skins/Rider01/runtime/rider01_ch42_mixamo_animation_captures/mounted_breathing_front.png
+CAPTURE=res://assets/3D/Rider/skins/Rider01/runtime/rider01_ch42_mixamo_animation_captures/mounted_breathing_lateral.png
+CAPTURE=res://assets/3D/Rider/skins/Rider01/runtime/rider01_ch42_mixamo_animation_captures/mounted_breathing_rear.png
+CAPTURE=res://assets/3D/Rider/skins/Rider01/runtime/rider01_ch42_mixamo_animation_captures/mounted_breathing_shoulders.png
+CAPTURE=res://assets/3D/Rider/skins/Rider01/runtime/rider01_ch42_mixamo_animation_captures/mounted_breathing_hands.png
+CAPTURE=res://assets/3D/Rider/skins/Rider01/runtime/rider01_ch42_mixamo_animation_captures/mounted_breathing_feet.png
+ANIMATION_CAPTURED=Mounted_Turn_Left | sample=0.500000
+CAPTURE=res://assets/3D/Rider/skins/Rider01/runtime/rider01_ch42_mixamo_animation_captures/mounted_turn_left_front.png
+CAPTURE=res://assets/3D/Rider/skins/Rider01/runtime/rider01_ch42_mixamo_animation_captures/mounted_turn_left_lateral.png
+CAPTURE=res://assets/3D/Rider/skins/Rider01/runtime/rider01_ch42_mixamo_animation_captures/mounted_turn_left_rear.png
+CAPTURE=res://assets/3D/Rider/skins/Rider01/runtime/rider01_ch42_mixamo_animation_captures/mounted_turn_left_shoulders.png
+CAPTURE=res://assets/3D/Rider/skins/Rider01/runtime/rider01_ch42_mixamo_animation_captures/mounted_turn_left_hands.png
+CAPTURE=res://assets/3D/Rider/skins/Rider01/runtime/rider01_ch42_mixamo_animation_captures/mounted_turn_left_feet.png
+ANIMATION_CAPTURED=Mounted_Turn_Right | sample=0.500000
+CAPTURE=res://assets/3D/Rider/skins/Rider01/runtime/rider01_ch42_mixamo_animation_captures/mounted_turn_right_front.png
+CAPTURE=res://assets/3D/Rider/skins/Rider01/runtime/rider01_ch42_mixamo_animation_captures/mounted_turn_right_lateral.png
+CAPTURE=res://assets/3D/Rider/skins/Rider01/runtime/rider01_ch42_mixamo_animation_captures/mounted_turn_right_rear.png
+CAPTURE=res://assets/3D/Rider/skins/Rider01/runtime/rider01_ch42_mixamo_animation_captures/mounted_turn_right_shoulders.png
+CAPTURE=res://assets/3D/Rider/skins/Rider01/runtime/rider01_ch42_mixamo_animation_captures/mounted_turn_right_hands.png
+CAPTURE=res://assets/3D/Rider/skins/Rider01/runtime/rider01_ch42_mixamo_animation_captures/mounted_turn_right_feet.png
+ANIMATION_CAPTURED=Mounted_Lean_Left | sample=0.500000
+CAPTURE=res://assets/3D/Rider/skins/Rider01/runtime/rider01_ch42_mixamo_animation_captures/mounted_lean_left_front.png
+CAPTURE=res://assets/3D/Rider/skins/Rider01/runtime/rider01_ch42_mixamo_animation_captures/mounted_lean_left_lateral.png
+CAPTURE=res://assets/3D/Rider/skins/Rider01/runtime/rider01_ch42_mixamo_animation_captures/mounted_lean_left_rear.png
+CAPTURE=res://assets/3D/Rider/skins/Rider01/runtime/rider01_ch42_mixamo_animation_captures/mounted_lean_left_shoulders.png
+CAPTURE=res://assets/3D/Rider/skins/Rider01/runtime/rider01_ch42_mixamo_animation_captures/mounted_lean_left_hands.png
+CAPTURE=res://assets/3D/Rider/skins/Rider01/runtime/rider01_ch42_mixamo_animation_captures/mounted_lean_left_feet.png
+ANIMATION_CAPTURED=Mounted_Lean_Right | sample=0.500000
+CAPTURE=res://assets/3D/Rider/skins/Rider01/runtime/rider01_ch42_mixamo_animation_captures/mounted_lean_right_front.png
+CAPTURE=res://assets/3D/Rider/skins/Rider01/runtime/rider01_ch42_mixamo_animation_captures/mounted_lean_right_lateral.png
+CAPTURE=res://assets/3D/Rider/skins/Rider01/runtime/rider01_ch42_mixamo_animation_captures/mounted_lean_right_rear.png
+CAPTURE=res://assets/3D/Rider/skins/Rider01/runtime/rider01_ch42_mixamo_animation_captures/mounted_lean_right_shoulders.png
+CAPTURE=res://assets/3D/Rider/skins/Rider01/runtime/rider01_ch42_mixamo_animation_captures/mounted_lean_right_hands.png
+CAPTURE=res://assets/3D/Rider/skins/Rider01/runtime/rider01_ch42_mixamo_animation_captures/mounted_lean_right_feet.png
+ANIMATION_CAPTURED=Mounted_Lean_Forward | sample=0.500000
+CAPTURE=res://assets/3D/Rider/skins/Rider01/runtime/rider01_ch42_mixamo_animation_captures/mounted_lean_forward_front.png
+CAPTURE=res://assets/3D/Rider/skins/Rider01/runtime/rider01_ch42_mixamo_animation_captures/mounted_lean_forward_lateral.png
+CAPTURE=res://assets/3D/Rider/skins/Rider01/runtime/rider01_ch42_mixamo_animation_captures/mounted_lean_forward_rear.png
+CAPTURE=res://assets/3D/Rider/skins/Rider01/runtime/rider01_ch42_mixamo_animation_captures/mounted_lean_forward_shoulders.png
+CAPTURE=res://assets/3D/Rider/skins/Rider01/runtime/rider01_ch42_mixamo_animation_captures/mounted_lean_forward_hands.png
+CAPTURE=res://assets/3D/Rider/skins/Rider01/runtime/rider01_ch42_mixamo_animation_captures/mounted_lean_forward_feet.png
+ANIMATION_CAPTURED=Mounted_Lean_Back | sample=0.500000
+CAPTURE=res://assets/3D/Rider/skins/Rider01/runtime/rider01_ch42_mixamo_animation_captures/mounted_lean_back_front.png
+CAPTURE=res://assets/3D/Rider/skins/Rider01/runtime/rider01_ch42_mixamo_animation_captures/mounted_lean_back_lateral.png
+CAPTURE=res://assets/3D/Rider/skins/Rider01/runtime/rider01_ch42_mixamo_animation_captures/mounted_lean_back_rear.png
+CAPTURE=res://assets/3D/Rider/skins/Rider01/runtime/rider01_ch42_mixamo_animation_captures/mounted_lean_back_shoulders.png
+CAPTURE=res://assets/3D/Rider/skins/Rider01/runtime/rider01_ch42_mixamo_animation_captures/mounted_lean_back_hands.png
+CAPTURE=res://assets/3D/Rider/skins/Rider01/runtime/rider01_ch42_mixamo_animation_captures/mounted_lean_back_feet.png
+TEST_STAGE=ANIMATION_TEST_COMPLETED_VISUAL_REVIEW_REQUIRED
