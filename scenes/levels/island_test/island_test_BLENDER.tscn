@@ -478,6 +478,8 @@ impact_irregularity = 1.0
 
 [node name="RiderMountedLean" parent="Gameplay/JetSki" index="9" unique_id=1839269125]
 automatic_turn_response_speed = 3.0
+manual_lean_response_speed = 6.0
+grip_hard_extension_ratio = 1.1
 
 [node name="OceanWaves" type="AudioStreamPlayer" parent="Gameplay/JetSki" unique_id=1310889787]
 stream = ExtResource("204_4tj3w")

@@ -158,6 +158,7 @@ const TRICK_POST_TAKEOFF_MINIMUM_TIMING: float = 0.50
 @export_range(0.0, 1.0, 0.01) var rider_shift_deep_submerged_authority: float = 0.65
 @export_range(0.0, 0.5, 0.01) var rider_shift_landing_ramp_time: float = 0.15
 @export_range(0.0, 1.0, 0.01) var rider_shift_auto_upright_factor: float = 0.20
+@export_range(0.0, 30.0, 0.5, "degrees") var rider_manual_roll_max_angle_degrees: float = 16.0
 
 @export_group("Rider Weight Shift - Dynamic Boost")
 @export_range(0.0, 3.0, 0.05) var rider_wheelie_throttle_boost: float = 0.85
@@ -416,10 +417,10 @@ var rider_shift_air_authority_active: float:
 	get:
 		return _rider_shift_air_authority_active
 
-# OBSOLETE in 4B.1: manual water control no longer uses angular targets.
+# Active combined roll-target telemetry for automatic and manual water lean.
 var rider_shift_target_angle_metrics_status: StringName:
 	get:
-		return &"OBSOLETE_VIRTUAL_WEIGHT_MODEL"
+		return &"ACTIVE_COMBINED_ROLL_TARGET"
 
 var rider_shift_manual_roll_target_degrees: float:
 	get:
@@ -2040,8 +2041,18 @@ func _apply_turn_lean(state: PhysicsDirectBodyState3D) -> void:
 			* reverse_authority
 		)
 	_update_rider_shift_obsolete_target_metrics()
+	_rider_shift_manual_roll_target = (
+		deg_to_rad(rider_manual_roll_max_angle_degrees)
+		* _rider_shift_smoothed_input.x
+		* _rider_manual_medium_authority
+	)
+	_rider_shift_total_roll_target = clampf(
+		_turn_lean_target_roll + _rider_shift_manual_roll_target,
+		-deg_to_rad(rider_roll_soft_limit_degrees),
+		deg_to_rad(rider_roll_soft_limit_degrees)
+	)
 	_turn_lean_roll_error = wrapf(
-		_turn_lean_target_roll - _turn_lean_current_roll,
+		_rider_shift_total_roll_target - _turn_lean_current_roll,
 		-PI,
 		PI
 	)
@@ -2061,8 +2072,8 @@ func _apply_turn_lean(state: PhysicsDirectBodyState3D) -> void:
 		state.apply_torque(combined_torque)
 
 
-# Kept for compatibility with 4B telemetry consumers. Manual target-angle
-# metrics are intentionally zero because 4B.1 uses a physical weight moment.
+# Kept for compatibility with 4B telemetry consumers. Legacy manual pitch
+# target-angle metrics remain zero; roll targets are populated in turn lean.
 func _update_rider_shift_obsolete_target_metrics() -> void:
 	_rider_shift_manual_roll_target = 0.0
 	_rider_shift_manual_pitch_target = 0.0
@@ -2074,16 +2085,9 @@ func _update_rider_shift_obsolete_target_metrics() -> void:
 func _calculate_turn_lean_pd_torque() -> Vector3:
 	if _turn_lean_contact_factor <= 0.0:
 		return Vector3.ZERO
-	var manual_override := (
-		absf(_rider_shift_smoothed_input.x)
-		if rider_weight_shift_enabled
-		else 0.0
+	var effective_stiffness := (
+		turn_lean_stiffness * _submarine_upright_factor_current
 	)
-	var effective_stiffness := turn_lean_stiffness * lerpf(
-		1.0,
-		rider_shift_auto_upright_factor,
-		manual_override
-	) * _submarine_upright_factor_current
 	var effective_damping := (
 		turn_lean_damping * _submarine_upright_factor_current
 	)
@@ -2136,7 +2140,6 @@ func _calculate_virtual_rider_weight_torque(
 	)
 	# The physical moment is projected onto body roll/pitch axes so it cannot add
 	# a manual yaw component while the hull is tilted.
-	var roll_weight_torque := raw_weight_torque.dot(body_forward)
 	var pitch_weight_torque := raw_weight_torque.dot(body_right)
 	var back_input := maxf(_rider_shift_smoothed_input.y, 0.0)
 	var forward_input := maxf(-_rider_shift_smoothed_input.y, 0.0)
@@ -2151,24 +2154,17 @@ func _calculate_virtual_rider_weight_torque(
 		)
 	pitch_weight_torque *= _rider_dynamic_pitch_multiplier
 	_rider_virtual_weight_torque = (
-		body_forward * roll_weight_torque
-		+ body_right * pitch_weight_torque
-	) * _rider_manual_medium_authority
-	var roll_rate := state.angular_velocity.dot(body_forward)
+		body_right
+		* pitch_weight_torque
+		* _rider_manual_medium_authority
+	)
 	var pitch_rate := state.angular_velocity.dot(body_right)
 	var manual_damping_factor := lerpf(
 		1.0,
 		SUBMARINE_MANUAL_DAMPING_FACTOR,
 		_submarine_control_blend()
 	)
-	_rider_roll_damping_torque = (
-		-body_forward
-		* roll_rate
-		* rider_roll_rate_damping
-		* absf(_rider_shift_smoothed_input.x)
-		* _rider_manual_medium_authority
-		* manual_damping_factor
-	)
+	_rider_roll_damping_torque = Vector3.ZERO
 	_rider_pitch_damping_torque = (
 		-body_right
 		* pitch_rate
