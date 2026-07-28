@@ -6,7 +6,7 @@
 [ext_resource type="AudioStream" uid="uid://c5bbvguxmykwh" path="res://assets/audio/Motor.ogg" id="4_motor"]
 [ext_resource type="Script" uid="uid://ccpq0is7w8h55" path="res://scripts/effects/turbine_exhaust_controller.gd" id="5_turbine_exhaust"]
 [ext_resource type="PackedScene" path="res://scenes/effects/vehicle_water_effects_3d.tscn" id="6_water_effects"]
-[ext_resource type="Script" path="res://scripts/vehicle/jet_ski_arcade_handling.gd" id="7_arcade_handling"]
+[ext_resource type="Script" uid="uid://dn8rdqs3rho8l" path="res://scripts/vehicle/jet_ski_arcade_handling.gd" id="7_arcade_handling"]
 
 [sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_hull"]
 points = PackedVector3Array(0, 0.22, -1.55, 0.071, 0.185, -1.55, 0.1, 0.1, -1.55, 0.071, 0.015, -1.55, 0, -0.02, -1.55, -0.071, 0.015, -1.55, -0.1, 0.1, -1.55, -0.071, 0.185, -1.55, 0, 0.28, -1.15, 0.325, 0.198, -1.15, 0.46, 0, -1.15, 0.325, -0.198, -1.15, 0, -0.28, -1.15, -0.325, -0.198, -1.15, -0.46, 0, -1.15, -0.325, 0.198, -1.15, 0, 0.3, 0.55, 0.424, 0.212, 0.55, 0.6, 0, 0.55, 0.424, -0.212, 0.55, 0, -0.3, 0.55, -0.424, -0.212, 0.55, -0.6, 0, 0.55, -0.424, 0.212, 0.55, 0, 0.26, 1.55, 0.311, 0.19, 1.55, 0.44, 0.02, 1.55, 0.311, -0.15, 1.55, 0, -0.22, 1.55, -0.311, -0.15, 1.55, -0.44, 0.02, 1.55, -0.311, 0.19, 1.55)
@@ -22,6 +22,7 @@ script = ExtResource("1_controller")
 
 [node name="EngineAudio" type="AudioStreamPlayer3D" parent="." unique_id=1603778743]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.15, 0.45)
+visible = false
 stream = ExtResource("4_motor")
 volume_db = -14.0
 autoplay = true
@@ -30,7 +31,7 @@ attenuation_filter_cutoff_hz = 8000.0
 doppler_tracking = 2
 script = ExtResource("3_engine_audio")
 idle_pitch = 0.41
-full_throttle_pitch = 1.6400000000000001
+full_throttle_pitch = 1.64
 free_rev_pitch = 2.5
 idle_volume_db = -2.0
 full_throttle_volume_db = 6.0
@@ -40,10 +41,11 @@ free_rev_fall_speed = 18.700000000000003
 nose_down_pitch_boost = 0.125
 nose_up_pitch_drop = 0.135
 
-[node name="ArcadeHandling" type="Node" parent="."]
+[node name="ArcadeHandling" type="Node" parent="." unique_id=232523693]
 script = ExtResource("7_arcade_handling")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=2026230859]
+visible = false
 shape = SubResource("ConvexPolygonShape3D_hull")
 
 [node name="VisualRoot" type="Node3D" parent="." unique_id=1832404346]
@@ -52,6 +54,7 @@ shape = SubResource("ConvexPolygonShape3D_hull")
 transform = Transform3D(-1, 0, -1.509958e-07, 0, 1, 0, 1.509958e-07, 0, -1, 0.372027, -0.324537, -1.316655)
 
 [node name="BuoyancyPoints" type="Node3D" parent="." unique_id=1093517847]
+visible = false
 
 [node name="FrontLeft" type="Marker3D" parent="BuoyancyPoints" unique_id=2110467738]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.45, -0.15, -1.15)
@@ -69,11 +72,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, -0.15, 1.05)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.18, 1.25)
 
 [node name="CameraTarget" type="Marker3D" parent="." unique_id=1770908444]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0.35)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0747211, 1.1450217)
 
 [node name="Effects" type="Node3D" parent="." unique_id=1733691099]
 
-[node name="VehicleWaterEffects3D" parent="Effects" instance=ExtResource("6_water_effects")]
+[node name="VehicleWaterEffects3D" parent="Effects" unique_id=1574631450 instance=ExtResource("6_water_effects")]
 top_level = true
 vehicle_path = NodePath("../..")
 front_left_marker_path = NodePath("../../BuoyancyPoints/FrontLeft")
@@ -92,6 +95,6 @@ transform = Transform3D(1, 0, 0, 0, 0.43973684, 0.8981266, 0, -0.8981266, 0.4397
 [node name="JetCore" type="MeshInstance3D" parent="Effects/TurbineExhaust/TurbineOutlet" unique_id=1314280869]
 cast_shadow = 0
 
-[node name="JetSpray" type="GPUParticles3D" parent="Effects/TurbineExhaust/TurbineOutlet" unique_id=1829776583]
+[node name="JetSpray" type="GPUParticles3D" parent="Effects/TurbineExhaust/TurbineOutlet" unique_id=360848479]
 cast_shadow = 0
 emitting = false
