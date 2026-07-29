@@ -550,23 +550,29 @@ var rider_pitch_soft_limit_factor: float:
 
 var rider_air_unlimited_rotation: bool:
 	get:
-		return _rider_air_unlimited_rotation
+		return rider_dynamics_system.state.air_unlimited_rotation
 
 var rider_air_roll_rate: float:
 	get:
-		return _rider_air_roll_rate
+		return rider_dynamics_system.state.air_roll_rate
 
 var rider_air_pitch_rate: float:
 	get:
-		return _rider_air_pitch_rate
+		return rider_dynamics_system.state.air_pitch_rate
 
 var rider_air_accumulated_roll_degrees: float:
 	get:
-		return _rider_air_accumulated_roll_degrees
+		return (
+			rider_dynamics_system.state
+			.air_accumulated_roll_degrees
+		)
 
 var rider_air_accumulated_pitch_degrees: float:
 	get:
-		return _rider_air_accumulated_pitch_degrees
+		return (
+			rider_dynamics_system.state
+			.air_accumulated_pitch_degrees
+		)
 
 var submarine_dive_active: bool:
 	get:
@@ -716,19 +722,25 @@ var trick_last_release_strength: Vector2:
 
 var air_correction_roll_torque_current: float:
 	get:
-		return _air_correction_roll_torque_current
+		return (
+			rider_dynamics_system.state
+			.air_correction_roll_torque_current
+		)
 
 var air_correction_pitch_torque_current: float:
 	get:
-		return _air_correction_pitch_torque_current
+		return (
+			rider_dynamics_system.state
+			.air_correction_pitch_torque_current
+		)
 
 var air_current_roll_rate: float:
 	get:
-		return _rider_air_roll_rate
+		return rider_dynamics_system.state.air_roll_rate
 
 var air_current_pitch_rate: float:
 	get:
-		return _rider_air_pitch_rate
+		return rider_dynamics_system.state.air_pitch_rate
 
 var last_buoyancy_force_vectors: PackedVector3Array:
 	get:
@@ -927,12 +939,6 @@ var _rider_shift_raw_input: Vector2:
 var _rider_shift_smoothed_input: Vector2:
 	get:
 		return input_system.state.rider_shift_smoothed
-var _rider_air_unlimited_rotation: bool = false
-var _rider_air_roll_rate: float = 0.0
-var _rider_air_pitch_rate: float = 0.0
-var _rider_air_accumulated_roll_degrees: float = 0.0
-var _rider_air_accumulated_pitch_degrees: float = 0.0
-var _rider_air_tracking_active: bool = false
 var _rider_stunt_water_mode: JetSkiTypes.RiderStuntWaterMode = RiderStuntWaterMode.NORMAL
 var _submarine_entry_speed: float = 0.0
 var _submarine_entry_pitch_degrees: float = 0.0
@@ -987,9 +993,6 @@ var _trick_launch_consumed: bool = false
 var _trick_last_launch_type: JetSkiTypes.RiderTrickLaunchType = RiderTrickLaunchType.NONE
 var _trick_last_launch_charge: Vector2 = Vector2.ZERO
 var _trick_last_release_strength: Vector2 = Vector2.ZERO
-var _air_correction_roll_torque_current: float = 0.0
-var _air_correction_pitch_torque_current: float = 0.0
-var _rider_air_warning_emitted: bool = false
 
 
 func _ready() -> void:
@@ -1007,7 +1010,7 @@ func _ready() -> void:
 	navigation_system.reset_runtime_state()
 	drive_system.reset_runtime_state()
 	rider_dynamics_system.reset_runtime_state()
-	_reset_air_control_state()
+	input_system.reset_rider_shift()
 	_reset_submarine_state(false)
 	_reset_trick_state()
 	reset_physics_interpolation()
@@ -1017,7 +1020,7 @@ func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 	navigation_system.begin_physics_tick()
 	drive_system.begin_physics_tick()
 	rider_dynamics_system.begin_physics_tick()
-	_clear_air_control_frame_metrics()
+	_clear_trick_release_frame_metrics()
 	input_system.rider_weight_shift_enabled = rider_weight_shift_enabled
 	input_system.rider_shift_input_half_life = rider_shift_input_half_life
 	input_system.rider_shift_release_half_life = rider_shift_release_half_life
@@ -1172,7 +1175,7 @@ func reset_vehicle(reason: StringName = &"manual") -> void:
 	navigation_system.reset_runtime_state()
 	drive_system.reset_runtime_state()
 	rider_dynamics_system.reset_runtime_state()
-	_reset_air_control_state()
+	input_system.reset_rider_shift()
 	_reset_submarine_state(true)
 	_reset_trick_state()
 	reset_physics_interpolation()
@@ -1404,6 +1407,30 @@ func _configure_rider_dynamics_system() -> void:
 	rider_dynamics_system.rider_soft_limit_damping = (
 		rider_soft_limit_damping
 	)
+	rider_dynamics_system.rider_air_max_roll_rate = (
+		rider_air_max_roll_rate
+	)
+	rider_dynamics_system.rider_air_max_pitch_rate = (
+		rider_air_max_pitch_rate
+	)
+	rider_dynamics_system.rider_air_overspeed_damping = (
+		rider_air_overspeed_damping
+	)
+	rider_dynamics_system.air_correction_roll_torque = (
+		air_correction_roll_torque
+	)
+	rider_dynamics_system.air_correction_pitch_torque = (
+		air_correction_pitch_torque
+	)
+	rider_dynamics_system.air_correction_target_roll_rate = (
+		air_correction_target_roll_rate
+	)
+	rider_dynamics_system.air_correction_target_pitch_rate = (
+		air_correction_target_pitch_rate
+	)
+	rider_dynamics_system.air_counter_input_brake_multiplier = (
+		air_counter_input_brake_multiplier
+	)
 	rider_dynamics_system.buoyancy_strength_per_point = (
 		buoyancy_strength_per_point
 	)
@@ -1459,13 +1486,7 @@ func _apply_rider_dynamics(
 	)
 	if not rider_dynamics_system.has_valid_body_axes():
 		return
-	var vehicle_basis := (
-		body_state.transform.basis.orthonormalized()
-	)
-	_update_rider_air_rotation_metrics(
-		body_state,
-		vehicle_basis
-	)
+	rider_dynamics_system.update_air_rotation_metrics(body_state)
 	rider_dynamics_system.prepare_common_metrics(
 		input_system.state,
 		water_physics_system.state,
@@ -1475,16 +1496,25 @@ func _apply_rider_dynamics(
 		== RiderStuntWaterMode.SUBMARINE_DIVE
 	)
 	if using_air:
-		var air_attitude := _calculate_rider_world_attitude(
-			body_state.transform
+		if not rider_dynamics_system.prepare_air_metrics(
+			body_state,
+			input_system.state
+		):
+			return
+		var external_trick_release_torque := (
+			_calculate_trick_release_torque(
+				rider_dynamics_system
+				.get_prepared_body_forward(),
+				rider_dynamics_system
+				.get_prepared_body_right(),
+				body_state.step
+			)
 		)
-		rider_dynamics_system.state.turn_lean_current_roll = (
-			air_attitude.x
+		rider_dynamics_system.apply_air_torque(
+			body_state,
+			input_system.state,
+			external_trick_release_torque
 		)
-		rider_dynamics_system.state.rider_shift_current_pitch = (
-			air_attitude.y
-		)
-		_apply_rider_shift_air_control(body_state)
 		return
 	if not rider_dynamics_system.prepare_supported(
 		body_state,
@@ -1515,116 +1545,6 @@ func _apply_rider_dynamics(
 		_submarine_control_blend(),
 		external_submarine_pitch_torque
 	)
-
-
-func _apply_rider_shift_air_control(state: PhysicsDirectBodyState3D) -> void:
-	if not rider_weight_shift_enabled:
-		return
-	var rider_state: JetSkiRiderDynamicsState = (
-		rider_dynamics_system.state
-	)
-	rider_state.rider_shift_air_authority_active = 1.0
-	var vehicle_basis := state.transform.basis.orthonormalized()
-	var body_forward := -vehicle_basis.z
-	var body_right := vehicle_basis.x
-	if (
-		not body_forward.is_finite()
-		or not body_right.is_finite()
-		or body_forward.length_squared() <= 0.000001
-		or body_right.length_squared() <= 0.000001
-	):
-		_warn_about_invalid_rider_air_once(
-			"Rider weight-shift air axes are degenerate."
-		)
-		return
-	rider_state.virtual_offset_local = Vector3(
-		_rider_shift_raw_input.x * rider_lateral_shift_distance,
-		0.0,
-		_rider_shift_raw_input.y * rider_longitudinal_shift_distance
-	)
-	rider_state.virtual_offset_world = (
-		vehicle_basis * rider_state.virtual_offset_local
-	)
-	# Air control uses the normalized raw input so releasing the arrows produces
-	# zero correction torque in the same physics tick. Water retains smooth weight shift.
-	var roll_rate := state.angular_velocity.dot(body_forward)
-	var pitch_rate := state.angular_velocity.dot(body_right)
-	_air_correction_roll_torque_current = _calculate_air_rate_correction_torque(
-		roll_rate,
-		_rider_shift_raw_input.x,
-		air_correction_target_roll_rate,
-		air_correction_roll_torque
-	)
-	_air_correction_pitch_torque_current = _calculate_air_rate_correction_torque(
-		pitch_rate,
-		_rider_shift_raw_input.y,
-		air_correction_target_pitch_rate,
-		air_correction_pitch_torque
-	)
-	var release_torque := _calculate_trick_release_torque(
-		body_forward,
-		body_right,
-		state.step
-	)
-	var air_torque := (
-		release_torque
-		+ body_forward * _air_correction_roll_torque_current
-		+ body_right * _air_correction_pitch_torque_current
-		+ body_forward * _calculate_rider_air_overspeed_torque(
-			roll_rate,
-			_rider_shift_raw_input.x,
-			rider_air_max_roll_rate
-		)
-		+ body_right * _calculate_rider_air_overspeed_torque(
-			pitch_rate,
-			_rider_shift_raw_input.y,
-			rider_air_max_pitch_rate
-		)
-	)
-	if not air_torque.is_finite():
-		rider_state.rider_shift_roll_torque = 0.0
-		rider_state.rider_shift_pitch_torque = 0.0
-		_warn_about_invalid_rider_air_once(
-			"Rider weight-shift air torque is not finite."
-		)
-		return
-	rider_state.rider_shift_roll_torque = air_torque.dot(
-		body_forward
-	)
-	rider_state.rider_shift_pitch_torque = air_torque.dot(body_right)
-	rider_state.manual_applied_torque = air_torque
-	rider_state.total_applied_torque_vector = air_torque
-	if not air_torque.is_zero_approx():
-		state.apply_torque(air_torque)
-
-
-func _calculate_air_rate_correction_torque(
-	axis_rate: float,
-	axis_input: float,
-	target_rate: float,
-	maximum_torque: float
-) -> float:
-	var input_magnitude := absf(axis_input)
-	if input_magnitude <= 0.0001:
-		return 0.0
-	var input_direction := signf(axis_input)
-	if axis_rate * input_direction < 0.0:
-		return (
-			input_direction
-			* maximum_torque
-			* input_magnitude
-			* air_counter_input_brake_multiplier
-		)
-	var desired_rate_magnitude := input_magnitude * target_rate
-	if absf(axis_rate) >= desired_rate_magnitude:
-		return 0.0
-	var rate_deficit_factor := clampf(
-		(desired_rate_magnitude - absf(axis_rate))
-		/ maxf(desired_rate_magnitude, 0.0001),
-		0.0,
-		1.0
-	)
-	return input_direction * maximum_torque * input_magnitude * rate_deficit_factor
 
 
 func _calculate_trick_release_torque(
@@ -1673,70 +1593,10 @@ func _calculate_trick_release_torque(
 	return release_torque
 
 
-func _calculate_rider_air_overspeed_torque(
-	axis_rate: float,
-	axis_input: float,
-	maximum_rate: float
-) -> float:
-	if (
-		absf(axis_input) <= 0.0001
-		or signf(axis_rate) != signf(axis_input)
-		or absf(axis_rate) <= maximum_rate
-	):
-		return 0.0
-	return (
-		-signf(axis_rate)
-		* (absf(axis_rate) - maximum_rate)
-		* rider_air_overspeed_damping
-	)
-
-
-func _update_rider_air_rotation_metrics(
-	state: PhysicsDirectBodyState3D,
-	vehicle_basis: Basis
-) -> void:
-	if not rider_dynamics_system.state.using_air_control:
-		_rider_air_unlimited_rotation = false
-		_rider_air_roll_rate = 0.0
-		_rider_air_pitch_rate = 0.0
-		_rider_air_tracking_active = false
-		return
-	if not _rider_air_tracking_active:
-		_rider_air_accumulated_roll_degrees = 0.0
-		_rider_air_accumulated_pitch_degrees = 0.0
-		_rider_air_tracking_active = true
-	var body_forward := -vehicle_basis.z
-	var body_right := vehicle_basis.x
-	_rider_air_unlimited_rotation = true
-	_rider_air_roll_rate = state.angular_velocity.dot(body_forward)
-	_rider_air_pitch_rate = state.angular_velocity.dot(body_right)
-	_rider_air_accumulated_roll_degrees += rad_to_deg(
-		_rider_air_roll_rate * state.step
-	)
-	_rider_air_accumulated_pitch_degrees += rad_to_deg(
-		_rider_air_pitch_rate * state.step
-	)
-
-
-func _calculate_rider_world_attitude(vehicle_transform: Transform3D) -> Vector2:
-	var vehicle_basis := vehicle_transform.basis.orthonormalized()
-	var vehicle_forward := -vehicle_basis.z
-	var vehicle_up := vehicle_basis.y
-	var pitch := asin(clampf(vehicle_forward.y, -1.0, 1.0))
-	var horizontal_forward := vehicle_forward.slide(Vector3.UP)
-	var reference_right := vehicle_basis.x
-	if horizontal_forward.length_squared() > 0.000001:
-		horizontal_forward = horizontal_forward.normalized()
-		reference_right = horizontal_forward.cross(Vector3.UP).normalized()
-	var roll := atan2(
-		vehicle_up.dot(reference_right),
-		vehicle_up.dot(Vector3.UP)
-	)
-	return Vector2(roll, pitch)
-
-
 func _capture_submarine_pre_contact_state(state: PhysicsDirectBodyState3D) -> void:
-	var attitude := _calculate_rider_world_attitude(state.transform)
+	var attitude := rider_dynamics_system.calculate_world_attitude(
+		state.transform
+	)
 	_submarine_pre_contact_valid = (
 		state.transform.is_finite()
 		and state.linear_velocity.is_finite()
@@ -1767,7 +1627,11 @@ func _update_submarine_before_forces(
 			state.linear_velocity.x,
 			state.linear_velocity.z
 		).length()
-		var current_attitude := _calculate_rider_world_attitude(state.transform)
+		var current_attitude := (
+			rider_dynamics_system.calculate_world_attitude(
+				state.transform
+			)
+		)
 		var exit_requested := (
 			not submarine_dive_enabled
 			or forward_input < 0.60
@@ -2463,28 +2327,13 @@ func _reset_trick_state() -> void:
 	_trick_last_launch_type = RiderTrickLaunchType.NONE
 	_trick_last_launch_charge = Vector2.ZERO
 	_trick_last_release_strength = Vector2.ZERO
-	_air_correction_roll_torque_current = 0.0
-	_air_correction_pitch_torque_current = 0.0
 	_clear_trick_roll_preload()
 	_clear_trick_pitch_preload()
 
 
-func _clear_air_control_frame_metrics() -> void:
-	_rider_air_unlimited_rotation = false
-	_rider_air_roll_rate = 0.0
-	_rider_air_pitch_rate = 0.0
+func _clear_trick_release_frame_metrics() -> void:
 	_trick_release_roll_torque = 0.0
 	_trick_release_pitch_torque = 0.0
-	_air_correction_roll_torque_current = 0.0
-	_air_correction_pitch_torque_current = 0.0
-
-
-func _reset_air_control_state() -> void:
-	input_system.reset_rider_shift()
-	_rider_air_accumulated_roll_degrees = 0.0
-	_rider_air_accumulated_pitch_degrees = 0.0
-	_rider_air_tracking_active = false
-	_clear_air_control_frame_metrics()
 
 
 func _on_input_system_rider_weight_shift_changed(shift: Vector2) -> void:
@@ -2496,10 +2345,3 @@ func _warn_about_missing_water_once() -> void:
 		return
 	_water_warning_emitted = true
 	push_warning("JetSki buoyancy is disabled because its Ocean3D reference is invalid.")
-
-
-func _warn_about_invalid_rider_air_once(message: String) -> void:
-	if _rider_air_warning_emitted:
-		return
-	_rider_air_warning_emitted = true
-	push_warning(message)

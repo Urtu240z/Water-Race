@@ -46,14 +46,25 @@ var rider_nose_up_soft_limit_degrees: float = 34.0
 var rider_nose_down_soft_limit_degrees: float = 38.0
 var rider_soft_limit_stiffness: float = 12000.0
 var rider_soft_limit_damping: float = 3000.0
+var rider_air_max_roll_rate: float = 12.0
+var rider_air_max_pitch_rate: float = 10.0
+var rider_air_overspeed_damping: float = 1800.0
+var air_correction_roll_torque: float = 1000.0
+var air_correction_pitch_torque: float = 1300.0
+var air_correction_target_roll_rate: float = 1.8
+var air_correction_target_pitch_rate: float = 1.6
+var air_counter_input_brake_multiplier: float = 1.8
 
 var buoyancy_strength_per_point: float = 5500.0
 var max_submersion_depth: float = 0.8
 
 var _water_point_source: JetSkiWaterPhysicsSystem
 var _prepared_vehicle_basis: Basis = Basis.IDENTITY
+var _prepared_body_forward: Vector3 = Vector3.FORWARD
+var _prepared_body_right: Vector3 = Vector3.RIGHT
 var _body_axes_valid: bool = false
 var _warning_emitted: bool = false
+var _air_warning_emitted: bool = false
 var _warning_emission_count: int = 0
 
 
@@ -75,6 +86,8 @@ func prepare_mode(
 	_prepared_vehicle_basis = body_state.transform.basis.orthonormalized()
 	var vehicle_up := _prepared_vehicle_basis.y
 	var vehicle_forward := -_prepared_vehicle_basis.z
+	_prepared_body_forward = vehicle_forward
+	_prepared_body_right = _prepared_vehicle_basis.x
 	_body_axes_valid = (
 		vehicle_up.is_finite()
 		and vehicle_forward.is_finite()
@@ -86,6 +99,39 @@ func prepare_mode(
 
 func has_valid_body_axes() -> bool:
 	return _body_axes_valid
+
+
+func update_air_rotation_metrics(
+	body_state: PhysicsDirectBodyState3D
+) -> void:
+	if not state.using_air_control:
+		state.air_unlimited_rotation = false
+		state.air_roll_rate = 0.0
+		state.air_pitch_rate = 0.0
+		state.air_tracking_active = false
+		return
+	if not state.air_tracking_active:
+		state.air_accumulated_roll_degrees = 0.0
+		state.air_accumulated_pitch_degrees = 0.0
+		state.air_tracking_active = true
+	state.air_unlimited_rotation = true
+	state.air_roll_rate = body_state.angular_velocity.dot(
+		_prepared_body_forward
+	)
+	state.air_pitch_rate = body_state.angular_velocity.dot(
+		_prepared_body_right
+	)
+	if (
+		not is_finite(state.air_roll_rate)
+		or not is_finite(state.air_pitch_rate)
+	):
+		_warn_air_once("Rider air rotation rates are not finite.")
+	state.air_accumulated_roll_degrees += rad_to_deg(
+		state.air_roll_rate * body_state.step
+	)
+	state.air_accumulated_pitch_degrees += rad_to_deg(
+		state.air_pitch_rate * body_state.step
+	)
 
 
 func prepare_common_metrics(
@@ -108,6 +154,135 @@ func prepare_common_metrics(
 	):
 		state.arrow_only_steering_input = input_state.steering
 		state.arrow_only_steering_angle = drive_state.steering_angle_degrees
+
+
+func prepare_air_metrics(
+	body_state: PhysicsDirectBodyState3D,
+	input_state: JetSkiInputState
+) -> bool:
+	var air_attitude := calculate_world_attitude(
+		body_state.transform
+	)
+	state.turn_lean_current_roll = air_attitude.x
+	state.rider_shift_current_pitch = air_attitude.y
+	if not air_attitude.is_finite():
+		_warn_air_once("Rider air attitude is not finite.")
+		return false
+	if not rider_weight_shift_enabled:
+		return false
+	state.rider_shift_air_authority_active = 1.0
+	if (
+		not _prepared_body_forward.is_finite()
+		or not _prepared_body_right.is_finite()
+		or _prepared_body_forward.length_squared()
+		<= DIRECTION_EPSILON_SQUARED
+		or _prepared_body_right.length_squared()
+		<= DIRECTION_EPSILON_SQUARED
+	):
+		_warn_air_once("Rider weight-shift air axes are degenerate.")
+		return false
+	state.virtual_offset_local = Vector3(
+		input_state.rider_shift_raw.x * rider_lateral_shift_distance,
+		0.0,
+		input_state.rider_shift_raw.y
+		* rider_longitudinal_shift_distance
+	)
+	state.virtual_offset_world = (
+		_prepared_vehicle_basis * state.virtual_offset_local
+	)
+	return true
+
+
+func apply_air_torque(
+	body_state: PhysicsDirectBodyState3D,
+	input_state: JetSkiInputState,
+	external_trick_release_torque: Vector3
+) -> JetSkiRiderDynamicsState:
+	# Air control uses normalized raw input so releasing the arrows produces
+	# zero correction torque in the same physics tick.
+	state.air_correction_roll_torque_current = (
+		_calculate_air_rate_correction_torque(
+			state.air_roll_rate,
+			input_state.rider_shift_raw.x,
+			air_correction_target_roll_rate,
+			air_correction_roll_torque
+		)
+	)
+	state.air_correction_pitch_torque_current = (
+		_calculate_air_rate_correction_torque(
+			state.air_pitch_rate,
+			input_state.rider_shift_raw.y,
+			air_correction_target_pitch_rate,
+			air_correction_pitch_torque
+		)
+	)
+	var air_torque := (
+		external_trick_release_torque
+		+ _prepared_body_forward
+		* state.air_correction_roll_torque_current
+		+ _prepared_body_right
+		* state.air_correction_pitch_torque_current
+		+ _prepared_body_forward
+		* _calculate_rider_air_overspeed_torque(
+			state.air_roll_rate,
+			input_state.rider_shift_raw.x,
+			rider_air_max_roll_rate
+		)
+		+ _prepared_body_right
+		* _calculate_rider_air_overspeed_torque(
+			state.air_pitch_rate,
+			input_state.rider_shift_raw.y,
+			rider_air_max_pitch_rate
+		)
+	)
+	if not air_torque.is_finite():
+		state.rider_shift_roll_torque = 0.0
+		state.rider_shift_pitch_torque = 0.0
+		_warn_air_once("Rider weight-shift air torque is not finite.")
+		return state
+	state.rider_shift_roll_torque = air_torque.dot(
+		_prepared_body_forward
+	)
+	state.rider_shift_pitch_torque = air_torque.dot(
+		_prepared_body_right
+	)
+	state.manual_applied_torque = air_torque
+	state.total_applied_torque_vector = air_torque
+	if not air_torque.is_zero_approx():
+		body_state.apply_torque(air_torque)
+	return state
+
+
+func get_prepared_body_forward() -> Vector3:
+	return _prepared_body_forward
+
+
+func get_prepared_body_right() -> Vector3:
+	return _prepared_body_right
+
+
+func calculate_world_attitude(
+	vehicle_transform: Transform3D
+) -> Vector2:
+	var vehicle_basis := vehicle_transform.basis.orthonormalized()
+	var vehicle_forward := -vehicle_basis.z
+	var vehicle_up := vehicle_basis.y
+	var pitch := asin(clampf(vehicle_forward.y, -1.0, 1.0))
+	var horizontal_forward := vehicle_forward.slide(Vector3.UP)
+	var reference_right := vehicle_basis.x
+	if (
+		horizontal_forward.length_squared()
+		> DIRECTION_EPSILON_SQUARED
+	):
+		horizontal_forward = horizontal_forward.normalized()
+		reference_right = horizontal_forward.cross(
+			Vector3.UP
+		).normalized()
+	var roll := atan2(
+		vehicle_up.dot(reference_right),
+		vehicle_up.dot(Vector3.UP)
+	)
+	return Vector2(roll, pitch)
 
 
 func prepare_supported(
@@ -249,11 +424,65 @@ func apply_supported_torque(
 func reset_runtime_state() -> void:
 	state.reset_runtime_state()
 	_prepared_vehicle_basis = Basis.IDENTITY
+	_prepared_body_forward = Vector3.FORWARD
+	_prepared_body_right = Vector3.RIGHT
 	_body_axes_valid = false
 
 
 func get_warning_emission_count() -> int:
 	return _warning_emission_count
+
+
+func _calculate_air_rate_correction_torque(
+	axis_rate: float,
+	axis_input: float,
+	target_rate: float,
+	maximum_torque: float
+) -> float:
+	var input_magnitude := absf(axis_input)
+	if input_magnitude <= 0.0001:
+		return 0.0
+	var input_direction := signf(axis_input)
+	if axis_rate * input_direction < 0.0:
+		return (
+			input_direction
+			* maximum_torque
+			* input_magnitude
+			* air_counter_input_brake_multiplier
+		)
+	var desired_rate_magnitude := input_magnitude * target_rate
+	if absf(axis_rate) >= desired_rate_magnitude:
+		return 0.0
+	var rate_deficit_factor := clampf(
+		(desired_rate_magnitude - absf(axis_rate))
+		/ maxf(desired_rate_magnitude, 0.0001),
+		0.0,
+		1.0
+	)
+	return (
+		input_direction
+		* maximum_torque
+		* input_magnitude
+		* rate_deficit_factor
+	)
+
+
+func _calculate_rider_air_overspeed_torque(
+	axis_rate: float,
+	axis_input: float,
+	maximum_rate: float
+) -> float:
+	if (
+		absf(axis_input) <= 0.0001
+		or signf(axis_rate) != signf(axis_input)
+		or absf(axis_rate) <= maximum_rate
+	):
+		return 0.0
+	return (
+		-signf(axis_rate)
+		* (absf(axis_rate) - maximum_rate)
+		* rider_air_overspeed_damping
+	)
 
 
 func _update_rider_shift_obsolete_target_metrics() -> void:
@@ -762,5 +991,13 @@ func _warn_once(message: String) -> void:
 	if _warning_emitted:
 		return
 	_warning_emitted = true
+	_warning_emission_count += 1
+	push_warning(message)
+
+
+func _warn_air_once(message: String) -> void:
+	if _air_warning_emitted:
+		return
+	_air_warning_emitted = true
 	_warning_emission_count += 1
 	push_warning(message)

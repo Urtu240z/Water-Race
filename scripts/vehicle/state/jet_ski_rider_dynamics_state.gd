@@ -4,6 +4,14 @@ extends RefCounted
 var using_air_control: bool = false
 var turn_lean_airborne_disabled: bool = false
 var rider_shift_airborne: bool = false
+var air_unlimited_rotation: bool = false
+var air_roll_rate: float = 0.0
+var air_pitch_rate: float = 0.0
+var air_accumulated_roll_degrees: float = 0.0
+var air_accumulated_pitch_degrees: float = 0.0
+var air_tracking_active: bool = false
+var air_correction_roll_torque_current: float = 0.0
+var air_correction_pitch_torque_current: float = 0.0
 
 var turn_lean_target_roll: float = 0.0
 var turn_lean_current_roll: float = 0.0
@@ -57,6 +65,11 @@ func clear_frame_metrics() -> void:
 	using_air_control = false
 	turn_lean_airborne_disabled = false
 	rider_shift_airborne = false
+	air_unlimited_rotation = false
+	air_roll_rate = 0.0
+	air_pitch_rate = 0.0
+	air_correction_roll_torque_current = 0.0
+	air_correction_pitch_torque_current = 0.0
 	turn_lean_target_roll = 0.0
 	turn_lean_current_roll = 0.0
 	turn_lean_roll_error = 0.0
@@ -96,6 +109,9 @@ func clear_frame_metrics() -> void:
 
 func reset_runtime_state() -> void:
 	clear_frame_metrics()
+	air_accumulated_roll_degrees = 0.0
+	air_accumulated_pitch_degrees = 0.0
+	air_tracking_active = false
 	smoothed_support_normal = Vector3.UP
 	reference_forward = Vector3.FORWARD
 	reference_right = Vector3.RIGHT
