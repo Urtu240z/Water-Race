@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://8h4lqtd66nw0" path="res://scripts/levels/island_test_blender_bootstrap.gd" id="1_yqko0"]
 [ext_resource type="Environment" uid="uid://dxw5rtrc0obhl" path="res://resources/environment/environment_1.tres" id="2_0pibt"]
 [ext_resource type="Sky" uid="uid://bhe1h7h061jon" path="res://resources/environment/sky/sky_original.tres" id="2_tfoy1"]
+[ext_resource type="PackedScene" uid="uid://b6twl23g087ar" path="res://assets/3D/Atrezzo/Light.glb" id="3_djt2o"]
 [ext_resource type="PackedScene" uid="uid://1x3n2tx0xgj5" path="res://assets/3D/Terrain/independent_island.glb" id="3_oieqv"]
 [ext_resource type="PackedScene" uid="uid://cilidnwjw2dt" path="res://scenes/vegetation/palms_multimesh.scn" id="3_un2uv"]
 [ext_resource type="Material" uid="uid://cwtgldc4ahbeu" path="res://assets/materials/aerial_rocks_02.res" id="5_kmjc7"]
@@ -37,10 +38,10 @@
 [ext_resource type="Texture2D" uid="uid://bblan7rbfrudb" path="res://resources/water/organic_surface/surface_warp_noise.tres" id="37_vkhvf"]
 [ext_resource type="AudioStream" uid="uid://tn1we3rfc1hp" path="res://assets/audio/Motor_Idle.ogg" id="38_kotkt"]
 [ext_resource type="Texture2D" uid="uid://cq8kw5o6ssrwc" path="res://assets/environment/sky/aristea_wreck_puresky_4k.hdr" id="39_1y1wo"]
-[ext_resource type="Script" uid="uid://63m2q41d8l0h" path="res://scripts/vehicle/jet_ski_engine_audio_3d.gd" id="40_7gvnk"]
 [ext_resource type="Texture2D" uid="uid://dh4ygdetfbe7t" path="res://assets/environment/sky/kloofendal_48d_partly_cloudy_puresky_4k.hdr" id="40_armhu"]
 [ext_resource type="Texture2D" uid="uid://b7kfjl0vvcloa" path="res://assets/environment/sky/qwantani_dusk_1_puresky_4k.hdr" id="41_7fon7"]
 [ext_resource type="Texture2D" uid="uid://cmg3mg3yih3d1" path="res://assets/environment/sky/kloofendal_43d_clear_puresky_4k.hdr" id="42_1y1wo"]
+[ext_resource type="Script" uid="uid://cs8r4h4yr3knc" path="res://scripts/environment/hanging_light_sway_3d.gd" id="53_light_sway"]
 [ext_resource type="Material" uid="uid://dk2h67ph6buix" path="res://assets/materials/rusty_metal_03.res" id="60_vhs81"]
 [ext_resource type="PackedScene" uid="uid://cfw7pu0e3ws7n" path="res://assets/3D/Rock2.glb" id="195_ox2y0"]
 [ext_resource type="PackedScene" uid="uid://bgpsiyc4tr47u" path="res://assets/3D/Rock1.glb" id="196_t7md2"]
@@ -61,6 +62,11 @@
 [ext_resource type="PackedScene" uid="uid://c08rfa066ud8" path="res://assets/3D/Terrain/palm_impostor_ground_shadows.glb" id="222_palm_shadow"]
 [ext_resource type="Shader" uid="uid://cmnqja2yvxste" path="res://shaders/vegetation/palm_impostor_ground_shadow.gdshader" id="223_palm_shadow_shader"]
 [ext_resource type="PackedScene" uid="uid://cisubjold2oac" path="res://scenes/wildlife/ambient_wildlife.tscn" id="224_wildlife"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cyvr6"]
+emission_enabled = true
+emission = Color(0.6862745, 0.8156863, 0.6039216, 1)
+emission_energy_multiplier = 16.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_tpwhi"]
 render_priority = 0
@@ -168,7 +174,7 @@ shader_parameter/breakup = 0.0
 material = ExtResource("34_h01lt")
 size = Vector2(10000, 10000)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_7gvnk"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_djt2o"]
 resource_local_to_scene = true
 render_priority = 0
 shader = ExtResource("33_8ypm4")
@@ -219,7 +225,7 @@ shader_parameter/crest_tint = Color(0.11, 0.62, 0.68, 1)
 shader_parameter/absorption_density = 0.13
 shader_parameter/maximum_optical_depth = 38.0
 shader_parameter/shallow_depth_range = 5.5
-shader_parameter/near_water_alpha = 0.77
+shader_parameter/near_water_alpha = 0.6499999966472
 shader_parameter/deep_water_alpha = 0.92
 shader_parameter/horizon_water_alpha = 0.98
 shader_parameter/opacity_distance_start = 80.0
@@ -228,7 +234,7 @@ shader_parameter/fresnel_power = 4.8
 shader_parameter/reflection_strength = 0.82
 shader_parameter/refraction_strength = 0.009
 shader_parameter/near_roughness = 0.055
-shader_parameter/horizon_roughness = 0.23
+shader_parameter/horizon_roughness = 0.00999999977648
 shader_parameter/water_specular = 0.88
 shader_parameter/foam_enabled = true
 shader_parameter/foam_noise_texture = ExtResource("34_cowfl")
@@ -299,8 +305,14 @@ material = ExtResource("60_vhs81")
 left_to_right = 1.0
 size = Vector3(17.155, 5.85, 9.015)
 
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_xveky"]
+friction = 0.0
+
 [sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_djt2o"]
 data = PackedVector3Array(8.577499, 2.925, 4.5074997, 8.577499, -2.925, 4.5074997, -8.577499, -2.925, 4.5074997, 8.577499, 2.925, -4.5074997, -8.577499, -2.925, -4.5074997, 8.577499, -2.925, -4.5074997, 8.577499, 2.925, 4.5074997, 8.577499, 2.925, -4.5074997, 8.577499, -2.925, 4.5074997, 8.577499, 2.925, -4.5074997, 8.577499, -2.925, -4.5074997, 8.577499, -2.925, 4.5074997, 8.577499, 2.925, -4.5074997, 8.577499, 2.925, 4.5074997, -8.577499, -2.925, -4.5074997, 8.577499, 2.925, 4.5074997, -8.577499, -2.925, 4.5074997, -8.577499, -2.925, -4.5074997, -8.577499, -2.925, 4.5074997, 8.577499, -2.925, 4.5074997, -8.577499, -2.925, -4.5074997, 8.577499, -2.925, 4.5074997, 8.577499, -2.925, -4.5074997, -8.577499, -2.925, -4.5074997)
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_rtwgq"]
+friction = 0.0
 
 [node name="IslandTestBlender" type="Node3D" unique_id=2091620036]
 script = ExtResource("1_yqko0")
@@ -349,13 +361,50 @@ ambient_mode = 2
 ambient_color = Color(0.1385223, 0.26824376, 0.19000927, 1)
 ambient_color_energy = 1.22
 
-[node name="OmniLight3D" type="OmniLight3D" parent="Environment" unique_id=1122488882]
-transform = Transform3D(-0.48733947, 0, -0.8732126, 0, 1, 0, 0.8732126, 0, -0.48733947, 397.19693, -18.979523, 140.39047)
-light_color = Color(0, 0.548252, 0.54915243, 1)
-light_energy = 16.0
+[node name="Light" parent="Environment" unique_id=191579415 instance=ExtResource("3_djt2o")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.99999994, 415.18573, 10.909697, 149.67955)
+script = ExtResource("53_light_sway")
+pivot_offset_local = Vector3(0, 19.381, 0)
+sway_x_degrees = 5.7
+sway_z_degrees = 4.0
+
+[node name="Light_VIS" parent="Environment/Light" index="0" unique_id=1401331510]
+transform = Transform3D(0.32, 0, 0, 0, 0.32, 0, 0, 0, 0.32, 0, -0.7512207, 0)
+surface_material_override/0 = SubResource("StandardMaterial3D_cyvr6")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="Environment/Light" unique_id=1122488882]
+transform = Transform3D(-0.48733944, 0, -0.87321264, 0, 1, 0, 0.87321264, 0, -0.48733944, 0, -0.866971, 0)
+light_color = Color(0.7210554, 0.9999997, 0.99577314, 1)
+light_energy = 2.689
+light_size = 0.426
+light_specular = 8.814
 shadow_enabled = true
-omni_range = 61.327
-omni_attenuation = 0.718
+shadow_blur = 3.773
+omni_range = 29.782
+omni_attenuation = 0.971
+
+[node name="Light2" parent="Environment" unique_id=258847674 instance=ExtResource("3_djt2o")]
+transform = Transform3D(0.99999994, 0, 0, 0, 1, 0, 0, 0, 0.99999994, 362.8249, 10.84194, 118.325005)
+script = ExtResource("53_light_sway")
+pivot_offset_local = Vector3(0, 19.381, 0)
+sway_z_degrees = 3.9
+sway_frequency_hz = 0.31
+secondary_frequency_ratio = 0.44000000000000006
+
+[node name="Light_VIS" parent="Environment/Light2" index="0" unique_id=1401331510]
+transform = Transform3D(0.32, 0, 0, 0, 0.32, 0, 0, 0, 0.32, 0, -0.7512207, 0)
+surface_material_override/0 = SubResource("StandardMaterial3D_cyvr6")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="Environment/Light2" unique_id=401580262]
+transform = Transform3D(-0.48733944, 1.0011718e-08, -0.87321264, 0, 1, 7.450581e-09, 0.8732127, -2.9802322e-08, -0.48733947, 0.1940918, -4.699774, -0.8023529)
+light_color = Color(0.7210554, 0.9999997, 0.99577314, 1)
+light_energy = 3.361
+light_size = 0.426
+light_specular = 8.814
+shadow_enabled = true
+shadow_blur = 3.773
+omni_range = 29.782
+omni_attenuation = 0.971
 
 [node name="TerrainRoot" type="Node3D" parent="." unique_id=432130367]
 
@@ -467,7 +516,7 @@ mesh = SubResource("PlaneMesh_tpwhi")
 [node name="WaterIntegration" type="Node3D" parent="." unique_id=1889730552]
 
 [node name="Ocean" parent="WaterIntegration" unique_id=1340264265 instance=ExtResource("32_wfhwd")]
-ocean_material = SubResource("ShaderMaterial_7gvnk")
+ocean_material = SubResource("ShaderMaterial_djt2o")
 wave_world_size_a = 200.0
 wave_world_size_b = 120.0
 wave_amplitude_a = 0.999999977648
@@ -503,7 +552,6 @@ visible = true
 stream = ExtResource("38_kotkt")
 volume_db = -6.0
 pitch_scale = 0.6
-script = ExtResource("40_7gvnk")
 full_throttle_pitch = 1.6
 free_rev_pitch = 2.2
 idle_volume_db = 6.0
@@ -523,7 +571,6 @@ volume_db = -60.0
 visible = true
 
 [node name="JetSkiVisual" parent="Gameplay/JetSki/VisualRoot" parent_id_path=PackedInt32Array(328650943, 1832404346) index="0" unique_id=556077452]
-visible = true
 water_material_tag_enabled = true
 water_material_tag_roughness = 0.019608
 
@@ -536,20 +583,81 @@ breathing_influence = 1.0
 [node name="Skeleton3D" parent="Gameplay/JetSki/VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/Rider_Bot/SKEL_Rider" parent_id_path=PackedInt32Array(328650943, 2001770911, 1075285769, 1348584656) index="0" unique_id=426480764]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.081000924, 0.0069850683, 0)
 bones/0/rotation = Quaternion(0.0064583384, 1.6179755e-09, 2.5050662e-07, 0.99997914)
+bones/0/scale = Vector3(1, 0.99999994, 0.99999994)
 bones/1/position = Vector3(-4.8325298e-12, 0.10182449, 3.2595353e-09)
+bones/1/scale = Vector3(1, 0.9999998, 0.99999994)
 bones/2/position = Vector3(-2.4344415e-13, 0.10002686, 8.3823934e-09)
 bones/3/position = Vector3(1.364242e-12, 0.10010647, -1.8094065e-08)
 bones/4/position = Vector3(-3.710018e-06, 0.16292441, -0.0025706573)
+bones/4/scale = Vector3(1, 1, 1)
 bones/5/position = Vector3(-1.0776875e-09, 0.09341913, 0.028410386)
+bones/5/scale = Vector3(1, 0.99999994, 0.99999994)
 bones/7/position = Vector3(-1.1175871e-08, 0.11116077, 2.3283064e-10)
+bones/7/scale = Vector3(0.99999994, 1, 0.99999994)
+bones/9/rotation = Quaternion(2.2111117e-16, -6.0766336e-11, -3.5107657e-08, 1)
+bones/10/position = Vector3(0.026818521, 0.02464804, 0.015739927)
+bones/10/rotation = Quaternion(0.2532839, 0.061619177, -0.22821042, 0.9380674)
+bones/11/position = Vector3(-3.934838e-08, 0.04188987, -2.1098005e-07)
+bones/11/rotation = Quaternion(-0.0023141836, -0.0011703466, 0.009300497, 0.9999534)
+bones/12/position = Vector3(1.3504177e-08, 0.034162637, 8.756131e-08)
+bones/12/rotation = Quaternion(-0.0016660402, -0.00080820406, 0.006919737, 0.9999743)
+bones/13/rotation = Quaternion(-0.05324761, -0.05324781, 0.15012597, 0.9857949)
+bones/14/rotation = Quaternion(0.053246345, 0.05324396, -0.1500353, 0.98580897)
+bones/15/position = Vector3(-3.3280543e-09, 0.028500233, -4.8838544e-08)
+bones/15/rotation = Quaternion(0.09837924, 0.09835267, -0.18223341, 0.9733649)
+bones/16/position = Vector3(-2.678558e-07, 0.09532508, 4.9202913e-07)
+bones/16/rotation = Quaternion(-0.053269494, -0.05326953, 0.14982367, 0.98583853)
+bones/17/rotation = Quaternion(0.053286072, 0.05325134, -0.14948025, 0.98589075)
+bones/18/position = Vector3(-7.347012e-10, 0.029499862, 8.831161e-08)
+bones/18/rotation = Quaternion(0.09208112, 0.09201529, -0.17354263, 0.976185)
+bones/19/position = Vector3(-0.018651372, 0.091035925, 0.0004307226)
+bones/19/rotation = Quaternion(-0.057171095, -0.05717098, 0.16369338, 0.98319244)
+bones/20/rotation = Quaternion(0.05716534, 0.057175197, -0.16375771, 0.98318183)
+bones/21/position = Vector3(2.8478553e-10, 0.028896932, -1.3136172e-08)
+bones/21/rotation = Quaternion(0.10377321, 0.103785165, -0.18961848, 0.9708268)
+bones/22/position = Vector3(-0.038062822, 0.08076676, 0.0048671006)
+bones/22/rotation = Quaternion(-0.05437109, -0.05437682, 0.15464939, 0.98497236)
+bones/23/rotation = Quaternion(0.05444816, 0.05430212, -0.15330318, 0.98518264)
+bones/24/position = Vector3(-6.3593575e-10, 0.020999873, 6.254597e-08)
+bones/24/rotation = Quaternion(0.13183951, 0.13147534, -0.2248103, 0.9564481)
 bones/25/rotation = Quaternion(0.43952805, 0.59007734, -0.55047023, 0.39446965)
+bones/26/scale = Vector3(1, 0.99999994, 0.9999999)
 bones/27/position = Vector3(-2.9825742e-10, 0.27841514, 4.8592856e-08)
+bones/29/position = Vector3(-0.026817312, 0.024661459, 0.015761862)
+bones/29/rotation = Quaternion(0.25309613, -0.0613242, 0.22735296, 0.93834555)
+bones/30/position = Vector3(-3.958121e-09, 0.04187095, 1.1144547e-07)
+bones/30/rotation = Quaternion(-0.0020654905, 0.001043728, -0.00821381, 0.9999636)
+bones/31/position = Vector3(1.6298145e-08, 0.034183986, 7.630609e-09)
+bones/31/rotation = Quaternion(-0.0015297808, 0.00074413355, -0.00607335, 0.9999801)
+bones/32/position = Vector3(-0.022598632, 0.091093086, 0.0051802727)
+bones/32/rotation = Quaternion(-0.053266168, 0.053267147, -0.15042141, 0.9857478)
+bones/33/rotation = Quaternion(0.05326424, -0.053270143, 0.1504817, 0.9857386)
+bones/34/position = Vector3(-2.49929e-09, 0.028500063, 6.991251e-08)
+bones/34/rotation = Quaternion(0.09814278, -0.098153286, 0.1817879, 0.97349226)
+bones/35/position = Vector3(-3.5860938e-07, 0.09533393, -4.479784e-07)
+bones/35/rotation = Quaternion(-0.0532684, 0.053267583, -0.1504098, 0.9857494)
+bones/36/rotation = Quaternion(0.05327221, -0.05326654, 0.15039994, 0.9857508)
+bones/37/position = Vector3(-4.1668073e-09, 0.029499896, -3.3597452e-08)
+bones/37/rotation = Quaternion(0.09173783, -0.09173937, 0.1727996, 0.9763751)
+bones/38/position = Vector3(0.018650819, 0.091045246, 0.00043014373)
+bones/38/rotation = Quaternion(-0.06039615, 0.060395323, -0.17464446, 0.98092)
+bones/39/rotation = Quaternion(0.060399, -0.06039511, 0.17465097, 0.9809187)
+bones/40/position = Vector3(-7.558647e-09, 0.0294999, 6.4542704e-08)
+bones/40/rotation = Quaternion(0.1034078, -0.10341266, 0.18905726, 0.9710149)
+bones/41/rotation = Quaternion(-0.0545863, 0.054581683, -0.15248315, 0.98528683)
+bones/42/rotation = Quaternion(0.05447704, -0.054683316, 0.15428944, 0.985006)
+bones/43/position = Vector3(2.8401814e-09, 0.021000098, 2.9347216e-08)
+bones/43/rotation = Quaternion(0.13074756, -0.13122135, 0.22274286, 0.9571163)
 bones/44/position = Vector3(-0.0820779, -0.0677175, -0.01512219)
 bones/45/position = Vector3(-6.982418e-09, 0.43905485, -2.2728273e-09)
 bones/46/position = Vector3(9.280655e-09, 0.4452782, -2.0814248e-09)
+bones/47/position = Vector3(-1.2781584e-08, 0.14997412, -1.344597e-08)
+bones/47/rotation = Quaternion(0.3242161, -0.00014739741, -1.0539367e-07, 0.94598305)
 bones/48/position = Vector3(0.08207788, -0.067718, -0.015122137)
 bones/49/position = Vector3(-1.2923408e-08, 0.43905368, -2.2650966e-09)
 bones/50/position = Vector3(-1.0939593e-09, 0.44527858, 3.188938e-09)
+bones/51/position = Vector3(-6.275741e-09, 0.1499741, 1.0166332e-08)
+bones/51/rotation = Quaternion(0.32421583, -0.00014736943, -1.4682928e-07, 0.9459832)
 
 [node name="FootOrientation" parent="Gameplay/JetSki/VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D" index="3" unique_id=1357917683]
 left_foot_rotation_correction_degrees = Vector3(240, 0, 0)
@@ -711,6 +819,7 @@ transform = Transform3D(0.047000684, 0, -0.9988949, 0, 1, 0, 0.9988949, 0, 0.047
 mesh = SubResource("PrismMesh_tpwhi")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Atrezzo/Jump1" unique_id=1563769446]
+physics_material_override = SubResource("PhysicsMaterial_xveky")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Atrezzo/Jump1/StaticBody3D" unique_id=30672136]
 shape = SubResource("ConcavePolygonShape3D_djt2o")
@@ -720,6 +829,7 @@ transform = Transform3D(0.047000684, 0, -0.9988949, 0, 1, 0, 0.9988949, 0, 0.047
 mesh = SubResource("PrismMesh_tpwhi")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Atrezzo/Jump4" unique_id=1041393990]
+physics_material_override = SubResource("PhysicsMaterial_rtwgq")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Atrezzo/Jump4/StaticBody3D" unique_id=780011347]
 shape = SubResource("ConcavePolygonShape3D_djt2o")
@@ -729,6 +839,7 @@ transform = Transform3D(0.047000684, 0, -0.9988949, 0, 1, 0, 0.9988949, 0, 0.047
 mesh = SubResource("PrismMesh_tpwhi")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Atrezzo/Jump5" unique_id=1185602380]
+physics_material_override = SubResource("PhysicsMaterial_rtwgq")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Atrezzo/Jump5/StaticBody3D" unique_id=359322754]
 shape = SubResource("ConcavePolygonShape3D_djt2o")
@@ -738,6 +849,7 @@ transform = Transform3D(0.047000684, 0, -0.9988949, 0, 1, 0, 0.9988949, 0, 0.047
 mesh = SubResource("PrismMesh_tpwhi")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Atrezzo/Jump2" unique_id=363621744]
+physics_material_override = SubResource("PhysicsMaterial_rtwgq")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Atrezzo/Jump2/StaticBody3D" unique_id=1888373563]
 shape = SubResource("ConcavePolygonShape3D_djt2o")
@@ -747,6 +859,7 @@ transform = Transform3D(0.047000684, 0, -0.9988949, 0, 1, 0, 0.9988949, 0, 0.047
 mesh = SubResource("PrismMesh_tpwhi")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Atrezzo/Jump3" unique_id=2017955259]
+physics_material_override = SubResource("PhysicsMaterial_rtwgq")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Atrezzo/Jump3/StaticBody3D" unique_id=1708739139]
 shape = SubResource("ConcavePolygonShape3D_djt2o")
@@ -803,6 +916,8 @@ transform = Transform3D(0.71017504, 0, -0.7040251, 0, 1, 0, 0.7040251, 0, 0.7101
 buoy_side = 1
 buoy_clearance = 20.0
 
+[editable path="Environment/Light"]
+[editable path="Environment/Light2"]
 [editable path="TerrainRoot/independent_island"]
 [editable path="TerrainRoot/independent_island2"]
 [editable path="TerrainRoot/independent_island3"]

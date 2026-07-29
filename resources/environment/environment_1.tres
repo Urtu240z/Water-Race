@@ -10,9 +10,9 @@ sky_material = SubResource("PanoramaSkyMaterial_qid03")
 
 [resource]
 background_mode = 2
-background_energy_multiplier = 0.7
 sky = SubResource("Sky_s3uqp")
 ambient_light_source = 3
+ambient_light_sky_contribution = 0.85
 reflected_light_source = 2
 tonemap_mode = 2
 ssr_enabled = true

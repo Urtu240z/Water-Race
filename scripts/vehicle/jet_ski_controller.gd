@@ -1093,9 +1093,9 @@ func _on_trick_system_trick_launched(
 
 func _on_submarine_system_dive_ended(
 	duration: float,
-	maximum_depth: float
+	dive_maximum_depth: float
 ) -> void:
-	submarine_dive_ended.emit(duration, maximum_depth)
+	submarine_dive_ended.emit(duration, dive_maximum_depth)
 
 
 func _on_navigation_system_water_entered(
