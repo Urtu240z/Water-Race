@@ -647,10 +647,17 @@ func _validate_compatibility(controller_source: String) -> void:
 	)
 	_expect_numbered(
 		67,
-		controller_source.contains("previous_contact_mask == 0")
-		and controller_source.contains("current_contact_mask != 0")
+		controller_source.contains("water_state.raw_contact_mask == 0")
 		and controller_source.contains(
-			"_capture_submarine_pre_contact_state(state)"
+			"submarine_system.capture_pre_contact_state("
+		)
+		and controller_source.find(
+			"submarine_system.capture_pre_contact_state("
+		) < controller_source.find("navigation_system.step(")
+		and controller_source.find("navigation_system.step(") < (
+			controller_source.find(
+				"submarine_system.update_after_contacts("
+			)
 		),
 		"Submarine conserva contactos y snapshot previo."
 	)

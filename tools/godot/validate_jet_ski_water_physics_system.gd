@@ -133,13 +133,13 @@ func _validate_isolated_fixture(jet_ski_packed: PackedScene) -> void:
 
 	Input.action_press(&"rider_shift_forward", 1.0)
 	vehicle.submarine_buoyancy_factor = 0.5
-	vehicle.set(
-		"_rider_stunt_water_mode",
+	vehicle.submarine_system.buoyancy_factor = 0.5
+	vehicle.submarine_system.state.water_mode = (
 		JetSkiController.RiderStuntWaterMode.SUBMARINE_DIVE
 	)
-	vehicle.set("_submarine_buoyancy_factor_current", 0.5)
-	vehicle.set("_submarine_current_depth", 0.0)
-	vehicle.set("_submarine_duration", 0.0)
+	vehicle.submarine_system.state.buoyancy_factor_current = 0.5
+	vehicle.submarine_system.state.current_depth = 0.0
+	vehicle.submarine_system.state.duration = 0.0
 	vehicle.global_transform = Transform3D(
 		Basis.IDENTITY,
 		Vector3.ZERO
@@ -154,10 +154,7 @@ func _validate_isolated_fixture(jet_ski_packed: PackedScene) -> void:
 		"Submarine factor still produces finite scaled buoyancy."
 	)
 	Input.action_release(&"rider_shift_forward")
-	vehicle.set(
-		"_rider_stunt_water_mode",
-		JetSkiController.RiderStuntWaterMode.NORMAL
-	)
+	vehicle.submarine_system.reset_runtime_state(false)
 
 	var local_points_before := water_system.get_buoyancy_local_points()
 	water_system.reset_runtime_state()

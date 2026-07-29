@@ -26,15 +26,8 @@ signal rider_trick_launched(
 const BUOYANCY_POINT_COUNT: int = 4
 const FRONT_POINT_COUNT: int = 2
 const ALL_CONTACT_MASK: int = 15
-const FRONT_CONTACT_MASK: int = 3
-const REAR_CONTACT_MASK: int = 12
 const LEFT_CONTACT_MASK: int = 5
 const RIGHT_CONTACT_MASK: int = 10
-const SUBMARINE_MAX_ENTRY_ROLL_DEGREES: float = 45.0
-const SUBMARINE_MIN_EXIT_SPEED: float = 3.0
-const SUBMARINE_SAFETY_DEPTH: float = 3.0
-const SUBMARINE_CLEAR_NOSE_UP_DEGREES: float = 10.0
-const SUBMARINE_ENTRY_BUOYANCY_BLEND_TIME: float = 0.12
 const TRICK_PRE_TAKEOFF_OPTIMAL_TIME: float = 0.22
 const TRICK_PRE_TAKEOFF_MINIMUM_TIMING: float = 0.65
 const TRICK_POST_TAKEOFF_OPTIMAL_TIME: float = 0.10
@@ -576,35 +569,43 @@ var rider_air_accumulated_pitch_degrees: float:
 
 var submarine_dive_active: bool:
 	get:
-		return _rider_stunt_water_mode == RiderStuntWaterMode.SUBMARINE_DIVE
+		return submarine_system.is_dive_active()
 
 var submarine_entry_speed: float:
 	get:
-		return _submarine_entry_speed
+		return submarine_system.state.entry_speed
 
 var submarine_entry_pitch_degrees: float:
 	get:
-		return _submarine_entry_pitch_degrees
+		return submarine_system.state.entry_pitch_degrees
 
 var submarine_duration: float:
 	get:
-		return _submarine_duration
+		return submarine_system.state.duration
 
 var submarine_current_depth: float:
 	get:
-		return _submarine_current_depth
+		return submarine_system.state.current_depth
 
 var submarine_max_depth: float:
 	get:
-		return _submarine_max_depth
+		return submarine_system.state.maximum_depth
 
 var submarine_buoyancy_factor_current: float:
 	get:
-		return _submarine_buoyancy_factor_current
+		return submarine_system.state.buoyancy_factor_current
+
+var submarine_propulsion_factor_current: float:
+	get:
+		return submarine_system.state.propulsion_factor_current
+
+var submarine_upright_factor_current: float:
+	get:
+		return submarine_system.state.upright_factor_current
 
 var submarine_exit_blend: float:
 	get:
-		return _submarine_exit_blend
+		return submarine_system.state.exit_blend
 
 var trick_preload_state: JetSkiTypes.TrickPreloadState:
 	get:
@@ -932,6 +933,14 @@ var rider_dynamics_system: JetSkiRiderDynamicsSystem:
 				"Systems/RiderDynamicsSystem"
 			) as JetSkiRiderDynamicsSystem
 		return _rider_dynamics_system
+var _submarine_system: JetSkiSubmarineSystem
+var submarine_system: JetSkiSubmarineSystem:
+	get:
+		if _submarine_system == null:
+			_submarine_system = get_node_or_null(
+				"Systems/SubmarineSystem"
+			) as JetSkiSubmarineSystem
+		return _submarine_system
 var _water_warning_emitted: bool = false
 var _rider_shift_raw_input: Vector2:
 	get:
@@ -939,25 +948,6 @@ var _rider_shift_raw_input: Vector2:
 var _rider_shift_smoothed_input: Vector2:
 	get:
 		return input_system.state.rider_shift_smoothed
-var _rider_stunt_water_mode: JetSkiTypes.RiderStuntWaterMode = RiderStuntWaterMode.NORMAL
-var _submarine_entry_speed: float = 0.0
-var _submarine_entry_pitch_degrees: float = 0.0
-var _submarine_duration: float = 0.0
-var _submarine_current_depth: float = 0.0
-var _submarine_max_depth: float = 0.0
-var _submarine_buoyancy_factor_current: float = 1.0
-var _submarine_propulsion_factor_current: float = 1.0
-var _submarine_upright_factor_current: float = 1.0
-var _submarine_exit_blend: float = 1.0
-var _submarine_exit_start_buoyancy_factor: float = 1.0
-var _submarine_recovery_active: bool = false
-var _submarine_pre_contact_valid: bool = false
-var _submarine_pre_contact_transform: Transform3D = Transform3D.IDENTITY
-var _submarine_pre_contact_linear_velocity: Vector3 = Vector3.ZERO
-var _submarine_pre_contact_angular_velocity: Vector3 = Vector3.ZERO
-var _submarine_pre_contact_roll_degrees: float = 0.0
-var _submarine_pre_contact_pitch_degrees: float = 0.0
-var _submarine_pre_contact_horizontal_speed: float = 0.0
 var _trick_preload_state: JetSkiTypes.TrickPreloadState = TrickPreloadState.IDLE
 var _trick_roll_preload_sign: float = 0.0
 var _trick_pitch_preload_sign: float = 0.0
@@ -1007,11 +997,13 @@ func _ready() -> void:
 	_connect_navigation_signals()
 	_configure_drive_system()
 	_configure_rider_dynamics_system()
+	_configure_submarine_system()
+	_connect_submarine_signals()
 	navigation_system.reset_runtime_state()
 	drive_system.reset_runtime_state()
 	rider_dynamics_system.reset_runtime_state()
 	input_system.reset_rider_shift()
-	_reset_submarine_state(false)
+	submarine_system.reset_runtime_state(false)
 	_reset_trick_state()
 	reset_physics_interpolation()
 
@@ -1037,27 +1029,46 @@ func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 	if not water_physics_system.has_valid_buoyancy_points():
 		water_physics_system.reset_runtime_state()
 		return
-	_update_submarine_before_forces(state, state.step)
+	var current_attitude := (
+		rider_dynamics_system.calculate_world_attitude(state.transform)
+	)
+	submarine_system.update_before_forces(
+		state,
+		input_system.state,
+		current_attitude,
+		state.step
+	)
 	var water_state := water_physics_system.step(
 		state,
 		_ocean,
-		_submarine_buoyancy_factor_current
+		submarine_system.state.buoyancy_factor_current
 	)
 	navigation_system.prepare_support_state(state, water_state)
 	if water_state.raw_contact_mask == 0:
-		_capture_submarine_pre_contact_state(state)
+		var pre_contact_attitude := (
+			rider_dynamics_system.calculate_world_attitude(state.transform)
+		)
+		submarine_system.capture_pre_contact_state(
+			state,
+			pre_contact_attitude
+		)
 	navigation_system.step(
 		state,
 		water_physics_system,
 		state.step
 	)
-	_update_submarine_after_contacts(state)
+	submarine_system.update_after_contacts(
+		input_system.state,
+		water_state,
+		navigation_system.state,
+		water_physics_system
+	)
 	_update_rider_trick_state(state, state.step)
 	drive_system.step(
 		state,
 		_ocean,
 		input_system.state,
-		_submarine_propulsion_factor_current
+		submarine_system.state.propulsion_factor_current
 	)
 	_apply_rider_dynamics(state)
 
@@ -1103,8 +1114,7 @@ func apply_world_rebase(shift: Vector3) -> void:
 		shifted_transform
 	)
 	global_position -= horizontal_shift
-	if _submarine_pre_contact_valid:
-		_submarine_pre_contact_transform.origin -= horizontal_shift
+	submarine_system.apply_world_rebase(horizontal_shift)
 	PhysicsServer3D.body_set_state(
 		get_rid(),
 		PhysicsServer3D.BODY_STATE_LINEAR_VELOCITY,
@@ -1176,7 +1186,7 @@ func reset_vehicle(reason: StringName = &"manual") -> void:
 	drive_system.reset_runtime_state()
 	rider_dynamics_system.reset_runtime_state()
 	input_system.reset_rider_shift()
-	_reset_submarine_state(true)
+	submarine_system.reset_runtime_state(true)
 	_reset_trick_state()
 	reset_physics_interpolation()
 	last_reset_linear_velocity = linear_velocity
@@ -1440,6 +1450,31 @@ func _configure_rider_dynamics_system() -> void:
 	rider_dynamics_system.configure(water_physics_system)
 
 
+func _configure_submarine_system() -> void:
+	submarine_system.dive_enabled = submarine_dive_enabled
+	submarine_system.entry_min_nose_down_degrees = (
+		submarine_entry_min_nose_down_degrees
+	)
+	submarine_system.entry_max_nose_down_degrees = (
+		submarine_entry_max_nose_down_degrees
+	)
+	submarine_system.entry_min_speed = submarine_entry_min_speed
+	submarine_system.target_nose_down_degrees = (
+		submarine_target_nose_down_degrees
+	)
+	submarine_system.maximum_duration = submarine_max_duration
+	submarine_system.upright_factor = submarine_upright_factor
+	submarine_system.buoyancy_factor = submarine_buoyancy_factor
+	submarine_system.propulsion_factor = submarine_propulsion_factor
+	submarine_system.exit_blend_time = submarine_exit_blend_time
+	submarine_system.rider_soft_limit_stiffness = (
+		rider_soft_limit_stiffness
+	)
+	submarine_system.rider_soft_limit_damping = (
+		rider_soft_limit_damping
+	)
+
+
 func _connect_navigation_signals() -> void:
 	navigation_system.water_entered.connect(
 		_on_navigation_system_water_entered
@@ -1453,6 +1488,27 @@ func _connect_navigation_signals() -> void:
 	navigation_system.deeply_submerged.connect(
 		_on_navigation_system_deeply_submerged
 	)
+
+
+func _connect_submarine_signals() -> void:
+	submarine_system.dive_started.connect(
+		_on_submarine_system_dive_started
+	)
+	submarine_system.dive_ended.connect(
+		_on_submarine_system_dive_ended
+	)
+
+
+func _on_submarine_system_dive_started() -> void:
+	_cancel_rider_trick_state_for_submarine()
+	submarine_dive_started.emit()
+
+
+func _on_submarine_system_dive_ended(
+	duration: float,
+	maximum_depth: float
+) -> void:
+	submarine_dive_ended.emit(duration, maximum_depth)
 
 
 func _on_navigation_system_water_entered(
@@ -1492,8 +1548,7 @@ func _apply_rider_dynamics(
 		water_physics_system.state,
 		navigation_system.state,
 		drive_system.state,
-		_rider_stunt_water_mode
-		== RiderStuntWaterMode.SUBMARINE_DIVE
+		submarine_system.is_dive_active()
 	)
 	if using_air:
 		if not rider_dynamics_system.prepare_air_metrics(
@@ -1533,16 +1588,17 @@ func _apply_rider_dynamics(
 			body_state.transform.basis.orthonormalized().x
 		)
 		external_submarine_pitch_torque = (
-			_calculate_submarine_pitch_target_torque(
+			submarine_system.calculate_pitch_target_torque(
 				body_state,
+				rider_dynamics_system.state,
 				body_right
 			)
 		)
 	rider_dynamics_system.apply_supported_torque(
 		body_state,
 		input_system.state,
-		_submarine_upright_factor_current,
-		_submarine_control_blend(),
+		submarine_system.state.upright_factor_current,
+		submarine_system.get_control_blend(),
 		external_submarine_pitch_torque
 	)
 
@@ -1593,257 +1649,6 @@ func _calculate_trick_release_torque(
 	return release_torque
 
 
-func _capture_submarine_pre_contact_state(state: PhysicsDirectBodyState3D) -> void:
-	var attitude := rider_dynamics_system.calculate_world_attitude(
-		state.transform
-	)
-	_submarine_pre_contact_valid = (
-		state.transform.is_finite()
-		and state.linear_velocity.is_finite()
-		and state.angular_velocity.is_finite()
-		and attitude.is_finite()
-	)
-	if not _submarine_pre_contact_valid:
-		return
-	_submarine_pre_contact_transform = state.transform
-	_submarine_pre_contact_linear_velocity = state.linear_velocity
-	_submarine_pre_contact_angular_velocity = state.angular_velocity
-	_submarine_pre_contact_roll_degrees = rad_to_deg(attitude.x)
-	_submarine_pre_contact_pitch_degrees = rad_to_deg(attitude.y)
-	_submarine_pre_contact_horizontal_speed = Vector2(
-		state.linear_velocity.x,
-		state.linear_velocity.z
-	).length()
-
-
-func _update_submarine_before_forces(
-	state: PhysicsDirectBodyState3D,
-	physics_delta: float
-) -> void:
-	if _rider_stunt_water_mode == RiderStuntWaterMode.SUBMARINE_DIVE:
-		_submarine_duration += maxf(physics_delta, 0.0)
-		var forward_input := maxf(-_rider_shift_raw_input.y, 0.0)
-		var horizontal_speed := Vector2(
-			state.linear_velocity.x,
-			state.linear_velocity.z
-		).length()
-		var current_attitude := (
-			rider_dynamics_system.calculate_world_attitude(
-				state.transform
-			)
-		)
-		var exit_requested := (
-			not submarine_dive_enabled
-			or forward_input < 0.60
-			or _submarine_duration >= submarine_max_duration
-			or horizontal_speed < SUBMARINE_MIN_EXIT_SPEED
-			or rad_to_deg(current_attitude.y) > SUBMARINE_CLEAR_NOSE_UP_DEGREES
-			or _submarine_current_depth >= SUBMARINE_SAFETY_DEPTH
-		)
-		if exit_requested:
-			_end_submarine_dive()
-	if _rider_stunt_water_mode == RiderStuntWaterMode.SUBMARINE_DIVE:
-		_submarine_buoyancy_factor_current = move_toward(
-			_submarine_buoyancy_factor_current,
-			submarine_buoyancy_factor,
-			maxf(physics_delta, 0.0)
-			* absf(1.0 - submarine_buoyancy_factor)
-			/ SUBMARINE_ENTRY_BUOYANCY_BLEND_TIME
-		)
-		_submarine_propulsion_factor_current = submarine_propulsion_factor
-		_submarine_upright_factor_current = submarine_upright_factor
-		_submarine_exit_blend = 0.0
-		_submarine_recovery_active = false
-		return
-	if _submarine_recovery_active:
-		_submarine_exit_blend = minf(
-			_submarine_exit_blend
-			+ maxf(physics_delta, 0.0) / maxf(submarine_exit_blend_time, 0.0001),
-			1.0
-		)
-		var recovery_weight := smoothstep(0.0, 1.0, _submarine_exit_blend)
-		_submarine_buoyancy_factor_current = lerpf(
-			_submarine_exit_start_buoyancy_factor,
-			1.0,
-			recovery_weight
-		)
-		_submarine_propulsion_factor_current = lerpf(
-			submarine_propulsion_factor,
-			1.0,
-			recovery_weight
-		)
-		_submarine_upright_factor_current = lerpf(
-			submarine_upright_factor,
-			1.0,
-			recovery_weight
-		)
-		if _submarine_exit_blend >= 1.0:
-			_submarine_recovery_active = false
-		return
-	_submarine_buoyancy_factor_current = 1.0
-	_submarine_propulsion_factor_current = 1.0
-	_submarine_upright_factor_current = 1.0
-	_submarine_exit_blend = 1.0
-
-
-func _update_submarine_after_contacts(state: PhysicsDirectBodyState3D) -> void:
-	var first_water_contact := (
-		previous_contact_mask == 0
-		and current_contact_mask != 0
-	)
-	if first_water_contact:
-		_try_start_submarine_dive(state)
-		_submarine_pre_contact_valid = false
-	if (
-		_rider_stunt_water_mode == RiderStuntWaterMode.SUBMARINE_DIVE
-		or _submarine_recovery_active
-	):
-		_submarine_current_depth = maxf(
-			water_physics_system.state.average_depth,
-			0.0
-		)
-		_submarine_max_depth = maxf(
-			_submarine_max_depth,
-			_submarine_current_depth
-		)
-	elif current_contact_mask == 0:
-		_submarine_current_depth = 0.0
-
-
-func _try_start_submarine_dive(_state: PhysicsDirectBodyState3D) -> void:
-	if (
-		not submarine_dive_enabled
-		or not _submarine_pre_contact_valid
-		or _rider_stunt_water_mode != RiderStuntWaterMode.NORMAL
-		or _submarine_recovery_active
-	):
-		return
-	var forward_input := maxf(-_rider_shift_raw_input.y, 0.0)
-	var nose_down_degrees := -_submarine_pre_contact_pitch_degrees
-	var vehicle_up := _submarine_pre_contact_transform.basis.y.normalized()
-	var valid_entry := (
-		forward_input >= 0.60
-		and _submarine_pre_contact_horizontal_speed >= submarine_entry_min_speed
-		and nose_down_degrees >= submarine_entry_min_nose_down_degrees
-		and nose_down_degrees <= submarine_entry_max_nose_down_degrees
-		and absf(_submarine_pre_contact_roll_degrees) < SUBMARINE_MAX_ENTRY_ROLL_DEGREES
-		and vehicle_up.dot(Vector3.UP) > 0.25
-		and _front_leads_submarine_entry()
-	)
-	if not valid_entry:
-		return
-	_rider_stunt_water_mode = RiderStuntWaterMode.SUBMARINE_DIVE
-	_submarine_entry_speed = _submarine_pre_contact_horizontal_speed
-	_submarine_entry_pitch_degrees = _submarine_pre_contact_pitch_degrees
-	_submarine_duration = 0.0
-	_submarine_current_depth = maxf(
-		water_physics_system.state.average_depth,
-		0.0
-	)
-	_submarine_max_depth = _submarine_current_depth
-	_submarine_exit_blend = 0.0
-	_submarine_recovery_active = false
-	_submarine_propulsion_factor_current = submarine_propulsion_factor
-	_submarine_upright_factor_current = submarine_upright_factor
-	_cancel_rider_trick_state_for_submarine()
-	submarine_dive_started.emit()
-
-
-func _front_leads_submarine_entry() -> bool:
-	var front_contacts := navigation_system.count_contact_bits(
-		new_contact_mask & FRONT_CONTACT_MASK
-	)
-	var rear_contacts := navigation_system.count_contact_bits(
-		new_contact_mask & REAR_CONTACT_MASK
-	)
-	var point_depths := water_physics_system.point_depths
-	var front_depth := (point_depths[0] + point_depths[1]) * 0.5
-	var rear_depth := (point_depths[2] + point_depths[3]) * 0.5
-	return (
-		front_contacts > 0
-		and (
-			front_contacts > rear_contacts
-			or front_depth > rear_depth + 0.05
-		)
-	)
-
-
-func _calculate_submarine_pitch_target_torque(
-	state: PhysicsDirectBodyState3D,
-	body_right: Vector3
-) -> Vector3:
-	if _rider_stunt_water_mode != RiderStuntWaterMode.SUBMARINE_DIVE:
-		return Vector3.ZERO
-	var target_pitch := -deg_to_rad(submarine_target_nose_down_degrees)
-	var pitch_error := wrapf(
-		target_pitch
-		- rider_dynamics_system.state.rider_shift_current_pitch,
-		-PI,
-		PI
-	)
-	var pitch_rate := state.angular_velocity.dot(body_right)
-	var target_stiffness := rider_soft_limit_stiffness * 0.30
-	var target_damping := rider_soft_limit_damping * 0.20
-	var maximum_target_torque := (
-		rider_soft_limit_stiffness * deg_to_rad(20.0)
-	)
-	var target_torque := clampf(
-		pitch_error * target_stiffness - pitch_rate * target_damping,
-		-maximum_target_torque,
-		maximum_target_torque
-	)
-	return (
-		body_right
-		* target_torque
-		* rider_dynamics_system.state.rider_manual_medium_authority
-	)
-
-
-func _submarine_control_blend() -> float:
-	if _rider_stunt_water_mode == RiderStuntWaterMode.SUBMARINE_DIVE:
-		return 1.0
-	if _submarine_recovery_active:
-		return 1.0 - _submarine_exit_blend
-	return 0.0
-
-
-func _end_submarine_dive() -> void:
-	if _rider_stunt_water_mode != RiderStuntWaterMode.SUBMARINE_DIVE:
-		return
-	_rider_stunt_water_mode = RiderStuntWaterMode.NORMAL
-	_submarine_recovery_active = true
-	_submarine_exit_start_buoyancy_factor = _submarine_buoyancy_factor_current
-	_submarine_exit_blend = 0.0
-	submarine_dive_ended.emit(_submarine_duration, _submarine_max_depth)
-
-
-func _reset_submarine_state(emit_end_signal: bool) -> void:
-	if (
-		emit_end_signal
-		and _rider_stunt_water_mode == RiderStuntWaterMode.SUBMARINE_DIVE
-	):
-		submarine_dive_ended.emit(_submarine_duration, _submarine_max_depth)
-	_rider_stunt_water_mode = RiderStuntWaterMode.NORMAL
-	_submarine_entry_speed = 0.0
-	_submarine_entry_pitch_degrees = 0.0
-	_submarine_duration = 0.0
-	_submarine_current_depth = 0.0
-	_submarine_max_depth = 0.0
-	_submarine_buoyancy_factor_current = 1.0
-	_submarine_propulsion_factor_current = 1.0
-	_submarine_upright_factor_current = 1.0
-	_submarine_exit_blend = 1.0
-	_submarine_exit_start_buoyancy_factor = 1.0
-	_submarine_recovery_active = false
-	_submarine_pre_contact_valid = false
-	_submarine_pre_contact_transform = Transform3D.IDENTITY
-	_submarine_pre_contact_linear_velocity = Vector3.ZERO
-	_submarine_pre_contact_angular_velocity = Vector3.ZERO
-	_submarine_pre_contact_roll_degrees = 0.0
-	_submarine_pre_contact_pitch_degrees = 0.0
-	_submarine_pre_contact_horizontal_speed = 0.0
-
-
 func _update_rider_trick_state(
 	state: PhysicsDirectBodyState3D,
 	physics_delta: float
@@ -1855,7 +1660,7 @@ func _update_rider_trick_state(
 		not rider_weight_shift_enabled
 		or not trick_preload_enabled
 		or navigation_state == NavigationState.DEEP_SUBMERGED
-		or _rider_stunt_water_mode == RiderStuntWaterMode.SUBMARINE_DIVE
+		or submarine_system.is_dive_active()
 	):
 		_cancel_rider_trick_state_for_submarine()
 		return

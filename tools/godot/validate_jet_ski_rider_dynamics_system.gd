@@ -350,7 +350,7 @@ func _validate_structure_and_configuration() -> void:
 		10,
 		controller_source.contains("rider_air_max_roll_rate")
 		and controller_source.contains(
-			"func _calculate_submarine_pitch_target_torque"
+			"submarine_system.calculate_pitch_target_torque("
 		)
 		and controller_source.contains(
 			"func _calculate_trick_release_torque"
@@ -361,7 +361,7 @@ func _validate_structure_and_configuration() -> void:
 		and system_source.contains("func apply_air_torque(")
 		and not system_source.contains("submarine_max_duration")
 		and not system_source.contains("trick_release_duration"),
-		"Air pertenece al sistema; Submarine y Tricks permanecen fuera."
+		"Air pertenece al sistema; Submarine se delega y Tricks permanece fuera."
 	)
 
 

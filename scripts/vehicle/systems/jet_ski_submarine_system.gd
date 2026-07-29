@@ -114,11 +114,23 @@ func _try_start_dive(input_state: JetSkiInputState, water_state: JetSkiWaterStat
 
 
 func _front_leads_entry(navigation_state: JetSkiNavigationState, water_system: JetSkiWaterPhysicsSystem) -> bool:
-	var front_contacts: int = navigation_state.count_contact_bits(navigation_state.new_contact_mask & FRONT_CONTACT_MASK)
-	var rear_contacts: int = navigation_state.count_contact_bits(navigation_state.new_contact_mask & REAR_CONTACT_MASK)
+	var front_contacts: int = _count_contact_bits(
+		navigation_state.new_contact_mask & FRONT_CONTACT_MASK
+	)
+	var rear_contacts: int = _count_contact_bits(
+		navigation_state.new_contact_mask & REAR_CONTACT_MASK
+	)
 	var front_depth := (water_system.point_depths[0] + water_system.point_depths[1]) * 0.5
 	var rear_depth := (water_system.point_depths[2] + water_system.point_depths[3]) * 0.5
 	return front_contacts > 0 and (front_contacts > rear_contacts or front_depth > rear_depth + 0.05)
+
+
+func _count_contact_bits(contact_mask: int) -> int:
+	var contact_count: int = 0
+	for bit_index in 4:
+		if (contact_mask & (1 << bit_index)) != 0:
+			contact_count += 1
+	return contact_count
 
 
 func calculate_pitch_target_torque(body_state: PhysicsDirectBodyState3D, rider_state: JetSkiRiderDynamicsState, body_right: Vector3) -> Vector3:
