@@ -45,6 +45,9 @@ const CONTROLLER_SOURCE := (
 const DRIVE_SOURCE := (
 	"res://scripts/vehicle/systems/jet_ski_drive_system.gd"
 )
+const RIDER_DYNAMICS_SOURCE := (
+	"res://scripts/vehicle/systems/jet_ski_rider_dynamics_system.gd"
+)
 const SCALAR_EPSILON: float = 0.0001
 const SCALAR_RELATIVE_EPSILON: float = 0.000001
 const VECTOR_EPSILON: float = 0.0005
@@ -1069,13 +1072,16 @@ func _validate_compatibility() -> void:
 	var controller_source := FileAccess.get_file_as_string(
 		CONTROLLER_SOURCE
 	)
+	var rider_dynamics_source := FileAccess.get_file_as_string(
+		RIDER_DYNAMICS_SOURCE
+	)
 	_expect_numbered(
 		69,
-		controller_source.contains(
-			"clampf(propulsion_contact_factor, 0.0, 1.0)"
+		rider_dynamics_source.contains(
+			"drive_state.propulsion_contact_factor"
 		)
 		and not controller_source.contains("_propulsion_contact_factor"),
-		"Turn lean recibe el mismo factor mediante proxy."
+		"Turn lean recibe el mismo factor mediante DriveState."
 	)
 	_expect_numbered(
 		70,

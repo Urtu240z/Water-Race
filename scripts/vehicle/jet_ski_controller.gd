@@ -30,15 +30,11 @@ const FRONT_CONTACT_MASK: int = 3
 const REAR_CONTACT_MASK: int = 12
 const LEFT_CONTACT_MASK: int = 5
 const RIGHT_CONTACT_MASK: int = 10
-const TURN_LEAN_STEERING_EXPONENT: float = 0.9
-const HALF_LIFE_LOG_TWO: float = 0.6931471805599453
-const RIDER_SOFT_LIMIT_BLEND_DEGREES: float = 8.0
 const SUBMARINE_MAX_ENTRY_ROLL_DEGREES: float = 45.0
 const SUBMARINE_MIN_EXIT_SPEED: float = 3.0
 const SUBMARINE_SAFETY_DEPTH: float = 3.0
 const SUBMARINE_CLEAR_NOSE_UP_DEGREES: float = 10.0
 const SUBMARINE_ENTRY_BUOYANCY_BLEND_TIME: float = 0.12
-const SUBMARINE_MANUAL_DAMPING_FACTOR: float = 0.35
 const TRICK_PRE_TAKEOFF_OPTIMAL_TIME: float = 0.22
 const TRICK_PRE_TAKEOFF_MINIMUM_TIMING: float = 0.65
 const TRICK_POST_TAKEOFF_OPTIMAL_TIME: float = 0.10
@@ -296,55 +292,67 @@ var current_propulsion_force_vector: Vector3:
 
 var turn_lean_target_roll_degrees: float:
 	get:
-		return rad_to_deg(_turn_lean_target_roll)
+		return rad_to_deg(
+			rider_dynamics_system.state.turn_lean_target_roll
+		)
 
 var turn_lean_current_roll_degrees: float:
 	get:
-		return rad_to_deg(_turn_lean_current_roll)
+		return rad_to_deg(
+			rider_dynamics_system.state.turn_lean_current_roll
+		)
 
 var turn_lean_error_degrees: float:
 	get:
-		return rad_to_deg(_turn_lean_roll_error)
+		return rad_to_deg(
+			rider_dynamics_system.state.turn_lean_roll_error
+		)
 
 var turn_lean_speed_factor: float:
 	get:
-		return _turn_lean_speed_factor
+		return rider_dynamics_system.state.turn_lean_speed_factor
 
 var turn_lean_contact_factor: float:
 	get:
-		return _turn_lean_contact_factor
+		return rider_dynamics_system.state.turn_lean_contact_factor
 
 var turn_lean_roll_rate: float:
 	get:
-		return _turn_lean_roll_rate
+		return rider_dynamics_system.state.turn_lean_roll_rate
 
 var turn_lean_requested_torque: float:
 	get:
-		return _turn_lean_requested_torque
+		return rider_dynamics_system.state.turn_lean_requested_torque
 
 var turn_lean_applied_torque_vector: Vector3:
 	get:
-		return _turn_lean_applied_torque_vector
+		return (
+			rider_dynamics_system.state
+			.turn_lean_applied_torque_vector
+		)
 
 var turn_lean_support_normal: Vector3:
 	get:
-		return _turn_lean_smoothed_support_normal
+		return rider_dynamics_system.state.smoothed_support_normal
 
 var turn_lean_reference_forward: Vector3:
 	get:
-		return _turn_lean_reference_forward
+		return rider_dynamics_system.state.reference_forward
 
 var turn_lean_reference_right: Vector3:
 	get:
-		return _turn_lean_reference_right
+		return rider_dynamics_system.state.reference_right
 
 var turn_lean_airborne_disabled: bool:
 	get:
-		return _turn_lean_airborne_disabled
+		return (
+			rider_dynamics_system.state
+			.turn_lean_airborne_disabled
+		)
 
 var turn_lean_landing_ramp: float:
 	get:
-		return _turn_lean_landing_ramp
+		return rider_dynamics_system.state.turn_lean_landing_ramp
 
 var rider_weight_shift_input: Vector2:
 	get:
@@ -368,19 +376,28 @@ var rider_shift_smoothed_input: Vector2:
 
 var rider_shift_speed_authority: float:
 	get:
-		return _rider_shift_speed_authority
+		return (
+			rider_dynamics_system.state
+			.rider_shift_speed_authority
+		)
 
 var rider_shift_speed_factor: float:
 	get:
-		return _rider_shift_speed_factor
+		return rider_dynamics_system.state.rider_shift_speed_factor
 
 var rider_shift_contact_authority: float:
 	get:
-		return _rider_shift_contact_authority
+		return (
+			rider_dynamics_system.state
+			.rider_shift_contact_authority
+		)
 
 var rider_shift_air_authority_active: float:
 	get:
-		return _rider_shift_air_authority_active
+		return (
+			rider_dynamics_system.state
+			.rider_shift_air_authority_active
+		)
 
 # Active combined roll-target telemetry for automatic and manual water lean.
 var rider_shift_target_angle_metrics_status: StringName:
@@ -389,111 +406,147 @@ var rider_shift_target_angle_metrics_status: StringName:
 
 var rider_shift_manual_roll_target_degrees: float:
 	get:
-		return rad_to_deg(_rider_shift_manual_roll_target)
+		return rad_to_deg(
+			rider_dynamics_system.state
+			.rider_shift_manual_roll_target
+		)
 
 var rider_shift_automatic_roll_target_degrees: float:
 	get:
-		return rad_to_deg(_turn_lean_target_roll)
+		return rad_to_deg(
+			rider_dynamics_system.state.turn_lean_target_roll
+		)
 
 var rider_shift_total_roll_target_degrees: float:
 	get:
-		return rad_to_deg(_rider_shift_total_roll_target)
+		return rad_to_deg(
+			rider_dynamics_system.state
+			.rider_shift_total_roll_target
+		)
 
 var rider_shift_current_roll_degrees: float:
 	get:
-		return rad_to_deg(_turn_lean_current_roll)
+		return rad_to_deg(
+			rider_dynamics_system.state.turn_lean_current_roll
+		)
 
 var rider_shift_manual_pitch_target_degrees: float:
 	get:
-		return rad_to_deg(_rider_shift_manual_pitch_target)
+		return rad_to_deg(
+			rider_dynamics_system.state
+			.rider_shift_manual_pitch_target
+		)
 
 var rider_shift_base_pitch_target_degrees: float:
 	get:
-		return rad_to_deg(_rider_shift_base_pitch_target)
+		return rad_to_deg(
+			rider_dynamics_system.state
+			.rider_shift_base_pitch_target
+		)
 
 var rider_shift_total_pitch_target_degrees: float:
 	get:
-		return rad_to_deg(_rider_shift_total_pitch_target)
+		return rad_to_deg(
+			rider_dynamics_system.state
+			.rider_shift_total_pitch_target
+		)
 
 var rider_shift_current_pitch_degrees: float:
 	get:
-		return rad_to_deg(_rider_shift_current_pitch)
+		return rad_to_deg(
+			rider_dynamics_system.state.rider_shift_current_pitch
+		)
 
 var rider_shift_roll_torque: float:
 	get:
-		return _rider_shift_roll_torque
+		return rider_dynamics_system.state.rider_shift_roll_torque
 
 var rider_shift_pitch_torque: float:
 	get:
-		return _rider_shift_pitch_torque
+		return rider_dynamics_system.state.rider_shift_pitch_torque
 
 var rider_shift_front_contact_ratio: float:
 	get:
-		return _rider_shift_front_contact_ratio
+		return (
+			rider_dynamics_system.state
+			.rider_shift_front_contact_ratio
+		)
 
 var rider_shift_rear_contact_ratio: float:
 	get:
-		return _rider_shift_rear_contact_ratio
+		return (
+			rider_dynamics_system.state
+			.rider_shift_rear_contact_ratio
+		)
 
 var rider_shift_airborne: bool:
 	get:
-		return _rider_shift_airborne
+		return rider_dynamics_system.state.rider_shift_airborne
 
 var rider_shift_landing_ramp: float:
 	get:
-		return _rider_shift_landing_ramp
+		return rider_dynamics_system.state.rider_shift_landing_ramp
 
 var rider_virtual_offset_local: Vector3:
 	get:
-		return _rider_virtual_offset_local
+		return rider_dynamics_system.state.virtual_offset_local
 
 var rider_virtual_offset_world: Vector3:
 	get:
-		return _rider_virtual_offset_world
+		return rider_dynamics_system.state.virtual_offset_world
 
 var rider_virtual_weight_torque: Vector3:
 	get:
-		return _rider_virtual_weight_torque
+		return rider_dynamics_system.state.virtual_weight_torque
 
 var rider_manual_applied_torque: Vector3:
 	get:
-		return _rider_manual_applied_torque
+		return rider_dynamics_system.state.manual_applied_torque
 
 var rider_roll_damping_torque: Vector3:
 	get:
-		return _rider_roll_damping_torque
+		return rider_dynamics_system.state.roll_damping_torque
 
 var rider_pitch_damping_torque: Vector3:
 	get:
-		return _rider_pitch_damping_torque
+		return rider_dynamics_system.state.pitch_damping_torque
 
 var rider_dynamic_pitch_multiplier: float:
 	get:
-		return _rider_dynamic_pitch_multiplier
+		return rider_dynamics_system.state.dynamic_pitch_multiplier
 
 var rider_manual_medium_authority: float:
 	get:
-		return _rider_manual_medium_authority
+		return (
+			rider_dynamics_system.state
+			.rider_manual_medium_authority
+		)
 
 var rider_using_air_control: bool:
 	get:
-		return _rider_using_air_control
+		return rider_dynamics_system.state.using_air_control
 
 var rider_arrow_only_steering_input: float:
 	get:
-		return _rider_arrow_only_steering_input
+		return (
+			rider_dynamics_system.state
+			.arrow_only_steering_input
+		)
 
 var rider_arrow_only_steering_angle: float:
 	get:
-		return _rider_arrow_only_steering_angle
+		return (
+			rider_dynamics_system.state
+			.arrow_only_steering_angle
+		)
 
 var rider_roll_soft_limit_factor: float:
 	get:
-		return _rider_roll_soft_limit_factor
+		return rider_dynamics_system.state.roll_soft_limit_factor
 
 var rider_pitch_soft_limit_factor: float:
 	get:
-		return _rider_pitch_soft_limit_factor
+		return rider_dynamics_system.state.pitch_soft_limit_factor
 
 var rider_air_unlimited_rotation: bool:
 	get:
@@ -859,6 +912,14 @@ var drive_system: JetSkiDriveSystem:
 				"Systems/DriveSystem"
 			) as JetSkiDriveSystem
 		return _drive_system
+var _rider_dynamics_system: JetSkiRiderDynamicsSystem
+var rider_dynamics_system: JetSkiRiderDynamicsSystem:
+	get:
+		if _rider_dynamics_system == null:
+			_rider_dynamics_system = get_node_or_null(
+				"Systems/RiderDynamicsSystem"
+			) as JetSkiRiderDynamicsSystem
+		return _rider_dynamics_system
 var _water_warning_emitted: bool = false
 var _throttle_input: float:
 	get:
@@ -875,54 +936,12 @@ var _steering_input: float:
 		return input_system.state.steering
 	set(value):
 		input_system.state.steering = value
-var _turn_lean_target_roll: float = 0.0
-var _turn_lean_current_roll: float = 0.0
-var _turn_lean_roll_error: float = 0.0
-var _turn_lean_speed_factor: float = 0.0
-var _turn_lean_contact_factor: float = 0.0
-var _turn_lean_roll_rate: float = 0.0
-var _turn_lean_requested_torque: float = 0.0
-var _turn_lean_applied_torque_vector: Vector3 = Vector3.ZERO
-var _turn_lean_smoothed_support_normal: Vector3 = Vector3.UP
-var _turn_lean_reference_forward: Vector3 = Vector3.FORWARD
-var _turn_lean_reference_right: Vector3 = Vector3.RIGHT
-var _turn_lean_airborne_disabled: bool = false
-var _turn_lean_landing_ramp: float = 0.0
 var _rider_shift_raw_input: Vector2:
 	get:
 		return input_system.state.rider_shift_raw
 var _rider_shift_smoothed_input: Vector2:
 	get:
 		return input_system.state.rider_shift_smoothed
-var _rider_shift_speed_authority: float = 0.0
-var _rider_shift_speed_factor: float = 0.0
-var _rider_shift_contact_authority: float = 0.0
-var _rider_shift_air_authority_active: float = 0.0
-var _rider_shift_manual_roll_target: float = 0.0
-var _rider_shift_total_roll_target: float = 0.0
-var _rider_shift_base_pitch_target: float = 0.0
-var _rider_shift_manual_pitch_target: float = 0.0
-var _rider_shift_total_pitch_target: float = 0.0
-var _rider_shift_current_pitch: float = 0.0
-var _rider_shift_roll_torque: float = 0.0
-var _rider_shift_pitch_torque: float = 0.0
-var _rider_shift_front_contact_ratio: float = 0.0
-var _rider_shift_rear_contact_ratio: float = 0.0
-var _rider_shift_airborne: bool = false
-var _rider_shift_landing_ramp: float = 0.0
-var _rider_virtual_offset_local: Vector3 = Vector3.ZERO
-var _rider_virtual_offset_world: Vector3 = Vector3.ZERO
-var _rider_virtual_weight_torque: Vector3 = Vector3.ZERO
-var _rider_manual_applied_torque: Vector3 = Vector3.ZERO
-var _rider_roll_damping_torque: Vector3 = Vector3.ZERO
-var _rider_pitch_damping_torque: Vector3 = Vector3.ZERO
-var _rider_dynamic_pitch_multiplier: float = 1.0
-var _rider_manual_medium_authority: float = 0.0
-var _rider_using_air_control: bool = false
-var _rider_arrow_only_steering_input: float = 0.0
-var _rider_arrow_only_steering_angle: float = 0.0
-var _rider_roll_soft_limit_factor: float = 0.0
-var _rider_pitch_soft_limit_factor: float = 0.0
 var _rider_air_unlimited_rotation: bool = false
 var _rider_air_roll_rate: float = 0.0
 var _rider_air_pitch_rate: float = 0.0
@@ -985,7 +1004,7 @@ var _trick_last_launch_charge: Vector2 = Vector2.ZERO
 var _trick_last_release_strength: Vector2 = Vector2.ZERO
 var _air_correction_roll_torque_current: float = 0.0
 var _air_correction_pitch_torque_current: float = 0.0
-var _rider_shift_warning_emitted: bool = false
+var _rider_air_warning_emitted: bool = false
 
 
 func _ready() -> void:
@@ -999,10 +1018,11 @@ func _ready() -> void:
 	_configure_navigation_system()
 	_connect_navigation_signals()
 	_configure_drive_system()
+	_configure_rider_dynamics_system()
 	navigation_system.reset_runtime_state()
 	drive_system.reset_runtime_state()
-	_reset_turn_lean_state()
-	_reset_rider_shift_state()
+	rider_dynamics_system.reset_runtime_state()
+	_reset_air_control_state()
 	_reset_submarine_state(false)
 	_reset_trick_state()
 	reset_physics_interpolation()
@@ -1011,8 +1031,8 @@ func _ready() -> void:
 func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 	navigation_system.begin_physics_tick()
 	drive_system.begin_physics_tick()
-	_clear_turn_lean_frame_metrics()
-	_clear_rider_shift_frame_metrics()
+	rider_dynamics_system.begin_physics_tick()
+	_clear_air_control_frame_metrics()
 	input_system.rider_weight_shift_enabled = rider_weight_shift_enabled
 	input_system.rider_shift_input_half_life = rider_shift_input_half_life
 	input_system.rider_shift_release_half_life = rider_shift_release_half_life
@@ -1051,7 +1071,7 @@ func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 		input_system.state,
 		_submarine_propulsion_factor_current
 	)
-	_apply_turn_lean(state)
+	_apply_rider_dynamics(state)
 
 
 func _physics_process(_delta: float) -> void:
@@ -1166,8 +1186,8 @@ func reset_vehicle(reason: StringName = &"manual") -> void:
 	water_physics_system.reset_runtime_state()
 	navigation_system.reset_runtime_state()
 	drive_system.reset_runtime_state()
-	_reset_turn_lean_state()
-	_reset_rider_shift_state()
+	rider_dynamics_system.reset_runtime_state()
+	_reset_air_control_state()
 	_reset_submarine_state(true)
 	_reset_trick_state()
 	reset_physics_interpolation()
@@ -1310,6 +1330,104 @@ func _configure_drive_system() -> void:
 	drive_system.configure(propulsion_marker)
 
 
+func _configure_rider_dynamics_system() -> void:
+	rider_dynamics_system.turn_lean_enabled = turn_lean_enabled
+	rider_dynamics_system.turn_lean_max_angle_degrees = (
+		turn_lean_max_angle_degrees
+	)
+	rider_dynamics_system.turn_lean_start_speed = (
+		turn_lean_start_speed
+	)
+	rider_dynamics_system.turn_lean_full_speed = (
+		turn_lean_full_speed
+	)
+	rider_dynamics_system.turn_lean_stiffness = turn_lean_stiffness
+	rider_dynamics_system.turn_lean_damping = turn_lean_damping
+	rider_dynamics_system.turn_lean_max_torque = (
+		turn_lean_max_torque
+	)
+	rider_dynamics_system.turn_lean_reverse_factor = (
+		turn_lean_reverse_factor
+	)
+	rider_dynamics_system.turn_lean_landing_ramp_time = (
+		turn_lean_landing_ramp_time
+	)
+	rider_dynamics_system.turn_lean_support_normal_half_life = (
+		turn_lean_support_normal_half_life
+	)
+	rider_dynamics_system.rider_weight_shift_enabled = (
+		rider_weight_shift_enabled
+	)
+	rider_dynamics_system.rider_shift_input_half_life = (
+		rider_shift_input_half_life
+	)
+	rider_dynamics_system.rider_shift_release_half_life = (
+		rider_shift_release_half_life
+	)
+	rider_dynamics_system.rider_effective_mass = rider_effective_mass
+	rider_dynamics_system.rider_lateral_shift_distance = (
+		rider_lateral_shift_distance
+	)
+	rider_dynamics_system.rider_longitudinal_shift_distance = (
+		rider_longitudinal_shift_distance
+	)
+	rider_dynamics_system.rider_weight_torque_multiplier = (
+		rider_weight_torque_multiplier
+	)
+	rider_dynamics_system.rider_roll_rate_damping = (
+		rider_roll_rate_damping
+	)
+	rider_dynamics_system.rider_pitch_rate_damping = (
+		rider_pitch_rate_damping
+	)
+	rider_dynamics_system.rider_shift_standstill_authority = (
+		rider_shift_standstill_authority
+	)
+	rider_dynamics_system.rider_shift_full_speed = (
+		rider_shift_full_speed
+	)
+	rider_dynamics_system.rider_shift_deep_submerged_authority = (
+		rider_shift_deep_submerged_authority
+	)
+	rider_dynamics_system.rider_shift_landing_ramp_time = (
+		rider_shift_landing_ramp_time
+	)
+	rider_dynamics_system.rider_shift_auto_upright_factor = (
+		rider_shift_auto_upright_factor
+	)
+	rider_dynamics_system.rider_manual_roll_max_angle_degrees = (
+		rider_manual_roll_max_angle_degrees
+	)
+	rider_dynamics_system.rider_wheelie_throttle_boost = (
+		rider_wheelie_throttle_boost
+	)
+	rider_dynamics_system.rider_nose_dive_speed_boost = (
+		rider_nose_dive_speed_boost
+	)
+	rider_dynamics_system.rider_roll_soft_limit_degrees = (
+		rider_roll_soft_limit_degrees
+	)
+	rider_dynamics_system.rider_nose_up_soft_limit_degrees = (
+		rider_nose_up_soft_limit_degrees
+	)
+	rider_dynamics_system.rider_nose_down_soft_limit_degrees = (
+		rider_nose_down_soft_limit_degrees
+	)
+	rider_dynamics_system.rider_soft_limit_stiffness = (
+		rider_soft_limit_stiffness
+	)
+	rider_dynamics_system.rider_soft_limit_damping = (
+		rider_soft_limit_damping
+	)
+	rider_dynamics_system.buoyancy_strength_per_point = (
+		buoyancy_strength_per_point
+	)
+	rider_dynamics_system.max_submersion_depth = (
+		max_submersion_depth
+	)
+	rider_dynamics_system.configure(water_physics_system)
+
+
 func _connect_navigation_signals() -> void:
 	navigation_system.water_entered.connect(
 		_on_navigation_system_water_entered
@@ -1347,309 +1465,78 @@ func _on_navigation_system_deeply_submerged() -> void:
 	deeply_submerged.emit()
 
 
-func _apply_turn_lean(state: PhysicsDirectBodyState3D) -> void:
-	var vehicle_basis := state.transform.basis.orthonormalized()
-	var vehicle_up := vehicle_basis.y
-	var vehicle_forward := -vehicle_basis.z
-	if (
-		not vehicle_up.is_finite()
-		or not vehicle_forward.is_finite()
-	):
-		_warn_about_invalid_rider_shift_once("Rider weight-shift body axes are not finite.")
+func _apply_rider_dynamics(
+	body_state: PhysicsDirectBodyState3D
+) -> void:
+	var using_air := rider_dynamics_system.prepare_mode(
+		body_state,
+		navigation_system.state
+	)
+	if not rider_dynamics_system.has_valid_body_axes():
 		return
-	# Losing buoyancy-point contact is not a takeoff while the physical hull is
-	# still supported by a ramp or another upward-facing solid contact.
-	_rider_using_air_control = not has_any_support
-	_turn_lean_airborne_disabled = _rider_using_air_control
-	_rider_shift_airborne = _rider_using_air_control
-	_update_rider_air_rotation_metrics(state, vehicle_basis)
-	_update_rider_shift_speed_authority()
-	_update_rider_shift_contact_metrics()
-	_update_rider_shift_obsolete_target_metrics()
+	var vehicle_basis := (
+		body_state.transform.basis.orthonormalized()
+	)
+	_update_rider_air_rotation_metrics(
+		body_state,
+		vehicle_basis
+	)
+	rider_dynamics_system.prepare_common_metrics(
+		input_system.state,
+		water_physics_system.state,
+		navigation_system.state,
+		drive_system.state,
+		_rider_stunt_water_mode
+		== RiderStuntWaterMode.SUBMARINE_DIVE
+	)
+	if using_air:
+		var air_attitude := _calculate_rider_world_attitude(
+			body_state.transform
+		)
+		rider_dynamics_system.state.turn_lean_current_roll = (
+			air_attitude.x
+		)
+		rider_dynamics_system.state.rider_shift_current_pitch = (
+			air_attitude.y
+		)
+		_apply_rider_shift_air_control(body_state)
+		return
+	if not rider_dynamics_system.prepare_supported(
+		body_state,
+		input_system.state,
+		water_physics_system.state,
+		navigation_system.state,
+		drive_system.state
+	):
+		return
+	var external_submarine_pitch_torque := Vector3.ZERO
 	if (
 		rider_weight_shift_enabled
 		and not _rider_shift_smoothed_input.is_zero_approx()
-		and absf(_steering_input) <= 0.0001
 	):
-		_rider_arrow_only_steering_input = _steering_input
-		_rider_arrow_only_steering_angle = current_steering_angle_degrees
-	if _rider_using_air_control:
-		var air_attitude := _calculate_rider_world_attitude(state.transform)
-		_turn_lean_current_roll = air_attitude.x
-		_rider_shift_current_pitch = air_attitude.y
-		_apply_rider_shift_air_control(state)
-		return
-	_update_turn_lean_support_normal(state.step)
-	_update_turn_lean_reference_axes(state.transform)
-	_update_turn_lean_landing_authority(state.step)
-	_update_rider_shift_landing_authority(state.step)
-	if (
-		not _turn_lean_smoothed_support_normal.is_finite()
-		or not _turn_lean_reference_forward.is_finite()
-		or not _turn_lean_reference_right.is_finite()
-	):
-		_warn_about_invalid_rider_shift_once("Rider weight-shift reference axes are not finite.")
-		return
-	# With forward=-Z and right=+X, a positive roll tilts vehicle_up to the right.
-	_turn_lean_current_roll = atan2(
-		vehicle_up.dot(_turn_lean_reference_right),
-		vehicle_up.dot(_turn_lean_smoothed_support_normal)
-	)
-	# Positive pitch raises the physical bow; negative pitch lowers it.
-	_rider_shift_current_pitch = atan2(
-		vehicle_forward.dot(_turn_lean_smoothed_support_normal),
-		vehicle_forward.dot(_turn_lean_reference_forward)
-	)
-	if not is_finite(_turn_lean_current_roll) or not is_finite(_rider_shift_current_pitch):
-		_warn_about_invalid_rider_shift_once("Rider weight-shift attitude angles are not finite.")
-		return
-	_turn_lean_roll_rate = state.angular_velocity.dot(_turn_lean_reference_forward)
-	_turn_lean_speed_factor = smoothstep(
-		turn_lean_start_speed,
-		turn_lean_full_speed,
-		absf(water_physics_system.state.water_relative_forward_speed)
-	)
-	_turn_lean_contact_factor = _calculate_turn_lean_contact_factor()
-	var drive_direction_sign := _turn_lean_drive_direction_sign()
-	var steering_lean_factor := (
-		signf(_steering_input)
-		* pow(absf(_steering_input), TURN_LEAN_STEERING_EXPONENT)
-	)
-	var reverse_authority := (
-		turn_lean_reverse_factor
-		if drive_direction_sign < 0.0
-		else 1.0
-	)
-	_turn_lean_target_roll = 0.0
-	if turn_lean_enabled:
-		_turn_lean_target_roll = (
-			drive_direction_sign
-			* deg_to_rad(turn_lean_max_angle_degrees)
-			* steering_lean_factor
-			* _turn_lean_speed_factor
-			* _turn_lean_contact_factor
-			* reverse_authority
+		var body_right := (
+			body_state.transform.basis.orthonormalized().x
 		)
-	_update_rider_shift_obsolete_target_metrics()
-	_rider_shift_manual_roll_target = (
-		deg_to_rad(rider_manual_roll_max_angle_degrees)
-		* _rider_shift_smoothed_input.x
-		* _rider_manual_medium_authority
-	)
-	_rider_shift_total_roll_target = clampf(
-		_turn_lean_target_roll + _rider_shift_manual_roll_target,
-		-deg_to_rad(rider_roll_soft_limit_degrees),
-		deg_to_rad(rider_roll_soft_limit_degrees)
-	)
-	_turn_lean_roll_error = wrapf(
-		_rider_shift_total_roll_target - _turn_lean_current_roll,
-		-PI,
-		PI
-	)
-	var combined_torque := Vector3.ZERO
-	if turn_lean_enabled:
-		combined_torque += _calculate_turn_lean_pd_torque()
-	if rider_weight_shift_enabled and not _rider_shift_smoothed_input.is_zero_approx():
-		combined_torque += _calculate_virtual_rider_weight_torque(state)
-	if not combined_torque.is_finite():
-		_turn_lean_requested_torque = 0.0
-		_turn_lean_applied_torque_vector = Vector3.ZERO
-		_rider_shift_roll_torque = 0.0
-		_rider_shift_pitch_torque = 0.0
-		_warn_about_invalid_rider_shift_once("Rider weight-shift torque is not finite.")
-		return
-	if not combined_torque.is_zero_approx():
-		state.apply_torque(combined_torque)
-
-
-# Kept for compatibility with 4B telemetry consumers. Legacy manual pitch
-# target-angle metrics remain zero; roll targets are populated in turn lean.
-func _update_rider_shift_obsolete_target_metrics() -> void:
-	_rider_shift_manual_roll_target = 0.0
-	_rider_shift_manual_pitch_target = 0.0
-	_rider_shift_base_pitch_target = 0.0
-	_rider_shift_total_roll_target = _turn_lean_target_roll
-	_rider_shift_total_pitch_target = 0.0
-
-
-func _calculate_turn_lean_pd_torque() -> Vector3:
-	if _turn_lean_contact_factor <= 0.0:
-		return Vector3.ZERO
-	var effective_stiffness := (
-		turn_lean_stiffness * _submarine_upright_factor_current
-	)
-	var effective_damping := (
-		turn_lean_damping * _submarine_upright_factor_current
-	)
-	_turn_lean_requested_torque = clampf(
-		_turn_lean_roll_error * effective_stiffness
-		- _turn_lean_roll_rate * effective_damping,
-		-turn_lean_max_torque,
-		turn_lean_max_torque
-	)
-	_turn_lean_applied_torque_vector = (
-		_turn_lean_reference_forward
-		* _turn_lean_requested_torque
-		* _turn_lean_contact_factor
-	)
-	return _turn_lean_applied_torque_vector
-
-
-func _calculate_virtual_rider_weight_torque(
-	state: PhysicsDirectBodyState3D
-) -> Vector3:
-	var vehicle_basis := state.transform.basis.orthonormalized()
-	var body_forward := -vehicle_basis.z
-	var body_right := vehicle_basis.x
-	if (
-		not body_forward.is_finite()
-		or not body_right.is_finite()
-		or body_forward.length_squared() <= 0.000001
-		or body_right.length_squared() <= 0.000001
-	):
-		_warn_about_invalid_rider_shift_once("Virtual rider axes are degenerate.")
-		return Vector3.ZERO
-	_rider_virtual_offset_local = Vector3(
-		_rider_shift_smoothed_input.x * rider_lateral_shift_distance,
-		0.0,
-		_rider_shift_smoothed_input.y * rider_longitudinal_shift_distance
-	)
-	_rider_virtual_offset_world = (
-		vehicle_basis * _rider_virtual_offset_local
-	)
-	var gravity_acceleration: Vector3 = state.total_gravity
-	if (
-		not gravity_acceleration.is_finite()
-		or gravity_acceleration.length_squared() <= 0.000001
-	):
-		gravity_acceleration = Vector3.DOWN * 9.81
-	var virtual_weight_force := gravity_acceleration * rider_effective_mass
-	var raw_weight_torque := (
-		_rider_virtual_offset_world.cross(virtual_weight_force)
-		* rider_weight_torque_multiplier
-	)
-	# The physical moment is projected onto body roll/pitch axes so it cannot add
-	# a manual yaw component while the hull is tilted.
-	var pitch_weight_torque := raw_weight_torque.dot(body_right)
-	var back_input := maxf(_rider_shift_smoothed_input.y, 0.0)
-	var forward_input := maxf(-_rider_shift_smoothed_input.y, 0.0)
-	_rider_dynamic_pitch_multiplier = 1.0
-	if back_input > 0.0:
-		_rider_dynamic_pitch_multiplier += (
-			_throttle_input * back_input * rider_wheelie_throttle_boost
+		external_submarine_pitch_torque = (
+			_calculate_submarine_pitch_target_torque(
+				body_state,
+				body_right
+			)
 		)
-	elif forward_input > 0.0:
-		_rider_dynamic_pitch_multiplier += (
-			_rider_shift_speed_factor * forward_input * rider_nose_dive_speed_boost
-		)
-	pitch_weight_torque *= _rider_dynamic_pitch_multiplier
-	_rider_virtual_weight_torque = (
-		body_right
-		* pitch_weight_torque
-		* _rider_manual_medium_authority
+	rider_dynamics_system.apply_supported_torque(
+		body_state,
+		input_system.state,
+		_submarine_upright_factor_current,
+		_submarine_control_blend(),
+		external_submarine_pitch_torque
 	)
-	var pitch_rate := state.angular_velocity.dot(body_right)
-	var manual_damping_factor := lerpf(
-		1.0,
-		SUBMARINE_MANUAL_DAMPING_FACTOR,
-		_submarine_control_blend()
-	)
-	_rider_roll_damping_torque = Vector3.ZERO
-	_rider_pitch_damping_torque = (
-		-body_right
-		* pitch_rate
-		* rider_pitch_rate_damping
-		* absf(_rider_shift_smoothed_input.y)
-		* _rider_manual_medium_authority
-		* manual_damping_factor
-	)
-	var soft_limit_torque := _calculate_rider_shift_soft_limit_torque(
-		state,
-		body_forward,
-		body_right,
-		rider_roll_soft_limit_degrees,
-		rider_nose_up_soft_limit_degrees,
-		rider_nose_down_soft_limit_degrees
-	)
-	var manual_torque := (
-		_rider_virtual_weight_torque
-		+ _rider_roll_damping_torque
-		+ _rider_pitch_damping_torque
-		+ soft_limit_torque
-		+ _calculate_submarine_pitch_target_torque(state, body_right)
-	)
-	_rider_shift_roll_torque = manual_torque.dot(body_forward)
-	_rider_shift_pitch_torque = manual_torque.dot(body_right)
-	_rider_manual_applied_torque = manual_torque
-	return manual_torque
-
-
-func _calculate_rider_shift_soft_limit_torque(
-	state: PhysicsDirectBodyState3D,
-	body_forward: Vector3,
-	body_right: Vector3,
-	roll_limit_degrees: float,
-	nose_up_limit_degrees: float,
-	nose_down_limit_degrees: float
-) -> Vector3:
-	var limit_torque := Vector3.ZERO
-	var blend_range := deg_to_rad(RIDER_SOFT_LIMIT_BLEND_DEGREES)
-	if absf(_rider_shift_smoothed_input.x) > 0.0005:
-		var roll_limit := deg_to_rad(roll_limit_degrees)
-		var roll_excess := 0.0
-		if _turn_lean_current_roll > roll_limit:
-			roll_excess = _turn_lean_current_roll - roll_limit
-		elif _turn_lean_current_roll < -roll_limit:
-			roll_excess = _turn_lean_current_roll + roll_limit
-		if not is_zero_approx(roll_excess):
-			var roll_direction := signf(roll_excess)
-			var roll_rate := state.angular_velocity.dot(body_forward)
-			var outward_roll_rate := maxf(roll_rate * roll_direction, 0.0)
-			_rider_roll_soft_limit_factor = clampf(
-				absf(roll_excess) / maxf(blend_range, 0.0001),
-				0.0,
-				1.0
-			)
-			limit_torque += (
-				-body_forward
-				* roll_direction
-				* (
-					absf(roll_excess) * rider_soft_limit_stiffness
-					+ outward_roll_rate * rider_soft_limit_damping
-				)
-			)
-	if absf(_rider_shift_smoothed_input.y) > 0.0005:
-		var nose_up_limit := deg_to_rad(nose_up_limit_degrees)
-		var nose_down_limit := deg_to_rad(nose_down_limit_degrees)
-		var pitch_excess := 0.0
-		if _rider_shift_current_pitch > nose_up_limit:
-			pitch_excess = _rider_shift_current_pitch - nose_up_limit
-		elif _rider_shift_current_pitch < -nose_down_limit:
-			pitch_excess = _rider_shift_current_pitch + nose_down_limit
-		if not is_zero_approx(pitch_excess):
-			var pitch_direction := signf(pitch_excess)
-			var pitch_rate := state.angular_velocity.dot(body_right)
-			var outward_pitch_rate := maxf(pitch_rate * pitch_direction, 0.0)
-			_rider_pitch_soft_limit_factor = clampf(
-				absf(pitch_excess) / maxf(blend_range, 0.0001),
-				0.0,
-				1.0
-			)
-			limit_torque += (
-				-body_right
-				* pitch_direction
-				* (
-					absf(pitch_excess) * rider_soft_limit_stiffness
-					+ outward_pitch_rate * rider_soft_limit_damping
-				)
-			)
-	return limit_torque
 
 
 func _apply_rider_shift_air_control(state: PhysicsDirectBodyState3D) -> void:
 	if not rider_weight_shift_enabled:
 		return
-	_rider_shift_air_authority_active = 1.0
+	var rider_state := rider_dynamics_system.state
+	rider_state.rider_shift_air_authority_active = 1.0
 	var vehicle_basis := state.transform.basis.orthonormalized()
 	var body_forward := -vehicle_basis.z
 	var body_right := vehicle_basis.x
@@ -1659,14 +1546,18 @@ func _apply_rider_shift_air_control(state: PhysicsDirectBodyState3D) -> void:
 		or body_forward.length_squared() <= 0.000001
 		or body_right.length_squared() <= 0.000001
 	):
-		_warn_about_invalid_rider_shift_once("Rider weight-shift air axes are degenerate.")
+		_warn_about_invalid_rider_air_once(
+			"Rider weight-shift air axes are degenerate."
+		)
 		return
-	_rider_virtual_offset_local = Vector3(
+	rider_state.virtual_offset_local = Vector3(
 		_rider_shift_raw_input.x * rider_lateral_shift_distance,
 		0.0,
 		_rider_shift_raw_input.y * rider_longitudinal_shift_distance
 	)
-	_rider_virtual_offset_world = vehicle_basis * _rider_virtual_offset_local
+	rider_state.virtual_offset_world = (
+		vehicle_basis * rider_state.virtual_offset_local
+	)
 	# Air control uses the normalized raw input so releasing the arrows produces
 	# zero correction torque in the same physics tick. Water retains smooth weight shift.
 	var roll_rate := state.angular_velocity.dot(body_forward)
@@ -1704,13 +1595,18 @@ func _apply_rider_shift_air_control(state: PhysicsDirectBodyState3D) -> void:
 		)
 	)
 	if not air_torque.is_finite():
-		_rider_shift_roll_torque = 0.0
-		_rider_shift_pitch_torque = 0.0
-		_warn_about_invalid_rider_shift_once("Rider weight-shift air torque is not finite.")
+		rider_state.rider_shift_roll_torque = 0.0
+		rider_state.rider_shift_pitch_torque = 0.0
+		_warn_about_invalid_rider_air_once(
+			"Rider weight-shift air torque is not finite."
+		)
 		return
-	_rider_shift_roll_torque = air_torque.dot(body_forward)
-	_rider_shift_pitch_torque = air_torque.dot(body_right)
-	_rider_manual_applied_torque = air_torque
+	rider_state.rider_shift_roll_torque = air_torque.dot(
+		body_forward
+	)
+	rider_state.rider_shift_pitch_torque = air_torque.dot(body_right)
+	rider_state.manual_applied_torque = air_torque
+	rider_state.total_applied_torque_vector = air_torque
 	if not air_torque.is_zero_approx():
 		state.apply_torque(air_torque)
 
@@ -1812,7 +1708,7 @@ func _update_rider_air_rotation_metrics(
 	state: PhysicsDirectBodyState3D,
 	vehicle_basis: Basis
 ) -> void:
-	if not _rider_using_air_control:
+	if not rider_dynamics_system.state.using_air_control:
 		_rider_air_unlimited_rotation = false
 		_rider_air_roll_rate = 0.0
 		_rider_air_pitch_rate = 0.0
@@ -2029,7 +1925,8 @@ func _calculate_submarine_pitch_target_torque(
 		return Vector3.ZERO
 	var target_pitch := -deg_to_rad(submarine_target_nose_down_degrees)
 	var pitch_error := wrapf(
-		target_pitch - _rider_shift_current_pitch,
+		target_pitch
+		- rider_dynamics_system.state.rider_shift_current_pitch,
 		-PI,
 		PI
 	)
@@ -2047,7 +1944,7 @@ func _calculate_submarine_pitch_target_torque(
 	return (
 		body_right
 		* target_torque
-		* _rider_manual_medium_authority
+		* rider_dynamics_system.state.rider_manual_medium_authority
 	)
 
 
@@ -2585,247 +2482,7 @@ func _reset_trick_state() -> void:
 	_clear_trick_pitch_preload()
 
 
-func _update_rider_shift_speed_authority() -> void:
-	_rider_shift_speed_factor = _rider_shift_observed_speed_factor()
-	_rider_shift_speed_authority = lerpf(
-		rider_shift_standstill_authority,
-		1.0,
-		_rider_shift_speed_factor
-	)
-	_rider_shift_speed_authority = clampf(_rider_shift_speed_authority, 0.0, 1.0)
-
-
-func _rider_shift_observed_speed_factor() -> float:
-	return smoothstep(
-		0.0,
-		maxf(rider_shift_full_speed, 0.001),
-		absf(water_physics_system.state.water_relative_forward_speed)
-	)
-
-
-func _update_rider_shift_contact_metrics() -> void:
-	_rider_shift_front_contact_ratio = (
-		float(navigation_system.count_contact_bits(
-			current_contact_mask & FRONT_CONTACT_MASK
-		))
-		/ float(FRONT_POINT_COUNT)
-	)
-	_rider_shift_rear_contact_ratio = (
-		float(navigation_system.count_contact_bits(
-			current_contact_mask & REAR_CONTACT_MASK
-		))
-		/ float(FRONT_POINT_COUNT)
-	)
-	if _rider_using_air_control:
-		_rider_shift_contact_authority = 0.0
-		_rider_manual_medium_authority = 0.0
-		return
-	var medium_authority := 1.0
-	if _rider_stunt_water_mode == RiderStuntWaterMode.SUBMARINE_DIVE:
-		medium_authority = 1.0
-	elif navigation_state == NavigationState.DEEP_SUBMERGED:
-		medium_authority = rider_shift_deep_submerged_authority
-	elif navigation_state == NavigationState.LANDING:
-		medium_authority = lerpf(0.35, 1.0, _rider_shift_landing_ramp)
-	# This is the only optional speed-dependent reinforcement of the base manual
-	# moment. With the required default of 1.0 it is speed-independent.
-	medium_authority *= _rider_shift_speed_authority
-	_rider_manual_medium_authority = clampf(
-		medium_authority,
-		0.0,
-		1.0
-	)
-	# Compatibility alias: 4B.1 no longer derives authority from contact count.
-	_rider_shift_contact_authority = _rider_manual_medium_authority
-
-
-func _update_rider_shift_landing_authority(physics_delta: float) -> void:
-	if current_contact_mask == 0:
-		_rider_shift_landing_ramp = 0.0
-		return
-	if previous_contact_mask == 0 and current_contact_mask != 0:
-		_rider_shift_landing_ramp = 0.0
-		return
-	if rider_shift_landing_ramp_time <= 0.0:
-		_rider_shift_landing_ramp = 1.0
-		return
-	_rider_shift_landing_ramp = minf(
-		_rider_shift_landing_ramp
-		+ maxf(physics_delta, 0.0) / rider_shift_landing_ramp_time,
-		1.0
-	)
-func _update_turn_lean_support_normal(physics_delta: float) -> void:
-	var weighted_normal_sum := Vector3.ZERO
-	var total_weight: float = 0.0
-	for index in BUOYANCY_POINT_COUNT:
-		if (
-			not water_physics_system.point_sample_valid[index]
-			or water_physics_system.point_depths[index] <= 0.0
-		):
-			continue
-		var point_normal := water_physics_system.point_water_normals[index]
-		if not point_normal.is_finite() or point_normal.length_squared() <= 0.000001:
-			continue
-		var depth_weight := (
-			water_physics_system.point_depths[index]
-			* buoyancy_strength_per_point
-		)
-		var point_weight := maxf(
-			water_physics_system.point_normal_forces[index],
-			maxf(depth_weight, 1.0)
-		)
-		weighted_normal_sum += point_normal * point_weight
-		total_weight += point_weight
-	var target_support_normal := Vector3.UP
-	if total_weight > 0.0 and weighted_normal_sum.length_squared() > 0.000001:
-		target_support_normal = weighted_normal_sum.normalized()
-	if target_support_normal.y < 0.0:
-		target_support_normal = -target_support_normal
-	var blend_weight := 1.0 - exp(
-		-HALF_LIFE_LOG_TWO
-		* physics_delta
-		/ maxf(turn_lean_support_normal_half_life, 0.0001)
-	)
-	var blended_normal := _turn_lean_smoothed_support_normal.lerp(
-		target_support_normal,
-		clampf(blend_weight, 0.0, 1.0)
-	)
-	if blended_normal.is_finite() and blended_normal.length_squared() > 0.000001:
-		_turn_lean_smoothed_support_normal = blended_normal.normalized()
-	else:
-		_turn_lean_smoothed_support_normal = Vector3.UP
-
-
-func _update_turn_lean_reference_axes(vehicle_transform: Transform3D) -> void:
-	var vehicle_forward := -vehicle_transform.basis.z.normalized()
-	var projected_forward := vehicle_forward.slide(_turn_lean_smoothed_support_normal)
-	if projected_forward.length_squared() <= 0.000001:
-		var vehicle_right := vehicle_transform.basis.x.normalized()
-		projected_forward = _turn_lean_smoothed_support_normal.cross(vehicle_right)
-	if projected_forward.length_squared() <= 0.000001:
-		projected_forward = Vector3.FORWARD.slide(_turn_lean_smoothed_support_normal)
-	_turn_lean_reference_forward = projected_forward.normalized()
-	var reference_right := _turn_lean_reference_forward.cross(
-		_turn_lean_smoothed_support_normal
-	)
-	if reference_right.length_squared() <= 0.000001:
-		reference_right = vehicle_transform.basis.x.normalized()
-	_turn_lean_reference_right = reference_right.normalized()
-
-
-func _update_turn_lean_landing_authority(physics_delta: float) -> void:
-	if current_contact_mask == 0 or navigation_state == NavigationState.AIRBORNE:
-		_turn_lean_landing_ramp = 0.0
-		return
-	if turn_lean_landing_ramp_time <= 0.0:
-		_turn_lean_landing_ramp = 1.0
-		return
-	_turn_lean_landing_ramp = minf(
-		_turn_lean_landing_ramp + physics_delta / turn_lean_landing_ramp_time,
-		1.0
-	)
-
-
-func _calculate_turn_lean_contact_factor() -> float:
-	if navigation_state == NavigationState.AIRBORNE:
-		return 0.0
-	var contact_count := navigation_system.count_contact_bits(
-		current_contact_mask
-	)
-	var point_support: float = 0.0
-	match contact_count:
-		1:
-			point_support = 0.15
-		2:
-			point_support = 0.55
-		3:
-			point_support = 0.8
-		4:
-			point_support = 1.0
-	var full_depth := maxf(max_submersion_depth * 0.2, 0.01)
-	var depth_support := lerpf(
-		0.5,
-		1.0,
-		smoothstep(
-			0.0,
-			full_depth,
-			water_physics_system.state.average_depth
-		)
-	)
-	var propulsor_support := lerpf(
-		0.25,
-		1.0,
-		clampf(propulsion_contact_factor, 0.0, 1.0)
-	)
-	var navigation_support := (
-		0.35
-		if navigation_state == NavigationState.DEEP_SUBMERGED
-		else 1.0
-	)
-	return clampf(
-		point_support
-		* depth_support
-		* propulsor_support
-		* navigation_support
-		* _turn_lean_landing_ramp,
-		0.0,
-		1.0
-	)
-
-
-func _turn_lean_drive_direction_sign() -> float:
-	var net_propulsion_input := _throttle_input - _brake_input
-	if absf(net_propulsion_input) > 0.001:
-		return signf(net_propulsion_input)
-	var relative_forward_speed := (
-		water_physics_system.state.water_relative_forward_speed
-	)
-	if absf(relative_forward_speed) > 0.01:
-		return signf(relative_forward_speed)
-	return 0.0
-
-
-func _clear_turn_lean_frame_metrics() -> void:
-	_turn_lean_target_roll = 0.0
-	_turn_lean_current_roll = 0.0
-	_turn_lean_roll_error = 0.0
-	_turn_lean_speed_factor = 0.0
-	_turn_lean_contact_factor = 0.0
-	_turn_lean_roll_rate = 0.0
-	_turn_lean_requested_torque = 0.0
-	_turn_lean_applied_torque_vector = Vector3.ZERO
-	_turn_lean_airborne_disabled = false
-
-
-func _clear_rider_shift_frame_metrics() -> void:
-	_rider_shift_speed_authority = 0.0
-	_rider_shift_speed_factor = 0.0
-	_rider_shift_contact_authority = 0.0
-	_rider_shift_air_authority_active = 0.0
-	_rider_shift_manual_roll_target = 0.0
-	_rider_shift_total_roll_target = 0.0
-	_rider_shift_base_pitch_target = 0.0
-	_rider_shift_manual_pitch_target = 0.0
-	_rider_shift_total_pitch_target = 0.0
-	_rider_shift_current_pitch = 0.0
-	_rider_shift_roll_torque = 0.0
-	_rider_shift_pitch_torque = 0.0
-	_rider_shift_front_contact_ratio = 0.0
-	_rider_shift_rear_contact_ratio = 0.0
-	_rider_shift_airborne = false
-	_rider_virtual_offset_local = Vector3.ZERO
-	_rider_virtual_offset_world = Vector3.ZERO
-	_rider_virtual_weight_torque = Vector3.ZERO
-	_rider_manual_applied_torque = Vector3.ZERO
-	_rider_roll_damping_torque = Vector3.ZERO
-	_rider_pitch_damping_torque = Vector3.ZERO
-	_rider_dynamic_pitch_multiplier = 1.0
-	_rider_manual_medium_authority = 0.0
-	_rider_using_air_control = false
-	_rider_arrow_only_steering_input = 0.0
-	_rider_arrow_only_steering_angle = 0.0
-	_rider_roll_soft_limit_factor = 0.0
-	_rider_pitch_soft_limit_factor = 0.0
+func _clear_air_control_frame_metrics() -> void:
 	_rider_air_unlimited_rotation = false
 	_rider_air_roll_rate = 0.0
 	_rider_air_pitch_rate = 0.0
@@ -2835,21 +2492,12 @@ func _clear_rider_shift_frame_metrics() -> void:
 	_air_correction_pitch_torque_current = 0.0
 
 
-func _reset_turn_lean_state() -> void:
-	_clear_turn_lean_frame_metrics()
-	_turn_lean_smoothed_support_normal = Vector3.UP
-	_turn_lean_reference_forward = Vector3.FORWARD
-	_turn_lean_reference_right = Vector3.RIGHT
-	_turn_lean_landing_ramp = 0.0
-
-
-func _reset_rider_shift_state() -> void:
+func _reset_air_control_state() -> void:
 	input_system.reset_rider_shift()
-	_rider_shift_landing_ramp = 0.0
 	_rider_air_accumulated_roll_degrees = 0.0
 	_rider_air_accumulated_pitch_degrees = 0.0
 	_rider_air_tracking_active = false
-	_clear_rider_shift_frame_metrics()
+	_clear_air_control_frame_metrics()
 
 
 func _on_input_system_rider_weight_shift_changed(shift: Vector2) -> void:
@@ -2863,8 +2511,8 @@ func _warn_about_missing_water_once() -> void:
 	push_warning("JetSki buoyancy is disabled because its Ocean3D reference is invalid.")
 
 
-func _warn_about_invalid_rider_shift_once(message: String) -> void:
-	if _rider_shift_warning_emitted:
+func _warn_about_invalid_rider_air_once(message: String) -> void:
+	if _rider_air_warning_emitted:
 		return
-	_rider_shift_warning_emitted = true
+	_rider_air_warning_emitted = true
 	push_warning(message)
