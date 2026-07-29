@@ -1,0 +1,25 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://cd2ujmstnmfva"]
+
+[ext_resource type="Texture2D" uid="uid://csv11al8otyxt" path="res://assets/materials/Plastic005_1K-PNG/Plastic005_1K-PNG_Color.png" id="Color"]
+[ext_resource type="Texture2D" uid="uid://bqypnha1qgjqn" path="res://assets/materials/Plastic005_1K-PNG/Plastic005_1K-PNG_Displacement.png" id="Displacement"]
+[ext_resource type="Texture2D" uid="uid://uogm2usb5pk0" path="res://assets/materials/Plastic005_1K-PNG/Plastic005_1K-PNG_NormalGL.png" id="NormalGL"]
+[ext_resource type="Texture2D" uid="uid://dx68loma4t2ir" path="res://assets/materials/Plastic005_1K-PNG/Plastic005_1K-PNG_Roughness.png" id="Roughness"]
+
+[resource]
+albedo_color = Color(1.1291975, 0, 0, 1)
+albedo_texture = ExtResource("Color")
+metallic = 0.13
+metallic_specular = 0.81
+roughness = 0.78
+roughness_texture = ExtResource("Roughness")
+roughness_texture_channel = 4
+normal_enabled = true
+normal_scale = 1.3
+normal_texture = ExtResource("NormalGL")
+heightmap_scale = 1.0
+heightmap_texture = ExtResource("Displacement")
+uv1_scale = Vector3(6.12, 6.12, 6.12)
+uv1_offset = Vector3(-1.41, 0, 0)
+uv1_triplanar = true
+uv1_triplanar_sharpness = 0.18670307
+uv1_world_triplanar = true

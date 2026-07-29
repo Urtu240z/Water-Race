@@ -42,6 +42,9 @@ enum ResponseMode {
 @export_range(0.0, 1.5, 0.01) var physical_impact_strength: float = 1.0
 @export_range(0.1, 30.0, 0.1, "suffix:1/s") var physical_impact_decay_speed: float = 4.0
 
+@export_group("Automatic Response - Submerged")
+@export_range(0.0, 1.0, 0.01) var submerged_compression_target: float = 1.0
+
 @export_group("Automatic Response - Airborne")
 @export_range(-1.0, 0.0, 0.01) var airborne_extension_target: float = -0.28
 
@@ -453,7 +456,7 @@ func _update_target_compression() -> void:
 	)
 	if deep_submerged:
 		_airborne_extension_active = false
-		_target_compression = 0.0
+		_target_compression = submerged_compression_target
 	elif _airborne_extension_active:
 		_target_compression = airborne_extension_target
 	else:

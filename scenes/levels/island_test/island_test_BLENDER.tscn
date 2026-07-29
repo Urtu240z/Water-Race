@@ -464,8 +464,9 @@ volume_db = -60.0
 [node name="CollisionShape3D" parent="Gameplay/JetSki" index="3" unique_id=2026230859]
 visible = true
 
-[node name="HandlePivot" parent="Gameplay/JetSki/VisualRoot/JetSkiVisual" parent_id_path=PackedInt32Array(328650943, 556077452) index="1" unique_id=1724927576]
-transform = Transform3D(1, 0, 0, 0, 0.99904823, 0.043619387, 0, -0.043619387, 0.99904823, 0.37203, 0.456944, -0.33678)
+[node name="JetSkiVisual" parent="Gameplay/JetSki/VisualRoot" parent_id_path=PackedInt32Array(328650943, 1832404346) index="0" unique_id=556077452]
+water_material_tag_enabled = true
+water_material_tag_roughness = 0.019608
 
 [node name="LeftGripTarget" parent="Gameplay/JetSki/VisualRoot/JetSkiVisual/HandlePivot/GripTargets" parent_id_path=PackedInt32Array(328650943, 1552986585) index="0" unique_id=133906918]
 transform = Transform3D(0.80945057, -0.3843369, -0.4439311, -0.56238306, -0.724853, -0.39788496, -0.1688622, 0.57172793, -0.8028763, 0.19560242, 0.6935289, -1.4804459)

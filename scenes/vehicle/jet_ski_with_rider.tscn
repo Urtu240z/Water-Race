@@ -9,90 +9,6 @@
 [ext_resource type="Script" uid="uid://clycxmofcu2k5" path="res://scripts/rider/rider_grip_finger_modifier_3d.gd" id="7_grip_fingers"]
 [ext_resource type="Script" uid="uid://44vr286e106h" path="res://scripts/rider/rider_mounted_lean_controller.gd" id="8_mounted_lean"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bn8gx"]
-albedo_color = Color(1, 0, 0, 1)
-metallic = 1.0
-metallic_specular = 1.0
-roughness = 0.019607844
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5bkrj"]
-albedo_color = Color(1, 0, 0, 1)
-metallic = 0.5
-metallic_specular = 1.0
-roughness = 0.019607844
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wtmpo"]
-albedo_color = Color(0.9405437, 0, 0.0008259237, 1)
-metallic = 1.0
-metallic_specular = 1.0
-roughness = 0.019607844
-
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_dyy3r"]
-frequency = 0.0001
-
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_s0jot"]
-noise = SubResource("FastNoiseLite_dyy3r")
-seamless = true
-as_normal_map = true
-seamless_blend_skirt = 0.0
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_islw3"]
-albedo_color = Color(0.48178947, 0.48178947, 0.48178947, 1)
-metallic = 1.0
-metallic_specular = 1.0
-roughness = 0.019607844
-normal_enabled = true
-normal_scale = 16.0
-normal_texture = SubResource("NoiseTexture2D_s0jot")
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_m6xd3"]
-albedo_color = Color(0.69135684, 0.6913568, 0.69135696, 1)
-metallic = 1.0
-metallic_specular = 1.0
-roughness = 0.019607844
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_o21br"]
-albedo_color = Color(0, 0, 0.64705884, 1)
-metallic = 0.8
-metallic_specular = 1.0
-roughness = 0.019607844
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_15ofr"]
-albedo_color = Color(0, 0, 0, 1)
-roughness = 0.019607844
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1w7bg"]
-albedo_color = Color(0.3515629, 0.3515629, 0.35156286, 1)
-metallic = 1.0
-metallic_specular = 1.0
-roughness = 0.019607844
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_nyl2c"]
-albedo_color = Color(1, 0, 0, 1)
-roughness = 0.019607844
-emission_enabled = true
-emission = Color(1, 0, 0, 1)
-emission_energy_multiplier = 16.0
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7t8cp"]
-albedo_color = Color(0, 0, 0, 1)
-metallic = 1.0
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_i1p4d"]
-albedo_color = Color(0.04755766, 0.047557645, 0.047557645, 1)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_stiq7"]
-albedo_color = Color(1, 0, 0, 1)
-metallic = 0.65
-metallic_specular = 1.0
-roughness = 0.0
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0aeic"]
-albedo_color = Color(0.44291076, 0.44291076, 0.44291073, 1)
-metallic = 1.0
-metallic_specular = 1.0
-roughness = 0.0
-
 [node name="JetSki2" unique_id=117969959 instance=ExtResource("1_base")]
 
 [node name="EngineAudio" parent="." index="0" unique_id=1603778743]
@@ -103,30 +19,6 @@ speed_for_full_load = 42.0
 
 [node name="JetSkiVisual" parent="VisualRoot" parent_id_path=PackedInt32Array(1832404346) index="0" unique_id=556077452]
 handle_low_angle_degrees = -3.0
-
-[node name="Hull" parent="VisualRoot/JetSkiVisual/HullModel/Hull" parent_id_path=PackedInt32Array(556077452, 1635276613) index="0" unique_id=534305348]
-surface_material_override/0 = SubResource("StandardMaterial3D_bn8gx")
-surface_material_override/1 = SubResource("StandardMaterial3D_5bkrj")
-surface_material_override/2 = SubResource("StandardMaterial3D_wtmpo")
-surface_material_override/3 = SubResource("StandardMaterial3D_islw3")
-surface_material_override/4 = SubResource("StandardMaterial3D_m6xd3")
-surface_material_override/5 = SubResource("StandardMaterial3D_o21br")
-surface_material_override/6 = SubResource("StandardMaterial3D_15ofr")
-surface_material_override/7 = SubResource("StandardMaterial3D_1w7bg")
-surface_material_override/8 = SubResource("StandardMaterial3D_1w7bg")
-surface_material_override/9 = SubResource("StandardMaterial3D_1w7bg")
-surface_material_override/10 = SubResource("StandardMaterial3D_1w7bg")
-surface_material_override/11 = SubResource("StandardMaterial3D_nyl2c")
-surface_material_override/12 = SubResource("StandardMaterial3D_1w7bg")
-surface_material_override/13 = SubResource("StandardMaterial3D_1w7bg")
-
-[node name="Handle" parent="VisualRoot/JetSkiVisual/HandlePivot/HandleModel/Handle" parent_id_path=PackedInt32Array(556077452, 771268882) index="0" unique_id=1681021911]
-surface_material_override/0 = SubResource("StandardMaterial3D_7t8cp")
-surface_material_override/1 = SubResource("StandardMaterial3D_i1p4d")
-surface_material_override/2 = SubResource("StandardMaterial3D_stiq7")
-surface_material_override/3 = SubResource("StandardMaterial3D_0aeic")
-surface_material_override/4 = SubResource("StandardMaterial3D_i1p4d")
-surface_material_override/5 = SubResource("StandardMaterial3D_stiq7")
 
 [node name="GripTargets" type="Node3D" parent="VisualRoot/JetSkiVisual/HandlePivot" parent_id_path=PackedInt32Array(556077452, 1724927576) index="1" unique_id=1552986585]
 
@@ -296,7 +188,6 @@ extension_spine_rotation_degrees = Vector3(-8, 0, 0)
 extension_spine1_rotation_degrees = Vector3(-6, 0, 0)
 extension_spine2_rotation_degrees = Vector3(5, 0, 0)
 extension_neck_rotation_degrees = Vector3(1.5, 0, 0)
-extension_head_rotation_degrees = Vector3(1, 0, 0)
 
 [node name="LeftLegIK" type="TwoBoneIK3D" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D" index="1" unique_id=1661474148]
 setting_count = 1
@@ -438,16 +329,7 @@ compression_acceleration_for_full = 7.5
 extension_acceleration_for_full = 6.5
 extension_strength = 0.95
 acceleration_filter_speed = 4.2
-solid_impact_dead_zone = 1.5
-solid_vertical_acceleration_for_full = 9.0
-solid_longitudinal_acceleration_for_full = 14.0
-solid_impact_strength = 1.0
-solid_impact_filter_speed = 9.0
-solid_impact_decay_speed = 4.0
-physical_impact_minimum_delta_velocity = 0.25
-physical_impact_delta_velocity_for_full = 2.0
-physical_impact_strength = 1.0
-physical_impact_decay_speed = 4.0
+submerged_compression_target = 1.0
 airborne_extension_target = -0.7
 normal_landing_impulse = 1.0
 hard_landing_impulse = 1.55
@@ -462,7 +344,5 @@ extension_handle_offset_degrees = 5.5
 script = ExtResource("8_mounted_lean")
 
 [editable path="VisualRoot/JetSkiVisual"]
-[editable path="VisualRoot/JetSkiVisual/HullModel/Hull"]
-[editable path="VisualRoot/JetSkiVisual/HandlePivot/HandleModel/Handle"]
 [editable path="VisualRoot/RiderMount/RiderAssetRoot/RiderRig"]
 [editable path="VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/Rider_Bot"]

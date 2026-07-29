@@ -25,6 +25,10 @@ extends Node3D
 
 @export_range(0.1, 30.0, 0.1) var handle_pole_sharpness: float = 8.0
 
+@export_group("Water Material Tag")
+@export var water_material_tag_enabled: bool = true
+@export_range(0.001, 0.05, 0.001) var water_material_tag_roughness: float = 0.019608
+
 @export_range(0.0, 1.0, 0.01) var handle_pole_preview: float = 0.5:
 	set(value):
 		handle_pole_preview = clampf(value, 0.0, 1.0)
@@ -54,6 +58,8 @@ var _current_angle_radians: float = 0.0
 
 
 func _ready() -> void:
+	if not Engine.is_editor_hint():
+		_apply_water_material_tag()
 	_register_anime_toon_targets()
 	if Engine.is_editor_hint():
 		_base_target_angle_radians = deg_to_rad(
@@ -71,6 +77,34 @@ func _register_anime_toon_targets() -> void:
 		var mesh_instance := node as MeshInstance3D
 		if mesh_instance != null and mesh_instance.name != &"AnimeOutline":
 			mesh_instance.add_to_group(&"anime_toon_target")
+
+
+func _apply_water_material_tag() -> void:
+	if not water_material_tag_enabled:
+		return
+	var hull_root := get_node_or_null("HullModel")
+	if hull_root == null:
+		return
+	for node in hull_root.find_children("*", "MeshInstance3D", true, false):
+		var mesh_instance := node as MeshInstance3D
+		if mesh_instance == null or mesh_instance.mesh == null:
+			continue
+		for surface_index in mesh_instance.mesh.get_surface_count():
+			var source_material := mesh_instance.get_active_material(surface_index)
+			if not (source_material is StandardMaterial3D):
+				continue
+			var tagged_material := (
+				source_material as StandardMaterial3D
+			).duplicate(false) as StandardMaterial3D
+			if tagged_material == null:
+				continue
+			tagged_material.resource_local_to_scene = true
+			tagged_material.roughness = water_material_tag_roughness
+			tagged_material.roughness_texture = null
+			mesh_instance.set_surface_override_material(
+				surface_index,
+				tagged_material
+			)
 
 
 func _process(delta: float) -> void:
