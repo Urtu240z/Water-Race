@@ -25,8 +25,8 @@
 [ext_resource type="Texture2D" uid="uid://cm7w5uwuuwkx8" path="res://assets/materials/terrain_master_textures/wet_sand_normal.png" id="21_fsh7y"]
 [ext_resource type="Texture2D" uid="uid://cexe4l4551x8v" path="res://assets/materials/terrain_master_textures/wet_sand_orm.png" id="22_cfiqe"]
 [ext_resource type="Texture2D" uid="uid://co0du6jbk56x6" path="res://assets/3D/Terrain/test_island_palm_billboard_continuous_atlas.png" id="24_wath7"]
+[ext_resource type="Shader" uid="uid://dh7o8h2pae1kd" path="res://shaders/ocean_water_custom_ssr.gdshader" id="32_djt2o"]
 [ext_resource type="PackedScene" uid="uid://1d3iohmalk05" path="res://scenes/water/ocean_3d.tscn" id="32_wfhwd"]
-[ext_resource type="Shader" uid="uid://cu3bm250n7pis" path="res://shaders/ocean_water.gdshader" id="33_8ypm4"]
 [ext_resource type="Texture2D" uid="uid://c0kex04xga83k" path="res://resources/water/ocean/macro_wave_a.png" id="34_cfiqe"]
 [ext_resource type="Texture2D" uid="uid://dpb0qhgywdm05" path="res://resources/water/foam_breakup_noise.tres" id="34_cowfl"]
 [ext_resource type="Material" uid="uid://dmj6dyip8ab0w" path="res://assets/materials/sand_02.res" id="34_h01lt"]
@@ -174,10 +174,10 @@ shader_parameter/breakup = 0.0
 material = ExtResource("34_h01lt")
 size = Vector2(10000, 10000)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_djt2o"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_6j5nl"]
 resource_local_to_scene = true
 render_priority = 0
-shader = ExtResource("33_8ypm4")
+shader = ExtResource("32_djt2o")
 shader_parameter/ocean_enabled = true
 shader_parameter/water_level = 0.0
 shader_parameter/simulation_time = 0.0
@@ -261,6 +261,22 @@ shader_parameter/ocean_medium_wave_fade_end = 700.0
 shader_parameter/ocean_middle_wave_amplitude_ratio = 0.55
 shader_parameter/ocean_far_wave_amplitude_ratio = 0.08
 shader_parameter/ocean_debug_show_rings = false
+shader_parameter/custom_ssr_enabled = true
+shader_parameter/custom_ssr_steps = 32
+shader_parameter/custom_ssr_refinement_steps = 5
+shader_parameter/custom_ssr_strength = 1.499999966472
+shader_parameter/custom_ssr_max_distance = 73.0
+shader_parameter/custom_ssr_start_bias = 0.00999999977648
+shader_parameter/custom_ssr_base_step = 0.3
+shader_parameter/custom_ssr_step_growth = 1.1
+shader_parameter/custom_ssr_thickness = 0.65
+shader_parameter/custom_ssr_min_fresnel = 0.08
+shader_parameter/custom_ssr_edge_fade = 0.08
+shader_parameter/custom_ssr_distance_fade_start = 65.0
+shader_parameter/custom_ssr_distance_fade_end = 120.0
+shader_parameter/custom_ssr_blur_lod = 0.8
+shader_parameter/custom_ssr_upward_rejection = -0.1
+shader_parameter/custom_ssr_debug_mode = 0
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_f0815"]
 panorama = ExtResource("39_1y1wo")
@@ -516,7 +532,7 @@ mesh = SubResource("PlaneMesh_tpwhi")
 [node name="WaterIntegration" type="Node3D" parent="." unique_id=1889730552]
 
 [node name="Ocean" parent="WaterIntegration" unique_id=1340264265 instance=ExtResource("32_wfhwd")]
-ocean_material = SubResource("ShaderMaterial_djt2o")
+ocean_material = SubResource("ShaderMaterial_6j5nl")
 wave_world_size_a = 200.0
 wave_world_size_b = 120.0
 wave_amplitude_a = 0.999999977648

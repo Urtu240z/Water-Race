@@ -307,11 +307,15 @@ float linear_depth_from_buffer(
 }
 
 
-vec3 reconstruct_view_position(vec2 screen_uv, float raw_depth) {
+vec3 reconstruct_view_position(
+	vec2 screen_uv,
+	float raw_depth,
+	mat4 inverse_projection
+) {
 	if (raw_depth <= 0.000001) {
 		return vec3(0.0);
 	}
-	vec4 homogeneous_position = INV_PROJECTION_MATRIX * vec4(
+	vec4 homogeneous_position = inverse_projection * vec4(
 		screen_uv * 2.0 - 1.0,
 		raw_depth,
 		1.0
@@ -323,8 +327,11 @@ vec3 reconstruct_view_position(vec2 screen_uv, float raw_depth) {
 }
 
 
-vec2 project_view_position_to_uv(vec3 view_position) {
-	vec4 clip_position = PROJECTION_MATRIX * vec4(view_position, 1.0);
+vec2 project_view_position_to_uv(
+	vec3 view_position,
+	mat4 projection
+) {
+	vec4 clip_position = projection * vec4(view_position, 1.0);
 	if (clip_position.w <= 0.000001) {
 		return vec2(-1.0);
 	}
@@ -360,6 +367,8 @@ bool is_valid_view_position(vec3 view_position) {
 bool custom_ssr_trace(
 	vec3 origin_view,
 	vec3 direction_view,
+	mat4 projection,
+	mat4 inverse_projection,
 	out vec2 hit_uv,
 	out float hit_distance,
 	out float hit_confidence
@@ -391,7 +400,10 @@ bool custom_ssr_trace(
 		if (!is_valid_view_position(ray_position)) {
 			break;
 		}
-		vec2 ray_uv = project_view_position_to_uv(ray_position);
+		vec2 ray_uv = project_view_position_to_uv(
+			ray_position,
+			projection
+		);
 		if (!is_valid_screen_uv(ray_uv)) {
 			break;
 		}
@@ -400,15 +412,25 @@ bool custom_ssr_trace(
 		if (raw_depth <= 0.000001) {
 			has_previous_sample = false;
 			traveled_distance += step_length;
-			step_length *= max(custom_ssr_step_growth, 1.0);
+			step_length = (
+				step_length * max(custom_ssr_step_growth, 1.0)
+				+ custom_ssr_base_step
+			);
 			continue;
 		}
 
-		vec3 scene_position = reconstruct_view_position(ray_uv, raw_depth);
+		vec3 scene_position = reconstruct_view_position(
+			ray_uv,
+			raw_depth,
+			inverse_projection
+		);
 		if (!is_valid_view_position(scene_position)) {
 			has_previous_sample = false;
 			traveled_distance += step_length;
-			step_length *= max(custom_ssr_step_growth, 1.0);
+			step_length = (
+				step_length * max(custom_ssr_step_growth, 1.0)
+				+ custom_ssr_base_step
+			);
 			continue;
 		}
 
@@ -443,7 +465,8 @@ bool custom_ssr_trace(
 				vec3 midpoint_position = origin_view
 					+ direction_view * midpoint_distance;
 				vec2 midpoint_uv = project_view_position_to_uv(
-					midpoint_position
+					midpoint_position,
+					projection
 				);
 				if (!is_valid_screen_uv(midpoint_uv)) {
 					break;
@@ -458,7 +481,8 @@ bool custom_ssr_trace(
 				}
 				vec3 midpoint_scene_position = reconstruct_view_position(
 					midpoint_uv,
-					midpoint_raw_depth
+					midpoint_raw_depth,
+					inverse_projection
 				);
 				if (!is_valid_view_position(midpoint_scene_position)) {
 					break;
@@ -518,7 +542,10 @@ bool custom_ssr_trace(
 		previous_distance = traveled_distance;
 		previous_depth_delta = depth_delta;
 		traveled_distance += step_length;
-		step_length *= max(custom_ssr_step_growth, 1.0);
+		step_length = (
+			step_length * max(custom_ssr_step_growth, 1.0)
+			+ custom_ssr_base_step
+		);
 	}
 	return false;
 }
@@ -697,6 +724,107 @@ void fragment() {
 			1.0
 		)
 		: 0.0;
+
+	float custom_ssr_hit_mask = 0.0;
+	float custom_ssr_hit_confidence = 0.0;
+	float custom_ssr_combined_fade = 0.0;
+	float custom_ssr_normalized_distance = 0.0;
+	vec3 custom_ssr_color = vec3(0.0);
+	if (
+		custom_ssr_enabled
+		&& custom_ssr_strength > 0.0
+		&& fresnel >= custom_ssr_min_fresnel
+		&& camera_distance < custom_ssr_distance_fade_end
+		&& foam_mask < 0.98
+	) {
+		vec3 reflection_direction_view = normalize(
+			reflect(-view_direction, visual_normal)
+		);
+		vec3 reflection_direction_world = normalize(
+			mat3(INV_VIEW_MATRIX) * reflection_direction_view
+		);
+		if (
+			is_valid_view_position(
+				VERTEX + reflection_direction_view * custom_ssr_start_bias
+			)
+			&& reflection_direction_world.y
+				>= custom_ssr_upward_rejection
+		) {
+			vec2 custom_ssr_hit_uv = vec2(0.0);
+			float custom_ssr_hit_distance = 0.0;
+			float trace_confidence = 0.0;
+			bool custom_ssr_hit = custom_ssr_trace(
+				VERTEX,
+				reflection_direction_view,
+				PROJECTION_MATRIX,
+				INV_PROJECTION_MATRIX,
+				custom_ssr_hit_uv,
+				custom_ssr_hit_distance,
+				trace_confidence
+			);
+			if (custom_ssr_hit) {
+				custom_ssr_hit_mask = 1.0;
+				custom_ssr_color = textureLod(
+					screen_texture,
+					custom_ssr_hit_uv,
+					custom_ssr_blur_lod
+				).rgb;
+				float fresnel_confidence = clamp(
+					(
+						fresnel - custom_ssr_min_fresnel
+					) / max(1.0 - custom_ssr_min_fresnel, 0.001),
+					0.0,
+					1.0
+				);
+				float orientation_confidence = smoothstep(
+					custom_ssr_upward_rejection,
+					min(
+						custom_ssr_upward_rejection + 0.10,
+						1.0
+					),
+					reflection_direction_world.y
+				);
+				custom_ssr_hit_confidence = clamp(
+					trace_confidence
+						* fresnel_confidence
+						* orientation_confidence,
+					0.0,
+					1.0
+				);
+				float edge_fade = calculate_screen_edge_fade(
+					custom_ssr_hit_uv,
+					custom_ssr_edge_fade
+				);
+				float distance_fade = 1.0 - smoothstep(
+					custom_ssr_distance_fade_start,
+					max(
+						custom_ssr_distance_fade_end,
+						custom_ssr_distance_fade_start + 0.001
+					),
+					custom_ssr_hit_distance
+				);
+				custom_ssr_combined_fade = edge_fade * distance_fade;
+				custom_ssr_normalized_distance = clamp(
+					custom_ssr_hit_distance
+						/ max(custom_ssr_max_distance, 0.001),
+					0.0,
+					1.0
+				);
+				float custom_ssr_weight = clamp(
+					custom_ssr_hit_confidence
+						* custom_ssr_strength
+						* reflection_factor,
+					0.0,
+					1.0
+				);
+				final_color = mix(
+					final_color,
+					custom_ssr_color,
+					custom_ssr_weight
+				);
+			}
+		}
+	}
 	final_color = mix(final_color, foam_color.rgb, foam_mask);
 
 	float local_alpha = mix(near_water_alpha, deep_water_alpha, water_density);
@@ -725,6 +853,33 @@ void fragment() {
 	METALLIC = 0.0;
 	SPECULAR = mix(water_specular, 0.16, foam_mask);
 	ALPHA = final_alpha;
+
+	if (custom_ssr_debug_mode == 1) {
+		ALBEDO = vec3(custom_ssr_hit_mask);
+		ROUGHNESS = 1.0;
+		SPECULAR = 0.0;
+		ALPHA = 1.0;
+	} else if (custom_ssr_debug_mode == 2) {
+		ALBEDO = custom_ssr_color;
+		ROUGHNESS = 1.0;
+		SPECULAR = 0.0;
+		ALPHA = 1.0;
+	} else if (custom_ssr_debug_mode == 3) {
+		ALBEDO = vec3(custom_ssr_hit_confidence);
+		ROUGHNESS = 1.0;
+		SPECULAR = 0.0;
+		ALPHA = 1.0;
+	} else if (custom_ssr_debug_mode == 4) {
+		ALBEDO = vec3(custom_ssr_combined_fade);
+		ROUGHNESS = 1.0;
+		SPECULAR = 0.0;
+		ALPHA = 1.0;
+	} else if (custom_ssr_debug_mode == 5) {
+		ALBEDO = vec3(custom_ssr_normalized_distance);
+		ROUGHNESS = 1.0;
+		SPECULAR = 0.0;
+		ALPHA = 1.0;
+	}
 
 	if (ocean_debug_show_rings) {
 		vec3 ring_color = debug_ring_color(interpolated_ocean_ring_id);
