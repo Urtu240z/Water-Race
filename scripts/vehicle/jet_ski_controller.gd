@@ -1327,9 +1327,9 @@ func _connect_navigation_signals() -> void:
 
 func _on_navigation_system_water_entered(
 	intensity: float,
-	position: Vector3
+	contact_position: Vector3
 ) -> void:
-	water_entered.emit(intensity, position)
+	water_entered.emit(intensity, contact_position)
 
 
 func _on_navigation_system_water_exited() -> void:
@@ -1338,9 +1338,9 @@ func _on_navigation_system_water_exited() -> void:
 
 func _on_navigation_system_hard_landing(
 	intensity: float,
-	position: Vector3
+	impact_position: Vector3
 ) -> void:
-	hard_landing.emit(intensity, position)
+	hard_landing.emit(intensity, impact_position)
 
 
 func _on_navigation_system_deeply_submerged() -> void:
