@@ -104,8 +104,10 @@ common/physics_interpolation=true
 [rendering]
 
 rendering_device/driver.windows="d3d12"
+global_illumination/gi/use_half_resolution=true
 scaling_3d/mode=1
 scaling_3d/scale=0.7
+global_illumination/sdfgi/frames_to_converge=3
 
 [threading]
 

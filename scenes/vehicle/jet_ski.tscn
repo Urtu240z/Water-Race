@@ -24,6 +24,7 @@
 [ext_resource type="Script" path="res://scripts/vehicle/systems/jet_ski_navigation_system.gd" id="22_navigation_system"]
 [ext_resource type="Script" path="res://scripts/vehicle/systems/jet_ski_drive_system.gd" id="23_drive_system"]
 [ext_resource type="Script" path="res://scripts/vehicle/systems/jet_ski_rider_dynamics_system.gd" id="24_rider_dynamics_system"]
+[ext_resource type="Script" path="res://scripts/vehicle/systems/jet_ski_submarine_system.gd" id="25_submarine_system"]
 
 [sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_hull"]
 points = PackedVector3Array(0, 0.22, -1.55, 0.071, 0.185, -1.55, 0.1, 0.1, -1.55, 0.071, 0.015, -1.55, 0, -0.02, -1.55, -0.071, 0.015, -1.55, -0.1, 0.1, -1.55, -0.071, 0.185, -1.55, 0, 0.28, -1.15, 0.325, 0.198, -1.15, 0.46, 0, -1.15, 0.325, -0.198, -1.15, 0, -0.28, -1.15, -0.325, -0.198, -1.15, -0.46, 0, -1.15, -0.325, 0.198, -1.15, 0, 0.3, 0.55, 0.424, 0.212, 0.55, 0.6, 0, 0.55, 0.424, -0.212, 0.55, 0, -0.3, 0.55, -0.424, -0.212, 0.55, -0.6, 0, 0.55, -0.424, 0.212, 0.55, 0, 0.26, 1.55, 0.311, 0.19, 1.55, 0.44, 0.02, 1.55, 0.311, -0.15, 1.55, 0, -0.22, 1.55, -0.311, -0.15, 1.55, -0.44, 0.02, 1.55, -0.311, 0.19, 1.55)
@@ -53,6 +54,9 @@ script = ExtResource("23_drive_system")
 
 [node name="RiderDynamicsSystem" type="Node" parent="Systems"]
 script = ExtResource("24_rider_dynamics_system")
+
+[node name="SubmarineSystem" type="Node" parent="Systems"]
+script = ExtResource("25_submarine_system")
 
 [node name="EngineAudio" type="AudioStreamPlayer3D" parent="." unique_id=1603778743]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.15, 0.45)
