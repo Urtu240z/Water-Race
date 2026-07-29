@@ -199,7 +199,7 @@ func _validate_structure_and_configuration() -> void:
 	)
 	_expect(
 		8,
-		_controller_source.contains(
+		not _controller_source.contains(
 			"const RiderStuntWaterMode = JetSkiTypes.RiderStuntWaterMode"
 		)
 		and _state_source.contains(
@@ -969,7 +969,7 @@ func _validate_pitch_target() -> void:
 		105,
 		rider_source.contains("rider_weight_shift_enabled")
 		and rider_source.contains(
-			"not _rider_shift_smoothed_input.is_zero_approx()"
+			"not input_system.state.rider_shift_smoothed.is_zero_approx()"
 		)
 		and rider_source.contains(
 			"submarine_system.calculate_pitch_target_torque("

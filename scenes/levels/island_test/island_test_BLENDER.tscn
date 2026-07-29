@@ -41,6 +41,7 @@
 [ext_resource type="Texture2D" uid="uid://dh4ygdetfbe7t" path="res://assets/environment/sky/kloofendal_48d_partly_cloudy_puresky_4k.hdr" id="40_armhu"]
 [ext_resource type="Texture2D" uid="uid://b7kfjl0vvcloa" path="res://assets/environment/sky/qwantani_dusk_1_puresky_4k.hdr" id="41_7fon7"]
 [ext_resource type="Texture2D" uid="uid://cmg3mg3yih3d1" path="res://assets/environment/sky/kloofendal_43d_clear_puresky_4k.hdr" id="42_1y1wo"]
+[ext_resource type="Material" uid="uid://dk2h67ph6buix" path="res://assets/materials/rusty_metal_03.res" id="60_vhs81"]
 [ext_resource type="PackedScene" uid="uid://cfw7pu0e3ws7n" path="res://assets/3D/Rock2.glb" id="195_ox2y0"]
 [ext_resource type="PackedScene" uid="uid://bgpsiyc4tr47u" path="res://assets/3D/Rock1.glb" id="196_t7md2"]
 [ext_resource type="PackedScene" uid="uid://vls5xu5jnvyf" path="res://assets/3D/Rock3.glb" id="197_3j4p0"]
@@ -293,6 +294,14 @@ roughness = 0.0
 clearcoat = 0.0
 clearcoat_roughness = 1.0
 
+[sub_resource type="PrismMesh" id="PrismMesh_tpwhi"]
+material = ExtResource("60_vhs81")
+left_to_right = 1.0
+size = Vector3(17.155, 5.85, 9.015)
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_djt2o"]
+data = PackedVector3Array(8.577499, 2.925, 4.5074997, 8.577499, -2.925, 4.5074997, -8.577499, -2.925, 4.5074997, 8.577499, 2.925, -4.5074997, -8.577499, -2.925, -4.5074997, 8.577499, -2.925, -4.5074997, 8.577499, 2.925, 4.5074997, 8.577499, 2.925, -4.5074997, 8.577499, -2.925, 4.5074997, 8.577499, 2.925, -4.5074997, 8.577499, -2.925, -4.5074997, 8.577499, -2.925, 4.5074997, 8.577499, 2.925, -4.5074997, 8.577499, 2.925, 4.5074997, -8.577499, -2.925, -4.5074997, 8.577499, 2.925, 4.5074997, -8.577499, -2.925, 4.5074997, -8.577499, -2.925, -4.5074997, -8.577499, -2.925, 4.5074997, 8.577499, -2.925, 4.5074997, -8.577499, -2.925, -4.5074997, 8.577499, -2.925, 4.5074997, 8.577499, -2.925, -4.5074997, -8.577499, -2.925, -4.5074997)
+
 [node name="IslandTestBlender" type="Node3D" unique_id=2091620036]
 script = ExtResource("1_yqko0")
 ocean_path = NodePath("WaterIntegration/Ocean")
@@ -307,6 +316,7 @@ environment = ExtResource("2_0pibt")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="Environment" unique_id=1488093793]
 transform = Transform3D(0.88294756, 0.3488854, -0.3141378, 0, 0.66913056, 0.74314487, 0.46947157, -0.656158, 0.5908072, 0, 0, 0)
+visible = false
 light_color = Color(0.936434, 0.6636586, 4.1970015e-05, 1)
 light_energy = 2.867
 shadow_enabled = true
@@ -695,6 +705,51 @@ transform = Transform3D(0.86, 0, 0, 0, 0.86, 0, 0, 0, 0.86, 149, 1.8, 120.1001)
 metadata/instance_count = 7717
 metadata/sector_count = 14
 metadata/multimesh_count = 98
+
+[node name="Jump1" type="MeshInstance3D" parent="Atrezzo" unique_id=1190177101]
+transform = Transform3D(0.047000684, 0, -0.9988949, 0, 1, 0, 0.9988949, 0, 0.047000684, 189.9109, 1.2042637, 2.8569958)
+mesh = SubResource("PrismMesh_tpwhi")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Atrezzo/Jump1" unique_id=1563769446]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Atrezzo/Jump1/StaticBody3D" unique_id=30672136]
+shape = SubResource("ConcavePolygonShape3D_djt2o")
+
+[node name="Jump4" type="MeshInstance3D" parent="Atrezzo" unique_id=1929662083]
+transform = Transform3D(0.047000684, 0, -0.9988949, 0, 1, 0, 0.9988949, 0, 0.047000684, 223.61113, 1.2042637, -94.87814)
+mesh = SubResource("PrismMesh_tpwhi")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Atrezzo/Jump4" unique_id=1041393990]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Atrezzo/Jump4/StaticBody3D" unique_id=780011347]
+shape = SubResource("ConcavePolygonShape3D_djt2o")
+
+[node name="Jump5" type="MeshInstance3D" parent="Atrezzo" unique_id=601217171]
+transform = Transform3D(0.047000684, 0, -0.9988949, 0, 1, 0, 0.9988949, 0, 0.047000684, 184.03395, 1.2042637, -209.91396)
+mesh = SubResource("PrismMesh_tpwhi")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Atrezzo/Jump5" unique_id=1185602380]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Atrezzo/Jump5/StaticBody3D" unique_id=359322754]
+shape = SubResource("ConcavePolygonShape3D_djt2o")
+
+[node name="Jump2" type="MeshInstance3D" parent="Atrezzo" unique_id=982363763]
+transform = Transform3D(0.047000684, 0, -0.9988949, 0, 1, 0, 0.9988949, 0, 0.047000684, 214.77977, 1.2042637, 101.30986)
+mesh = SubResource("PrismMesh_tpwhi")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Atrezzo/Jump2" unique_id=363621744]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Atrezzo/Jump2/StaticBody3D" unique_id=1888373563]
+shape = SubResource("ConcavePolygonShape3D_djt2o")
+
+[node name="Jump3" type="MeshInstance3D" parent="Atrezzo" unique_id=1836126976]
+transform = Transform3D(0.047000684, 0, -0.9988949, 0, 1, 0, 0.9988949, 0, 0.047000684, 177.71559, 1.2042637, 266.83514)
+mesh = SubResource("PrismMesh_tpwhi")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Atrezzo/Jump3" unique_id=2017955259]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Atrezzo/Jump3/StaticBody3D" unique_id=1708739139]
+shape = SubResource("ConcavePolygonShape3D_djt2o")
 
 [node name="Circuit" type="Node3D" parent="." unique_id=1519848915]
 

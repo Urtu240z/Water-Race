@@ -104,7 +104,7 @@ func _run() -> void:
 	_expect(vehicle.brake_input == input_system.state.brake, "Brake proxy works.")
 	_expect(vehicle.steering_input == input_system.state.steering, "Steering proxy works.")
 	_expect(
-		vehicle.rider_weight_shift_input
+		vehicle.input_system.state.rider_shift_smoothed
 		== input_system.state.rider_shift_smoothed,
 		"Rider shift proxy works."
 	)
@@ -145,7 +145,10 @@ func _run() -> void:
 		"_integrate_forces() samples steering through InputSystem."
 	)
 	_expect(
-		is_equal_approx(vehicle.rider_shift_raw_input.y, -0.50),
+		is_equal_approx(
+			vehicle.input_system.state.rider_shift_raw.y,
+			-0.50
+		),
 		"_integrate_forces() samples rider shift through InputSystem."
 	)
 	_release_all_inputs()

@@ -182,13 +182,15 @@ func _validate_structure_and_configuration() -> void:
 	)
 	_expect(
 		9,
-		_controller_source.contains(
+		not _controller_source.contains("const TrickPreloadState")
+		and not _controller_source.contains("const RiderTrickLaunchType")
+		and _system_source.contains(
 			"const TrickPreloadState = JetSkiTypes.TrickPreloadState"
 		)
-		and _controller_source.contains(
+		and _system_source.contains(
 			"const RiderTrickLaunchType = JetSkiTypes.RiderTrickLaunchType"
 		),
-		"Los enums compartidos conservan sus aliases."
+		"Los aliases sin consumidores se retiran de la fachada."
 	)
 	_expect(
 		10,

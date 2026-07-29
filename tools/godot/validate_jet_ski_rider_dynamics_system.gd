@@ -1374,17 +1374,15 @@ func _validate_air_control_5b() -> void:
 	scene_state.air_correction_pitch_torque_current = -222.0
 	_expect_5b(
 		6,
-		_vehicle.rider_air_unlimited_rotation
-		and _scalar_close(_vehicle.rider_air_roll_rate, 1.25)
-		and _scalar_close(_vehicle.air_current_roll_rate, 1.25)
-		and _scalar_close(_vehicle.rider_air_pitch_rate, -0.75)
-		and _scalar_close(_vehicle.air_current_pitch_rate, -0.75)
+		scene_state.air_unlimited_rotation
+		and _scalar_close(scene_state.air_roll_rate, 1.25)
+		and _scalar_close(scene_state.air_pitch_rate, -0.75)
 		and _scalar_close(
-			_vehicle.rider_air_accumulated_roll_degrees,
+			scene_state.air_accumulated_roll_degrees,
 			12.0
 		)
 		and _scalar_close(
-			_vehicle.rider_air_accumulated_pitch_degrees,
+			scene_state.air_accumulated_pitch_degrees,
 			-8.0
 		)
 		and _scalar_close(
@@ -2265,28 +2263,28 @@ func _validate_compatibility() -> void:
 	_expect_numbered(
 		73,
 		_scalar_close(
-			_vehicle.turn_lean_target_roll_degrees,
+			rad_to_deg(scene_state.turn_lean_target_roll),
 			rad_to_deg(0.1)
 		)
 		and _scalar_close(
-			_vehicle.turn_lean_current_roll_degrees,
+			rad_to_deg(scene_state.turn_lean_current_roll),
 			rad_to_deg(0.2)
 		)
 		and _scalar_close(
-			_vehicle.turn_lean_error_degrees,
+			rad_to_deg(scene_state.turn_lean_roll_error),
 			rad_to_deg(-0.1)
 		)
 		and _scalar_close(_vehicle.turn_lean_speed_factor, 0.7)
 		and _scalar_close(_vehicle.turn_lean_contact_factor, 0.8)
 		and _scalar_close(
-			_vehicle.rider_shift_current_pitch_degrees,
+			rad_to_deg(scene_state.rider_shift_current_pitch),
 			rad_to_deg(0.3)
 		)
 		and _scalar_close(_vehicle.rider_shift_roll_torque, 10.0)
 		and _scalar_close(_vehicle.rider_shift_pitch_torque, 20.0)
-		and _vehicle.rider_virtual_offset_local == Vector3.ONE
-		and _vehicle.rider_using_air_control,
-		"Todos los proxies coinciden con RiderDynamicsState."
+		and scene_state.virtual_offset_local == Vector3.ONE
+		and scene_state.using_air_control,
+		"Los proxies activos y RiderDynamicsState coinciden."
 	)
 	var main_vehicle := _main_instance.get_node_or_null(
 		"Gameplay/JetSki"

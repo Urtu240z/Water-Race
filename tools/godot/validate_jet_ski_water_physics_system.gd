@@ -135,7 +135,7 @@ func _validate_isolated_fixture(jet_ski_packed: PackedScene) -> void:
 	vehicle.submarine_buoyancy_factor = 0.5
 	vehicle.submarine_system.buoyancy_factor = 0.5
 	vehicle.submarine_system.state.water_mode = (
-		JetSkiController.RiderStuntWaterMode.SUBMARINE_DIVE
+		JetSkiTypes.RiderStuntWaterMode.SUBMARINE_DIVE
 	)
 	vehicle.submarine_system.state.buoyancy_factor_current = 0.5
 	vehicle.submarine_system.state.current_depth = 0.0
@@ -616,18 +616,18 @@ func _validate_proxies_and_public_arrays(
 	)
 	_expect(proxies_match, "All public water-metric proxies match system state.")
 
-	var depth_copy := vehicle.get_buoyancy_point_depths()
+	var depth_copy := water_system.get_buoyancy_point_depths()
 	var internal_depth := water_system.point_depths[0]
 	depth_copy[0] = internal_depth + 1000.0
 	var public_arrays_work := (
-		vehicle.get_buoyancy_local_points().size() == POINT_COUNT
-		and vehicle.get_buoyancy_point_normal_forces().size()
+		water_system.get_buoyancy_local_points().size() == POINT_COUNT
+		and water_system.get_buoyancy_point_normal_forces().size()
 		== POINT_COUNT
-		and vehicle.get_buoyancy_point_water_normals().size()
+		and water_system.get_buoyancy_point_water_normals().size()
 		== POINT_COUNT
-		and vehicle.get_point_forward_drag_forces().size()
+		and water_system.get_point_forward_drag_forces().size()
 		== POINT_COUNT
-		and vehicle.get_point_lateral_drag_forces().size()
+		and water_system.get_point_lateral_drag_forces().size()
 		== POINT_COUNT
 		and is_equal_approx(
 			water_system.point_depths[0],
@@ -636,7 +636,7 @@ func _validate_proxies_and_public_arrays(
 	)
 	_expect(
 		public_arrays_work,
-		"Public array methods return safe four-element duplicates."
+		"WaterSystem array methods return safe four-element duplicates."
 	)
 
 
@@ -688,11 +688,11 @@ func _validate_main_runtime(main_packed: PackedScene) -> void:
 		)
 		maximum_propulsion_force = maxf(
 			maximum_propulsion_force,
-			vehicle.current_propulsion_force
+			vehicle.drive_system.state.propulsion_force
 		)
 		maximum_steering_angle = maxf(
 			maximum_steering_angle,
-			absf(vehicle.current_steering_angle_degrees)
+			absf(vehicle.drive_system.state.steering_angle_degrees)
 		)
 		maximum_buoyancy_force = maxf(
 			maximum_buoyancy_force,

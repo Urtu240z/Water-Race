@@ -1020,24 +1020,22 @@ func _validate_compatibility() -> void:
 		62,
 		_scalar_close(_vehicle.propulsion_depth, 0.2)
 		and _scalar_close(_vehicle.propulsion_contact_factor, 0.75)
-		and _scalar_close(_vehicle.current_steering_angle_degrees, -4.0)
-		and _scalar_close(_vehicle.current_forward_speed_factor, 0.8)
-		and _scalar_close(_vehicle.current_reverse_speed_factor, 0.6)
-		and _scalar_close(_vehicle.current_propulsion_force, 1234.0)
-		and _vehicle.current_propulsion_force_vector
+		and _scalar_close(scene_drive.state.steering_angle_degrees, -4.0)
+		and _scalar_close(scene_drive.state.forward_speed_factor, 0.8)
+		and _scalar_close(scene_drive.state.reverse_speed_factor, 0.6)
+		and _scalar_close(scene_drive.state.propulsion_force, 1234.0)
+		and scene_drive.state.propulsion_force_vector
 		== Vector3(1.0, 2.0, 3.0)
-		and _vehicle.last_propulsion_force_vector
-		== Vector3(1.0, 2.0, 3.0)
-		and _vehicle.last_propulsion_world_position
+		and scene_drive.state.propulsion_world_position
 		== Vector3(4.0, 5.0, 6.0)
 		and _vehicle.is_propelling,
-		"Todos los proxies coinciden con DriveState."
+		"Los proxies activos y DriveState coinciden."
 	)
 	_expect_numbered(
 		63,
-		_vehicle.get_propulsion_local_point()
-		== scene_drive.get_propulsion_local_point(),
-		"get_propulsion_local_point coincide."
+		scene_drive.get_propulsion_local_point()
+		== LOCAL_PROPULSION_POINT,
+		"DriveSystem conserva el punto de propulsion."
 	)
 	_expect_numbered(
 		64,
@@ -1086,7 +1084,7 @@ func _validate_compatibility() -> void:
 	_expect_numbered(
 		70,
 		_main_instance.get_node_or_null("Debug") != null
-		and _vehicle.current_propulsion_force == 1234.0,
+		and scene_drive.state.propulsion_force == 1234.0,
 		"Debug continúa recibiendo métricas públicas."
 	)
 	var position_before_reset := (

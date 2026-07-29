@@ -13,9 +13,6 @@ signal submarine_dive_ended(duration: float, max_depth: float)
 
 const NavigationState = JetSkiTypes.NavigationState
 const LandingEntryType = JetSkiTypes.LandingEntryType
-const RiderStuntWaterMode = JetSkiTypes.RiderStuntWaterMode
-const TrickPreloadState = JetSkiTypes.TrickPreloadState
-const RiderTrickLaunchType = JetSkiTypes.RiderTrickLaunchType
 
 signal rider_trick_launched(
 	trick_type: JetSkiTypes.RiderTrickLaunchType,
@@ -24,10 +21,7 @@ signal rider_trick_launched(
 )
 
 const BUOYANCY_POINT_COUNT: int = 4
-const FRONT_POINT_COUNT: int = 2
-const ALL_CONTACT_MASK: int = 15
 const LEFT_CONTACT_MASK: int = 5
-const RIGHT_CONTACT_MASK: int = 10
 
 @export_group("Water")
 @export_node_path("Ocean3D") var ocean_path: NodePath
@@ -259,44 +253,6 @@ var propulsion_contact_factor: float:
 	get:
 		return drive_system.state.propulsion_contact_factor
 
-var current_steering_angle_degrees: float:
-	get:
-		return drive_system.state.steering_angle_degrees
-
-var current_forward_speed_factor: float:
-	get:
-		return drive_system.state.forward_speed_factor
-
-var current_reverse_speed_factor: float:
-	get:
-		return drive_system.state.reverse_speed_factor
-
-var current_propulsion_force: float:
-	get:
-		return drive_system.state.propulsion_force
-
-var current_propulsion_force_vector: Vector3:
-	get:
-		return drive_system.state.propulsion_force_vector
-
-var turn_lean_target_roll_degrees: float:
-	get:
-		return rad_to_deg(
-			rider_dynamics_system.state.turn_lean_target_roll
-		)
-
-var turn_lean_current_roll_degrees: float:
-	get:
-		return rad_to_deg(
-			rider_dynamics_system.state.turn_lean_current_roll
-		)
-
-var turn_lean_error_degrees: float:
-	get:
-		return rad_to_deg(
-			rider_dynamics_system.state.turn_lean_roll_error
-		)
-
 var turn_lean_speed_factor: float:
 	get:
 		return rider_dynamics_system.state.turn_lean_speed_factor
@@ -324,14 +280,6 @@ var turn_lean_support_normal: Vector3:
 	get:
 		return rider_dynamics_system.state.smoothed_support_normal
 
-var turn_lean_reference_forward: Vector3:
-	get:
-		return rider_dynamics_system.state.reference_forward
-
-var turn_lean_reference_right: Vector3:
-	get:
-		return rider_dynamics_system.state.reference_right
-
 var turn_lean_airborne_disabled: bool:
 	get:
 		return (
@@ -343,10 +291,6 @@ var turn_lean_landing_ramp: float:
 	get:
 		return rider_dynamics_system.state.turn_lean_landing_ramp
 
-var rider_weight_shift_input: Vector2:
-	get:
-		return input_system.state.rider_shift_smoothed
-
 var rider_weight_shift_roll: float:
 	get:
 		return input_system.state.rider_shift_smoothed.x
@@ -354,14 +298,6 @@ var rider_weight_shift_roll: float:
 var rider_weight_shift_pitch: float:
 	get:
 		return input_system.state.rider_shift_smoothed.y
-
-var rider_shift_raw_input: Vector2:
-	get:
-		return input_system.state.rider_shift_raw
-
-var rider_shift_smoothed_input: Vector2:
-	get:
-		return input_system.state.rider_shift_smoothed
 
 var rider_shift_speed_authority: float:
 	get:
@@ -386,64 +322,6 @@ var rider_shift_air_authority_active: float:
 		return (
 			rider_dynamics_system.state
 			.rider_shift_air_authority_active
-		)
-
-# Active combined roll-target telemetry for automatic and manual water lean.
-var rider_shift_target_angle_metrics_status: StringName:
-	get:
-		return &"ACTIVE_COMBINED_ROLL_TARGET"
-
-var rider_shift_manual_roll_target_degrees: float:
-	get:
-		return rad_to_deg(
-			rider_dynamics_system.state
-			.rider_shift_manual_roll_target
-		)
-
-var rider_shift_automatic_roll_target_degrees: float:
-	get:
-		return rad_to_deg(
-			rider_dynamics_system.state.turn_lean_target_roll
-		)
-
-var rider_shift_total_roll_target_degrees: float:
-	get:
-		return rad_to_deg(
-			rider_dynamics_system.state
-			.rider_shift_total_roll_target
-		)
-
-var rider_shift_current_roll_degrees: float:
-	get:
-		return rad_to_deg(
-			rider_dynamics_system.state.turn_lean_current_roll
-		)
-
-var rider_shift_manual_pitch_target_degrees: float:
-	get:
-		return rad_to_deg(
-			rider_dynamics_system.state
-			.rider_shift_manual_pitch_target
-		)
-
-var rider_shift_base_pitch_target_degrees: float:
-	get:
-		return rad_to_deg(
-			rider_dynamics_system.state
-			.rider_shift_base_pitch_target
-		)
-
-var rider_shift_total_pitch_target_degrees: float:
-	get:
-		return rad_to_deg(
-			rider_dynamics_system.state
-			.rider_shift_total_pitch_target
-		)
-
-var rider_shift_current_pitch_degrees: float:
-	get:
-		return rad_to_deg(
-			rider_dynamics_system.state.rider_shift_current_pitch
 		)
 
 var rider_shift_roll_torque: float:
@@ -476,34 +354,6 @@ var rider_shift_landing_ramp: float:
 	get:
 		return rider_dynamics_system.state.rider_shift_landing_ramp
 
-var rider_virtual_offset_local: Vector3:
-	get:
-		return rider_dynamics_system.state.virtual_offset_local
-
-var rider_virtual_offset_world: Vector3:
-	get:
-		return rider_dynamics_system.state.virtual_offset_world
-
-var rider_virtual_weight_torque: Vector3:
-	get:
-		return rider_dynamics_system.state.virtual_weight_torque
-
-var rider_manual_applied_torque: Vector3:
-	get:
-		return rider_dynamics_system.state.manual_applied_torque
-
-var rider_roll_damping_torque: Vector3:
-	get:
-		return rider_dynamics_system.state.roll_damping_torque
-
-var rider_pitch_damping_torque: Vector3:
-	get:
-		return rider_dynamics_system.state.pitch_damping_torque
-
-var rider_dynamic_pitch_multiplier: float:
-	get:
-		return rider_dynamics_system.state.dynamic_pitch_multiplier
-
 var rider_manual_medium_authority: float:
 	get:
 		return (
@@ -511,101 +361,9 @@ var rider_manual_medium_authority: float:
 			.rider_manual_medium_authority
 		)
 
-var rider_using_air_control: bool:
-	get:
-		return rider_dynamics_system.state.using_air_control
-
-var rider_arrow_only_steering_input: float:
-	get:
-		return (
-			rider_dynamics_system.state
-			.arrow_only_steering_input
-		)
-
-var rider_arrow_only_steering_angle: float:
-	get:
-		return (
-			rider_dynamics_system.state
-			.arrow_only_steering_angle
-		)
-
-var rider_roll_soft_limit_factor: float:
-	get:
-		return rider_dynamics_system.state.roll_soft_limit_factor
-
-var rider_pitch_soft_limit_factor: float:
-	get:
-		return rider_dynamics_system.state.pitch_soft_limit_factor
-
-var rider_air_unlimited_rotation: bool:
-	get:
-		return rider_dynamics_system.state.air_unlimited_rotation
-
-var rider_air_roll_rate: float:
-	get:
-		return rider_dynamics_system.state.air_roll_rate
-
-var rider_air_pitch_rate: float:
-	get:
-		return rider_dynamics_system.state.air_pitch_rate
-
-var rider_air_accumulated_roll_degrees: float:
-	get:
-		return (
-			rider_dynamics_system.state
-			.air_accumulated_roll_degrees
-		)
-
-var rider_air_accumulated_pitch_degrees: float:
-	get:
-		return (
-			rider_dynamics_system.state
-			.air_accumulated_pitch_degrees
-		)
-
 var submarine_dive_active: bool:
 	get:
 		return submarine_system.is_dive_active()
-
-var submarine_entry_speed: float:
-	get:
-		return submarine_system.state.entry_speed
-
-var submarine_entry_pitch_degrees: float:
-	get:
-		return submarine_system.state.entry_pitch_degrees
-
-var submarine_duration: float:
-	get:
-		return submarine_system.state.duration
-
-var submarine_current_depth: float:
-	get:
-		return submarine_system.state.current_depth
-
-var submarine_max_depth: float:
-	get:
-		return submarine_system.state.maximum_depth
-
-var submarine_buoyancy_factor_current: float:
-	get:
-		return submarine_system.state.buoyancy_factor_current
-
-var submarine_propulsion_factor_current: float:
-	get:
-		return submarine_system.state.propulsion_factor_current
-
-var submarine_upright_factor_current: float:
-	get:
-		return submarine_system.state.upright_factor_current
-
-var submarine_exit_blend: float:
-	get:
-		return submarine_system.state.exit_blend
-
-var trick_preload_state: JetSkiTypes.TrickPreloadState:
-	get:
-		return trick_system.state.preload_state
 
 var solid_support_contact_count: int:
 	get:
@@ -643,76 +401,6 @@ var true_takeoff_this_tick: bool:
 	get:
 		return navigation_system.state.true_takeoff_this_tick
 
-var trick_roll_preload_sign: float:
-	get:
-		return trick_system.state.roll_preload_sign
-
-var trick_pitch_preload_sign: float:
-	get:
-		return trick_system.state.pitch_preload_sign
-
-var trick_roll_charge: float:
-	get:
-		return trick_system.state.roll_charge
-
-var trick_pitch_charge: float:
-	get:
-		return trick_system.state.pitch_charge
-
-var trick_roll_reversal_armed: bool:
-	get:
-		return trick_system.state.roll_reversal_armed
-
-var trick_pitch_reversal_armed: bool:
-	get:
-		return trick_system.state.pitch_reversal_armed
-
-var trick_reversal_time_remaining: float:
-	get:
-		return trick_system.get_reversal_time_remaining()
-
-var trick_takeoff_quality: float:
-	get:
-		return trick_system.state.takeoff_quality
-
-var trick_takeoff_timing_factor: float:
-	get:
-		return trick_system.state.takeoff_timing_factor
-
-var trick_release_active: bool:
-	get:
-		return trick_system.state.release_active
-
-var trick_release_time_remaining: float:
-	get:
-		return trick_system.state.release_time_remaining
-
-var trick_release_roll_torque: float:
-	get:
-		return trick_system.state.release_roll_torque
-
-var trick_release_pitch_torque: float:
-	get:
-		return trick_system.state.release_pitch_torque
-
-var trick_last_launch_type: JetSkiTypes.RiderTrickLaunchType:
-	get:
-		return trick_system.state.last_launch_type
-
-var trick_last_launch_type_name: StringName:
-	get:
-		return trick_system.get_launch_type_name(
-			trick_system.state.last_launch_type
-		)
-
-var trick_last_launch_charge: Vector2:
-	get:
-		return trick_system.state.last_launch_charge
-
-var trick_last_release_strength: Vector2:
-	get:
-		return trick_system.state.last_release_strength
-
 var air_correction_roll_torque_current: float:
 	get:
 		return (
@@ -727,50 +415,6 @@ var air_correction_pitch_torque_current: float:
 			.air_correction_pitch_torque_current
 		)
 
-var air_current_roll_rate: float:
-	get:
-		return rider_dynamics_system.state.air_roll_rate
-
-var air_current_pitch_rate: float:
-	get:
-		return rider_dynamics_system.state.air_pitch_rate
-
-var last_buoyancy_force_vectors: PackedVector3Array:
-	get:
-		return water_physics_system.point_buoyancy_force_vectors
-
-var last_forward_drag_force_vectors: PackedVector3Array:
-	get:
-		return water_physics_system.point_forward_drag_forces
-
-var last_lateral_drag_force_vectors: PackedVector3Array:
-	get:
-		return water_physics_system.point_lateral_drag_forces
-
-var last_point_world_positions: PackedVector3Array:
-	get:
-		return water_physics_system.point_world_positions
-
-var last_water_surface_positions: PackedVector3Array:
-	get:
-		return water_physics_system.point_water_surface_positions
-
-var last_water_normals: PackedVector3Array:
-	get:
-		return water_physics_system.point_water_normals
-
-var last_propulsion_force_vector: Vector3:
-	get:
-		return drive_system.state.propulsion_force_vector
-
-var last_propulsion_world_position: Vector3:
-	get:
-		return drive_system.state.propulsion_world_position
-
-var water_reference_valid: bool:
-	get:
-		return is_instance_valid(_ocean)
-
 var is_propelling: bool:
 	get:
 		return drive_system.state.is_propelling
@@ -778,10 +422,6 @@ var is_propelling: bool:
 var navigation_state: JetSkiTypes.NavigationState:
 	get:
 		return navigation_system.state.navigation_state
-
-var navigation_state_name: StringName:
-	get:
-		return navigation_system.get_navigation_state_name(navigation_state)
 
 var current_contact_mask: int:
 	get:
@@ -798,22 +438,6 @@ var new_contact_mask: int:
 var lost_contact_mask: int:
 	get:
 		return navigation_system.state.lost_contact_mask
-
-var signed_depth_front_left: float:
-	get:
-		return water_physics_system.get_signed_point_depth(0)
-
-var signed_depth_front_right: float:
-	get:
-		return water_physics_system.get_signed_point_depth(1)
-
-var signed_depth_rear_left: float:
-	get:
-		return water_physics_system.get_signed_point_depth(2)
-
-var signed_depth_rear_right: float:
-	get:
-		return water_physics_system.get_signed_point_depth(3)
 
 var maximum_signed_point_depth: float:
 	get:
@@ -867,12 +491,6 @@ var last_landing_entry_type: JetSkiTypes.LandingEntryType:
 	get:
 		return navigation_system.state.last_landing_entry_type
 
-var last_landing_entry_type_name: StringName:
-	get:
-		return navigation_system.get_landing_entry_type_name(
-			last_landing_entry_type
-		)
-
 var water_entry_count: int:
 	get:
 		return navigation_system.state.water_entry_count
@@ -888,11 +506,6 @@ var hard_landing_count: int:
 var deep_submersion_count: int:
 	get:
 		return navigation_system.state.deep_submersion_count
-
-var reset_count: int = 0
-var last_reset_reason: StringName = &""
-var last_reset_linear_velocity: Vector3 = Vector3.ZERO
-var last_reset_angular_velocity: Vector3 = Vector3.ZERO
 
 var _respawn_transform: Transform3D
 var _has_respawn_transform: bool = false
@@ -942,9 +555,8 @@ var trick_system: JetSkiTrickSystem:
 			) as JetSkiTrickSystem
 		return _trick_system
 var _water_warning_emitted: bool = false
-var _rider_shift_smoothed_input: Vector2:
-	get:
-		return input_system.state.rider_shift_smoothed
+
+
 func _ready() -> void:
 	input_system.rider_weight_shift_changed.connect(
 		_on_input_system_rider_weight_shift_changed
@@ -1103,42 +715,6 @@ func apply_world_rebase(shift: Vector3) -> void:
 	world_rebased.emit(horizontal_shift)
 
 
-func get_buoyancy_local_points() -> PackedVector3Array:
-	return water_physics_system.get_buoyancy_local_points()
-
-
-func get_buoyancy_point_depths() -> PackedFloat32Array:
-	return water_physics_system.get_buoyancy_point_depths()
-
-
-func get_buoyancy_point_normal_forces() -> PackedFloat32Array:
-	return water_physics_system.get_buoyancy_point_normal_forces()
-
-
-func get_buoyancy_point_water_normals() -> PackedVector3Array:
-	return water_physics_system.get_buoyancy_point_water_normals()
-
-
-func get_point_forward_drag_forces() -> PackedVector3Array:
-	return water_physics_system.get_point_forward_drag_forces()
-
-
-func get_point_lateral_drag_forces() -> PackedVector3Array:
-	return water_physics_system.get_point_lateral_drag_forces()
-
-
-func get_degenerate_drag_axis_count() -> int:
-	return water_physics_system.get_degenerate_drag_axis_count()
-
-
-func get_propulsion_local_point() -> Vector3:
-	return drive_system.get_propulsion_local_point()
-
-
-func clear_navigation_statistics() -> void:
-	navigation_system.clear_navigation_statistics()
-
-
 func reset_vehicle(reason: StringName = &"manual") -> void:
 	if not _has_respawn_transform:
 		_respawn_transform = global_transform
@@ -1160,10 +736,6 @@ func reset_vehicle(reason: StringName = &"manual") -> void:
 	submarine_system.reset_runtime_state(true)
 	trick_system.reset_runtime_state()
 	reset_physics_interpolation()
-	last_reset_linear_velocity = linear_velocity
-	last_reset_angular_velocity = angular_velocity
-	last_reset_reason = reason
-	reset_count += 1
 	reset_completed.emit(reason)
 
 
@@ -1597,7 +1169,7 @@ func _apply_rider_dynamics(
 	var external_submarine_pitch_torque := Vector3.ZERO
 	if (
 		rider_weight_shift_enabled
-		and not _rider_shift_smoothed_input.is_zero_approx()
+		and not input_system.state.rider_shift_smoothed.is_zero_approx()
 	):
 		var body_right := (
 			body_state.transform.basis.orthonormalized().x
