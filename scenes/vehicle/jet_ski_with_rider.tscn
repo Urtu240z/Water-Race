@@ -2,23 +2,38 @@
 
 [ext_resource type="PackedScene" uid="uid://qiqduyrfwah7" path="res://scenes/vehicle/jet_ski.tscn" id="1_base"]
 [ext_resource type="PackedScene" uid="uid://3htphu61qseo" path="res://scenes/rider/rider_rig.tscn" id="2_rider"]
+[ext_resource type="AudioStream" uid="uid://n6ydetcej3es" path="res://assets/audio/Splash_2.ogg" id="2_s0jot"]
+[ext_resource type="AudioStream" uid="uid://bpwibglyb4koa" path="res://assets/audio/Splash_Heavy_3.ogg" id="3_dyy3r"]
 [ext_resource type="Script" uid="uid://bk28pr20t1b8q" path="res://scripts/rider/rider_grip_orientation_modifier_3d.gd" id="3_grip_orientation"]
 [ext_resource type="Script" uid="uid://dbqp5gmdnuxmf" path="res://scripts/rider/rider_impact_pose_modifier_3d.gd" id="4_impact_pose"]
+[ext_resource type="AudioStream" uid="uid://dqwxbrecfnfno" path="res://assets/audio/Splash_Heavy_4.ogg" id="4_m6xd3"]
 [ext_resource type="Script" uid="uid://1mx1c4y02pnl" path="res://scripts/rider/rider_foot_orientation_modifier_3d.gd" id="5_foot_orientation"]
+[ext_resource type="AudioStream" uid="uid://bk01pfc1hsy55" path="res://assets/audio/Running_Water_3.ogg" id="5_o21br"]
 [ext_resource type="Script" uid="uid://b3kfrm0a2yu83" path="res://scripts/rider/rider_impact_response_controller.gd" id="6_impact_response"]
 [ext_resource type="Script" uid="uid://clycxmofcu2k5" path="res://scripts/rider/rider_grip_finger_modifier_3d.gd" id="7_grip_fingers"]
 [ext_resource type="Script" uid="uid://44vr286e106h" path="res://scripts/rider/rider_mounted_lean_controller.gd" id="8_mounted_lean"]
 
 [node name="JetSki2" unique_id=117969959 instance=ExtResource("1_base")]
 
-[node name="EngineAudio" parent="." index="0" unique_id=1603778743]
+[node name="EngineAudio" parent="." index="1" unique_id=1603778743]
 full_throttle_pitch = 3.5
 free_rev_pitch = 4.5
 idle_volume_db = 0.0
 speed_for_full_load = 42.0
 
+[node name="WaterAudio" parent="." index="3" unique_id=1620158886]
+normal_splash_streams = Array[AudioStream]([ExtResource("2_s0jot")])
+heavy_splash_streams = Array[AudioStream]([ExtResource("3_dyy3r"), ExtResource("4_m6xd3")])
+running_water_streams = Array[AudioStream]([ExtResource("5_o21br")])
+splash_pitch_min = 0.8300000000000001
+splash_pitch_max = 1.15
+running_water_min_pitch = 0.77
+running_water_max_pitch = 1.23
+
 [node name="JetSkiVisual" parent="VisualRoot" parent_id_path=PackedInt32Array(1832404346) index="0" unique_id=556077452]
 handle_low_angle_degrees = -3.0
+water_material_tag_enabled = true
+water_material_tag_roughness = 0.019608
 
 [node name="GripTargets" type="Node3D" parent="VisualRoot/JetSkiVisual/HandlePivot" parent_id_path=PackedInt32Array(556077452, 1724927576) index="1" unique_id=1552986585]
 
@@ -329,7 +344,6 @@ compression_acceleration_for_full = 7.5
 extension_acceleration_for_full = 6.5
 extension_strength = 0.95
 acceleration_filter_speed = 4.2
-submerged_compression_target = 1.0
 airborne_extension_target = -0.7
 normal_landing_impulse = 1.0
 hard_landing_impulse = 1.55
@@ -344,5 +358,7 @@ extension_handle_offset_degrees = 5.5
 script = ExtResource("8_mounted_lean")
 
 [editable path="VisualRoot/JetSkiVisual"]
+[editable path="VisualRoot/JetSkiVisual/HullModel/Hull"]
+[editable path="VisualRoot/JetSkiVisual/HandlePivot/HandleModel/Handle"]
 [editable path="VisualRoot/RiderMount/RiderAssetRoot/RiderRig"]
 [editable path="VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/Rider_Bot"]

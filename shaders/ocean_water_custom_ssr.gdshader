@@ -110,21 +110,67 @@ uniform bool ocean_debug_show_rings = false;
 
 group_uniforms CustomSSR;
 uniform bool custom_ssr_enabled = true;
-uniform int custom_ssr_steps : hint_range(4, 32, 1) = 12;
+uniform int custom_ssr_steps : hint_range(4, 32, 1) = 24;
 uniform int custom_ssr_refinement_steps : hint_range(0, 5, 1) = 2;
-uniform float custom_ssr_strength : hint_range(0.0, 1.5, 0.01) = 0.70;
-uniform float custom_ssr_max_distance : hint_range(5.0, 300.0, 1.0) = 120.0;
-uniform float custom_ssr_start_bias : hint_range(0.01, 3.0, 0.01) = 0.25;
-uniform float custom_ssr_base_step : hint_range(0.02, 5.0, 0.01) = 0.30;
+uniform float custom_ssr_strength : hint_range(0.0, 1.5, 0.01) = 0.85;
+uniform float custom_ssr_max_distance : hint_range(10.0, 500.0, 1.0) = 280.0;
+uniform float custom_ssr_start_bias : hint_range(0.01, 3.0, 0.01) = 0.20;
+uniform float custom_ssr_base_step : hint_range(0.02, 5.0, 0.01) = 0.35;
 uniform float custom_ssr_step_growth : hint_range(1.0, 1.5, 0.01) = 1.10;
-uniform float custom_ssr_thickness : hint_range(0.01, 5.0, 0.01) = 0.65;
-uniform float custom_ssr_min_fresnel : hint_range(0.0, 1.0, 0.01) = 0.08;
-uniform float custom_ssr_edge_fade : hint_range(0.001, 0.25, 0.001) = 0.08;
-uniform float custom_ssr_distance_fade_start : hint_range(0.0, 300.0, 1.0) = 65.0;
-uniform float custom_ssr_distance_fade_end : hint_range(1.0, 500.0, 1.0) = 120.0;
-uniform float custom_ssr_blur_lod : hint_range(0.0, 5.0, 0.1) = 0.8;
-uniform float custom_ssr_upward_rejection : hint_range(-1.0, 1.0, 0.01) = -0.10;
-uniform int custom_ssr_debug_mode : hint_range(0, 5, 1) = 0;
+uniform float custom_ssr_thickness : hint_range(0.01, 5.0, 0.01) = 1.10;
+uniform float custom_ssr_min_fresnel : hint_range(0.0, 1.0, 0.01) = 0.0;
+uniform float custom_ssr_edge_fade : hint_range(0.001, 0.25, 0.001) = 0.04;
+uniform float custom_ssr_distance_fade_start : hint_range(0.0, 500.0, 1.0) = 190.0;
+uniform float custom_ssr_distance_fade_end : hint_range(1.0, 600.0, 1.0) = 300.0;
+uniform float custom_ssr_blur_lod : hint_range(0.0, 5.0, 0.05) = 0.15;
+uniform float custom_ssr_upward_rejection : hint_range(-1.0, 1.0, 0.01) = -0.50;
+uniform float custom_ssr_trace_normal_flatten : hint_range(0.0, 1.0, 0.01) = 0.72;
+uniform float custom_ssr_hit_distortion : hint_range(0.0, 0.03, 0.0001) = 0.0035;
+uniform float custom_ssr_minimum_hit_visibility : hint_range(0.0, 1.0, 0.01) = 0.55;
+uniform float custom_ssr_hit_contrast : hint_range(0.5, 2.0, 0.01) = 1.10;
+uniform float custom_ssr_hit_brightness : hint_range(0.25, 2.0, 0.01) = 1.05;
+uniform int custom_ssr_debug_mode : hint_range(0, 9, 1) = 0;
+group_uniforms;
+
+group_uniforms MirroredReflection;
+uniform bool mirrored_reflection_enabled = true;
+uniform float mirrored_reflection_strength : hint_range(0.0, 1.5, 0.01) = 0.82;
+uniform float mirrored_reflection_vertical_scale : hint_range(0.5, 2.0, 0.01) = 1.0;
+uniform float mirrored_reflection_geometry_strength : hint_range(0.0, 1.5, 0.01) = 1.0;
+uniform float mirrored_reflection_sky_strength : hint_range(0.0, 1.0, 0.01) = 0.15;
+uniform float mirrored_reflection_reference_distance : hint_range(20.0, 1000.0, 1.0) = 220.0;
+uniform float mirrored_reflection_macro_distortion : hint_range(0.0, 0.05, 0.0001) = 0.008;
+uniform float mirrored_reflection_detail_distortion : hint_range(0.0, 0.02, 0.0001) = 0.002;
+uniform float mirrored_reflection_blur_lod : hint_range(0.0, 5.0, 0.05) = 0.20;
+uniform float mirrored_reflection_edge_fade : hint_range(0.001, 0.25, 0.001) = 0.04;
+uniform float mirrored_reflection_near_fade : hint_range(0.0, 1.0, 0.01) = 0.05;
+uniform float mirrored_reflection_far_fade_start : hint_range(0.0, 1000.0, 1.0) = 250.0;
+uniform float mirrored_reflection_far_fade_end : hint_range(1.0, 1500.0, 1.0) = 600.0;
+uniform vec3 mirrored_reflection_tint : source_color = vec3(0.78, 0.90, 0.96);
+uniform float mirrored_reflection_saturation : hint_range(0.0, 2.0, 0.01) = 0.82;
+uniform float mirrored_reflection_contrast : hint_range(0.5, 2.0, 0.01) = 1.08;
+uniform float mirrored_reflection_brightness : hint_range(0.25, 2.0, 0.01) = 0.92;
+group_uniforms;
+
+group_uniforms ReflectionWaveDistortion;
+uniform bool reflection_wave_distortion_enabled = true;
+uniform float reflection_macro_distortion_x : hint_range(0.0, 0.15, 0.0005) = 0.028;
+uniform float reflection_macro_distortion_y : hint_range(0.0, 0.15, 0.0005) = 0.060;
+uniform float reflection_macro_slope_influence : hint_range(0.0, 4.0, 0.01) = 1.65;
+uniform float reflection_macro_height_influence : hint_range(0.0, 4.0, 0.01) = 0.80;
+uniform float reflection_micro_distortion : hint_range(0.0, 0.03, 0.0001) = 0.0035;
+uniform float reflection_micro_breakup : hint_range(0.0, 2.0, 0.01) = 0.70;
+uniform float reflection_vertical_stretch : hint_range(0.5, 2.0, 0.01) = 1.06;
+uniform float reflection_horizontal_shear : hint_range(0.0, 1.0, 0.01) = 0.22;
+uniform float reflection_wave_phase_influence : hint_range(0.0, 2.0, 0.01) = 0.75;
+uniform float reflection_coast_breakup_strength : hint_range(0.0, 1.0, 0.01) = 0.20;
+uniform float reflection_coast_breakup_distance : hint_range(0.0, 50.0, 0.1) = 10.0;
+group_uniforms;
+
+group_uniforms HybridReflection;
+uniform float custom_reflection_minimum_surface_weight : hint_range(0.0, 1.0, 0.01) = 0.34;
+uniform float custom_reflection_maximum_surface_weight : hint_range(0.0, 1.0, 0.01) = 0.88;
+uniform float custom_reflection_emission_strength : hint_range(0.0, 2.0, 0.01) = 1.0;
 group_uniforms;
 
 varying float interpolated_wave_height;
@@ -364,6 +410,73 @@ bool is_valid_view_position(vec3 view_position) {
 }
 
 
+float calculate_projected_waterline_uv_y(
+	vec3 camera_position_world,
+	mat4 inverse_view,
+	mat4 view,
+	mat4 projection
+) {
+	vec3 camera_forward_world = -normalize(inverse_view[2].xyz);
+	vec2 horizontal_forward = camera_forward_world.xz;
+	float horizontal_length = length(horizontal_forward);
+	if (horizontal_length <= 0.00001) {
+		horizontal_forward = vec2(0.0, -1.0);
+	} else {
+		horizontal_forward /= horizontal_length;
+	}
+	vec3 reference_position_world = vec3(
+		camera_position_world.x
+			+ horizontal_forward.x
+				* mirrored_reflection_reference_distance,
+		water_level,
+		camera_position_world.z
+			+ horizontal_forward.y
+				* mirrored_reflection_reference_distance
+	);
+	vec4 reference_position_view = view * vec4(
+		reference_position_world,
+		1.0
+	);
+	vec4 reference_position_clip = projection * reference_position_view;
+	if (reference_position_clip.w <= 0.000001) {
+		return -1.0;
+	}
+	return (
+		reference_position_clip.y
+			/ reference_position_clip.w
+			* 0.5
+			+ 0.5
+	);
+}
+
+
+vec3 grade_reflection_color(
+	vec3 input_color,
+	vec3 tint,
+	float saturation,
+	float contrast_value,
+	float brightness
+) {
+	float luminance = dot(
+		input_color,
+		vec3(0.2126, 0.7152, 0.0722)
+	);
+	vec3 saturated = mix(
+		vec3(luminance),
+		input_color,
+		saturation
+	);
+	vec3 contrasted = (
+		(saturated - vec3(0.5)) * contrast_value
+		+ vec3(0.5)
+	);
+	return max(
+		contrasted * tint * brightness,
+		vec3(0.0)
+	);
+}
+
+
 bool custom_ssr_trace(
 	vec3 origin_view,
 	vec3 direction_view,
@@ -577,8 +690,20 @@ void fragment() {
 		0.0,
 		detail_slope.y
 	);
+	vec3 geometric_normal = normalize(NORMAL);
+	vec3 world_up_view = normalize(
+		mat3(VIEW_MATRIX) * vec3(0.0, 1.0, 0.0)
+	);
 	vec3 visual_normal = normalize(
-		NORMAL + detail_offset_view * surface_normal_strength
+		geometric_normal
+			+ detail_offset_view * surface_normal_strength
+	);
+	vec3 ssr_trace_normal = normalize(
+		mix(
+			geometric_normal,
+			world_up_view,
+			custom_ssr_trace_normal_flatten
+		)
 	);
 
 	float scene_raw_depth = textureLod(depth_texture, SCREEN_UV, 0.0).r;
@@ -725,20 +850,182 @@ void fragment() {
 		)
 		: 0.0;
 
+	float reflection_waterline_uv_y = calculate_projected_waterline_uv_y(
+		CAMERA_POSITION_WORLD,
+		INV_VIEW_MATRIX,
+		VIEW_MATRIX,
+		PROJECTION_MATRIX
+	);
+	float distance_below_waterline = (
+		SCREEN_UV.y - reflection_waterline_uv_y
+	);
+	float mirrored_vertical_distance = max(
+		distance_below_waterline,
+		0.0
+	);
+	float normalized_wave_height = clamp(
+		interpolated_wave_height / max(
+			abs(wave_amplitude_a) + abs(wave_amplitude_b),
+			0.001
+		),
+		-1.0,
+		1.0
+	);
+	float macro_wave_signal = (
+		normalized_wave_height * reflection_macro_height_influence
+			+ normalized_wave_height
+				* reflection_wave_phase_influence
+				* 0.24
+	);
+	float shallow_reflection_breakup = scene_is_sky
+		? 0.0
+		: 1.0 - smoothstep(
+			0.0,
+			max(reflection_coast_breakup_distance, 0.001),
+			water_thickness
+		);
+	float coast_breakup_signal = max(
+		shallow_reflection_breakup,
+		foam_mask * 0.65
+	);
+	float coast_breakup_factor = coast_breakup_signal
+		* reflection_coast_breakup_strength;
+	float reflection_distortion_multiplier = 1.0 + coast_breakup_factor;
+	vec2 macro_normal_offset = (
+		geometric_normal - world_up_view
+	).xy;
+	float macro_distance_moderation = mix(
+		1.0,
+		0.62,
+		smoothstep(180.0, 620.0, camera_distance)
+	);
+	vec2 macro_wave_offset = vec2(
+		macro_normal_offset.x
+			* reflection_macro_distortion_x
+			* reflection_macro_slope_influence
+			+ macro_wave_signal
+				* reflection_macro_distortion_x
+				* reflection_horizontal_shear,
+		-macro_normal_offset.y
+			* reflection_macro_distortion_y
+			* reflection_macro_slope_influence
+			+ macro_wave_signal
+				* reflection_macro_distortion_y
+				* 0.20
+	) * macro_distance_moderation * reflection_distortion_multiplier;
+	vec2 micro_wave_offset = detail_offset_view.xy
+		* reflection_micro_distortion
+		* reflection_micro_breakup
+		* reflection_distortion_multiplier;
+	float slope_stretch = 1.0 + clamp(
+		interpolated_wave_slope * reflection_macro_slope_influence,
+		0.0,
+		1.0
+	) * 0.06;
+	float active_vertical_stretch = reflection_wave_distortion_enabled
+		? reflection_vertical_stretch * slope_stretch
+		: 1.0;
+	vec2 mirrored_uv_unclamped = vec2(
+		SCREEN_UV.x,
+		reflection_waterline_uv_y
+			- mirrored_vertical_distance
+				* mirrored_reflection_vertical_scale
+				* active_vertical_stretch
+	);
+	if (reflection_wave_distortion_enabled) {
+		mirrored_uv_unclamped += macro_wave_offset + micro_wave_offset;
+	} else {
+		mirrored_uv_unclamped += (
+			macro_normal_offset
+				* mirrored_reflection_macro_distortion
+			+ detail_offset_view.xy
+				* mirrored_reflection_detail_distortion
+		);
+	}
+	bool mirrored_uv_is_valid = is_valid_screen_uv(
+		mirrored_uv_unclamped
+	);
+	vec2 viewport_pixel = 1.0 / VIEWPORT_SIZE;
+	vec2 mirrored_uv = clamp(
+		mirrored_uv_unclamped,
+		viewport_pixel,
+		vec2(1.0) - viewport_pixel
+	);
+	float mirrored_raw_depth = textureLod(
+		depth_texture,
+		mirrored_uv,
+		0.0
+	).r;
+	float mirrored_geometry_mask = (
+		mirrored_raw_depth > 0.000001 ? 1.0 : 0.0
+	);
+	vec3 mirrored_color = grade_reflection_color(
+		textureLod(
+			screen_texture,
+			mirrored_uv,
+			mirrored_reflection_blur_lod
+		).rgb,
+		mirrored_reflection_tint,
+		mirrored_reflection_saturation,
+		mirrored_reflection_contrast,
+		mirrored_reflection_brightness
+	);
+	float mirrored_domain = smoothstep(
+		-0.02,
+		0.002,
+		distance_below_waterline
+	);
+	float mirrored_near_fade = smoothstep(
+		0.0,
+		max(mirrored_reflection_near_fade, 0.0001),
+		mirrored_vertical_distance
+	);
+	float mirrored_far_fade = 1.0 - smoothstep(
+		mirrored_reflection_far_fade_start,
+		max(
+			mirrored_reflection_far_fade_end,
+			mirrored_reflection_far_fade_start + 0.001
+		),
+		camera_distance
+	);
+	float mirrored_edge_visibility = calculate_screen_edge_fade(
+		mirrored_uv,
+		mirrored_reflection_edge_fade
+	);
+	float mirrored_source_strength = mix(
+		mirrored_reflection_sky_strength,
+		mirrored_reflection_geometry_strength,
+		mirrored_geometry_mask
+	);
+	float mirrored_weight = (
+		mirrored_reflection_enabled
+		&& mirrored_reflection_strength > 0.0
+		&& mirrored_uv_is_valid
+	)
+		? clamp(
+			mirrored_reflection_strength
+				* mirrored_source_strength
+				* mirrored_domain
+				* mirrored_near_fade
+				* mirrored_far_fade
+				* mirrored_edge_visibility,
+			0.0,
+			1.0
+		)
+		: 0.0;
+
 	float custom_ssr_hit_mask = 0.0;
 	float custom_ssr_hit_confidence = 0.0;
-	float custom_ssr_combined_fade = 0.0;
-	float custom_ssr_normalized_distance = 0.0;
+	float raymarched_weight = 0.0;
 	vec3 custom_ssr_color = vec3(0.0);
 	if (
 		custom_ssr_enabled
 		&& custom_ssr_strength > 0.0
 		&& fresnel >= custom_ssr_min_fresnel
-		&& camera_distance < custom_ssr_distance_fade_end
 		&& foam_mask < 0.98
 	) {
 		vec3 reflection_direction_view = normalize(
-			reflect(-view_direction, visual_normal)
+			reflect(-view_direction, ssr_trace_normal)
 		);
 		vec3 reflection_direction_world = normalize(
 			mat3(INV_VIEW_MATRIX) * reflection_direction_view
@@ -764,67 +1051,83 @@ void fragment() {
 			);
 			if (custom_ssr_hit) {
 				custom_ssr_hit_mask = 1.0;
-				custom_ssr_color = textureLod(
+				custom_ssr_hit_uv += (
+					detail_offset_view.xy
+						* custom_ssr_hit_distortion
+				);
+				if (reflection_wave_distortion_enabled) {
+					custom_ssr_hit_uv += (
+						macro_wave_offset * 0.12
+							+ micro_wave_offset * 0.35
+					);
+				}
+				bool distorted_hit_is_valid = is_valid_screen_uv(
+					custom_ssr_hit_uv
+				);
+				custom_ssr_hit_uv = clamp(
+					custom_ssr_hit_uv,
+					viewport_pixel,
+					vec2(1.0) - viewport_pixel
+				);
+				vec3 raw_raymarched_color = textureLod(
 					screen_texture,
 					custom_ssr_hit_uv,
 					custom_ssr_blur_lod
 				).rgb;
-				float fresnel_confidence = clamp(
-					(
-						fresnel - custom_ssr_min_fresnel
-					) / max(1.0 - custom_ssr_min_fresnel, 0.001),
-					0.0,
-					1.0
+				custom_ssr_color = grade_reflection_color(
+					raw_raymarched_color,
+					vec3(1.0),
+					1.0,
+					custom_ssr_hit_contrast,
+					custom_ssr_hit_brightness
 				);
-				float orientation_confidence = smoothstep(
-					custom_ssr_upward_rejection,
-					min(
-						custom_ssr_upward_rejection + 0.10,
-						1.0
-					),
-					reflection_direction_world.y
-				);
-				custom_ssr_hit_confidence = clamp(
+				custom_ssr_hit_confidence = (
 					trace_confidence
-						* fresnel_confidence
-						* orientation_confidence,
-					0.0,
-					1.0
+					* (distorted_hit_is_valid ? 1.0 : 0.0)
 				);
-				float edge_fade = calculate_screen_edge_fade(
-					custom_ssr_hit_uv,
-					custom_ssr_edge_fade
+				float angular_visibility = mix(
+					custom_ssr_minimum_hit_visibility,
+					1.0,
+					fresnel
 				);
-				float distance_fade = 1.0 - smoothstep(
-					custom_ssr_distance_fade_start,
-					max(
-						custom_ssr_distance_fade_end,
-						custom_ssr_distance_fade_start + 0.001
-					),
-					custom_ssr_hit_distance
-				);
-				custom_ssr_combined_fade = edge_fade * distance_fade;
-				custom_ssr_normalized_distance = clamp(
-					custom_ssr_hit_distance
-						/ max(custom_ssr_max_distance, 0.001),
-					0.0,
-					1.0
-				);
-				float custom_ssr_weight = clamp(
+				raymarched_weight = clamp(
 					custom_ssr_hit_confidence
 						* custom_ssr_strength
-						* reflection_factor,
+						* angular_visibility,
 					0.0,
 					1.0
-				);
-				final_color = mix(
-					final_color,
-					custom_ssr_color,
-					custom_ssr_weight
 				);
 			}
 		}
 	}
+
+	float raymarched_blend = clamp(
+		custom_ssr_hit_confidence * 0.35,
+		0.0,
+		1.0
+	);
+	vec3 hybrid_reflection_color = mix(
+		mirrored_color,
+		custom_ssr_color,
+		raymarched_blend
+	);
+	float hybrid_source_weight = max(
+		mirrored_weight,
+		raymarched_weight
+	);
+	float surface_reflection_weight = mix(
+		custom_reflection_minimum_surface_weight,
+		custom_reflection_maximum_surface_weight,
+		fresnel
+	);
+	float final_reflection_weight = clamp(
+		hybrid_source_weight
+			* surface_reflection_weight
+			* (1.0 - foam_mask),
+		0.0,
+		1.0
+	);
+	final_color *= 1.0 - final_reflection_weight;
 	final_color = mix(final_color, foam_color.rgb, foam_mask);
 
 	float local_alpha = mix(near_water_alpha, deep_water_alpha, water_density);
@@ -836,6 +1139,11 @@ void fragment() {
 		),
 		0.55,
 		1.0
+	);
+	final_alpha = mix(
+		final_alpha,
+		0.96,
+		clamp(final_reflection_weight * 0.75, 0.0, 1.0)
 	);
 	final_alpha = max(final_alpha, foam_mask * 0.98);
 
@@ -851,8 +1159,20 @@ void fragment() {
 		foam_mask
 	);
 	METALLIC = 0.0;
-	SPECULAR = mix(water_specular, 0.16, foam_mask);
+	float reflection_aware_specular = mix(
+		water_specular,
+		0.05,
+		final_reflection_weight
+	);
+	SPECULAR = mix(
+		reflection_aware_specular,
+		0.16,
+		foam_mask
+	);
 	ALPHA = final_alpha;
+	EMISSION = hybrid_reflection_color
+		* final_reflection_weight
+		* custom_reflection_emission_strength;
 
 	if (custom_ssr_debug_mode == 1) {
 		ALBEDO = vec3(custom_ssr_hit_mask);
@@ -870,15 +1190,71 @@ void fragment() {
 		SPECULAR = 0.0;
 		ALPHA = 1.0;
 	} else if (custom_ssr_debug_mode == 4) {
-		ALBEDO = vec3(custom_ssr_combined_fade);
+		ALBEDO = mirrored_color * mirrored_domain;
 		ROUGHNESS = 1.0;
 		SPECULAR = 0.0;
 		ALPHA = 1.0;
 	} else if (custom_ssr_debug_mode == 5) {
-		ALBEDO = vec3(custom_ssr_normalized_distance);
+		ALBEDO = vec3(
+			clamp(
+				0.5 + macro_wave_offset.x
+					/ max(reflection_macro_distortion_x * 0.35, 0.001),
+				0.0,
+				1.0
+			),
+			clamp(
+				0.5 + macro_wave_offset.y
+					/ max(reflection_macro_distortion_y * 0.35, 0.001),
+				0.0,
+				1.0
+			),
+			0.5
+		);
 		ROUGHNESS = 1.0;
 		SPECULAR = 0.0;
 		ALPHA = 1.0;
+	} else if (custom_ssr_debug_mode == 6) {
+		ALBEDO = vec3(
+			clamp(
+				0.5 + micro_wave_offset.x
+					/ max(reflection_micro_distortion * 0.35, 0.001),
+				0.0,
+				1.0
+			),
+			clamp(
+				0.5 + micro_wave_offset.y
+					/ max(reflection_micro_distortion * 0.35, 0.001),
+				0.0,
+				1.0
+			),
+			0.5
+		);
+		ROUGHNESS = 1.0;
+		SPECULAR = 0.0;
+		ALPHA = 1.0;
+	} else if (custom_ssr_debug_mode == 7) {
+		float hybrid_debug_validity = max(
+			mirrored_domain,
+			custom_ssr_hit_mask
+		);
+		ALBEDO = hybrid_reflection_color
+			* hybrid_debug_validity;
+		ROUGHNESS = 1.0;
+		SPECULAR = 0.0;
+		ALPHA = 1.0;
+	} else if (custom_ssr_debug_mode == 8) {
+		ALBEDO = vec3(final_reflection_weight);
+		ROUGHNESS = 1.0;
+		SPECULAR = 0.0;
+		ALPHA = 1.0;
+	} else if (custom_ssr_debug_mode == 9) {
+		ALBEDO = vec3(coast_breakup_signal);
+		ROUGHNESS = 1.0;
+		SPECULAR = 0.0;
+		ALPHA = 1.0;
+	}
+	if (custom_ssr_debug_mode != 0) {
+		EMISSION = vec3(0.0);
 	}
 
 	if (ocean_debug_show_rings) {

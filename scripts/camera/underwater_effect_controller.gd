@@ -1,6 +1,10 @@
 class_name UnderwaterEffectController
 extends Node3D
 
+const UNDERWATER_POST_PROCESS_SHADER: Shader = preload(
+	"res://shaders/effects/underwater_split_view_post_process.gdshader"
+)
+
 enum DebugForceMode {
 	AUTOMATIC,
 	FORCE_AIR,
@@ -19,21 +23,59 @@ enum DebugForceMode {
 @export_range(0.0, 0.5, 0.005, "suffix:m") var exit_clearance: float = 0.05
 @export_range(0.1, 30.0, 0.1) var transition_sharpness: float = 8.0
 
+@export_group("Partial Underwater View")
+@export_range(0.10, 5.0, 0.05, "suffix:m")
+var partial_view_activation_distance: float = 1.50
+@export_range(0.0, 1.0, 0.01, "suffix:m")
+var full_submersion_start_depth: float = 0.05
+@export_range(0.05, 2.0, 0.01, "suffix:m")
+var full_submersion_end_depth: float = 0.35
+@export_range(1, 2, 1) var waterline_iterations: int = 1
+@export var waterline_include_ripples: bool = false
+@export_range(10.0, 200.0, 1.0, "suffix:m")
+var underwater_sky_distance: float = 45.0
+
 @export_group("Underwater Look")
-@export var underwater_tint: Color = Color(0.18, 0.58, 0.68, 1.0)
-@export_range(0.0, 1.0, 0.01) var tint_strength: float = 0.24
-@export_range(0.25, 1.5, 0.01) var contrast: float = 0.86
-@export var fog_color: Color = Color(0.025, 0.22, 0.29, 1.0)
-@export_range(0.0, 0.5, 0.0025) var fog_density: float = 0.0325
-@export_range(0.0, 0.5, 0.0025) var absorption_density: float = 0.055
-@export_range(0.0, 0.01, 0.0001) var distortion_strength: float = 0.0014
+@export var underwater_tint: Color = Color(0.10, 0.40, 0.50, 1.0)
+@export_range(0.0, 1.0, 0.01) var tint_strength: float = 0.16
+@export_range(0.25, 1.5, 0.01) var contrast: float = 0.94
+@export var fog_color: Color = Color(0.015, 0.095, 0.13, 1.0)
+@export_range(0.0, 0.1, 0.001) var fog_density: float = 0.009
+@export_range(0.0, 0.1, 0.001) var sky_fog_density: float = 0.007
+@export_range(0.0, 1.0, 0.01) var sky_maximum_fog: float = 0.72
+@export_range(0.0, 1.0, 0.01) var geometry_maximum_fog: float = 0.88
+@export var absorption_coefficients: Vector3 = Vector3(0.022, 0.010, 0.005)
+@export_range(0.0, 1.0, 0.01) var minimum_scene_visibility: float = 0.18
+@export_range(0.0, 30.0, 0.5, "suffix:m") var near_clarity_distance: float = 7.0
+@export_range(0.0, 50.0, 0.5, "suffix:m") var fog_start_distance: float = 5.0
+@export_range(0.0, 50.0, 0.5, "suffix:m") var blur_start_distance: float = 8.0
+@export_range(0.0, 0.01, 0.0001) var distortion_strength: float = 0.0008
 @export_range(0.0, 5.0, 0.05) var distortion_speed: float = 0.7
-@export_range(0.01, 1.0, 0.01, "suffix:m") var waterline_blend_width: float = 0.12
+@export_range(0.01, 1.0, 0.01, "suffix:m") var waterline_blend_width: float = 0.28
+@export_range(0.0, 0.1, 0.001, "suffix:m")
+var waterline_distortion_strength: float = 0.012
+@export_range(1.0, 100.0, 1.0, "suffix:m")
+var waterline_distortion_scale: float = 28.0
+@export_range(0.0, 0.5, 0.01) var waterline_band_strength: float = 0.08
+@export_range(0.001, 0.5, 0.001, "suffix:m")
+var waterline_band_width: float = 0.06
 @export_range(0.0, 1.0, 0.01) var maximum_effect_strength: float = 1.0
+@export_range(0.0, 0.25, 0.001) var blur_density: float = 0.010
+@export_range(0.0, 4.0, 0.05) var blur_near_lod: float = 0.0
+@export_range(0.0, 1.2, 0.05) var blur_far_lod: float = 0.85
 
 @export_group("Debug")
 @export var force_mode: DebugForceMode = DebugForceMode.AUTOMATIC
-@export var show_underwater_mask: bool = false
+@export_enum(
+	"Final",
+	"Underwater Mask",
+	"Water Distance",
+	"Fog Amount",
+	"RGB Transmission",
+	"Blur Amount",
+	"Scene Color Before Effects",
+	"Final Underwater Color",
+) var debug_mode: int = 0
 
 var is_underwater: bool:
 	get:
@@ -68,7 +110,15 @@ func _ready() -> void:
 	_camera = get_parent() as Camera3D
 	_post_process = get_node_or_null(post_process_path) as MeshInstance3D
 	if _post_process != null:
-		_material = _post_process.material_override as ShaderMaterial
+		var configured_material := (
+			_post_process.material_override as ShaderMaterial
+		)
+		if configured_material != null:
+			_material = configured_material.duplicate() as ShaderMaterial
+		else:
+			_material = ShaderMaterial.new()
+		_material.shader = UNDERWATER_POST_PROCESS_SHADER
+		_post_process.material_override = _material
 		_post_process.visible = false
 	if _camera == null or _material == null:
 		push_warning(
@@ -105,7 +155,20 @@ func _process(delta: float) -> void:
 	_camera_depth = _sampled_surface_height - camera_position.y
 	_update_detection_state()
 
-	var target_strength := 1.0 if _is_underwater else 0.0
+	var depth_submersion := smoothstep(
+		full_submersion_start_depth,
+		maxf(
+			full_submersion_end_depth,
+			full_submersion_start_depth + 0.001
+		),
+		maxf(_camera_depth, 0.0)
+	)
+	var target_strength := depth_submersion
+	match force_mode:
+		DebugForceMode.FORCE_AIR:
+			target_strength = 0.0
+		DebugForceMode.FORCE_UNDERWATER:
+			target_strength = 1.0
 	var blend := 1.0 - exp(
 		-maxf(transition_sharpness, 0.0) * maxf(delta, 0.0)
 	)
@@ -116,10 +179,14 @@ func _process(delta: float) -> void:
 	_push_look_parameters(false)
 	_material.set_shader_parameter(&"camera_submersion", _effect_strength)
 	_material.set_shader_parameter(&"camera_depth", _camera_depth)
+	var near_surface := (
+		_camera_depth >= -partial_view_activation_distance
+	)
 	_post_process.visible = (
 		force_mode != DebugForceMode.FORCE_AIR
 		and (
-			_is_underwater
+			near_surface
+			or _is_underwater
 			or _effect_strength > 0.001
 			or force_mode == DebugForceMode.FORCE_UNDERWATER
 		)
@@ -188,12 +255,29 @@ func _push_look_parameters(force_update: bool) -> void:
 		contrast,
 		fog_color,
 		fog_density,
-		absorption_density,
+		sky_fog_density,
+		sky_maximum_fog,
+		geometry_maximum_fog,
+		absorption_coefficients,
+		minimum_scene_visibility,
+		near_clarity_distance,
+		fog_start_distance,
+		blur_start_distance,
 		distortion_strength,
 		distortion_speed,
 		waterline_blend_width,
+		waterline_distortion_strength,
+		waterline_distortion_scale,
+		waterline_band_strength,
+		waterline_band_width,
 		maximum_effect_strength,
-		show_underwater_mask,
+		waterline_iterations,
+		waterline_include_ripples,
+		underwater_sky_distance,
+		blur_density,
+		blur_near_lod,
+		blur_far_lod,
+		debug_mode,
 	])
 	if not force_update and signature == _look_signature:
 		return
@@ -203,15 +287,65 @@ func _push_look_parameters(force_update: bool) -> void:
 	_material.set_shader_parameter(&"contrast", contrast)
 	_material.set_shader_parameter(&"fog_color", fog_color)
 	_material.set_shader_parameter(&"fog_density", fog_density)
-	_material.set_shader_parameter(&"absorption_density", absorption_density)
+	_material.set_shader_parameter(&"sky_fog_density", sky_fog_density)
+	_material.set_shader_parameter(&"sky_maximum_fog", sky_maximum_fog)
+	_material.set_shader_parameter(
+		&"geometry_maximum_fog",
+		geometry_maximum_fog
+	)
+	_material.set_shader_parameter(
+		&"absorption_coefficients",
+		absorption_coefficients
+	)
+	_material.set_shader_parameter(
+		&"minimum_scene_visibility",
+		minimum_scene_visibility
+	)
+	_material.set_shader_parameter(
+		&"near_clarity_distance",
+		near_clarity_distance
+	)
+	_material.set_shader_parameter(
+		&"fog_start_distance",
+		fog_start_distance
+	)
+	_material.set_shader_parameter(
+		&"blur_start_distance",
+		blur_start_distance
+	)
 	_material.set_shader_parameter(&"distortion_strength", distortion_strength)
 	_material.set_shader_parameter(&"distortion_speed", distortion_speed)
 	_material.set_shader_parameter(&"waterline_blend_width", waterline_blend_width)
 	_material.set_shader_parameter(
+		&"waterline_distortion_strength",
+		waterline_distortion_strength
+	)
+	_material.set_shader_parameter(
+		&"waterline_distortion_scale",
+		waterline_distortion_scale
+	)
+	_material.set_shader_parameter(
+		&"waterline_band_strength",
+		waterline_band_strength
+	)
+	_material.set_shader_parameter(
+		&"waterline_band_width",
+		waterline_band_width
+	)
+	_material.set_shader_parameter(
 		&"maximum_effect_strength",
 		maximum_effect_strength
 	)
+	_material.set_shader_parameter(&"waterline_iterations", waterline_iterations)
 	_material.set_shader_parameter(
-		&"debug_mask_enabled",
-		show_underwater_mask
+		&"waterline_include_ripples",
+		waterline_include_ripples
 	)
+	_material.set_shader_parameter(
+		&"underwater_sky_distance",
+		underwater_sky_distance
+	)
+	_material.set_shader_parameter(&"blur_density", blur_density)
+	_material.set_shader_parameter(&"blur_near_lod", blur_near_lod)
+	_material.set_shader_parameter(&"blur_far_lod", blur_far_lod)
+	_material.set_shader_parameter(&"debug_mode", debug_mode)

@@ -7,14 +7,19 @@ panorama = ExtResource("1_ndf22")
 
 [sub_resource type="Sky" id="Sky_s3uqp"]
 sky_material = SubResource("PanoramaSkyMaterial_qid03")
+process_mode = 1
+radiance_size = 5
 
 [resource]
 background_mode = 2
+background_energy_multiplier = 1.17
 sky = SubResource("Sky_s3uqp")
 ambient_light_source = 3
-ambient_light_sky_contribution = 0.85
+ambient_light_sky_contribution = 0.75
 reflected_light_source = 2
 tonemap_mode = 2
+tonemap_exposure = 2.04
+tonemap_white = 1.74
 ssr_enabled = true
 ssao_enabled = true
 ssao_radius = 2.5
@@ -51,3 +56,6 @@ volumetric_fog_ambient_inject = 1.0
 volumetric_fog_sky_affect = 0.65
 volumetric_fog_temporal_reprojection_enabled = false
 adjustment_enabled = true
+adjustment_brightness = 0.89
+adjustment_contrast = 0.94
+adjustment_saturation = 0.86
