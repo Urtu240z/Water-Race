@@ -268,31 +268,31 @@ var steering_input: float:
 
 var propulsion_depth: float:
 	get:
-		return _propulsion_depth
+		return drive_system.state.propulsion_depth
 
 var propulsion_contact_factor: float:
 	get:
-		return _propulsion_contact_factor
+		return drive_system.state.propulsion_contact_factor
 
 var current_steering_angle_degrees: float:
 	get:
-		return _current_steering_angle_degrees
+		return drive_system.state.steering_angle_degrees
 
 var current_forward_speed_factor: float:
 	get:
-		return _current_forward_speed_factor
+		return drive_system.state.forward_speed_factor
 
 var current_reverse_speed_factor: float:
 	get:
-		return _current_reverse_speed_factor
+		return drive_system.state.reverse_speed_factor
 
 var current_propulsion_force: float:
 	get:
-		return _current_propulsion_force
+		return drive_system.state.propulsion_force
 
 var current_propulsion_force_vector: Vector3:
 	get:
-		return _current_propulsion_force_vector
+		return drive_system.state.propulsion_force_vector
 
 var turn_lean_target_roll_degrees: float:
 	get:
@@ -703,11 +703,11 @@ var last_water_normals: PackedVector3Array:
 
 var last_propulsion_force_vector: Vector3:
 	get:
-		return _current_propulsion_force_vector
+		return drive_system.state.propulsion_force_vector
 
 var last_propulsion_world_position: Vector3:
 	get:
-		return _last_propulsion_world_position
+		return drive_system.state.propulsion_world_position
 
 var water_reference_valid: bool:
 	get:
@@ -715,7 +715,7 @@ var water_reference_valid: bool:
 
 var is_propelling: bool:
 	get:
-		return _is_propelling
+		return drive_system.state.is_propelling
 
 var navigation_state: JetSkiTypes.NavigationState:
 	get:
@@ -851,10 +851,15 @@ var navigation_system: JetSkiNavigationSystem:
 				"Systems/NavigationSystem"
 			) as JetSkiNavigationSystem
 		return _navigation_system
+var _drive_system: JetSkiDriveSystem
+var drive_system: JetSkiDriveSystem:
+	get:
+		if _drive_system == null:
+			_drive_system = get_node_or_null(
+				"Systems/DriveSystem"
+			) as JetSkiDriveSystem
+		return _drive_system
 var _water_warning_emitted: bool = false
-var _propulsion_warning_emitted: bool = false
-var _propulsion_local_point: Vector3 = Vector3.ZERO
-var _has_propulsion_point: bool = false
 var _throttle_input: float:
 	get:
 		return input_system.state.throttle
@@ -870,15 +875,6 @@ var _steering_input: float:
 		return input_system.state.steering
 	set(value):
 		input_system.state.steering = value
-var _propulsion_depth: float = 0.0
-var _propulsion_contact_factor: float = 0.0
-var _current_steering_angle_degrees: float = 0.0
-var _current_forward_speed_factor: float = 0.0
-var _current_reverse_speed_factor: float = 0.0
-var _current_propulsion_force: float = 0.0
-var _current_propulsion_force_vector: Vector3 = Vector3.ZERO
-var _last_propulsion_world_position: Vector3 = Vector3.ZERO
-var _is_propelling: bool = false
 var _turn_lean_target_roll: float = 0.0
 var _turn_lean_current_roll: float = 0.0
 var _turn_lean_roll_error: float = 0.0
@@ -1002,8 +998,9 @@ func _ready() -> void:
 	_configure_water_physics_system()
 	_configure_navigation_system()
 	_connect_navigation_signals()
-	_cache_propulsion_point()
+	_configure_drive_system()
 	navigation_system.reset_runtime_state()
+	drive_system.reset_runtime_state()
 	_reset_turn_lean_state()
 	_reset_rider_shift_state()
 	_reset_submarine_state(false)
@@ -1013,7 +1010,7 @@ func _ready() -> void:
 
 func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 	navigation_system.begin_physics_tick()
-	_clear_propulsion_metrics()
+	drive_system.begin_physics_tick()
 	_clear_turn_lean_frame_metrics()
 	_clear_rider_shift_frame_metrics()
 	input_system.rider_weight_shift_enabled = rider_weight_shift_enabled
@@ -1038,7 +1035,6 @@ func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 		_ocean,
 		_submarine_buoyancy_factor_current
 	)
-	var body_forward := -state.transform.basis.z.normalized()
 	navigation_system.prepare_support_state(state, water_state)
 	if water_state.raw_contact_mask == 0:
 		_capture_submarine_pre_contact_state(state)
@@ -1049,7 +1045,12 @@ func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 	)
 	_update_submarine_after_contacts(state)
 	_update_rider_trick_state(state, state.step)
-	_apply_propulsion(state, body_forward)
+	drive_system.step(
+		state,
+		_ocean,
+		input_system.state,
+		_submarine_propulsion_factor_current
+	)
 	_apply_turn_lean(state)
 
 
@@ -1142,7 +1143,7 @@ func get_degenerate_drag_axis_count() -> int:
 
 
 func get_propulsion_local_point() -> Vector3:
-	return _propulsion_local_point
+	return drive_system.get_propulsion_local_point()
 
 
 func clear_navigation_statistics() -> void:
@@ -1164,6 +1165,7 @@ func reset_vehicle(reason: StringName = &"manual") -> void:
 	sleeping = false
 	water_physics_system.reset_runtime_state()
 	navigation_system.reset_runtime_state()
+	drive_system.reset_runtime_state()
 	_reset_turn_lean_state()
 	_reset_rider_shift_state()
 	_reset_submarine_state(true)
@@ -1266,6 +1268,48 @@ func _configure_navigation_system() -> void:
 	)
 
 
+func _configure_drive_system() -> void:
+	drive_system.forward_engine_force = forward_engine_force
+	drive_system.reverse_engine_force = reverse_engine_force
+	drive_system.propulsion_full_contact_depth = (
+		propulsion_full_contact_depth
+	)
+	drive_system.forward_thrust_falloff_start_speed = (
+		forward_thrust_falloff_start_speed
+	)
+	drive_system.forward_thrust_falloff_end_speed = (
+		forward_thrust_falloff_end_speed
+	)
+	drive_system.reverse_thrust_falloff_start_speed = (
+		reverse_thrust_falloff_start_speed
+	)
+	drive_system.reverse_thrust_falloff_end_speed = (
+		reverse_thrust_falloff_end_speed
+	)
+	drive_system.maximum_steering_angle_degrees = (
+		maximum_steering_angle_degrees
+	)
+	drive_system.steering_reduction_start_speed = (
+		steering_reduction_start_speed
+	)
+	drive_system.steering_reduction_end_speed = (
+		steering_reduction_end_speed
+	)
+	drive_system.high_speed_steering_factor = (
+		high_speed_steering_factor
+	)
+	drive_system.coasting_steering_force_per_speed_squared = (
+		coasting_steering_force_per_speed_squared
+	)
+	drive_system.max_coasting_steering_force = (
+		max_coasting_steering_force
+	)
+	var propulsion_marker := get_node_or_null(
+		"PropulsionPoint"
+	) as Marker3D
+	drive_system.configure(propulsion_marker)
+
+
 func _connect_navigation_signals() -> void:
 	navigation_system.water_entered.connect(
 		_on_navigation_system_water_entered
@@ -1303,147 +1347,6 @@ func _on_navigation_system_deeply_submerged() -> void:
 	deeply_submerged.emit()
 
 
-func _cache_propulsion_point() -> void:
-	var propulsion_marker := get_node_or_null("PropulsionPoint") as Marker3D
-	if propulsion_marker == null:
-		_warn_about_missing_propulsion_point_once()
-		return
-	_propulsion_local_point = propulsion_marker.transform.origin
-	_has_propulsion_point = true
-
-
-func _clear_propulsion_metrics() -> void:
-	_propulsion_depth = 0.0
-	_propulsion_contact_factor = 0.0
-	_current_steering_angle_degrees = 0.0
-	_current_forward_speed_factor = 0.0
-	_current_reverse_speed_factor = 0.0
-	_current_propulsion_force = 0.0
-	_current_propulsion_force_vector = Vector3.ZERO
-	_is_propelling = false
-
-
-func _apply_propulsion(state: PhysicsDirectBodyState3D, body_forward: Vector3) -> void:
-	if not _has_propulsion_point:
-		_warn_about_missing_propulsion_point_once()
-		return
-	var propulsion_world_position := state.transform * _propulsion_local_point
-	_last_propulsion_world_position = propulsion_world_position
-	var propulsion_world_offset := propulsion_world_position - state.transform.origin
-	var water_height := _ocean.sample_height(propulsion_world_position)
-	var water_normal := _ocean.sample_normal(propulsion_world_position)
-	var water_velocity := _ocean.sample_water_velocity(propulsion_world_position)
-	if not water_normal.is_finite() or not water_velocity.is_finite():
-		return
-	if water_normal.length_squared() <= 0.000001:
-		return
-	water_normal = water_normal.normalized()
-	if water_normal.y < 0.0:
-		water_normal = -water_normal
-	_propulsion_depth = water_height - propulsion_world_position.y
-	_propulsion_contact_factor = clampf(
-		_propulsion_depth / propulsion_full_contact_depth,
-		0.0,
-		1.0
-	)
-	if _propulsion_contact_factor <= 0.0:
-		return
-	var base_propulsion_direction := (
-		body_forward - water_normal * body_forward.dot(water_normal)
-	)
-	if base_propulsion_direction.length_squared() <= 0.000001:
-		return
-	base_propulsion_direction = base_propulsion_direction.normalized()
-	var point_velocity := state.get_velocity_at_local_position(propulsion_world_offset)
-	var relative_velocity := point_velocity - water_velocity
-	var longitudinal_speed := relative_velocity.dot(base_propulsion_direction)
-	var absolute_longitudinal_speed := absf(longitudinal_speed)
-	var steering_speed_factor := lerpf(
-		1.0,
-		high_speed_steering_factor,
-		_inverse_lerp_clamped(
-			steering_reduction_start_speed,
-			steering_reduction_end_speed,
-			absolute_longitudinal_speed
-		)
-	)
-	_current_steering_angle_degrees = (
-		_steering_input
-		* maximum_steering_angle_degrees
-		* steering_speed_factor
-	)
-	var propulsion_direction := base_propulsion_direction.rotated(
-		water_normal,
-		deg_to_rad(_current_steering_angle_degrees)
-	).normalized()
-	var forward_speed_factor := 1.0 - _inverse_lerp_clamped(
-		forward_thrust_falloff_start_speed,
-		forward_thrust_falloff_end_speed,
-		maxf(longitudinal_speed, 0.0)
-	)
-	var reverse_speed_factor := 1.0 - _inverse_lerp_clamped(
-		reverse_thrust_falloff_start_speed,
-		reverse_thrust_falloff_end_speed,
-		maxf(-longitudinal_speed, 0.0)
-	)
-	var net_input := _throttle_input - _brake_input
-	var propulsion_force := Vector3.ZERO
-	if net_input > 0.0:
-		_current_forward_speed_factor = forward_speed_factor
-		propulsion_force = (
-			propulsion_direction
-			* forward_engine_force
-			* net_input
-			* _propulsion_contact_factor
-			* forward_speed_factor
-		)
-	elif net_input < 0.0:
-		_current_reverse_speed_factor = reverse_speed_factor
-		propulsion_force = (
-			-propulsion_direction
-			* reverse_engine_force
-			* -net_input
-			* _propulsion_contact_factor
-			* reverse_speed_factor
-		)
-	propulsion_force *= _submarine_propulsion_factor_current
-	if propulsion_force.is_finite() and not propulsion_force.is_zero_approx():
-		_current_propulsion_force_vector = propulsion_force
-		_current_propulsion_force = propulsion_force.length()
-		_is_propelling = true
-		state.apply_force(propulsion_force, propulsion_world_offset)
-	if is_zero_approx(net_input):
-		_apply_coasting_steering(
-			state,
-			base_propulsion_direction,
-			propulsion_direction,
-			absolute_longitudinal_speed,
-			propulsion_world_offset
-		)
-
-
-func _apply_coasting_steering(
-	state: PhysicsDirectBodyState3D,
-	forward_direction: Vector3,
-	steered_direction: Vector3,
-	forward_speed: float,
-	world_offset: Vector3
-) -> void:
-	if absf(_steering_input) <= 0.001 or forward_speed <= 0.01:
-		return
-	var lateral_direction := steered_direction - forward_direction
-	if lateral_direction.length_squared() <= 0.000001:
-		return
-	var steering_force_magnitude := minf(
-		forward_speed * forward_speed
-		* coasting_steering_force_per_speed_squared
-		* absf(_steering_input)
-		* _propulsion_contact_factor,
-		max_coasting_steering_force
-	)
-	state.apply_force(lateral_direction.normalized() * steering_force_magnitude, world_offset)
-
-
 func _apply_turn_lean(state: PhysicsDirectBodyState3D) -> void:
 	var vehicle_basis := state.transform.basis.orthonormalized()
 	var vehicle_up := vehicle_basis.y
@@ -1469,7 +1372,7 @@ func _apply_turn_lean(state: PhysicsDirectBodyState3D) -> void:
 		and absf(_steering_input) <= 0.0001
 	):
 		_rider_arrow_only_steering_input = _steering_input
-		_rider_arrow_only_steering_angle = _current_steering_angle_degrees
+		_rider_arrow_only_steering_angle = current_steering_angle_degrees
 	if _rider_using_air_control:
 		var air_attitude := _calculate_rider_world_attitude(state.transform)
 		_turn_lean_current_roll = air_attitude.x
@@ -2852,7 +2755,7 @@ func _calculate_turn_lean_contact_factor() -> float:
 	var propulsor_support := lerpf(
 		0.25,
 		1.0,
-		clampf(_propulsion_contact_factor, 0.0, 1.0)
+		clampf(propulsion_contact_factor, 0.0, 1.0)
 	)
 	var navigation_support := (
 		0.35
@@ -2953,24 +2856,11 @@ func _on_input_system_rider_weight_shift_changed(shift: Vector2) -> void:
 	rider_weight_shift_changed.emit(shift)
 
 
-func _inverse_lerp_clamped(from: float, to: float, value: float) -> float:
-	if to <= from:
-		return 1.0 if value >= to else 0.0
-	return clampf(inverse_lerp(from, to, value), 0.0, 1.0)
-
-
 func _warn_about_missing_water_once() -> void:
 	if _water_warning_emitted:
 		return
 	_water_warning_emitted = true
 	push_warning("JetSki buoyancy is disabled because its Ocean3D reference is invalid.")
-
-
-func _warn_about_missing_propulsion_point_once() -> void:
-	if _propulsion_warning_emitted:
-		return
-	_propulsion_warning_emitted = true
-	push_warning("JetSki propulsion is disabled because PropulsionPoint is missing.")
 
 
 func _warn_about_invalid_rider_shift_once(message: String) -> void:
