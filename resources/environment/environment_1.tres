@@ -12,10 +12,9 @@ radiance_size = 5
 
 [resource]
 background_mode = 2
-background_energy_multiplier = 1.17
+background_energy_multiplier = 0.45
 sky = SubResource("Sky_s3uqp")
 ambient_light_source = 3
-ambient_light_sky_contribution = 0.75
 reflected_light_source = 2
 tonemap_mode = 2
 tonemap_exposure = 2.04

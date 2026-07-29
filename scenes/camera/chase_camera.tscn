@@ -105,12 +105,15 @@ near_clarity_distance = 7.0
 fog_start_distance = 5.0
 blur_start_distance = 8.0
 distortion_strength = 0.0008
+distortion_speed = 0.7
 waterline_blend_width = 0.28
 waterline_distortion_strength = 0.012
 waterline_distortion_scale = 28.0
 waterline_band_strength = 0.08
 waterline_band_width = 0.06
+maximum_effect_strength = 1.0
 blur_density = 0.01
+blur_near_lod = 0.0
 blur_far_lod = 0.85
 
 [node name="UnderwaterPostProcess" type="MeshInstance3D" parent="Camera3D/UnderwaterEffect" unique_id=1854893749]

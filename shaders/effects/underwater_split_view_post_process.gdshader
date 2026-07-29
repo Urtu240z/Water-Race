@@ -434,6 +434,7 @@ void fragment() {
     tinted_color = (
         tinted_color - vec3(0.5)
     ) * distance_contrast + vec3(0.5);
+    tinted_color = max(tinted_color, vec3(0.0));
 
     float fog_distance = max(
         water_distance - fog_start_distance,
