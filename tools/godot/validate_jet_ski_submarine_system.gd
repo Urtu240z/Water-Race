@@ -581,7 +581,7 @@ func _validate_valid_entry() -> void:
 	_expect(
 		55,
 		callback_source.find(
-			"_cancel_rider_trick_state_for_submarine()"
+			"trick_system.cancel_for_submarine()"
 		) < callback_source.find("submarine_dive_started.emit()"),
 		"Tricks se cancela antes de la señal pública."
 	)
@@ -1033,15 +1033,16 @@ func _validate_integration_and_reset() -> void:
 	_expect(
 		113,
 		_controller_source.contains(
-			"func _calculate_trick_release_torque("
+			"trick_system.calculate_release_torque("
 		),
-		"Trick Release permanece en el controlador."
+		"Trick Release se consume como torque externo."
 	)
 	_expect(
 		114,
-		_controller_source.contains("var _trick_preload_state")
-		and not _system_source.contains("_trick_"),
-		"Trick state no se mueve."
+		not _controller_source.contains("var _trick_preload_state")
+		and _controller_source.contains("trick_system.update_state(")
+		and not _system_source.contains("TrickPreloadState"),
+		"Trick state se mantiene fuera de Submarine."
 	)
 	_expect(
 		115,
@@ -1368,7 +1369,7 @@ func _expect_order(integrate_source: String) -> void:
 		integrate_source.find("submarine_system.capture_pre_contact_state("),
 		integrate_source.find("navigation_system.step("),
 		integrate_source.find("submarine_system.update_after_contacts("),
-		integrate_source.find("_update_rider_trick_state("),
+		integrate_source.find("trick_system.update_state("),
 		integrate_source.find("drive_system.step("),
 		integrate_source.find("_apply_rider_dynamics("),
 	])

@@ -353,7 +353,7 @@ func _validate_structure_and_configuration() -> void:
 			"submarine_system.calculate_pitch_target_torque("
 		)
 		and controller_source.contains(
-			"func _calculate_trick_release_torque"
+			"trick_system.calculate_release_torque("
 		)
 		and system_source.contains(
 			"air_correction_target_roll_rate"

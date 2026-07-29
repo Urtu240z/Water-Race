@@ -642,7 +642,12 @@ func _validate_compatibility(controller_source: String) -> void:
 	)
 	_expect_numbered(
 		66,
-		controller_source.contains("if true_takeoff_this_tick:"),
+		controller_source.contains("navigation_system.state,")
+		and FileAccess.get_file_as_string(
+			"res://scripts/vehicle/systems/jet_ski_trick_system.gd"
+		).contains(
+			"if navigation_state.true_takeoff_this_tick:"
+		),
 		"El sistema de trucos recibe true_takeoff_this_tick."
 	)
 	_expect_numbered(

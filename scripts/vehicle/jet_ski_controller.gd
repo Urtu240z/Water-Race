@@ -28,10 +28,6 @@ const FRONT_POINT_COUNT: int = 2
 const ALL_CONTACT_MASK: int = 15
 const LEFT_CONTACT_MASK: int = 5
 const RIGHT_CONTACT_MASK: int = 10
-const TRICK_PRE_TAKEOFF_OPTIMAL_TIME: float = 0.22
-const TRICK_PRE_TAKEOFF_MINIMUM_TIMING: float = 0.65
-const TRICK_POST_TAKEOFF_OPTIMAL_TIME: float = 0.10
-const TRICK_POST_TAKEOFF_MINIMUM_TIMING: float = 0.50
 
 @export_group("Water")
 @export_node_path("Ocean3D") var ocean_path: NodePath
@@ -609,7 +605,7 @@ var submarine_exit_blend: float:
 
 var trick_preload_state: JetSkiTypes.TrickPreloadState:
 	get:
-		return _trick_preload_state
+		return trick_system.state.preload_state
 
 var solid_support_contact_count: int:
 	get:
@@ -649,77 +645,73 @@ var true_takeoff_this_tick: bool:
 
 var trick_roll_preload_sign: float:
 	get:
-		return _trick_roll_preload_sign
+		return trick_system.state.roll_preload_sign
 
 var trick_pitch_preload_sign: float:
 	get:
-		return _trick_pitch_preload_sign
+		return trick_system.state.pitch_preload_sign
 
 var trick_roll_charge: float:
 	get:
-		return _trick_roll_charge
+		return trick_system.state.roll_charge
 
 var trick_pitch_charge: float:
 	get:
-		return _trick_pitch_charge
+		return trick_system.state.pitch_charge
 
 var trick_roll_reversal_armed: bool:
 	get:
-		return _trick_roll_reversal_armed
+		return trick_system.state.roll_reversal_armed
 
 var trick_pitch_reversal_armed: bool:
 	get:
-		return _trick_pitch_reversal_armed
+		return trick_system.state.pitch_reversal_armed
 
 var trick_reversal_time_remaining: float:
 	get:
-		return maxf(
-			maxf(
-				_trick_roll_reversal_time_remaining,
-				_trick_pitch_reversal_time_remaining
-			),
-			0.0
-		)
+		return trick_system.get_reversal_time_remaining()
 
 var trick_takeoff_quality: float:
 	get:
-		return _trick_takeoff_quality
+		return trick_system.state.takeoff_quality
 
 var trick_takeoff_timing_factor: float:
 	get:
-		return _trick_takeoff_timing_factor
+		return trick_system.state.takeoff_timing_factor
 
 var trick_release_active: bool:
 	get:
-		return _trick_release_active
+		return trick_system.state.release_active
 
 var trick_release_time_remaining: float:
 	get:
-		return _trick_release_time_remaining
+		return trick_system.state.release_time_remaining
 
 var trick_release_roll_torque: float:
 	get:
-		return _trick_release_roll_torque
+		return trick_system.state.release_roll_torque
 
 var trick_release_pitch_torque: float:
 	get:
-		return _trick_release_pitch_torque
+		return trick_system.state.release_pitch_torque
 
 var trick_last_launch_type: JetSkiTypes.RiderTrickLaunchType:
 	get:
-		return _trick_last_launch_type
+		return trick_system.state.last_launch_type
 
 var trick_last_launch_type_name: StringName:
 	get:
-		return _get_rider_trick_launch_type_name(_trick_last_launch_type)
+		return trick_system.get_launch_type_name(
+			trick_system.state.last_launch_type
+		)
 
 var trick_last_launch_charge: Vector2:
 	get:
-		return _trick_last_launch_charge
+		return trick_system.state.last_launch_charge
 
 var trick_last_release_strength: Vector2:
 	get:
-		return _trick_last_release_strength
+		return trick_system.state.last_release_strength
 
 var air_correction_roll_torque_current: float:
 	get:
@@ -941,50 +933,18 @@ var submarine_system: JetSkiSubmarineSystem:
 				"Systems/SubmarineSystem"
 			) as JetSkiSubmarineSystem
 		return _submarine_system
-var _water_warning_emitted: bool = false
-var _rider_shift_raw_input: Vector2:
+var _trick_system: JetSkiTrickSystem
+var trick_system: JetSkiTrickSystem:
 	get:
-		return input_system.state.rider_shift_raw
+		if _trick_system == null:
+			_trick_system = get_node_or_null(
+				"Systems/TrickSystem"
+			) as JetSkiTrickSystem
+		return _trick_system
+var _water_warning_emitted: bool = false
 var _rider_shift_smoothed_input: Vector2:
 	get:
 		return input_system.state.rider_shift_smoothed
-var _trick_preload_state: JetSkiTypes.TrickPreloadState = TrickPreloadState.IDLE
-var _trick_roll_preload_sign: float = 0.0
-var _trick_pitch_preload_sign: float = 0.0
-var _trick_roll_hold_time: float = 0.0
-var _trick_pitch_hold_time: float = 0.0
-var _trick_roll_charge: float = 0.0
-var _trick_pitch_charge: float = 0.0
-var _trick_roll_reversal_armed: bool = false
-var _trick_pitch_reversal_armed: bool = false
-var _trick_roll_reversal_direction: float = 0.0
-var _trick_pitch_reversal_direction: float = 0.0
-var _trick_roll_armed_charge: float = 0.0
-var _trick_pitch_armed_charge: float = 0.0
-var _trick_roll_reversal_time_remaining: float = 0.0
-var _trick_pitch_reversal_time_remaining: float = 0.0
-var _trick_takeoff_pending: bool = false
-var _trick_time_since_takeoff: float = 0.0
-var _trick_pending_speed_factor: float = 0.0
-var _trick_pending_upward_factor: float = 0.0
-var _trick_pending_depth_factor: float = 0.0
-var _trick_pending_launch_speed_valid: bool = false
-var _trick_last_contact_average_depth: float = 0.0
-var _trick_takeoff_quality: float = 0.0
-var _trick_takeoff_timing_factor: float = 0.0
-var _trick_release_active: bool = false
-var _trick_release_elapsed: float = 0.0
-var _trick_release_time_remaining: float = 0.0
-var _trick_release_strength: Vector2 = Vector2.ZERO
-var _trick_release_charge: Vector2 = Vector2.ZERO
-var _trick_release_roll_torque: float = 0.0
-var _trick_release_pitch_torque: float = 0.0
-var _trick_launch_consumed: bool = false
-var _trick_last_launch_type: JetSkiTypes.RiderTrickLaunchType = RiderTrickLaunchType.NONE
-var _trick_last_launch_charge: Vector2 = Vector2.ZERO
-var _trick_last_release_strength: Vector2 = Vector2.ZERO
-
-
 func _ready() -> void:
 	input_system.rider_weight_shift_changed.connect(
 		_on_input_system_rider_weight_shift_changed
@@ -998,13 +958,15 @@ func _ready() -> void:
 	_configure_drive_system()
 	_configure_rider_dynamics_system()
 	_configure_submarine_system()
+	_configure_trick_system()
 	_connect_submarine_signals()
+	_connect_trick_signals()
 	navigation_system.reset_runtime_state()
 	drive_system.reset_runtime_state()
 	rider_dynamics_system.reset_runtime_state()
 	input_system.reset_rider_shift()
 	submarine_system.reset_runtime_state(false)
-	_reset_trick_state()
+	trick_system.reset_runtime_state()
 	reset_physics_interpolation()
 
 
@@ -1012,7 +974,7 @@ func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 	navigation_system.begin_physics_tick()
 	drive_system.begin_physics_tick()
 	rider_dynamics_system.begin_physics_tick()
-	_clear_trick_release_frame_metrics()
+	trick_system.begin_physics_tick()
 	input_system.rider_weight_shift_enabled = rider_weight_shift_enabled
 	input_system.rider_shift_input_half_life = rider_shift_input_half_life
 	input_system.rider_shift_release_half_life = rider_shift_release_half_life
@@ -1063,7 +1025,16 @@ func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 		navigation_system.state,
 		water_physics_system
 	)
-	_update_rider_trick_state(state, state.step)
+	trick_system.update_state(
+		state,
+		input_system.state,
+		water_state,
+		navigation_system.state,
+		rider_weight_shift_enabled,
+		trick_preload_enabled,
+		submarine_system.is_dive_active(),
+		state.step
+	)
 	drive_system.step(
 		state,
 		_ocean,
@@ -1187,7 +1158,7 @@ func reset_vehicle(reason: StringName = &"manual") -> void:
 	rider_dynamics_system.reset_runtime_state()
 	input_system.reset_rider_shift()
 	submarine_system.reset_runtime_state(true)
-	_reset_trick_state()
+	trick_system.reset_runtime_state()
 	reset_physics_interpolation()
 	last_reset_linear_velocity = linear_velocity
 	last_reset_angular_velocity = angular_velocity
@@ -1475,6 +1446,32 @@ func _configure_submarine_system() -> void:
 	)
 
 
+func _configure_trick_system() -> void:
+	trick_system.trick_preload_min_hold_time = (
+		trick_preload_min_hold_time
+	)
+	trick_system.trick_preload_full_charge_time = (
+		trick_preload_full_charge_time
+	)
+	trick_system.trick_preload_min_input = trick_preload_min_input
+	trick_system.trick_reversal_min_input = trick_reversal_min_input
+	trick_system.trick_reversal_takeoff_window = (
+		trick_reversal_takeoff_window
+	)
+	trick_system.trick_takeoff_coyote_time = trick_takeoff_coyote_time
+	trick_system.trick_preload_decay_rate = trick_preload_decay_rate
+	trick_system.trick_minimum_launch_speed = trick_minimum_launch_speed
+	trick_system.trick_full_launch_speed = trick_full_launch_speed
+	trick_system.trick_roll_release_torque = trick_roll_release_torque
+	trick_system.trick_pitch_release_torque = trick_pitch_release_torque
+	trick_system.trick_release_duration = trick_release_duration
+	trick_system.trick_minimum_release_charge = (
+		trick_minimum_release_charge
+	)
+	trick_system.trick_release_curve_power = trick_release_curve_power
+	trick_system.max_submersion_depth = max_submersion_depth
+
+
 func _connect_navigation_signals() -> void:
 	navigation_system.water_entered.connect(
 		_on_navigation_system_water_entered
@@ -1499,9 +1496,27 @@ func _connect_submarine_signals() -> void:
 	)
 
 
+func _connect_trick_signals() -> void:
+	trick_system.trick_launched.connect(
+		_on_trick_system_trick_launched
+	)
+
+
 func _on_submarine_system_dive_started() -> void:
-	_cancel_rider_trick_state_for_submarine()
+	trick_system.cancel_for_submarine()
 	submarine_dive_started.emit()
+
+
+func _on_trick_system_trick_launched(
+	trick_type: JetSkiTypes.RiderTrickLaunchType,
+	launch_charge: Vector2,
+	release_strength: Vector2
+) -> void:
+	rider_trick_launched.emit(
+		trick_type,
+		launch_charge,
+		release_strength
+	)
 
 
 func _on_submarine_system_dive_ended(
@@ -1557,7 +1572,7 @@ func _apply_rider_dynamics(
 		):
 			return
 		var external_trick_release_torque := (
-			_calculate_trick_release_torque(
+			trick_system.calculate_release_torque(
 				rider_dynamics_system
 				.get_prepared_body_forward(),
 				rider_dynamics_system
@@ -1601,544 +1616,6 @@ func _apply_rider_dynamics(
 		submarine_system.get_control_blend(),
 		external_submarine_pitch_torque
 	)
-
-
-func _calculate_trick_release_torque(
-	body_forward: Vector3,
-	body_right: Vector3,
-	physics_delta: float
-) -> Vector3:
-	if not _trick_release_active:
-		return Vector3.ZERO
-	var safe_duration := maxf(trick_release_duration, 0.001)
-	var sampled_release_time := minf(
-		_trick_release_elapsed + maxf(physics_delta, 0.0) * 0.5,
-		safe_duration
-	)
-	var normalized_release_time := clampf(
-		sampled_release_time / safe_duration,
-		0.0,
-		1.0
-	)
-	var release_envelope := sin(normalized_release_time * PI)
-	_trick_release_roll_torque = (
-		_trick_release_strength.x
-		* trick_roll_release_torque
-		* release_envelope
-	)
-	_trick_release_pitch_torque = (
-		_trick_release_strength.y
-		* trick_pitch_release_torque
-		* release_envelope
-	)
-	var release_torque := (
-		body_forward * _trick_release_roll_torque
-		+ body_right * _trick_release_pitch_torque
-	)
-	_trick_release_elapsed = minf(
-		_trick_release_elapsed + maxf(physics_delta, 0.0),
-		safe_duration
-	)
-	_trick_release_time_remaining = maxf(
-		safe_duration - _trick_release_elapsed,
-		0.0
-	)
-	if _trick_release_elapsed >= safe_duration:
-		_trick_release_active = false
-		_update_trick_preload_state_metric()
-	return release_torque
-
-
-func _update_rider_trick_state(
-	state: PhysicsDirectBodyState3D,
-	physics_delta: float
-) -> void:
-	var gained_support := not previous_has_any_support and has_any_support
-	if gained_support:
-		_reset_trick_for_new_support_contact()
-	if (
-		not rider_weight_shift_enabled
-		or not trick_preload_enabled
-		or navigation_state == NavigationState.DEEP_SUBMERGED
-		or submarine_system.is_dive_active()
-	):
-		_cancel_rider_trick_state_for_submarine()
-		return
-	_update_trick_reversal_timers(physics_delta)
-	var horizontal_speed := Vector2(
-		state.linear_velocity.x,
-		state.linear_velocity.z
-	).length()
-	var launch_speed_factor := smoothstep(
-		trick_minimum_launch_speed,
-		maxf(trick_full_launch_speed, trick_minimum_launch_speed + 0.001),
-		horizontal_speed
-	)
-	if has_any_support:
-		if has_water_support:
-			_trick_last_contact_average_depth = (
-				water_physics_system.state.average_depth
-			)
-		elif has_solid_support:
-			# A solid ramp has no buoyancy depth. Use the neutral midpoint of the
-			# small 0.95-1.05 depth modifier instead of penalizing it.
-			_trick_last_contact_average_depth = max_submersion_depth * 0.25
-		_trick_takeoff_pending = false
-		_trick_time_since_takeoff = 0.0
-		_update_trick_roll_preload(
-			_rider_shift_raw_input.x,
-			physics_delta,
-			false
-		)
-		_update_trick_pitch_preload(
-			_rider_shift_raw_input.y,
-			physics_delta,
-			false
-		)
-	if true_takeoff_this_tick:
-		_prepare_trick_takeoff_context(
-			state,
-			launch_speed_factor,
-			horizontal_speed >= trick_minimum_launch_speed
-		)
-		_try_start_trick_release(false)
-		if not _trick_launch_consumed:
-			_detect_coyote_reversals()
-			_try_start_trick_release(true)
-	elif _trick_takeoff_pending and not _trick_launch_consumed:
-		_trick_time_since_takeoff += maxf(physics_delta, 0.0)
-		if _trick_time_since_takeoff <= trick_takeoff_coyote_time:
-			_detect_coyote_reversals()
-			_try_start_trick_release(true)
-		else:
-			_cancel_expired_trick_takeoff()
-	_update_trick_preload_state_metric()
-
-
-func _update_trick_roll_preload(
-	axis_input: float,
-	physics_delta: float,
-	allow_air_reversal: bool
-) -> void:
-	if _trick_roll_reversal_armed:
-		return
-	var input_magnitude := absf(axis_input)
-	var input_sign := signf(axis_input)
-	if (
-		input_magnitude >= trick_reversal_min_input
-		and input_sign == -_trick_roll_preload_sign
-		and _trick_roll_preload_sign != 0.0
-		and _trick_roll_hold_time >= trick_preload_min_hold_time
-		and _trick_roll_charge >= trick_minimum_release_charge
-	):
-		_trick_roll_reversal_armed = true
-		_trick_roll_reversal_direction = input_sign
-		_trick_roll_armed_charge = _trick_roll_charge
-		_trick_roll_reversal_time_remaining = (
-			trick_takeoff_coyote_time - _trick_time_since_takeoff
-			if allow_air_reversal
-			else trick_reversal_takeoff_window
-		)
-		return
-	if allow_air_reversal:
-		return
-	if input_magnitude >= trick_preload_min_input:
-		if _trick_roll_preload_sign == 0.0:
-			_trick_roll_preload_sign = input_sign
-		if input_sign == _trick_roll_preload_sign:
-			_trick_roll_hold_time += maxf(physics_delta, 0.0)
-			_trick_roll_charge = minf(
-				_trick_roll_charge
-				+ maxf(physics_delta, 0.0)
-				/ maxf(trick_preload_full_charge_time, 0.001)
-				* input_magnitude,
-				1.0
-			)
-			return
-	_decay_trick_roll_preload(physics_delta)
-
-
-func _update_trick_pitch_preload(
-	axis_input: float,
-	physics_delta: float,
-	allow_air_reversal: bool
-) -> void:
-	if _trick_pitch_reversal_armed:
-		return
-	var input_magnitude := absf(axis_input)
-	var input_sign := signf(axis_input)
-	if (
-		input_magnitude >= trick_reversal_min_input
-		and input_sign == -_trick_pitch_preload_sign
-		and _trick_pitch_preload_sign != 0.0
-		and _trick_pitch_hold_time >= trick_preload_min_hold_time
-		and _trick_pitch_charge >= trick_minimum_release_charge
-	):
-		_trick_pitch_reversal_armed = true
-		_trick_pitch_reversal_direction = input_sign
-		_trick_pitch_armed_charge = _trick_pitch_charge
-		_trick_pitch_reversal_time_remaining = (
-			trick_takeoff_coyote_time - _trick_time_since_takeoff
-			if allow_air_reversal
-			else trick_reversal_takeoff_window
-		)
-		return
-	if allow_air_reversal:
-		return
-	if input_magnitude >= trick_preload_min_input:
-		if _trick_pitch_preload_sign == 0.0:
-			_trick_pitch_preload_sign = input_sign
-		if input_sign == _trick_pitch_preload_sign:
-			_trick_pitch_hold_time += maxf(physics_delta, 0.0)
-			_trick_pitch_charge = minf(
-				_trick_pitch_charge
-				+ maxf(physics_delta, 0.0)
-				/ maxf(trick_preload_full_charge_time, 0.001)
-				* input_magnitude,
-				1.0
-			)
-			return
-	_decay_trick_pitch_preload(physics_delta)
-
-
-func _detect_coyote_reversals() -> void:
-	_update_trick_roll_preload(
-		_rider_shift_raw_input.x,
-		0.0,
-		true
-	)
-	_update_trick_pitch_preload(
-		_rider_shift_raw_input.y,
-		0.0,
-		true
-	)
-
-
-func _prepare_trick_takeoff_context(
-	state: PhysicsDirectBodyState3D,
-	launch_speed_factor: float,
-	launch_speed_valid: bool
-) -> void:
-	_trick_takeoff_pending = true
-	_trick_time_since_takeoff = 0.0
-	_trick_takeoff_quality = 0.0
-	_trick_takeoff_timing_factor = 0.0
-	_trick_pending_speed_factor = launch_speed_factor
-	_trick_pending_launch_speed_valid = launch_speed_valid
-	_trick_pending_upward_factor = smoothstep(
-		0.0,
-		6.0,
-		maxf(state.linear_velocity.y, 0.0)
-	)
-	_trick_pending_depth_factor = smoothstep(
-		0.0,
-		maxf(max_submersion_depth * 0.5, 0.001),
-		_trick_last_contact_average_depth
-	)
-
-
-func _try_start_trick_release(using_coyote_time: bool) -> void:
-	if _trick_launch_consumed or _trick_release_active:
-		return
-	if not _trick_pending_launch_speed_valid:
-		return
-	var roll_charge := (
-		_trick_roll_armed_charge
-		if _trick_roll_reversal_armed
-		else 0.0
-	)
-	var pitch_charge := (
-		_trick_pitch_armed_charge
-		if _trick_pitch_reversal_armed
-		else 0.0
-	)
-	if (
-		roll_charge < trick_minimum_release_charge
-		and pitch_charge < trick_minimum_release_charge
-	):
-		return
-	var roll_timing_factor := (
-		_trick_reversal_timing_factor(
-			_trick_roll_reversal_time_remaining,
-			using_coyote_time
-		)
-		if _trick_roll_reversal_armed
-		else 0.0
-	)
-	var pitch_timing_factor := (
-		_trick_reversal_timing_factor(
-			_trick_pitch_reversal_time_remaining,
-			using_coyote_time
-		)
-		if _trick_pitch_reversal_armed
-		else 0.0
-	)
-	_trick_takeoff_timing_factor = maxf(
-		roll_timing_factor,
-		pitch_timing_factor
-	)
-	var roll_quality := _calculate_trick_takeoff_quality(roll_timing_factor)
-	var pitch_quality := _calculate_trick_takeoff_quality(pitch_timing_factor)
-	var release_strength := Vector2(
-		_trick_roll_reversal_direction
-			* pow(roll_charge, trick_release_curve_power)
-			* roll_quality,
-		_trick_pitch_reversal_direction
-			* pow(pitch_charge, trick_release_curve_power)
-			* pitch_quality
-	)
-	if release_strength.length_squared() > 1.0:
-		release_strength = release_strength.normalized()
-	if release_strength.is_zero_approx():
-		return
-	_trick_takeoff_quality = maxf(roll_quality, pitch_quality)
-	_start_trick_release(
-		release_strength,
-		Vector2(
-			_trick_roll_preload_sign * roll_charge,
-			_trick_pitch_preload_sign * pitch_charge
-		)
-	)
-
-
-func _trick_reversal_timing_factor(
-	reversal_time_remaining: float,
-	using_coyote_time: bool
-) -> float:
-	if using_coyote_time:
-		if trick_takeoff_coyote_time <= 0.0:
-			return 1.0 if _trick_time_since_takeoff <= 0.0 else 0.0
-		if _trick_time_since_takeoff <= TRICK_POST_TAKEOFF_OPTIMAL_TIME:
-			return 1.0
-		var post_takeoff_blend := smoothstep(
-			TRICK_POST_TAKEOFF_OPTIMAL_TIME,
-			maxf(trick_takeoff_coyote_time, TRICK_POST_TAKEOFF_OPTIMAL_TIME + 0.001),
-			_trick_time_since_takeoff
-		)
-		return lerpf(1.0, TRICK_POST_TAKEOFF_MINIMUM_TIMING, post_takeoff_blend)
-	var reversal_age := maxf(
-		trick_reversal_takeoff_window - reversal_time_remaining,
-		0.0
-	)
-	if reversal_age <= TRICK_PRE_TAKEOFF_OPTIMAL_TIME:
-		return 1.0
-	var pre_takeoff_blend := smoothstep(
-		TRICK_PRE_TAKEOFF_OPTIMAL_TIME,
-		maxf(trick_reversal_takeoff_window, TRICK_PRE_TAKEOFF_OPTIMAL_TIME + 0.001),
-		reversal_age
-	)
-	return lerpf(1.0, TRICK_PRE_TAKEOFF_MINIMUM_TIMING, pre_takeoff_blend)
-
-
-func _calculate_trick_takeoff_quality(reversal_timing_factor: float) -> float:
-	var speed_quality := lerpf(0.65, 1.0, _trick_pending_speed_factor)
-	var upward_bonus := lerpf(0.90, 1.05, _trick_pending_upward_factor)
-	var depth_bonus := lerpf(0.95, 1.05, _trick_pending_depth_factor)
-	return clampf(
-		reversal_timing_factor
-		* speed_quality
-		* upward_bonus
-		* depth_bonus,
-		0.0,
-		1.1
-	)
-
-
-func _start_trick_release(
-	release_strength: Vector2,
-	launch_charge: Vector2
-) -> void:
-	_trick_release_active = true
-	_trick_release_elapsed = 0.0
-	_trick_release_time_remaining = trick_release_duration
-	_trick_release_strength = release_strength
-	_trick_release_charge = launch_charge
-	_trick_launch_consumed = true
-	_trick_takeoff_pending = false
-	_trick_pending_launch_speed_valid = false
-	_trick_last_launch_type = _classify_rider_trick_launch(release_strength)
-	_trick_last_launch_charge = launch_charge
-	_trick_last_release_strength = release_strength
-	_clear_trick_roll_preload()
-	_clear_trick_pitch_preload()
-	_trick_preload_state = TrickPreloadState.RELEASE_ACTIVE
-	rider_trick_launched.emit(
-		_trick_last_launch_type,
-		launch_charge,
-		release_strength
-	)
-
-
-func _classify_rider_trick_launch(
-	release_strength: Vector2
-) -> JetSkiTypes.RiderTrickLaunchType:
-	var has_roll := absf(release_strength.x) > 0.0001
-	var has_pitch := absf(release_strength.y) > 0.0001
-	if has_roll and has_pitch:
-		return RiderTrickLaunchType.COMBINED
-	if release_strength.x > 0.0:
-		return RiderTrickLaunchType.BARREL_RIGHT
-	if release_strength.x < 0.0:
-		return RiderTrickLaunchType.BARREL_LEFT
-	if release_strength.y > 0.0:
-		return RiderTrickLaunchType.BACKFLIP
-	if release_strength.y < 0.0:
-		return RiderTrickLaunchType.FRONTFLIP
-	return RiderTrickLaunchType.NONE
-
-
-func _get_rider_trick_launch_type_name(
-	trick_type: JetSkiTypes.RiderTrickLaunchType
-) -> StringName:
-	match trick_type:
-		RiderTrickLaunchType.BARREL_LEFT:
-			return &"BARREL_L"
-		RiderTrickLaunchType.BARREL_RIGHT:
-			return &"BARREL_R"
-		RiderTrickLaunchType.BACKFLIP:
-			return &"BACKFLIP"
-		RiderTrickLaunchType.FRONTFLIP:
-			return &"FRONTFLIP"
-		RiderTrickLaunchType.COMBINED:
-			return &"COMBINED"
-	return &"NONE"
-
-
-func _update_trick_reversal_timers(physics_delta: float) -> void:
-	if _trick_roll_reversal_armed:
-		_trick_roll_reversal_time_remaining = (
-			_trick_roll_reversal_time_remaining - maxf(physics_delta, 0.0)
-		)
-		if _trick_roll_reversal_time_remaining < -0.0001:
-			_clear_trick_roll_preload()
-	if _trick_pitch_reversal_armed:
-		_trick_pitch_reversal_time_remaining = (
-			_trick_pitch_reversal_time_remaining - maxf(physics_delta, 0.0)
-		)
-		if _trick_pitch_reversal_time_remaining < -0.0001:
-			_clear_trick_pitch_preload()
-
-
-func _decay_trick_roll_preload(physics_delta: float) -> void:
-	_trick_roll_charge = move_toward(
-		_trick_roll_charge,
-		0.0,
-		maxf(physics_delta, 0.0) * trick_preload_decay_rate
-	)
-	if _trick_roll_charge <= 0.0001:
-		_clear_trick_roll_preload()
-
-
-func _decay_trick_pitch_preload(physics_delta: float) -> void:
-	_trick_pitch_charge = move_toward(
-		_trick_pitch_charge,
-		0.0,
-		maxf(physics_delta, 0.0) * trick_preload_decay_rate
-	)
-	if _trick_pitch_charge <= 0.0001:
-		_clear_trick_pitch_preload()
-
-
-func _clear_trick_roll_preload() -> void:
-	_trick_roll_preload_sign = 0.0
-	_trick_roll_hold_time = 0.0
-	_trick_roll_charge = 0.0
-	_trick_roll_reversal_armed = false
-	_trick_roll_reversal_direction = 0.0
-	_trick_roll_armed_charge = 0.0
-	_trick_roll_reversal_time_remaining = 0.0
-
-
-func _clear_trick_pitch_preload() -> void:
-	_trick_pitch_preload_sign = 0.0
-	_trick_pitch_hold_time = 0.0
-	_trick_pitch_charge = 0.0
-	_trick_pitch_reversal_armed = false
-	_trick_pitch_reversal_direction = 0.0
-	_trick_pitch_armed_charge = 0.0
-	_trick_pitch_reversal_time_remaining = 0.0
-
-
-func _cancel_expired_trick_takeoff() -> void:
-	_trick_takeoff_pending = false
-	_trick_pending_launch_speed_valid = false
-	_trick_launch_consumed = true
-	_clear_trick_roll_preload()
-	_clear_trick_pitch_preload()
-
-
-func _reset_trick_for_new_support_contact() -> void:
-	_trick_launch_consumed = false
-	_trick_takeoff_pending = false
-	_trick_time_since_takeoff = 0.0
-	_trick_pending_launch_speed_valid = false
-	_trick_release_active = false
-	_trick_release_elapsed = 0.0
-	_trick_release_time_remaining = 0.0
-	_trick_release_strength = Vector2.ZERO
-	_trick_release_charge = Vector2.ZERO
-	_trick_release_roll_torque = 0.0
-	_trick_release_pitch_torque = 0.0
-	_clear_trick_roll_preload()
-	_clear_trick_pitch_preload()
-
-
-func _cancel_rider_trick_state_for_submarine() -> void:
-	_trick_takeoff_pending = false
-	_trick_pending_launch_speed_valid = false
-	_trick_release_active = false
-	_trick_release_elapsed = 0.0
-	_trick_release_time_remaining = 0.0
-	_trick_release_strength = Vector2.ZERO
-	_trick_release_charge = Vector2.ZERO
-	_trick_release_roll_torque = 0.0
-	_trick_release_pitch_torque = 0.0
-	_trick_launch_consumed = true
-	_clear_trick_roll_preload()
-	_clear_trick_pitch_preload()
-	_update_trick_preload_state_metric()
-
-
-func _update_trick_preload_state_metric() -> void:
-	if _trick_release_active:
-		_trick_preload_state = TrickPreloadState.RELEASE_ACTIVE
-	elif _trick_roll_reversal_armed or _trick_pitch_reversal_armed:
-		_trick_preload_state = TrickPreloadState.REVERSAL_ARMED
-	elif _trick_roll_charge > 0.0 or _trick_pitch_charge > 0.0:
-		_trick_preload_state = TrickPreloadState.CHARGING
-	else:
-		_trick_preload_state = TrickPreloadState.IDLE
-
-
-func _reset_trick_state() -> void:
-	_trick_preload_state = TrickPreloadState.IDLE
-	_trick_takeoff_pending = false
-	_trick_time_since_takeoff = 0.0
-	_trick_pending_speed_factor = 0.0
-	_trick_pending_upward_factor = 0.0
-	_trick_pending_depth_factor = 0.0
-	_trick_pending_launch_speed_valid = false
-	_trick_last_contact_average_depth = 0.0
-	_trick_takeoff_quality = 0.0
-	_trick_takeoff_timing_factor = 0.0
-	_trick_release_active = false
-	_trick_release_elapsed = 0.0
-	_trick_release_time_remaining = 0.0
-	_trick_release_strength = Vector2.ZERO
-	_trick_release_charge = Vector2.ZERO
-	_trick_release_roll_torque = 0.0
-	_trick_release_pitch_torque = 0.0
-	_trick_launch_consumed = false
-	_trick_last_launch_type = RiderTrickLaunchType.NONE
-	_trick_last_launch_charge = Vector2.ZERO
-	_trick_last_release_strength = Vector2.ZERO
-	_clear_trick_roll_preload()
-	_clear_trick_pitch_preload()
-
-
-func _clear_trick_release_frame_metrics() -> void:
-	_trick_release_roll_torque = 0.0
-	_trick_release_pitch_torque = 0.0
 
 
 func _on_input_system_rider_weight_shift_changed(shift: Vector2) -> void:

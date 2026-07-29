@@ -310,17 +310,18 @@ transform = Transform3D(0.88294756, 0.3488854, -0.3141378, 0, 0.66913056, 0.7431
 light_color = Color(0.936434, 0.6636586, 4.1970015e-05, 1)
 light_energy = 2.867
 shadow_enabled = true
-shadow_blur = 1.16
+shadow_blur = 3.796
 directional_shadow_mode = 1
 directional_shadow_fade_start = 0.85
 directional_shadow_max_distance = 500.0
 
 [node name="DirectionalLight3D2" type="DirectionalLight3D" parent="Environment" unique_id=1424115820]
-transform = Transform3D(0.5065836, 0.570615, -0.6463525, 3.9991328e-08, 0.74966294, 0.6618198, 0.86219084, -0.335267, 0.37976694, 0, 0, 0)
+transform = Transform3D(0.9195691, 0.09848075, -0.38038722, 0.2341794, 0.64000714, 0.73181343, 0.31552005, -0.7620319, 0.56546843, 0, 0, 0)
 visible = false
 light_color = Color(0.82647467, 0.6933553, 0.57007265, 1)
 light_energy = 0.4
-light_specular = 10.0
+light_volumetric_fog_energy = 16.0
+light_specular = 7.382
 shadow_enabled = true
 directional_shadow_mode = 1
 directional_shadow_split_1 = 0.15
@@ -334,15 +335,17 @@ max_distance = 493.3
 size = Vector3(180.5664, 33.165558, 68.5918)
 interior = true
 enable_shadows = true
-ambient_color = Color(0.17900485, 0.23762429, 0.3202555, 1)
+ambient_mode = 2
+ambient_color = Color(0.1385223, 0.26824376, 0.19000927, 1)
 ambient_color_energy = 1.22
 
 [node name="OmniLight3D" type="OmniLight3D" parent="Environment" unique_id=1122488882]
-transform = Transform3D(-0.48733947, 0, -0.8732126, 0, 1, 0, 0.8732126, 0, -0.48733947, 418.948, -5.144704, 157.61732)
+transform = Transform3D(-0.48733947, 0, -0.8732126, 0, 1, 0, 0.8732126, 0, -0.48733947, 397.19693, -18.979523, 140.39047)
 light_color = Color(0, 0.548252, 0.54915243, 1)
 light_energy = 16.0
-omni_range = 32.864
-omni_attenuation = 0.591
+shadow_enabled = true
+omni_range = 61.327
+omni_attenuation = 0.718
 
 [node name="TerrainRoot" type="Node3D" parent="." unique_id=432130367]
 
@@ -510,6 +513,7 @@ volume_db = -60.0
 visible = true
 
 [node name="JetSkiVisual" parent="Gameplay/JetSki/VisualRoot" parent_id_path=PackedInt32Array(328650943, 1832404346) index="0" unique_id=556077452]
+visible = true
 water_material_tag_enabled = true
 water_material_tag_roughness = 0.019608
 
