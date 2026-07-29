@@ -140,7 +140,7 @@ func _validate_acceleration_and_high_speed() -> void:
 
 
 func _validate_coasting() -> void:
-	_vehicle.set("_throttle_input", 0.0)
+	_vehicle.input_system.state.throttle = 0.0
 	_snapshot(
 		JetSkiController.NavigationState.PARTIALLY_SUBMERGED,
 		Vector3(0.0, 0.0, 10.0),

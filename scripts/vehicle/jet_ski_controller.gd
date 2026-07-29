@@ -921,21 +921,6 @@ var rider_dynamics_system: JetSkiRiderDynamicsSystem:
 			) as JetSkiRiderDynamicsSystem
 		return _rider_dynamics_system
 var _water_warning_emitted: bool = false
-var _throttle_input: float:
-	get:
-		return input_system.state.throttle
-	set(value):
-		input_system.state.throttle = value
-var _brake_input: float:
-	get:
-		return input_system.state.brake
-	set(value):
-		input_system.state.brake = value
-var _steering_input: float:
-	get:
-		return input_system.state.steering
-	set(value):
-		input_system.state.steering = value
 var _rider_shift_raw_input: Vector2:
 	get:
 		return input_system.state.rider_shift_raw
@@ -1468,7 +1453,7 @@ func _on_navigation_system_deeply_submerged() -> void:
 func _apply_rider_dynamics(
 	body_state: PhysicsDirectBodyState3D
 ) -> void:
-	var using_air := rider_dynamics_system.prepare_mode(
+	var using_air: bool = rider_dynamics_system.prepare_mode(
 		body_state,
 		navigation_system.state
 	)
@@ -1535,7 +1520,9 @@ func _apply_rider_dynamics(
 func _apply_rider_shift_air_control(state: PhysicsDirectBodyState3D) -> void:
 	if not rider_weight_shift_enabled:
 		return
-	var rider_state := rider_dynamics_system.state
+	var rider_state: JetSkiRiderDynamicsState = (
+		rider_dynamics_system.state
+	)
 	rider_state.rider_shift_air_authority_active = 1.0
 	var vehicle_basis := state.transform.basis.orthonormalized()
 	var body_forward := -vehicle_basis.z
