@@ -19,6 +19,9 @@
 [ext_resource type="AudioStream" uid="uid://41gs20c2usbp" path="res://assets/audio/Running_Water_2.ogg" id="17_running_2"]
 [ext_resource type="AudioStream" uid="uid://bk01pfc1hsy55" path="res://assets/audio/Running_Water_3.ogg" id="18_running_3"]
 [ext_resource type="AudioStream" uid="uid://4a4u6ec21n5a" path="res://assets/audio/Running_Water_4.ogg" id="19_running_4"]
+[ext_resource type="Script" path="res://scripts/vehicle/systems/jet_ski_input_system.gd" id="20_input_system"]
+[ext_resource type="Script" path="res://scripts/vehicle/systems/jet_ski_water_physics_system.gd" id="21_water_physics_system"]
+[ext_resource type="Script" path="res://scripts/vehicle/systems/jet_ski_navigation_system.gd" id="22_navigation_system"]
 
 [sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_hull"]
 points = PackedVector3Array(0, 0.22, -1.55, 0.071, 0.185, -1.55, 0.1, 0.1, -1.55, 0.071, 0.015, -1.55, 0, -0.02, -1.55, -0.071, 0.015, -1.55, -0.1, 0.1, -1.55, -0.071, 0.185, -1.55, 0, 0.28, -1.15, 0.325, 0.198, -1.15, 0.46, 0, -1.15, 0.325, -0.198, -1.15, 0, -0.28, -1.15, -0.325, -0.198, -1.15, -0.46, 0, -1.15, -0.325, 0.198, -1.15, 0, 0.3, 0.55, 0.424, 0.212, 0.55, 0.6, 0, 0.55, 0.424, -0.212, 0.55, 0, -0.3, 0.55, -0.424, -0.212, 0.55, -0.6, 0, 0.55, -0.424, 0.212, 0.55, 0, 0.26, 1.55, 0.311, 0.19, 1.55, 0.44, 0.02, 1.55, 0.311, -0.15, 1.55, 0, -0.22, 1.55, -0.311, -0.15, 1.55, -0.44, 0.02, 1.55, -0.311, 0.19, 1.55)
@@ -31,6 +34,17 @@ can_sleep = false
 contact_monitor = true
 max_contacts_reported = 8
 script = ExtResource("1_controller")
+
+[node name="Systems" type="Node" parent="."]
+
+[node name="InputSystem" type="Node" parent="Systems"]
+script = ExtResource("20_input_system")
+
+[node name="WaterPhysicsSystem" type="Node" parent="Systems"]
+script = ExtResource("21_water_physics_system")
+
+[node name="NavigationSystem" type="Node" parent="Systems"]
+script = ExtResource("22_navigation_system")
 
 [node name="EngineAudio" type="AudioStreamPlayer3D" parent="." unique_id=1603778743]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.15, 0.45)

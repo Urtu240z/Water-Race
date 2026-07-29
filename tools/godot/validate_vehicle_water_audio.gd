@@ -39,6 +39,12 @@ func _run() -> void:
 	if _audio == null:
 		_finish()
 		return
+	# The main level deliberately overrides this to 0.0 for immediate ambience,
+	# while the focused stopped-water case validates the base JetSki threshold.
+	_audio.running_water_start_speed = 0.5
+	var audio_random := _audio.get("_random") as RandomNumberGenerator
+	if audio_random != null:
+		audio_random.seed = 42
 
 	_report.append("=== VEHICLE WATER AUDIO FOCUSED VALIDATION ===")
 	_validate_resources_and_structure()
@@ -196,9 +202,11 @@ func _validate_normal_landing() -> void:
 		0
 	)
 	var pool_before := int(_audio.get("_impact_pool_cursor"))
-	_vehicle.set("_navigation_state", JetSkiController.NavigationState.LANDING)
-	_vehicle.set("_current_contact_mask", 3)
-	_vehicle.set("_submerged_point_count", 2)
+	_vehicle.navigation_system.state.navigation_state = (
+		JetSkiController.NavigationState.LANDING
+	)
+	_vehicle.navigation_system.state.current_contact_mask = 3
+	_set_submerged_point_count(2)
 	_vehicle.linear_velocity = Vector3(0.0, -0.3, 6.0)
 	_vehicle.water_entered.emit(0.2, Vector3(1.0, 0.0, 2.0))
 	_expect(
@@ -217,9 +225,11 @@ func _validate_heavy_landing() -> void:
 		0
 	)
 	var pool_before := int(_audio.get("_impact_pool_cursor"))
-	_vehicle.set("_navigation_state", JetSkiController.NavigationState.LANDING)
-	_vehicle.set("_current_contact_mask", 15)
-	_vehicle.set("_submerged_point_count", 4)
+	_vehicle.navigation_system.state.navigation_state = (
+		JetSkiController.NavigationState.LANDING
+	)
+	_vehicle.navigation_system.state.current_contact_mask = 15
+	_set_submerged_point_count(4)
 	_vehicle.linear_velocity = Vector3(0.0, -0.4, 8.0)
 	_vehicle.water_entered.emit(0.8, Vector3(2.0, 0.0, 3.0))
 	_expect(
@@ -294,14 +304,21 @@ func _snapshot(
 	velocity: Vector3,
 	submerged_points: int
 ) -> void:
-	_vehicle.set("_navigation_state", state)
-	_vehicle.set(
-		"_current_contact_mask",
+	_vehicle.navigation_system.state.navigation_state = state
+	_vehicle.navigation_system.state.current_contact_mask = (
 		(1 << submerged_points) - 1 if submerged_points > 0 else 0
 	)
-	_vehicle.set("_submerged_point_count", submerged_points)
+	_set_submerged_point_count(submerged_points)
 	_vehicle.linear_velocity = velocity
 	_audio.call("_physics_process", STEP)
+
+
+func _set_submerged_point_count(value: int) -> void:
+	var water_state := _vehicle.water_physics_system.state
+	water_state.submerged_point_count = value
+	water_state.submerged_ratio = (
+		float(value) / float(JetSkiController.BUOYANCY_POINT_COUNT)
+	)
 
 
 func _reset_audio() -> void:
@@ -349,10 +366,15 @@ func _finish() -> void:
 	var file := FileAccess.open(REPORT_PATH, FileAccess.WRITE)
 	if file != null:
 		file.store_string("\n".join(_report) + "\n")
+	file = null
 	print("\n".join(_report))
 	if is_instance_valid(_island):
 		_stop_all_audio(_island)
-		_island.queue_free()
+		_island.free()
+	_vehicle = null
+	_audio = null
+	_island = null
+	await physics_frame
 	await process_frame
 	await process_frame
 	quit(1 if _failed else 0)

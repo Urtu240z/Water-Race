@@ -11,51 +11,17 @@ signal rider_weight_shift_changed(shift: Vector2)
 signal submarine_dive_started()
 signal submarine_dive_ended(duration: float, max_depth: float)
 
-enum NavigationState {
-	IN_WATER,
-	PARTIALLY_SUBMERGED,
-	AIRBORNE,
-	LANDING,
-	DEEP_SUBMERGED,
-}
-
-enum RiderStuntWaterMode {
-	NORMAL,
-	SUBMARINE_DIVE,
-}
-
-enum TrickPreloadState {
-	IDLE,
-	CHARGING,
-	REVERSAL_ARMED,
-	RELEASE_ACTIVE,
-}
-
-enum RiderTrickLaunchType {
-	NONE,
-	BARREL_LEFT,
-	BARREL_RIGHT,
-	BACKFLIP,
-	FRONTFLIP,
-	COMBINED,
-}
+const NavigationState = JetSkiTypes.NavigationState
+const LandingEntryType = JetSkiTypes.LandingEntryType
+const RiderStuntWaterMode = JetSkiTypes.RiderStuntWaterMode
+const TrickPreloadState = JetSkiTypes.TrickPreloadState
+const RiderTrickLaunchType = JetSkiTypes.RiderTrickLaunchType
 
 signal rider_trick_launched(
-	trick_type: RiderTrickLaunchType,
+	trick_type: JetSkiTypes.RiderTrickLaunchType,
 	charge: Vector2,
 	release_strength: Vector2
 )
-
-enum LandingEntryType {
-	FRONT,
-	REAR,
-	LEFT,
-	RIGHT,
-	FLAT,
-	DIAGONAL,
-	SINGLE_POINT,
-	UNKNOWN,
-}
 
 const BUOYANCY_POINT_COUNT: int = 4
 const FRONT_POINT_COUNT: int = 2
@@ -73,7 +39,6 @@ const SUBMARINE_SAFETY_DEPTH: float = 3.0
 const SUBMARINE_CLEAR_NOSE_UP_DEGREES: float = 10.0
 const SUBMARINE_ENTRY_BUOYANCY_BLEND_TIME: float = 0.12
 const SUBMARINE_MANUAL_DAMPING_FACTOR: float = 0.35
-const TRICK_SUPPORT_MINIMUM_UP_DOT: float = 0.20
 const TRICK_PRE_TAKEOFF_OPTIMAL_TIME: float = 0.22
 const TRICK_PRE_TAKEOFF_MINIMUM_TIMING: float = 0.65
 const TRICK_POST_TAKEOFF_OPTIMAL_TIME: float = 0.10
@@ -231,75 +196,75 @@ const TRICK_POST_TAKEOFF_MINIMUM_TIMING: float = 0.50
 
 var submerged_point_count: int:
 	get:
-		return _submerged_point_count
+		return water_physics_system.state.submerged_point_count
 
 var submerged_ratio: float:
 	get:
-		return float(_submerged_point_count) / float(BUOYANCY_POINT_COUNT)
+		return water_physics_system.state.submerged_ratio
 
 var average_depth: float:
 	get:
-		return _average_depth
+		return water_physics_system.state.average_depth
 
 var maximum_depth: float:
 	get:
-		return _maximum_depth
+		return water_physics_system.state.maximum_depth
 
 var front_submerged_ratio: float:
 	get:
-		return float(_front_submerged_count) / float(FRONT_POINT_COUNT)
+		return water_physics_system.state.front_submerged_ratio
 
 var rear_submerged_ratio: float:
 	get:
-		return float(_rear_submerged_count) / float(FRONT_POINT_COUNT)
+		return water_physics_system.state.rear_submerged_ratio
 
 var water_relative_forward_speed: float:
 	get:
-		return _water_relative_forward_speed
+		return water_physics_system.state.water_relative_forward_speed
 
 var water_relative_lateral_speed: float:
 	get:
-		return _water_relative_lateral_speed
+		return water_physics_system.state.water_relative_lateral_speed
 
 var total_forward_drag_force: float:
 	get:
-		return _total_forward_drag_force
+		return water_physics_system.state.total_forward_drag_force
 
 var total_lateral_drag_force: float:
 	get:
-		return _total_lateral_drag_force
+		return water_physics_system.state.total_lateral_drag_force
 
 var total_buoyancy_force: float:
 	get:
-		return _total_buoyancy_force
+		return water_physics_system.state.total_buoyancy_force
 
 var maximum_point_buoyancy_force: float:
 	get:
-		return _maximum_point_buoyancy_force
+		return water_physics_system.state.maximum_point_buoyancy_force
 
 var maximum_point_forward_drag: float:
 	get:
-		return _maximum_point_forward_drag
+		return water_physics_system.state.maximum_point_forward_drag
 
 var maximum_point_lateral_drag: float:
 	get:
-		return _maximum_point_lateral_drag
+		return water_physics_system.state.maximum_point_lateral_drag
 
 var hydrodynamic_active_point_count: int:
 	get:
-		return _hydrodynamic_active_point_count
+		return water_physics_system.state.hydrodynamic_active_point_count
 
 var throttle_input: float:
 	get:
-		return _throttle_input
+		return input_system.state.throttle
 
 var brake_input: float:
 	get:
-		return _brake_input
+		return input_system.state.brake
 
 var steering_input: float:
 	get:
-		return _steering_input
+		return input_system.state.steering
 
 var propulsion_depth: float:
 	get:
@@ -383,23 +348,23 @@ var turn_lean_landing_ramp: float:
 
 var rider_weight_shift_input: Vector2:
 	get:
-		return _rider_shift_smoothed_input
+		return input_system.state.rider_shift_smoothed
 
 var rider_weight_shift_roll: float:
 	get:
-		return _rider_shift_smoothed_input.x
+		return input_system.state.rider_shift_smoothed.x
 
 var rider_weight_shift_pitch: float:
 	get:
-		return _rider_shift_smoothed_input.y
+		return input_system.state.rider_shift_smoothed.y
 
 var rider_shift_raw_input: Vector2:
 	get:
-		return _rider_shift_raw_input
+		return input_system.state.rider_shift_raw
 
 var rider_shift_smoothed_input: Vector2:
 	get:
-		return _rider_shift_smoothed_input
+		return input_system.state.rider_shift_smoothed
 
 var rider_shift_speed_authority: float:
 	get:
@@ -582,45 +547,45 @@ var submarine_exit_blend: float:
 	get:
 		return _submarine_exit_blend
 
-var trick_preload_state: TrickPreloadState:
+var trick_preload_state: JetSkiTypes.TrickPreloadState:
 	get:
 		return _trick_preload_state
 
 var solid_support_contact_count: int:
 	get:
-		return _solid_support_contact_count
+		return navigation_system.state.solid_support_contact_count
 
 var physical_contact_count: int:
 	get:
-		return _physical_contact_count
+		return navigation_system.state.physical_contact_count
 
 var physical_contact_delta_velocity: float:
 	get:
-		return _physical_contact_delta_velocity
+		return navigation_system.state.physical_contact_delta_velocity
 
 var physical_contact_position: Vector3:
 	get:
-		return _physical_contact_position
+		return navigation_system.state.physical_contact_position
 
 var has_solid_support: bool:
 	get:
-		return _has_solid_support
+		return navigation_system.state.has_solid_support
 
 var has_water_support: bool:
 	get:
-		return _has_water_support
+		return navigation_system.state.has_water_support
 
 var has_any_support: bool:
 	get:
-		return _has_any_support
+		return navigation_system.state.has_any_support
 
 var previous_has_any_support: bool:
 	get:
-		return _previous_has_any_support
+		return navigation_system.state.previous_has_any_support
 
 var true_takeoff_this_tick: bool:
 	get:
-		return _true_takeoff_this_tick
+		return navigation_system.state.true_takeoff_this_tick
 
 var trick_roll_preload_sign: float:
 	get:
@@ -680,7 +645,7 @@ var trick_release_pitch_torque: float:
 	get:
 		return _trick_release_pitch_torque
 
-var trick_last_launch_type: RiderTrickLaunchType:
+var trick_last_launch_type: JetSkiTypes.RiderTrickLaunchType:
 	get:
 		return _trick_last_launch_type
 
@@ -714,27 +679,27 @@ var air_current_pitch_rate: float:
 
 var last_buoyancy_force_vectors: PackedVector3Array:
 	get:
-		return _point_buoyancy_force_vectors
+		return water_physics_system.point_buoyancy_force_vectors
 
 var last_forward_drag_force_vectors: PackedVector3Array:
 	get:
-		return _point_forward_drag_forces
+		return water_physics_system.point_forward_drag_forces
 
 var last_lateral_drag_force_vectors: PackedVector3Array:
 	get:
-		return _point_lateral_drag_forces
+		return water_physics_system.point_lateral_drag_forces
 
 var last_point_world_positions: PackedVector3Array:
 	get:
-		return _point_world_positions
+		return water_physics_system.point_world_positions
 
 var last_water_surface_positions: PackedVector3Array:
 	get:
-		return _point_water_surface_positions
+		return water_physics_system.point_water_surface_positions
 
 var last_water_normals: PackedVector3Array:
 	get:
-		return _point_water_normals
+		return water_physics_system.point_water_normals
 
 var last_propulsion_force_vector: Vector3:
 	get:
@@ -752,117 +717,119 @@ var is_propelling: bool:
 	get:
 		return _is_propelling
 
-var navigation_state: NavigationState:
+var navigation_state: JetSkiTypes.NavigationState:
 	get:
-		return _navigation_state
+		return navigation_system.state.navigation_state
 
 var navigation_state_name: StringName:
 	get:
-		return _get_navigation_state_name(_navigation_state)
+		return navigation_system.get_navigation_state_name(navigation_state)
 
 var current_contact_mask: int:
 	get:
-		return _current_contact_mask
+		return navigation_system.state.current_contact_mask
 
 var previous_contact_mask: int:
 	get:
-		return _previous_contact_mask
+		return navigation_system.state.previous_contact_mask
 
 var new_contact_mask: int:
 	get:
-		return _new_contact_mask
+		return navigation_system.state.new_contact_mask
 
 var lost_contact_mask: int:
 	get:
-		return _lost_contact_mask
+		return navigation_system.state.lost_contact_mask
 
 var signed_depth_front_left: float:
 	get:
-		return _get_signed_point_depth(0)
+		return water_physics_system.get_signed_point_depth(0)
 
 var signed_depth_front_right: float:
 	get:
-		return _get_signed_point_depth(1)
+		return water_physics_system.get_signed_point_depth(1)
 
 var signed_depth_rear_left: float:
 	get:
-		return _get_signed_point_depth(2)
+		return water_physics_system.get_signed_point_depth(2)
 
 var signed_depth_rear_right: float:
 	get:
-		return _get_signed_point_depth(3)
+		return water_physics_system.get_signed_point_depth(3)
 
 var maximum_signed_point_depth: float:
 	get:
-		return _maximum_signed_point_depth
+		return water_physics_system.state.maximum_signed_point_depth
 
 var dry_contact_time: float:
 	get:
-		return _dry_contact_time
+		return navigation_system.state.dry_contact_time
 
 var current_airtime: float:
 	get:
-		return _current_airtime
+		return navigation_system.state.current_airtime
 
 var last_airtime: float:
 	get:
-		return _last_airtime
+		return navigation_system.state.last_airtime
 
 var maximum_recorded_airtime: float:
 	get:
-		return _maximum_recorded_airtime
+		return navigation_system.state.maximum_recorded_airtime
 
 var takeoff_position: Vector3:
 	get:
-		return _takeoff_position
+		return navigation_system.state.takeoff_position
 
 var takeoff_linear_velocity: Vector3:
 	get:
-		return _takeoff_linear_velocity
+		return navigation_system.state.takeoff_linear_velocity
 
 var last_landing_position: Vector3:
 	get:
-		return _last_landing_position
+		return navigation_system.state.last_landing_position
 
 var last_landing_normal_speed: float:
 	get:
-		return _last_landing_normal_speed
+		return navigation_system.state.last_landing_normal_speed
 
 var last_landing_intensity: float:
 	get:
-		return _last_landing_intensity
+		return navigation_system.state.last_landing_intensity
 
 var last_landing_contact_mask: int:
 	get:
-		return _last_landing_contact_mask
+		return navigation_system.state.last_landing_contact_mask
 
 var last_landing_contact_count: int:
 	get:
-		return _last_landing_contact_count
+		return navigation_system.state.last_landing_contact_count
 
-var last_landing_entry_type: LandingEntryType:
+var last_landing_entry_type: JetSkiTypes.LandingEntryType:
 	get:
-		return _last_landing_entry_type
+		return navigation_system.state.last_landing_entry_type
 
 var last_landing_entry_type_name: StringName:
 	get:
-		return _get_landing_entry_type_name(_last_landing_entry_type)
+		return navigation_system.get_landing_entry_type_name(
+			last_landing_entry_type
+		)
 
 var water_entry_count: int:
 	get:
-		return _water_entry_count
+		return navigation_system.state.water_entry_count
 
 var water_exit_count: int:
 	get:
-		return _water_exit_count
+		return navigation_system.state.water_exit_count
 
 var hard_landing_count: int:
 	get:
-		return _hard_landing_count
+		return navigation_system.state.hard_landing_count
 
 var deep_submersion_count: int:
 	get:
-		return _deep_submersion_count
+		return navigation_system.state.deep_submersion_count
 
 var reset_count: int = 0
 var last_reset_reason: StringName = &""
@@ -872,43 +839,37 @@ var last_reset_angular_velocity: Vector3 = Vector3.ZERO
 var _respawn_transform: Transform3D
 var _has_respawn_transform: bool = false
 var _ocean: Ocean3D
+@onready var input_system: JetSkiInputSystem = $Systems/InputSystem
+@onready var water_physics_system: JetSkiWaterPhysicsSystem = (
+	$Systems/WaterPhysicsSystem
+)
+var _navigation_system: JetSkiNavigationSystem
+var navigation_system: JetSkiNavigationSystem:
+	get:
+		if _navigation_system == null:
+			_navigation_system = get_node_or_null(
+				"Systems/NavigationSystem"
+			) as JetSkiNavigationSystem
+		return _navigation_system
 var _water_warning_emitted: bool = false
-var _point_warning_emitted: bool = false
 var _propulsion_warning_emitted: bool = false
-var _buoyancy_local_points: PackedVector3Array = PackedVector3Array()
 var _propulsion_local_point: Vector3 = Vector3.ZERO
 var _has_propulsion_point: bool = false
-var _point_depths: PackedFloat32Array = PackedFloat32Array()
-var _point_normal_forces: PackedFloat32Array = PackedFloat32Array()
-var _point_buoyancy_force_vectors: PackedVector3Array = PackedVector3Array()
-var _point_water_normals: PackedVector3Array = PackedVector3Array()
-var _point_world_positions: PackedVector3Array = PackedVector3Array()
-var _point_water_surface_positions: PackedVector3Array = PackedVector3Array()
-var _point_water_velocities: PackedVector3Array = PackedVector3Array()
-var _point_physical_velocities: PackedVector3Array = PackedVector3Array()
-var _point_relative_velocities: PackedVector3Array = PackedVector3Array()
-var _point_relative_normal_speeds: PackedFloat32Array = PackedFloat32Array()
-var _point_sample_valid: Array[bool] = []
-var _point_forward_drag_forces: PackedVector3Array = PackedVector3Array()
-var _point_lateral_drag_forces: PackedVector3Array = PackedVector3Array()
-var _submerged_point_count: int = 0
-var _front_submerged_count: int = 0
-var _rear_submerged_count: int = 0
-var _average_depth: float = 0.0
-var _maximum_depth: float = 0.0
-var _water_relative_forward_speed: float = 0.0
-var _water_relative_lateral_speed: float = 0.0
-var _total_forward_drag_force: float = 0.0
-var _total_lateral_drag_force: float = 0.0
-var _total_buoyancy_force: float = 0.0
-var _maximum_point_buoyancy_force: float = 0.0
-var _maximum_point_forward_drag: float = 0.0
-var _maximum_point_lateral_drag: float = 0.0
-var _hydrodynamic_active_point_count: int = 0
-var _degenerate_drag_axis_count: int = 0
-var _throttle_input: float = 0.0
-var _brake_input: float = 0.0
-var _steering_input: float = 0.0
+var _throttle_input: float:
+	get:
+		return input_system.state.throttle
+	set(value):
+		input_system.state.throttle = value
+var _brake_input: float:
+	get:
+		return input_system.state.brake
+	set(value):
+		input_system.state.brake = value
+var _steering_input: float:
+	get:
+		return input_system.state.steering
+	set(value):
+		input_system.state.steering = value
 var _propulsion_depth: float = 0.0
 var _propulsion_contact_factor: float = 0.0
 var _current_steering_angle_degrees: float = 0.0
@@ -931,9 +892,12 @@ var _turn_lean_reference_forward: Vector3 = Vector3.FORWARD
 var _turn_lean_reference_right: Vector3 = Vector3.RIGHT
 var _turn_lean_airborne_disabled: bool = false
 var _turn_lean_landing_ramp: float = 0.0
-var _rider_shift_raw_input: Vector2 = Vector2.ZERO
-var _rider_shift_smoothed_input: Vector2 = Vector2.ZERO
-var _rider_shift_last_emitted_input: Vector2 = Vector2.ZERO
+var _rider_shift_raw_input: Vector2:
+	get:
+		return input_system.state.rider_shift_raw
+var _rider_shift_smoothed_input: Vector2:
+	get:
+		return input_system.state.rider_shift_smoothed
 var _rider_shift_speed_authority: float = 0.0
 var _rider_shift_speed_factor: float = 0.0
 var _rider_shift_contact_authority: float = 0.0
@@ -969,7 +933,7 @@ var _rider_air_pitch_rate: float = 0.0
 var _rider_air_accumulated_roll_degrees: float = 0.0
 var _rider_air_accumulated_pitch_degrees: float = 0.0
 var _rider_air_tracking_active: bool = false
-var _rider_stunt_water_mode: RiderStuntWaterMode = RiderStuntWaterMode.NORMAL
+var _rider_stunt_water_mode: JetSkiTypes.RiderStuntWaterMode = RiderStuntWaterMode.NORMAL
 var _submarine_entry_speed: float = 0.0
 var _submarine_entry_pitch_degrees: float = 0.0
 var _submarine_duration: float = 0.0
@@ -988,17 +952,7 @@ var _submarine_pre_contact_angular_velocity: Vector3 = Vector3.ZERO
 var _submarine_pre_contact_roll_degrees: float = 0.0
 var _submarine_pre_contact_pitch_degrees: float = 0.0
 var _submarine_pre_contact_horizontal_speed: float = 0.0
-var _trick_preload_state: TrickPreloadState = TrickPreloadState.IDLE
-var _trick_support_state_initialized: bool = false
-var _solid_support_contact_count: int = 0
-var _physical_contact_count: int = 0
-var _physical_contact_delta_velocity: float = 0.0
-var _physical_contact_position := Vector3.ZERO
-var _has_solid_support: bool = false
-var _has_water_support: bool = false
-var _has_any_support: bool = false
-var _previous_has_any_support: bool = false
-var _true_takeoff_this_tick: bool = false
+var _trick_preload_state: JetSkiTypes.TrickPreloadState = TrickPreloadState.IDLE
 var _trick_roll_preload_sign: float = 0.0
 var _trick_pitch_preload_sign: float = 0.0
 var _trick_roll_hold_time: float = 0.0
@@ -1030,170 +984,69 @@ var _trick_release_charge: Vector2 = Vector2.ZERO
 var _trick_release_roll_torque: float = 0.0
 var _trick_release_pitch_torque: float = 0.0
 var _trick_launch_consumed: bool = false
-var _trick_last_launch_type: RiderTrickLaunchType = RiderTrickLaunchType.NONE
+var _trick_last_launch_type: JetSkiTypes.RiderTrickLaunchType = RiderTrickLaunchType.NONE
 var _trick_last_launch_charge: Vector2 = Vector2.ZERO
 var _trick_last_release_strength: Vector2 = Vector2.ZERO
 var _air_correction_roll_torque_current: float = 0.0
 var _air_correction_pitch_torque_current: float = 0.0
 var _rider_shift_warning_emitted: bool = false
-var _navigation_initialized: bool = false
-var _navigation_state: NavigationState = NavigationState.PARTIALLY_SUBMERGED
-var _current_contact_mask: int = 0
-var _previous_contact_mask: int = 0
-var _new_contact_mask: int = 0
-var _lost_contact_mask: int = 0
-var _maximum_signed_point_depth: float = 0.0
-var _dry_contact_time: float = 0.0
-var _current_airtime: float = 0.0
-var _last_airtime: float = 0.0
-var _maximum_recorded_airtime: float = 0.0
-var _takeoff_position: Vector3 = Vector3.ZERO
-var _takeoff_linear_velocity: Vector3 = Vector3.ZERO
-var _landing_state_time_remaining: float = 0.0
-var _has_ever_contacted_water: bool = false
-var _has_confirmed_airborne: bool = false
-var _deep_submersion_latched: bool = false
-var _last_landing_position: Vector3 = Vector3.ZERO
-var _last_landing_normal_speed: float = 0.0
-var _last_landing_intensity: float = 0.0
-var _last_landing_contact_mask: int = 0
-var _last_landing_contact_count: int = 0
-var _last_landing_entry_type: LandingEntryType = LandingEntryType.UNKNOWN
-var _water_entry_count: int = 0
-var _water_exit_count: int = 0
-var _hard_landing_count: int = 0
-var _deep_submersion_count: int = 0
 
 
 func _ready() -> void:
+	input_system.rider_weight_shift_changed.connect(
+		_on_input_system_rider_weight_shift_changed
+	)
 	_respawn_transform = global_transform
 	_has_respawn_transform = true
 	_resolve_water_reference()
-	_cache_buoyancy_points()
+	_configure_water_physics_system()
+	_configure_navigation_system()
+	_connect_navigation_signals()
 	_cache_propulsion_point()
-	_reset_navigation_detection()
+	navigation_system.reset_runtime_state()
 	_reset_turn_lean_state()
 	_reset_rider_shift_state()
 	_reset_submarine_state(false)
-	_reset_trick_support_state()
 	_reset_trick_state()
 	reset_physics_interpolation()
 
 
 func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
-	_clear_buoyancy_metrics()
+	navigation_system.begin_physics_tick()
 	_clear_propulsion_metrics()
 	_clear_turn_lean_frame_metrics()
 	_clear_rider_shift_frame_metrics()
-	_read_control_inputs(state.step)
+	input_system.rider_weight_shift_enabled = rider_weight_shift_enabled
+	input_system.rider_shift_input_half_life = rider_shift_input_half_life
+	input_system.rider_shift_release_half_life = rider_shift_release_half_life
+	input_system.rider_input_allowed = (
+		not freeze
+		and process_mode != Node.PROCESS_MODE_DISABLED
+		and not get_tree().paused
+	)
+	input_system.sample_input(state.step)
 	if not is_instance_valid(_ocean):
+		water_physics_system.reset_runtime_state()
 		_warn_about_missing_water_once()
 		return
-	if _buoyancy_local_points.size() != BUOYANCY_POINT_COUNT:
-		_warn_about_missing_points_once()
+	if not water_physics_system.has_valid_buoyancy_points():
+		water_physics_system.reset_runtime_state()
 		return
 	_update_submarine_before_forces(state, state.step)
-	var depth_sum: float = 0.0
-	var raw_contact_mask: int = 0
-	var maximum_signed_depth: float = -INF
-	var active_water_normal_sum := Vector3.ZERO
-	var active_water_velocity_sum := Vector3.ZERO
-	var body_forward := -state.transform.basis.z.normalized()
-	for index in BUOYANCY_POINT_COUNT:
-		var local_point := _buoyancy_local_points[index]
-		var world_point := state.transform * local_point
-		var world_offset := world_point - state.transform.origin
-		_point_world_positions[index] = world_point
-		var water_height := _ocean.sample_height(world_point)
-		_point_water_surface_positions[index] = Vector3(world_point.x, water_height, world_point.z)
-		var depth := water_height - world_point.y
-		_point_depths[index] = depth
-		maximum_signed_depth = maxf(maximum_signed_depth, depth)
-		if depth <= 0.0:
-			continue
-		raw_contact_mask |= 1 << index
-		var water_normal := _ocean.sample_normal(world_point)
-		var water_velocity := _ocean.sample_water_velocity(world_point)
-		if not water_normal.is_finite() or not water_velocity.is_finite():
-			continue
-		if water_normal.length_squared() <= 0.000001:
-			continue
-		water_normal = water_normal.normalized()
-		if water_normal.y < 0.0:
-			water_normal = -water_normal
-		var point_velocity := state.get_velocity_at_local_position(world_offset)
-		var relative_velocity := point_velocity - water_velocity
-		var normal_speed := relative_velocity.dot(water_normal)
-		_point_water_velocities[index] = water_velocity
-		_point_physical_velocities[index] = point_velocity
-		_point_relative_velocities[index] = relative_velocity
-		_point_relative_normal_speeds[index] = normal_speed
-		_point_sample_valid[index] = true
-		var clamped_depth := minf(depth, max_submersion_depth)
-		var depth_ratio := clampf(depth / max_submersion_depth, 0.0, 1.0)
-		# Preserve the normal surface response, then progressively strengthen
-		# recovery only after the vehicle is genuinely submerged.
-		var excess_submersion := maxf(depth - deep_buoyancy_start_depth, 0.0)
-		var raw_buoyancy := (
-			clamped_depth * buoyancy_strength_per_point
-			+ excess_submersion * deep_buoyancy_strength_per_point
-		)
-		var maximum_buoyancy_force := (
-			max_buoyancy_force_per_point
-			+ excess_submersion * deep_buoyancy_force_limit_per_meter
-		)
-		var damping_magnitude := (
-			-normal_speed
-			* buoyancy_damping_per_point
-			* depth_ratio
-		)
-		var normal_force := clampf(
-			raw_buoyancy + damping_magnitude,
-			0.0,
-			maximum_buoyancy_force
-		)
-		normal_force *= _submarine_buoyancy_factor_current
-		_point_normal_forces[index] = normal_force
-		_point_water_normals[index] = water_normal
-		var buoyancy_force := water_normal * normal_force
-		_point_buoyancy_force_vectors[index] = buoyancy_force
-		_total_buoyancy_force += buoyancy_force.length()
-		_maximum_point_buoyancy_force = maxf(
-			_maximum_point_buoyancy_force,
-			buoyancy_force.length()
-		)
-		state.apply_force(buoyancy_force, world_offset)
-		_apply_point_hydrodynamic_drag(
-			state,
-			index,
-			world_offset,
-			body_forward,
-			water_normal,
-			relative_velocity,
-			depth_ratio
-		)
-		active_water_normal_sum += water_normal
-		active_water_velocity_sum += water_velocity
-		_submerged_point_count += 1
-		depth_sum += depth
-		_maximum_depth = maxf(_maximum_depth, depth)
-		if index < FRONT_POINT_COUNT:
-			_front_submerged_count += 1
-		else:
-			_rear_submerged_count += 1
-	if _submerged_point_count > 0:
-		_average_depth = depth_sum / float(_submerged_point_count)
-	_update_hydrodynamic_speed_metrics(
+	var water_state := water_physics_system.step(
 		state,
-		body_forward,
-		active_water_normal_sum,
-		active_water_velocity_sum
+		_ocean,
+		_submarine_buoyancy_factor_current
 	)
-	_maximum_signed_point_depth = maximum_signed_depth
-	_update_trick_support_state(state, raw_contact_mask)
-	if raw_contact_mask == 0:
+	var body_forward := -state.transform.basis.z.normalized()
+	navigation_system.prepare_support_state(state, water_state)
+	if water_state.raw_contact_mask == 0:
 		_capture_submarine_pre_contact_state(state)
-	_update_navigation_detection(state, raw_contact_mask, state.step)
+	navigation_system.step(
+		state,
+		water_physics_system,
+		state.step
+	)
 	_update_submarine_after_contacts(state)
 	_update_rider_trick_state(state, state.step)
 	_apply_propulsion(state, body_forward)
@@ -1261,31 +1114,31 @@ func apply_world_rebase(shift: Vector3) -> void:
 
 
 func get_buoyancy_local_points() -> PackedVector3Array:
-	return _buoyancy_local_points.duplicate()
+	return water_physics_system.get_buoyancy_local_points()
 
 
 func get_buoyancy_point_depths() -> PackedFloat32Array:
-	return _point_depths.duplicate()
+	return water_physics_system.get_buoyancy_point_depths()
 
 
 func get_buoyancy_point_normal_forces() -> PackedFloat32Array:
-	return _point_normal_forces.duplicate()
+	return water_physics_system.get_buoyancy_point_normal_forces()
 
 
 func get_buoyancy_point_water_normals() -> PackedVector3Array:
-	return _point_water_normals.duplicate()
+	return water_physics_system.get_buoyancy_point_water_normals()
 
 
 func get_point_forward_drag_forces() -> PackedVector3Array:
-	return _point_forward_drag_forces.duplicate()
+	return water_physics_system.get_point_forward_drag_forces()
 
 
 func get_point_lateral_drag_forces() -> PackedVector3Array:
-	return _point_lateral_drag_forces.duplicate()
+	return water_physics_system.get_point_lateral_drag_forces()
 
 
 func get_degenerate_drag_axis_count() -> int:
-	return _degenerate_drag_axis_count
+	return water_physics_system.get_degenerate_drag_axis_count()
 
 
 func get_propulsion_local_point() -> Vector3:
@@ -1293,18 +1146,7 @@ func get_propulsion_local_point() -> Vector3:
 
 
 func clear_navigation_statistics() -> void:
-	_last_airtime = 0.0
-	_maximum_recorded_airtime = 0.0
-	_last_landing_position = Vector3.ZERO
-	_last_landing_normal_speed = 0.0
-	_last_landing_intensity = 0.0
-	_last_landing_contact_mask = 0
-	_last_landing_contact_count = 0
-	_last_landing_entry_type = LandingEntryType.UNKNOWN
-	_water_entry_count = 0
-	_water_exit_count = 0
-	_hard_landing_count = 0
-	_deep_submersion_count = 0
+	navigation_system.clear_navigation_statistics()
 
 
 func reset_vehicle(reason: StringName = &"manual") -> void:
@@ -1320,11 +1162,11 @@ func reset_vehicle(reason: StringName = &"manual") -> void:
 	constant_torque = Vector3.ZERO
 	freeze = was_frozen
 	sleeping = false
-	_reset_navigation_detection()
+	water_physics_system.reset_runtime_state()
+	navigation_system.reset_runtime_state()
 	_reset_turn_lean_state()
 	_reset_rider_shift_state()
 	_reset_submarine_state(true)
-	_reset_trick_support_state()
 	_reset_trick_state()
 	reset_physics_interpolation()
 	last_reset_linear_velocity = linear_velocity
@@ -1363,38 +1205,102 @@ func _resolve_water_reference() -> void:
 		_warn_about_missing_water_once()
 
 
-func _cache_buoyancy_points() -> void:
-	_buoyancy_local_points.clear()
+func _configure_water_physics_system() -> void:
+	water_physics_system.buoyancy_strength_per_point = (
+		buoyancy_strength_per_point
+	)
+	water_physics_system.buoyancy_damping_per_point = (
+		buoyancy_damping_per_point
+	)
+	water_physics_system.max_submersion_depth = max_submersion_depth
+	water_physics_system.deep_buoyancy_start_depth = (
+		deep_buoyancy_start_depth
+	)
+	water_physics_system.deep_buoyancy_strength_per_point = (
+		deep_buoyancy_strength_per_point
+	)
+	water_physics_system.deep_buoyancy_force_limit_per_meter = (
+		deep_buoyancy_force_limit_per_meter
+	)
+	water_physics_system.max_buoyancy_force_per_point = (
+		max_buoyancy_force_per_point
+	)
+	water_physics_system.forward_drag_linear_per_point = (
+		forward_drag_linear_per_point
+	)
+	water_physics_system.forward_drag_quadratic_per_point = (
+		forward_drag_quadratic_per_point
+	)
+	water_physics_system.lateral_drag_linear_per_point = (
+		lateral_drag_linear_per_point
+	)
+	water_physics_system.lateral_drag_quadratic_per_point = (
+		lateral_drag_quadratic_per_point
+	)
+	water_physics_system.drag_depth_exponent = drag_depth_exponent
+	water_physics_system.maximum_forward_drag_force_per_point = (
+		maximum_forward_drag_force_per_point
+	)
+	water_physics_system.maximum_lateral_drag_force_per_point = (
+		maximum_lateral_drag_force_per_point
+	)
 	var point_root := get_node_or_null("BuoyancyPoints") as Node3D
-	if point_root == null:
-		_warn_about_missing_points_once()
-		return
-	var point_names: Array[StringName] = [
-		&"FrontLeft",
-		&"FrontRight",
-		&"RearLeft",
-		&"RearRight",
-	]
-	for point_name in point_names:
-		var marker := point_root.get_node_or_null(NodePath(point_name)) as Marker3D
-		if marker == null:
-			_buoyancy_local_points.clear()
-			_warn_about_missing_points_once()
-			return
-		_buoyancy_local_points.append((point_root.transform * marker.transform).origin)
-	_point_depths.resize(BUOYANCY_POINT_COUNT)
-	_point_normal_forces.resize(BUOYANCY_POINT_COUNT)
-	_point_buoyancy_force_vectors.resize(BUOYANCY_POINT_COUNT)
-	_point_water_normals.resize(BUOYANCY_POINT_COUNT)
-	_point_world_positions.resize(BUOYANCY_POINT_COUNT)
-	_point_water_surface_positions.resize(BUOYANCY_POINT_COUNT)
-	_point_water_velocities.resize(BUOYANCY_POINT_COUNT)
-	_point_physical_velocities.resize(BUOYANCY_POINT_COUNT)
-	_point_relative_velocities.resize(BUOYANCY_POINT_COUNT)
-	_point_relative_normal_speeds.resize(BUOYANCY_POINT_COUNT)
-	_point_sample_valid.resize(BUOYANCY_POINT_COUNT)
-	_point_forward_drag_forces.resize(BUOYANCY_POINT_COUNT)
-	_point_lateral_drag_forces.resize(BUOYANCY_POINT_COUNT)
+	water_physics_system.configure(point_root)
+
+
+func _configure_navigation_system() -> void:
+	navigation_system.airborne_confirmation_time = airborne_confirmation_time
+	navigation_system.airborne_minimum_clearance = airborne_minimum_clearance
+	navigation_system.landing_state_duration = landing_state_duration
+	navigation_system.minimum_landing_speed = minimum_landing_speed
+	navigation_system.maximum_landing_speed = maximum_landing_speed
+	navigation_system.hard_landing_speed = hard_landing_speed
+	navigation_system.deep_submersion_average_depth = (
+		deep_submersion_average_depth
+	)
+	navigation_system.deep_submersion_release_depth = (
+		deep_submersion_release_depth
+	)
+	navigation_system.deep_submersion_required_points = (
+		deep_submersion_required_points
+	)
+
+
+func _connect_navigation_signals() -> void:
+	navigation_system.water_entered.connect(
+		_on_navigation_system_water_entered
+	)
+	navigation_system.water_exited.connect(
+		_on_navigation_system_water_exited
+	)
+	navigation_system.hard_landing.connect(
+		_on_navigation_system_hard_landing
+	)
+	navigation_system.deeply_submerged.connect(
+		_on_navigation_system_deeply_submerged
+	)
+
+
+func _on_navigation_system_water_entered(
+	intensity: float,
+	position: Vector3
+) -> void:
+	water_entered.emit(intensity, position)
+
+
+func _on_navigation_system_water_exited() -> void:
+	water_exited.emit()
+
+
+func _on_navigation_system_hard_landing(
+	intensity: float,
+	position: Vector3
+) -> void:
+	hard_landing.emit(intensity, position)
+
+
+func _on_navigation_system_deeply_submerged() -> void:
+	deeply_submerged.emit()
 
 
 func _cache_propulsion_point() -> void:
@@ -1406,379 +1312,6 @@ func _cache_propulsion_point() -> void:
 	_has_propulsion_point = true
 
 
-func _clear_buoyancy_metrics() -> void:
-	_submerged_point_count = 0
-	_front_submerged_count = 0
-	_rear_submerged_count = 0
-	_average_depth = 0.0
-	_maximum_depth = 0.0
-	_water_relative_forward_speed = 0.0
-	_water_relative_lateral_speed = 0.0
-	_total_forward_drag_force = 0.0
-	_total_lateral_drag_force = 0.0
-	_total_buoyancy_force = 0.0
-	_maximum_point_buoyancy_force = 0.0
-	_maximum_point_forward_drag = 0.0
-	_maximum_point_lateral_drag = 0.0
-	_hydrodynamic_active_point_count = 0
-	_degenerate_drag_axis_count = 0
-	for index in _point_depths.size():
-		_point_depths[index] = 0.0
-		_point_normal_forces[index] = 0.0
-		_point_buoyancy_force_vectors[index] = Vector3.ZERO
-		_point_water_normals[index] = Vector3.UP
-		_point_world_positions[index] = Vector3.ZERO
-		_point_water_surface_positions[index] = Vector3.ZERO
-		_point_water_velocities[index] = Vector3.ZERO
-		_point_physical_velocities[index] = Vector3.ZERO
-		_point_relative_velocities[index] = Vector3.ZERO
-		_point_relative_normal_speeds[index] = 0.0
-		_point_sample_valid[index] = false
-		_point_forward_drag_forces[index] = Vector3.ZERO
-		_point_lateral_drag_forces[index] = Vector3.ZERO
-
-
-func _update_navigation_detection(
-	state: PhysicsDirectBodyState3D,
-	raw_contact_mask: int,
-	physics_delta: float
-) -> void:
-	if not _navigation_initialized:
-		_navigation_initialized = true
-		_current_contact_mask = raw_contact_mask & ALL_CONTACT_MASK
-		_previous_contact_mask = _current_contact_mask
-		_new_contact_mask = 0
-		_lost_contact_mask = 0
-	else:
-		_previous_contact_mask = _current_contact_mask
-		_current_contact_mask = raw_contact_mask & ALL_CONTACT_MASK
-		_new_contact_mask = (
-			_current_contact_mask & (~_previous_contact_mask) & ALL_CONTACT_MASK
-		)
-		_lost_contact_mask = (
-			_previous_contact_mask & (~_current_contact_mask) & ALL_CONTACT_MASK
-		)
-	var has_confirmed_clearance := (
-		_current_contact_mask == 0
-		and _maximum_signed_point_depth <= -airborne_minimum_clearance
-	)
-	if has_confirmed_clearance:
-		_dry_contact_time += physics_delta
-	else:
-		_dry_contact_time = 0.0
-	_update_deep_submersion_detection()
-	if _navigation_state == NavigationState.LANDING:
-		_landing_state_time_remaining = maxf(
-			_landing_state_time_remaining - physics_delta,
-			0.0
-		)
-		if _current_contact_mask != 0:
-			_has_ever_contacted_water = true
-		if _landing_state_time_remaining > 0.0:
-			return
-		if _dry_contact_time >= airborne_confirmation_time:
-			_confirm_airborne(state)
-		else:
-			_navigation_state = _derive_contact_navigation_state()
-		return
-	if _has_confirmed_airborne:
-		if _current_contact_mask != 0 and _new_contact_mask != 0:
-			_record_landing()
-			_has_ever_contacted_water = true
-		else:
-			_navigation_state = NavigationState.AIRBORNE
-			_current_airtime += physics_delta
-		return
-	if _current_contact_mask == 0 and _dry_contact_time >= airborne_confirmation_time:
-		_confirm_airborne(state)
-		return
-	if _current_contact_mask != 0:
-		_has_ever_contacted_water = true
-	_navigation_state = _derive_contact_navigation_state()
-
-
-func _update_deep_submersion_detection() -> void:
-	var required_points := clampi(
-		deep_submersion_required_points,
-		1,
-		BUOYANCY_POINT_COUNT
-	)
-	var deeply_submerged_now := (
-		_submerged_point_count >= required_points
-		and _average_depth >= deep_submersion_average_depth
-	)
-	if not _deep_submersion_latched and deeply_submerged_now:
-		_deep_submersion_latched = true
-		_deep_submersion_count += 1
-		deeply_submerged.emit()
-	elif _deep_submersion_latched and (
-		_submerged_point_count < required_points
-		or _average_depth <= deep_submersion_release_depth
-	):
-		_deep_submersion_latched = false
-
-
-func _confirm_airborne(state: PhysicsDirectBodyState3D) -> void:
-	if _has_confirmed_airborne:
-		return
-	_has_confirmed_airborne = true
-	_navigation_state = NavigationState.AIRBORNE
-	_current_airtime = 0.0
-	_takeoff_position = state.transform.origin
-	_takeoff_linear_velocity = state.linear_velocity
-	if _has_ever_contacted_water:
-		_water_exit_count += 1
-		water_exited.emit()
-
-
-func _record_landing() -> void:
-	var first_contact_mask := _new_contact_mask & ALL_CONTACT_MASK
-	var landing_position_sum := Vector3.ZERO
-	var landing_position_count: int = 0
-	var landing_normal_speed: float = 0.0
-	for index in BUOYANCY_POINT_COUNT:
-		var point_bit := 1 << index
-		if (first_contact_mask & point_bit) == 0:
-			continue
-		landing_position_sum += _point_world_positions[index]
-		landing_position_count += 1
-		if _point_sample_valid[index]:
-			var point_entry_speed := maxf(
-				-_point_relative_normal_speeds[index],
-				0.0
-			)
-			landing_normal_speed = maxf(landing_normal_speed, point_entry_speed)
-	if landing_position_count > 0:
-		_last_landing_position = landing_position_sum / float(landing_position_count)
-	else:
-		_last_landing_position = _average_position_for_contact_mask(_current_contact_mask)
-	_last_landing_normal_speed = landing_normal_speed
-	_last_landing_intensity = _inverse_lerp_clamped(
-		minimum_landing_speed,
-		maximum_landing_speed,
-		landing_normal_speed
-	)
-	_last_landing_contact_mask = first_contact_mask
-	_last_landing_contact_count = _count_contact_bits(first_contact_mask)
-	_last_landing_entry_type = _classify_landing_entry(first_contact_mask)
-	_last_airtime = _current_airtime
-	_maximum_recorded_airtime = maxf(_maximum_recorded_airtime, _last_airtime)
-	_current_airtime = 0.0
-	_has_confirmed_airborne = false
-	_landing_state_time_remaining = landing_state_duration
-	_navigation_state = NavigationState.LANDING
-	_water_entry_count += 1
-	water_entered.emit(_last_landing_intensity, _last_landing_position)
-	if _last_landing_normal_speed >= hard_landing_speed:
-		_hard_landing_count += 1
-		hard_landing.emit(_last_landing_intensity, _last_landing_position)
-
-
-func _derive_contact_navigation_state() -> NavigationState:
-	if _deep_submersion_latched:
-		return NavigationState.DEEP_SUBMERGED
-	if _current_contact_mask == ALL_CONTACT_MASK:
-		return NavigationState.IN_WATER
-	return NavigationState.PARTIALLY_SUBMERGED
-
-
-func _classify_landing_entry(contact_mask: int) -> LandingEntryType:
-	var masked_contact := contact_mask & ALL_CONTACT_MASK
-	var contact_count := _count_contact_bits(masked_contact)
-	if contact_count == 1:
-		return LandingEntryType.SINGLE_POINT
-	if masked_contact == ALL_CONTACT_MASK:
-		return LandingEntryType.FLAT
-	if masked_contact == FRONT_CONTACT_MASK:
-		return LandingEntryType.FRONT
-	if masked_contact == REAR_CONTACT_MASK:
-		return LandingEntryType.REAR
-	if masked_contact == LEFT_CONTACT_MASK:
-		return LandingEntryType.LEFT
-	if masked_contact == RIGHT_CONTACT_MASK:
-		return LandingEntryType.RIGHT
-	if masked_contact == 6 or masked_contact == 9:
-		return LandingEntryType.DIAGONAL
-	return LandingEntryType.UNKNOWN
-
-
-func _average_position_for_contact_mask(contact_mask: int) -> Vector3:
-	var position_sum := Vector3.ZERO
-	var point_count: int = 0
-	for index in BUOYANCY_POINT_COUNT:
-		if (contact_mask & (1 << index)) == 0:
-			continue
-		position_sum += _point_world_positions[index]
-		point_count += 1
-	if point_count <= 0:
-		return global_position
-	return position_sum / float(point_count)
-
-
-func _count_contact_bits(contact_mask: int) -> int:
-	var contact_count: int = 0
-	for index in BUOYANCY_POINT_COUNT:
-		if (contact_mask & (1 << index)) != 0:
-			contact_count += 1
-	return contact_count
-
-
-func _get_signed_point_depth(index: int) -> float:
-	if index < 0 or index >= _point_depths.size():
-		return 0.0
-	return _point_depths[index]
-
-
-func _get_navigation_state_name(value: NavigationState) -> StringName:
-	match value:
-		NavigationState.IN_WATER:
-			return &"IN_WATER"
-		NavigationState.PARTIALLY_SUBMERGED:
-			return &"PARTIALLY_SUBMERGED"
-		NavigationState.AIRBORNE:
-			return &"AIRBORNE"
-		NavigationState.LANDING:
-			return &"LANDING"
-		NavigationState.DEEP_SUBMERGED:
-			return &"DEEP_SUBMERGED"
-	return &"PARTIALLY_SUBMERGED"
-
-
-func _get_landing_entry_type_name(value: LandingEntryType) -> StringName:
-	match value:
-		LandingEntryType.FRONT:
-			return &"FRONT"
-		LandingEntryType.REAR:
-			return &"REAR"
-		LandingEntryType.LEFT:
-			return &"LEFT"
-		LandingEntryType.RIGHT:
-			return &"RIGHT"
-		LandingEntryType.FLAT:
-			return &"FLAT"
-		LandingEntryType.DIAGONAL:
-			return &"DIAGONAL"
-		LandingEntryType.SINGLE_POINT:
-			return &"SINGLE_POINT"
-		LandingEntryType.UNKNOWN:
-			return &"UNKNOWN"
-	return &"UNKNOWN"
-
-
-func _reset_navigation_detection() -> void:
-	_navigation_initialized = false
-	_navigation_state = NavigationState.PARTIALLY_SUBMERGED
-	_current_contact_mask = 0
-	_previous_contact_mask = 0
-	_new_contact_mask = 0
-	_lost_contact_mask = 0
-	_maximum_signed_point_depth = 0.0
-	_dry_contact_time = 0.0
-	_current_airtime = 0.0
-	_takeoff_position = Vector3.ZERO
-	_takeoff_linear_velocity = Vector3.ZERO
-	_landing_state_time_remaining = 0.0
-	_has_ever_contacted_water = false
-	_has_confirmed_airborne = false
-	_deep_submersion_latched = false
-
-
-func _apply_point_hydrodynamic_drag(
-	state: PhysicsDirectBodyState3D,
-	point_index: int,
-	world_offset: Vector3,
-	body_forward: Vector3,
-	water_normal: Vector3,
-	relative_velocity: Vector3,
-	depth_ratio: float
-) -> void:
-	var normal_component := water_normal * relative_velocity.dot(water_normal)
-	var tangential_velocity := relative_velocity - normal_component
-	var forward_tangent := body_forward - water_normal * body_forward.dot(water_normal)
-	if forward_tangent.length_squared() <= 0.000001:
-		_degenerate_drag_axis_count += 1
-		return
-	forward_tangent = forward_tangent.normalized()
-	var right_tangent := forward_tangent.cross(water_normal)
-	if right_tangent.length_squared() <= 0.000001:
-		_degenerate_drag_axis_count += 1
-		return
-	right_tangent = right_tangent.normalized()
-	var forward_speed := tangential_velocity.dot(forward_tangent)
-	var lateral_speed := tangential_velocity.dot(right_tangent)
-	var immersion_factor := pow(depth_ratio, drag_depth_exponent)
-	var forward_drag_scalar := clampf(
-		_drag_scalar(
-			forward_speed,
-			forward_drag_linear_per_point,
-			forward_drag_quadratic_per_point
-		) * immersion_factor,
-		-maximum_forward_drag_force_per_point,
-		maximum_forward_drag_force_per_point
-	)
-	var lateral_drag_scalar := clampf(
-		_drag_scalar(
-			lateral_speed,
-			lateral_drag_linear_per_point,
-			lateral_drag_quadratic_per_point
-		) * immersion_factor,
-		-maximum_lateral_drag_force_per_point,
-		maximum_lateral_drag_force_per_point
-	)
-	var forward_drag := -forward_tangent * forward_drag_scalar
-	var lateral_drag := -right_tangent * lateral_drag_scalar
-	var drag_force := forward_drag + lateral_drag
-	if not drag_force.is_finite():
-		return
-	_point_forward_drag_forces[point_index] = forward_drag
-	_point_lateral_drag_forces[point_index] = lateral_drag
-	_total_forward_drag_force += absf(forward_drag_scalar)
-	_total_lateral_drag_force += absf(lateral_drag_scalar)
-	_maximum_point_forward_drag = maxf(
-		_maximum_point_forward_drag,
-		absf(forward_drag_scalar)
-	)
-	_maximum_point_lateral_drag = maxf(
-		_maximum_point_lateral_drag,
-		absf(lateral_drag_scalar)
-	)
-	_hydrodynamic_active_point_count += 1
-	state.apply_force(drag_force, world_offset)
-
-
-func _update_hydrodynamic_speed_metrics(
-	state: PhysicsDirectBodyState3D,
-	body_forward: Vector3,
-	water_normal_sum: Vector3,
-	water_velocity_sum: Vector3
-) -> void:
-	if _hydrodynamic_active_point_count <= 0:
-		return
-	var average_water_normal := water_normal_sum.normalized()
-	var average_water_velocity := (
-		water_velocity_sum / float(_hydrodynamic_active_point_count)
-	)
-	var forward_tangent := (
-		body_forward
-		- average_water_normal * body_forward.dot(average_water_normal)
-	)
-	if forward_tangent.length_squared() <= 0.000001:
-		return
-	forward_tangent = forward_tangent.normalized()
-	var right_tangent := forward_tangent.cross(average_water_normal).normalized()
-	var relative_center_velocity := state.linear_velocity - average_water_velocity
-	var tangential_center_velocity := (
-		relative_center_velocity
-		- average_water_normal * relative_center_velocity.dot(average_water_normal)
-	)
-	_water_relative_forward_speed = tangential_center_velocity.dot(forward_tangent)
-	_water_relative_lateral_speed = tangential_center_velocity.dot(right_tangent)
-
-
-func _drag_scalar(speed: float, linear_coefficient: float, quadratic_coefficient: float) -> float:
-	return linear_coefficient * speed + quadratic_coefficient * speed * absf(speed)
-
-
 func _clear_propulsion_metrics() -> void:
 	_propulsion_depth = 0.0
 	_propulsion_contact_factor = 0.0
@@ -1788,67 +1321,6 @@ func _clear_propulsion_metrics() -> void:
 	_current_propulsion_force = 0.0
 	_current_propulsion_force_vector = Vector3.ZERO
 	_is_propelling = false
-
-
-func _read_control_inputs(physics_delta: float) -> void:
-	_throttle_input = clampf(Input.get_action_strength("throttle"), 0.0, 1.0)
-	_brake_input = clampf(Input.get_action_strength("brake"), 0.0, 1.0)
-	_steering_input = clampf(
-		Input.get_action_strength("steer_right")
-		- Input.get_action_strength("steer_left"),
-		-1.0,
-		1.0
-	)
-	_update_rider_shift_input(physics_delta)
-
-
-func _update_rider_shift_input(physics_delta: float) -> void:
-	var accepts_rider_input := (
-		rider_weight_shift_enabled
-		and not freeze
-		and process_mode != Node.PROCESS_MODE_DISABLED
-		and not get_tree().paused
-	)
-	var raw_input := Vector2.ZERO
-	if accepts_rider_input:
-		raw_input = Vector2(
-			Input.get_action_strength("rider_shift_right")
-				- Input.get_action_strength("rider_shift_left"),
-			Input.get_action_strength("rider_shift_back")
-				- Input.get_action_strength("rider_shift_forward")
-		)
-	if not raw_input.is_finite():
-		_warn_about_invalid_rider_shift_once("Rider weight-shift input is not finite.")
-		raw_input = Vector2.ZERO
-	if raw_input.length_squared() > 1.0:
-		raw_input = raw_input.normalized()
-	_rider_shift_raw_input = raw_input
-	var half_life := (
-		rider_shift_release_half_life
-		if raw_input.is_zero_approx()
-		else rider_shift_input_half_life
-	)
-	var blend_weight := 1.0 - exp(
-		-HALF_LIFE_LOG_TWO
-		* maxf(physics_delta, 0.0)
-		/ maxf(half_life, 0.0001)
-	)
-	_rider_shift_smoothed_input = _rider_shift_smoothed_input.lerp(
-		raw_input,
-		clampf(blend_weight, 0.0, 1.0)
-	)
-	if not _rider_shift_smoothed_input.is_finite():
-		_warn_about_invalid_rider_shift_once("Smoothed rider weight-shift input is not finite.")
-		_rider_shift_smoothed_input = Vector2.ZERO
-	if (
-		_rider_shift_smoothed_input.distance_to(_rider_shift_last_emitted_input) >= 0.01
-		or (
-			_rider_shift_smoothed_input.is_zero_approx()
-			and not _rider_shift_last_emitted_input.is_zero_approx()
-		)
-	):
-		_rider_shift_last_emitted_input = _rider_shift_smoothed_input
-		rider_weight_shift_changed.emit(_rider_shift_smoothed_input)
 
 
 func _apply_propulsion(state: PhysicsDirectBodyState3D, body_forward: Vector3) -> void:
@@ -1984,7 +1456,7 @@ func _apply_turn_lean(state: PhysicsDirectBodyState3D) -> void:
 		return
 	# Losing buoyancy-point contact is not a takeoff while the physical hull is
 	# still supported by a ramp or another upward-facing solid contact.
-	_rider_using_air_control = not _has_any_support
+	_rider_using_air_control = not has_any_support
 	_turn_lean_airborne_disabled = _rider_using_air_control
 	_rider_shift_airborne = _rider_using_air_control
 	_update_rider_air_rotation_metrics(state, vehicle_basis)
@@ -2032,7 +1504,7 @@ func _apply_turn_lean(state: PhysicsDirectBodyState3D) -> void:
 	_turn_lean_speed_factor = smoothstep(
 		turn_lean_start_speed,
 		turn_lean_full_speed,
-		absf(_water_relative_forward_speed)
+		absf(water_physics_system.state.water_relative_forward_speed)
 	)
 	_turn_lean_contact_factor = _calculate_turn_lean_contact_factor()
 	var drive_direction_sign := _turn_lean_drive_direction_sign()
@@ -2566,8 +2038,8 @@ func _update_submarine_before_forces(
 
 func _update_submarine_after_contacts(state: PhysicsDirectBodyState3D) -> void:
 	var first_water_contact := (
-		_previous_contact_mask == 0
-		and _current_contact_mask != 0
+		previous_contact_mask == 0
+		and current_contact_mask != 0
 	)
 	if first_water_contact:
 		_try_start_submarine_dive(state)
@@ -2576,12 +2048,15 @@ func _update_submarine_after_contacts(state: PhysicsDirectBodyState3D) -> void:
 		_rider_stunt_water_mode == RiderStuntWaterMode.SUBMARINE_DIVE
 		or _submarine_recovery_active
 	):
-		_submarine_current_depth = maxf(_average_depth, 0.0)
+		_submarine_current_depth = maxf(
+			water_physics_system.state.average_depth,
+			0.0
+		)
 		_submarine_max_depth = maxf(
 			_submarine_max_depth,
 			_submarine_current_depth
 		)
-	elif _current_contact_mask == 0:
+	elif current_contact_mask == 0:
 		_submarine_current_depth = 0.0
 
 
@@ -2611,7 +2086,10 @@ func _try_start_submarine_dive(_state: PhysicsDirectBodyState3D) -> void:
 	_submarine_entry_speed = _submarine_pre_contact_horizontal_speed
 	_submarine_entry_pitch_degrees = _submarine_pre_contact_pitch_degrees
 	_submarine_duration = 0.0
-	_submarine_current_depth = maxf(_average_depth, 0.0)
+	_submarine_current_depth = maxf(
+		water_physics_system.state.average_depth,
+		0.0
+	)
 	_submarine_max_depth = _submarine_current_depth
 	_submarine_exit_blend = 0.0
 	_submarine_recovery_active = false
@@ -2622,10 +2100,15 @@ func _try_start_submarine_dive(_state: PhysicsDirectBodyState3D) -> void:
 
 
 func _front_leads_submarine_entry() -> bool:
-	var front_contacts := _count_contact_bits(_new_contact_mask & FRONT_CONTACT_MASK)
-	var rear_contacts := _count_contact_bits(_new_contact_mask & REAR_CONTACT_MASK)
-	var front_depth := (_point_depths[0] + _point_depths[1]) * 0.5
-	var rear_depth := (_point_depths[2] + _point_depths[3]) * 0.5
+	var front_contacts := navigation_system.count_contact_bits(
+		new_contact_mask & FRONT_CONTACT_MASK
+	)
+	var rear_contacts := navigation_system.count_contact_bits(
+		new_contact_mask & REAR_CONTACT_MASK
+	)
+	var point_depths := water_physics_system.point_depths
+	var front_depth := (point_depths[0] + point_depths[1]) * 0.5
+	var rear_depth := (point_depths[2] + point_depths[3]) * 0.5
 	return (
 		front_contacts > 0
 		and (
@@ -2710,75 +2193,17 @@ func _reset_submarine_state(emit_end_signal: bool) -> void:
 	_submarine_pre_contact_horizontal_speed = 0.0
 
 
-func _update_trick_support_state(
-	state: PhysicsDirectBodyState3D,
-	raw_water_contact_mask: int
-) -> void:
-	var was_supported := _has_any_support
-	_has_water_support = (raw_water_contact_mask & ALL_CONTACT_MASK) != 0
-	_solid_support_contact_count = 0
-	_physical_contact_count = state.get_contact_count()
-	_physical_contact_delta_velocity = 0.0
-	_physical_contact_position = state.transform.origin
-	var body_basis := state.transform.basis.orthonormalized()
-	for contact_index in _physical_contact_count:
-		var contact_impulse := state.get_contact_impulse(contact_index)
-		if contact_impulse.is_finite():
-			var contact_delta_velocity := (
-				contact_impulse.length() * state.inverse_mass
-			)
-			if contact_delta_velocity > _physical_contact_delta_velocity:
-				_physical_contact_delta_velocity = contact_delta_velocity
-				_physical_contact_position = state.get_contact_local_position(
-					contact_index
-				)
-		var collider_object: Object = state.get_contact_collider_object(contact_index)
-		if not is_instance_valid(collider_object):
-			continue
-		var local_normal := state.get_contact_local_normal(contact_index)
-		if not local_normal.is_finite() or local_normal.length_squared() <= 0.000001:
-			continue
-		var support_normal := (body_basis * local_normal).normalized()
-		if (
-			support_normal.is_finite()
-			and support_normal.dot(Vector3.UP) >= TRICK_SUPPORT_MINIMUM_UP_DOT
-		):
-			_solid_support_contact_count += 1
-	_has_solid_support = _solid_support_contact_count > 0
-	_has_any_support = _has_water_support or _has_solid_support
-	if not _trick_support_state_initialized:
-		_trick_support_state_initialized = true
-		_previous_has_any_support = _has_any_support
-		_true_takeoff_this_tick = false
-		return
-	_previous_has_any_support = was_supported
-	_true_takeoff_this_tick = _previous_has_any_support and not _has_any_support
-
-
-func _reset_trick_support_state() -> void:
-	_trick_support_state_initialized = false
-	_solid_support_contact_count = 0
-	_physical_contact_count = 0
-	_physical_contact_delta_velocity = 0.0
-	_physical_contact_position = Vector3.ZERO
-	_has_solid_support = false
-	_has_water_support = false
-	_has_any_support = false
-	_previous_has_any_support = false
-	_true_takeoff_this_tick = false
-
-
 func _update_rider_trick_state(
 	state: PhysicsDirectBodyState3D,
 	physics_delta: float
 ) -> void:
-	var gained_support := not _previous_has_any_support and _has_any_support
+	var gained_support := not previous_has_any_support and has_any_support
 	if gained_support:
 		_reset_trick_for_new_support_contact()
 	if (
 		not rider_weight_shift_enabled
 		or not trick_preload_enabled
-		or _navigation_state == NavigationState.DEEP_SUBMERGED
+		or navigation_state == NavigationState.DEEP_SUBMERGED
 		or _rider_stunt_water_mode == RiderStuntWaterMode.SUBMARINE_DIVE
 	):
 		_cancel_rider_trick_state_for_submarine()
@@ -2793,10 +2218,12 @@ func _update_rider_trick_state(
 		maxf(trick_full_launch_speed, trick_minimum_launch_speed + 0.001),
 		horizontal_speed
 	)
-	if _has_any_support:
-		if _has_water_support:
-			_trick_last_contact_average_depth = _average_depth
-		elif _has_solid_support:
+	if has_any_support:
+		if has_water_support:
+			_trick_last_contact_average_depth = (
+				water_physics_system.state.average_depth
+			)
+		elif has_solid_support:
 			# A solid ramp has no buoyancy depth. Use the neutral midpoint of the
 			# small 0.95-1.05 depth modifier instead of penalizing it.
 			_trick_last_contact_average_depth = max_submersion_depth * 0.25
@@ -2812,7 +2239,7 @@ func _update_rider_trick_state(
 			physics_delta,
 			false
 		)
-	if _true_takeoff_this_tick:
+	if true_takeoff_this_tick:
 		_prepare_trick_takeoff_context(
 			state,
 			launch_speed_factor,
@@ -3088,7 +2515,7 @@ func _start_trick_release(
 
 func _classify_rider_trick_launch(
 	release_strength: Vector2
-) -> RiderTrickLaunchType:
+) -> JetSkiTypes.RiderTrickLaunchType:
 	var has_roll := absf(release_strength.x) > 0.0001
 	var has_pitch := absf(release_strength.y) > 0.0001
 	if has_roll and has_pitch:
@@ -3105,7 +2532,7 @@ func _classify_rider_trick_launch(
 
 
 func _get_rider_trick_launch_type_name(
-	trick_type: RiderTrickLaunchType
+	trick_type: JetSkiTypes.RiderTrickLaunchType
 ) -> StringName:
 	match trick_type:
 		RiderTrickLaunchType.BARREL_LEFT:
@@ -3269,17 +2696,21 @@ func _rider_shift_observed_speed_factor() -> float:
 	return smoothstep(
 		0.0,
 		maxf(rider_shift_full_speed, 0.001),
-		absf(_water_relative_forward_speed)
+		absf(water_physics_system.state.water_relative_forward_speed)
 	)
 
 
 func _update_rider_shift_contact_metrics() -> void:
 	_rider_shift_front_contact_ratio = (
-		float(_count_contact_bits(_current_contact_mask & FRONT_CONTACT_MASK))
+		float(navigation_system.count_contact_bits(
+			current_contact_mask & FRONT_CONTACT_MASK
+		))
 		/ float(FRONT_POINT_COUNT)
 	)
 	_rider_shift_rear_contact_ratio = (
-		float(_count_contact_bits(_current_contact_mask & REAR_CONTACT_MASK))
+		float(navigation_system.count_contact_bits(
+			current_contact_mask & REAR_CONTACT_MASK
+		))
 		/ float(FRONT_POINT_COUNT)
 	)
 	if _rider_using_air_control:
@@ -3289,9 +2720,9 @@ func _update_rider_shift_contact_metrics() -> void:
 	var medium_authority := 1.0
 	if _rider_stunt_water_mode == RiderStuntWaterMode.SUBMARINE_DIVE:
 		medium_authority = 1.0
-	elif _navigation_state == NavigationState.DEEP_SUBMERGED:
+	elif navigation_state == NavigationState.DEEP_SUBMERGED:
 		medium_authority = rider_shift_deep_submerged_authority
-	elif _navigation_state == NavigationState.LANDING:
+	elif navigation_state == NavigationState.LANDING:
 		medium_authority = lerpf(0.35, 1.0, _rider_shift_landing_ramp)
 	# This is the only optional speed-dependent reinforcement of the base manual
 	# moment. With the required default of 1.0 it is speed-independent.
@@ -3306,10 +2737,10 @@ func _update_rider_shift_contact_metrics() -> void:
 
 
 func _update_rider_shift_landing_authority(physics_delta: float) -> void:
-	if _current_contact_mask == 0:
+	if current_contact_mask == 0:
 		_rider_shift_landing_ramp = 0.0
 		return
-	if _previous_contact_mask == 0 and _current_contact_mask != 0:
+	if previous_contact_mask == 0 and current_contact_mask != 0:
 		_rider_shift_landing_ramp = 0.0
 		return
 	if rider_shift_landing_ramp_time <= 0.0:
@@ -3324,13 +2755,22 @@ func _update_turn_lean_support_normal(physics_delta: float) -> void:
 	var weighted_normal_sum := Vector3.ZERO
 	var total_weight: float = 0.0
 	for index in BUOYANCY_POINT_COUNT:
-		if not _point_sample_valid[index] or _point_depths[index] <= 0.0:
+		if (
+			not water_physics_system.point_sample_valid[index]
+			or water_physics_system.point_depths[index] <= 0.0
+		):
 			continue
-		var point_normal := _point_water_normals[index]
+		var point_normal := water_physics_system.point_water_normals[index]
 		if not point_normal.is_finite() or point_normal.length_squared() <= 0.000001:
 			continue
-		var depth_weight := _point_depths[index] * buoyancy_strength_per_point
-		var point_weight := maxf(_point_normal_forces[index], maxf(depth_weight, 1.0))
+		var depth_weight := (
+			water_physics_system.point_depths[index]
+			* buoyancy_strength_per_point
+		)
+		var point_weight := maxf(
+			water_physics_system.point_normal_forces[index],
+			maxf(depth_weight, 1.0)
+		)
 		weighted_normal_sum += point_normal * point_weight
 		total_weight += point_weight
 	var target_support_normal := Vector3.UP
@@ -3371,7 +2811,7 @@ func _update_turn_lean_reference_axes(vehicle_transform: Transform3D) -> void:
 
 
 func _update_turn_lean_landing_authority(physics_delta: float) -> void:
-	if _current_contact_mask == 0 or _navigation_state == NavigationState.AIRBORNE:
+	if current_contact_mask == 0 or navigation_state == NavigationState.AIRBORNE:
 		_turn_lean_landing_ramp = 0.0
 		return
 	if turn_lean_landing_ramp_time <= 0.0:
@@ -3384,9 +2824,11 @@ func _update_turn_lean_landing_authority(physics_delta: float) -> void:
 
 
 func _calculate_turn_lean_contact_factor() -> float:
-	if _navigation_state == NavigationState.AIRBORNE:
+	if navigation_state == NavigationState.AIRBORNE:
 		return 0.0
-	var contact_count := _count_contact_bits(_current_contact_mask)
+	var contact_count := navigation_system.count_contact_bits(
+		current_contact_mask
+	)
 	var point_support: float = 0.0
 	match contact_count:
 		1:
@@ -3401,7 +2843,11 @@ func _calculate_turn_lean_contact_factor() -> float:
 	var depth_support := lerpf(
 		0.5,
 		1.0,
-		smoothstep(0.0, full_depth, _average_depth)
+		smoothstep(
+			0.0,
+			full_depth,
+			water_physics_system.state.average_depth
+		)
 	)
 	var propulsor_support := lerpf(
 		0.25,
@@ -3410,7 +2856,7 @@ func _calculate_turn_lean_contact_factor() -> float:
 	)
 	var navigation_support := (
 		0.35
-		if _navigation_state == NavigationState.DEEP_SUBMERGED
+		if navigation_state == NavigationState.DEEP_SUBMERGED
 		else 1.0
 	)
 	return clampf(
@@ -3428,8 +2874,11 @@ func _turn_lean_drive_direction_sign() -> float:
 	var net_propulsion_input := _throttle_input - _brake_input
 	if absf(net_propulsion_input) > 0.001:
 		return signf(net_propulsion_input)
-	if absf(_water_relative_forward_speed) > 0.01:
-		return signf(_water_relative_forward_speed)
+	var relative_forward_speed := (
+		water_physics_system.state.water_relative_forward_speed
+	)
+	if absf(relative_forward_speed) > 0.01:
+		return signf(relative_forward_speed)
 	return 0.0
 
 
@@ -3446,7 +2895,6 @@ func _clear_turn_lean_frame_metrics() -> void:
 
 
 func _clear_rider_shift_frame_metrics() -> void:
-	_true_takeoff_this_tick = false
 	_rider_shift_speed_authority = 0.0
 	_rider_shift_speed_factor = 0.0
 	_rider_shift_contact_authority = 0.0
@@ -3493,17 +2941,16 @@ func _reset_turn_lean_state() -> void:
 
 
 func _reset_rider_shift_state() -> void:
-	var should_emit_zero := not _rider_shift_last_emitted_input.is_zero_approx()
-	_rider_shift_raw_input = Vector2.ZERO
-	_rider_shift_smoothed_input = Vector2.ZERO
-	_rider_shift_last_emitted_input = Vector2.ZERO
+	input_system.reset_rider_shift()
 	_rider_shift_landing_ramp = 0.0
 	_rider_air_accumulated_roll_degrees = 0.0
 	_rider_air_accumulated_pitch_degrees = 0.0
 	_rider_air_tracking_active = false
 	_clear_rider_shift_frame_metrics()
-	if should_emit_zero:
-		rider_weight_shift_changed.emit(Vector2.ZERO)
+
+
+func _on_input_system_rider_weight_shift_changed(shift: Vector2) -> void:
+	rider_weight_shift_changed.emit(shift)
 
 
 func _inverse_lerp_clamped(from: float, to: float, value: float) -> float:
@@ -3517,13 +2964,6 @@ func _warn_about_missing_water_once() -> void:
 		return
 	_water_warning_emitted = true
 	push_warning("JetSki buoyancy is disabled because its Ocean3D reference is invalid.")
-
-
-func _warn_about_missing_points_once() -> void:
-	if _point_warning_emitted:
-		return
-	_point_warning_emitted = true
-	push_warning("JetSki buoyancy is disabled because exactly four buoyancy markers are required.")
 
 
 func _warn_about_missing_propulsion_point_once() -> void:
