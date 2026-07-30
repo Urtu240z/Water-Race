@@ -9,6 +9,7 @@ extends Node3D
 ## OceanSurface3D child. It intentionally does not inherit from the former generic water system.
 
 const MAX_RIPPLES: int = 12
+const MAX_LANDING_IMPACTS: int = 4
 const MAX_DIRECTIONAL_WAKE_SEGMENTS: int = 16
 const MIN_SAMPLE_STEP: float = 0.05
 const MACRO_MATERIAL_SYNC_INTERVAL: float = 0.25
@@ -72,6 +73,25 @@ const MACRO_MATERIAL_SYNC_INTERVAL: float = 0.25
 # Kept as a serialized compatibility property and used as the minimum lateral
 # separation of the optional secondary landing ripples.
 @export_range(0.0, 2.0, 0.05, "suffix:m") var wake_lateral_offset: float = 0.0
+
+@export_group("Landing Impacts")
+@export var landing_impacts_enabled: bool = true
+@export_range(0.0, 1.0, 0.005, "suffix:m") var landing_wave_minimum_amplitude: float = 0.14
+@export_range(0.0, 1.0, 0.005, "suffix:m") var landing_wave_maximum_amplitude: float = 0.50
+@export_range(0.0, 1.0, 0.005, "suffix:m") var landing_wave_minimum_depression: float = 0.08
+@export_range(0.0, 1.0, 0.005, "suffix:m") var landing_wave_maximum_depression: float = 0.38
+@export_range(0.1, 3.0, 0.05, "suffix:m") var landing_wave_minimum_radius: float = 0.65
+@export_range(0.1, 3.0, 0.05, "suffix:m") var landing_wave_maximum_radius: float = 1.20
+@export_range(0.1, 12.0, 0.05, "suffix:m/s") var landing_wave_minimum_speed: float = 3.2
+@export_range(0.1, 12.0, 0.05, "suffix:m/s") var landing_wave_maximum_speed: float = 6.2
+@export_range(0.25, 8.0, 0.05, "suffix:m") var landing_wave_minimum_wavelength: float = 2.4
+@export_range(0.25, 8.0, 0.05, "suffix:m") var landing_wave_maximum_wavelength: float = 5.0
+@export_range(0.25, 10.0, 0.05, "suffix:s") var landing_wave_minimum_duration: float = 3.5
+@export_range(0.25, 10.0, 0.05, "suffix:s") var landing_wave_maximum_duration: float = 6.8
+@export_range(0.0, 0.25, 0.005, "suffix:m") var landing_physical_ripple_minimum_amplitude: float = 0.035
+@export_range(0.0, 0.25, 0.005, "suffix:m") var landing_physical_ripple_maximum_amplitude: float = 0.09
+@export var landing_impact_exaggerated_debug: bool = false
+@export_range(1.0, 5.0, 0.25) var landing_impact_debug_multiplier: float = 2.5
 
 @export_group("Directional Wake")
 @export var directional_wake_enabled: bool = true
@@ -140,6 +160,35 @@ var _ripple_wavelengths := PackedFloat32Array()
 var _ripple_decays := PackedFloat32Array()
 var _ripple_lifetimes := PackedFloat32Array()
 
+var _landing_impact_active := PackedInt32Array()
+var _landing_impact_positions := PackedVector2Array()
+var _landing_impact_start_times := PackedFloat32Array()
+var _landing_impact_strengths := PackedFloat32Array()
+var _landing_impact_directions := PackedVector2Array()
+var _landing_impact_half_extents := PackedVector2Array()
+var _landing_impact_secondary_a_offsets := PackedVector2Array()
+var _landing_impact_secondary_b_offsets := PackedVector2Array()
+var _landing_impact_secondary_weights := PackedVector2Array()
+var _landing_impact_entry_types := PackedInt32Array()
+var _landing_impact_contact_masks := PackedInt32Array()
+var _landing_impact_amplitudes := PackedFloat32Array()
+var _landing_impact_depressions := PackedFloat32Array()
+var _landing_impact_initial_radii := PackedFloat32Array()
+var _landing_impact_speeds := PackedFloat32Array()
+var _landing_impact_wavelengths := PackedFloat32Array()
+var _landing_impact_durations := PackedFloat32Array()
+var _landing_impact_event_ids := PackedInt32Array()
+var _landing_impact_parameters_dirty: bool = true
+var _landing_impact_count: int = 0
+var _last_landing_descriptor_id: int = -1
+var _last_landing_wave_strength: float = 0.0
+var _last_landing_normal_speed: float = 0.0
+var _last_landing_airtime: float = 0.0
+var _last_landing_entry_type: int = 0
+var _last_landing_wave_amplitude: float = 0.0
+var _last_landing_wave_speed: float = 0.0
+var _last_landing_wave_radius: float = 0.0
+
 var _wake_source: WakeTrail3D
 var _interaction_vehicle: JetSkiController
 var _interaction_front_left: Marker3D
@@ -199,6 +248,7 @@ func _ready() -> void:
 	_surface = get_node_or_null("Surface") as OceanSurface3D
 	_sync_macro_waves_from_material(true)
 	_initialize_ripples()
+	_initialize_landing_impacts()
 	_initialize_vehicle_interactions()
 	_resolve_targets()
 	_refresh_material_cache()
@@ -248,6 +298,8 @@ func _physics_process(delta: float) -> void:
 	_simulation_time += safe_delta
 	if _expire_ripples():
 		_ripple_parameters_dirty = true
+	if _expire_landing_impacts():
+		_landing_impact_parameters_dirty = true
 	_update_hull_pressure_state(maxf(safe_delta, 0.0001))
 	_push_hull_pressure_parameters_to_all_materials()
 	_interaction_update_elapsed += safe_delta
@@ -265,6 +317,8 @@ func _physics_process(delta: float) -> void:
 		_push_static_parameters_to_all_materials()
 	if _ripple_parameters_dirty:
 		_push_ripple_parameters_to_all_materials()
+	if _landing_impact_parameters_dirty:
+		_push_landing_impact_parameters_to_all_materials()
 
 
 func _exit_tree() -> void:
@@ -289,6 +343,8 @@ func _get_configuration_warnings() -> PackedStringArray:
 
 
 func apply_ocean_settings() -> void:
+	if _landing_impact_active.size() != MAX_LANDING_IMPACTS:
+		_initialize_landing_impacts()
 	if _directional_wake_start_positions.size() != MAX_DIRECTIONAL_WAKE_SEGMENTS:
 		_initialize_vehicle_interactions()
 	_static_parameters_dirty = true
@@ -405,6 +461,65 @@ var merged_impact_count: int:
 		return _merged_impact_count
 
 
+var landing_impact_count: int:
+	get:
+		return _landing_impact_count
+
+
+var active_landing_impact_count: int:
+	get:
+		var count: int = 0
+		for active in _landing_impact_active:
+			count += active
+		return count
+
+
+var last_landing_wave_strength: float:
+	get:
+		return _last_landing_wave_strength
+
+
+var last_landing_normal_speed: float:
+	get:
+		return _last_landing_normal_speed
+
+
+var last_landing_airtime: float:
+	get:
+		return _last_landing_airtime
+
+
+var last_landing_entry_type: int:
+	get:
+		return _last_landing_entry_type
+
+
+var last_landing_wave_amplitude: float:
+	get:
+		return _last_landing_wave_amplitude
+
+
+var last_landing_wave_speed: float:
+	get:
+		return _last_landing_wave_speed
+
+
+var last_landing_wave_radius: float:
+	get:
+		for index in MAX_LANDING_IMPACTS:
+			if (
+				_landing_impact_active[index] != 0
+				and _landing_impact_event_ids[index]
+					== _last_landing_descriptor_id
+			):
+				return _landing_impact_initial_radii[index] + maxf(
+					_simulation_time
+						- _landing_impact_start_times[index],
+					0.0
+				) * _landing_impact_speeds[index]
+		return _last_landing_wave_radius
+
+
 func configure_ripple_emitter(target: Node3D) -> void:
 	if ripple_emitter_target == target:
 		_connect_ripple_emitter_signals()
@@ -425,6 +540,10 @@ func configure_vehicle_interaction_source(
 ) -> void:
 	_wake_source = wake_source
 	_interaction_vehicle = vehicle
+	# WakeTrail3D is configured with the same authoritative vehicle as the
+	# interaction sampler. Use that source for discrete water events as well so
+	# landing impacts cannot silently depend on optional scene NodePaths.
+	configure_ripple_emitter(vehicle)
 	_interaction_front_left = front_left
 	_interaction_front_right = front_right
 	_interaction_rear_left = rear_left
@@ -616,6 +735,11 @@ func _resolve_targets() -> void:
 	var resolved_ripple_target := get_node_or_null(ripple_emitter_target_path) as Node3D
 	if resolved_ripple_target == null:
 		resolved_ripple_target = follow_target
+	if (
+		resolved_ripple_target == null
+		and is_instance_valid(_interaction_vehicle)
+	):
+		resolved_ripple_target = _interaction_vehicle
 	if resolved_ripple_target != ripple_emitter_target:
 		configure_ripple_emitter(resolved_ripple_target)
 
@@ -717,6 +841,46 @@ func _initialize_ripples() -> void:
 	_ripple_parameters_dirty = true
 
 
+func _initialize_landing_impacts() -> void:
+	_landing_impact_active.resize(MAX_LANDING_IMPACTS)
+	_landing_impact_positions.resize(MAX_LANDING_IMPACTS)
+	_landing_impact_start_times.resize(MAX_LANDING_IMPACTS)
+	_landing_impact_strengths.resize(MAX_LANDING_IMPACTS)
+	_landing_impact_directions.resize(MAX_LANDING_IMPACTS)
+	_landing_impact_half_extents.resize(MAX_LANDING_IMPACTS)
+	_landing_impact_secondary_a_offsets.resize(MAX_LANDING_IMPACTS)
+	_landing_impact_secondary_b_offsets.resize(MAX_LANDING_IMPACTS)
+	_landing_impact_secondary_weights.resize(MAX_LANDING_IMPACTS)
+	_landing_impact_entry_types.resize(MAX_LANDING_IMPACTS)
+	_landing_impact_contact_masks.resize(MAX_LANDING_IMPACTS)
+	_landing_impact_amplitudes.resize(MAX_LANDING_IMPACTS)
+	_landing_impact_depressions.resize(MAX_LANDING_IMPACTS)
+	_landing_impact_initial_radii.resize(MAX_LANDING_IMPACTS)
+	_landing_impact_speeds.resize(MAX_LANDING_IMPACTS)
+	_landing_impact_wavelengths.resize(MAX_LANDING_IMPACTS)
+	_landing_impact_durations.resize(MAX_LANDING_IMPACTS)
+	_landing_impact_event_ids.resize(MAX_LANDING_IMPACTS)
+	_landing_impact_active.fill(0)
+	_landing_impact_positions.fill(Vector2.ZERO)
+	_landing_impact_start_times.fill(-INF)
+	_landing_impact_strengths.fill(0.0)
+	_landing_impact_directions.fill(Vector2(0.0, -1.0))
+	_landing_impact_half_extents.fill(Vector2(0.55, 1.35))
+	_landing_impact_secondary_a_offsets.fill(Vector2.ZERO)
+	_landing_impact_secondary_b_offsets.fill(Vector2.ZERO)
+	_landing_impact_secondary_weights.fill(Vector2.ZERO)
+	_landing_impact_entry_types.fill(0)
+	_landing_impact_contact_masks.fill(0)
+	_landing_impact_amplitudes.fill(0.0)
+	_landing_impact_depressions.fill(0.0)
+	_landing_impact_initial_radii.fill(0.0)
+	_landing_impact_speeds.fill(0.0)
+	_landing_impact_wavelengths.fill(0.0)
+	_landing_impact_durations.fill(0.0)
+	_landing_impact_event_ids.fill(-1)
+	_landing_impact_parameters_dirty = true
+
+
 func _initialize_vehicle_interactions() -> void:
 	_directional_wake_start_positions.resize(MAX_DIRECTIONAL_WAKE_SEGMENTS)
 	_directional_wake_end_positions.resize(MAX_DIRECTIONAL_WAKE_SEGMENTS)
@@ -763,6 +927,135 @@ func _expire_ripples() -> bool:
 			_ripple_active[index] = 0
 			changed = true
 	return changed
+
+
+func _find_landing_impact_slot() -> int:
+	var oldest_slot: int = 0
+	var oldest_time: float = INF
+	for index in MAX_LANDING_IMPACTS:
+		if _landing_impact_active[index] == 0:
+			return index
+		if _landing_impact_start_times[index] < oldest_time:
+			oldest_time = _landing_impact_start_times[index]
+			oldest_slot = index
+	return oldest_slot
+
+
+func _expire_landing_impacts() -> bool:
+	var changed := false
+	for index in MAX_LANDING_IMPACTS:
+		if (
+			_landing_impact_active[index] != 0
+			and _simulation_time - _landing_impact_start_times[index]
+				> _landing_impact_durations[index]
+		):
+			_landing_impact_active[index] = 0
+			changed = true
+	return changed
+
+
+func _on_landing_water_entered(
+	_signal_intensity: float,
+	_signal_position: Vector3
+) -> void:
+	if (
+		not landing_impacts_enabled
+		or not is_instance_valid(_interaction_vehicle)
+	):
+		return
+	var descriptor := (
+		_interaction_vehicle.last_landing_impact_descriptor
+		as LandingImpactDescriptor
+	)
+	if (
+		descriptor == null
+		or descriptor.event_id == _last_landing_descriptor_id
+		or not descriptor.position.is_finite()
+	):
+		return
+	_last_landing_descriptor_id = descriptor.event_id
+	var slot := _find_landing_impact_slot()
+	var strength := clampf(descriptor.strength, 0.0, 1.0)
+	var amplitude := lerpf(
+		landing_wave_minimum_amplitude,
+		landing_wave_maximum_amplitude,
+		strength
+	)
+	var depression := lerpf(
+		landing_wave_minimum_depression,
+		landing_wave_maximum_depression,
+		strength
+	)
+	var initial_radius := lerpf(
+		landing_wave_minimum_radius,
+		landing_wave_maximum_radius,
+		strength
+	)
+	var propagation_speed := lerpf(
+		landing_wave_minimum_speed,
+		landing_wave_maximum_speed,
+		strength
+	)
+	var wavelength := lerpf(
+		landing_wave_minimum_wavelength,
+		landing_wave_maximum_wavelength,
+		strength
+	)
+	var duration := lerpf(
+		landing_wave_minimum_duration,
+		landing_wave_maximum_duration,
+		strength
+	)
+	var direction := Vector2(descriptor.forward.x, descriptor.forward.z)
+	if direction.length_squared() <= 0.000001 or not direction.is_finite():
+		direction = Vector2(0.0, -1.0)
+	else:
+		direction = direction.normalized()
+	_landing_impact_active[slot] = 1
+	_landing_impact_positions[slot] = world_to_logical_xz(descriptor.position)
+	_landing_impact_start_times[slot] = _simulation_time
+	_landing_impact_strengths[slot] = strength
+	_landing_impact_directions[slot] = direction
+	_landing_impact_half_extents[slot] = descriptor.half_extents
+	_landing_impact_secondary_a_offsets[slot] = (
+		descriptor.secondary_a_offset
+	)
+	_landing_impact_secondary_b_offsets[slot] = (
+		descriptor.secondary_b_offset
+	)
+	_landing_impact_secondary_weights[slot] = descriptor.secondary_weights
+	_landing_impact_entry_types[slot] = int(descriptor.entry_type)
+	_landing_impact_contact_masks[slot] = descriptor.contact_mask
+	_landing_impact_amplitudes[slot] = amplitude
+	_landing_impact_depressions[slot] = depression
+	_landing_impact_initial_radii[slot] = initial_radius
+	_landing_impact_speeds[slot] = propagation_speed
+	_landing_impact_wavelengths[slot] = wavelength
+	_landing_impact_durations[slot] = duration
+	_landing_impact_event_ids[slot] = descriptor.event_id
+	_landing_impact_parameters_dirty = true
+	_landing_impact_count += 1
+	_last_landing_wave_strength = strength
+	_last_landing_normal_speed = descriptor.normal_speed
+	_last_landing_airtime = descriptor.airtime
+	_last_landing_entry_type = int(descriptor.entry_type)
+	_last_landing_wave_amplitude = amplitude
+	_last_landing_wave_speed = propagation_speed
+	_last_landing_wave_radius = initial_radius
+	var physical_amplitude := lerpf(
+		landing_physical_ripple_minimum_amplitude,
+		landing_physical_ripple_maximum_amplitude,
+		strength
+	)
+	add_ripple(
+		descriptor.position,
+		physical_amplitude,
+		lerpf(2.8, 4.2, strength),
+		lerpf(2.2, 3.6, strength),
+		ripple_decay,
+		lerpf(2.2, 3.8, strength)
+	)
+	_push_landing_impact_parameters_to_all_materials()
 
 
 func _update_directional_wake_segments() -> void:
@@ -1035,9 +1328,24 @@ func _update_interaction_metrics() -> void:
 	var requested_hull := hull_pressure_amplitude * _hull_pressure_intensity * (
 		1.0 + hull_pressure_depression_strength
 	) * _hull_pressure_contact
+	var requested_landing: float = 0.0
+	var landing_derivative: float = 0.0
+	for index in MAX_LANDING_IMPACTS:
+		if _landing_impact_active[index] == 0:
+			continue
+		requested_landing = maxf(
+			requested_landing,
+			_landing_impact_amplitudes[index]
+				+ _landing_impact_depressions[index]
+		)
+		landing_derivative = maxf(
+			landing_derivative,
+			_landing_impact_amplitudes[index]
+				/ maxf(_landing_impact_wavelengths[index] * 0.16, 0.24)
+		)
 	_maximum_requested_interaction_amplitude = maxf(
-		requested_wake,
-		requested_hull
+		maxf(requested_wake, requested_hull),
+		requested_landing
 	)
 	var wake_derivative := requested_wake / maxf(
 		directional_wake_arm_width,
@@ -1048,7 +1356,7 @@ func _update_interaction_metrics() -> void:
 		0.25
 	)
 	_maximum_requested_interaction_derivative = minf(
-		maxf(wake_derivative, hull_derivative),
+		maxf(maxf(wake_derivative, hull_derivative), landing_derivative),
 		vehicle_interaction_maximum_derivative
 	)
 
@@ -1229,13 +1537,15 @@ func _on_submarine_dive_ended(duration: float, maximum_depth: float) -> void:
 func _connect_ripple_emitter_signals() -> void:
 	if not is_instance_valid(ripple_emitter_target):
 		return
-	var impact_callable := Callable(self, "_on_water_impact")
-	for signal_name: StringName in [&"water_entered", &"hard_landing"]:
-		if (
-			ripple_emitter_target.has_signal(signal_name)
-			and not ripple_emitter_target.is_connected(signal_name, impact_callable)
-		):
-			ripple_emitter_target.connect(signal_name, impact_callable)
+	var landing_callable := Callable(self, "_on_landing_water_entered")
+	if (
+		ripple_emitter_target.has_signal(&"water_entered")
+		and not ripple_emitter_target.is_connected(
+			&"water_entered",
+			landing_callable
+		)
+	):
+		ripple_emitter_target.connect(&"water_entered", landing_callable)
 	var dive_started_callable := Callable(self, "_on_submarine_dive_started")
 	if (
 		ripple_emitter_target.has_signal(&"submarine_dive_started")
@@ -1265,13 +1575,15 @@ func _connect_ripple_emitter_signals() -> void:
 func _disconnect_ripple_emitter_signals() -> void:
 	if not is_instance_valid(ripple_emitter_target):
 		return
-	var impact_callable := Callable(self, "_on_water_impact")
-	for signal_name: StringName in [&"water_entered", &"hard_landing"]:
-		if (
-			ripple_emitter_target.has_signal(signal_name)
-			and ripple_emitter_target.is_connected(signal_name, impact_callable)
-		):
-			ripple_emitter_target.disconnect(signal_name, impact_callable)
+	var landing_callable := Callable(self, "_on_landing_water_entered")
+	if (
+		ripple_emitter_target.has_signal(&"water_entered")
+		and ripple_emitter_target.is_connected(
+			&"water_entered",
+			landing_callable
+		)
+	):
+		ripple_emitter_target.disconnect(&"water_entered", landing_callable)
 	var dive_started_callable := Callable(self, "_on_submarine_dive_started")
 	if (
 		ripple_emitter_target.has_signal(&"submarine_dive_started")
@@ -1608,6 +1920,7 @@ func _push_all_shader_parameters() -> void:
 		_push_all_parameters_to_material(material)
 	_static_parameters_dirty = false
 	_ripple_parameters_dirty = false
+	_landing_impact_parameters_dirty = false
 
 
 func _push_all_parameters_to_material(material: ShaderMaterial) -> void:
@@ -1615,6 +1928,7 @@ func _push_all_parameters_to_material(material: ShaderMaterial) -> void:
 	_push_time_parameter(material)
 	_push_origin_parameter(material)
 	_push_ripple_parameters(material)
+	_push_landing_impact_parameters(material)
 	_push_vehicle_interaction_parameters(material)
 
 
@@ -1638,6 +1952,12 @@ func _push_ripple_parameters_to_all_materials() -> void:
 	for material in _all_ocean_materials():
 		_push_ripple_parameters(material)
 	_ripple_parameters_dirty = false
+
+
+func _push_landing_impact_parameters_to_all_materials() -> void:
+	for material in _all_ocean_materials():
+		_push_landing_impact_parameters(material)
+	_landing_impact_parameters_dirty = false
 
 
 func _push_vehicle_interaction_parameters_to_all_materials() -> void:
@@ -1691,6 +2011,18 @@ func _push_static_parameters(material: ShaderMaterial) -> void:
 	material.set_shader_parameter(&"wave_mean_a", wave_mean_a)
 	material.set_shader_parameter(&"wave_mean_b", wave_mean_b)
 	material.set_shader_parameter(&"geometry_normal_step", normal_sample_step)
+	material.set_shader_parameter(
+		&"landing_impacts_enabled",
+		landing_impacts_enabled
+	)
+	material.set_shader_parameter(
+		&"landing_impact_exaggerated_debug",
+		landing_impact_exaggerated_debug
+	)
+	material.set_shader_parameter(
+		&"landing_impact_debug_multiplier",
+		landing_impact_debug_multiplier
+	)
 	material.set_shader_parameter(&"directional_wake_enabled", directional_wake_enabled)
 	material.set_shader_parameter(&"directional_wake_amplitude", directional_wake_amplitude)
 	material.set_shader_parameter(&"directional_wake_wavelength", directional_wake_wavelength)
@@ -1779,6 +2111,79 @@ func _push_ripple_parameters(material: ShaderMaterial) -> void:
 	material.set_shader_parameter(&"ripple_wavelengths", _ripple_wavelengths)
 	material.set_shader_parameter(&"ripple_decays", _ripple_decays)
 	material.set_shader_parameter(&"ripple_lifetimes", _ripple_lifetimes)
+
+
+func _push_landing_impact_parameters(material: ShaderMaterial) -> void:
+	if material == null or material.shader == null:
+		return
+	material.set_shader_parameter(
+		&"landing_impact_active",
+		_landing_impact_active
+	)
+	material.set_shader_parameter(
+		&"landing_impact_positions",
+		_landing_impact_positions
+	)
+	material.set_shader_parameter(
+		&"landing_impact_start_times",
+		_landing_impact_start_times
+	)
+	material.set_shader_parameter(
+		&"landing_impact_strengths",
+		_landing_impact_strengths
+	)
+	material.set_shader_parameter(
+		&"landing_impact_directions",
+		_landing_impact_directions
+	)
+	material.set_shader_parameter(
+		&"landing_impact_half_extents",
+		_landing_impact_half_extents
+	)
+	material.set_shader_parameter(
+		&"landing_impact_secondary_a_offsets",
+		_landing_impact_secondary_a_offsets
+	)
+	material.set_shader_parameter(
+		&"landing_impact_secondary_b_offsets",
+		_landing_impact_secondary_b_offsets
+	)
+	material.set_shader_parameter(
+		&"landing_impact_secondary_weights",
+		_landing_impact_secondary_weights
+	)
+	material.set_shader_parameter(
+		&"landing_impact_entry_types",
+		_landing_impact_entry_types
+	)
+	material.set_shader_parameter(
+		&"landing_impact_contact_masks",
+		_landing_impact_contact_masks
+	)
+	material.set_shader_parameter(
+		&"landing_impact_amplitudes",
+		_landing_impact_amplitudes
+	)
+	material.set_shader_parameter(
+		&"landing_impact_depressions",
+		_landing_impact_depressions
+	)
+	material.set_shader_parameter(
+		&"landing_impact_initial_radii",
+		_landing_impact_initial_radii
+	)
+	material.set_shader_parameter(
+		&"landing_impact_speeds",
+		_landing_impact_speeds
+	)
+	material.set_shader_parameter(
+		&"landing_impact_wavelengths",
+		_landing_impact_wavelengths
+	)
+	material.set_shader_parameter(
+		&"landing_impact_durations",
+		_landing_impact_durations
+	)
 
 
 func _push_vehicle_interaction_parameters(material: ShaderMaterial) -> void:

@@ -1,4 +1,27 @@
 const int MAX_DIRECTIONAL_WAKE_SAMPLES = 16;
+const int MAX_LANDING_IMPACTS = 4;
+
+group_uniforms LandingImpacts;
+uniform bool landing_impacts_enabled = true;
+uniform int landing_impact_active[4];
+uniform vec2 landing_impact_positions[4];
+uniform float landing_impact_start_times[4];
+uniform float landing_impact_strengths[4];
+uniform vec2 landing_impact_directions[4];
+uniform vec2 landing_impact_half_extents[4];
+uniform vec2 landing_impact_secondary_a_offsets[4];
+uniform vec2 landing_impact_secondary_b_offsets[4];
+uniform vec2 landing_impact_secondary_weights[4];
+uniform int landing_impact_entry_types[4];
+uniform int landing_impact_contact_masks[4];
+uniform float landing_impact_amplitudes[4];
+uniform float landing_impact_depressions[4];
+uniform float landing_impact_initial_radii[4];
+uniform float landing_impact_speeds[4];
+uniform float landing_impact_wavelengths[4];
+uniform float landing_impact_durations[4];
+uniform bool landing_impact_exaggerated_debug = false;
+uniform float landing_impact_debug_multiplier : hint_range(1.0, 5.0, 0.25) = 2.5;
 
 group_uniforms DirectionalWake;
 uniform bool directional_wake_enabled = true;

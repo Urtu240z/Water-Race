@@ -102,6 +102,52 @@ func _run() -> void:
 			else "ERROR_%d" % debug_error
 		)
 	)
+	var landing_position := _prepare_landing_impact(ocean, vehicle)
+	_position_landing_camera(island, landing_position)
+	await process_frame
+	await process_frame
+	var landing_depression_path := (
+		"res://.godot/ocean_landing_impact_depression.png"
+	)
+	var landing_depression_error := (
+		root.get_texture().get_image().save_png(landing_depression_path)
+	)
+	ocean.set("_simulation_time", float(ocean.get("_simulation_time")) + 1.0)
+	ocean.call("_expire_landing_impacts")
+	ocean.call("_push_time_parameter_to_all_materials")
+	await process_frame
+	await process_frame
+	var landing_front_path := (
+		"res://.godot/ocean_landing_impact_propagated.png"
+	)
+	var landing_front_error := (
+		root.get_texture().get_image().save_png(landing_front_path)
+	)
+	print(
+		"OCEAN_LANDING_DEPRESSION_SCREENSHOT=%s"
+		% (
+			ProjectSettings.globalize_path(landing_depression_path)
+			if landing_depression_error == OK
+			else "ERROR_%d" % landing_depression_error
+		)
+	)
+	print(
+		"OCEAN_LANDING_PROPAGATED_SCREENSHOT=%s"
+		% (
+			ProjectSettings.globalize_path(landing_front_path)
+			if landing_front_error == OK
+			else "ERROR_%d" % landing_front_error
+		)
+	)
+	print(
+		"OCEAN_LANDING_STRENGTH=%.3f AMPLITUDE=%.3f SPEED=%.3f RADIUS=%.3f"
+		% [
+			ocean.last_landing_wave_strength,
+			ocean.last_landing_wave_amplitude,
+			ocean.last_landing_wave_speed,
+			ocean.last_landing_wave_radius,
+		]
+	)
 	print("OCEAN_INTERACTION_BENCHMARK=PASS")
 	island.free()
 	packed = null
@@ -157,6 +203,48 @@ func _position_benchmark_camera(
 	var wake_midpoint := vehicle.global_position + Vector3(0.0, 0.0, 24.0)
 	camera.global_position = wake_midpoint + Vector3(19.0, 18.0, 2.0)
 	camera.look_at(wake_midpoint, Vector3.UP)
+
+
+func _prepare_landing_impact(
+	ocean: Ocean3D,
+	vehicle: JetSkiController
+) -> Vector3:
+	ocean.ocean_interaction_debug_mode = 0
+	ocean.vehicle_interaction_exaggerated_debug = false
+	ocean.landing_impact_exaggerated_debug = false
+	ocean.apply_ocean_settings()
+	var landing_position := vehicle.global_position
+	landing_position.y = ocean.sample_height(landing_position)
+	var state := vehicle.navigation_system.state
+	state.last_landing_position = landing_position
+	state.last_landing_normal_speed = 10.5
+	state.last_airtime = 1.4
+	state.last_landing_contact_mask = 9
+	state.last_landing_contact_count = 2
+	state.last_landing_entry_type = JetSkiTypes.LandingEntryType.DIAGONAL
+	state.last_landing_intensity = 0.9
+	vehicle.call(
+		"_on_navigation_system_water_entered",
+		state.last_landing_intensity,
+		landing_position
+	)
+	ocean.set("_simulation_time", float(ocean.get("_simulation_time")) + 0.08)
+	ocean.call("_push_time_parameter_to_all_materials")
+	ocean.call("_push_landing_impact_parameters_to_all_materials")
+	return landing_position
+
+
+func _position_landing_camera(
+	island: Node,
+	landing_position: Vector3
+) -> void:
+	var camera := island.get_node_or_null(
+		"CameraSystem/ChaseCamera/Camera3D"
+	) as Camera3D
+	if camera == null:
+		return
+	camera.global_position = landing_position + Vector3(11.0, 10.0, 13.0)
+	camera.look_at(landing_position, Vector3.UP)
 
 
 func _measure_frames() -> float:

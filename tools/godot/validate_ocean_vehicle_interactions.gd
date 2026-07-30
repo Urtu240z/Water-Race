@@ -26,10 +26,17 @@ func _run() -> void:
 		if vehicle != null
 		else null
 	)
+	var effects := (
+		vehicle.find_child("VehicleWaterEffects3D", true, false)
+			as VehicleWaterEffects3D
+		if vehicle != null
+		else null
+	)
 	_expect(ocean != null, "Ocean3D sigue siendo la autoridad de agua.")
 	_expect(vehicle != null, "La moto de agua principal existe.")
 	_expect(wake != null, "WakeTrail3D existente se reutiliza.")
-	if ocean == null or vehicle == null or wake == null:
+	_expect(effects != null, "VehicleWaterEffects3D comparte el impacto.")
+	if ocean == null or vehicle == null or wake == null or effects == null:
 		island.free()
 		_finish()
 		return
@@ -45,6 +52,7 @@ func _run() -> void:
 	_validate_jump_discontinuity(ocean, vehicle, wake)
 	_validate_hull_tick_update(ocean, vehicle)
 	_validate_air_submarine_and_impacts(ocean, vehicle, wake)
+	_validate_landing_impact_system(ocean, vehicle, wake, effects)
 	_validate_rebase(ocean, vehicle, wake)
 	_validate_foam_gpu_alignment(ocean, wake)
 	_validate_shader_and_uniform_contract(ocean)
@@ -317,8 +325,287 @@ func _validate_air_submarine_and_impacts(
 	_expect(
 		active_count == 3
 		and ocean.merged_impact_count == merged_before + 1,
-		"El aterrizaje conserva ripple principal, laterales y cooldown."
+		"Los impactos genéricos submarinos conservan su agrupación anterior."
 	)
+
+
+func _validate_landing_impact_system(
+	ocean: Ocean3D,
+	vehicle: JetSkiController,
+	wake: WakeTrail3D,
+	effects: VehicleWaterEffects3D
+) -> void:
+	var small_strength := vehicle.calculate_landing_wave_strength(2.0, 0.20, 1)
+	var medium_strength := vehicle.calculate_landing_wave_strength(6.0, 0.80, 2)
+	var large_strength := vehicle.calculate_landing_wave_strength(11.0, 1.60, 4)
+	_expect(
+		small_strength < medium_strength
+		and medium_strength < large_strength,
+		"La fuerza autoritativa crece de forma monótona con el salto."
+	)
+	var effects_root := vehicle.get_node_or_null("Effects") as Node3D
+	_expect(
+		effects_root != null and effects_root.visible,
+		"Gameplay/JetSki/Effects permanece visible en la escena real."
+	)
+	var original_wake_enabled := wake.wake_enabled
+	var original_effects_visible := effects_root.visible
+	wake.wake_enabled = false
+	effects_root.visible = false
+	vehicle.input_system.state.throttle = 0.0
+	vehicle.linear_velocity = Vector3(0.0, -9.0, 0.15)
+	var geometric_before := ocean.landing_impact_count
+	var particle_before := effects.impact_burst_count
+	var physical_ripple_before := _count_active_ripples(ocean)
+	_expect(
+		vehicle.water_entered.is_connected(ocean._on_landing_water_entered)
+		and vehicle.water_entered.is_connected(effects._on_ocean_entered),
+		"Ocean3D y VehicleWaterEffects3D escuchan el evento autoritativo."
+	)
+	_expect(
+		bool(effects.get("_impact_valid")),
+		"El pool de partículas de impacto está configurado en la escena real."
+	)
+	_emit_test_landing(
+		vehicle,
+		9.0,
+		1.10,
+		1,
+		JetSkiTypes.LandingEntryType.SINGLE_POINT,
+		vehicle.global_position
+	)
+	_expect(
+		ocean.landing_impact_count == geometric_before + 1
+		and ocean.last_landing_wave_strength > 0.0,
+		"El impacto geométrico existe sin acelerador, estela ni Effects visibles."
+	)
+	_expect(
+		_count_active_ripples(ocean) == physical_ripple_before + 1,
+		"El aterrizaje añade un solo ripple físico pequeño."
+	)
+	_expect(
+		effects.impact_burst_count == particle_before + 1
+		and absf(
+			effects.last_impact_visual_intensity
+				- ocean.last_landing_wave_strength
+		) <= EPSILON,
+		"Partículas y geometría consumen exactamente la misma fuerza."
+	)
+	var descriptor_id := vehicle.last_landing_impact_descriptor.event_id
+	var geometry_after_entry := ocean.landing_impact_count
+	var particles_after_entry := effects.impact_burst_count
+	var physical_ripples_after_entry := _count_active_ripples(ocean)
+	vehicle.call(
+		"_on_navigation_system_hard_landing",
+		vehicle.last_landing_intensity,
+		vehicle.last_landing_position
+	)
+	_expect(
+		ocean.landing_impact_count == geometry_after_entry
+		and effects.impact_burst_count == particles_after_entry
+		and _count_active_ripples(ocean) == physical_ripples_after_entry
+		and vehicle.last_landing_impact_descriptor.event_id == descriptor_id,
+		"water_entered + hard_landing producen un solo descriptor, onda y burst."
+	)
+
+	effects_root.visible = true
+	var amplitudes := PackedFloat32Array()
+	var initial_radii := PackedFloat32Array()
+	var speeds := PackedFloat32Array()
+	var durations := PackedFloat32Array()
+	var particles := PackedInt32Array()
+	for profile in [
+		[2.0, 0.20, 1],
+		[6.0, 0.80, 2],
+		[11.0, 1.60, 4],
+	]:
+		_emit_test_landing(
+			vehicle,
+			float(profile[0]),
+			float(profile[1]),
+			int(profile[2]),
+			JetSkiTypes.LandingEntryType.FLAT,
+			vehicle.global_position
+		)
+		amplitudes.append(ocean.last_landing_wave_amplitude)
+		speeds.append(ocean.last_landing_wave_speed)
+		var descriptor := vehicle.last_landing_impact_descriptor
+		var slot := _find_landing_slot_for_event(ocean, descriptor.event_id)
+		initial_radii.append(
+			(ocean.get("_landing_impact_initial_radii") as PackedFloat32Array)[
+				slot
+			]
+		)
+		durations.append(
+			(ocean.get("_landing_impact_durations") as PackedFloat32Array)[slot]
+		)
+		particles.append(effects.last_impact_particle_amount)
+	_expect(
+		_is_strictly_increasing(amplitudes)
+		and _is_strictly_increasing(initial_radii)
+		and _is_strictly_increasing(speeds)
+		and _is_strictly_increasing(durations)
+		and _is_strictly_increasing_int(particles),
+		"Amplitud, radio, velocidad, duración y partículas escalan monótonamente."
+	)
+
+	var radius_before := ocean.last_landing_wave_radius
+	var active_before := ocean.active_landing_impact_count
+	var persistent_descriptor := vehicle.last_landing_impact_descriptor
+	var persistent_slot := _find_landing_slot_for_event(
+		ocean,
+		persistent_descriptor.event_id
+	)
+	var fixed_position := (
+		ocean.get("_landing_impact_positions") as PackedVector2Array
+	)[persistent_slot]
+	var original_vehicle_position := vehicle.global_position
+	vehicle.global_position += Vector3(18.0, 0.0, -11.0)
+	ocean.set("_simulation_time", float(ocean.get("_simulation_time")) + 1.0)
+	ocean.call("_expire_landing_impacts")
+	_expect(
+		ocean.active_landing_impact_count == active_before
+		and ocean.last_landing_wave_radius
+			> radius_before + ocean.last_landing_wave_speed * 0.9,
+		"Sin eventos nuevos, el frente queda fijo y continúa propagándose."
+	)
+	_expect(
+		(
+			ocean.get("_landing_impact_positions") as PackedVector2Array
+		)[persistent_slot].is_equal_approx(fixed_position),
+		"La onda permanece en el contacto aunque la moto se aleje."
+	)
+	vehicle.global_position = original_vehicle_position
+
+	for entry_type in [
+		JetSkiTypes.LandingEntryType.FLAT,
+		JetSkiTypes.LandingEntryType.FRONT,
+		JetSkiTypes.LandingEntryType.REAR,
+		JetSkiTypes.LandingEntryType.LEFT,
+		JetSkiTypes.LandingEntryType.RIGHT,
+		JetSkiTypes.LandingEntryType.DIAGONAL,
+	]:
+		_emit_test_landing(
+			vehicle,
+			7.0,
+			0.9,
+			2,
+			entry_type,
+			vehicle.global_position
+		)
+		_expect(
+			ocean.last_landing_entry_type == int(entry_type),
+			"El perfil de entrada %d llega al paquete GPU." % int(entry_type)
+		)
+		var descriptor := vehicle.last_landing_impact_descriptor
+		var slot := _find_landing_slot_for_event(ocean, descriptor.event_id)
+		var secondary_weights := (
+			ocean.get("_landing_impact_secondary_weights")
+				as PackedVector2Array
+		)[slot]
+		var expects_two_secondaries: bool = (
+			entry_type == JetSkiTypes.LandingEntryType.FLAT
+			or entry_type == JetSkiTypes.LandingEntryType.DIAGONAL
+		)
+		_expect(
+			secondary_weights.x > 0.0
+			and (
+				secondary_weights.y > 0.0
+				if expects_two_secondaries
+				else true
+			),
+			"El perfil %d conserva secundarios derivados del contacto real."
+			% int(entry_type)
+		)
+	wake.wake_enabled = original_wake_enabled
+	effects_root.visible = original_effects_visible
+	_prepare_contact_state(vehicle)
+
+
+func _emit_test_landing(
+	vehicle: JetSkiController,
+	normal_speed: float,
+	airtime: float,
+	contact_count: int,
+	entry_type: JetSkiTypes.LandingEntryType,
+	position: Vector3
+) -> void:
+	var state := vehicle.navigation_system.state
+	state.last_landing_position = position
+	state.last_landing_normal_speed = normal_speed
+	state.last_landing_intensity = clampf(
+		inverse_lerp(1.0, 12.0, normal_speed),
+		0.0,
+		1.0
+	)
+	state.last_airtime = airtime
+	state.last_landing_contact_count = contact_count
+	state.last_landing_contact_mask = _contact_mask_for_entry(
+		entry_type,
+		contact_count
+	)
+	state.last_landing_entry_type = entry_type
+	vehicle.call(
+		"_on_navigation_system_water_entered",
+		state.last_landing_intensity,
+		position
+	)
+
+
+func _contact_mask_for_entry(
+	entry_type: JetSkiTypes.LandingEntryType,
+	contact_count: int
+) -> int:
+	match entry_type:
+		JetSkiTypes.LandingEntryType.FLAT:
+			return 15
+		JetSkiTypes.LandingEntryType.FRONT:
+			return 3
+		JetSkiTypes.LandingEntryType.REAR:
+			return 12
+		JetSkiTypes.LandingEntryType.LEFT:
+			return 5
+		JetSkiTypes.LandingEntryType.RIGHT:
+			return 10
+		JetSkiTypes.LandingEntryType.DIAGONAL:
+			return 9
+		JetSkiTypes.LandingEntryType.SINGLE_POINT:
+			return 1
+	return (
+		1 if contact_count <= 1
+		else 3 if contact_count == 2
+		else 7 if contact_count == 3
+		else 15
+	)
+
+
+func _find_landing_slot_for_event(ocean: Ocean3D, event_id: int) -> int:
+	var event_ids := ocean.get("_landing_impact_event_ids") as PackedInt32Array
+	for index in event_ids.size():
+		if event_ids[index] == event_id:
+			return index
+	return 0
+
+
+func _count_active_ripples(ocean: Ocean3D) -> int:
+	var count: int = 0
+	for active in ocean.get("_ripple_active") as PackedInt32Array:
+		count += active
+	return count
+
+
+func _is_strictly_increasing(values: PackedFloat32Array) -> bool:
+	for index in range(1, values.size()):
+		if values[index] <= values[index - 1]:
+			return false
+	return true
+
+
+func _is_strictly_increasing_int(values: PackedInt32Array) -> bool:
+	for index in range(1, values.size()):
+		if values[index] <= values[index - 1]:
+			return false
+	return true
 
 
 func _validate_rebase(
@@ -379,6 +666,17 @@ func _validate_shader_and_uniform_contract(ocean: Ocean3D) -> void:
 		and not function_source.contains("inversesqrt"),
 		"El shader usa frentes liberados sin anclaje ni normalización global."
 	)
+	_expect(
+		function_source.contains("sample_landing_impact_state")
+		and function_source.contains(
+			"initial_radius + age * propagation_speed"
+		)
+		and function_source.contains("depression_time")
+		and function_source.contains(
+			"ocean_interaction_debug_mode == 1"
+		),
+		"El impacto compuesto comparte depresión, propagación y modos debug."
+	)
 	ocean.call("_push_vehicle_interaction_parameters_to_all_materials")
 	var material := ocean.get_active_water_material()
 	var starts := material.get_shader_parameter(
@@ -387,11 +685,15 @@ func _validate_shader_and_uniform_contract(ocean: Ocean3D) -> void:
 	var ends := material.get_shader_parameter(
 		&"directional_wake_end_positions"
 	) as PackedVector2Array
+	var landing_positions := material.get_shader_parameter(
+		&"landing_impact_positions"
+	) as PackedVector2Array
 	_expect(
 		starts.size() == 16
 		and ends.size() == 16
+		and landing_positions.size() == 4
 		and ocean.interaction_uniform_write_count > 0,
-		"Ocean3D sincroniza buffers fijos de segmentos."
+		"Ocean3D sincroniza 16 segmentos y 4 impactos fijos."
 	)
 	_expect(
 		ocean.vehicle_interaction_update_interval >= 0.05 - EPSILON,

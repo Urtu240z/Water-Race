@@ -893,7 +893,19 @@ func _stop_continuous_spray() -> void:
 func _on_ocean_entered(_signal_intensity: float, impact_position: Vector3) -> void:
 	if not impact_splash_enabled or not _impact_valid:
 		return
-	var visual_intensity := clampf(_vehicle.last_landing_intensity, 0.0, 1.0)
+	var descriptor := _vehicle.last_landing_impact_descriptor
+	var visual_intensity := clampf(
+		descriptor.strength
+			if descriptor != null
+			else _vehicle.last_landing_wave_strength,
+		0.0,
+		1.0
+	)
+	var authoritative_position := (
+		descriptor.position
+		if descriptor != null and descriptor.position.is_finite()
+		else impact_position
+	)
 	var emitter_index := _select_impact_emitter()
 	if emitter_index < 0:
 		return
@@ -934,11 +946,11 @@ func _on_ocean_entered(_signal_intensity: float, impact_position: Vector3) -> vo
 	var particle_lifetime := lerpf(impact_minimum_lifetime, impact_maximum_lifetime, visual_intensity)
 	var particle_spread := lerpf(35.0, 75.0, visual_intensity)
 	var water_position := Vector3(
-		impact_position.x,
-		_ocean.sample_height(impact_position) + splash_surface_offset,
-		impact_position.z
+		authoritative_position.x,
+		_ocean.sample_height(authoritative_position) + splash_surface_offset,
+		authoritative_position.z
 	)
-	var water_normal := _ocean.sample_normal(impact_position)
+	var water_normal := _ocean.sample_normal(authoritative_position)
 	var biased_normal := _impact_direction(water_normal)
 	emitter.global_transform = Transform3D(
 		_basis_with_y(biased_normal, -_vehicle.global_basis.z),
@@ -971,16 +983,25 @@ func _on_ocean_entered(_signal_intensity: float, impact_position: Vector3) -> vo
 
 func _on_hard_landing(_intensity: float, _position: Vector3) -> void:
 	# water_entered is emitted immediately before hard_landing by the physical
-	# controller. The same configured burst already uses last_landing_intensity;
-	# record the merge but never create a second burst.
+	# controller. The configured burst already consumed the shared landing
+	# descriptor; record the merge but never create a second burst.
 	if _last_impact_index >= 0 and _last_impact_physics_frame == Engine.get_physics_frames():
 		_hard_landing_merge_count += 1
 
 
 func _impact_direction(water_normal: Vector3) -> Vector3:
 	var bias := Vector3.ZERO
-	var forward := -_vehicle.global_basis.z.normalized()
-	var right := _vehicle.global_basis.x.normalized()
+	var descriptor := _vehicle.last_landing_impact_descriptor
+	var forward := (
+		descriptor.forward
+		if descriptor != null
+		else -_vehicle.global_basis.z.normalized()
+	)
+	var right := (
+		descriptor.right
+		if descriptor != null
+		else _vehicle.global_basis.x.normalized()
+	)
 	match _vehicle.last_landing_entry_type:
 		JetSkiController.LandingEntryType.FRONT:
 			bias = forward * 0.25

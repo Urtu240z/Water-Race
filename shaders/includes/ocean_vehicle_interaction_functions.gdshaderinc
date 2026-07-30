@@ -181,6 +181,262 @@ vec4 sample_directional_wake_state(vec2 logical_xz) {
 }
 
 
+// x: profile height, yz: spatial derivatives.
+vec3 sample_landing_radial_packet(
+	vec2 delta,
+	float radius,
+	float wavelength,
+	float arm_width
+) {
+	float distance_to_center = length(delta);
+	float front_offset = distance_to_center - radius;
+	float crest_x = front_offset;
+	float valley_x = front_offset + wavelength * 0.48;
+	float recovery_x = front_offset + wavelength * 0.96;
+	float valley_width = arm_width * 1.18;
+	float recovery_width = arm_width * 1.42;
+	float crest = exp(-crest_x * crest_x / (arm_width * arm_width));
+	float valley = exp(
+		-valley_x * valley_x / (valley_width * valley_width)
+	);
+	float recovery = exp(
+		-recovery_x * recovery_x / (recovery_width * recovery_width)
+	);
+	float profile = crest - valley * 0.52 + recovery * 0.18;
+	float profile_derivative =
+		crest * -2.0 * crest_x / (arm_width * arm_width)
+		- valley * 0.52 * -2.0 * valley_x
+			/ (valley_width * valley_width)
+		+ recovery * 0.18 * -2.0 * recovery_x
+			/ (recovery_width * recovery_width);
+	vec2 gradient = distance_to_center > 0.0001
+		? delta / distance_to_center
+		: vec2(0.0);
+	return vec3(profile, gradient * profile_derivative);
+}
+
+
+// x: height, yz: spatial derivatives, w: deformation energy.
+vec4 sample_landing_impact_state(vec2 logical_xz) {
+	if (!landing_impacts_enabled) {
+		return vec4(0.0);
+	}
+	float height = 0.0;
+	vec2 derivatives = vec2(0.0);
+	float energy = 0.0;
+	float overlap_weight = 0.0;
+	float impact_multiplier = landing_impact_exaggerated_debug
+		? max(landing_impact_debug_multiplier, 1.0)
+		: 1.0;
+	for (int index = 0; index < MAX_LANDING_IMPACTS; index++) {
+		if (landing_impact_active[index] == 0) {
+			continue;
+		}
+		float age = simulation_time - landing_impact_start_times[index];
+		float duration = max(landing_impact_durations[index], 0.05);
+		if (age < 0.0 || age > duration) {
+			continue;
+		}
+		vec2 forward = interaction_safe_direction(
+			landing_impact_directions[index],
+			vec2(0.0, -1.0)
+		);
+		vec2 right = vec2(-forward.y, forward.x);
+		vec2 delta = logical_xz - landing_impact_positions[index];
+		float local_forward = dot(delta, forward);
+		float local_lateral = dot(delta, right);
+		float strength = clamp(landing_impact_strengths[index], 0.0, 1.0);
+		float initial_radius = max(landing_impact_initial_radii[index], 0.1);
+		float propagation_speed = max(landing_impact_speeds[index], 0.1);
+		float wavelength = max(landing_impact_wavelengths[index], 0.25);
+		float radius = initial_radius + age * propagation_speed;
+		float maximum_reach = radius + wavelength * 1.35;
+		if (length(delta) > maximum_reach * 1.4) {
+			continue;
+		}
+		int entry_type = landing_impact_entry_types[index];
+		int contact_mask = landing_impact_contact_masks[index];
+		float longitudinal_scale = 1.0;
+		float lateral_scale = 1.0;
+		if (entry_type == 4) {
+			longitudinal_scale = 1.12;
+			lateral_scale = 1.24;
+		} else if (entry_type == 0 || entry_type == 1) {
+			longitudinal_scale = 1.18;
+			lateral_scale = 0.96;
+		} else if (entry_type == 2 || entry_type == 3) {
+			longitudinal_scale = 0.96;
+			lateral_scale = 1.14;
+		}
+		vec2 elliptical_coordinates = vec2(
+			local_forward / longitudinal_scale,
+			local_lateral / lateral_scale
+		);
+		float elliptical_distance = length(elliptical_coordinates);
+		float front_offset = elliptical_distance - radius;
+		float arm_width = max(wavelength * 0.16, 0.24);
+		if (front_offset > arm_width * 3.2
+			|| front_offset < -wavelength * 1.35) {
+			continue;
+		}
+		vec3 packet = sample_landing_radial_packet(
+			elliptical_coordinates,
+			radius,
+			wavelength,
+			arm_width
+		);
+		vec2 elliptical_gradient = vec2(0.0);
+		float packet_derivative = 0.0;
+		if (elliptical_distance > 0.0001) {
+			packet_derivative = dot(
+				packet.yz,
+				elliptical_coordinates / elliptical_distance
+			);
+			elliptical_gradient =
+				forward * (
+					elliptical_coordinates.x
+					/ (elliptical_distance * longitudinal_scale)
+				)
+				+ right * (
+					elliptical_coordinates.y
+					/ (elliptical_distance * lateral_scale)
+				);
+		}
+		float directional_coordinate = clamp(
+			(local_forward + local_lateral) / max(radius, 0.5),
+			-1.0,
+			1.0
+		);
+		float directional_weight = 1.0;
+		if (entry_type == 0) {
+			directional_weight += clamp(local_forward / max(radius, 0.5), -1.0, 1.0) * 0.24;
+		} else if (entry_type == 1) {
+			directional_weight -= clamp(local_forward / max(radius, 0.5), -1.0, 1.0) * 0.24;
+		} else if (entry_type == 2) {
+			directional_weight -= clamp(local_lateral / max(radius, 0.5), -1.0, 1.0) * 0.28;
+		} else if (entry_type == 3) {
+			directional_weight += clamp(local_lateral / max(radius, 0.5), -1.0, 1.0) * 0.28;
+		} else if (entry_type == 5 || entry_type == 6) {
+			directional_weight += directional_coordinate * 0.16;
+		}
+		if (entry_type == 5 || entry_type == 6) {
+			float contact_forward = float(
+				((contact_mask & 1) != 0 ? 1 : 0)
+				+ ((contact_mask & 2) != 0 ? 1 : 0)
+				- ((contact_mask & 4) != 0 ? 1 : 0)
+				- ((contact_mask & 8) != 0 ? 1 : 0)
+			);
+			float contact_lateral = float(
+				((contact_mask & 2) != 0 ? 1 : 0)
+				+ ((contact_mask & 8) != 0 ? 1 : 0)
+				- ((contact_mask & 1) != 0 ? 1 : 0)
+				- ((contact_mask & 4) != 0 ? 1 : 0)
+			);
+			directional_weight += clamp(
+				contact_forward * local_forward
+					+ contact_lateral * local_lateral,
+				-radius,
+				radius
+			) / max(radius, 0.5) / 11.75;
+		}
+		float age_fade = exp(-age * mix(0.20, 0.11, strength))
+			* (1.0 - smoothstep(duration * 0.68, duration, age));
+		float amplitude = landing_impact_amplitudes[index]
+			* directional_weight * age_fade * impact_multiplier;
+		height += packet.x * amplitude;
+		derivatives += elliptical_gradient * packet_derivative * amplitude;
+
+		vec2 half_extents = max(
+			landing_impact_half_extents[index],
+			vec2(0.25, 0.5)
+		);
+		float depression_lateral_radius = half_extents.x
+			* mix(1.05, 1.38, strength);
+		float depression_longitudinal_radius = half_extents.y
+			* mix(1.02, 1.30, strength);
+		float depression_gaussian = exp(
+			-local_forward * local_forward
+				/ (
+					depression_longitudinal_radius
+					* depression_longitudinal_radius
+				)
+			-local_lateral * local_lateral
+				/ (
+					depression_lateral_radius
+					* depression_lateral_radius
+				)
+		);
+		float depression_time = smoothstep(0.0, 0.035, age)
+			* (1.0 - smoothstep(
+				mix(0.14, 0.22, strength),
+				mix(0.30, 0.45, strength),
+				age
+			));
+		float depression = landing_impact_depressions[index]
+			* depression_gaussian * depression_time * impact_multiplier;
+		height -= depression;
+		derivatives += depression * (
+			forward * 2.0 * local_forward
+				/ (
+					depression_longitudinal_radius
+					* depression_longitudinal_radius
+				)
+			+ right * 2.0 * local_lateral
+				/ (
+					depression_lateral_radius
+					* depression_lateral_radius
+				)
+		);
+
+		vec2 secondary_weights = landing_impact_secondary_weights[index];
+		vec3 secondary_a = sample_landing_radial_packet(
+			delta - landing_impact_secondary_a_offsets[index],
+			radius * 0.88,
+			wavelength * 0.80,
+			arm_width * 0.87
+		);
+		vec3 secondary_b = sample_landing_radial_packet(
+			delta - landing_impact_secondary_b_offsets[index],
+			radius * 0.84,
+			wavelength * 0.76,
+			arm_width * 0.84
+		);
+		height += (
+			secondary_a.x * secondary_weights.x
+			+ secondary_b.x * secondary_weights.y
+		) * amplitude;
+		derivatives += (
+			secondary_a.yz * secondary_weights.x
+			+ secondary_b.yz * secondary_weights.y
+		) * amplitude;
+		float relevance = max(
+			abs(packet.x),
+			depression_gaussian * depression_time
+		);
+		overlap_weight += relevance;
+		energy = max(
+			energy,
+			clamp(
+				(
+					max(packet.x, 0.0) * abs(amplitude)
+					+ length(packet.yz) * abs(amplitude)
+						* arm_width * 0.12
+					+ depression * 0.30
+				) * 1.55,
+				0.0,
+				1.0
+			)
+		);
+	}
+	float normalization = max(overlap_weight, 1.0);
+	return vec4(
+		height / normalization,
+		derivatives / normalization,
+		energy
+	);
+}
+
+
 // Returns height and XZ derivatives for one oriented elliptical Gaussian.
 vec3 sample_hull_gaussian_lobe(
 	vec2 delta,
@@ -305,20 +561,30 @@ vec4 sample_vehicle_interaction_state(vec2 logical_xz) {
 	bool include_hull = ocean_interaction_debug_mode == 0
 		|| ocean_interaction_debug_mode == 3
 		|| ocean_interaction_debug_mode == 4;
+	bool include_landing = ocean_interaction_debug_mode == 0
+		|| ocean_interaction_debug_mode == 1
+		|| ocean_interaction_debug_mode == 4;
 	vec4 wake_state = include_wake
 		? sample_directional_wake_state(logical_xz)
 		: vec4(0.0);
 	vec4 hull_state = include_hull
 		? sample_hull_pressure_state(logical_xz)
 		: vec4(0.0);
-	vec4 state = wake_state + hull_state;
+	vec4 landing_state = include_landing
+		? sample_landing_impact_state(logical_xz)
+		: vec4(0.0);
+	vec4 state = wake_state + hull_state + landing_state;
 	float debug_multiplier = vehicle_interaction_exaggerated_debug
 		? max(vehicle_interaction_debug_multiplier, 1.0)
 		: 1.0;
 	state.xyz *= debug_multiplier;
 	float debug_limit_scale = vehicle_interaction_exaggerated_debug
 		? min(debug_multiplier, 2.5)
-		: 1.0;
+		: (
+			landing_impact_exaggerated_debug
+				? min(max(landing_impact_debug_multiplier, 1.0), 2.5)
+				: 1.0
+		);
 	float displacement_limit = max(
 		vehicle_interaction_maximum_displacement * debug_limit_scale,
 		0.01
@@ -339,7 +605,7 @@ vec4 sample_vehicle_interaction_state(vec2 logical_xz) {
 		? min(derivative_limit / derivative_magnitude, 1.0)
 		: 1.0;
 	state.yz *= mix(1.0, derivative_scale, derivative_blend);
-	state.w = max(wake_state.w, hull_state.w);
+	state.w = max(max(wake_state.w, hull_state.w), landing_state.w);
 	return state;
 }
 

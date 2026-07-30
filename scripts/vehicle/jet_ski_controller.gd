@@ -21,7 +21,13 @@ signal rider_trick_launched(
 )
 
 const BUOYANCY_POINT_COUNT: int = 4
-const LEFT_CONTACT_MASK: int = 5
+const FRONT_LEFT_CONTACT_MASK: int = 1
+const FRONT_RIGHT_CONTACT_MASK: int = 2
+const REAR_LEFT_CONTACT_MASK: int = 4
+const REAR_RIGHT_CONTACT_MASK: int = 8
+const LEFT_CONTACT_MASK: int = (
+	FRONT_LEFT_CONTACT_MASK | REAR_LEFT_CONTACT_MASK
+)
 
 @export_group("Water")
 @export_node_path("Ocean3D") var ocean_path: NodePath
@@ -168,6 +174,13 @@ const LEFT_CONTACT_MASK: int = 5
 @export_range(0.0, 10.0, 0.01, "or_greater", "suffix:m") var deep_submersion_average_depth: float = 0.7
 @export_range(0.0, 10.0, 0.01, "or_greater", "suffix:m") var deep_submersion_release_depth: float = 0.4
 @export_range(1, BUOYANCY_POINT_COUNT, 1) var deep_submersion_required_points: int = 4
+
+@export_group("Landing Wave Strength")
+@export_range(0.0, 20.0, 0.1, "suffix:m/s") var landing_wave_minimum_normal_speed: float = 1.5
+@export_range(0.1, 30.0, 0.1, "suffix:m/s") var landing_wave_full_normal_speed: float = 11.0
+@export_range(0.0, 3.0, 0.01, "suffix:s") var landing_wave_minimum_airtime: float = 0.12
+@export_range(0.01, 5.0, 0.01, "suffix:s") var landing_wave_full_airtime: float = 1.6
+@export_range(0.0, 1.0, 0.01) var landing_wave_minimum_visible_strength: float = 0.12
 
 @export_group("Safety Reset")
 @export var minimum_safe_y: float = -25.0
@@ -491,6 +504,19 @@ var last_landing_entry_type: JetSkiTypes.LandingEntryType:
 	get:
 		return navigation_system.state.last_landing_entry_type
 
+
+var last_landing_impact_descriptor: LandingImpactDescriptor
+
+
+var last_landing_wave_strength: float:
+	get:
+		return (
+			last_landing_impact_descriptor.strength
+			if last_landing_impact_descriptor != null
+			else 0.0
+		)
+
+
 var water_entry_count: int:
 	get:
 		return navigation_system.state.water_entry_count
@@ -509,6 +535,7 @@ var deep_submersion_count: int:
 
 var _respawn_transform: Transform3D
 var _has_respawn_transform: bool = false
+var _landing_impact_event_id: int = 0
 var _ocean: Ocean3D
 @onready var input_system: JetSkiInputSystem = $Systems/InputSystem
 @onready var water_physics_system: JetSkiWaterPhysicsSystem = (
@@ -735,6 +762,7 @@ func reset_vehicle(reason: StringName = &"manual") -> void:
 	input_system.reset_rider_shift()
 	submarine_system.reset_runtime_state(true)
 	trick_system.reset_runtime_state()
+	last_landing_impact_descriptor = null
 	reset_physics_interpolation()
 	reset_completed.emit(reason)
 
@@ -1102,7 +1130,228 @@ func _on_navigation_system_water_entered(
 	intensity: float,
 	contact_position: Vector3
 ) -> void:
+	last_landing_impact_descriptor = _build_landing_impact_descriptor(
+		contact_position
+	)
 	water_entered.emit(intensity, contact_position)
+
+
+func calculate_landing_wave_strength(
+	landing_normal_speed: float,
+	landing_airtime: float,
+	landing_contact_count: int
+) -> float:
+	return LandingImpactDescriptor.calculate_strength(
+		landing_normal_speed,
+		landing_airtime,
+		landing_contact_count,
+		landing_wave_minimum_normal_speed,
+		landing_wave_full_normal_speed,
+		landing_wave_minimum_airtime,
+		landing_wave_full_airtime,
+		landing_wave_minimum_visible_strength,
+		true
+	)
+
+
+func _build_landing_impact_descriptor(
+	fallback_position: Vector3
+) -> LandingImpactDescriptor:
+	var descriptor := LandingImpactDescriptor.new()
+	_landing_impact_event_id += 1
+	descriptor.event_id = _landing_impact_event_id
+	descriptor.position = (
+		last_landing_position
+		if last_landing_position.is_finite()
+		else fallback_position
+	)
+	descriptor.normal_speed = maxf(last_landing_normal_speed, 0.0)
+	descriptor.airtime = maxf(last_airtime, 0.0)
+	descriptor.contact_mask = last_landing_contact_mask
+	descriptor.contact_count = last_landing_contact_count
+	descriptor.entry_type = last_landing_entry_type
+	descriptor.strength = calculate_landing_wave_strength(
+		descriptor.normal_speed,
+		descriptor.airtime,
+		descriptor.contact_count
+	)
+	var vehicle_basis := (
+		global_basis if is_inside_tree() else basis
+	).orthonormalized()
+	descriptor.forward = -vehicle_basis.z
+	descriptor.forward.y = 0.0
+	if descriptor.forward.length_squared() <= 0.000001:
+		descriptor.forward = Vector3.FORWARD
+	else:
+		descriptor.forward = descriptor.forward.normalized()
+	descriptor.right = vehicle_basis.x
+	descriptor.right.y = 0.0
+	if descriptor.right.length_squared() <= 0.000001:
+		descriptor.right = Vector3.RIGHT
+	else:
+		descriptor.right = descriptor.right.normalized()
+	if is_instance_valid(water_physics_system):
+		descriptor.front_left_position = (
+			water_physics_system.get_point_world_position(0)
+		)
+		descriptor.front_right_position = (
+			water_physics_system.get_point_world_position(1)
+		)
+		descriptor.rear_left_position = (
+			water_physics_system.get_point_world_position(2)
+		)
+		descriptor.rear_right_position = (
+			water_physics_system.get_point_world_position(3)
+		)
+		var front_center := (
+			descriptor.front_left_position
+			+ descriptor.front_right_position
+		) * 0.5
+		var rear_center := (
+			descriptor.rear_left_position
+			+ descriptor.rear_right_position
+		) * 0.5
+		var front_width := descriptor.front_left_position.distance_to(
+			descriptor.front_right_position
+		)
+		var rear_width := descriptor.rear_left_position.distance_to(
+			descriptor.rear_right_position
+		)
+		descriptor.half_extents = Vector2(
+			maxf((front_width + rear_width) * 0.25, 0.25),
+			maxf(front_center.distance_to(rear_center) * 0.5, 0.5)
+		)
+		_configure_landing_secondary_contacts(
+			descriptor,
+			front_center,
+			rear_center
+		)
+	return descriptor
+
+
+func _configure_landing_secondary_contacts(
+	descriptor: LandingImpactDescriptor,
+	front_center: Vector3,
+	rear_center: Vector3
+) -> void:
+	var left_center := (
+		descriptor.front_left_position
+		+ descriptor.rear_left_position
+	) * 0.5
+	var right_center := (
+		descriptor.front_right_position
+		+ descriptor.rear_right_position
+	) * 0.5
+	match descriptor.entry_type:
+		JetSkiTypes.LandingEntryType.FLAT:
+			descriptor.secondary_a_offset = _landing_contact_offset(
+				left_center,
+				descriptor.position
+			)
+			descriptor.secondary_b_offset = _landing_contact_offset(
+				right_center,
+				descriptor.position
+			)
+			descriptor.secondary_weights = Vector2(0.18, 0.18)
+		JetSkiTypes.LandingEntryType.FRONT:
+			descriptor.secondary_a_offset = _landing_contact_offset(
+				rear_center,
+				descriptor.position
+			)
+			descriptor.secondary_weights.x = 0.14
+		JetSkiTypes.LandingEntryType.REAR:
+			descriptor.secondary_a_offset = _landing_contact_offset(
+				front_center,
+				descriptor.position
+			)
+			descriptor.secondary_weights.x = 0.14
+		JetSkiTypes.LandingEntryType.LEFT:
+			descriptor.secondary_a_offset = _landing_contact_offset(
+				right_center,
+				descriptor.position
+			)
+			descriptor.secondary_weights.x = 0.08
+		JetSkiTypes.LandingEntryType.RIGHT:
+			descriptor.secondary_a_offset = _landing_contact_offset(
+				left_center,
+				descriptor.position
+			)
+			descriptor.secondary_weights.x = 0.08
+		JetSkiTypes.LandingEntryType.DIAGONAL:
+			_configure_diagonal_landing_contacts(descriptor)
+		JetSkiTypes.LandingEntryType.SINGLE_POINT:
+			_configure_single_point_landing_contacts(descriptor)
+
+
+func _configure_diagonal_landing_contacts(
+	descriptor: LandingImpactDescriptor
+) -> void:
+	var first_position := descriptor.front_left_position
+	var second_position := descriptor.rear_right_position
+	if (
+		descriptor.contact_mask
+			& (
+				JetSkiController.FRONT_RIGHT_CONTACT_MASK
+				| JetSkiController.REAR_LEFT_CONTACT_MASK
+			)
+	) != 0:
+		first_position = descriptor.front_right_position
+		second_position = descriptor.rear_left_position
+	descriptor.secondary_a_offset = _landing_contact_offset(
+		first_position,
+		descriptor.position
+	)
+	descriptor.secondary_b_offset = _landing_contact_offset(
+		second_position,
+		descriptor.position
+	)
+	descriptor.secondary_weights = Vector2(0.12, 0.09)
+
+
+func _configure_single_point_landing_contacts(
+	descriptor: LandingImpactDescriptor
+) -> void:
+	var longitudinal_neighbor := descriptor.rear_left_position
+	var lateral_neighbor := descriptor.front_right_position
+	if (
+		descriptor.contact_mask
+			& JetSkiController.FRONT_RIGHT_CONTACT_MASK
+	) != 0:
+		longitudinal_neighbor = descriptor.rear_right_position
+		lateral_neighbor = descriptor.front_left_position
+	elif (
+		descriptor.contact_mask
+			& JetSkiController.REAR_LEFT_CONTACT_MASK
+	) != 0:
+		longitudinal_neighbor = descriptor.front_left_position
+		lateral_neighbor = descriptor.rear_right_position
+	elif (
+		descriptor.contact_mask
+			& JetSkiController.REAR_RIGHT_CONTACT_MASK
+	) != 0:
+		longitudinal_neighbor = descriptor.front_right_position
+		lateral_neighbor = descriptor.rear_left_position
+	descriptor.secondary_a_offset = _landing_contact_offset(
+		longitudinal_neighbor,
+		descriptor.position
+	)
+	descriptor.secondary_b_offset = _landing_contact_offset(
+		lateral_neighbor,
+		descriptor.position
+	)
+	descriptor.secondary_weights = Vector2(0.10, 0.06)
+
+
+func _landing_contact_offset(
+	contact_position: Vector3,
+	landing_position: Vector3
+) -> Vector2:
+	if not contact_position.is_finite() or not landing_position.is_finite():
+		return Vector2.ZERO
+	return Vector2(
+		contact_position.x - landing_position.x,
+		contact_position.z - landing_position.z
+	)
 
 
 func _on_navigation_system_water_exited() -> void:
