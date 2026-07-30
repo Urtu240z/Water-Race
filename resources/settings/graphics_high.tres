@@ -12,7 +12,6 @@ use_taa = false
 anisotropic_filtering = 3
 texture_mipmap_bias = 0.0
 mesh_lod_bias = 1.0
-max_fps = 60
 built_in_ssr = false
 ssao = true
 ssao_radius = 2.5

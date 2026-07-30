@@ -58,6 +58,7 @@ var _application_revision: int = 0
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	Engine.max_fps = 0
 	is_steam_deck = _detect_steam_deck()
 	_load_profiles()
 	current_quality = _get_startup_quality()
@@ -150,19 +151,7 @@ func _get_startup_quality() -> int:
 	var command_line_quality := _get_command_line_quality()
 	if command_line_quality >= 0:
 		return command_line_quality
-	var config := ConfigFile.new()
-	if not FileAccess.file_exists(_settings_path):
-		return Quality.MEDIUM if is_steam_deck else Quality.HIGH
-	if config.load(_settings_path) != OK:
-		return Quality.MEDIUM
-	var stored_value: Variant = config.get_value(
-		SETTINGS_SECTION,
-		SETTINGS_KEY,
-		Quality.MEDIUM
-	)
-	if typeof(stored_value) != TYPE_INT or not _is_valid_quality(stored_value as int):
-		return Quality.MEDIUM
-	return stored_value as int
+	return Quality.HIGH
 
 
 func _save_quality() -> void:
@@ -378,7 +367,7 @@ func _apply_viewport_settings(profile: GraphicsQualityProfile) -> void:
 		profile.directional_shadow_atlas_size,
 		true
 	)
-	Engine.max_fps = profile.max_fps
+	Engine.max_fps = 0
 
 
 func _apply_environment_settings(profile: GraphicsQualityProfile) -> void:

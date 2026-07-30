@@ -18,6 +18,10 @@ func _run() -> void:
 	var manager := root.get_node_or_null("GraphicsQualityManager")
 	var packed := load(MAIN_SCENE) as PackedScene
 	_expect(manager != null, "El manager específico existe.")
+	_expect(
+		Engine.max_fps == 0,
+		"El juego arranca sin limitador interno de FPS."
+	)
 	_expect(packed != null, "La escena principal carga.")
 	if manager == null or packed == null:
 		_finish()
@@ -189,9 +193,14 @@ func _apply_and_validate(
 ) -> void:
 	var before: Dictionary = manager.get_graphics_quality_debug_status()
 	var before_rebuilds := _surface_rebuild_count(before)
+	Engine.max_fps = 37
 	manager.set_quality(level, false)
 	while manager.is_applying:
 		await manager.graphics_quality_applied
+	_expect(
+		Engine.max_fps == 0,
+		"El nivel %d mantiene los FPS internos ilimitados." % level
+	)
 	var status: Dictionary = manager.get_graphics_quality_debug_status()
 	_expect(
 		_group_count(status, "ocean") == 1

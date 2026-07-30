@@ -15,8 +15,12 @@
 [ext_resource type="ArrayMesh" path="res://assets/3D/Rider/skins/Rider01/runtime/Rider01_Mesh_06_Mesh.res" id="13_rider01_mesh_06"]
 [ext_resource type="ArrayMesh" uid="uid://dnndcgjeqycgw" path="res://assets/3D/Rider/skins/Rider04/runtime/Rider04_Body_Mesh.res" id="14_rider04_body_mesh"]
 [ext_resource type="Skin" path="res://assets/3D/Rider/skins/Rider04/runtime/Rider04_Skin.res" id="15_rider04_skin"]
+[ext_resource type="ArrayMesh" path="res://assets/3D/Rider/skins/Rider05/runtime/Rider05_Body_Mesh.res" id="16_rider05_body_mesh"]
+[ext_resource type="Skin" path="res://assets/3D/Rider/skins/Rider05/runtime/Rider05_Skin.res" id="17_rider05_skin"]
+[ext_resource type="ArrayMesh" path="res://assets/3D/Rider/skins/Rider06/runtime/Rider06_Body_Mesh.res" id="18_rider06_body_mesh"]
+[ext_resource type="Skin" path="res://assets/3D/Rider/skins/Rider06/runtime/Rider06_Skin.res" id="19_rider06_skin"]
 
-[node name="RiderRig" type="Node3D" unique_id=553895823]
+[node name="RiderRig" type="Node3D" unique_id=553895823 groups=["rider_selectable"]]
 script = ExtResource("1_4yq34")
 rider_skin = 2
 
@@ -93,6 +97,18 @@ skeleton = NodePath("..")
 [node name="Rider04_Body" type="MeshInstance3D" parent="RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D" index="8" unique_id=1837524736 groups=["rider_skin_rider04"]]
 mesh = ExtResource("14_rider04_body_mesh")
 skin = ExtResource("15_rider04_skin")
+skeleton = NodePath("..")
+
+[node name="Rider05_Body" type="MeshInstance3D" parent="RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D" index="9" groups=["rider_skin_rider05"]]
+visible = false
+mesh = ExtResource("16_rider05_body_mesh")
+skin = ExtResource("17_rider05_skin")
+skeleton = NodePath("..")
+
+[node name="Rider06_Body" type="MeshInstance3D" parent="RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D" index="10" groups=["rider_skin_rider06"]]
+visible = false
+mesh = ExtResource("18_rider06_body_mesh")
+skin = ExtResource("19_rider06_skin")
 skeleton = NodePath("..")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=785147574]

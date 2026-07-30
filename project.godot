@@ -17,14 +17,14 @@ boot_splash/bg_color=Color(0, 0, 0, 1)
 boot_splash/show_image=false
 config/icon="res://icon.svg"
 
+[autoload]
+
+GraphicsQualityManager="*res://scripts/settings/graphics_quality_manager.gd"
+
 [display]
 
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
-
-[autoload]
-
-GraphicsQualityManager="*res://scripts/settings/graphics_quality_manager.gd"
 
 [input]
 

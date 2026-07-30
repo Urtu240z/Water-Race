@@ -10,7 +10,6 @@ extends Resource
 @export var anisotropic_filtering: Viewport.AnisotropicFiltering = Viewport.ANISOTROPY_8X
 @export_range(-2.0, 2.0, 0.01) var texture_mipmap_bias: float = 0.0
 @export_range(0.0, 4.0, 0.01) var mesh_lod_bias: float = 1.0
-@export_range(0, 1000, 1) var max_fps: int = 60
 
 @export_group("Environment")
 @export var built_in_ssr: bool = false

@@ -15,6 +15,8 @@ enum RiderSkin {
 	RACER = 1,
 	RIDER01 = 2,
 	RIDER04 = 3,
+	RIDER05 = 4,
+	RIDER06 = 5,
 }
 
 @export var rider_skin: RiderSkin = RiderSkin.BOT:
@@ -46,10 +48,7 @@ var _mounted_lean_blends_valid: bool = false
 var _automatic_turn_blend: float = 0.0
 var _manual_roll_blend: float = 0.0
 var _manual_pitch_blend: float = 0.0
-var _bot_skin_meshes: Array[MeshInstance3D] = []
-var _racer_skin_meshes: Array[MeshInstance3D] = []
-var _rider01_skin_meshes: Array[MeshInstance3D] = []
-var _rider04_skin_meshes: Array[MeshInstance3D] = []
+var _skin_meshes_by_value: Dictionary = {}
 var _last_missing_skin_warning: int = -1
 
 
@@ -75,6 +74,50 @@ func set_mounted_pose_enabled(enabled: bool) -> void:
 
 func set_rider_skin(value: RiderSkin) -> void:
 	rider_skin = value
+
+
+static func get_rider_skin_options() -> Array[Dictionary]:
+	var options: Array[Dictionary] = []
+	for skin_name_variant: Variant in RiderSkin.keys():
+		var skin_name := StringName(skin_name_variant)
+		options.append(
+			{
+				"id": skin_name,
+				"display_name": _format_rider_skin_name(skin_name),
+				"value": int(RiderSkin[skin_name]),
+			}
+		)
+	return options
+
+
+static func get_rider_skin_id(value: int) -> StringName:
+	for skin_name_variant: Variant in RiderSkin.keys():
+		var skin_name := StringName(skin_name_variant)
+		if int(RiderSkin[skin_name]) == value:
+			return skin_name
+	return &""
+
+
+static func find_rider_skin_by_id(
+	skin_id: StringName,
+	fallback: int = RiderSkin.BOT
+) -> int:
+	if RiderSkin.has(skin_id):
+		return int(RiderSkin[skin_id])
+	return fallback
+
+
+func get_available_rider_skin_options() -> Array[Dictionary]:
+	var options: Array[Dictionary] = []
+	for option: Dictionary in get_rider_skin_options():
+		if is_rider_skin_available(int(option["value"])):
+			options.append(option)
+	return options
+
+
+func is_rider_skin_available(value: int) -> bool:
+	var meshes := _skin_meshes_by_value.get(value, []) as Array
+	return _skin_meshes_valid(meshes)
 
 
 func set_automatic_turn_blend(value: float) -> void:
@@ -113,10 +156,9 @@ func get_skeleton() -> Skeleton3D:
 
 
 func _resolve_rider_skin_meshes() -> void:
-	_bot_skin_meshes.clear()
-	_racer_skin_meshes.clear()
-	_rider01_skin_meshes.clear()
-	_rider04_skin_meshes.clear()
+	_skin_meshes_by_value.clear()
+	for skin_value_variant: Variant in RiderSkin.values():
+		_skin_meshes_by_value[int(skin_value_variant)] = []
 	var rider_bot := get_node_or_null("RiderModelRoot/Rider_Bot")
 	if rider_bot == null:
 		push_warning("RiderRig cannot resolve RiderModelRoot/Rider_Bot.")
@@ -126,14 +168,12 @@ func _resolve_rider_skin_meshes() -> void:
 		var current: Node = pending.pop_back() as Node
 		if current is MeshInstance3D:
 			var mesh_instance := current as MeshInstance3D
-			if mesh_instance.is_in_group(&"rider_skin_racer"):
-				_racer_skin_meshes.append(mesh_instance)
-			elif mesh_instance.is_in_group(&"rider_skin_rider01"):
-				_rider01_skin_meshes.append(mesh_instance)
-			elif mesh_instance.is_in_group(&"rider_skin_rider04"):
-				_rider04_skin_meshes.append(mesh_instance)
-			elif mesh_instance.mesh != null:
-				_bot_skin_meshes.append(mesh_instance)
+			var skin_value := _get_mesh_rider_skin(mesh_instance)
+			if skin_value >= 0:
+				var skin_meshes := (
+					_skin_meshes_by_value[skin_value] as Array
+				)
+				skin_meshes.append(mesh_instance)
 		for child: Node in current.get_children():
 			pending.append(child)
 
@@ -141,54 +181,70 @@ func _resolve_rider_skin_meshes() -> void:
 func _apply_rider_skin() -> void:
 	if not is_node_ready():
 		return
-	var racer_valid := _skin_meshes_valid(_racer_skin_meshes)
-	var rider01_valid := _skin_meshes_valid(_rider01_skin_meshes)
-	var rider04_valid := _skin_meshes_valid(_rider04_skin_meshes)
-	var show_racer := rider_skin == RiderSkin.RACER and racer_valid
-	var show_rider01 := (
-		rider_skin == RiderSkin.RIDER01 and rider01_valid
-	)
-	var show_rider04 := (
-		rider_skin == RiderSkin.RIDER04 and rider04_valid
-	)
-	var missing_skin_name := ""
-	if rider_skin == RiderSkin.RACER and not racer_valid:
-		missing_skin_name = "Racer"
-	elif rider_skin == RiderSkin.RIDER01 and not rider01_valid:
-		missing_skin_name = "Rider01"
-	elif rider_skin == RiderSkin.RIDER04 and not rider04_valid:
-		missing_skin_name = "Rider04"
-	if missing_skin_name.is_empty():
+	var selected_value := int(rider_skin)
+	var displayed_value := selected_value
+	if not is_rider_skin_available(selected_value):
+		displayed_value = RiderSkin.BOT
+	if displayed_value == selected_value:
 		_last_missing_skin_warning = -1
-	elif _last_missing_skin_warning != int(rider_skin):
-		_last_missing_skin_warning = int(rider_skin)
+	elif _last_missing_skin_warning != selected_value:
+		_last_missing_skin_warning = selected_value
 		push_warning(
 			"%s skin resources are missing; RiderRig is showing BOT."
-			% missing_skin_name
+			% _format_rider_skin_name(get_rider_skin_id(selected_value))
 		)
-	for mesh_instance in _bot_skin_meshes:
-		mesh_instance.visible = (
-			not show_racer
-			and not show_rider01
-			and not show_rider04
-		)
-	for mesh_instance in _racer_skin_meshes:
-		mesh_instance.visible = show_racer
-	for mesh_instance in _rider01_skin_meshes:
-		mesh_instance.visible = show_rider01
-	for mesh_instance in _rider04_skin_meshes:
-		mesh_instance.visible = show_rider04
+	for skin_value_variant: Variant in _skin_meshes_by_value:
+		var skin_value := int(skin_value_variant)
+		var skin_meshes := _skin_meshes_by_value[skin_value] as Array
+		for mesh_variant: Variant in skin_meshes:
+			var mesh_instance := mesh_variant as MeshInstance3D
+			if mesh_instance != null:
+				mesh_instance.visible = skin_value == displayed_value
 
 
 func _skin_meshes_valid(
-	meshes: Array[MeshInstance3D]
+	meshes: Array
 ) -> bool:
 	if meshes.is_empty():
 		return false
-	for mesh_instance in meshes:
+	for mesh_variant: Variant in meshes:
+		var mesh_instance := mesh_variant as MeshInstance3D
+		if mesh_instance == null:
+			return false
 		if mesh_instance.mesh == null or mesh_instance.skin == null:
 			return false
 	return true
+
+
+func _get_mesh_rider_skin(mesh_instance: MeshInstance3D) -> int:
+	for skin_name_variant: Variant in RiderSkin.keys():
+		var skin_name := StringName(skin_name_variant)
+		if skin_name == &"BOT":
+			continue
+		var skin_group := StringName(
+			"rider_skin_%s" % String(skin_name).to_lower()
+		)
+		if mesh_instance.is_in_group(skin_group):
+			return int(RiderSkin[skin_name])
+	if mesh_instance.mesh != null:
+		return RiderSkin.BOT
+	return -1
+
+
+static func _format_rider_skin_name(skin_id: StringName) -> String:
+	var raw_name := String(skin_id).to_lower().replace("_", " ")
+	var formatted_name := ""
+	for character_index: int in raw_name.length():
+		var character := raw_name.substr(character_index, 1)
+		if (
+			character_index > 0
+			and character.is_valid_int()
+			and not raw_name.substr(character_index - 1, 1).is_valid_int()
+			and not formatted_name.ends_with(" ")
+		):
+			formatted_name += " "
+		formatted_name += character
+	return formatted_name.capitalize()
 
 
 func _apply_animation_parameters() -> void:

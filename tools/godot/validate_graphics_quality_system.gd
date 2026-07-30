@@ -13,6 +13,10 @@ func _initialize() -> void:
 func _run() -> void:
 	var manager := root.get_node_or_null("GraphicsQualityManager")
 	_expect(manager != null, "GraphicsQualityManager está registrado como Autoload.")
+	_expect(
+		Engine.max_fps == 0,
+		"El juego arranca sin limitador interno de FPS."
+	)
 	var packed := load(MAIN_SCENE) as PackedScene
 	_expect(packed != null, "La escena principal carga con el menú reutilizable.")
 	if manager == null or packed == null:
@@ -98,8 +102,13 @@ func _validate_low(
 	omni_light: OmniLight3D,
 	reflection_probe: ReflectionProbe
 ) -> void:
+	Engine.max_fps = 37
 	manager.set_quality(manager.Quality.LOW, false)
 	var environment := world_environment.environment
+	_expect(
+		Engine.max_fps == 0,
+		"LOW elimina cualquier limitador interno previo."
+	)
 	_expect(_near(viewport.scaling_3d_scale, 0.5), "LOW aplica escala 3D 0.50.")
 	_expect(
 		viewport.scaling_3d_mode == Viewport.SCALING_3D_MODE_FSR,
@@ -138,8 +147,13 @@ func _validate_medium(
 	omni_light: OmniLight3D,
 	reflection_probe: ReflectionProbe
 ) -> void:
+	Engine.max_fps = 37
 	manager.set_quality(manager.Quality.MEDIUM, false)
 	var environment := world_environment.environment
+	_expect(
+		Engine.max_fps == 0,
+		"MEDIUM elimina cualquier limitador interno previo."
+	)
 	_expect(_near(viewport.scaling_3d_scale, 0.67), "MEDIUM aplica escala 3D 0.67.")
 	_expect(
 		viewport.screen_space_aa == Viewport.SCREEN_SPACE_AA_SMAA,
@@ -177,8 +191,13 @@ func _validate_high(
 	omni_light: OmniLight3D,
 	reflection_probe: ReflectionProbe
 ) -> void:
+	Engine.max_fps = 37
 	manager.set_quality(manager.Quality.HIGH, false)
 	var environment := world_environment.environment
+	_expect(
+		Engine.max_fps == 0,
+		"HIGH elimina cualquier limitador interno previo."
+	)
 	var expected_scale := 0.77 if manager.is_steam_deck else 1.0
 	_expect(
 		_near(viewport.scaling_3d_scale, expected_scale),
@@ -249,6 +268,10 @@ func _validate_pause_menu(manager: Node, pause_menu: CanvasLayer) -> void:
 		"El botón aplica LOW sin reanudar el juego."
 	)
 	_expect(
+		Engine.max_fps == 0,
+		"El cambio desde el menú mantiene los FPS internos ilimitados."
+	)
+	_expect(
 		low_button.button_pressed
 		and pause_menu.get_viewport().gui_get_focus_owner() == low_button,
 		"El botón muestra la selección y conserva el foco."
@@ -267,6 +290,10 @@ func _validate_pause_menu(manager: Node, pause_menu: CanvasLayer) -> void:
 	Input.parse_input_event(close_event)
 	await process_frame
 	_expect(not pause_menu.visible and not paused, "La acción pause_menu cierra y reanuda.")
+	_expect(
+		not bool(manager.restart_required),
+		"Los presets y el menú no requieren reiniciar."
+	)
 
 
 func _validate_command_line_overrides(manager: Node) -> void:
@@ -307,31 +334,32 @@ func _validate_persistence(manager: Node) -> void:
 	if FileAccess.file_exists(test_path):
 		DirAccess.remove_absolute(absolute_test_path)
 	manager.set("_settings_path", test_path)
-	manager.set_quality(manager.Quality.HIGH, true)
+	_expect(
+		manager.current_quality == manager.Quality.HIGH,
+		"El arranque normal selecciona siempre HIGH."
+	)
+	manager.set_quality(manager.Quality.LOW, true)
 	var config := ConfigFile.new()
 	var load_error := config.load(test_path)
 	_expect(
 		load_error == OK
-		and config.get_value("graphics", "quality", -1) == manager.Quality.HIGH,
+		and config.get_value("graphics", "quality", -1) == manager.Quality.LOW,
 		"La selección se guarda como [graphics] quality."
 	)
 	_expect(
 		manager.call("_get_startup_quality") == manager.Quality.HIGH,
-		"Una selección guardada se recupera al arrancar."
+		"Una selección LOW guardada no sustituye HIGH al arrancar."
 	)
 	config.set_value("graphics", "quality", "corrupt")
 	config.save(test_path)
 	_expect(
-		manager.call("_get_startup_quality") == manager.Quality.MEDIUM,
-		"Un valor corrupto vuelve a MEDIUM."
+		manager.call("_get_startup_quality") == manager.Quality.HIGH,
+		"Un archivo corrupto tampoco sustituye HIGH al arrancar."
 	)
 	DirAccess.remove_absolute(absolute_test_path)
-	var expected_default: int = (
-		manager.Quality.MEDIUM if manager.is_steam_deck else manager.Quality.HIGH
-	)
 	_expect(
-		manager.call("_get_startup_quality") == expected_default,
-		"La primera ejecución usa el preset predeterminado de la plataforma."
+		manager.call("_get_startup_quality") == manager.Quality.HIGH,
+		"La primera ejecución usa HIGH en todas las plataformas."
 	)
 	manager.set("_settings_path", original_path)
 
