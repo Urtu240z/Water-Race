@@ -10,10 +10,11 @@ const MOUNTED_LEAN_ADD_NODES: Array[StringName] = [
 ]
 
 enum RiderSkin {
-	# Serialized values: BOT = 0, RACER = 1, RIDER01 = 2.
-	BOT,
-	RACER,
-	RIDER01,
+	# Fixed serialized values. Do not reorder or renumber existing skins.
+	BOT = 0,
+	RACER = 1,
+	RIDER01 = 2,
+	RIDER04 = 3,
 }
 
 @export var rider_skin: RiderSkin = RiderSkin.BOT:
@@ -48,6 +49,8 @@ var _manual_pitch_blend: float = 0.0
 var _bot_skin_meshes: Array[MeshInstance3D] = []
 var _racer_skin_meshes: Array[MeshInstance3D] = []
 var _rider01_skin_meshes: Array[MeshInstance3D] = []
+var _rider04_skin_meshes: Array[MeshInstance3D] = []
+var _last_missing_skin_warning: int = -1
 
 
 func _ready() -> void:
@@ -113,6 +116,7 @@ func _resolve_rider_skin_meshes() -> void:
 	_bot_skin_meshes.clear()
 	_racer_skin_meshes.clear()
 	_rider01_skin_meshes.clear()
+	_rider04_skin_meshes.clear()
 	var rider_bot := get_node_or_null("RiderModelRoot/Rider_Bot")
 	if rider_bot == null:
 		push_warning("RiderRig cannot resolve RiderModelRoot/Rider_Bot.")
@@ -126,6 +130,8 @@ func _resolve_rider_skin_meshes() -> void:
 				_racer_skin_meshes.append(mesh_instance)
 			elif mesh_instance.is_in_group(&"rider_skin_rider01"):
 				_rider01_skin_meshes.append(mesh_instance)
+			elif mesh_instance.is_in_group(&"rider_skin_rider04"):
+				_rider04_skin_meshes.append(mesh_instance)
 			elif mesh_instance.mesh != null:
 				_bot_skin_meshes.append(mesh_instance)
 		for child: Node in current.get_children():
@@ -137,24 +143,41 @@ func _apply_rider_skin() -> void:
 		return
 	var racer_valid := _skin_meshes_valid(_racer_skin_meshes)
 	var rider01_valid := _skin_meshes_valid(_rider01_skin_meshes)
+	var rider04_valid := _skin_meshes_valid(_rider04_skin_meshes)
 	var show_racer := rider_skin == RiderSkin.RACER and racer_valid
 	var show_rider01 := (
 		rider_skin == RiderSkin.RIDER01 and rider01_valid
 	)
+	var show_rider04 := (
+		rider_skin == RiderSkin.RIDER04 and rider04_valid
+	)
+	var missing_skin_name := ""
 	if rider_skin == RiderSkin.RACER and not racer_valid:
+		missing_skin_name = "Racer"
+	elif rider_skin == RiderSkin.RIDER01 and not rider01_valid:
+		missing_skin_name = "Rider01"
+	elif rider_skin == RiderSkin.RIDER04 and not rider04_valid:
+		missing_skin_name = "Rider04"
+	if missing_skin_name.is_empty():
+		_last_missing_skin_warning = -1
+	elif _last_missing_skin_warning != int(rider_skin):
+		_last_missing_skin_warning = int(rider_skin)
 		push_warning(
-			"Racer skin resources are missing; RiderRig is showing BOT."
-		)
-	if rider_skin == RiderSkin.RIDER01 and not rider01_valid:
-		push_warning(
-			"Rider01 skin resources are missing; RiderRig is showing BOT."
+			"%s skin resources are missing; RiderRig is showing BOT."
+			% missing_skin_name
 		)
 	for mesh_instance in _bot_skin_meshes:
-		mesh_instance.visible = not show_racer and not show_rider01
+		mesh_instance.visible = (
+			not show_racer
+			and not show_rider01
+			and not show_rider04
+		)
 	for mesh_instance in _racer_skin_meshes:
 		mesh_instance.visible = show_racer
 	for mesh_instance in _rider01_skin_meshes:
 		mesh_instance.visible = show_rider01
+	for mesh_instance in _rider04_skin_meshes:
+		mesh_instance.visible = show_rider04
 
 
 func _skin_meshes_valid(

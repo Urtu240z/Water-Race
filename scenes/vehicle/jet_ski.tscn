@@ -19,13 +19,13 @@
 [ext_resource type="AudioStream" uid="uid://41gs20c2usbp" path="res://assets/audio/Running_Water_2.ogg" id="17_running_2"]
 [ext_resource type="AudioStream" uid="uid://bk01pfc1hsy55" path="res://assets/audio/Running_Water_3.ogg" id="18_running_3"]
 [ext_resource type="AudioStream" uid="uid://4a4u6ec21n5a" path="res://assets/audio/Running_Water_4.ogg" id="19_running_4"]
-[ext_resource type="Script" path="res://scripts/vehicle/systems/jet_ski_input_system.gd" id="20_input_system"]
-[ext_resource type="Script" path="res://scripts/vehicle/systems/jet_ski_water_physics_system.gd" id="21_water_physics_system"]
-[ext_resource type="Script" path="res://scripts/vehicle/systems/jet_ski_navigation_system.gd" id="22_navigation_system"]
-[ext_resource type="Script" path="res://scripts/vehicle/systems/jet_ski_drive_system.gd" id="23_drive_system"]
-[ext_resource type="Script" path="res://scripts/vehicle/systems/jet_ski_rider_dynamics_system.gd" id="24_rider_dynamics_system"]
-[ext_resource type="Script" path="res://scripts/vehicle/systems/jet_ski_submarine_system.gd" id="25_submarine_system"]
-[ext_resource type="Script" path="res://scripts/vehicle/systems/jet_ski_trick_system.gd" id="26_trick_system"]
+[ext_resource type="Script" uid="uid://dws0h1ur7ader" path="res://scripts/vehicle/systems/jet_ski_input_system.gd" id="20_input_system"]
+[ext_resource type="Script" uid="uid://dxfvny0douflh" path="res://scripts/vehicle/systems/jet_ski_water_physics_system.gd" id="21_water_physics_system"]
+[ext_resource type="Script" uid="uid://di5h50ifw1vmd" path="res://scripts/vehicle/systems/jet_ski_navigation_system.gd" id="22_navigation_system"]
+[ext_resource type="Script" uid="uid://ri7meu32mp23" path="res://scripts/vehicle/systems/jet_ski_drive_system.gd" id="23_drive_system"]
+[ext_resource type="Script" uid="uid://d00oqe3fqhubf" path="res://scripts/vehicle/systems/jet_ski_rider_dynamics_system.gd" id="24_rider_dynamics_system"]
+[ext_resource type="Script" uid="uid://dd35vwelqjkpb" path="res://scripts/vehicle/systems/jet_ski_submarine_system.gd" id="25_submarine_system"]
+[ext_resource type="Script" uid="uid://t7bh13fqh7dp" path="res://scripts/vehicle/systems/jet_ski_trick_system.gd" id="26_trick_system"]
 
 [sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_hull"]
 points = PackedVector3Array(0, 0.22, -1.55, 0.071, 0.185, -1.55, 0.1, 0.1, -1.55, 0.071, 0.015, -1.55, 0, -0.02, -1.55, -0.071, 0.015, -1.55, -0.1, 0.1, -1.55, -0.071, 0.185, -1.55, 0, 0.28, -1.15, 0.325, 0.198, -1.15, 0.46, 0, -1.15, 0.325, -0.198, -1.15, 0, -0.28, -1.15, -0.325, -0.198, -1.15, -0.46, 0, -1.15, -0.325, 0.198, -1.15, 0, 0.3, 0.55, 0.424, 0.212, 0.55, 0.6, 0, 0.55, 0.424, -0.212, 0.55, 0, -0.3, 0.55, -0.424, -0.212, 0.55, -0.6, 0, 0.55, -0.424, 0.212, 0.55, 0, 0.26, 1.55, 0.311, 0.19, 1.55, 0.44, 0.02, 1.55, 0.311, -0.15, 1.55, 0, -0.22, 1.55, -0.311, -0.15, 1.55, -0.44, 0.02, 1.55, -0.311, 0.19, 1.55)
@@ -39,27 +39,27 @@ contact_monitor = true
 max_contacts_reported = 8
 script = ExtResource("1_controller")
 
-[node name="Systems" type="Node" parent="."]
+[node name="Systems" type="Node" parent="." unique_id=388330452]
 
-[node name="InputSystem" type="Node" parent="Systems"]
+[node name="InputSystem" type="Node" parent="Systems" unique_id=885842622]
 script = ExtResource("20_input_system")
 
-[node name="WaterPhysicsSystem" type="Node" parent="Systems"]
+[node name="WaterPhysicsSystem" type="Node" parent="Systems" unique_id=981548732]
 script = ExtResource("21_water_physics_system")
 
-[node name="NavigationSystem" type="Node" parent="Systems"]
+[node name="NavigationSystem" type="Node" parent="Systems" unique_id=2090706970]
 script = ExtResource("22_navigation_system")
 
-[node name="DriveSystem" type="Node" parent="Systems"]
+[node name="DriveSystem" type="Node" parent="Systems" unique_id=769548430]
 script = ExtResource("23_drive_system")
 
-[node name="RiderDynamicsSystem" type="Node" parent="Systems"]
+[node name="RiderDynamicsSystem" type="Node" parent="Systems" unique_id=1452568871]
 script = ExtResource("24_rider_dynamics_system")
 
-[node name="SubmarineSystem" type="Node" parent="Systems"]
+[node name="SubmarineSystem" type="Node" parent="Systems" unique_id=1064117230]
 script = ExtResource("25_submarine_system")
 
-[node name="TrickSystem" type="Node" parent="Systems"]
+[node name="TrickSystem" type="Node" parent="Systems" unique_id=1720461229]
 script = ExtResource("26_trick_system")
 
 [node name="EngineAudio" type="AudioStreamPlayer3D" parent="." unique_id=1603778743]
@@ -113,7 +113,7 @@ max_distance = 85.0
 doppler_tracking = 2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=2026230859]
-visible = false
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1129114, 0)
 shape = SubResource("ConvexPolygonShape3D_hull")
 
 [node name="VisualRoot" type="Node3D" parent="." unique_id=1832404346]

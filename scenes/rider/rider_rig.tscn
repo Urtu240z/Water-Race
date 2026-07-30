@@ -13,6 +13,8 @@
 [ext_resource type="ArrayMesh" uid="uid://dy8gconewht46" path="res://assets/3D/Rider/skins/Rider01/runtime/Rider01_Mesh_04_Mesh.res" id="11_rider01_mesh_04"]
 [ext_resource type="ArrayMesh" uid="uid://h252y7sabnlg" path="res://assets/3D/Rider/skins/Rider01/runtime/Rider01_Mesh_05_Mesh.res" id="12_rider01_mesh_05"]
 [ext_resource type="ArrayMesh" path="res://assets/3D/Rider/skins/Rider01/runtime/Rider01_Mesh_06_Mesh.res" id="13_rider01_mesh_06"]
+[ext_resource type="ArrayMesh" path="res://assets/3D/Rider/skins/Rider04/runtime/Rider04_Body_Mesh.res" id="14_rider04_body_mesh"]
+[ext_resource type="Skin" path="res://assets/3D/Rider/skins/Rider04/runtime/Rider04_Skin.res" id="15_rider04_skin"]
 
 [node name="RiderRig" type="Node3D" unique_id=553895823]
 script = ExtResource("1_4yq34")
@@ -80,6 +82,12 @@ skeleton = NodePath("..")
 [node name="Rider01_Mesh_06" type="MeshInstance3D" parent="RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D" index="7" unique_id=816370644 groups=["rider_skin_rider01"]]
 mesh = ExtResource("13_rider01_mesh_06")
 skin = ExtResource("7_rider01_skin")
+skeleton = NodePath("..")
+
+[node name="Rider04_Body" type="MeshInstance3D" parent="RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D" index="8" groups=["rider_skin_rider04"]]
+visible = false
+mesh = ExtResource("14_rider04_body_mesh")
+skin = ExtResource("15_rider04_skin")
 skeleton = NodePath("..")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=785147574]
