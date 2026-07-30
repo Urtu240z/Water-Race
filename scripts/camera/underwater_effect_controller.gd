@@ -163,6 +163,8 @@ var _crossing_transition: WaterCrossingTransition = (
 )
 var _crossing_transition_elapsed: float = 0.0
 var _crossing_transition_progress: float = 1.0
+var _base_wet_lens_zoom: float = 1.0
+var _base_wet_lens_warp_strength: float = 1.0
 
 
 func _ready() -> void:
@@ -177,8 +179,54 @@ func _ready() -> void:
 		if not Engine.is_editor_hint():
 			set_process(false)
 		return
+	_base_wet_lens_zoom = wet_lens_zoom
+	_base_wet_lens_warp_strength = wet_lens_warp_strength
 	_push_look_parameters(true)
 	call_deferred("_resolve_ocean")
+
+
+func set_graphics_quality(
+	_level: int,
+	profile: GraphicsQualityProfile
+) -> void:
+	if profile == null:
+		return
+	blur_strength = profile.underwater_blur_strength
+	blur_passes = profile.underwater_blur_passes
+	wet_lens_zoom = (
+		_base_wet_lens_zoom
+		* profile.underwater_wet_lens_zoom_multiplier
+	)
+	wet_lens_warp_strength = (
+		_base_wet_lens_warp_strength
+		* profile.underwater_wet_lens_warp_multiplier
+	)
+	if _bubble_particles != null:
+		_bubble_particles.amount = profile.underwater_entry_bubbles_amount
+	_push_look_parameters(true)
+	_update_fullscreen_compositor(_effect_strength)
+
+
+func get_graphics_quality_debug_status() -> Dictionary:
+	return {
+		"postprocess_enabled": (
+			_compositor_effect != null and _compositor_effect.enabled
+		),
+		"compositor_attached": (
+			is_instance_valid(_compositor_camera)
+			and _compositor_camera.compositor == _active_compositor
+		),
+		"blur_strength": blur_strength,
+		"blur_passes": blur_passes,
+		"entry_bubbles_amount": (
+			_bubble_particles.amount if _bubble_particles != null else 0
+		),
+		"effect_strength": _effect_strength,
+		"is_underwater": _is_underwater,
+		"transition_active": (
+			_crossing_transition != WaterCrossingTransition.NONE
+		),
+	}
 
 
 func _initialize_post_process() -> bool:
@@ -334,6 +382,9 @@ func _update_fullscreen_compositor(strength: float) -> void:
 		_crossing_transition != WaterCrossingTransition.NONE
 		and crossing_transition_strength > 0.0001
 	)
+	if active_strength <= 0.0001 and not transition_active:
+		_compositor_effect.enabled = false
+		return
 	if (
 		Engine.is_editor_hint()
 		and active_strength <= 0.0001

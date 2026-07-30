@@ -6,11 +6,17 @@ extends Resource
 @export_range(0, 256, 1) var rail_particles_per_side: int = 28
 @export_range(0, 512, 1) var jet_breakup_particles: int = 56
 @export_range(1, 500, 1) var impact_maximum_particles: int = 140
+@export_range(0.1, 8.0, 0.1) var spray_particle_amount_multiplier: float = 6.0
+@export_range(0.1, 8.0, 0.1) var impact_particle_amount_multiplier: float = 6.0
+@export_range(1, 4, 1) var impact_pool_size: int = 4
+@export_range(1, 500, 1) var target_maximum_impact_particles: int = 216
+@export_range(1, 120, 1) var particles_fixed_fps: int = 60
 
 @export_group("Wake")
 @export_range(8, 256, 1) var wake_maximum_points: int = 96
 @export_range(0.01, 0.25, 0.005, "suffix:s") var wake_mesh_update_interval: float = 0.05
 @export_range(0.1, 2.0, 0.05, "suffix:m") var wake_sample_distance: float = 0.28
+@export_range(0.1, 20.0, 0.1, "suffix:s") var wake_lifetime: float = 1.8
 
 @export_group("Jet Stream")
 @export_range(6, 64, 1) var jet_maximum_sections: int = 24
@@ -18,4 +24,4 @@ extends Resource
 
 @export_group("Optics")
 @export var refraction_enabled: bool = true
-
+@export var spray_sheet_enabled: bool = false

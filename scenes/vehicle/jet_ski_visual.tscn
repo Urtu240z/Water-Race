@@ -17,6 +17,7 @@
 [ext_resource type="Texture2D" uid="uid://d4avcd6orq7p" path="res://assets/materials/Metal003_1K-PNG/Metal003_1K-PNG_NormalGL.png" id="12_0wt3r"]
 [ext_resource type="Texture2D" uid="uid://ceifnwbwqobtl" path="res://assets/materials/Metal003_1K-PNG/Metal003_1K-PNG_Roughness.png" id="13_7ocrc"]
 [ext_resource type="PackedScene" uid="uid://bfsj1pnssopof" path="res://assets/3D/Vehicle/JetSki/NewJetSki_Hull.glb" id="16_2mnik"]
+[ext_resource type="Texture2D" uid="uid://cbrhhhp87iwf1" path="res://assets/3D/Vehicle/JetSki/NewJetSki_Hull_stand+up+jet+ski+3d+model_basecolor.jpg" id="17_hpoxi"]
 [ext_resource type="PackedScene" uid="uid://d4dvm3t7i4613" path="res://assets/3D/Vehicle/JetSki/NewJetSki_Handle.glb" id="18_hpoxi"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rtwgq"]
@@ -74,6 +75,17 @@ emission_enabled = true
 emission = Color(1, 0, 0, 1)
 emission_energy_multiplier = 15.4
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_w1gxf"]
+albedo_texture = ExtResource("17_hpoxi")
+metallic = 0.87
+metallic_specular = 0.59
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jp5tv"]
+albedo_texture = ExtResource("17_hpoxi")
+metallic = 0.71
+metallic_specular = 0.68
+roughness = 0.24
+
 [node name="JetSkiVisual" type="Node3D" unique_id=1835512432]
 script = ExtResource("1_controller")
 
@@ -102,6 +114,9 @@ surface_material_override/13 = SubResource("StandardMaterial3D_7a3ph")
 [node name="NewJetSki_Hull" parent="HullModel/Hull" unique_id=1418367438 instance=ExtResource("16_2mnik")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.023672342, -0.026179463)
 
+[node name="hull" parent="HullModel/Hull/NewJetSki_Hull" index="0" unique_id=175798407]
+surface_material_override/1 = SubResource("StandardMaterial3D_w1gxf")
+
 [node name="HandlePivot" type="Node3D" parent="." unique_id=1724927576]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.37203, 0.456944, -0.33678)
@@ -124,5 +139,10 @@ surface_material_override/5 = ExtResource("4_yv3c8")
 [node name="NewJetSki_Handle" parent="HandlePivot/HandleModel/Handle" unique_id=1303283041 instance=ExtResource("18_hpoxi")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.10748199, -0.43334556, 0.2595762)
 
+[node name="handle" parent="HandlePivot/HandleModel/Handle/NewJetSki_Handle" index="0" unique_id=1893010395]
+surface_material_override/0 = SubResource("StandardMaterial3D_jp5tv")
+
 [editable path="HullModel/Hull"]
+[editable path="HullModel/Hull/NewJetSki_Hull"]
 [editable path="HandlePivot/HandleModel/Handle"]
+[editable path="HandlePivot/HandleModel/Handle/NewJetSki_Handle"]

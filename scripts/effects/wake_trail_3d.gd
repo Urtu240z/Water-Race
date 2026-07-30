@@ -168,14 +168,27 @@ func configure(
 func configure_quality(
 	maximum_points: int,
 	update_interval: float,
-	sample_distance: float
+	sample_distance: float,
+	lifetime: float = wake_lifetime
 ) -> void:
 	wake_maximum_points = maxi(maximum_points, 8)
 	mesh_update_interval = clampf(update_interval, 0.01, 0.25)
 	wake_sample_minimum_distance = clampf(sample_distance, 0.1, 2.0)
+	wake_lifetime = maxf(lifetime, 0.1)
 	while _samples.size() > wake_maximum_points:
 		_samples.pop_front()
 	_mesh_dirty = true
+
+
+func get_graphics_quality_debug_status() -> Dictionary:
+	return {
+		"maximum_points": wake_maximum_points,
+		"sample_count": sample_count,
+		"mesh_update_interval": mesh_update_interval,
+		"sample_distance": wake_sample_minimum_distance,
+		"lifetime": wake_lifetime,
+		"vertex_count": vertex_count,
+	}
 
 
 func configure_foam(settings: WaterFoamSettings, noise_texture: Texture2D) -> void:

@@ -3,6 +3,7 @@ const int MAX_LANDING_IMPACTS = 4;
 
 group_uniforms LandingImpacts;
 uniform bool landing_impacts_enabled = true;
+uniform int landing_impact_effective_count : hint_range(1, 4, 1) = 4;
 uniform int landing_impact_active[4];
 uniform vec2 landing_impact_positions[4];
 uniform float landing_impact_start_times[4];
@@ -26,6 +27,7 @@ uniform float landing_impact_debug_multiplier : hint_range(1.0, 5.0, 0.25) = 2.5
 group_uniforms DirectionalWake;
 uniform bool directional_wake_enabled = true;
 uniform int directional_wake_active_count = 0;
+uniform int directional_wake_effective_count : hint_range(1, 16, 1) = 16;
 uniform vec2 directional_wake_start_positions[16];
 uniform vec2 directional_wake_end_positions[16];
 uniform float directional_wake_start_times[16];

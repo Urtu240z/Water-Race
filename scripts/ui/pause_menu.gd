@@ -100,7 +100,8 @@ func _on_quality_button_pressed(quality: int) -> void:
 	_applying_label.visible = true
 	await get_tree().process_frame
 	GraphicsQualityManager.set_quality(quality, true)
-	await get_tree().process_frame
+	while GraphicsQualityManager.is_applying:
+		await GraphicsQualityManager.graphics_quality_applied
 	_update_quality_display()
 	_applying_label.visible = false
 	_set_quality_buttons_disabled(false)

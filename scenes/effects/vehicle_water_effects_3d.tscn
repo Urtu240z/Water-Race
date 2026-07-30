@@ -18,7 +18,7 @@ shader_parameter/foam_core_strength = 0.72
 shader_parameter/foam_core_opacity = 0.62
 shader_parameter/foam_emission_strength = 0.16
 
-[node name="VehicleWaterEffects3D" type="Node3D"]
+[node name="VehicleWaterEffects3D" type="Node3D" groups=["graphics_quality_vehicle_effects"]]
 script = ExtResource("1_effects")
 
 [node name="BowDropletsLeft" type="GPUParticles3D" parent="."]

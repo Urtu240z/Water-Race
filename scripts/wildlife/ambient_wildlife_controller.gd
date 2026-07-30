@@ -112,11 +112,28 @@ var visible_wildlife_actor_count: int:
 	get:
 		return _visible_actor_count
 
+var quality_active_actor_count: int:
+	get:
+		return _quality_active_actor_count
+
+var animated_wildlife_actor_count: int:
+	get:
+		return _animated_actor_count
+
+var wildlife_update_rate_hz: float:
+	get:
+		return 1.0 / _quality_update_interval
+
 var _ocean: Ocean3D
 var _player: Node3D
 var _actors: Array[Dictionary] = []
 var _elapsed_time: float = 0.0
+var _quality_elapsed: float = 0.0
+var _quality_update_interval: float = 1.0 / 60.0
+var _population_ratio: float = 1.0
 var _visible_actor_count: int = 0
+var _quality_active_actor_count: int = 0
+var _animated_actor_count: int = 0
 var _random := RandomNumberGenerator.new()
 
 
@@ -137,8 +154,63 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
-	_elapsed_time += delta
-	_update_wildlife(delta)
+	_quality_elapsed += maxf(delta, 0.0)
+	if _quality_elapsed < _quality_update_interval:
+		return
+	var update_delta := _quality_elapsed
+	_quality_elapsed = 0.0
+	_elapsed_time += update_delta
+	_update_wildlife(update_delta)
+
+
+func set_graphics_quality(
+	_level: int,
+	profile: GraphicsQualityProfile
+) -> void:
+	if profile == null:
+		return
+	_population_ratio = clampf(profile.wildlife_population_ratio, 0.0, 1.0)
+	_quality_update_interval = 1.0 / maxf(
+		profile.wildlife_update_rate_hz,
+		1.0
+	)
+	bird_visibility_distance = profile.wildlife_bird_visibility_distance
+	fish_visibility_distance = profile.wildlife_fish_visibility_distance
+	dolphin_visibility_distance = (
+		profile.wildlife_dolphin_visibility_distance
+	)
+	for state: Dictionary in _actors:
+		var distance := _visibility_distance_for_type(String(state.type))
+		state.visibility_distance = distance
+		var actor := state.node as Node3D
+		if actor == null:
+			continue
+		for child: Node in actor.find_children(
+			"*",
+			"GeometryInstance3D",
+			true,
+			false
+		):
+			var geometry := child as GeometryInstance3D
+			if geometry != null:
+				geometry.visibility_range_end = distance
+	_quality_elapsed = _quality_update_interval
+	if is_node_ready() and not _actors.is_empty():
+		_update_wildlife(0.0)
+
+
+func get_graphics_quality_debug_status() -> Dictionary:
+	return {
+		"actor_count": _actors.size(),
+		"quality_active_actor_count": _quality_active_actor_count,
+		"visible_actor_count": _visible_actor_count,
+		"animated_actor_count": _animated_actor_count,
+		"population_ratio": _population_ratio,
+		"update_rate_hz": 1.0 / _quality_update_interval,
+		"bird_visibility_distance": bird_visibility_distance,
+		"fish_visibility_distance": fish_visibility_distance,
+		"dolphin_visibility_distance": dolphin_visibility_distance,
+	}
 
 
 func _spawn_bird_flocks() -> void:
@@ -170,6 +242,9 @@ func _spawn_bird_flocks() -> void:
 				"turn_response": _random.randf_range(0.42, 0.82),
 				"retarget_time": _random.randf_range(2.0, 7.0),
 				"visibility_distance": bird_visibility_distance,
+				"group_index": group_index,
+				"member_index": member_index,
+				"group_count": int(specification.count),
 			}
 			state.actor_position = _random_bird_target(state)
 			state.target_position = _random_bird_target(state)
@@ -217,6 +292,9 @@ func _spawn_fish_schools() -> void:
 				"turn_response": _random.randf_range(0.65, 1.25),
 				"retarget_time": _random.randf_range(3.0, 8.0),
 				"visibility_distance": fish_visibility_distance,
+				"group_index": group_index,
+				"member_index": member_index,
+				"group_count": int(specification.count),
 			}
 			state.actor_position = _random_fish_target(state)
 			state.target_position = _random_fish_target(state)
@@ -276,6 +354,9 @@ func _spawn_dolphin_pods() -> void:
 					+ group_index * 2.0
 					+ member_index * 1.4,
 				"visibility_distance": dolphin_visibility_distance,
+				"group_index": group_index,
+				"member_index": member_index,
+				"group_count": int(specification.count),
 			}
 			state.actor_position = _random_dolphin_target(state)
 			state.target_position = _random_dolphin_target(state)
@@ -338,7 +419,23 @@ func _find_animation_player(actor: Node) -> AnimationPlayer:
 
 func _update_wildlife(delta: float) -> void:
 	_visible_actor_count = 0
-	for state in _actors:
+	_quality_active_actor_count = 0
+	_animated_actor_count = 0
+	for state: Dictionary in _actors:
+		var actor := state.node as Node3D
+		var animation_player := state.player as AnimationPlayer
+		var active_count := maxi(
+			ceili(float(state.group_count) * _population_ratio),
+			1
+		)
+		var quality_active := int(state.member_index) < active_count
+		if not quality_active:
+			_set_actor_runtime_active(actor, animation_player, false)
+			continue
+		_quality_active_actor_count += 1
+		if not _actor_is_in_visibility_range(state):
+			_set_actor_runtime_active(actor, animation_player, false)
+			continue
 		match String(state.type):
 			"bird":
 				_update_bird(state, delta)
@@ -346,25 +443,41 @@ func _update_wildlife(delta: float) -> void:
 				_update_fish(state, delta)
 			"dolphin":
 				_update_dolphin(state, delta)
-		if _update_visibility(state):
-			_visible_actor_count += 1
+		_set_actor_runtime_active(actor, animation_player, true)
+		_visible_actor_count += 1
+		_animated_actor_count += 1
 
 
-func _update_visibility(state: Dictionary) -> bool:
+func _actor_is_in_visibility_range(state: Dictionary) -> bool:
 	var actor := state.node as Node3D
-	var animation_player := state.player as AnimationPlayer
-	var actor_is_visible := true
 	if is_instance_valid(_player):
 		var maximum_distance := float(state.visibility_distance)
-		actor_is_visible = (
+		return (
 			actor.global_position.distance_squared_to(_player.global_position)
 			<= maximum_distance * maximum_distance
 		)
-	if actor.visible != actor_is_visible:
-		actor.visible = actor_is_visible
+	return true
+
+
+func _set_actor_runtime_active(
+	actor: Node3D,
+	animation_player: AnimationPlayer,
+	active: bool
+) -> void:
+	if is_instance_valid(actor):
+		actor.visible = active
 	if is_instance_valid(animation_player):
-		animation_player.active = actor_is_visible
-	return actor_is_visible
+		animation_player.active = active
+
+
+func _visibility_distance_for_type(actor_type: String) -> float:
+	match actor_type:
+		"bird":
+			return bird_visibility_distance
+		"fish":
+			return fish_visibility_distance
+		_:
+			return dolphin_visibility_distance
 
 
 func _update_bird(state: Dictionary, delta: float) -> void:

@@ -1,6 +1,8 @@
 extends Node
 
 signal quality_changed(quality: int)
+signal graphics_quality_applying(level: int, profile: GraphicsQualityProfile)
+signal graphics_quality_applied(level: int, profile: GraphicsQualityProfile)
 
 enum Quality {
 	LOW = 0,
@@ -13,6 +15,12 @@ const DIRECTIONAL_LIGHT_GROUP: StringName = &"graphics_quality_directional_light
 const POSITIONAL_LIGHT_GROUP: StringName = &"graphics_quality_positional_light"
 const REFLECTION_PROBE_GROUP: StringName = &"graphics_quality_reflection_probe"
 const GEOMETRY_GROUP: StringName = &"graphics_quality_geometry"
+const OCEAN_GROUP: StringName = &"graphics_quality_ocean"
+const VEHICLE_EFFECTS_GROUP: StringName = &"graphics_quality_vehicle_effects"
+const TERRAIN_GROUP: StringName = &"graphics_quality_terrain"
+const VEGETATION_GROUP: StringName = &"graphics_quality_vegetation"
+const WILDLIFE_GROUP: StringName = &"graphics_quality_wildlife"
+const UNDERWATER_GROUP: StringName = &"graphics_quality_underwater"
 
 const SETTINGS_PATH := "user://graphics_settings.cfg"
 const SETTINGS_SECTION := "graphics"
@@ -28,6 +36,8 @@ const PROFILE_PATHS := {
 var is_steam_deck: bool = false
 var current_quality: int = Quality.HIGH
 var current_profile: GraphicsQualityProfile
+var is_applying: bool = false
+var restart_required: bool = false
 
 var _profiles: Dictionary = {}
 var _settings_path: String = SETTINGS_PATH
@@ -36,7 +46,14 @@ var _directional_light_refs: Array[WeakRef] = []
 var _positional_light_refs: Array[WeakRef] = []
 var _reflection_probe_refs: Array[WeakRef] = []
 var _geometry_refs: Array[WeakRef] = []
+var _ocean_refs: Array[WeakRef] = []
+var _vehicle_effects_refs: Array[WeakRef] = []
+var _terrain_refs: Array[WeakRef] = []
+var _vegetation_refs: Array[WeakRef] = []
+var _wildlife_refs: Array[WeakRef] = []
+var _underwater_refs: Array[WeakRef] = []
 var _scene_refresh_queued: bool = false
+var _application_revision: int = 0
 
 
 func _ready() -> void:
@@ -59,18 +76,43 @@ func set_quality(quality: int, persist: bool = true) -> void:
 		return
 	current_quality = quality
 	current_profile = profile
+	is_applying = true
+	_application_revision += 1
+	var revision := _application_revision
+	graphics_quality_applying.emit(current_quality, current_profile)
 	_refresh_targets()
 	_apply_current_profile()
 	if persist:
 		_save_quality()
 	quality_changed.emit(current_quality)
+	_finish_quality_application(revision)
 
 
 func reapply_current_quality() -> void:
 	if current_profile == null:
 		return
+	is_applying = true
+	_application_revision += 1
+	var revision := _application_revision
+	graphics_quality_applying.emit(current_quality, current_profile)
 	_refresh_targets()
 	_apply_current_profile()
+	_finish_quality_application(revision)
+
+
+func get_graphics_quality_debug_status() -> Dictionary:
+	return {
+		"level": current_quality,
+		"name": get_quality_name(),
+		"is_applying": is_applying,
+		"restart_required": restart_required,
+		"ocean": _collect_debug_status(_ocean_refs),
+		"vehicle_effects": _collect_debug_status(_vehicle_effects_refs),
+		"terrain": _collect_debug_status(_terrain_refs),
+		"vegetation": _collect_debug_status(_vegetation_refs),
+		"wildlife": _collect_debug_status(_wildlife_refs),
+		"underwater": _collect_debug_status(_underwater_refs),
+	}
 
 
 func get_quality_name(quality: int = current_quality) -> String:
@@ -195,6 +237,12 @@ func _on_tree_node_added(node: Node) -> void:
 		or node.is_in_group(POSITIONAL_LIGHT_GROUP)
 		or node.is_in_group(REFLECTION_PROBE_GROUP)
 		or node.is_in_group(GEOMETRY_GROUP)
+		or node.is_in_group(OCEAN_GROUP)
+		or node.is_in_group(VEHICLE_EFFECTS_GROUP)
+		or node.is_in_group(TERRAIN_GROUP)
+		or node.is_in_group(VEGETATION_GROUP)
+		or node.is_in_group(WILDLIFE_GROUP)
+		or node.is_in_group(UNDERWATER_GROUP)
 	):
 		_queue_scene_refresh()
 
@@ -218,6 +266,12 @@ func _refresh_targets() -> void:
 	_positional_light_refs.clear()
 	_reflection_probe_refs.clear()
 	_geometry_refs.clear()
+	_ocean_refs.clear()
+	_vehicle_effects_refs.clear()
+	_terrain_refs.clear()
+	_vegetation_refs.clear()
+	_wildlife_refs.clear()
+	_underwater_refs.clear()
 	var current_scene := get_tree().current_scene
 	if current_scene != null:
 		_collect_targets(current_scene)
@@ -237,6 +291,12 @@ func _collect_targets(node: Node) -> void:
 		_reflection_probe_refs.append(weakref(node))
 	if node.is_in_group(GEOMETRY_GROUP) and node is GeometryInstance3D:
 		_geometry_refs.append(weakref(node))
+	_collect_quality_target(node, OCEAN_GROUP, _ocean_refs)
+	_collect_quality_target(node, VEHICLE_EFFECTS_GROUP, _vehicle_effects_refs)
+	_collect_quality_target(node, TERRAIN_GROUP, _terrain_refs)
+	_collect_quality_target(node, VEGETATION_GROUP, _vegetation_refs)
+	_collect_quality_target(node, WILDLIFE_GROUP, _wildlife_refs)
+	_collect_quality_target(node, UNDERWATER_GROUP, _underwater_refs)
 	for child: Node in node.get_children():
 		_collect_targets(child)
 
@@ -249,6 +309,56 @@ func _apply_current_profile() -> void:
 	_apply_directional_light_settings(current_profile)
 	_apply_positional_light_settings(current_profile)
 	_apply_reflection_probe_settings(current_profile)
+	_apply_quality_targets(_ocean_refs, current_profile)
+	_apply_quality_targets(_vehicle_effects_refs, current_profile)
+	_apply_quality_targets(_terrain_refs, current_profile)
+	_apply_quality_targets(_vegetation_refs, current_profile)
+	_apply_quality_targets(_wildlife_refs, current_profile)
+	_apply_quality_targets(_underwater_refs, current_profile)
+
+
+func _collect_quality_target(
+	node: Node,
+	group: StringName,
+	target_refs: Array[WeakRef]
+) -> void:
+	if node.is_in_group(group) and node.has_method(&"set_graphics_quality"):
+		target_refs.append(weakref(node))
+
+
+func _apply_quality_targets(
+	target_refs: Array[WeakRef],
+	profile: GraphicsQualityProfile
+) -> void:
+	for reference: WeakRef in target_refs:
+		var target := reference.get_ref() as Node
+		if target != null:
+			target.call(&"set_graphics_quality", current_quality, profile)
+
+
+func _finish_quality_application(revision: int) -> void:
+	await get_tree().process_frame
+	if revision != _application_revision:
+		return
+	is_applying = false
+	graphics_quality_applied.emit(current_quality, current_profile)
+
+
+func _collect_debug_status(target_refs: Array[WeakRef]) -> Array[Dictionary]:
+	var result: Array[Dictionary] = []
+	for reference: WeakRef in target_refs:
+		var target := reference.get_ref() as Node
+		if target == null:
+			continue
+		var status := {"node": str(target.get_path())}
+		if target.has_method(&"get_graphics_quality_debug_status"):
+			var reported: Variant = target.call(
+				&"get_graphics_quality_debug_status"
+			)
+			if reported is Dictionary:
+				status.merge(reported as Dictionary, true)
+		result.append(status)
+	return result
 
 
 func _apply_viewport_settings(profile: GraphicsQualityProfile) -> void:

@@ -206,7 +206,10 @@ var _directional_wake_biases := PackedFloat32Array()
 var _directional_wake_speeds := PackedFloat32Array()
 var _directional_wake_active_count: int = 0
 var _effective_directional_wake_sample_count: int = MAX_DIRECTIONAL_WAKE_SEGMENTS
+var _effective_ripple_count: int = MAX_RIPPLES
+var _effective_landing_impact_count: int = MAX_LANDING_IMPACTS
 var _vehicle_interaction_quality_level: int = 2
+var _graphics_quality_profile: GraphicsQualityProfile
 var _interaction_update_elapsed: float = 0.0
 var _hull_pressure_center := Vector2.ZERO
 var _hull_pressure_forward := Vector2(0.0, -1.0)
@@ -575,6 +578,97 @@ func set_vehicle_interaction_quality(quality_level: int) -> void:
 		)
 	)
 	_interaction_update_elapsed = maxf(vehicle_interaction_update_interval, 0.025)
+
+
+func set_graphics_quality(
+	level: int,
+	profile: GraphicsQualityProfile
+) -> void:
+	if profile == null:
+		return
+	_graphics_quality_profile = profile
+	_vehicle_interaction_quality_level = clampi(level, 0, 2)
+	_effective_ripple_count = clampi(
+		profile.ocean_effective_ripple_count,
+		1,
+		MAX_RIPPLES
+	)
+	_effective_directional_wake_sample_count = clampi(
+		profile.ocean_effective_directional_segment_count,
+		1,
+		MAX_DIRECTIONAL_WAKE_SEGMENTS
+	)
+	_effective_landing_impact_count = clampi(
+		profile.ocean_effective_landing_impact_count,
+		1,
+		MAX_LANDING_IMPACTS
+	)
+	vehicle_interaction_clipmap_distance = (
+		profile.ocean_vehicle_interaction_distance
+	)
+	if is_instance_valid(_surface):
+		_surface.set_graphics_quality(level, profile)
+	_static_parameters_dirty = true
+	_push_static_parameters_to_all_materials()
+	_push_ripple_parameters_to_all_materials()
+	_push_landing_impact_parameters_to_all_materials()
+	_push_directional_wake_parameters_to_all_materials()
+
+
+func get_graphics_quality_debug_status() -> Dictionary:
+	var active_ripples := 0
+	for active: int in _ripple_active:
+		active_ripples += 1 if active != 0 else 0
+	var active_landings := 0
+	for active: int in _landing_impact_active:
+		active_landings += 1 if active != 0 else 0
+	return {
+		"quality_level": _vehicle_interaction_quality_level,
+		"effective_ripples": _effective_ripple_count,
+		"active_ripples": active_ripples,
+		"effective_directional_segments": (
+			_effective_directional_wake_sample_count
+		),
+		"active_directional_segments": _directional_wake_active_count,
+		"effective_landing_impacts": _effective_landing_impact_count,
+		"active_landing_impacts": active_landings,
+		"interaction_distance": vehicle_interaction_clipmap_distance,
+		"geometry_normal_quality": (
+			_graphics_quality_profile.ocean_geometry_normal_quality
+			if _graphics_quality_profile != null
+			else 2
+		),
+		"surface_detail_quality": (
+			_graphics_quality_profile.ocean_surface_detail_quality
+			if _graphics_quality_profile != null
+			else 2
+		),
+		"custom_ssr_enabled": (
+			_graphics_quality_profile.ocean_custom_ssr_enabled
+			if _graphics_quality_profile != null
+			else true
+		),
+		"custom_ssr_steps": (
+			_graphics_quality_profile.ocean_custom_ssr_steps
+			if _graphics_quality_profile != null
+			else 24
+		),
+		"custom_ssr_refinement_steps": (
+			_graphics_quality_profile.ocean_custom_ssr_refinement_steps
+			if _graphics_quality_profile != null
+			else 2
+		),
+		"foam_detail_quality": (
+			_graphics_quality_profile.ocean_foam_detail_quality
+			if _graphics_quality_profile != null
+			else 1
+		),
+		"surface": (
+			_surface.get_graphics_quality_debug_status()
+			if is_instance_valid(_surface)
+			else {}
+		),
+	}
 
 
 func add_ripple(
@@ -2012,6 +2106,92 @@ func _push_static_parameters(material: ShaderMaterial) -> void:
 	material.set_shader_parameter(&"wave_mean_b", wave_mean_b)
 	material.set_shader_parameter(&"geometry_normal_step", normal_sample_step)
 	material.set_shader_parameter(
+		&"ripple_effective_count",
+		_effective_ripple_count
+	)
+	material.set_shader_parameter(
+		&"landing_impact_effective_count",
+		_effective_landing_impact_count
+	)
+	material.set_shader_parameter(
+		&"directional_wake_effective_count",
+		_effective_directional_wake_sample_count
+	)
+	if _graphics_quality_profile != null:
+		var profile := _graphics_quality_profile
+		material.set_shader_parameter(
+			&"ocean_geometry_normal_quality",
+			profile.ocean_geometry_normal_quality
+		)
+		material.set_shader_parameter(
+			&"ocean_surface_detail_quality",
+			profile.ocean_surface_detail_quality
+		)
+		material.set_shader_parameter(
+			&"surface_detail_fade_start",
+			profile.ocean_surface_detail_fade_start
+		)
+		material.set_shader_parameter(
+			&"surface_detail_fade_end",
+			profile.ocean_surface_detail_fade_end
+		)
+		material.set_shader_parameter(
+			&"custom_ssr_enabled",
+			profile.ocean_custom_ssr_enabled
+		)
+		material.set_shader_parameter(
+			&"custom_ssr_steps",
+			profile.ocean_custom_ssr_steps
+		)
+		material.set_shader_parameter(
+			&"custom_ssr_refinement_steps",
+			profile.ocean_custom_ssr_refinement_steps
+		)
+		material.set_shader_parameter(
+			&"custom_ssr_max_distance",
+			profile.ocean_custom_ssr_max_distance
+		)
+		material.set_shader_parameter(
+			&"custom_ssr_distance_fade_start",
+			profile.ocean_custom_ssr_distance_fade_start
+		)
+		material.set_shader_parameter(
+			&"custom_ssr_distance_fade_end",
+			profile.ocean_custom_ssr_distance_fade_end
+		)
+		material.set_shader_parameter(
+			&"custom_ssr_blur_lod",
+			profile.ocean_custom_ssr_blur_lod
+		)
+		material.set_shader_parameter(
+			&"mirrored_reflection_enabled",
+			profile.ocean_mirrored_reflection_enabled
+		)
+		material.set_shader_parameter(
+			&"mirrored_reflection_strength",
+			profile.ocean_mirrored_reflection_strength
+		)
+		material.set_shader_parameter(
+			&"mirrored_reflection_blur_lod",
+			profile.ocean_mirrored_reflection_blur_lod
+		)
+		material.set_shader_parameter(
+			&"shore_foam_strength",
+			profile.ocean_shore_foam_strength
+		)
+		material.set_shader_parameter(
+			&"crest_foam_strength",
+			profile.ocean_crest_foam_strength
+		)
+		material.set_shader_parameter(
+			&"ocean_foam_detail_quality",
+			profile.ocean_foam_detail_quality
+		)
+		material.set_shader_parameter(
+			&"ocean_foam_evaluation_distance",
+			profile.ocean_foam_evaluation_distance
+		)
+	material.set_shader_parameter(
 		&"landing_impacts_enabled",
 		landing_impacts_enabled
 	)
@@ -2103,87 +2283,189 @@ func _push_origin_parameter(material: ShaderMaterial) -> void:
 func _push_ripple_parameters(material: ShaderMaterial) -> void:
 	if material == null or material.shader == null:
 		return
-	material.set_shader_parameter(&"ripple_active", _ripple_active)
-	material.set_shader_parameter(&"ripple_positions", _ripple_positions)
-	material.set_shader_parameter(&"ripple_start_times", _ripple_start_times)
-	material.set_shader_parameter(&"ripple_amplitudes", _ripple_amplitudes)
-	material.set_shader_parameter(&"ripple_speeds", _ripple_speeds)
-	material.set_shader_parameter(&"ripple_wavelengths", _ripple_wavelengths)
-	material.set_shader_parameter(&"ripple_decays", _ripple_decays)
-	material.set_shader_parameter(&"ripple_lifetimes", _ripple_lifetimes)
+	var indices := _newest_active_indices(
+		_ripple_active,
+		_ripple_start_times,
+		_effective_ripple_count
+	)
+	var active := _ripple_active.duplicate()
+	var positions := _ripple_positions.duplicate()
+	var start_times := _ripple_start_times.duplicate()
+	var amplitudes := _ripple_amplitudes.duplicate()
+	var speeds := _ripple_speeds.duplicate()
+	var wavelengths := _ripple_wavelengths.duplicate()
+	var decays := _ripple_decays.duplicate()
+	var lifetimes := _ripple_lifetimes.duplicate()
+	active.fill(0)
+	for target_index in indices.size():
+		var source_index: int = indices[target_index]
+		active[target_index] = 1
+		positions[target_index] = _ripple_positions[source_index]
+		start_times[target_index] = _ripple_start_times[source_index]
+		amplitudes[target_index] = _ripple_amplitudes[source_index]
+		speeds[target_index] = _ripple_speeds[source_index]
+		wavelengths[target_index] = _ripple_wavelengths[source_index]
+		decays[target_index] = _ripple_decays[source_index]
+		lifetimes[target_index] = _ripple_lifetimes[source_index]
+	material.set_shader_parameter(&"ripple_active", active)
+	material.set_shader_parameter(&"ripple_positions", positions)
+	material.set_shader_parameter(&"ripple_start_times", start_times)
+	material.set_shader_parameter(&"ripple_amplitudes", amplitudes)
+	material.set_shader_parameter(&"ripple_speeds", speeds)
+	material.set_shader_parameter(&"ripple_wavelengths", wavelengths)
+	material.set_shader_parameter(&"ripple_decays", decays)
+	material.set_shader_parameter(&"ripple_lifetimes", lifetimes)
+	material.set_shader_parameter(
+		&"ripple_effective_count",
+		_effective_ripple_count
+	)
 
 
 func _push_landing_impact_parameters(material: ShaderMaterial) -> void:
 	if material == null or material.shader == null:
 		return
+	var indices := _newest_active_indices(
+		_landing_impact_active,
+		_landing_impact_start_times,
+		_effective_landing_impact_count
+	)
+	var active := _landing_impact_active.duplicate()
+	var positions := _landing_impact_positions.duplicate()
+	var start_times := _landing_impact_start_times.duplicate()
+	var strengths := _landing_impact_strengths.duplicate()
+	var directions := _landing_impact_directions.duplicate()
+	var half_extents := _landing_impact_half_extents.duplicate()
+	var secondary_a := _landing_impact_secondary_a_offsets.duplicate()
+	var secondary_b := _landing_impact_secondary_b_offsets.duplicate()
+	var secondary_weights := _landing_impact_secondary_weights.duplicate()
+	var entry_types := _landing_impact_entry_types.duplicate()
+	var contact_masks := _landing_impact_contact_masks.duplicate()
+	var amplitudes := _landing_impact_amplitudes.duplicate()
+	var depressions := _landing_impact_depressions.duplicate()
+	var initial_radii := _landing_impact_initial_radii.duplicate()
+	var speeds := _landing_impact_speeds.duplicate()
+	var wavelengths := _landing_impact_wavelengths.duplicate()
+	var durations := _landing_impact_durations.duplicate()
+	active.fill(0)
+	for target_index in indices.size():
+		var source_index: int = indices[target_index]
+		active[target_index] = 1
+		positions[target_index] = _landing_impact_positions[source_index]
+		start_times[target_index] = _landing_impact_start_times[source_index]
+		strengths[target_index] = _landing_impact_strengths[source_index]
+		directions[target_index] = _landing_impact_directions[source_index]
+		half_extents[target_index] = _landing_impact_half_extents[source_index]
+		secondary_a[target_index] = (
+			_landing_impact_secondary_a_offsets[source_index]
+		)
+		secondary_b[target_index] = (
+			_landing_impact_secondary_b_offsets[source_index]
+		)
+		secondary_weights[target_index] = (
+			_landing_impact_secondary_weights[source_index]
+		)
+		entry_types[target_index] = _landing_impact_entry_types[source_index]
+		contact_masks[target_index] = (
+			_landing_impact_contact_masks[source_index]
+		)
+		amplitudes[target_index] = _landing_impact_amplitudes[source_index]
+		depressions[target_index] = _landing_impact_depressions[source_index]
+		initial_radii[target_index] = (
+			_landing_impact_initial_radii[source_index]
+		)
+		speeds[target_index] = _landing_impact_speeds[source_index]
+		wavelengths[target_index] = _landing_impact_wavelengths[source_index]
+		durations[target_index] = _landing_impact_durations[source_index]
 	material.set_shader_parameter(
 		&"landing_impact_active",
-		_landing_impact_active
+		active
 	)
 	material.set_shader_parameter(
 		&"landing_impact_positions",
-		_landing_impact_positions
+		positions
 	)
 	material.set_shader_parameter(
 		&"landing_impact_start_times",
-		_landing_impact_start_times
+		start_times
 	)
 	material.set_shader_parameter(
 		&"landing_impact_strengths",
-		_landing_impact_strengths
+		strengths
 	)
 	material.set_shader_parameter(
 		&"landing_impact_directions",
-		_landing_impact_directions
+		directions
 	)
 	material.set_shader_parameter(
 		&"landing_impact_half_extents",
-		_landing_impact_half_extents
+		half_extents
 	)
 	material.set_shader_parameter(
 		&"landing_impact_secondary_a_offsets",
-		_landing_impact_secondary_a_offsets
+		secondary_a
 	)
 	material.set_shader_parameter(
 		&"landing_impact_secondary_b_offsets",
-		_landing_impact_secondary_b_offsets
+		secondary_b
 	)
 	material.set_shader_parameter(
 		&"landing_impact_secondary_weights",
-		_landing_impact_secondary_weights
+		secondary_weights
 	)
 	material.set_shader_parameter(
 		&"landing_impact_entry_types",
-		_landing_impact_entry_types
+		entry_types
 	)
 	material.set_shader_parameter(
 		&"landing_impact_contact_masks",
-		_landing_impact_contact_masks
+		contact_masks
 	)
 	material.set_shader_parameter(
 		&"landing_impact_amplitudes",
-		_landing_impact_amplitudes
+		amplitudes
 	)
 	material.set_shader_parameter(
 		&"landing_impact_depressions",
-		_landing_impact_depressions
+		depressions
 	)
 	material.set_shader_parameter(
 		&"landing_impact_initial_radii",
-		_landing_impact_initial_radii
+		initial_radii
 	)
 	material.set_shader_parameter(
 		&"landing_impact_speeds",
-		_landing_impact_speeds
+		speeds
 	)
 	material.set_shader_parameter(
 		&"landing_impact_wavelengths",
-		_landing_impact_wavelengths
+		wavelengths
 	)
 	material.set_shader_parameter(
 		&"landing_impact_durations",
-		_landing_impact_durations
+		durations
 	)
+	material.set_shader_parameter(
+		&"landing_impact_effective_count",
+		_effective_landing_impact_count
+	)
+
+
+func _newest_active_indices(
+	active: PackedInt32Array,
+	start_times: PackedFloat32Array,
+	maximum_count: int
+) -> Array[int]:
+	var result: Array[int] = []
+	for index in active.size():
+		if active[index] != 0:
+			result.append(index)
+	result.sort_custom(
+		func(left: int, right: int) -> bool:
+			return start_times[left] > start_times[right]
+	)
+	if result.size() > maximum_count:
+		result.resize(maximum_count)
+	return result
 
 
 func _push_vehicle_interaction_parameters(material: ShaderMaterial) -> void:
@@ -2197,6 +2479,10 @@ func _push_directional_wake_parameters(material: ShaderMaterial) -> void:
 	material.set_shader_parameter(
 		&"directional_wake_active_count",
 		_directional_wake_active_count
+	)
+	material.set_shader_parameter(
+		&"directional_wake_effective_count",
+		_effective_directional_wake_sample_count
 	)
 	material.set_shader_parameter(
 		&"directional_wake_start_positions",

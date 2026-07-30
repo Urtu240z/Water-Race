@@ -7,13 +7,13 @@
 [ext_resource type="ArrayMesh" uid="uid://ddxb8h3nbv4qw" path="res://assets/3D/Rider/skins/Racer/runtime/Racer_Mesh.res" id="5_racer_mesh"]
 [ext_resource type="Skin" path="res://assets/3D/Rider/skins/Racer/runtime/Racer_Skin.res" id="6_racer_skin"]
 [ext_resource type="Skin" uid="uid://dpvbsp05a1uf6" path="res://assets/3D/Rider/skins/Rider01/runtime/Rider01_Skin.res" id="7_rider01_skin"]
-[ext_resource type="ArrayMesh" path="res://assets/3D/Rider/skins/Rider01/runtime/Rider01_Mesh_01_Mesh.res" id="8_rider01_mesh_01"]
+[ext_resource type="ArrayMesh" uid="uid://dsm6lxqu60nmk" path="res://assets/3D/Rider/skins/Rider01/runtime/Rider01_Mesh_01_Mesh.res" id="8_rider01_mesh_01"]
 [ext_resource type="ArrayMesh" uid="uid://ceji4yy8jovxo" path="res://assets/3D/Rider/skins/Rider01/runtime/Rider01_Mesh_02_Mesh.res" id="9_rider01_mesh_02"]
 [ext_resource type="ArrayMesh" uid="uid://bxotgom6iskij" path="res://assets/3D/Rider/skins/Rider01/runtime/Rider01_Mesh_03_Mesh.res" id="10_rider01_mesh_03"]
 [ext_resource type="ArrayMesh" uid="uid://dy8gconewht46" path="res://assets/3D/Rider/skins/Rider01/runtime/Rider01_Mesh_04_Mesh.res" id="11_rider01_mesh_04"]
 [ext_resource type="ArrayMesh" uid="uid://h252y7sabnlg" path="res://assets/3D/Rider/skins/Rider01/runtime/Rider01_Mesh_05_Mesh.res" id="12_rider01_mesh_05"]
 [ext_resource type="ArrayMesh" path="res://assets/3D/Rider/skins/Rider01/runtime/Rider01_Mesh_06_Mesh.res" id="13_rider01_mesh_06"]
-[ext_resource type="ArrayMesh" path="res://assets/3D/Rider/skins/Rider04/runtime/Rider04_Body_Mesh.res" id="14_rider04_body_mesh"]
+[ext_resource type="ArrayMesh" uid="uid://dnndcgjeqycgw" path="res://assets/3D/Rider/skins/Rider04/runtime/Rider04_Body_Mesh.res" id="14_rider04_body_mesh"]
 [ext_resource type="Skin" path="res://assets/3D/Rider/skins/Rider04/runtime/Rider04_Skin.res" id="15_rider04_skin"]
 
 [node name="RiderRig" type="Node3D" unique_id=553895823]
@@ -55,37 +55,42 @@ skin = ExtResource("6_racer_skin")
 skeleton = NodePath("..")
 
 [node name="Rider01_Mesh_01" type="MeshInstance3D" parent="RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D" index="2" unique_id=1774638866 groups=["rider_skin_rider01"]]
+visible = false
 mesh = ExtResource("8_rider01_mesh_01")
 skin = ExtResource("7_rider01_skin")
 skeleton = NodePath("..")
 
 [node name="Rider01_Mesh_02" type="MeshInstance3D" parent="RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D" index="3" unique_id=2122553941 groups=["rider_skin_rider01"]]
+visible = false
 mesh = ExtResource("9_rider01_mesh_02")
 skin = ExtResource("7_rider01_skin")
 skeleton = NodePath("..")
 
 [node name="Rider01_Mesh_03" type="MeshInstance3D" parent="RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D" index="4" unique_id=750232266 groups=["rider_skin_rider01"]]
+visible = false
 mesh = ExtResource("10_rider01_mesh_03")
 skin = ExtResource("7_rider01_skin")
 skeleton = NodePath("..")
 
 [node name="Rider01_Mesh_04" type="MeshInstance3D" parent="RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D" index="5" unique_id=1391495539 groups=["rider_skin_rider01"]]
+visible = false
 mesh = ExtResource("11_rider01_mesh_04")
 skin = ExtResource("7_rider01_skin")
 skeleton = NodePath("..")
 
 [node name="Rider01_Mesh_05" type="MeshInstance3D" parent="RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D" index="6" unique_id=2015072498 groups=["rider_skin_rider01"]]
+visible = false
 mesh = ExtResource("12_rider01_mesh_05")
 skin = ExtResource("7_rider01_skin")
 skeleton = NodePath("..")
 
 [node name="Rider01_Mesh_06" type="MeshInstance3D" parent="RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D" index="7" unique_id=816370644 groups=["rider_skin_rider01"]]
+visible = false
 mesh = ExtResource("13_rider01_mesh_06")
 skin = ExtResource("7_rider01_skin")
 skeleton = NodePath("..")
 
-[node name="Rider04_Body" type="MeshInstance3D" parent="RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D" index="8" groups=["rider_skin_rider04"]]
-visible = false
+[node name="Rider04_Body" type="MeshInstance3D" parent="RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D" index="8" unique_id=1837524736 groups=["rider_skin_rider04"]]
 mesh = ExtResource("14_rider04_body_mesh")
 skin = ExtResource("15_rider04_skin")
 skeleton = NodePath("..")

@@ -25,6 +25,7 @@ uniform float wave_travel_speed_b : hint_range(-20.0, 20.0, 0.05) = 2.3;
 uniform float wave_mean_a : hint_range(0.0, 1.0, 0.001) = 0.50;
 uniform float wave_mean_b : hint_range(0.0, 1.0, 0.001) = 0.47;
 uniform float geometry_normal_step : hint_range(0.05, 2.0, 0.05) = 0.40;
+uniform int ocean_geometry_normal_quality : hint_range(0, 2, 1) = 2;
 
 group_uniforms Ripples;
 uniform int ripple_active[12];
@@ -35,6 +36,7 @@ uniform float ripple_speeds[12];
 uniform float ripple_wavelengths[12];
 uniform float ripple_decays[12];
 uniform float ripple_lifetimes[12];
+uniform int ripple_effective_count : hint_range(1, 12, 1) = 12;
 
 #include "res://shaders/includes/ocean_vehicle_interaction_uniforms.gdshaderinc"
 
@@ -53,6 +55,7 @@ uniform float surface_warp_world_size : hint_range(2.0, 300.0, 0.5) = 46.0;
 uniform float surface_warp_strength : hint_range(0.0, 12.0, 0.05) = 2.4;
 uniform float surface_detail_fade_start : hint_range(0.0, 1000.0, 1.0) = 130.0;
 uniform float surface_detail_fade_end : hint_range(1.0, 2000.0, 1.0) = 520.0;
+uniform int ocean_surface_detail_quality : hint_range(0, 2, 1) = 2;
 
 group_uniforms Optics;
 uniform sampler2D screen_texture : hint_screen_texture, repeat_disable, filter_linear_mipmap;
@@ -103,6 +106,8 @@ uniform float foam_macro_scale : hint_range(0.001, 1.0, 0.001) = 0.055;
 uniform float foam_detail_scale : hint_range(0.001, 2.0, 0.001) = 0.19;
 uniform float foam_scroll_speed : hint_range(0.0, 2.0, 0.01) = 0.13;
 uniform float foam_roughness : hint_range(0.0, 1.0, 0.01) = 0.88;
+uniform int ocean_foam_detail_quality : hint_range(0, 1, 1) = 1;
+uniform float ocean_foam_evaluation_distance : hint_range(1.0, 2000.0, 1.0) = 520.0;
 
 group_uniforms Clipmap;
 uniform bool ocean_surface_enabled = false;
@@ -156,6 +161,9 @@ vec4 sample_ripple_state(vec2 logical_xz) {
 	vec2 derivatives = vec2(0.0);
 	float energy = 0.0;
 	for (int index = 0; index < MAX_RIPPLES; index++) {
+		if (index >= ripple_effective_count) {
+			break;
+		}
 		if (ripple_active[index] == 0) {
 			continue;
 		}
@@ -221,16 +229,37 @@ vec4 sample_wave_state(vec2 world_xz) {
 	vec2 logical_xz = world_xz + ocean_logical_origin_offset_xz;
 	float step_size = max(geometry_normal_step, 0.05);
 	float macro_height = sample_macro_height(logical_xz);
-	vec2 macro_derivatives = vec2(
-		(
-			sample_macro_height(logical_xz + vec2(step_size, 0.0))
-			- sample_macro_height(logical_xz - vec2(step_size, 0.0))
-		) / (2.0 * step_size),
-		(
-			sample_macro_height(logical_xz + vec2(0.0, step_size))
-			- sample_macro_height(logical_xz - vec2(0.0, step_size))
-		) / (2.0 * step_size)
-	);
+	vec2 macro_derivatives = vec2(0.0);
+	if (ocean_geometry_normal_quality <= 0) {
+		float diagonal_height = sample_macro_height(
+			logical_xz + vec2(step_size)
+		);
+		macro_derivatives = vec2(
+			(diagonal_height - macro_height) / step_size
+		);
+	} else if (ocean_geometry_normal_quality == 1) {
+		macro_derivatives = vec2(
+			(
+				sample_macro_height(logical_xz + vec2(step_size, 0.0))
+				- macro_height
+			) / step_size,
+			(
+				sample_macro_height(logical_xz + vec2(0.0, step_size))
+				- macro_height
+			) / step_size
+		);
+	} else {
+		macro_derivatives = vec2(
+			(
+				sample_macro_height(logical_xz + vec2(step_size, 0.0))
+				- sample_macro_height(logical_xz - vec2(step_size, 0.0))
+			) / (2.0 * step_size),
+			(
+				sample_macro_height(logical_xz + vec2(0.0, step_size))
+				- sample_macro_height(logical_xz - vec2(0.0, step_size))
+			) / (2.0 * step_size)
+		);
+	}
 	vec4 ripple = sample_ripple_state(logical_xz);
 	float macro_scale = vehicle_interaction_exaggerated_debug
 		? 0.0
@@ -275,11 +304,14 @@ void vertex() {
 
 
 vec3 sample_surface_detail(vec2 logical_xz, float camera_distance) {
-	vec2 warp_uv = logical_xz / max(surface_warp_world_size, 0.001)
-		+ vec2(0.31, -0.95) * simulation_time * 0.035;
-	vec2 warp = (
-		texture(surface_warp_texture, warp_uv).rg * 2.0 - 1.0
-	) * surface_warp_strength;
+	vec2 warp = vec2(0.0);
+	if (ocean_surface_detail_quality >= 2) {
+		vec2 warp_uv = logical_xz / max(surface_warp_world_size, 0.001)
+			+ vec2(0.31, -0.95) * simulation_time * 0.035;
+		warp = (
+			texture(surface_warp_texture, warp_uv).rg * 2.0 - 1.0
+		) * surface_warp_strength;
+	}
 	vec2 uv_a = (logical_xz + warp) / max(surface_normal_world_size_a, 0.001)
 		+ safe_direction(surface_flow_direction_a, vec2(1.0, 0.0))
 			* simulation_time * surface_flow_speed_a
@@ -289,11 +321,14 @@ vec3 sample_surface_detail(vec2 logical_xz, float camera_distance) {
 			* simulation_time * surface_flow_speed_b
 			/ max(surface_normal_world_size_b, 0.001);
 	vec3 normal_a = texture(surface_normal_texture_a, uv_a).xyz * 2.0 - 1.0;
-	vec3 normal_b = texture(surface_normal_texture_b, uv_b).xyz * 2.0 - 1.0;
-	vec3 combined = normalize(vec3(
-		normal_a.xy * 0.58 + normal_b.xy * 0.42,
-		max(normal_a.z * 0.58 + normal_b.z * 0.42, 0.08)
-	));
+	vec3 combined = normalize(normal_a);
+	if (ocean_surface_detail_quality >= 1) {
+		vec3 normal_b = texture(surface_normal_texture_b, uv_b).xyz * 2.0 - 1.0;
+		combined = normalize(vec3(
+			normal_a.xy * 0.58 + normal_b.xy * 0.42,
+			max(normal_a.z * 0.58 + normal_b.z * 0.42, 0.08)
+		));
+	}
 	float detail_fade = 1.0 - smoothstep(
 		surface_detail_fade_start,
 		max(surface_detail_fade_end, surface_detail_fade_start + 0.001),
@@ -474,8 +509,19 @@ void fragment() {
 	);
 	vec2 foam_uv_b = FOAM_ROTATION * logical_xz * foam_detail_scale
 		- foam_direction * simulation_time * foam_scroll_speed * 0.61;
-	float foam_noise = texture(foam_noise_texture, foam_uv_a).r * 0.64
-		+ texture(foam_noise_texture, foam_uv_b).r * 0.36;
+	float foam_distance_gate = 1.0 - smoothstep(
+		ocean_foam_evaluation_distance * 0.85,
+		ocean_foam_evaluation_distance,
+		camera_distance
+	);
+	float foam_noise = 0.5;
+	if (foam_enabled && foam_distance_gate > 0.0001) {
+		foam_noise = texture(foam_noise_texture, foam_uv_a).r;
+		if (ocean_foam_detail_quality >= 1) {
+			foam_noise = foam_noise * 0.64
+				+ texture(foam_noise_texture, foam_uv_b).r * 0.36;
+		}
+	}
 	float noise_width = max(fwidth(foam_noise) * 1.5, 0.015);
 	float foam_breakup = smoothstep(
 		0.46 - noise_width,
@@ -518,7 +564,8 @@ void fragment() {
 	float foam_mask = foam_enabled
 		? clamp(
 			(shoreline + crest_foam + ripple_foam)
-				* mix(0.42, 1.0, foam_breakup),
+				* mix(0.42, 1.0, foam_breakup)
+				* foam_distance_gate,
 			0.0,
 			1.0
 		)

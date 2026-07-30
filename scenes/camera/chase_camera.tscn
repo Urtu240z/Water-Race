@@ -60,7 +60,7 @@ physics_interpolation_mode = 2
 current = true
 fov = 65.0
 
-[node name="UnderwaterEffect" type="Node3D" parent="Camera3D" unique_id=997962906]
+[node name="UnderwaterEffect" type="Node3D" parent="Camera3D" unique_id=997962906 groups=["graphics_quality_underwater"]]
 script = ExtResource("2_underwater")
 editor_preview_enabled = true
 editor_preview_mode = 1

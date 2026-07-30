@@ -41,3 +41,73 @@ extends Resource
 @export var reflection_probe: bool = true
 @export var reflection_probe_shadows: bool = true
 @export var sky_radiance: Sky.RadianceSize = Sky.RADIANCE_SIZE_256
+
+@export_group("Ocean Geometry")
+@export_range(1.0, 1000.0, 1.0) var ocean_near_radius: float = 220.0
+@export_range(0.25, 128.0, 0.25) var ocean_near_cell_size: float = 0.5
+@export_range(1.0, 2000.0, 1.0) var ocean_middle_radius: float = 700.0
+@export_range(0.25, 128.0, 0.25) var ocean_middle_cell_size: float = 10.0
+@export_range(1.0, 5000.0, 1.0) var ocean_far_radius: float = 3000.0
+@export_range(0.25, 256.0, 0.25) var ocean_far_cell_size: float = 100.0
+@export_range(0.25, 16.0, 0.25) var ocean_snap_step: float = 2.0
+@export_range(0.0, 1000.0, 1.0) var ocean_detailed_wave_fade_start: float = 170.0
+@export_range(1.0, 2000.0, 1.0) var ocean_detailed_wave_fade_end: float = 280.0
+@export_range(0.0, 1.0, 0.01) var ocean_middle_wave_amplitude_ratio: float = 0.55
+@export_range(0.0, 1.0, 0.01) var ocean_far_wave_amplitude_ratio: float = 0.08
+
+@export_group("Ocean Visual Interaction")
+@export_range(1, 12, 1) var ocean_effective_ripple_count: int = 12
+@export_range(1, 16, 1) var ocean_effective_directional_segment_count: int = 16
+@export_range(1, 4, 1) var ocean_effective_landing_impact_count: int = 4
+@export_range(8.0, 200.0, 1.0) var ocean_vehicle_interaction_distance: float = 86.0
+@export_range(0, 2, 1) var ocean_geometry_normal_quality: int = 2
+@export_range(0, 2, 1) var ocean_surface_detail_quality: int = 2
+@export_range(0.0, 1000.0, 1.0) var ocean_surface_detail_fade_start: float = 130.0
+@export_range(1.0, 2000.0, 1.0) var ocean_surface_detail_fade_end: float = 520.0
+
+@export_group("Ocean Reflections")
+@export var ocean_custom_ssr_enabled: bool = true
+@export_range(0, 32, 1) var ocean_custom_ssr_steps: int = 24
+@export_range(0, 5, 1) var ocean_custom_ssr_refinement_steps: int = 2
+@export_range(0.0, 500.0, 1.0) var ocean_custom_ssr_max_distance: float = 280.0
+@export_range(0.0, 500.0, 1.0) var ocean_custom_ssr_distance_fade_start: float = 190.0
+@export_range(1.0, 600.0, 1.0) var ocean_custom_ssr_distance_fade_end: float = 300.0
+@export_range(0.0, 5.0, 0.05) var ocean_custom_ssr_blur_lod: float = 0.15
+@export var ocean_mirrored_reflection_enabled: bool = true
+@export_range(0.0, 1.5, 0.01) var ocean_mirrored_reflection_strength: float = 0.82
+@export_range(0.0, 5.0, 0.05) var ocean_mirrored_reflection_blur_lod: float = 0.20
+
+@export_group("Ocean Foam")
+@export_range(0.0, 2.0, 0.01) var ocean_shore_foam_strength: float = 1.05
+@export_range(0.0, 2.0, 0.01) var ocean_crest_foam_strength: float = 0.82
+@export_range(0, 1, 1) var ocean_foam_detail_quality: int = 1
+@export_range(1.0, 2000.0, 1.0) var ocean_foam_evaluation_distance: float = 520.0
+
+@export_group("Vehicle Water Effects")
+@export_range(0, 2, 1) var vehicle_effects_quality_level: int = 2
+
+@export_group("Terrain")
+@export_range(0, 2, 1) var terrain_hex_tiling_mode: int = 2
+
+@export_group("Vegetation")
+@export_range(1.0, 5000.0, 1.0) var vegetation_full_3d_range: float = 4000.0
+@export_range(1.0, 5000.0, 1.0) var vegetation_impostor_range: float = 4000.0
+@export_range(0.0, 5000.0, 1.0) var vegetation_ground_shadow_range: float = 4000.0
+@export var vegetation_ground_shadows_enabled: bool = true
+@export var vegetation_real_shadows_enabled: bool = true
+@export_range(1.0, 30.0, 1.0) var vegetation_update_rate_hz: float = 12.0
+@export_range(0.0, 1.0, 0.01) var vegetation_future_density_ratio: float = 1.0
+
+@export_group("Wildlife")
+@export_range(0.0, 1.0, 0.01) var wildlife_population_ratio: float = 1.0
+@export_range(1.0, 60.0, 1.0) var wildlife_update_rate_hz: float = 60.0
+@export_range(1.0, 3000.0, 1.0) var wildlife_bird_visibility_distance: float = 1500.0
+@export_range(1.0, 1000.0, 1.0) var wildlife_fish_visibility_distance: float = 360.0
+@export_range(1.0, 3000.0, 1.0) var wildlife_dolphin_visibility_distance: float = 1080.0
+
+@export_group("Underwater Post-process")
+@export_range(0.0, 24.0, 0.1) var underwater_blur_strength: float = 5.0
+@export_range(1, 4, 1) var underwater_blur_passes: int = 2
+@export_range(0, 2000, 1) var underwater_entry_bubbles_amount: int = 500
+@export_range(0.0, 1.0, 0.01) var underwater_wet_lens_warp_multiplier: float = 1.0
+@export_range(0.0, 1.0, 0.01) var underwater_wet_lens_zoom_multiplier: float = 1.0

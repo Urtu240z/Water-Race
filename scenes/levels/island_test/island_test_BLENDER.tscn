@@ -64,6 +64,8 @@
 [ext_resource type="Shader" uid="uid://cmnqja2yvxste" path="res://shaders/vegetation/palm_impostor_ground_shadow.gdshader" id="223_palm_shadow_shader"]
 [ext_resource type="PackedScene" uid="uid://cisubjold2oac" path="res://scenes/wildlife/ambient_wildlife.tscn" id="224_wildlife"]
 [ext_resource type="PackedScene" path="res://scenes/ui/pause_menu.tscn" id="225_pause_menu"]
+[ext_resource type="Script" path="res://scripts/environment/terrain_quality_controller.gd" id="226_terrain_quality"]
+[ext_resource type="Script" path="res://scripts/vegetation/vegetation_quality_controller.gd" id="227_vegetation_quality"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_f0815"]
 panorama = ExtResource("39_1y1wo")
@@ -186,7 +188,7 @@ shader_parameter/wet_sand_normal_strength = 1.35000002011662
 shader_parameter/grass_normal_strength = 1.70000002533204
 shader_parameter/rock_normal_strength = 1.65000002458698
 shader_parameter/moss_normal_strength = 2.0
-shader_parameter/hex_tiling_mode = 3
+shader_parameter/hex_tiling_mode = 2
 shader_parameter/hex_rotation_strength = 0.11999999731776
 shader_parameter/hex_weight_contrast = 0.98999997787152
 shader_parameter/hex_luminance_influence = 0.0999999977648
@@ -562,6 +564,9 @@ chase_camera_path = NodePath("CameraSystem/ChaseCamera")
 
 [node name="PauseMenu" parent="." instance=ExtResource("225_pause_menu")]
 
+[node name="VegetationQualityController" type="Node" parent="." groups=["graphics_quality_vegetation"]]
+script = ExtResource("227_vegetation_quality")
+
 [node name="Environment" type="Node3D" parent="." unique_id=366055671]
 
 [node name="SkyEnvironmentController" type="Node" parent="Environment" unique_id=1243144762]
@@ -657,7 +662,8 @@ shadow_blur = 3.773
 omni_range = 29.782
 omni_attenuation = 0.971
 
-[node name="TerrainRoot" type="Node3D" parent="." unique_id=432130367]
+[node name="TerrainRoot" type="Node3D" parent="." unique_id=432130367 groups=["graphics_quality_terrain"]]
+script = ExtResource("226_terrain_quality")
 
 [node name="independent_island" parent="TerrainRoot" unique_id=135701482 instance=ExtResource("3_oieqv")]
 transform = Transform3D(0.71981424, 0, -0.6941668, 0, 1, 0, 0.6941668, 0, 0.71981424, 2427.3716, -15.736182, 136.60822)

@@ -393,6 +393,44 @@ func set_quality_level(level: int) -> void:
 	) as QualityLevel
 
 
+func set_graphics_quality(
+	_level: int,
+	profile: GraphicsQualityProfile
+) -> void:
+	if profile != null:
+		set_quality_level(profile.vehicle_effects_quality_level)
+
+
+func get_graphics_quality_debug_status() -> Dictionary:
+	return {
+		"quality_level": quality_level,
+		"spray_multiplier": spray_particle_amount_multiplier,
+		"impact_multiplier": impact_particle_amount_multiplier,
+		"impact_pool_size": impact_pool_size,
+		"impact_target_maximum": (
+			_quality_profile.target_maximum_impact_particles
+			if _quality_profile != null
+			else impact_maximum_amount
+		),
+		"fixed_fps": (
+			_quality_profile.particles_fixed_fps
+			if _quality_profile != null
+			else 0
+		),
+		"estimated_active_particles": _estimated_active_particle_count,
+		"wake": (
+			_wake_trail.get_graphics_quality_debug_status()
+			if is_instance_valid(_wake_trail)
+			else {}
+		),
+		"turbine": (
+			_turbine_controller.get_graphics_quality_debug_status()
+			if is_instance_valid(_turbine_controller)
+			else {}
+		),
+	}
+
+
 func _resolve_references() -> void:
 	_vehicle = get_node_or_null(vehicle_path) as JetSkiController
 	_ocean = get_node_or_null(ocean_path) as Ocean3D
@@ -911,30 +949,15 @@ func _on_ocean_entered(_signal_intensity: float, impact_position: Vector3) -> vo
 		return
 	var emitter := _impact_emitters[emitter_index]
 	var material := _impact_materials[emitter_index]
-	var quality_impact_base := (
-		_quality_profile.impact_maximum_particles
+	var quality_impact_maximum := (
+		_quality_profile.target_maximum_impact_particles
 		if _quality_profile != null
 		else impact_maximum_amount
 	)
-	var quality_impact_maximum := mini(
-		impact_maximum_amount,
-		maxi(
-			roundi(
-				float(quality_impact_base)
-				* maxf(impact_particle_amount_multiplier, 0.1)
-			),
-			1
-		)
-	)
-	var scaled_impact_minimum := mini(
+	var scaled_impact_minimum := clampi(
+		roundi(float(quality_impact_maximum) * 0.28),
+		1,
 		quality_impact_maximum,
-		maxi(
-			roundi(
-				float(impact_minimum_amount)
-				* maxf(impact_particle_amount_multiplier, 0.1)
-			),
-			1
-		)
 	)
 	var particle_amount := roundi(lerpf(
 		float(scaled_impact_minimum),
@@ -1100,6 +1123,19 @@ func _apply_quality_profile() -> void:
 			_quality_profile = QUALITY_HIGH
 	if not is_inside_tree() or _quality_profile == null:
 		return
+	spray_particle_amount_multiplier = (
+		_quality_profile.spray_particle_amount_multiplier
+	)
+	impact_particle_amount_multiplier = (
+		_quality_profile.impact_particle_amount_multiplier
+	)
+	impact_pool_size = clampi(
+		_quality_profile.impact_pool_size,
+		1,
+		IMPACT_POOL_CAPACITY
+	)
+	wake_lifetime = _quality_profile.wake_lifetime
+	spray_sheet_enabled = _quality_profile.spray_sheet_enabled
 	var amount_multiplier := maxf(spray_particle_amount_multiplier, 0.1)
 	_bow_left.amount = maxi(
 		roundi(float(_quality_profile.bow_particles_per_side) * amount_multiplier),
@@ -1118,12 +1154,19 @@ func _apply_quality_profile() -> void:
 		_wake_trail.configure_quality(
 			_quality_profile.wake_maximum_points,
 			_quality_profile.wake_mesh_update_interval,
-			_quality_profile.wake_sample_distance
+			_quality_profile.wake_sample_distance,
+			_quality_profile.wake_lifetime
 		)
 	if is_instance_valid(_ocean):
 		_ocean.set_vehicle_interaction_quality(quality_level)
 	if is_instance_valid(_spray_sheet):
 		_spray_sheet.set_refraction_enabled(_quality_profile.refraction_enabled)
+		if not spray_sheet_enabled:
+			_spray_sheet.clear_sheets()
+	for particle_node: Node in find_children("*", "GPUParticles3D", true, false):
+		var particles := particle_node as GPUParticles3D
+		if particles != null:
+			particles.fixed_fps = _quality_profile.particles_fixed_fps
 	if is_instance_valid(_turbine_controller):
 		_turbine_controller.set_quality_level(quality_level)
 

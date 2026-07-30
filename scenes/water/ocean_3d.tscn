@@ -105,7 +105,7 @@ shader_parameter/ocean_middle_wave_amplitude_ratio = 0.55
 shader_parameter/ocean_far_wave_amplitude_ratio = 0.08
 shader_parameter/ocean_debug_show_rings = false
 
-[node name="Ocean3D" type="Node3D" unique_id=1340264265]
+[node name="Ocean3D" type="Node3D" unique_id=1340264265 groups=["graphics_quality_ocean"]]
 process_priority = -100
 process_physics_priority = -100
 script = ExtResource("1_system")

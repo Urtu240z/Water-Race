@@ -1,16 +1,9 @@
-[gd_resource type="Resource" script_class="VehicleWaterEffectsQuality" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="VehicleWaterEffectsQuality" format=3 uid="uid://dcevsmjwlqguq"]
 
-[ext_resource type="Script" path="res://scripts/effects/vehicle_water_effects_quality.gd" id="1_quality"]
+[ext_resource type="Script" uid="uid://d5waquerhq4u" path="res://scripts/effects/vehicle_water_effects_quality.gd" id="1_quality"]
 
 [resource]
 script = ExtResource("1_quality")
 bow_particles_per_side = 16
 rail_particles_per_side = 8
-jet_breakup_particles = 56
 impact_maximum_particles = 36
-wake_maximum_points = 96
-wake_mesh_update_interval = 0.05
-wake_sample_distance = 0.28
-jet_maximum_sections = 24
-jet_cross_section_sides = 6
-refraction_enabled = true

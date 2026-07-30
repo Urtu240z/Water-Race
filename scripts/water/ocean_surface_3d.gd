@@ -188,6 +188,7 @@ var detail_center_xz := Vector2.ZERO
 var effective_near_radius: float = 0.0
 var effective_middle_radius: float = 0.0
 var effective_far_radius: float = 0.0
+var mesh_rebuild_count: int = 0
 var _surface_static_uniform_signature: int = -1
 
 @onready var _near_grid: MeshInstance3D = get_node("NearGrid") as MeshInstance3D
@@ -204,6 +205,7 @@ var _mesh_rebuild_queued: bool = false
 var _uniform_update_queued: bool = false
 var _warned_missing_material: bool = false
 var _has_snapped_origin: bool = false
+var _quality_application_active: bool = false
 
 
 func _enter_tree() -> void:
@@ -326,7 +328,53 @@ func get_debug_status() -> Dictionary:
 			far_triangle_count
 		),
 		"draw_calls": get_estimated_draw_call_count(),
+		"mesh_rebuild_count": mesh_rebuild_count,
 	}
+
+
+func set_graphics_quality(
+	_level: int,
+	profile: GraphicsQualityProfile
+) -> void:
+	if profile == null:
+		return
+	_quality_application_active = true
+	near_radius = profile.ocean_near_radius
+	near_cell_size = profile.ocean_near_cell_size
+	middle_radius = profile.ocean_middle_radius
+	middle_cell_size = profile.ocean_middle_cell_size
+	far_radius = profile.ocean_far_radius
+	far_cell_size = profile.ocean_far_cell_size
+	snap_step = profile.ocean_snap_step
+	detailed_wave_fade_start = profile.ocean_detailed_wave_fade_start
+	detailed_wave_fade_end = profile.ocean_detailed_wave_fade_end
+	middle_wave_amplitude_ratio = profile.ocean_middle_wave_amplitude_ratio
+	far_wave_amplitude_ratio = profile.ocean_far_wave_amplitude_ratio
+	_quality_application_active = false
+	_mesh_rebuild_queued = false
+	if not _structural_parameters_are_valid():
+		push_error("OceanSurface3D: rejected invalid graphics-quality geometry.")
+		return
+	if is_node_ready():
+		_rebuild_meshes()
+	else:
+		_request_mesh_rebuild()
+
+
+func get_graphics_quality_debug_status() -> Dictionary:
+	var status := get_debug_status()
+	status.merge(
+		{
+			"near_radius": near_radius,
+			"near_cell_size": near_cell_size,
+			"middle_radius": middle_radius,
+			"middle_cell_size": middle_cell_size,
+			"far_radius": far_radius,
+			"far_cell_size": far_cell_size,
+		},
+		true
+	)
+	return status
 
 
 func rebuild_meshes() -> void:
@@ -336,10 +384,12 @@ func rebuild_meshes() -> void:
 func _request_mesh_rebuild() -> void:
 	if Engine.is_editor_hint():
 		update_configuration_warnings()
+	if _quality_application_active:
+		return
 	if not is_inside_tree() or _mesh_rebuild_queued:
 		return
 	_mesh_rebuild_queued = true
-	call_deferred(&"_rebuild_meshes")
+	call_deferred(&"_flush_requested_mesh_rebuild")
 
 
 func _request_uniform_update() -> void:
@@ -392,6 +442,12 @@ func _flush_uniform_update() -> void:
 	_build_debug_guides()
 
 
+func _flush_requested_mesh_rebuild() -> void:
+	if not _mesh_rebuild_queued:
+		return
+	_rebuild_meshes()
+
+
 func _configure_processing() -> void:
 	if not is_inside_tree():
 		return
@@ -414,6 +470,7 @@ func _rebuild_meshes() -> void:
 			% MAX_SAFE_ESTIMATED_VERTICES
 		)
 		return
+	mesh_rebuild_count += 1
 
 	effective_near_radius = _ceil_to_step(near_radius, middle_cell_size)
 	effective_middle_radius = _ceil_to_step(middle_radius, far_cell_size)

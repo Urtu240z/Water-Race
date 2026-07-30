@@ -197,6 +197,38 @@ func set_quality_level(level: int) -> void:
 	) as QualityLevel
 
 
+func set_graphics_quality(
+	_level: int,
+	profile: GraphicsQualityProfile
+) -> void:
+	if profile != null:
+		set_quality_level(profile.vehicle_effects_quality_level)
+
+
+func get_graphics_quality_debug_status() -> Dictionary:
+	return {
+		"quality_level": quality_level,
+		"maximum_sections": (
+			_quality_profile.jet_maximum_sections
+			if _quality_profile != null
+			else 0
+		),
+		"cross_section_sides": (
+			_quality_profile.jet_cross_section_sides
+			if _quality_profile != null
+			else 0
+		),
+		"sample_count": _samples.size(),
+		"stream_vertex_count": stream_vertex_count,
+		"jet_particles": (
+			_jet_spray.amount if is_instance_valid(_jet_spray) else 0
+		),
+		"fixed_fps": (
+			_jet_spray.fixed_fps if is_instance_valid(_jet_spray) else 0
+		),
+	}
+
+
 func _cache_references() -> void:
 	_vehicle = get_node_or_null(vehicle_path) as JetSkiController
 	_outlet = get_node_or_null("TurbineOutlet") as Marker3D
@@ -304,6 +336,7 @@ func _apply_quality_profile() -> void:
 		return
 	if is_instance_valid(_jet_spray):
 		_jet_spray.amount = _quality_profile.jet_breakup_particles
+		_jet_spray.fixed_fps = _quality_profile.particles_fixed_fps
 	if _stream_material != null:
 		_stream_material.set_shader_parameter(
 			&"refraction_enabled",

@@ -17,7 +17,10 @@ vec4 sample_directional_wake_state(vec2 logical_xz) {
 	float arm_width = max(directional_wake_arm_width, 0.08);
 	float local_weight_sum = 0.0;
 	for (int index = 0; index < MAX_DIRECTIONAL_WAKE_SAMPLES; index++) {
-		if (index >= directional_wake_active_count) {
+		if (
+			index >= directional_wake_active_count
+			|| index >= directional_wake_effective_count
+		) {
 			break;
 		}
 		vec2 segment = directional_wake_end_positions[index]
@@ -229,6 +232,9 @@ vec4 sample_landing_impact_state(vec2 logical_xz) {
 		? max(landing_impact_debug_multiplier, 1.0)
 		: 1.0;
 	for (int index = 0; index < MAX_LANDING_IMPACTS; index++) {
+		if (index >= landing_impact_effective_count) {
+			break;
+		}
 		if (landing_impact_active[index] == 0) {
 			continue;
 		}
