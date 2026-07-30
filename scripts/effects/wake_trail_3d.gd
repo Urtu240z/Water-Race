@@ -121,10 +121,14 @@ func _ready() -> void:
 	process_physics_priority = 10
 	_mesh_arrays.resize(Mesh.ARRAY_MAX)
 	_wake_mesh.mesh = _array_mesh
-	_normal_material = _wake_mesh.material_override as ShaderMaterial
+	var source_material := _wake_mesh.material_override as ShaderMaterial
+	if source_material != null:
+		_normal_material = source_material.duplicate() as ShaderMaterial
+		_wake_mesh.material_override = _normal_material
 
 
 func _exit_tree() -> void:
+	_unregister_ocean_material()
 	_disconnect_vehicle_signals()
 
 
@@ -137,6 +141,7 @@ func configure(
 	front_left: Marker3D = null,
 	front_right: Marker3D = null
 ) -> void:
+	_unregister_ocean_material()
 	_disconnect_vehicle_signals()
 	_vehicle = vehicle
 	_ocean = ocean
@@ -147,6 +152,8 @@ func configure(
 	_front_right = front_right
 	_connect_vehicle_signals()
 	if is_instance_valid(_ocean):
+		if _normal_material != null:
+			_ocean.register_external_water_material(_normal_material)
 		_ocean.configure_vehicle_interaction_source(
 			self,
 			_vehicle,
@@ -486,6 +493,11 @@ func _disconnect_vehicle_signals() -> void:
 		_vehicle.water_exited.disconnect(_on_vehicle_water_exited)
 
 
+func _unregister_ocean_material() -> void:
+	if is_instance_valid(_ocean) and _normal_material != null:
+		_ocean.unregister_external_water_material(_normal_material)
+
+
 func _on_vehicle_water_exited() -> void:
 	mark_segment_break()
 
@@ -576,37 +588,45 @@ func _rebuild_mesh() -> void:
 			alpha * 0.68 * (1.0 - steering_bias * 0.22)
 		)
 		_append_wake_vertex(
-			surface_position - right * (released_front + rail_half_width),
+			_surface_vertex_at(
+				surface_position - right * (released_front + rail_half_width)
+			),
 			water_normal,
 			left_color,
 			Vector2(0.0, cumulative_length)
 		)
 		_append_wake_vertex(
-			surface_position - right * (released_front - rail_half_width),
+			_surface_vertex_at(
+				surface_position - right * (released_front - rail_half_width)
+			),
 			water_normal,
 			left_color,
 			Vector2(1.0, cumulative_length)
 		)
 		_append_wake_vertex(
-			surface_position - right * central_half_width,
+			_surface_vertex_at(surface_position - right * central_half_width),
 			water_normal,
 			center_color,
 			Vector2(0.0, cumulative_length)
 		)
 		_append_wake_vertex(
-			surface_position + right * central_half_width,
+			_surface_vertex_at(surface_position + right * central_half_width),
 			water_normal,
 			center_color,
 			Vector2(1.0, cumulative_length)
 		)
 		_append_wake_vertex(
-			surface_position + right * (released_front - rail_half_width),
+			_surface_vertex_at(
+				surface_position + right * (released_front - rail_half_width)
+			),
 			water_normal,
 			right_color,
 			Vector2(0.0, cumulative_length)
 		)
 		_append_wake_vertex(
-			surface_position + right * (released_front + rail_half_width),
+			_surface_vertex_at(
+				surface_position + right * (released_front + rail_half_width)
+			),
 			water_normal,
 			right_color,
 			Vector2(1.0, cumulative_length)
@@ -667,6 +687,14 @@ func _append_wake_vertex(
 	_normals.append(normal)
 	_colors.append(color)
 	_uvs.append(uv)
+
+
+func _surface_vertex_at(horizontal_position: Vector3) -> Vector3:
+	return Vector3(
+		horizontal_position.x,
+		_ocean.sample_height(horizontal_position) + wake_surface_offset,
+		horizontal_position.z
+	)
 
 
 func _append_strip_indices(

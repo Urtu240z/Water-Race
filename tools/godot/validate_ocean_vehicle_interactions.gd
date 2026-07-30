@@ -46,6 +46,7 @@ func _run() -> void:
 	_validate_hull_tick_update(ocean, vehicle)
 	_validate_air_submarine_and_impacts(ocean, vehicle, wake)
 	_validate_rebase(ocean, vehicle, wake)
+	_validate_foam_gpu_alignment(ocean, wake)
 	_validate_shader_and_uniform_contract(ocean)
 	_benchmark_cpu_updates(ocean)
 
@@ -395,6 +396,56 @@ func _validate_shader_and_uniform_contract(ocean: Ocean3D) -> void:
 	_expect(
 		ocean.vehicle_interaction_update_interval >= 0.05 - EPSILON,
 		"Solo el historial queda limitado aproximadamente a 20 Hz."
+	)
+
+
+func _validate_foam_gpu_alignment(
+	ocean: Ocean3D,
+	wake: WakeTrail3D
+) -> void:
+	wake.call("_rebuild_mesh")
+	var vertices := wake.get("_vertices") as PackedVector3Array
+	var base_height_matches := not vertices.is_empty()
+	if base_height_matches:
+		var first_vertex := vertices[0]
+		base_height_matches = absf(
+			first_vertex.y
+				- (
+					ocean.sample_height(first_vertex)
+					+ wake.wake_surface_offset
+				)
+		) <= EPSILON
+	_expect(
+		base_height_matches,
+		"Cada vértice lateral parte de su propia altura macro/ripple CPU."
+	)
+	var foam_source := FileAccess.get_file_as_string(
+		"res://shaders/wake_foam.gdshader"
+	)
+	_expect(
+		foam_source.contains(
+			"ocean_vehicle_interaction_functions.gdshaderinc"
+		)
+		and foam_source.contains(
+			"sample_vehicle_interaction_state(logical_xz).x"
+		)
+		and foam_source.contains("void vertex()"),
+		"La espuma suma en GPU la misma deformación direccional que el océano."
+	)
+	var material := wake.get("_normal_material") as ShaderMaterial
+	var external_materials := ocean.get("_external_materials") as Array
+	var starts := (
+		material.get_shader_parameter(
+			&"directional_wake_start_positions"
+		) as PackedVector2Array
+		if material != null
+		else PackedVector2Array()
+	)
+	_expect(
+		material != null
+		and external_materials.has(material)
+		and starts.size() == 16,
+		"Ocean3D sincroniza tiempo, origen y segmentos con el material de espuma."
 	)
 
 

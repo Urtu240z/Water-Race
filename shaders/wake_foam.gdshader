@@ -4,6 +4,7 @@ render_mode unshaded, blend_mix, depth_prepass_alpha, cull_disabled;
 uniform vec4 foam_color : source_color = vec4(0.76, 0.92, 0.98, 0.58);
 uniform sampler2D foam_noise_texture : repeat_enable, filter_linear_mipmap;
 uniform float simulation_time = 0.0;
+uniform vec2 ocean_logical_origin_offset_xz = vec2(0.0);
 uniform float foam_intensity = 0.0;
 uniform float macro_noise_scale = 0.055;
 uniform float detail_noise_scale = 0.19;
@@ -13,6 +14,19 @@ uniform float edge_softness : hint_range(0.01, 0.49, 0.01) = 0.16;
 uniform float opacity_boost : hint_range(0.0, 4.0, 0.01) = 1.0;
 uniform float core_opacity : hint_range(0.0, 1.0, 0.01) = 0.22;
 uniform float emission_strength : hint_range(0.0, 2.0, 0.01) = 0.05;
+
+#include "res://shaders/includes/ocean_vehicle_interaction_uniforms.gdshaderinc"
+#include "res://shaders/includes/ocean_vehicle_interaction_functions.gdshaderinc"
+
+
+void vertex() {
+	vec3 world_position = (MODEL_MATRIX * vec4(VERTEX, 1.0)).xyz;
+	vec2 logical_xz = world_position.xz + ocean_logical_origin_offset_xz;
+	float interaction_height = sample_vehicle_interaction_state(logical_xz).x;
+	vec3 local_displacement = inverse(mat3(MODEL_MATRIX))
+		* vec3(0.0, interaction_height, 0.0);
+	VERTEX += local_displacement;
+}
 
 
 float hash21(vec2 value) {
