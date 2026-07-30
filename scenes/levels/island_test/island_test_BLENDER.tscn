@@ -64,8 +64,8 @@
 [ext_resource type="Shader" uid="uid://cmnqja2yvxste" path="res://shaders/vegetation/palm_impostor_ground_shadow.gdshader" id="223_palm_shadow_shader"]
 [ext_resource type="PackedScene" uid="uid://cisubjold2oac" path="res://scenes/wildlife/ambient_wildlife.tscn" id="224_wildlife"]
 [ext_resource type="PackedScene" path="res://scenes/ui/pause_menu.tscn" id="225_pause_menu"]
-[ext_resource type="Script" path="res://scripts/environment/terrain_quality_controller.gd" id="226_terrain_quality"]
-[ext_resource type="Script" path="res://scripts/vegetation/vegetation_quality_controller.gd" id="227_vegetation_quality"]
+[ext_resource type="Script" uid="uid://det7bptrkw1dp" path="res://scripts/environment/terrain_quality_controller.gd" id="226_terrain_quality"]
+[ext_resource type="Script" uid="uid://bhgjw8t7kbunx" path="res://scripts/vegetation/vegetation_quality_controller.gd" id="227_vegetation_quality"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_f0815"]
 panorama = ExtResource("39_1y1wo")
@@ -246,7 +246,7 @@ shader_parameter/breakup = 0.0
 material = ExtResource("34_h01lt")
 size = Vector2(10000, 10000)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_6j5nl"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_y0n38"]
 resource_local_to_scene = true
 render_priority = 0
 shader = ExtResource("32_djt2o")
@@ -266,6 +266,7 @@ shader_parameter/wave_travel_speed_b = 4.0000003576287995
 shader_parameter/wave_mean_a = 0.638000030305
 shader_parameter/wave_mean_b = 0.26800001273
 shader_parameter/geometry_normal_step = 2.0
+shader_parameter/ocean_geometry_normal_quality = 2
 shader_parameter/ripple_active = PackedInt32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 shader_parameter/ripple_positions = PackedVector2Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 shader_parameter/ripple_start_times = PackedFloat32Array(-inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf)
@@ -274,7 +275,9 @@ shader_parameter/ripple_speeds = PackedFloat32Array(3.4, 3.4, 3.4, 3.4, 3.4, 3.4
 shader_parameter/ripple_wavelengths = PackedFloat32Array(2.6, 2.6, 2.6, 2.6, 2.6, 2.6, 2.6, 2.6, 2.6, 2.6, 2.6, 2.6)
 shader_parameter/ripple_decays = PackedFloat32Array(0.72, 0.72, 0.72, 0.72, 0.72, 0.72, 0.72, 0.72, 0.72, 0.72, 0.72, 0.72)
 shader_parameter/ripple_lifetimes = PackedFloat32Array(4.6, 4.6, 4.6, 4.6, 4.6, 4.6, 4.6, 4.6, 4.6, 4.6, 4.6, 4.6)
+shader_parameter/ripple_effective_count = 12
 shader_parameter/landing_impacts_enabled = true
+shader_parameter/landing_impact_effective_count = 4
 shader_parameter/landing_impact_active = PackedInt32Array(0, 0, 0, 0)
 shader_parameter/landing_impact_positions = PackedVector2Array(0, 0, 0, 0, 0, 0, 0, 0)
 shader_parameter/landing_impact_start_times = PackedFloat32Array(-inf, -inf, -inf, -inf)
@@ -296,6 +299,7 @@ shader_parameter/landing_impact_exaggerated_debug = false
 shader_parameter/landing_impact_debug_multiplier = 2.5
 shader_parameter/directional_wake_enabled = true
 shader_parameter/directional_wake_active_count = 0
+shader_parameter/directional_wake_effective_count = 16
 shader_parameter/directional_wake_start_positions = PackedVector2Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 shader_parameter/directional_wake_end_positions = PackedVector2Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 shader_parameter/directional_wake_start_times = PackedFloat32Array(-inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf)
@@ -347,6 +351,7 @@ shader_parameter/surface_warp_world_size = 212.0
 shader_parameter/surface_warp_strength = 1.2500000186265
 shader_parameter/surface_detail_fade_start = 130.0
 shader_parameter/surface_detail_fade_end = 520.0
+shader_parameter/ocean_surface_detail_quality = 2
 shader_parameter/shallow_water_color = Color(0.035, 0.43, 0.55, 1)
 shader_parameter/deep_water_color = Color(0.004, 0.055, 0.115, 1)
 shader_parameter/horizon_water_color = Color(0.025, 0.22, 0.34, 1)
@@ -388,6 +393,8 @@ shader_parameter/foam_macro_scale = 0.1390000066025
 shader_parameter/foam_detail_scale = 0.06500000308750001
 shader_parameter/foam_scroll_speed = 0.13
 shader_parameter/foam_roughness = 0.70999998413008
+shader_parameter/ocean_foam_detail_quality = 1
+shader_parameter/ocean_foam_evaluation_distance = 520.0
 shader_parameter/ocean_surface_enabled = true
 shader_parameter/ocean_snapped_origin_xz = Vector2(0, 0)
 shader_parameter/ocean_logical_origin_offset_xz = Vector2(0, 0)
@@ -452,7 +459,7 @@ shader_parameter/custom_reflection_minimum_surface_weight = 0.34
 shader_parameter/custom_reflection_maximum_surface_weight = 0.88
 shader_parameter/custom_reflection_emission_strength = 1.20999997295408
 
-[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_tkuhf"]
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_px0hy"]
 resource_local_to_scene = true
 blend_mode = 1
 
@@ -479,7 +486,7 @@ point_count = 3
 [sub_resource type="CurveTexture" id="CurveTexture_bubble_shrink"]
 curve = SubResource("Curve_bubble_shrink")
 
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_pl0kw"]
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_yvlvf"]
 resource_local_to_scene = true
 particle_flag_disable_z = true
 emission_shape_offset = Vector3(0, 600, 0)
@@ -502,7 +509,7 @@ turbulence_influence_max = 0.082
 turbulence_initial_displacement_min = -47.5
 turbulence_initial_displacement_max = 94.5
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_y0n38"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ehkfu"]
 resource_local_to_scene = true
 render_priority = -127
 shader = ExtResource("51_6j5nl")
@@ -562,9 +569,9 @@ player_spawn_path = NodePath("Gameplay/PlayerSpawn")
 vehicle_path = NodePath("Gameplay/JetSki")
 chase_camera_path = NodePath("CameraSystem/ChaseCamera")
 
-[node name="PauseMenu" parent="." instance=ExtResource("225_pause_menu")]
+[node name="PauseMenu" parent="." unique_id=885050825 instance=ExtResource("225_pause_menu")]
 
-[node name="VegetationQualityController" type="Node" parent="." groups=["graphics_quality_vegetation"]]
+[node name="VegetationQualityController" type="Node" parent="." unique_id=1324789763 groups=["graphics_quality_vegetation"]]
 script = ExtResource("227_vegetation_quality")
 
 [node name="Environment" type="Node3D" parent="." unique_id=366055671]
@@ -778,7 +785,7 @@ mesh = SubResource("PlaneMesh_tpwhi")
 [node name="WaterIntegration" type="Node3D" parent="." unique_id=1889730552]
 
 [node name="Ocean" parent="WaterIntegration" unique_id=1340264265 instance=ExtResource("32_wfhwd")]
-ocean_material = SubResource("ShaderMaterial_6j5nl")
+ocean_material = SubResource("ShaderMaterial_y0n38")
 wave_world_size_a = 298.5
 wave_world_size_b = 177.5
 wave_amplitude_a = 0.77999998256544
@@ -952,7 +959,7 @@ editor_preview_mode = 0
 
 [node name="EntryBubbles" parent="CameraSystem/ChaseCamera/Camera3D/UnderwaterEffect/WaterCrossingOverlay" index="0"]
 visible = false
-material = SubResource("CanvasItemMaterial_tkuhf")
+material = SubResource("CanvasItemMaterial_px0hy")
 position = Vector2(1, 1.76)
 amount = 500
 texture = SubResource("GradientTexture2D_pl0kw")
@@ -960,10 +967,10 @@ lifetime = 20.0
 speed_scale = 8.0
 explosiveness = 1.0
 randomness = 1.0
-process_material = SubResource("ParticleProcessMaterial_pl0kw")
+process_material = SubResource("ParticleProcessMaterial_yvlvf")
 
 [node name="UnderwaterPostProcess" parent="CameraSystem/ChaseCamera/Camera3D/UnderwaterEffect" index="1" unique_id=1854893749]
-material_override = SubResource("ShaderMaterial_y0n38")
+material_override = SubResource("ShaderMaterial_ehkfu")
 
 [node name="Debug" type="Node" parent="." unique_id=1303880580]
 
@@ -1016,25 +1023,47 @@ transform = Transform3D(2.5107322, 0, -1.5284144, 0, 2.3749995, 0, 1.3486009, 0,
 surface_material_override/0 = ExtResource("5_kmjc7")
 
 [node name="Rock2" parent="Atrezzo" unique_id=2094025158 instance=ExtResource("195_ox2y0")]
-transform = Transform3D(-0.69639826, 0.60558695, -5.467661, 0.07651358, 5.5118318, 0.600734, 5.5005636, -3.6218538e-08, -0.700589, -121.76657, -16.910297, -180.97124)
+transform = Transform3D(3.1803858, 0.6325982, -6.2092667, 0.09665962, 6.963099, 0.75890744, 6.2406597, -0.4302361, 3.152633, -551.9645, -16.910297, -180.97124)
+
+[node name="Rock2_VIS" parent="Atrezzo/Rock2" index="0" unique_id=1604875007]
+surface_material_override/0 = ExtResource("5_kmjc7")
 
 [node name="Rock3" parent="Atrezzo" unique_id=32409294 instance=ExtResource("195_ox2y0")]
-transform = Transform3D(-0.69639826, 0.60558695, -5.467661, 0.07651358, 5.5118318, 0.600734, 5.5005636, -3.6218538e-08, -0.700589, -139.17538, -16.910297, -123.952194)
+transform = Transform3D(2.1527746, -0.58318883, 5.0766606, 0.07651358, 5.5118313, 0.60073394, -5.1094747, -0.16317603, 2.1479445, -636.2675, -9.634373, -123.952194)
+
+[node name="Rock2_VIS" parent="Atrezzo/Rock3" index="0" unique_id=1604875007]
+surface_material_override/0 = ExtResource("5_kmjc7")
 
 [node name="Rock4" parent="Atrezzo" unique_id=732379558 instance=ExtResource("195_ox2y0")]
-transform = Transform3D(-0.9700894, 3.5165074, -7.616502, 0.44429702, 7.678032, 3.488327, 8.377321, -3.245338e-08, -1.0669926, -152.22296, -27.328716, -141.59525)
+transform = Transform3D(-0.9700894, 3.5165074, -7.616502, 0.44429702, 7.678032, 3.488327, 8.377321, -3.245338e-08, -1.0669926, -567.65735, -46.195744, -141.59525)
+
+[node name="Rock2_VIS" parent="Atrezzo/Rock4" index="0" unique_id=1604875007]
+surface_material_override/0 = ExtResource("5_kmjc7")
 
 [node name="Rock5" parent="Atrezzo" unique_id=765989064 instance=ExtResource("195_ox2y0")]
-transform = Transform3D(-1.1396358, 2.6904924, -5.6494913, 0.5078428, 6.037661, 2.5175169, 9.795862, -2.4660984e-08, -0.7877678, -119.72862, -1.9967346, -148.51874)
+transform = Transform3D(-1.1396358, 2.6904924, -5.6494913, 0.5078428, 6.037661, 2.5175169, 9.795862, -2.4660984e-08, -0.7877678, -235.79329, -52.84747, -148.51874)
+
+[node name="Rock2_VIS" parent="Atrezzo/Rock5" index="0" unique_id=1604875007]
+surface_material_override/0 = ExtResource("5_kmjc7")
 
 [node name="Rock6" parent="Atrezzo" unique_id=712207501 instance=ExtResource("197_3j4p0")]
-transform = Transform3D(12.3, 0, 0, 0, 12.3, 0, 0, 0, 12.3, -215.29344, -13.349108, -25.681166)
+transform = Transform3D(18.05736, -10.612488, 0, 10.612488, 18.05736, 0, 0, 0, 20.945002, -217.55464, -24.05898, -25.681166)
+
+[node name="Rock3_VIS" parent="Atrezzo/Rock6" index="0" unique_id=977166469]
+transform = Transform3D(1.2727225, 0.58904827, -1.7913191, 0.5890485, 1.9288102, 1.0527757, 1.791319, -1.0527761, 0.926533, -0.5910263, -1.0056431, 0)
+surface_material_override/0 = ExtResource("5_kmjc7")
 
 [node name="Rock7" parent="Atrezzo" unique_id=1710166104 instance=ExtResource("197_3j4p0")]
-transform = Transform3D(-3.09367, 0, -10.243008, 2.198888, 10.4505415, -0.66412467, 10.004204, -2.2969916, -3.0215447, -215.29344, -13.349108, -37.872215)
+transform = Transform3D(-12.991967, -3.3479185e-07, -43.01585, 9.234303, 43.887394, -2.7890134, 42.012985, -9.646292, -12.6890745, -269.192, -62.774254, -70.82382)
+
+[node name="Rock3_VIS" parent="Atrezzo/Rock7" index="0" unique_id=977166469]
+surface_material_override/0 = ExtResource("5_kmjc7")
 
 [node name="Rock8" parent="Atrezzo" unique_id=571328736 instance=ExtResource("197_3j4p0")]
 transform = Transform3D(33.475, 0, 0, 0, 33.475, 0, 0, 0, 33.475, 39.93125, -40.529305, 376.03717)
+
+[node name="Rock3_VIS" parent="Atrezzo/Rock8" index="0" unique_id=977166469]
+surface_material_override/0 = ExtResource("5_kmjc7")
 
 [node name="PalmsMultiMesh" parent="Atrezzo" unique_id=302165511 instance=ExtResource("3_un2uv")]
 transform = Transform3D(0.86, 0, 0, 0, 0.86, 0, 0, 0, 0.86, 149, 1.8, 120.1001)
@@ -1155,7 +1184,9 @@ buoy_clearance = 20.0
 [editable path="Gameplay/JetSki"]
 [editable path="Gameplay/JetSki/VisualRoot/JetSkiVisual"]
 [editable path="Gameplay/JetSki/VisualRoot/JetSkiVisual/HullModel/Hull"]
+[editable path="Gameplay/JetSki/VisualRoot/JetSkiVisual/HullModel/Hull/NewJetSki_Hull"]
 [editable path="Gameplay/JetSki/VisualRoot/JetSkiVisual/HandlePivot/HandleModel/Handle"]
+[editable path="Gameplay/JetSki/VisualRoot/JetSkiVisual/HandlePivot/HandleModel/Handle/NewJetSki_Handle"]
 [editable path="Gameplay/JetSki/VisualRoot/RiderMount/RiderAssetRoot/RiderRig"]
 [editable path="Gameplay/JetSki/VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/Rider_Bot"]
 [editable path="CameraSystem/ChaseCamera"]
@@ -1164,3 +1195,10 @@ buoy_clearance = 20.0
 [editable path="Atrezzo/Boat_4"]
 [editable path="Atrezzo/Boat_2"]
 [editable path="Atrezzo/Rock1"]
+[editable path="Atrezzo/Rock2"]
+[editable path="Atrezzo/Rock3"]
+[editable path="Atrezzo/Rock4"]
+[editable path="Atrezzo/Rock5"]
+[editable path="Atrezzo/Rock6"]
+[editable path="Atrezzo/Rock7"]
+[editable path="Atrezzo/Rock8"]

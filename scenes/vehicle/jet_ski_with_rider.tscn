@@ -84,7 +84,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2428, 0.679)
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
 
 [node name="RiderRig" parent="VisualRoot/RiderMount/RiderAssetRoot" index="0" unique_id=2001770911 instance=ExtResource("2_rider")]
-rider_skin = 3
+rider_skin = 4
 
 [node name="Rider_Bot" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot" parent_id_path=PackedInt32Array(2001770911, 226906520) index="0" unique_id=1075285769]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.18724537, 0)
@@ -333,27 +333,6 @@ left_grip_strength = 0.87
 right_grip_strength = 0.93
 thumb_opposition_strength = 0.47
 
-[node name="Rider01_Mesh_01" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D" index="10" unique_id=1774638866]
-visible = false
-
-[node name="Rider01_Mesh_02" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D" index="11" unique_id=2122553941]
-visible = false
-
-[node name="Rider01_Mesh_03" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D" index="12" unique_id=750232266]
-visible = false
-
-[node name="Rider01_Mesh_04" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D" index="13" unique_id=1391495539]
-visible = false
-
-[node name="Rider01_Mesh_05" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D" index="14" unique_id=2015072498]
-visible = false
-
-[node name="Rider01_Mesh_06" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D" index="15" unique_id=816370644]
-visible = false
-
-[node name="Rider04_Body" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D" index="16"]
-visible = true
-
 [node name="AnimationTree" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig" index="2" unique_id=187453891]
 parameters/mounted_add/add_amount = 0.0
 
@@ -383,6 +362,8 @@ spray_edge_color = Color(1, 1, 1, 0.1254902)
 
 [editable path="VisualRoot/JetSkiVisual"]
 [editable path="VisualRoot/JetSkiVisual/HullModel/Hull"]
+[editable path="VisualRoot/JetSkiVisual/HullModel/Hull/NewJetSki_Hull"]
 [editable path="VisualRoot/JetSkiVisual/HandlePivot/HandleModel/Handle"]
+[editable path="VisualRoot/JetSkiVisual/HandlePivot/HandleModel/Handle/NewJetSki_Handle"]
 [editable path="VisualRoot/RiderMount/RiderAssetRoot/RiderRig"]
 [editable path="VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/Rider_Bot"]
