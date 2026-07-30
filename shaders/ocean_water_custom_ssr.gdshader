@@ -298,7 +298,9 @@ vec4 sample_wave_state(vec2 world_xz) {
 		) / (2.0 * step_size)
 	);
 	vec4 ripple = sample_ripple_state(logical_xz);
-	float macro_scale = clipmap_wave_scale(world_xz);
+	float macro_scale = vehicle_interaction_exaggerated_debug
+		? 0.0
+		: clipmap_wave_scale(world_xz);
 	float ripple_distance = length(world_xz - ocean_detail_center_xz);
 	float ripple_scale = 1.0 - smoothstep(70.0, 130.0, ripple_distance);
 	float interaction_scale = 1.0 - smoothstep(

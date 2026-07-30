@@ -13,67 +13,91 @@ vec4 sample_directional_wake_state(vec2 logical_xz) {
 	vec2 derivatives = vec2(0.0);
 	float energy = 0.0;
 	float safe_wavelength = max(directional_wake_wavelength, 0.05);
-	float wave_number = TAU_VALUE / safe_wavelength;
-	float maximum_distance = max(directional_wake_maximum_distance, 0.1);
 	float duration = max(directional_wake_duration, 0.05);
-	float sample_normalization = inversesqrt(
-		max(float(directional_wake_active_count), 1.0)
-	);
+	float arm_width = max(directional_wake_arm_width, 0.08);
+	float local_weight_sum = 0.0;
 	for (int index = 0; index < MAX_DIRECTIONAL_WAKE_SAMPLES; index++) {
 		if (index >= directional_wake_active_count) {
 			break;
 		}
-		float age = simulation_time - directional_wake_start_times[index];
+		vec2 segment = directional_wake_end_positions[index]
+			- directional_wake_start_positions[index];
+		float segment_length_squared = dot(segment, segment);
+		if (segment_length_squared <= 0.0001) {
+			continue;
+		}
+		float segment_length = sqrt(segment_length_squared);
+		vec2 direction = segment / segment_length;
+		vec2 right = vec2(-direction.y, direction.x);
+		vec2 from_start = logical_xz
+			- directional_wake_start_positions[index];
+		float raw_segment_ratio = dot(from_start, segment)
+			/ segment_length_squared;
+		float segment_ratio = clamp(raw_segment_ratio, 0.0, 1.0);
+		vec2 closest_point = directional_wake_start_positions[index]
+			+ segment * segment_ratio;
+		float endpoint_distance = raw_segment_ratio < 0.0
+			? -raw_segment_ratio * segment_length
+			: (
+				raw_segment_ratio > 1.0
+				? (raw_segment_ratio - 1.0) * segment_length
+				: 0.0
+			);
+		float endpoint_fade_distance = max(safe_wavelength * 0.8, arm_width * 2.0);
+		float endpoint_gate = 1.0 - smoothstep(
+			0.0,
+			endpoint_fade_distance,
+			endpoint_distance
+		);
+		if (endpoint_gate <= 0.0001) {
+			continue;
+		}
+		float local_creation_time = mix(
+			directional_wake_start_times[index],
+			directional_wake_end_times[index],
+			segment_ratio
+		);
+		float age = simulation_time - local_creation_time;
 		if (age < 0.0 || age > duration) {
 			continue;
 		}
-		vec2 direction = interaction_safe_direction(
-			directional_wake_directions[index],
-			vec2(0.0, -1.0)
-		);
-		vec2 right = vec2(-direction.y, direction.x);
-		vec2 delta = logical_xz - directional_wake_positions[index];
-		float behind = -dot(delta, direction);
-		if (behind < -0.75 || behind > maximum_distance) {
-			continue;
-		}
-		float lateral = dot(delta, right);
+		vec2 closest_delta = logical_xz - closest_point;
+		float lateral = dot(closest_delta, right);
 		float initial_width = max(directional_wake_widths[index], 0.15);
-		float opening = max(behind, 0.0) * directional_wake_opening_slope;
-		float propagation = age * directional_wake_propagation_speed * 0.08;
-		float preliminary_arm_offset = initial_width + opening + propagation;
-		float preliminary_arm_width = max(
-			directional_wake_arm_width * mix(
-				0.82,
-				1.28,
-				clamp(behind / maximum_distance, 0.0, 1.0)
-			),
-			0.08
-		);
-		if (
-			abs(lateral)
-			> preliminary_arm_offset
-				+ preliminary_arm_width * 3.35
-				+ safe_wavelength * 0.05
-		) {
+		float source_speed = max(directional_wake_speeds[index], 0.0);
+		float front_speed = directional_wake_propagation_speed
+			+ source_speed * directional_wake_opening_slope;
+		float front_distance = initial_width + age * front_speed;
+		float absolute_lateral = abs(lateral);
+		float front_offset = absolute_lateral - front_distance;
+		if (front_offset > arm_width * 3.2
+			|| front_offset < -safe_wavelength * 2.2) {
 			continue;
 		}
-		float stable_irregularity = sin(
-			dot(logical_xz, vec2(0.071, -0.053))
-				+ dot(directional_wake_positions[index], vec2(0.037, 0.061))
-		) * safe_wavelength * 0.045;
-		float arm_offset = preliminary_arm_offset + stable_irregularity;
-		float left_distance = lateral + arm_offset;
-		float right_distance = lateral - arm_offset;
-		float arm_width = preliminary_arm_width;
-		float distance_fade = exp(
-			-max(behind, 0.0) * directional_wake_attenuation
-		) * (1.0 - smoothstep(maximum_distance * 0.72, maximum_distance, behind));
-		float age_fade = 1.0 - smoothstep(duration * 0.42, duration, age);
-		float forward_gate = smoothstep(-0.75, 0.35, behind);
+		float crest_x = front_offset;
+		float valley_x = front_offset + safe_wavelength * 0.72;
+		float recovery_x = front_offset + safe_wavelength * 1.45;
+		float valley_width = arm_width * 1.15;
+		float recovery_width = arm_width * 1.35;
+		float crest = exp(-crest_x * crest_x / (arm_width * arm_width));
+		float valley = exp(
+			-valley_x * valley_x / (valley_width * valley_width)
+		);
+		float recovery = exp(
+			-recovery_x * recovery_x / (recovery_width * recovery_width)
+		);
+		float packet_profile = crest - valley * 0.55 + recovery * 0.20;
+		float packet_derivative =
+			crest * -2.0 * crest_x / (arm_width * arm_width)
+			- valley * 0.55 * -2.0 * valley_x
+				/ (valley_width * valley_width)
+			+ recovery * 0.20 * -2.0 * recovery_x
+				/ (recovery_width * recovery_width);
+		float age_fade = exp(-age * directional_wake_attenuation)
+			* (1.0 - smoothstep(duration * 0.62, duration, age));
 		float base_amplitude = directional_wake_amplitude
 			* clamp(directional_wake_intensities[index], 0.0, 1.0)
-			* distance_fade * age_fade * forward_gate * sample_normalization;
+			* age_fade * endpoint_gate;
 		if (base_amplitude <= 0.00001) {
 			continue;
 		}
@@ -82,66 +106,77 @@ vec4 sample_directional_wake_state(vec2 logical_xz) {
 			-0.65,
 			0.65
 		);
-		float left_amplitude = base_amplitude * (1.0 + turn_bias);
-		float right_amplitude = base_amplitude * (1.0 - turn_bias);
-		float phase_travel = age * directional_wake_propagation_speed;
-		float left_phase = (left_distance - phase_travel) * wave_number;
-		float right_phase = (right_distance + phase_travel) * wave_number;
-		float left_gaussian = exp(
-			-left_distance * left_distance / (arm_width * arm_width)
-		);
-		float right_gaussian = exp(
-			-right_distance * right_distance / (arm_width * arm_width)
-		);
-		float left_sine = sin(left_phase);
-		float right_sine = sin(right_phase);
-		height += left_sine * left_amplitude * left_gaussian;
-		height += right_sine * right_amplitude * right_gaussian;
-		vec2 opening_gradient = -direction * directional_wake_opening_slope;
-		vec2 left_gradient = right + opening_gradient;
-		vec2 right_gradient = right - opening_gradient;
-		float left_derivative = left_amplitude * left_gaussian * (
-			wave_number * cos(left_phase)
-				- 2.0 * left_distance / (arm_width * arm_width) * left_sine
-		);
-		float right_derivative = right_amplitude * right_gaussian * (
-			wave_number * cos(right_phase)
-				- 2.0 * right_distance / (arm_width * arm_width) * right_sine
-		);
-		derivatives += left_gradient * left_derivative;
-		derivatives += right_gradient * right_derivative;
+		float side_sign = lateral >= 0.0 ? 1.0 : -1.0;
+		float side_amplitude = 1.0 - turn_bias * side_sign;
+		height += packet_profile * base_amplitude * side_amplitude;
+		float creation_time_gradient = (
+			directional_wake_end_times[index]
+				- directional_wake_start_times[index]
+		) / segment_length;
+		vec2 age_gradient = -direction * creation_time_gradient;
+		vec2 front_gradient = age_gradient * front_speed;
+		vec2 offset_gradient = right * side_sign - front_gradient;
+		derivatives += offset_gradient * packet_derivative
+			* base_amplitude * side_amplitude;
 
-		float center_width = max(arm_offset * 0.74, initial_width);
-		float shifted_lateral = lateral - turn_bias * initial_width * 0.32;
+		float center_width = max(initial_width * 0.72, 0.22);
 		float center_gaussian = exp(
-			-shifted_lateral * shifted_lateral / (center_width * center_width)
+			-lateral * lateral / (center_width * center_width)
 		);
-		float center_envelope = smoothstep(0.0, 2.0, behind)
-			* (1.0 - smoothstep(maximum_distance * 0.48, maximum_distance, behind));
 		float depression = directional_wake_center_depression
 			* clamp(directional_wake_intensities[index], 0.0, 1.0)
-			* center_gaussian * center_envelope * age_fade * sample_normalization;
+			* center_gaussian
+			* exp(-age * 1.65)
+			* (1.0 - smoothstep(0.75, 1.8, age))
+			* endpoint_gate;
 		height -= depression;
 		derivatives += right * (
-			depression * 2.0 * shifted_lateral / (center_width * center_width)
+			depression * 2.0 * lateral / (center_width * center_width)
 		);
-		float recovery = depression * 0.24 * smoothstep(
-			maximum_distance * 0.34,
-			maximum_distance * 0.72,
-			behind
+		float closure_front = initial_width * 0.55
+			+ age * directional_wake_propagation_speed * 0.38;
+		float closure_width = max(center_width * 0.72, 0.16);
+		float closure_offset = absolute_lateral - closure_front;
+		float closure_gaussian = exp(
+			-closure_offset * closure_offset
+				/ (closure_width * closure_width)
 		);
-		height += recovery;
+		float closure_age_gate = smoothstep(0.08, 0.42, age)
+			* (1.0 - smoothstep(0.82, 1.75, age));
+		float closure_recovery = directional_wake_center_depression
+			* 0.30 * clamp(directional_wake_intensities[index], 0.0, 1.0)
+			* closure_gaussian * closure_age_gate * endpoint_gate;
+		height += closure_recovery;
+		float closure_derivative = closure_recovery
+			* -2.0 * closure_offset / (closure_width * closure_width);
+		vec2 closure_front_gradient = age_gradient
+			* directional_wake_propagation_speed * 0.38;
+		derivatives += (
+			right * side_sign - closure_front_gradient
+		) * closure_derivative;
+		float relevance = max(
+			max(crest, max(valley, recovery)),
+			max(center_gaussian * exp(-age * 1.65), closure_gaussian * closure_age_gate)
+		);
+		local_weight_sum += endpoint_gate * relevance;
 		energy = max(
 			energy,
 			clamp(
-				(abs(left_amplitude) * left_gaussian
-					+ abs(right_amplitude) * right_gaussian
-					+ depression) * 5.0,
+				(
+					crest * base_amplitude
+					+ abs(packet_derivative) * base_amplitude
+						* arm_width * 0.18
+					+ depression * 0.35
+					+ closure_recovery
+				) * 1.35,
 				0.0,
 				1.0
 			)
 		);
 	}
+	float local_normalization = max(local_weight_sum, 1.0);
+	height /= local_normalization;
+	derivatives /= local_normalization;
 	return vec4(height, derivatives, energy);
 }
 
@@ -277,19 +312,40 @@ vec4 sample_vehicle_interaction_state(vec2 logical_xz) {
 		? sample_hull_pressure_state(logical_xz)
 		: vec4(0.0);
 	vec4 state = wake_state + hull_state;
-	float displacement_limit = max(vehicle_interaction_maximum_displacement, 0.01);
-	float requested_height = state.x;
-	float clamp_scale = abs(requested_height) > displacement_limit
-		? displacement_limit / max(abs(requested_height), 0.00001)
+	float debug_multiplier = vehicle_interaction_exaggerated_debug
+		? max(vehicle_interaction_debug_multiplier, 1.0)
 		: 1.0;
-	state.xyz *= clamp_scale;
+	state.xyz *= debug_multiplier;
+	float debug_limit_scale = vehicle_interaction_exaggerated_debug
+		? min(debug_multiplier, 2.5)
+		: 1.0;
+	float displacement_limit = max(
+		vehicle_interaction_maximum_displacement * debug_limit_scale,
+		0.01
+	);
+	float requested_height = state.x;
+	state.x = clamp(requested_height, -displacement_limit, displacement_limit);
+	float derivative_limit = max(
+		vehicle_interaction_maximum_derivative * debug_limit_scale,
+		0.05
+	);
+	float derivative_magnitude = length(state.yz);
+	float derivative_blend = smoothstep(
+		derivative_limit * 0.75,
+		derivative_limit,
+		derivative_magnitude
+	);
+	float derivative_scale = derivative_magnitude > 0.00001
+		? min(derivative_limit / derivative_magnitude, 1.0)
+		: 1.0;
+	state.yz *= mix(1.0, derivative_scale, derivative_blend);
 	state.w = max(wake_state.w, hull_state.w);
 	return state;
 }
 
 
 float interaction_ripple_weight() {
-	return (
+	return vehicle_interaction_exaggerated_debug ? 0.0 : (
 		ocean_interaction_debug_mode == 2
 		|| ocean_interaction_debug_mode == 3
 	) ? 0.0 : 1.0;

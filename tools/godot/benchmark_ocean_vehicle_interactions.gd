@@ -52,15 +52,54 @@ func _run() -> void:
 		"OCEAN_INTERACTION_RENDER_PROXY_DELTA_MSEC=%.3f"
 		% (enabled_msec - disabled_msec)
 	)
-	var screenshot := root.get_texture().get_image()
 	var screenshot_path := "res://.godot/ocean_vehicle_interaction_benchmark.png"
-	var screenshot_error := screenshot.save_png(screenshot_path)
+	var screenshot_error := root.get_texture().get_image().save_png(screenshot_path)
 	print(
 		"OCEAN_INTERACTION_SCREENSHOT=%s"
 		% (
 			ProjectSettings.globalize_path(screenshot_path)
 			if screenshot_error == OK
 			else "ERROR_%d" % screenshot_error
+		)
+	)
+	wake.call("_age_samples", 1.0)
+	ocean.set("_simulation_time", float(ocean.get("_simulation_time")) + 1.0)
+	ocean.call("_update_directional_wake_segments")
+	ocean.call("_update_interaction_metrics")
+	ocean.call("_push_time_parameter_to_all_materials")
+	ocean.call("_push_directional_wake_parameters_to_all_materials")
+	await process_frame
+	await process_frame
+	var persisted_path := "res://.godot/ocean_vehicle_interaction_persisted.png"
+	var persisted_error := root.get_texture().get_image().save_png(persisted_path)
+	print(
+		"OCEAN_INTERACTION_PERSISTED_SCREENSHOT=%s"
+		% (
+			ProjectSettings.globalize_path(persisted_path)
+			if persisted_error == OK
+			else "ERROR_%d" % persisted_error
+		)
+	)
+	print(
+		"OCEAN_INTERACTION_ACTIVE_SEGMENTS=%d AVERAGE_FRONT_METERS=%.2f"
+		% [
+			ocean.directional_wake_active_segments,
+			ocean.average_propagated_wake_distance,
+		]
+	)
+	ocean.vehicle_interaction_exaggerated_debug = true
+	ocean.ocean_interaction_debug_mode = 2
+	ocean.apply_ocean_settings()
+	await process_frame
+	await process_frame
+	var debug_path := "res://.godot/ocean_vehicle_interaction_debug.png"
+	var debug_error := root.get_texture().get_image().save_png(debug_path)
+	print(
+		"OCEAN_INTERACTION_DEBUG_SCREENSHOT=%s"
+		% (
+			ProjectSettings.globalize_path(debug_path)
+			if debug_error == OK
+			else "ERROR_%d" % debug_error
 		)
 	)
 	print("OCEAN_INTERACTION_BENCHMARK=PASS")
@@ -89,19 +128,19 @@ func _prepare_high_quality_wake(
 	vehicle.drive_system.state.propulsion_contact_factor = 1.0
 	vehicle.linear_velocity = Vector3(0.0, 0.0, -24.0)
 	wake.clear_trail(false)
-	for _index in 24:
+	for _index in 48:
 		wake.call("_try_add_sample")
 		wake.call("_age_samples", 0.04)
-		vehicle.global_position += Vector3(0.0, 0.0, -2.0)
+		vehicle.global_position += Vector3(0.0, 0.0, -0.96)
 	ocean.set_vehicle_interaction_quality(2)
-	ocean.call("_update_vehicle_interactions", 0.05)
+	ocean.call("_update_directional_wake_segments")
 
 
 func _set_interactions(ocean: Ocean3D, enabled: bool) -> void:
 	ocean.directional_wake_enabled = enabled
 	ocean.hull_pressure_enabled = enabled
 	ocean.apply_ocean_settings()
-	ocean.call("_update_vehicle_interactions", 0.05)
+	ocean.call("_update_directional_wake_segments")
 	ocean.call("_push_vehicle_interaction_parameters_to_all_materials")
 
 

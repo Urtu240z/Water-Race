@@ -9,7 +9,7 @@ extends Node3D
 ## OceanSurface3D child. It intentionally does not inherit from the former generic water system.
 
 const MAX_RIPPLES: int = 12
-const MAX_DIRECTIONAL_WAKE_SAMPLES: int = 16
+const MAX_DIRECTIONAL_WAKE_SEGMENTS: int = 16
 const MIN_SAMPLE_STEP: float = 0.05
 const MACRO_MATERIAL_SYNC_INTERVAL: float = 0.25
 
@@ -75,16 +75,16 @@ const MACRO_MATERIAL_SYNC_INTERVAL: float = 0.25
 
 @export_group("Directional Wake")
 @export var directional_wake_enabled: bool = true
-@export_range(8, MAX_DIRECTIONAL_WAKE_SAMPLES, 1) var directional_wake_sample_count: int = 16
-@export_range(0.0, 0.5, 0.005, "suffix:m") var directional_wake_amplitude: float = 0.11
+@export_range(8, MAX_DIRECTIONAL_WAKE_SEGMENTS, 1) var directional_wake_sample_count: int = 16
+@export_range(0.0, 0.5, 0.005, "suffix:m") var directional_wake_amplitude: float = 0.16
 @export_range(0.25, 12.0, 0.05, "suffix:m") var directional_wake_wavelength: float = 2.4
-@export_range(0.0, 12.0, 0.05, "suffix:m/s") var directional_wake_propagation_speed: float = 2.1
-@export_range(0.02, 1.0, 0.01) var directional_wake_opening_slope: float = 0.24
-@export_range(0.1, 4.0, 0.05, "suffix:m") var directional_wake_arm_width: float = 0.72
-@export_range(0.0, 0.5, 0.005, "suffix:m") var directional_wake_center_depression: float = 0.055
+@export_range(0.0, 12.0, 0.05, "suffix:m/s") var directional_wake_propagation_speed: float = 2.8
+@export_range(0.0, 0.5, 0.005) var directional_wake_opening_slope: float = 0.085
+@export_range(0.1, 4.0, 0.05, "suffix:m") var directional_wake_arm_width: float = 0.62
+@export_range(0.0, 0.5, 0.005, "suffix:m") var directional_wake_center_depression: float = 0.065
 @export_range(4.0, 100.0, 1.0, "suffix:m") var directional_wake_maximum_distance: float = 46.0
-@export_range(0.25, 12.0, 0.05, "suffix:s") var directional_wake_duration: float = 4.2
-@export_range(0.0, 0.2, 0.001) var directional_wake_attenuation: float = 0.028
+@export_range(0.25, 12.0, 0.05, "suffix:s") var directional_wake_duration: float = 5.2
+@export_range(0.0, 1.0, 0.005) var directional_wake_attenuation: float = 0.16
 @export_range(0.0, 2.0, 0.01) var directional_wake_turn_strength: float = 0.65
 @export_range(0.025, 0.25, 0.005, "suffix:s") var vehicle_interaction_update_interval: float = 0.05
 
@@ -95,10 +95,13 @@ const MACRO_MATERIAL_SYNC_INTERVAL: float = 0.25
 @export_range(2.0, 30.0, 0.25, "suffix:m") var hull_pressure_maximum_distance: float = 9.0
 
 @export_group("Vehicle Interaction Limits")
-@export_range(0.05, 2.0, 0.01, "suffix:m") var vehicle_interaction_maximum_displacement: float = 0.48
+@export_range(0.05, 2.0, 0.01, "suffix:m") var vehicle_interaction_maximum_displacement: float = 0.55
+@export_range(0.1, 4.0, 0.05) var vehicle_interaction_maximum_derivative: float = 1.35
 @export_range(8.0, 200.0, 1.0, "suffix:m") var vehicle_interaction_clipmap_distance: float = 86.0
 @export_enum("Disabled:0", "Ripples:1", "Directional Wake:2", "Hull Pressure:3", "Total:4")
 var ocean_interaction_debug_mode: int = 0
+@export var vehicle_interaction_exaggerated_debug: bool = false
+@export_range(1.0, 8.0, 0.25) var vehicle_interaction_debug_multiplier: float = 3.5
 
 @export_group("Foam")
 @export var wave_crest_color: Color = Color(0.090, 0.500, 0.610, 1.0)
@@ -144,14 +147,16 @@ var _interaction_front_right: Marker3D
 var _interaction_rear_left: Marker3D
 var _interaction_rear_right: Marker3D
 var _interaction_propulsion_point: Marker3D
-var _directional_wake_positions := PackedVector2Array()
-var _directional_wake_directions := PackedVector2Array()
+var _directional_wake_start_positions := PackedVector2Array()
+var _directional_wake_end_positions := PackedVector2Array()
 var _directional_wake_start_times := PackedFloat32Array()
+var _directional_wake_end_times := PackedFloat32Array()
 var _directional_wake_intensities := PackedFloat32Array()
 var _directional_wake_widths := PackedFloat32Array()
 var _directional_wake_biases := PackedFloat32Array()
+var _directional_wake_speeds := PackedFloat32Array()
 var _directional_wake_active_count: int = 0
-var _effective_directional_wake_sample_count: int = MAX_DIRECTIONAL_WAKE_SAMPLES
+var _effective_directional_wake_sample_count: int = MAX_DIRECTIONAL_WAKE_SEGMENTS
 var _vehicle_interaction_quality_level: int = 2
 var _interaction_update_elapsed: float = 0.0
 var _hull_pressure_center := Vector2.ZERO
@@ -171,6 +176,9 @@ var _merged_impact_count: int = 0
 var _interaction_uniform_update_count: int = 0
 var _interaction_uniform_write_count: int = 0
 var _maximum_requested_interaction_amplitude: float = 0.0
+var _maximum_requested_interaction_derivative: float = 0.0
+var _average_propagated_wake_distance: float = 0.0
+var _oldest_directional_segment_age: float = 0.0
 var _directional_wake_updated_last_tick: bool = false
 var _static_parameters_dirty: bool = true
 var _ripple_parameters_dirty: bool = true
@@ -240,16 +248,18 @@ func _physics_process(delta: float) -> void:
 	_simulation_time += safe_delta
 	if _expire_ripples():
 		_ripple_parameters_dirty = true
+	_update_hull_pressure_state(maxf(safe_delta, 0.0001))
+	_push_hull_pressure_parameters_to_all_materials()
 	_interaction_update_elapsed += safe_delta
 	var interaction_interval := maxf(vehicle_interaction_update_interval, 0.025)
 	if _interaction_update_elapsed >= interaction_interval:
-		var interaction_delta := _interaction_update_elapsed
 		_interaction_update_elapsed = fmod(
 			_interaction_update_elapsed,
 			interaction_interval
 		)
-		_update_vehicle_interactions(interaction_delta)
-		_push_vehicle_interaction_parameters_to_all_materials()
+		_update_directional_wake_segments()
+		_push_directional_wake_parameters_to_all_materials()
+	_update_interaction_metrics()
 	_push_time_parameter_to_all_materials()
 	if _static_parameters_dirty:
 		_push_static_parameters_to_all_materials()
@@ -279,7 +289,7 @@ func _get_configuration_warnings() -> PackedStringArray:
 
 
 func apply_ocean_settings() -> void:
-	if _directional_wake_positions.size() != MAX_DIRECTIONAL_WAKE_SAMPLES:
+	if _directional_wake_start_positions.size() != MAX_DIRECTIONAL_WAKE_SEGMENTS:
 		_initialize_vehicle_interactions()
 	_static_parameters_dirty = true
 	_ripple_parameters_dirty = true
@@ -314,6 +324,45 @@ func get_foam_settings() -> WaterFoamSettings:
 var directional_wake_active_samples: int:
 	get:
 		return _directional_wake_active_count
+
+
+var directional_wake_active_segments: int:
+	get:
+		return _directional_wake_active_count
+
+
+var directional_wake_active_packets: int:
+	get:
+		return _directional_wake_active_count
+
+
+var average_propagated_wake_distance: float:
+	get:
+		return _average_propagated_wake_distance
+
+
+var oldest_directional_segment_age: float:
+	get:
+		return _oldest_directional_segment_age
+
+
+var maximum_requested_interaction_derivative: float:
+	get:
+		return _maximum_requested_interaction_derivative
+
+
+var last_hull_pressure_center: Vector2:
+	get:
+		return _hull_pressure_center
+
+
+var wake_jump_discontinuity_count: int:
+	get:
+		return (
+			_wake_source.jump_discontinuity_count
+			if is_instance_valid(_wake_source)
+			else 0
+		)
 
 
 var maximum_requested_interaction_amplitude: float:
@@ -403,7 +452,7 @@ func set_vehicle_interaction_quality(quality_level: int) -> void:
 		clampi(
 			directional_wake_sample_count,
 			8,
-			MAX_DIRECTIONAL_WAKE_SAMPLES
+			MAX_DIRECTIONAL_WAKE_SEGMENTS
 		)
 	)
 	_interaction_update_elapsed = maxf(vehicle_interaction_update_interval, 0.025)
@@ -669,22 +718,26 @@ func _initialize_ripples() -> void:
 
 
 func _initialize_vehicle_interactions() -> void:
-	_directional_wake_positions.resize(MAX_DIRECTIONAL_WAKE_SAMPLES)
-	_directional_wake_directions.resize(MAX_DIRECTIONAL_WAKE_SAMPLES)
-	_directional_wake_start_times.resize(MAX_DIRECTIONAL_WAKE_SAMPLES)
-	_directional_wake_intensities.resize(MAX_DIRECTIONAL_WAKE_SAMPLES)
-	_directional_wake_widths.resize(MAX_DIRECTIONAL_WAKE_SAMPLES)
-	_directional_wake_biases.resize(MAX_DIRECTIONAL_WAKE_SAMPLES)
-	_directional_wake_positions.fill(Vector2.ZERO)
-	_directional_wake_directions.fill(Vector2(0.0, -1.0))
+	_directional_wake_start_positions.resize(MAX_DIRECTIONAL_WAKE_SEGMENTS)
+	_directional_wake_end_positions.resize(MAX_DIRECTIONAL_WAKE_SEGMENTS)
+	_directional_wake_start_times.resize(MAX_DIRECTIONAL_WAKE_SEGMENTS)
+	_directional_wake_end_times.resize(MAX_DIRECTIONAL_WAKE_SEGMENTS)
+	_directional_wake_intensities.resize(MAX_DIRECTIONAL_WAKE_SEGMENTS)
+	_directional_wake_widths.resize(MAX_DIRECTIONAL_WAKE_SEGMENTS)
+	_directional_wake_biases.resize(MAX_DIRECTIONAL_WAKE_SEGMENTS)
+	_directional_wake_speeds.resize(MAX_DIRECTIONAL_WAKE_SEGMENTS)
+	_directional_wake_start_positions.fill(Vector2.ZERO)
+	_directional_wake_end_positions.fill(Vector2.ZERO)
 	_directional_wake_start_times.fill(-INF)
+	_directional_wake_end_times.fill(-INF)
 	_directional_wake_intensities.fill(0.0)
 	_directional_wake_widths.fill(0.0)
 	_directional_wake_biases.fill(0.0)
+	_directional_wake_speeds.fill(0.0)
 	_effective_directional_wake_sample_count = clampi(
 		directional_wake_sample_count,
 		8,
-		MAX_DIRECTIONAL_WAKE_SAMPLES
+		MAX_DIRECTIONAL_WAKE_SEGMENTS
 	)
 
 
@@ -712,8 +765,7 @@ func _expire_ripples() -> bool:
 	return changed
 
 
-func _update_vehicle_interactions(delta: float) -> void:
-	var safe_delta := maxf(delta, 0.0001)
+func _update_directional_wake_segments() -> void:
 	_directional_wake_updated_last_tick = false
 	if is_instance_valid(_wake_source):
 		_wake_source.directional_history_lifetime = maxf(
@@ -721,13 +773,15 @@ func _update_vehicle_interactions(delta: float) -> void:
 			directional_wake_duration
 		)
 		_directional_wake_active_count = (
-			_wake_source.fill_directional_shader_samples(
-				_directional_wake_positions,
-				_directional_wake_directions,
+			_wake_source.fill_directional_shader_segments(
+				_directional_wake_start_positions,
+				_directional_wake_end_positions,
 				_directional_wake_start_times,
+				_directional_wake_end_times,
 				_directional_wake_intensities,
 				_directional_wake_widths,
 				_directional_wake_biases,
+				_directional_wake_speeds,
 				_effective_directional_wake_sample_count,
 				directional_wake_maximum_distance,
 				directional_wake_duration,
@@ -743,8 +797,6 @@ func _update_vehicle_interactions(delta: float) -> void:
 		)
 	else:
 		_directional_wake_active_count = 0
-	_update_hull_pressure_state(safe_delta)
-	_update_interaction_metrics()
 
 
 func _update_hull_pressure_state(delta: float) -> void:
@@ -798,6 +850,12 @@ func _update_hull_pressure_state(delta: float) -> void:
 				_horizontal_distance(front_center, rear_center) * 0.5,
 				0.5
 			)
+		var prediction_time := minf(delta * 0.5, 0.02)
+		hull_center += Vector3(
+			_interaction_vehicle.linear_velocity.x,
+			0.0,
+			_interaction_vehicle.linear_velocity.z
+		) * prediction_time
 		_hull_pressure_center = world_to_logical_xz(hull_center)
 
 		var water_state := _interaction_vehicle.water_physics_system.state
@@ -939,6 +997,10 @@ func _update_hull_pressure_state(delta: float) -> void:
 func _update_interaction_metrics() -> void:
 	var maximum_wake_intensity: float = 0.0
 	var maximum_wake_bias: float = 0.0
+	var propagated_distance_sum: float = 0.0
+	var valid_age_count: int = 0
+	_average_propagated_wake_distance = 0.0
+	_oldest_directional_segment_age = 0.0
 	for index in _directional_wake_active_count:
 		maximum_wake_intensity = maxf(
 			maximum_wake_intensity,
@@ -948,6 +1010,25 @@ func _update_interaction_metrics() -> void:
 			maximum_wake_bias,
 			absf(_directional_wake_biases[index])
 		)
+		var local_age := maxf(
+			_simulation_time
+				- (_directional_wake_start_times[index]
+					+ _directional_wake_end_times[index]) * 0.5,
+			0.0
+		)
+		propagated_distance_sum += (
+			local_age * directional_wake_propagation_speed
+		)
+		_oldest_directional_segment_age = maxf(
+			_oldest_directional_segment_age,
+			local_age
+		)
+		valid_age_count += 1
+	_average_propagated_wake_distance = (
+		propagated_distance_sum / float(valid_age_count)
+		if valid_age_count > 0
+		else 0.0
+	)
 	var requested_wake := directional_wake_amplitude * maximum_wake_intensity * (
 		1.0 + maximum_wake_bias * directional_wake_turn_strength
 	)
@@ -958,6 +1039,61 @@ func _update_interaction_metrics() -> void:
 		requested_wake,
 		requested_hull
 	)
+	var wake_derivative := requested_wake / maxf(
+		directional_wake_arm_width,
+		0.1
+	) * 1.8
+	var hull_derivative := requested_hull / maxf(
+		_hull_pressure_half_extents.x,
+		0.25
+	)
+	_maximum_requested_interaction_derivative = minf(
+		maxf(wake_derivative, hull_derivative),
+		vehicle_interaction_maximum_derivative
+	)
+
+
+func calculate_directional_front_distance(
+	initial_half_width: float,
+	age: float,
+	source_speed: float = 0.0
+) -> float:
+	var safe_age := maxf(age, 0.0)
+	return maxf(initial_half_width, 0.0) + safe_age * (
+		directional_wake_propagation_speed
+		+ maxf(source_speed, 0.0) * directional_wake_opening_slope
+	)
+
+
+func calculate_directional_packet_profile(
+	front_offset: float,
+	arm_width: float = -1.0
+) -> Vector2:
+	var safe_arm_width := maxf(
+		arm_width if arm_width > 0.0 else directional_wake_arm_width,
+		0.08
+	)
+	var safe_wavelength := maxf(directional_wake_wavelength, 0.25)
+	var crest_x := front_offset
+	var valley_x := front_offset + safe_wavelength * 0.72
+	var recovery_x := front_offset + safe_wavelength * 1.45
+	var crest := exp(-crest_x * crest_x / (safe_arm_width * safe_arm_width))
+	var valley_width := safe_arm_width * 1.15
+	var valley := exp(-valley_x * valley_x / (valley_width * valley_width))
+	var recovery_width := safe_arm_width * 1.35
+	var recovery := exp(
+		-recovery_x * recovery_x
+			/ (recovery_width * recovery_width)
+	)
+	var height := crest - valley * 0.55 + recovery * 0.20
+	var derivative := (
+		crest * -2.0 * crest_x / (safe_arm_width * safe_arm_width)
+		- valley * 0.55 * -2.0 * valley_x
+			/ (valley_width * valley_width)
+		+ recovery * 0.20 * -2.0 * recovery_x
+			/ (recovery_width * recovery_width)
+	)
+	return Vector2(height, derivative)
 
 
 func _horizontal_distance(first: Vector3, second: Vector3) -> float:
@@ -1510,6 +1646,18 @@ func _push_vehicle_interaction_parameters_to_all_materials() -> void:
 	_interaction_uniform_update_count += 1
 
 
+func _push_directional_wake_parameters_to_all_materials() -> void:
+	for material in _all_ocean_materials():
+		_push_directional_wake_parameters(material)
+	_interaction_uniform_update_count += 1
+
+
+func _push_hull_pressure_parameters_to_all_materials() -> void:
+	for material in _all_ocean_materials():
+		_push_hull_pressure_parameters(material)
+	_interaction_uniform_update_count += 1
+
+
 func _push_static_parameters(material: ShaderMaterial) -> void:
 	if material == null or material.shader == null:
 		return
@@ -1587,12 +1735,24 @@ func _push_static_parameters(material: ShaderMaterial) -> void:
 		vehicle_interaction_maximum_displacement
 	)
 	material.set_shader_parameter(
+		&"vehicle_interaction_maximum_derivative",
+		vehicle_interaction_maximum_derivative
+	)
+	material.set_shader_parameter(
 		&"vehicle_interaction_clipmap_distance",
 		vehicle_interaction_clipmap_distance
 	)
 	material.set_shader_parameter(
 		&"ocean_interaction_debug_mode",
 		ocean_interaction_debug_mode
+	)
+	material.set_shader_parameter(
+		&"vehicle_interaction_exaggerated_debug",
+		vehicle_interaction_exaggerated_debug
+	)
+	material.set_shader_parameter(
+		&"vehicle_interaction_debug_multiplier",
+		vehicle_interaction_debug_multiplier
 	)
 	if foam_noise_texture != null:
 		material.set_shader_parameter(&"foam_noise_texture", foam_noise_texture)
@@ -1622,6 +1782,11 @@ func _push_ripple_parameters(material: ShaderMaterial) -> void:
 
 
 func _push_vehicle_interaction_parameters(material: ShaderMaterial) -> void:
+	_push_directional_wake_parameters(material)
+	_push_hull_pressure_parameters(material)
+
+
+func _push_directional_wake_parameters(material: ShaderMaterial) -> void:
 	if material == null or material.shader == null:
 		return
 	material.set_shader_parameter(
@@ -1629,16 +1794,20 @@ func _push_vehicle_interaction_parameters(material: ShaderMaterial) -> void:
 		_directional_wake_active_count
 	)
 	material.set_shader_parameter(
-		&"directional_wake_positions",
-		_directional_wake_positions
+		&"directional_wake_start_positions",
+		_directional_wake_start_positions
 	)
 	material.set_shader_parameter(
-		&"directional_wake_directions",
-		_directional_wake_directions
+		&"directional_wake_end_positions",
+		_directional_wake_end_positions
 	)
 	material.set_shader_parameter(
 		&"directional_wake_start_times",
 		_directional_wake_start_times
+	)
+	material.set_shader_parameter(
+		&"directional_wake_end_times",
+		_directional_wake_end_times
 	)
 	material.set_shader_parameter(
 		&"directional_wake_intensities",
@@ -1652,6 +1821,16 @@ func _push_vehicle_interaction_parameters(material: ShaderMaterial) -> void:
 		&"directional_wake_biases",
 		_directional_wake_biases
 	)
+	material.set_shader_parameter(
+		&"directional_wake_speeds",
+		_directional_wake_speeds
+	)
+	_interaction_uniform_write_count += 8
+
+
+func _push_hull_pressure_parameters(material: ShaderMaterial) -> void:
+	if material == null or material.shader == null:
+		return
 	material.set_shader_parameter(&"hull_pressure_center", _hull_pressure_center)
 	material.set_shader_parameter(&"hull_pressure_forward", _hull_pressure_forward)
 	material.set_shader_parameter(
@@ -1673,7 +1852,7 @@ func _push_vehicle_interaction_parameters(material: ShaderMaterial) -> void:
 		_hull_pressure_turn_bias
 	)
 	material.set_shader_parameter(&"hull_pressure_pitch", _hull_pressure_pitch)
-	_interaction_uniform_write_count += 15
+	_interaction_uniform_write_count += 9
 
 
 func _all_ocean_materials() -> Array[ShaderMaterial]:

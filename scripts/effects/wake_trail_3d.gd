@@ -6,22 +6,31 @@ class WakeSample:
 	var age: float
 	var forward_direction: Vector3
 	var speed_factor: float
+	var horizontal_speed: float
 	var initial_width: float
 	var steering_bias: float
+	var segment_id: int
+	var break_before: bool
 
 	func _init(
 		initial_position: Vector3,
 		initial_forward: Vector3,
 		initial_speed_factor: float,
+		initial_horizontal_speed: float,
 		width: float,
-		initial_steering_bias: float
+		initial_steering_bias: float,
+		initial_segment_id: int,
+		initial_break_before: bool
 	) -> void:
 		position = initial_position
 		age = 0.0
 		forward_direction = initial_forward
 		speed_factor = initial_speed_factor
+		horizontal_speed = initial_horizontal_speed
 		initial_width = width
 		steering_bias = initial_steering_bias
+		segment_id = initial_segment_id
+		break_before = initial_break_before
 
 
 var wake_enabled: bool = true
@@ -71,6 +80,7 @@ var vertex_count: int:
 var foam_intensity: float = 0.0
 var directional_export_count: int = 0
 var directional_export_revision: int = 0
+var jump_discontinuity_count: int = 0
 
 var _vehicle: JetSkiController
 var _ocean: Ocean3D
@@ -84,6 +94,9 @@ var _sample_elapsed: float = 0.0
 var _has_last_sample: bool = false
 var _last_sample_position: Vector3 = Vector3.ZERO
 var _suppress_sampling_ticks: int = 0
+var _current_segment_id: int = 0
+var _segment_break_pending: bool = true
+var _was_generating_wake: bool = false
 var _trail_length: float = 0.0
 var _current_width: float = 0.0
 var _rebase_count: int = 0
@@ -111,6 +124,10 @@ func _ready() -> void:
 	_normal_material = _wake_mesh.material_override as ShaderMaterial
 
 
+func _exit_tree() -> void:
+	_disconnect_vehicle_signals()
+
+
 func configure(
 	vehicle: JetSkiController,
 	ocean: Ocean3D,
@@ -120,6 +137,7 @@ func configure(
 	front_left: Marker3D = null,
 	front_right: Marker3D = null
 ) -> void:
+	_disconnect_vehicle_signals()
 	_vehicle = vehicle
 	_ocean = ocean
 	_propulsion_point = propulsion_point
@@ -127,6 +145,7 @@ func configure(
 	_rear_right = rear_right
 	_front_left = front_left
 	_front_right = front_right
+	_connect_vehicle_signals()
 	if is_instance_valid(_ocean):
 		_ocean.configure_vehicle_interaction_source(
 			self,
@@ -167,6 +186,7 @@ func _physics_process(delta: float) -> void:
 	_age_samples(delta)
 	_sample_elapsed += delta
 	_mesh_update_elapsed += delta
+	_update_segment_continuity()
 	if _suppress_sampling_ticks > 0:
 		_suppress_sampling_ticks -= 1
 	else:
@@ -185,6 +205,10 @@ func clear_trail(suppress_next_tick: bool = true) -> void:
 	_sample_elapsed = 0.0
 	_has_last_sample = false
 	_last_sample_position = Vector3.ZERO
+	_current_segment_id = 0
+	_segment_break_pending = true
+	_was_generating_wake = false
+	jump_discontinuity_count = 0
 	_trail_length = 0.0
 	_current_width = 0.0
 	_suppress_sampling_ticks = 1 if suppress_next_tick else 0
@@ -216,99 +240,138 @@ func get_sample_positions() -> PackedVector3Array:
 	return positions
 
 
-func fill_directional_shader_samples(
-	positions: PackedVector2Array,
-	directions: PackedVector2Array,
+func fill_directional_shader_segments(
+	start_positions: PackedVector2Array,
+	end_positions: PackedVector2Array,
 	start_times: PackedFloat32Array,
+	end_times: PackedFloat32Array,
 	intensities: PackedFloat32Array,
 	widths: PackedFloat32Array,
 	biases: PackedFloat32Array,
-	maximum_samples: int,
+	speeds: PackedFloat32Array,
+	maximum_segments: int,
 	maximum_distance: float,
 	maximum_age: float,
 	logical_origin_xz: Vector2,
 	simulation_time: float
 ) -> int:
 	var buffer_size := mini(
-		positions.size(),
+		start_positions.size(),
 		mini(
-			directions.size(),
+			end_positions.size(),
 			mini(
 				start_times.size(),
 				mini(
-					intensities.size(),
-					mini(widths.size(), biases.size())
+					end_times.size(),
+					mini(
+						intensities.size(),
+						mini(widths.size(), mini(biases.size(), speeds.size()))
+					)
 				)
 			)
 		)
 	)
-	var allowed_samples := clampi(maximum_samples, 0, buffer_size)
+	var allowed_segments := clampi(maximum_segments, 0, buffer_size)
+	var export_count: int = 0
 	var newest_index := _samples.size() - 1
 	var first_index := newest_index
 	var covered_distance: float = 0.0
-	if allowed_samples > 0 and newest_index >= 0:
+	if allowed_segments > 0 and newest_index > 0:
 		for index in range(newest_index - 1, -1, -1):
 			var newer := _samples[index + 1]
-			var candidate := _samples[index]
-			covered_distance += Vector2(
-				newer.position.x - candidate.position.x,
-				newer.position.z - candidate.position.z
-			).length()
-			if covered_distance > maximum_distance:
+			var older := _samples[index]
+			if older.age > maximum_age:
 				break
+			if newer.break_before or newer.segment_id != older.segment_id:
+				first_index = index
+				continue
+			var pair_distance := Vector2(
+				newer.position.x - older.position.x,
+				newer.position.z - older.position.z
+			).length()
+			if covered_distance + pair_distance > maximum_distance:
+				break
+			covered_distance += pair_distance
 			first_index = index
-	var candidate_count := (
-		newest_index - first_index + 1
-		if newest_index >= 0 and allowed_samples > 0
-		else 0
-	)
-	var export_count := mini(candidate_count, allowed_samples)
-	for output_index in export_count:
-		var history_ratio := (
-			float(output_index) / float(export_count - 1)
-			if export_count > 1
-			else 0.0
+		var valid_pair_count: int = 0
+		for pair_index in range(newest_index, first_index, -1):
+			var newer := _samples[pair_index]
+			var older := _samples[pair_index - 1]
+			if not newer.break_before and newer.segment_id == older.segment_id:
+				valid_pair_count += 1
+		var pair_stride := maxi(
+			ceili(float(valid_pair_count) / float(allowed_segments)),
+			1
 		)
-		var sample_index := clampi(
-			roundi(lerpf(
-				float(newest_index),
-				float(first_index),
-				history_ratio
-			)),
-			first_index,
-			newest_index
-		)
-		var sample := _samples[sample_index]
-		if sample.age > maximum_age or not sample.position.is_finite():
-			export_count = output_index
-			break
-		var horizontal_direction := Vector2(
-			sample.forward_direction.x,
-			sample.forward_direction.z
-		)
-		if (
-			horizontal_direction.length_squared() <= 0.000001
-			or not horizontal_direction.is_finite()
-		):
-			horizontal_direction = Vector2(0.0, -1.0)
-		else:
-			horizontal_direction = horizontal_direction.normalized()
-		positions[output_index] = (
-			Vector2(sample.position.x, sample.position.z)
-			+ logical_origin_xz
-		)
-		directions[output_index] = horizontal_direction
-		start_times[output_index] = simulation_time - maxf(sample.age, 0.0)
-		intensities[output_index] = clampf(sample.speed_factor, 0.0, 1.0)
-		widths[output_index] = maxf(sample.initial_width, 0.1)
-		biases[output_index] = clampf(sample.steering_bias, -1.0, 1.0)
+		var newer_index := newest_index
+		while newer_index > first_index and export_count < allowed_segments:
+			var immediate_newer := _samples[newer_index]
+			var immediate_older := _samples[newer_index - 1]
+			if (
+				immediate_newer.break_before
+				or immediate_newer.segment_id != immediate_older.segment_id
+			):
+				newer_index -= 1
+				continue
+			var group_newer_index := newer_index
+			var group_older_index := newer_index - 1
+			var grouped_pair_count := 1
+			while (
+				grouped_pair_count < pair_stride
+				and group_older_index > first_index
+			):
+				var candidate_newer := _samples[group_older_index]
+				var candidate_older := _samples[group_older_index - 1]
+				if (
+					candidate_newer.break_before
+					or candidate_newer.segment_id != candidate_older.segment_id
+				):
+					break
+				group_older_index -= 1
+				grouped_pair_count += 1
+			var newer := _samples[group_newer_index]
+			var older := _samples[group_older_index]
+			if not newer.position.is_finite() or not older.position.is_finite():
+				newer_index = group_older_index
+				continue
+			var horizontal_start := Vector2(older.position.x, older.position.z)
+			var horizontal_end := Vector2(newer.position.x, newer.position.z)
+			if horizontal_start.distance_squared_to(horizontal_end) <= 0.000001:
+				newer_index = group_older_index
+				continue
+			start_positions[export_count] = horizontal_start + logical_origin_xz
+			end_positions[export_count] = horizontal_end + logical_origin_xz
+			start_times[export_count] = simulation_time - maxf(older.age, 0.0)
+			end_times[export_count] = simulation_time - maxf(newer.age, 0.0)
+			intensities[export_count] = clampf(
+				(older.speed_factor + newer.speed_factor) * 0.5,
+				0.0,
+				1.0
+			)
+			widths[export_count] = maxf(
+				(older.initial_width + newer.initial_width) * 0.5,
+				0.1
+			)
+			biases[export_count] = clampf(
+				(older.steering_bias + newer.steering_bias) * 0.5,
+				-1.0,
+				1.0
+			)
+			speeds[export_count] = maxf(
+				(older.horizontal_speed + newer.horizontal_speed) * 0.5,
+				0.0
+			)
+			export_count += 1
+			newer_index = group_older_index
 	for output_index in range(export_count, buffer_size):
-		positions[output_index] = Vector2.ZERO
-		directions[output_index] = Vector2(0.0, -1.0)
+		start_positions[output_index] = Vector2.ZERO
+		end_positions[output_index] = Vector2.ZERO
 		start_times[output_index] = -INF
+		end_times[output_index] = -INF
 		intensities[output_index] = 0.0
 		widths[output_index] = 0.0
 		biases[output_index] = 0.0
+		speeds[output_index] = 0.0
 	directional_export_count = export_count
 	directional_export_revision += 1
 	return export_count
@@ -337,11 +400,12 @@ func _try_add_sample() -> void:
 	):
 		return
 	var forward := _real_movement_direction(sample_position)
+	var horizontal_speed := _water_relative_horizontal_speed()
 	var speed_factor := clampf(
 		inverse_lerp(
 			wake_minimum_speed,
 			wake_full_speed,
-			_water_relative_horizontal_speed()
+			horizontal_speed
 		),
 		0.0,
 		1.0
@@ -354,9 +418,14 @@ func _try_add_sample() -> void:
 		sample_position,
 		forward,
 		speed_factor,
+		horizontal_speed,
 		initial_width,
-		steering_bias
+		steering_bias,
+		_current_segment_id,
+		_segment_break_pending
 	))
+	_segment_break_pending = false
+	_was_generating_wake = true
 	_mesh_dirty = true
 	while _samples.size() > maxi(wake_maximum_points, 2):
 		_samples.pop_front()
@@ -378,6 +447,49 @@ func _can_add_sample() -> bool:
 	)
 
 
+func mark_segment_break() -> void:
+	if _segment_break_pending:
+		return
+	_current_segment_id += 1
+	_segment_break_pending = true
+	_has_last_sample = false
+	_sample_elapsed = wake_sample_maximum_interval
+	jump_discontinuity_count += 1
+	_mesh_dirty = true
+
+
+func _update_segment_continuity() -> void:
+	var generating_wake := (
+		is_instance_valid(_vehicle)
+		and _vehicle.navigation_state
+			!= JetSkiController.NavigationState.AIRBORNE
+		and _vehicle.rear_submerged_ratio > 0.0
+		and _vehicle.propulsion_contact_factor > wake_minimum_contact
+	)
+	if _was_generating_wake and not generating_wake:
+		mark_segment_break()
+	_was_generating_wake = generating_wake
+
+
+func _connect_vehicle_signals() -> void:
+	if not is_instance_valid(_vehicle):
+		return
+	if not _vehicle.water_exited.is_connected(_on_vehicle_water_exited):
+		_vehicle.water_exited.connect(_on_vehicle_water_exited)
+
+
+func _disconnect_vehicle_signals() -> void:
+	if (
+		is_instance_valid(_vehicle)
+		and _vehicle.water_exited.is_connected(_on_vehicle_water_exited)
+	):
+		_vehicle.water_exited.disconnect(_on_vehicle_water_exited)
+
+
+func _on_vehicle_water_exited() -> void:
+	mark_segment_break()
+
+
 func _rebuild_mesh() -> void:
 	_array_mesh.clear_surfaces()
 	_trail_length = 0.0
@@ -390,10 +502,14 @@ func _rebuild_mesh() -> void:
 	_uvs.clear()
 	_indices.clear()
 	var cumulative_length: float = 0.0
-	var newest_position := _samples[_samples.size() - 1].position
 	for index in _samples.size():
 		var sample := _samples[index]
-		if index > 0:
+		var connected_to_previous := (
+			index > 0
+			and not sample.break_before
+			and sample.segment_id == _samples[index - 1].segment_id
+		)
+		if connected_to_previous:
 			cumulative_length += Vector2(
 				sample.position.x - _samples[index - 1].position.x,
 				sample.position.z - _samples[index - 1].position.z
@@ -415,67 +531,96 @@ func _rebuild_mesh() -> void:
 			0.0,
 			1.0
 		)
-		var history_ratio := (
-			1.0 - float(index) / float(_samples.size() - 1)
-			if _samples.size() > 1
-			else 0.0
+		var age_ratio := lifetime_ratio
+		var released_front := sample.initial_width + sample.age * (
+			_ocean.directional_wake_propagation_speed
+			+ sample.horizontal_speed * _ocean.directional_wake_opening_slope
 		)
-		var age_ratio := maxf(lifetime_ratio, history_ratio)
-		var distance_behind_hull := Vector2(
-			sample.position.x - newest_position.x,
-			sample.position.z - newest_position.z
-		).length()
-		var width_growth := smoothstep(
-			0.0,
-			maxf(wake_opening_distance, 0.01),
-			distance_behind_hull
-		) * lerpf(0.72, 1.0, sample.speed_factor)
-		var outer_width := sample.initial_width * lerpf(
-			1.0,
-			wake_maximum_width_multiplier,
-			width_growth
+		var rail_half_width := clampf(
+			_ocean.directional_wake_arm_width * 0.34,
+			0.16,
+			0.48
 		)
-		_current_width = maxf(_current_width, outer_width * 2.0)
+		released_front = maxf(
+			released_front,
+			sample.initial_width + rail_half_width
+		)
+		var central_half_width := maxf(sample.initial_width * 0.68, 0.24)
+		_current_width = maxf(
+			_current_width,
+			(released_front + rail_half_width) * 2.0
+		)
 		var fade := 1.0 - smoothstep(
 			wake_fade_start_ratio,
 			1.0,
 			age_ratio
 		)
-		var alpha := fade * lerpf(0.08, 0.28, sample.speed_factor)
+		var alpha := fade * lerpf(0.012, 0.075, sample.speed_factor)
 		var steering_bias := sample.steering_bias
 		var left_color := Color(
 			age_ratio,
 			sample.speed_factor,
 			0.5 + steering_bias * 0.5,
-			alpha * (1.0 + steering_bias * 0.22)
+			alpha * 0.68 * (1.0 + steering_bias * 0.22)
+		)
+		var center_color := Color(
+			age_ratio,
+			sample.speed_factor,
+			0.5 + steering_bias * 0.5,
+			alpha * 0.42
 		)
 		var right_color := Color(
 			age_ratio,
 			sample.speed_factor,
 			0.5 + steering_bias * 0.5,
-			alpha * (1.0 - steering_bias * 0.22)
+			alpha * 0.68 * (1.0 - steering_bias * 0.22)
 		)
 		_append_wake_vertex(
-			surface_position - right * outer_width,
+			surface_position - right * (released_front + rail_half_width),
 			water_normal,
 			left_color,
 			Vector2(0.0, cumulative_length)
 		)
 		_append_wake_vertex(
-			surface_position + right * outer_width,
+			surface_position - right * (released_front - rail_half_width),
+			water_normal,
+			left_color,
+			Vector2(1.0, cumulative_length)
+		)
+		_append_wake_vertex(
+			surface_position - right * central_half_width,
+			water_normal,
+			center_color,
+			Vector2(0.0, cumulative_length)
+		)
+		_append_wake_vertex(
+			surface_position + right * central_half_width,
+			water_normal,
+			center_color,
+			Vector2(1.0, cumulative_length)
+		)
+		_append_wake_vertex(
+			surface_position + right * (released_front - rail_half_width),
+			water_normal,
+			right_color,
+			Vector2(0.0, cumulative_length)
+		)
+		_append_wake_vertex(
+			surface_position + right * (released_front + rail_half_width),
 			water_normal,
 			right_color,
 			Vector2(1.0, cumulative_length)
 		)
-		if index > 0:
-			var previous_base := (index - 1) * 2
-			var current_base := index * 2
-			_append_strip_indices(
-				previous_base,
-				previous_base + 1,
-				current_base,
-				current_base + 1
-			)
+		if connected_to_previous:
+			var previous_base := (index - 1) * 6
+			var current_base := index * 6
+			for strip_offset in [0, 2, 4]:
+				_append_strip_indices(
+					previous_base + strip_offset,
+					previous_base + strip_offset + 1,
+					current_base + strip_offset,
+					current_base + strip_offset + 1
+				)
 	_trail_length = cumulative_length
 	if _indices.is_empty():
 		return
@@ -490,11 +635,21 @@ func _rebuild_mesh() -> void:
 
 func _sample_tangent(index: int) -> Vector3:
 	var tangent := Vector3.ZERO
-	if index > 0 and index + 1 < _samples.size():
+	var has_previous := (
+		index > 0
+		and not _samples[index].break_before
+		and _samples[index].segment_id == _samples[index - 1].segment_id
+	)
+	var has_next := (
+		index + 1 < _samples.size()
+		and not _samples[index + 1].break_before
+		and _samples[index].segment_id == _samples[index + 1].segment_id
+	)
+	if has_previous and has_next:
 		tangent = _samples[index + 1].position - _samples[index - 1].position
-	elif index + 1 < _samples.size():
+	elif has_next:
 		tangent = _samples[index + 1].position - _samples[index].position
-	elif index > 0:
+	elif has_previous:
 		tangent = _samples[index].position - _samples[index - 1].position
 	tangent.y = 0.0
 	if tangent.length_squared() <= 0.000001:

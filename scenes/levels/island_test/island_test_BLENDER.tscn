@@ -271,6 +271,40 @@ shader_parameter/ripple_speeds = PackedFloat32Array(3.4, 3.4, 3.4, 3.4, 3.4, 3.4
 shader_parameter/ripple_wavelengths = PackedFloat32Array(2.6, 2.6, 2.6, 2.6, 2.6, 2.6, 2.6, 2.6, 2.6, 2.6, 2.6, 2.6)
 shader_parameter/ripple_decays = PackedFloat32Array(0.72, 0.72, 0.72, 0.72, 0.72, 0.72, 0.72, 0.72, 0.72, 0.72, 0.72, 0.72)
 shader_parameter/ripple_lifetimes = PackedFloat32Array(4.6, 4.6, 4.6, 4.6, 4.6, 4.6, 4.6, 4.6, 4.6, 4.6, 4.6, 4.6)
+shader_parameter/directional_wake_enabled = true
+shader_parameter/directional_wake_active_count = 0
+shader_parameter/directional_wake_positions = PackedVector2Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/directional_wake_directions = PackedVector2Array(0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1)
+shader_parameter/directional_wake_start_times = PackedFloat32Array(-inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf)
+shader_parameter/directional_wake_intensities = PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/directional_wake_widths = PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/directional_wake_biases = PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/directional_wake_amplitude = 0.11
+shader_parameter/directional_wake_wavelength = 2.4
+shader_parameter/directional_wake_propagation_speed = 2.1
+shader_parameter/directional_wake_opening_slope = 0.24
+shader_parameter/directional_wake_arm_width = 0.72
+shader_parameter/directional_wake_center_depression = 0.055
+shader_parameter/directional_wake_maximum_distance = 46.0
+shader_parameter/directional_wake_duration = 4.2
+shader_parameter/directional_wake_attenuation = 0.028
+shader_parameter/directional_wake_turn_strength = 0.65
+shader_parameter/hull_pressure_enabled = true
+shader_parameter/hull_pressure_center = Vector2(0, 0)
+shader_parameter/hull_pressure_forward = Vector2(0, -1)
+shader_parameter/hull_pressure_half_extents = Vector2(0.6, 1.45)
+shader_parameter/hull_pressure_contact = 0.0
+shader_parameter/hull_pressure_intensity = 0.0
+shader_parameter/hull_pressure_left_strength = 0.0
+shader_parameter/hull_pressure_right_strength = 0.0
+shader_parameter/hull_pressure_turn_bias = 0.0
+shader_parameter/hull_pressure_pitch = 0.0
+shader_parameter/hull_pressure_amplitude = 0.14
+shader_parameter/hull_pressure_depression_strength = 0.72
+shader_parameter/hull_pressure_maximum_distance = 9.0
+shader_parameter/vehicle_interaction_maximum_displacement = 0.48
+shader_parameter/vehicle_interaction_clipmap_distance = 86.0
+shader_parameter/ocean_interaction_debug_mode = 0
 shader_parameter/surface_normal_texture_a = ExtResource("35_g6vww")
 shader_parameter/surface_normal_texture_b = ExtResource("36_a0jux")
 shader_parameter/surface_warp_texture = ExtResource("37_vkhvf")
@@ -872,7 +906,10 @@ grip_hard_extension_ratio = 1.1
 [node name="CameraTarget" parent="Gameplay/JetSki" index="10" unique_id=1770908444]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0.35)
 
-[node name="VehicleWaterEffects3D" parent="Gameplay/JetSki/Effects" parent_id_path=PackedInt32Array(328650943, 1733691099) index="0" unique_id=1574631450]
+[node name="Effects" parent="Gameplay/JetSki" index="11" unique_id=1733691099]
+visible = false
+
+[node name="VehicleWaterEffects3D" parent="Gameplay/JetSki/Effects" index="0" unique_id=1574631450]
 spray_minimum_scale = 0.001
 spray_maximum_scale = 0.748
 spray_growth_multiplier = 2.95
@@ -886,7 +923,7 @@ impact_birth_scale = 0.39
 impact_edge_softness = 0.3
 impact_irregularity = 1.0
 
-[node name="TurbineExhaust" parent="Gameplay/JetSki/Effects" parent_id_path=PackedInt32Array(328650943, 1733691099) index="1" unique_id=1478477575]
+[node name="TurbineExhaust" parent="Gameplay/JetSki/Effects" index="1" unique_id=1478477575]
 full_core_length = 2.0
 jet_foam_core_strength = 2.0
 jet_foam_core_opacity = 1.0
