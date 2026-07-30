@@ -63,6 +63,7 @@
 [ext_resource type="PackedScene" uid="uid://c08rfa066ud8" path="res://assets/3D/Terrain/palm_impostor_ground_shadows.glb" id="222_palm_shadow"]
 [ext_resource type="Shader" uid="uid://cmnqja2yvxste" path="res://shaders/vegetation/palm_impostor_ground_shadow.gdshader" id="223_palm_shadow_shader"]
 [ext_resource type="PackedScene" uid="uid://cisubjold2oac" path="res://scenes/wildlife/ambient_wildlife.tscn" id="224_wildlife"]
+[ext_resource type="PackedScene" path="res://scenes/ui/pause_menu.tscn" id="225_pause_menu"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_f0815"]
 panorama = ExtResource("39_1y1wo")
@@ -559,6 +560,8 @@ player_spawn_path = NodePath("Gameplay/PlayerSpawn")
 vehicle_path = NodePath("Gameplay/JetSki")
 chase_camera_path = NodePath("CameraSystem/ChaseCamera")
 
+[node name="PauseMenu" parent="." instance=ExtResource("225_pause_menu")]
+
 [node name="Environment" type="Node3D" parent="." unique_id=366055671]
 
 [node name="SkyEnvironmentController" type="Node" parent="Environment" unique_id=1243144762]
@@ -572,10 +575,10 @@ custom_sky = SubResource("Sky_lusr1")
 sky_energy_multiplier = 0.45
 ambient_sky_contribution = 1.0
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="Environment" unique_id=951090327]
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Environment" unique_id=951090327 groups=["graphics_quality_environment"]]
 environment = ExtResource("2_0pibt")
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Environment" unique_id=1488093793]
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Environment" unique_id=1488093793 groups=["graphics_quality_directional_light"]]
 transform = Transform3D(0.8829475, 0.34888542, -0.3141378, 0, 0.66913056, 0.74314487, 0.46947157, -0.656158, 0.5908072, 0, 0, 0)
 light_color = Color(0.936434, 0.6636586, 4.1970015e-05, 1)
 light_energy = 1.88
@@ -585,7 +588,7 @@ directional_shadow_mode = 1
 directional_shadow_fade_start = 0.85
 directional_shadow_max_distance = 500.0
 
-[node name="DirectionalLight3D2" type="DirectionalLight3D" parent="Environment" unique_id=1424115820]
+[node name="DirectionalLight3D2" type="DirectionalLight3D" parent="Environment" unique_id=1424115820 groups=["graphics_quality_directional_light"]]
 transform = Transform3D(0.9195691, 0.09848075, -0.38038722, 0.2341794, 0.64000714, 0.73181343, 0.31552005, -0.7620319, 0.56546843, 0, 0, 0)
 visible = false
 light_color = Color(0.82647467, 0.6933553, 0.57007265, 1)
@@ -598,7 +601,7 @@ directional_shadow_split_1 = 0.15
 directional_shadow_fade_start = 0.85
 directional_shadow_max_distance = 600.0
 
-[node name="ReflectionProbe" type="ReflectionProbe" parent="Environment" unique_id=1674306851]
+[node name="ReflectionProbe" type="ReflectionProbe" parent="Environment" unique_id=1674306851 groups=["graphics_quality_reflection_probe"]]
 transform = Transform3D(0.88528687, 0, -0.4650454, 0, 1, 0, 0.4650454, 0, 0.88528687, 402.08948, 6.582779, 146.33685)
 blend_distance = 8.0
 max_distance = 493.3
@@ -620,7 +623,7 @@ sway_z_degrees = 4.0
 transform = Transform3D(0.32, 0, 0, 0, 0.32, 0, 0, 0, 0.32, 0, -0.7512207, 0)
 surface_material_override/0 = SubResource("StandardMaterial3D_cyvr6")
 
-[node name="OmniLight3D" type="OmniLight3D" parent="Environment/Light" unique_id=1122488882]
+[node name="OmniLight3D" type="OmniLight3D" parent="Environment/Light" unique_id=1122488882 groups=["graphics_quality_positional_light"]]
 transform = Transform3D(-0.48733944, 0, -0.87321264, 0, 1, 0, 0.87321264, 0, -0.48733944, 0, -0.866971, 0)
 light_color = Color(0.7210554, 0.9999997, 0.99577314, 1)
 light_energy = 2.689
@@ -643,7 +646,7 @@ secondary_frequency_ratio = 0.44000000000000006
 transform = Transform3D(0.32, 0, 0, 0, 0.32, 0, 0, 0, 0.32, 0, -0.7512207, 0)
 surface_material_override/0 = SubResource("StandardMaterial3D_cyvr6")
 
-[node name="OmniLight3D" type="OmniLight3D" parent="Environment/Light2" unique_id=401580262]
+[node name="OmniLight3D" type="OmniLight3D" parent="Environment/Light2" unique_id=401580262 groups=["graphics_quality_positional_light"]]
 transform = Transform3D(-0.48733944, 1.0011718e-08, -0.87321264, 0, 1, 7.450581e-09, 0.8732127, -2.9802322e-08, -0.48733947, 0.1940918, -4.699774, -0.8023529)
 light_color = Color(0.7210554, 0.9999997, 0.99577314, 1)
 light_energy = 3.361

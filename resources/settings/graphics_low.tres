@@ -1,0 +1,31 @@
+[gd_resource type="Resource" script_class="GraphicsQualityProfile" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/settings/graphics_quality_profile.gd" id="1_profile"]
+
+[resource]
+script = ExtResource("1_profile")
+scaling_3d_scale = 0.5
+scaling_3d_mode = 1
+msaa_3d = 0
+screen_space_aa = 1
+use_taa = false
+anisotropic_filtering = 1
+texture_mipmap_bias = 0.75
+mesh_lod_bias = 0.5
+max_fps = 60
+built_in_ssr = false
+ssao = false
+ssil = false
+glow = false
+fog = true
+volumetric_fog = false
+sdfgi = false
+directional_shadow_max_distance = 120.0
+directional_shadow_mode = 0
+directional_shadow_blur = 0.8
+directional_shadow_atlas_size = 1024
+positional_shadow_atlas_size = 1024
+omni_shadows = false
+reflection_probe = false
+reflection_probe_shadows = false
+sky_radiance = 1

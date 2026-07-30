@@ -1,0 +1,123 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/pause_menu.gd" id="1_pause"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+bg_color = Color(0.035, 0.075, 0.1, 0.96)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.22, 0.75, 0.88, 0.85)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="ButtonGroup" id="ButtonGroup_quality"]
+allow_unpress = false
+
+[node name="PauseMenu" type="CanvasLayer"]
+process_mode = 3
+layer = 100
+script = ExtResource("1_pause")
+
+[node name="Overlay" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 0
+color = Color(0, 0.02, 0.035, 0.72)
+
+[node name="CenterContainer" type="CenterContainer" parent="Overlay"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="Overlay/CenterContainer"]
+custom_minimum_size = Vector2(430, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="MarginContainer" type="MarginContainer" parent="Overlay/CenterContainer/PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 28
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 28
+theme_override_constants/margin_bottom = 24
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Overlay/CenterContainer/PanelContainer/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Title" type="Label" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.45, 0.9, 1, 1)
+theme_override_font_sizes/font_size = 30
+text = "PAUSA"
+horizontal_alignment = 1
+
+[node name="QualityTitle" type="Label" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Calidad gráfica"
+horizontal_alignment = 1
+
+[node name="QualityButtons" type="HBoxContainer" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 8
+alignment = 1
+
+[node name="LowButton" type="Button" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/QualityButtons"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(105, 42)
+layout_mode = 2
+toggle_mode = true
+button_group = SubResource("ButtonGroup_quality")
+text = "BAJO"
+
+[node name="MediumButton" type="Button" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/QualityButtons"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(105, 42)
+layout_mode = 2
+toggle_mode = true
+button_group = SubResource("ButtonGroup_quality")
+text = "MEDIO"
+
+[node name="HighButton" type="Button" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/QualityButtons"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(105, 42)
+layout_mode = 2
+toggle_mode = true
+button_group = SubResource("ButtonGroup_quality")
+text = "ALTO"
+
+[node name="PresetLabel" type="Label" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Preset actual: ALTO"
+horizontal_alignment = 1
+
+[node name="ApplyingLabel" type="Label" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.82, 0.35, 1)
+text = "Aplicando…"
+horizontal_alignment = 1
+
+[node name="FpsLabel" type="Label" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "FPS actuales: 0"
+horizontal_alignment = 1
+
+[node name="ContinueButton" type="Button" parent="Overlay/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 46)
+layout_mode = 2
+text = "CONTINUAR"
