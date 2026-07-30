@@ -3,53 +3,16 @@
 [ext_resource type="Script" uid="uid://bt8dcn7r2hxqv" path="res://scripts/camera/chase_camera.gd" id="1_chase"]
 [ext_resource type="Script" uid="uid://cqeki8dba3dyx" path="res://scripts/camera/underwater_effect_controller.gd" id="2_underwater"]
 [ext_resource type="Shader" uid="uid://udpsvcumn1mh" path="res://shaders/effects/underwater_split_view_post_process.gdshader" id="3_underwater_shader"]
+[ext_resource type="Texture2D" uid="uid://dt41md6x88s0u" path="res://assets/effects/underwater/bubble_additive.png" id="4_bubble"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_underwater"]
 resource_local_to_scene = true
-render_priority = 127
+render_priority = -127
 shader = ExtResource("3_underwater_shader")
-shader_parameter/base_height = 0.0
-shader_parameter/simulation_time = 0.0
-shader_parameter/active_wave_count = 0
-shader_parameter/wave_directions = PackedVector2Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
-shader_parameter/wave_amplitudes = PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
-shader_parameter/wave_numbers = PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
-shader_parameter/wave_angular_frequencies = PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
-shader_parameter/wave_effective_phases = PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
-shader_parameter/wave_crest_shapes = PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
-shader_parameter/wave_crest_normalizations = PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
-shader_parameter/natural_variation_enabled = false
-shader_parameter/phase_warp_strength = 0.0
-shader_parameter/wave_group_strength = 0.0
-shader_parameter/modulation_directions = PackedVector2Array(0, 0, 0, 0)
-shader_parameter/modulation_wave_numbers = PackedFloat32Array(0, 0)
-shader_parameter/modulation_angular_frequencies = PackedFloat32Array(0, 0)
-shader_parameter/modulation_effective_phases = PackedFloat32Array(0, 0)
-shader_parameter/wave_phase_warp_weights = PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
-shader_parameter/wave_group_weights = PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
-shader_parameter/wave_group_phase_offsets = PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
-shader_parameter/wave_set_active = PackedInt32Array(0, 0, 0)
-shader_parameter/wave_set_focus_positions = PackedVector2Array(0, 0, 0, 0, 0, 0)
-shader_parameter/wave_set_focus_times = PackedFloat32Array(0, 0, 0)
-shader_parameter/wave_set_directions = PackedVector2Array(0, 0, 0, 0, 0, 0)
-shader_parameter/wave_set_right_directions = PackedVector2Array(0, 0, 0, 0, 0, 0)
-shader_parameter/wave_set_group_speeds = PackedFloat32Array(0, 0, 0)
-shader_parameter/wave_set_packet_lengths = PackedFloat32Array(0, 0, 0)
-shader_parameter/wave_set_packet_widths = PackedFloat32Array(0, 0, 0)
-shader_parameter/wave_set_carrier_amplitudes = PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0)
-shader_parameter/wave_set_carrier_wave_numbers = PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0)
-shader_parameter/wave_set_carrier_angular_frequencies = PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0)
-shader_parameter/wave_set_carrier_phases = PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0)
-shader_parameter/wave_set_crest_sharpnesses = PackedFloat32Array(0, 0, 0)
-shader_parameter/wave_set_front_face_skews = PackedFloat32Array(0, 0, 0)
-shader_parameter/wave_set_third_harmonics = PackedFloat32Array(0, 0, 0)
-shader_parameter/wave_set_shape_normalizations = PackedFloat32Array(0, 0, 0)
 shader_parameter/camera_submersion = 0.0
-shader_parameter/camera_depth = -1.0
 shader_parameter/underwater_tint = Color(0.1, 0.4, 0.5, 1)
 shader_parameter/tint_strength = 0.16
 shader_parameter/contrast = 0.94
-shader_parameter/fog_color = Color(0.015, 0.095, 0.13, 1)
 shader_parameter/fog_density = 0.009
 shader_parameter/sky_fog_density = 0.007
 shader_parameter/sky_maximum_fog = 0.72
@@ -58,26 +21,35 @@ shader_parameter/absorption_coefficients = Vector3(0.022, 0.01, 0.005)
 shader_parameter/minimum_scene_visibility = 0.18
 shader_parameter/near_clarity_distance = 7.0
 shader_parameter/fog_start_distance = 5.0
-shader_parameter/blur_start_distance = 8.0
 shader_parameter/distortion_strength = 0.0008
 shader_parameter/distortion_speed = 0.7
-shader_parameter/waterline_blend_width = 0.28
-shader_parameter/waterline_distortion_strength = 0.012
-shader_parameter/waterline_distortion_scale = 28.0
-shader_parameter/waterline_band_strength = 0.08
-shader_parameter/waterline_band_width = 0.06
 shader_parameter/maximum_effect_strength = 1.0
-shader_parameter/waterline_iterations = 1
-shader_parameter/waterline_include_ripples = false
-shader_parameter/underwater_sky_distance = 45.0
-shader_parameter/blur_density = 0.01
-shader_parameter/blur_near_lod = 0.0
-shader_parameter/blur_far_lod = 0.85
+shader_parameter/blur_strength = 6.0
+shader_parameter/underwater_visibility_radius = 80.0
+shader_parameter/underwater_visibility_blend = 20.0
 shader_parameter/debug_mode = 0
 
 [sub_resource type="QuadMesh" id="QuadMesh_underwater"]
 flip_faces = true
 size = Vector2(2, 2)
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_bubbles"]
+resource_local_to_scene = true
+blend_mode = 1
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_bubbles"]
+resource_local_to_scene = true
+particle_flag_disable_z = true
+direction = Vector3(0, -1, 0)
+spread = 32.0
+gravity = Vector3(0, -24, 0)
+initial_velocity_min = 90.0
+initial_velocity_max = 210.0
+scale_min = 0.018
+scale_max = 0.052
+color = Color(0.72, 0.9, 1, 0.82)
+emission_shape = 3
+emission_box_extents = Vector3(960, 80, 1)
 
 [node name="ChaseCamera" type="Node3D" unique_id=27337197]
 physics_interpolation_mode = 2
@@ -90,31 +62,33 @@ fov = 65.0
 
 [node name="UnderwaterEffect" type="Node3D" parent="Camera3D" unique_id=997962906]
 script = ExtResource("2_underwater")
-underwater_sky_distance = 45.0
+editor_preview_enabled = true
+editor_preview_mode = 1
 underwater_tint = Color(0.1, 0.4, 0.5, 1)
 tint_strength = 0.16
 contrast = 0.94
-fog_color = Color(0.015, 0.095, 0.13, 1)
 fog_density = 0.009
-sky_fog_density = 0.007
-sky_maximum_fog = 0.72
-geometry_maximum_fog = 0.88
-absorption_coefficients = Vector3(0.022, 0.01, 0.005)
-minimum_scene_visibility = 0.18
-near_clarity_distance = 7.0
 fog_start_distance = 5.0
-blur_start_distance = 8.0
-distortion_strength = 0.0008
-distortion_speed = 0.7
-waterline_blend_width = 0.28
-waterline_distortion_strength = 0.012
-waterline_distortion_scale = 28.0
-waterline_band_strength = 0.08
-waterline_band_width = 0.06
-maximum_effect_strength = 1.0
-blur_density = 0.01
-blur_near_lod = 0.0
-blur_far_lod = 0.85
+blur_strength = 6.0
+underwater_visibility_radius = 80.0
+underwater_visibility_blend = 20.0
+underwater_surface_alpha = 0.82
+
+[node name="WaterCrossingOverlay" type="CanvasLayer" parent="Camera3D/UnderwaterEffect"]
+layer = -1
+
+[node name="EntryBubbles" type="GPUParticles2D" parent="Camera3D/UnderwaterEffect/WaterCrossingOverlay"]
+material = SubResource("CanvasItemMaterial_bubbles")
+position = Vector2(960, 950)
+emitting = false
+amount = 18
+lifetime = 0.85
+one_shot = true
+explosiveness = 0.92
+randomness = 0.55
+visibility_rect = Rect2(-2200, -1400, 4400, 2800)
+process_material = SubResource("ParticleProcessMaterial_bubbles")
+texture = ExtResource("4_bubble")
 
 [node name="UnderwaterPostProcess" type="MeshInstance3D" parent="Camera3D/UnderwaterEffect" unique_id=1854893749]
 visible = false

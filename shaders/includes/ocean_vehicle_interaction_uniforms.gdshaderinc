@@ -1,0 +1,42 @@
+const int MAX_DIRECTIONAL_WAKE_SAMPLES = 16;
+
+group_uniforms DirectionalWake;
+uniform bool directional_wake_enabled = true;
+uniform int directional_wake_active_count = 0;
+uniform vec2 directional_wake_positions[16];
+uniform vec2 directional_wake_directions[16];
+uniform float directional_wake_start_times[16];
+uniform float directional_wake_intensities[16];
+uniform float directional_wake_widths[16];
+uniform float directional_wake_biases[16];
+uniform float directional_wake_amplitude : hint_range(0.0, 0.5, 0.005) = 0.11;
+uniform float directional_wake_wavelength : hint_range(0.25, 12.0, 0.05) = 2.4;
+uniform float directional_wake_propagation_speed : hint_range(0.0, 12.0, 0.05) = 2.1;
+uniform float directional_wake_opening_slope : hint_range(0.02, 1.0, 0.01) = 0.24;
+uniform float directional_wake_arm_width : hint_range(0.1, 4.0, 0.05) = 0.72;
+uniform float directional_wake_center_depression : hint_range(0.0, 0.5, 0.005) = 0.055;
+uniform float directional_wake_maximum_distance : hint_range(4.0, 100.0, 1.0) = 46.0;
+uniform float directional_wake_duration : hint_range(0.25, 12.0, 0.05) = 4.2;
+uniform float directional_wake_attenuation : hint_range(0.0, 0.2, 0.001) = 0.028;
+uniform float directional_wake_turn_strength : hint_range(0.0, 2.0, 0.01) = 0.65;
+
+group_uniforms HullPressure;
+uniform bool hull_pressure_enabled = true;
+uniform vec2 hull_pressure_center = vec2(0.0);
+uniform vec2 hull_pressure_forward = vec2(0.0, -1.0);
+uniform vec2 hull_pressure_half_extents = vec2(0.6, 1.45);
+uniform float hull_pressure_contact = 0.0;
+uniform float hull_pressure_intensity = 0.0;
+uniform float hull_pressure_left_strength = 0.0;
+uniform float hull_pressure_right_strength = 0.0;
+uniform float hull_pressure_turn_bias = 0.0;
+uniform float hull_pressure_pitch = 0.0;
+uniform float hull_pressure_amplitude : hint_range(0.0, 0.5, 0.005) = 0.14;
+uniform float hull_pressure_depression_strength : hint_range(0.0, 2.0, 0.01) = 0.72;
+uniform float hull_pressure_maximum_distance : hint_range(2.0, 30.0, 0.25) = 9.0;
+
+group_uniforms VehicleInteraction;
+uniform float vehicle_interaction_maximum_displacement : hint_range(0.05, 2.0, 0.01) = 0.48;
+uniform float vehicle_interaction_clipmap_distance : hint_range(8.0, 200.0, 1.0) = 86.0;
+uniform int ocean_interaction_debug_mode : hint_enum("Off", "Ripples", "Directional Wake", "Hull Pressure", "Total") = 0;
+group_uniforms;

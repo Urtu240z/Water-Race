@@ -34,7 +34,6 @@ ao_light_affect = 1.0
 ao_texture = ExtResource("5_5ey78")
 uv1_scale = Vector3(2.31, 2.31, 2.31)
 uv1_triplanar = true
-uv1_world_triplanar = true
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kotkt"]
 albedo_texture = ExtResource("8_5ey78")
@@ -49,9 +48,9 @@ normal_texture = ExtResource("10_2mnik")
 ao_enabled = true
 ao_light_affect = 1.0
 ao_texture = ExtResource("9_183rk")
+uv1_scale = Vector3(1.975, 1.975, 1.975)
 uv1_triplanar = true
 uv1_triplanar_sharpness = 1.4936266
-uv1_world_triplanar = true
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7a3ph"]
 albedo_color = Color(0.6052743, 0.6052743, 0.6052743, 1)
@@ -75,8 +74,6 @@ emission_energy_multiplier = 15.4
 
 [node name="JetSkiVisual" type="Node3D" unique_id=1835512432]
 script = ExtResource("1_controller")
-water_material_tag_enabled = null
-water_material_tag_roughness = null
 
 [node name="HullModel" type="Node3D" parent="." unique_id=2052411101]
 unique_name_in_owner = true

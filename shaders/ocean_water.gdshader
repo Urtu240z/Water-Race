@@ -2,7 +2,7 @@
 // The macro displacement and CPU sampling model are adapted from the
 // texture-driven approach in Taillight Games' MIT-licensed texture-driven water shader.
 shader_type spatial;
-render_mode blend_mix, world_vertex_coords, cull_disabled, depth_draw_always, diffuse_burley, specular_schlick_ggx;
+render_mode blend_mix, world_vertex_coords, cull_disabled, depth_draw_always, diffuse_burley, specular_schlick_ggx, fog_disabled;
 
 const int MAX_RIPPLES = 12;
 const float TAU_VALUE = 6.28318530718;
@@ -35,6 +35,8 @@ uniform float ripple_speeds[12];
 uniform float ripple_wavelengths[12];
 uniform float ripple_decays[12];
 uniform float ripple_lifetimes[12];
+
+#include "res://shaders/includes/ocean_vehicle_interaction_uniforms.gdshaderinc"
 
 group_uniforms SurfaceDetail;
 uniform sampler2D surface_normal_texture_a : hint_normal, repeat_enable, filter_linear_mipmap_anisotropic;
@@ -76,6 +78,14 @@ uniform float refraction_strength : hint_range(0.0, 0.05, 0.0005) = 0.009;
 uniform float near_roughness : hint_range(0.0, 1.0, 0.01) = 0.055;
 uniform float horizon_roughness : hint_range(0.0, 1.0, 0.01) = 0.23;
 uniform float water_specular : hint_range(0.0, 1.0, 0.01) = 0.88;
+
+group_uniforms UnderwaterView;
+uniform vec4 underwater_surface_fog_color : source_color = vec4(0.10, 0.40, 0.50, 1.0);
+uniform float underwater_surface_fog_density : hint_range(0.0, 0.1, 0.001) = 0.009;
+uniform float underwater_surface_fog_start_distance : hint_range(0.0, 500.0, 0.5) = 5.0;
+uniform float underwater_visibility_radius : hint_range(5.0, 300.0, 1.0) = 80.0;
+uniform float underwater_visibility_blend : hint_range(1.0, 150.0, 1.0) = 20.0;
+uniform float underwater_surface_alpha : hint_range(0.0, 1.0, 0.01) = 0.82;
 
 group_uniforms Foam;
 uniform bool foam_enabled = true;
@@ -180,6 +190,8 @@ vec4 sample_ripple_state(vec2 logical_xz) {
 	return vec4(height, derivatives, energy);
 }
 
+#include "res://shaders/includes/ocean_vehicle_interaction_functions.gdshaderinc"
+
 
 float clipmap_wave_scale(vec2 world_xz) {
 	if (!ocean_surface_enabled) {
@@ -223,10 +235,26 @@ vec4 sample_wave_state(vec2 world_xz) {
 	float macro_scale = clipmap_wave_scale(world_xz);
 	float ripple_distance = length(world_xz - ocean_detail_center_xz);
 	float ripple_scale = 1.0 - smoothstep(70.0, 130.0, ripple_distance);
+	float interaction_scale = 1.0 - smoothstep(
+		vehicle_interaction_clipmap_distance * 0.82,
+		vehicle_interaction_clipmap_distance,
+		ripple_distance
+	);
+	vec4 interaction = interaction_scale > 0.0001
+		? sample_vehicle_interaction_state(logical_xz)
+		: vec4(0.0);
+	float ripple_weight = interaction_ripple_weight();
 	return vec4(
-		macro_height * macro_scale + ripple.x * ripple_scale,
-		macro_derivatives * macro_scale + ripple.yz * ripple_scale,
-		ripple.w * ripple_scale
+		macro_height * macro_scale
+			+ ripple.x * ripple_scale * ripple_weight
+			+ interaction.x * interaction_scale,
+		macro_derivatives * macro_scale
+			+ ripple.yz * ripple_scale * ripple_weight
+			+ interaction.yz * interaction_scale,
+		max(
+			ripple.w * ripple_scale * ripple_weight,
+			interaction.w * interaction_scale
+		)
 	);
 }
 
@@ -305,6 +333,39 @@ void fragment() {
 		interpolated_world_xz.y
 	);
 	float camera_distance = length(CAMERA_POSITION_WORLD - world_fragment_position);
+	float camera_underwater_factor = 1.0 - smoothstep(
+		-0.05,
+		0.05,
+		CAMERA_POSITION_WORLD.y - water_level
+	);
+	float underwater_surface_fog_distance = max(
+		camera_distance - underwater_surface_fog_start_distance,
+		0.0
+	);
+	float underwater_surface_fog_amount = camera_underwater_factor * (
+		1.0 - exp(
+			-underwater_surface_fog_density
+				* underwater_surface_fog_distance
+		)
+	);
+	float safe_underwater_visibility_radius = max(
+		underwater_visibility_radius,
+		0.001
+	);
+	float safe_underwater_visibility_blend = clamp(
+		underwater_visibility_blend,
+		0.001,
+		safe_underwater_visibility_radius
+	);
+	float underwater_radius_extinction = camera_underwater_factor * smoothstep(
+		safe_underwater_visibility_radius - safe_underwater_visibility_blend,
+		safe_underwater_visibility_radius,
+		camera_distance
+	);
+	underwater_surface_fog_amount = max(
+		underwater_surface_fog_amount,
+		underwater_radius_extinction
+	);
 	vec2 logical_xz = interpolated_world_xz + ocean_logical_origin_offset_xz;
 	vec3 detail_normal = sample_surface_detail(logical_xz, camera_distance);
 	vec2 detail_slope = detail_normal.xy / max(detail_normal.z, 0.08);
@@ -460,7 +521,22 @@ void fragment() {
 			1.0
 		)
 		: 0.0;
+	vec3 underwater_surface_color = mix(
+		refracted_scene,
+		shallow_water_color.rgb,
+		0.18
+	);
+	final_color = mix(
+		final_color,
+		underwater_surface_color,
+		camera_underwater_factor
+	);
 	final_color = mix(final_color, foam_color.rgb, foam_mask);
+	final_color = mix(
+		final_color,
+		underwater_surface_fog_color.rgb,
+		underwater_surface_fog_amount
+	);
 
 	float local_alpha = mix(near_water_alpha, deep_water_alpha, water_density);
 	float final_alpha = clamp(
@@ -471,6 +547,11 @@ void fragment() {
 		),
 		0.55,
 		1.0
+	);
+	final_alpha = mix(
+		final_alpha,
+		underwater_surface_alpha,
+		camera_underwater_factor
 	);
 	final_alpha = max(final_alpha, foam_mask * 0.98);
 
@@ -486,7 +567,11 @@ void fragment() {
 		foam_mask
 	);
 	METALLIC = 0.0;
-	SPECULAR = mix(water_specular, 0.16, foam_mask);
+	SPECULAR = mix(water_specular, 0.16, foam_mask) * mix(
+		1.0,
+		0.08,
+		camera_underwater_factor
+	);
 	ALPHA = final_alpha;
 
 	if (ocean_debug_show_rings) {

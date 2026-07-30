@@ -1,14 +1,33 @@
+@tool
 class_name UnderwaterEffectController
 extends Node3D
 
 const UNDERWATER_POST_PROCESS_SHADER: Shader = preload(
 	"res://shaders/effects/underwater_split_view_post_process.gdshader"
 )
+const UNDERWATER_COMPOSITOR_EFFECT_SCRIPT: Script = preload(
+	"res://scripts/camera/underwater_fullscreen_compositor_effect.gd"
+)
+const UNDERWATER_POST_PROCESS_RENDER_PRIORITY: int = -127
+const DEFAULT_WET_LENS_HEIGHT: Texture2D = preload(
+	"res://assets/effects/underwater/wet_lens_height.png"
+)
 
 enum DebugForceMode {
 	AUTOMATIC,
 	FORCE_AIR,
 	FORCE_UNDERWATER,
+}
+
+enum EditorPreviewMode {
+	FOLLOW_VIEWPORT,
+	FULLY_UNDERWATER,
+}
+
+enum WaterCrossingTransition {
+	NONE,
+	ENTERING,
+	EXITING,
 }
 
 @export_group("References")
@@ -21,48 +40,74 @@ enum DebugForceMode {
 @export_group("Detection")
 @export_range(0.0, 0.5, 0.005, "suffix:m") var enter_depth: float = 0.03
 @export_range(0.0, 0.5, 0.005, "suffix:m") var exit_clearance: float = 0.05
-@export_range(0.1, 30.0, 0.1) var transition_sharpness: float = 8.0
-
-@export_group("Partial Underwater View")
-@export_range(0.10, 5.0, 0.05, "suffix:m")
-var partial_view_activation_distance: float = 1.50
-@export_range(0.0, 1.0, 0.01, "suffix:m")
-var full_submersion_start_depth: float = 0.05
-@export_range(0.05, 2.0, 0.01, "suffix:m")
-var full_submersion_end_depth: float = 0.35
-@export_range(1, 2, 1) var waterline_iterations: int = 1
-@export var waterline_include_ripples: bool = false
-@export_range(10.0, 200.0, 1.0, "suffix:m")
-var underwater_sky_distance: float = 45.0
 
 @export_group("Underwater Look")
 @export var underwater_tint: Color = Color(0.10, 0.40, 0.50, 1.0)
 @export_range(0.0, 1.0, 0.01) var tint_strength: float = 0.16
 @export_range(0.25, 1.5, 0.01) var contrast: float = 0.94
-@export var fog_color: Color = Color(0.015, 0.095, 0.13, 1.0)
+## Final fog color. Geometry and ocean converge smoothly to this color.
+@export var underwater_fog_color: Color = Color(0.03, 0.16, 0.21, 1.0)
 @export_range(0.0, 0.1, 0.001) var fog_density: float = 0.009
-@export_range(0.0, 0.1, 0.001) var sky_fog_density: float = 0.007
-@export_range(0.0, 1.0, 0.01) var sky_maximum_fog: float = 0.72
-@export_range(0.0, 1.0, 0.01) var geometry_maximum_fog: float = 0.88
-@export var absorption_coefficients: Vector3 = Vector3(0.022, 0.010, 0.005)
-@export_range(0.0, 1.0, 0.01) var minimum_scene_visibility: float = 0.18
-@export_range(0.0, 30.0, 0.5, "suffix:m") var near_clarity_distance: float = 7.0
 @export_range(0.0, 50.0, 0.5, "suffix:m") var fog_start_distance: float = 5.0
-@export_range(0.0, 50.0, 0.5, "suffix:m") var blur_start_distance: float = 8.0
-@export_range(0.0, 0.01, 0.0001) var distortion_strength: float = 0.0008
-@export_range(0.0, 5.0, 0.05) var distortion_speed: float = 0.7
-@export_range(0.01, 1.0, 0.01, "suffix:m") var waterline_blend_width: float = 0.28
-@export_range(0.0, 0.1, 0.001, "suffix:m")
-var waterline_distortion_strength: float = 0.012
-@export_range(1.0, 100.0, 1.0, "suffix:m")
-var waterline_distortion_scale: float = 28.0
-@export_range(0.0, 0.5, 0.01) var waterline_band_strength: float = 0.08
-@export_range(0.001, 0.5, 0.001, "suffix:m")
-var waterline_band_width: float = 0.06
-@export_range(0.0, 1.0, 0.01) var maximum_effect_strength: float = 1.0
-@export_range(0.0, 0.25, 0.001) var blur_density: float = 0.010
-@export_range(0.0, 4.0, 0.05) var blur_near_lod: float = 0.0
-@export_range(0.0, 1.2, 0.05) var blur_far_lod: float = 0.85
+
+@export_group("Underwater Blur")
+## Uniform screen-space blur radius. It only affects the underwater mask.
+@export_range(0.0, 24.0, 0.1, "suffix:px") var blur_strength: float = 6.0
+## Number of separable Gaussian passes. More passes produce a smoother blur at
+## additional GPU cost.
+@export_range(1, 4, 1) var blur_passes: int = 2
+
+@export_group("Underwater Visibility")
+## Maximum visible distance below water. At this radius every scene element
+## and the ocean surface converge completely to the underwater fog color.
+@export_range(5.0, 300.0, 1.0, "suffix:m")
+var underwater_visibility_radius: float = 80.0
+## Distance over which the image blends smoothly into the underwater tint before
+## reaching the visibility radius.
+@export_range(1.0, 150.0, 1.0, "suffix:m")
+var underwater_visibility_blend: float = 20.0
+
+@export_group("Underwater Surface")
+## Alpha of the ocean surface when viewed from below. Lower values let more
+## sky light through without changing the surface alpha above water.
+@export_range(0.0, 1.0, 0.01) var underwater_surface_alpha: float = 0.82
+
+@export_group("Water Crossing Transition")
+## Short bubble/refraction burst used when the camera enters the water.
+@export_range(0.05, 2.0, 0.05, "suffix:s")
+var entry_transition_duration: float = 0.45
+## Wet-lens drain used when the camera exits the water.
+@export_range(0.05, 3.0, 0.05, "suffix:s")
+var exit_transition_duration: float = 0.90
+@export_range(0.0, 2.0, 0.05)
+var crossing_transition_strength: float = 1.0
+## Grayscale height map used to refract realistic droplets on exit.
+@export var wet_lens_height_texture: Texture2D = DEFAULT_WET_LENS_HEIGHT
+## Zooms into the wet-lens texture. Higher values show fewer, larger drops.
+@export_range(0.5, 4.0, 0.05) var wet_lens_zoom: float = 1.0
+## Strength of the animated refraction and downward image drag.
+@export_range(0.0, 3.0, 0.05) var wet_lens_warp_strength: float = 1.0
+## Fraction of the screen travelled downward during the exit transition.
+@export_range(0.0, 1.0, 0.01) var wet_lens_fall_distance: float = 0.28
+## Vertical variation of the clearing edge. Zero produces a straight wash.
+@export_range(0.0, 1.5, 0.01)
+var wet_lens_wash_irregularity: float = 1.0
+## Width of the blend between wet and clean areas.
+@export_range(0.01, 0.5, 0.01)
+var wet_lens_wash_softness: float = 0.18
+## Soft fade applied where the moving droplet texture leaves its UV bounds.
+@export_range(0.0, 0.25, 0.005)
+var wet_lens_texture_edge_feather: float = 0.08
+
+@export_group("Editor Preview")
+## Shows this post-process in the 3D editor viewport only.
+@export var editor_preview_enabled: bool = false
+## FULLY_UNDERWATER makes tuning immediately visible from any editor camera position.
+@export var editor_preview_mode: EditorPreviewMode = EditorPreviewMode.FULLY_UNDERWATER
+## Fallback depth, also used by the two forced preview modes.
+## Negative values are above the surface; positive values are below it.
+@export_range(-2.0, 2.0, 0.01, "suffix:m")
+var editor_preview_camera_depth: float = -0.10
 
 @export_group("Debug")
 @export var force_mode: DebugForceMode = DebugForceMode.AUTOMATIC
@@ -103,40 +148,86 @@ var _sampled_surface_height: float = -INF
 var _effect_strength: float = 0.0
 var _resolve_retry_time: float = 0.0
 var _look_signature: int = 0
+var _fog_environment: Environment
+var _fog_environment_original: Dictionary = {}
+var _preview_environment_camera: Camera3D
+var _preview_original_environment: Environment
+var _preview_environment: Environment
+var _compositor_effect: CompositorEffect
+var _compositor_camera: Camera3D
+var _original_compositor: Compositor
+var _active_compositor: Compositor
+var _bubble_particles: GPUParticles2D
+var _crossing_transition: WaterCrossingTransition = (
+	WaterCrossingTransition.NONE
+)
+var _crossing_transition_elapsed: float = 0.0
+var _crossing_transition_progress: float = 1.0
 
 
 func _ready() -> void:
 	process_priority = 100
-	_camera = get_parent() as Camera3D
-	_post_process = get_node_or_null(post_process_path) as MeshInstance3D
-	if _post_process != null:
-		var configured_material := (
-			_post_process.material_override as ShaderMaterial
-		)
-		if configured_material != null:
-			_material = configured_material.duplicate() as ShaderMaterial
-		else:
-			_material = ShaderMaterial.new()
-		_material.shader = UNDERWATER_POST_PROCESS_SHADER
-		_post_process.material_override = _material
-		_post_process.visible = false
-	if _camera == null or _material == null:
+	_compositor_effect = (
+		UNDERWATER_COMPOSITOR_EFFECT_SCRIPT.new() as CompositorEffect
+	)
+	if not _initialize_post_process():
 		push_warning(
 			"UnderwaterEffect requires a Camera3D parent and a ShaderMaterial post-process."
 		)
-		set_process(false)
+		if not Engine.is_editor_hint():
+			set_process(false)
 		return
 	_push_look_parameters(true)
 	call_deferred("_resolve_ocean")
 
 
+func _initialize_post_process() -> bool:
+	_camera = get_parent() as Camera3D
+	_post_process = get_node_or_null(post_process_path) as MeshInstance3D
+	_bubble_particles = get_node_or_null(
+		"WaterCrossingOverlay/EntryBubbles"
+	) as GPUParticles2D
+	if _post_process != null:
+		var configured_material := (
+			_post_process.material_override as ShaderMaterial
+		)
+		if (
+			Engine.is_editor_hint()
+			and configured_material != null
+			and configured_material.shader == UNDERWATER_POST_PROCESS_SHADER
+		):
+			_material = configured_material
+		elif configured_material != null:
+			_material = configured_material.duplicate() as ShaderMaterial
+		else:
+			_material = ShaderMaterial.new()
+		if _material.shader != UNDERWATER_POST_PROCESS_SHADER:
+			_material.shader = UNDERWATER_POST_PROCESS_SHADER
+		_material.render_priority = UNDERWATER_POST_PROCESS_RENDER_PRIORITY
+		if _post_process.material_override != _material:
+			_post_process.material_override = _material
+		_post_process.visible = false
+	return _camera != null and _material != null and _post_process != null
+
+
 func _exit_tree() -> void:
+	_restore_fullscreen_compositor()
+	_restore_volumetric_fog()
+	_restore_editor_preview_environment()
 	_unregister_ocean_material()
 
 
 func _process(delta: float) -> void:
+	_update_bubble_particle_layout()
+	if Engine.is_editor_hint():
+		_process_editor_preview(delta)
+		return
+
 	if not effect_enabled:
 		_effect_strength = 0.0
+		_clear_crossing_transition()
+		_update_fullscreen_compositor(0.0)
+		_update_volumetric_fog(0.0)
 		if _post_process != null:
 			_post_process.visible = false
 		return
@@ -146,6 +237,9 @@ func _process(delta: float) -> void:
 			_resolve_retry_time = 1.0
 			_resolve_ocean()
 		if not is_instance_valid(_ocean):
+			_clear_crossing_transition()
+			_update_fullscreen_compositor(0.0)
+			_update_volumetric_fog(0.0)
 			if _post_process != null:
 				_post_process.visible = false
 			return
@@ -153,44 +247,402 @@ func _process(delta: float) -> void:
 	var camera_position := _camera.global_position
 	_sampled_surface_height = _ocean.sample_height(camera_position)
 	_camera_depth = _sampled_surface_height - camera_position.y
+	var was_underwater := _is_underwater
 	_update_detection_state()
+	if _is_underwater != was_underwater:
+		_start_crossing_transition(_is_underwater)
+	_update_crossing_transition(delta)
 
-	var depth_submersion := smoothstep(
-		full_submersion_start_depth,
-		maxf(
-			full_submersion_end_depth,
-			full_submersion_start_depth + 0.001
-		),
-		maxf(_camera_depth, 0.0)
-	)
-	var target_strength := depth_submersion
+	var target_strength := 0.0
 	match force_mode:
 		DebugForceMode.FORCE_AIR:
 			target_strength = 0.0
 		DebugForceMode.FORCE_UNDERWATER:
 			target_strength = 1.0
-	var blend := 1.0 - exp(
-		-maxf(transition_sharpness, 0.0) * maxf(delta, 0.0)
-	)
-	_effect_strength = lerpf(_effect_strength, target_strength, blend)
-	if absf(_effect_strength - target_strength) <= 0.0001:
-		_effect_strength = target_strength
+		_:
+			if _is_underwater:
+				target_strength = 1.0
+	# The visual state changes on the same frame as the water detector. Entry
+	# and exit clearances remain as spatial hysteresis against wave flicker.
+	_effect_strength = target_strength
+	_update_volumetric_fog(_effect_strength)
+	_update_fullscreen_compositor(_effect_strength)
 
 	_push_look_parameters(false)
 	_material.set_shader_parameter(&"camera_submersion", _effect_strength)
-	_material.set_shader_parameter(&"camera_depth", _camera_depth)
-	var near_surface := (
-		_camera_depth >= -partial_view_activation_distance
+	_post_process.visible = false
+
+
+func _process_editor_preview(delta: float) -> void:
+	if (
+		_camera == null
+		or _material == null
+		or _post_process == null
+	) and not _initialize_post_process():
+		return
+	var editor_camera := _get_editor_viewport_camera()
+	if editor_camera != null:
+		# The underwater preview is entirely compositor-driven. Clearing a
+		# Camera3D override makes the viewport use the scene WorldEnvironment
+		# again and also recovers overrides orphaned by tool-script hot reloads.
+		editor_camera.environment = null
+	if not editor_preview_enabled:
+		_clear_crossing_transition()
+		_update_fullscreen_compositor(0.0)
+		_update_volumetric_fog(0.0)
+		_post_process.visible = false
+		return
+
+	if not is_instance_valid(_ocean):
+		_resolve_ocean()
+
+	var preview_depth: float = editor_preview_camera_depth
+	if editor_preview_mode == EditorPreviewMode.FOLLOW_VIEWPORT and is_instance_valid(_ocean):
+		if is_instance_valid(editor_camera):
+			var camera_position := editor_camera.global_position
+			_sampled_surface_height = _ocean.sample_height(camera_position)
+			preview_depth = _sampled_surface_height - camera_position.y
+
+	var was_underwater := _is_underwater
+	_camera_depth = preview_depth
+	_update_detection_state()
+	if editor_preview_mode == EditorPreviewMode.FULLY_UNDERWATER:
+		_is_underwater = true
+	if _is_underwater != was_underwater:
+		_start_crossing_transition(_is_underwater)
+	_update_crossing_transition(delta)
+	var preview_submersion := 1.0 if _is_underwater else 0.0
+
+	_effect_strength = preview_submersion
+	_update_volumetric_fog(preview_submersion)
+	_update_fullscreen_compositor(preview_submersion)
+	_push_look_parameters(false)
+	_material.set_shader_parameter(&"camera_submersion", preview_submersion)
+	_post_process.visible = false
+
+
+func _update_fullscreen_compositor(strength: float) -> void:
+	if _compositor_effect == null:
+		return
+	var target_camera := _camera
+	if Engine.is_editor_hint():
+		target_camera = _get_editor_viewport_camera()
+	if target_camera == null:
+		return
+	var active_strength := clampf(strength, 0.0, 1.0)
+	var transition_active := (
+		_crossing_transition != WaterCrossingTransition.NONE
+		and crossing_transition_strength > 0.0001
 	)
-	_post_process.visible = (
-		force_mode != DebugForceMode.FORCE_AIR
-		and (
-			near_surface
-			or _is_underwater
-			or _effect_strength > 0.001
-			or force_mode == DebugForceMode.FORCE_UNDERWATER
+	if (
+		Engine.is_editor_hint()
+		and active_strength <= 0.0001
+		and not transition_active
+	):
+		_restore_fullscreen_compositor()
+		# This project has no baseline editor compositor. Clearing the camera
+		# RID is the only deterministic way to discard effects orphaned by a
+		# previous @tool instance.
+		target_camera.compositor = null
+		return
+	_ensure_fullscreen_compositor(target_camera)
+	_compositor_effect.enabled = (
+		active_strength > 0.0001
+		or transition_active
+	)
+	_compositor_effect.call(
+		&"update_parameters",
+		active_strength,
+		blur_strength,
+		blur_passes,
+		int(_crossing_transition),
+		_crossing_transition_progress,
+		crossing_transition_strength,
+		wet_lens_height_texture,
+		wet_lens_zoom,
+		wet_lens_warp_strength,
+		wet_lens_fall_distance,
+		wet_lens_wash_irregularity,
+		wet_lens_wash_softness,
+		wet_lens_texture_edge_feather,
+		underwater_tint,
+		underwater_fog_color,
+		tint_strength,
+		contrast,
+		fog_density,
+		fog_start_distance,
+		underwater_visibility_radius,
+		underwater_visibility_blend
+	)
+
+
+func _start_crossing_transition(entering_water: bool) -> void:
+	_crossing_transition = (
+		WaterCrossingTransition.ENTERING
+		if entering_water
+		else WaterCrossingTransition.EXITING
+	)
+	_crossing_transition_elapsed = 0.0
+	_crossing_transition_progress = 0.0
+	if _bubble_particles == null:
+		return
+	if entering_water:
+		# The particle node owns its texture/material. This deliberately
+		# preserves scene-local GradientTexture2D or sprite overrides.
+		_bubble_particles.visible = _bubble_particles.texture != null
+		if _bubble_particles.visible:
+			_update_bubble_particle_layout()
+			_bubble_particles.restart()
+			_bubble_particles.emitting = true
+	else:
+		# A new crossing always replaces the previous one. Stop and hide the
+		# entry burst immediately so bubbles can never remain visible in air.
+		_bubble_particles.emitting = false
+		_bubble_particles.visible = false
+
+
+func _update_crossing_transition(delta: float) -> void:
+	if _crossing_transition == WaterCrossingTransition.NONE:
+		return
+	var duration := (
+		entry_transition_duration
+		if _crossing_transition == WaterCrossingTransition.ENTERING
+		else exit_transition_duration
+	)
+	_crossing_transition_elapsed += maxf(delta, 0.0)
+	_crossing_transition_progress = clampf(
+		_crossing_transition_elapsed / maxf(duration, 0.001),
+		0.0,
+		1.0
+	)
+	if _crossing_transition_progress >= 1.0:
+		_clear_crossing_transition()
+
+
+func _clear_crossing_transition() -> void:
+	_crossing_transition = WaterCrossingTransition.NONE
+	_crossing_transition_elapsed = 0.0
+	_crossing_transition_progress = 1.0
+
+
+func _update_bubble_particle_layout() -> void:
+	if _bubble_particles == null:
+		return
+	var viewport_size := get_viewport().get_visible_rect().size
+	if viewport_size.x <= 0.0 or viewport_size.y <= 0.0:
+		return
+	_bubble_particles.position = Vector2(
+		viewport_size.x * 0.5,
+		viewport_size.y * 0.88
+	)
+	var particle_material := (
+		_bubble_particles.process_material as ParticleProcessMaterial
+	)
+	if particle_material != null:
+		particle_material.emission_box_extents = Vector3(
+			viewport_size.x * 0.48,
+			viewport_size.y * 0.08,
+			1.0
 		)
+
+
+func _ensure_fullscreen_compositor(target_camera: Camera3D) -> void:
+	if (
+		target_camera == _compositor_camera
+		and target_camera.compositor == _active_compositor
+	):
+		return
+	_restore_fullscreen_compositor()
+	_compositor_camera = target_camera
+	_original_compositor = _remove_orphaned_underwater_effects(
+		target_camera.compositor
 	)
+	if target_camera.compositor != _original_compositor:
+		target_camera.compositor = _original_compositor
+	if _original_compositor != null:
+		_active_compositor = _original_compositor.duplicate(true) as Compositor
+	else:
+		_active_compositor = Compositor.new()
+	var effects: Array[CompositorEffect] = []
+	for existing_effect in _active_compositor.compositor_effects:
+		effects.append(existing_effect)
+	effects.append(_compositor_effect)
+	_active_compositor.compositor_effects = effects
+	target_camera.compositor = _active_compositor
+
+
+func _remove_orphaned_underwater_effects(
+	source_compositor: Compositor
+) -> Compositor:
+	if source_compositor == null:
+		return null
+	var contains_underwater_effect := false
+	for existing_effect in source_compositor.compositor_effects:
+		if _is_underwater_compositor_effect(existing_effect):
+			contains_underwater_effect = true
+			break
+	if not contains_underwater_effect:
+		return source_compositor
+
+	var clean_compositor := source_compositor.duplicate(true) as Compositor
+	var clean_effects: Array[CompositorEffect] = []
+	for existing_effect in clean_compositor.compositor_effects:
+		if not _is_underwater_compositor_effect(existing_effect):
+			clean_effects.append(existing_effect)
+	clean_compositor.compositor_effects = clean_effects
+	return clean_compositor
+
+
+func _is_underwater_compositor_effect(effect: CompositorEffect) -> bool:
+	if effect == null:
+		return false
+	var effect_script := effect.get_script() as Script
+	return (
+		effect_script != null
+		and effect_script.resource_path
+		== UNDERWATER_COMPOSITOR_EFFECT_SCRIPT.resource_path
+	)
+
+
+func _restore_fullscreen_compositor() -> void:
+	if (
+		is_instance_valid(_compositor_camera)
+		and _compositor_camera.compositor == _active_compositor
+	):
+		_compositor_camera.compositor = _original_compositor
+	_compositor_camera = null
+	_original_compositor = null
+	_active_compositor = null
+
+
+func _get_editor_viewport_camera() -> Camera3D:
+	var editor_viewport := EditorInterface.get_editor_viewport_3d(0)
+	if editor_viewport != null:
+		var editor_camera := editor_viewport.get_camera_3d()
+		if editor_camera != null:
+			return editor_camera
+	return get_viewport().get_camera_3d()
+
+
+func _update_volumetric_fog(strength: float) -> void:
+	if Engine.is_editor_hint():
+		# Never mutate the editor viewport Environment. Tool-script hot reloads
+		# can outlive the controller state and leave the preview fog enabled
+		# above water. The compositor already previews the complete underwater
+		# look in the editor; real volumetric fog is runtime-only.
+		_restore_volumetric_fog()
+		_restore_editor_preview_environment()
+		return
+	var active_strength := clampf(strength, 0.0, 1.0)
+	if active_strength <= 0.001:
+		_restore_volumetric_fog()
+		return
+	var environment := _get_active_environment()
+	if environment == null:
+		return
+	if environment != _fog_environment:
+		_restore_volumetric_fog()
+		_fog_environment = environment
+		_fog_environment_original = {
+			&"depth_fog_enabled": environment.fog_enabled,
+			&"enabled": environment.volumetric_fog_enabled,
+			&"density": environment.volumetric_fog_density,
+			&"albedo": environment.volumetric_fog_albedo,
+			&"emission": environment.volumetric_fog_emission,
+			&"emission_energy": environment.volumetric_fog_emission_energy,
+			&"length": environment.volumetric_fog_length,
+			&"detail_spread": environment.volumetric_fog_detail_spread,
+			&"ambient_inject": environment.volumetric_fog_ambient_inject,
+			&"sky_affect": environment.volumetric_fog_sky_affect,
+		}
+	environment.fog_enabled = false
+	environment.volumetric_fog_enabled = true
+	environment.volumetric_fog_density = maxf(
+		fog_density * active_strength,
+		0.0001
+	)
+	environment.volumetric_fog_albedo = underwater_fog_color
+	environment.volumetric_fog_emission = underwater_fog_color
+	environment.volumetric_fog_emission_energy = 0.35 * active_strength
+	# The volume's own edge is deliberately kept far behind the post-process
+	# extinction radius. Otherwise its finite spherical boundary becomes visible.
+	environment.volumetric_fog_length = maxf(
+		underwater_visibility_radius + underwater_visibility_blend * 4.0,
+		512.0
+	)
+	environment.volumetric_fog_detail_spread = 2.0
+	environment.volumetric_fog_ambient_inject = 1.0
+	environment.volumetric_fog_sky_affect = 1.0
+
+
+func _get_active_environment() -> Environment:
+	if Engine.is_editor_hint():
+		var editor_camera := _get_editor_viewport_camera()
+		if editor_camera != null:
+			return _ensure_editor_preview_environment(editor_camera)
+	if _camera != null and _camera.get_world_3d() != null:
+		return _camera.get_world_3d().environment
+	return null
+
+
+func _ensure_editor_preview_environment(
+	editor_camera: Camera3D
+) -> Environment:
+	if (
+		editor_camera == _preview_environment_camera
+		and editor_camera.environment == _preview_environment
+	):
+		return _preview_environment
+	_restore_volumetric_fog()
+	_restore_editor_preview_environment()
+	var source_environment := editor_camera.environment
+	if source_environment == null and editor_camera.get_world_3d() != null:
+		source_environment = editor_camera.get_world_3d().environment
+	if source_environment == null:
+		return null
+	_preview_environment_camera = editor_camera
+	_preview_original_environment = editor_camera.environment
+	_preview_environment = source_environment.duplicate(true) as Environment
+	editor_camera.environment = _preview_environment
+	return _preview_environment
+
+
+func _restore_editor_preview_environment() -> void:
+	if (
+		is_instance_valid(_preview_environment_camera)
+		and _preview_environment_camera.environment == _preview_environment
+	):
+		_preview_environment_camera.environment = _preview_original_environment
+	_preview_environment_camera = null
+	_preview_original_environment = null
+	_preview_environment = null
+
+
+func _restore_volumetric_fog() -> void:
+	if _fog_environment == null or _fog_environment_original.is_empty():
+		_fog_environment = null
+		_fog_environment_original.clear()
+		return
+	_fog_environment.fog_enabled = _fog_environment_original[&"depth_fog_enabled"]
+	_fog_environment.volumetric_fog_enabled = _fog_environment_original[&"enabled"]
+	_fog_environment.volumetric_fog_density = _fog_environment_original[&"density"]
+	_fog_environment.volumetric_fog_albedo = _fog_environment_original[&"albedo"]
+	_fog_environment.volumetric_fog_emission = _fog_environment_original[&"emission"]
+	_fog_environment.volumetric_fog_emission_energy = (
+		_fog_environment_original[&"emission_energy"]
+	)
+	_fog_environment.volumetric_fog_length = _fog_environment_original[&"length"]
+	_fog_environment.volumetric_fog_detail_spread = (
+		_fog_environment_original[&"detail_spread"]
+	)
+	_fog_environment.volumetric_fog_ambient_inject = (
+		_fog_environment_original[&"ambient_inject"]
+	)
+	_fog_environment.volumetric_fog_sky_affect = (
+		_fog_environment_original[&"sky_affect"]
+	)
+	_fog_environment = null
+	_fog_environment_original.clear()
 
 
 func _update_detection_state() -> void:
@@ -218,7 +670,7 @@ func _resolve_ocean() -> void:
 	_unregister_ocean_material()
 	_ocean = resolved
 	if _ocean != null and _material != null:
-		_ocean.register_external_water_material(_material)
+		_push_look_parameters(true)
 
 
 func _find_matching_ocean() -> Ocean3D:
@@ -253,30 +705,13 @@ func _push_look_parameters(force_update: bool) -> void:
 		underwater_tint,
 		tint_strength,
 		contrast,
-		fog_color,
+		underwater_fog_color,
 		fog_density,
-		sky_fog_density,
-		sky_maximum_fog,
-		geometry_maximum_fog,
-		absorption_coefficients,
-		minimum_scene_visibility,
-		near_clarity_distance,
 		fog_start_distance,
-		blur_start_distance,
-		distortion_strength,
-		distortion_speed,
-		waterline_blend_width,
-		waterline_distortion_strength,
-		waterline_distortion_scale,
-		waterline_band_strength,
-		waterline_band_width,
-		maximum_effect_strength,
-		waterline_iterations,
-		waterline_include_ripples,
-		underwater_sky_distance,
-		blur_density,
-		blur_near_lod,
-		blur_far_lod,
+		blur_strength,
+		underwater_visibility_radius,
+		underwater_visibility_blend,
+		underwater_surface_alpha,
 		debug_mode,
 	])
 	if not force_update and signature == _look_signature:
@@ -285,67 +720,50 @@ func _push_look_parameters(force_update: bool) -> void:
 	_material.set_shader_parameter(&"underwater_tint", underwater_tint)
 	_material.set_shader_parameter(&"tint_strength", tint_strength)
 	_material.set_shader_parameter(&"contrast", contrast)
-	_material.set_shader_parameter(&"fog_color", fog_color)
+	_material.set_shader_parameter(&"fog_tint", underwater_fog_color)
 	_material.set_shader_parameter(&"fog_density", fog_density)
-	_material.set_shader_parameter(&"sky_fog_density", sky_fog_density)
-	_material.set_shader_parameter(&"sky_maximum_fog", sky_maximum_fog)
-	_material.set_shader_parameter(
-		&"geometry_maximum_fog",
-		geometry_maximum_fog
-	)
-	_material.set_shader_parameter(
-		&"absorption_coefficients",
-		absorption_coefficients
-	)
-	_material.set_shader_parameter(
-		&"minimum_scene_visibility",
-		minimum_scene_visibility
-	)
-	_material.set_shader_parameter(
-		&"near_clarity_distance",
-		near_clarity_distance
-	)
 	_material.set_shader_parameter(
 		&"fog_start_distance",
 		fog_start_distance
 	)
+	_material.set_shader_parameter(&"blur_strength", blur_strength)
 	_material.set_shader_parameter(
-		&"blur_start_distance",
-		blur_start_distance
-	)
-	_material.set_shader_parameter(&"distortion_strength", distortion_strength)
-	_material.set_shader_parameter(&"distortion_speed", distortion_speed)
-	_material.set_shader_parameter(&"waterline_blend_width", waterline_blend_width)
-	_material.set_shader_parameter(
-		&"waterline_distortion_strength",
-		waterline_distortion_strength
+		&"underwater_visibility_radius",
+		underwater_visibility_radius
 	)
 	_material.set_shader_parameter(
-		&"waterline_distortion_scale",
-		waterline_distortion_scale
+		&"underwater_visibility_blend",
+		underwater_visibility_blend
 	)
-	_material.set_shader_parameter(
-		&"waterline_band_strength",
-		waterline_band_strength
-	)
-	_material.set_shader_parameter(
-		&"waterline_band_width",
-		waterline_band_width
-	)
-	_material.set_shader_parameter(
-		&"maximum_effect_strength",
-		maximum_effect_strength
-	)
-	_material.set_shader_parameter(&"waterline_iterations", waterline_iterations)
-	_material.set_shader_parameter(
-		&"waterline_include_ripples",
-		waterline_include_ripples
-	)
-	_material.set_shader_parameter(
-		&"underwater_sky_distance",
-		underwater_sky_distance
-	)
-	_material.set_shader_parameter(&"blur_density", blur_density)
-	_material.set_shader_parameter(&"blur_near_lod", blur_near_lod)
-	_material.set_shader_parameter(&"blur_far_lod", blur_far_lod)
 	_material.set_shader_parameter(&"debug_mode", debug_mode)
+	_push_ocean_underwater_parameters()
+
+
+func _push_ocean_underwater_parameters() -> void:
+	if not is_instance_valid(_ocean) or _ocean.ocean_material == null:
+		return
+	var ocean_material := _ocean.ocean_material
+	ocean_material.set_shader_parameter(
+		&"underwater_surface_fog_color",
+		underwater_fog_color
+	)
+	ocean_material.set_shader_parameter(
+		&"underwater_surface_fog_density",
+		fog_density
+	)
+	ocean_material.set_shader_parameter(
+		&"underwater_surface_fog_start_distance",
+		fog_start_distance
+	)
+	ocean_material.set_shader_parameter(
+		&"underwater_visibility_radius",
+		underwater_visibility_radius
+	)
+	ocean_material.set_shader_parameter(
+		&"underwater_visibility_blend",
+		underwater_visibility_blend
+	)
+	ocean_material.set_shader_parameter(
+		&"underwater_surface_alpha",
+		underwater_surface_alpha
+	)

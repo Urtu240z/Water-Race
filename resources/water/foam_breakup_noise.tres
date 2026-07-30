@@ -2,8 +2,9 @@
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_foam"]
 seed = 4817
-frequency = 0.03
+frequency = 0.0256
 fractal_octaves = 4
+fractal_gain = -0.99
 
 [resource]
 width = 200

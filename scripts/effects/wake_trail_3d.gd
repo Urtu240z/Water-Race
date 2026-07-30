@@ -7,18 +7,21 @@ class WakeSample:
 	var forward_direction: Vector3
 	var speed_factor: float
 	var initial_width: float
+	var steering_bias: float
 
 	func _init(
 		initial_position: Vector3,
 		initial_forward: Vector3,
 		initial_speed_factor: float,
-		width: float
+		width: float,
+		initial_steering_bias: float
 	) -> void:
 		position = initial_position
 		age = 0.0
 		forward_direction = initial_forward
 		speed_factor = initial_speed_factor
 		initial_width = width
+		steering_bias = initial_steering_bias
 
 
 var wake_enabled: bool = true
@@ -35,6 +38,7 @@ var wake_initial_width_multiplier: float = 1.05
 var wake_maximum_width_multiplier: float = 2.60
 var wake_opening_distance: float = 6.0
 var mesh_update_interval: float = 0.05
+var directional_history_lifetime: float = 4.2
 
 var sample_count: int:
 	get:
@@ -65,10 +69,14 @@ var vertex_count: int:
 		return _vertices.size() if surface_count > 0 else 0
 
 var foam_intensity: float = 0.0
+var directional_export_count: int = 0
+var directional_export_revision: int = 0
 
 var _vehicle: JetSkiController
 var _ocean: Ocean3D
 var _propulsion_point: Marker3D
+var _front_left: Marker3D
+var _front_right: Marker3D
 var _rear_left: Marker3D
 var _rear_right: Marker3D
 var _samples: Array[WakeSample] = []
@@ -108,13 +116,27 @@ func configure(
 	ocean: Ocean3D,
 	propulsion_point: Marker3D,
 	rear_left: Marker3D = null,
-	rear_right: Marker3D = null
+	rear_right: Marker3D = null,
+	front_left: Marker3D = null,
+	front_right: Marker3D = null
 ) -> void:
 	_vehicle = vehicle
 	_ocean = ocean
 	_propulsion_point = propulsion_point
 	_rear_left = rear_left
 	_rear_right = rear_right
+	_front_left = front_left
+	_front_right = front_right
+	if is_instance_valid(_ocean):
+		_ocean.configure_vehicle_interaction_source(
+			self,
+			_vehicle,
+			_front_left,
+			_front_right,
+			_rear_left,
+			_rear_right,
+			_propulsion_point
+		)
 
 
 func configure_quality(
@@ -194,10 +216,109 @@ func get_sample_positions() -> PackedVector3Array:
 	return positions
 
 
+func fill_directional_shader_samples(
+	positions: PackedVector2Array,
+	directions: PackedVector2Array,
+	start_times: PackedFloat32Array,
+	intensities: PackedFloat32Array,
+	widths: PackedFloat32Array,
+	biases: PackedFloat32Array,
+	maximum_samples: int,
+	maximum_distance: float,
+	maximum_age: float,
+	logical_origin_xz: Vector2,
+	simulation_time: float
+) -> int:
+	var buffer_size := mini(
+		positions.size(),
+		mini(
+			directions.size(),
+			mini(
+				start_times.size(),
+				mini(
+					intensities.size(),
+					mini(widths.size(), biases.size())
+				)
+			)
+		)
+	)
+	var allowed_samples := clampi(maximum_samples, 0, buffer_size)
+	var newest_index := _samples.size() - 1
+	var first_index := newest_index
+	var covered_distance: float = 0.0
+	if allowed_samples > 0 and newest_index >= 0:
+		for index in range(newest_index - 1, -1, -1):
+			var newer := _samples[index + 1]
+			var candidate := _samples[index]
+			covered_distance += Vector2(
+				newer.position.x - candidate.position.x,
+				newer.position.z - candidate.position.z
+			).length()
+			if covered_distance > maximum_distance:
+				break
+			first_index = index
+	var candidate_count := (
+		newest_index - first_index + 1
+		if newest_index >= 0 and allowed_samples > 0
+		else 0
+	)
+	var export_count := mini(candidate_count, allowed_samples)
+	for output_index in export_count:
+		var history_ratio := (
+			float(output_index) / float(export_count - 1)
+			if export_count > 1
+			else 0.0
+		)
+		var sample_index := clampi(
+			roundi(lerpf(
+				float(newest_index),
+				float(first_index),
+				history_ratio
+			)),
+			first_index,
+			newest_index
+		)
+		var sample := _samples[sample_index]
+		if sample.age > maximum_age or not sample.position.is_finite():
+			export_count = output_index
+			break
+		var horizontal_direction := Vector2(
+			sample.forward_direction.x,
+			sample.forward_direction.z
+		)
+		if (
+			horizontal_direction.length_squared() <= 0.000001
+			or not horizontal_direction.is_finite()
+		):
+			horizontal_direction = Vector2(0.0, -1.0)
+		else:
+			horizontal_direction = horizontal_direction.normalized()
+		positions[output_index] = (
+			Vector2(sample.position.x, sample.position.z)
+			+ logical_origin_xz
+		)
+		directions[output_index] = horizontal_direction
+		start_times[output_index] = simulation_time - maxf(sample.age, 0.0)
+		intensities[output_index] = clampf(sample.speed_factor, 0.0, 1.0)
+		widths[output_index] = maxf(sample.initial_width, 0.1)
+		biases[output_index] = clampf(sample.steering_bias, -1.0, 1.0)
+	for output_index in range(export_count, buffer_size):
+		positions[output_index] = Vector2.ZERO
+		directions[output_index] = Vector2(0.0, -1.0)
+		start_times[output_index] = -INF
+		intensities[output_index] = 0.0
+		widths[output_index] = 0.0
+		biases[output_index] = 0.0
+	directional_export_count = export_count
+	directional_export_revision += 1
+	return export_count
+
+
 func _age_samples(delta: float) -> void:
 	for sample in _samples:
 		sample.age += delta
-	while not _samples.is_empty() and _samples[0].age >= wake_lifetime:
+	var retention_lifetime := maxf(wake_lifetime, directional_history_lifetime)
+	while not _samples.is_empty() and _samples[0].age >= retention_lifetime:
 		_samples.pop_front()
 		_mesh_dirty = true
 
@@ -215,17 +336,12 @@ func _try_add_sample() -> void:
 		and _sample_elapsed < wake_sample_maximum_interval
 	):
 		return
-	var forward := -_vehicle.global_basis.z
-	forward.y = 0.0
-	if forward.length_squared() <= 0.000001:
-		forward = Vector3.FORWARD
-	else:
-		forward = forward.normalized()
+	var forward := _real_movement_direction(sample_position)
 	var speed_factor := clampf(
 		inverse_lerp(
 			wake_minimum_speed,
 			wake_full_speed,
-			_vehicle.water_relative_forward_speed
+			_water_relative_horizontal_speed()
 		),
 		0.0,
 		1.0
@@ -233,7 +349,14 @@ func _try_add_sample() -> void:
 	var measured_half_width := _measured_hull_half_width()
 	var initial_width := measured_half_width * wake_initial_width_multiplier
 	initial_width *= lerpf(0.94, 1.08, speed_factor)
-	_samples.append(WakeSample.new(sample_position, forward, speed_factor, initial_width))
+	var steering_bias := _current_steering_bias(forward)
+	_samples.append(WakeSample.new(
+		sample_position,
+		forward,
+		speed_factor,
+		initial_width,
+		steering_bias
+	))
 	_mesh_dirty = true
 	while _samples.size() > maxi(wake_maximum_points, 2):
 		_samples.pop_front()
@@ -251,7 +374,7 @@ func _can_add_sample() -> bool:
 		and _vehicle.navigation_state != JetSkiController.NavigationState.AIRBORNE
 		and _vehicle.rear_submerged_ratio > 0.0
 		and _vehicle.propulsion_contact_factor > wake_minimum_contact
-		and _vehicle.water_relative_forward_speed > wake_minimum_speed
+		and _water_relative_horizontal_speed() > wake_minimum_speed
 	)
 
 
@@ -319,17 +442,7 @@ func _rebuild_mesh() -> void:
 			age_ratio
 		)
 		var alpha := fade * lerpf(0.08, 0.28, sample.speed_factor)
-		var lateral_ratio := clampf(
-			_vehicle.water_relative_lateral_speed
-			/ maxf(absf(_vehicle.water_relative_forward_speed), 2.0),
-			-1.0,
-			1.0
-		)
-		var steering_bias := clampf(
-			lateral_ratio * 0.45 + _vehicle.steering_input * 0.18,
-			-0.35,
-			0.35
-		)
+		var steering_bias := sample.steering_bias
 		var left_color := Color(
 			age_ratio,
 			sample.speed_factor,
@@ -426,6 +539,74 @@ func _measured_hull_half_width() -> float:
 	return 0.5
 
 
+func _real_movement_direction(sample_position: Vector3) -> Vector3:
+	var movement := Vector3.ZERO
+	if _has_last_sample:
+		movement = sample_position - _last_sample_position
+		movement.y = 0.0
+	if movement.length_squared() <= 0.0001 and is_instance_valid(_vehicle):
+		movement = _water_relative_horizontal_velocity()
+		movement.y = 0.0
+	if movement.length_squared() <= 0.0001 or not movement.is_finite():
+		movement = -_vehicle.global_basis.z if is_instance_valid(_vehicle) else Vector3.FORWARD
+		movement.y = 0.0
+	if movement.length_squared() <= 0.000001:
+		return Vector3.FORWARD
+	return movement.normalized()
+
+
+func _current_steering_bias(movement_direction: Vector3) -> float:
+	if not is_instance_valid(_vehicle):
+		return 0.0
+	var vehicle_right := _vehicle.global_basis.x
+	vehicle_right.y = 0.0
+	if vehicle_right.length_squared() <= 0.000001:
+		vehicle_right = Vector3.RIGHT
+	else:
+		vehicle_right = vehicle_right.normalized()
+	var slip_ratio := clampf(
+		_vehicle.water_relative_lateral_speed
+			/ maxf(absf(_vehicle.water_relative_forward_speed), 2.0),
+		-1.0,
+		1.0
+	)
+	var trajectory_misalignment := clampf(
+		movement_direction.dot(vehicle_right),
+		-1.0,
+		1.0
+	)
+	var contact_mask := _vehicle.current_contact_mask
+	var left_contact := float(
+		int((contact_mask & 1) != 0) + int((contact_mask & 4) != 0)
+	) * 0.5
+	var right_contact := float(
+		int((contact_mask & 2) != 0) + int((contact_mask & 8) != 0)
+	) * 0.5
+	return clampf(
+		slip_ratio * 0.42
+			+ trajectory_misalignment * 0.28
+			+ _vehicle.steering_input * 0.22
+			+ (right_contact - left_contact) * 0.18,
+		-0.55,
+		0.55
+	)
+
+
+func _water_relative_horizontal_velocity() -> Vector3:
+	if not is_instance_valid(_vehicle):
+		return Vector3.ZERO
+	var relative_velocity := (
+		_vehicle.linear_velocity
+		- _vehicle.water_physics_system.state.average_water_velocity
+	)
+	relative_velocity.y = 0.0
+	return relative_velocity
+
+
+func _water_relative_horizontal_speed() -> float:
+	return _water_relative_horizontal_velocity().length()
+
+
 func _update_foam_intensity(delta: float) -> void:
 	var target_intensity: float = 0.0
 	if not (
@@ -438,7 +619,7 @@ func _update_foam_intensity(delta: float) -> void:
 			inverse_lerp(
 				wake_minimum_speed,
 				maxf(wake_full_speed, wake_minimum_speed + 0.001),
-				_vehicle.water_relative_forward_speed
+				_water_relative_horizontal_speed()
 			),
 			0.0,
 			1.0

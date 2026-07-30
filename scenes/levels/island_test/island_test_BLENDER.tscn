@@ -41,7 +41,7 @@
 [ext_resource type="Texture2D" uid="uid://dh4ygdetfbe7t" path="res://assets/environment/sky/kloofendal_48d_partly_cloudy_puresky_4k.hdr" id="40_armhu"]
 [ext_resource type="Texture2D" uid="uid://b7kfjl0vvcloa" path="res://assets/environment/sky/qwantani_dusk_1_puresky_4k.hdr" id="41_7fon7"]
 [ext_resource type="Texture2D" uid="uid://cmg3mg3yih3d1" path="res://assets/environment/sky/kloofendal_43d_clear_puresky_4k.hdr" id="42_1y1wo"]
-[ext_resource type="Shader" uid="uid://clnbfhglt8pkp" path="res://shaders/effects/underwater_wave_post_process.gdshader" id="45_6j5nl"]
+[ext_resource type="Shader" uid="uid://udpsvcumn1mh" path="res://shaders/effects/underwater_split_view_post_process.gdshader" id="51_6j5nl"]
 [ext_resource type="Script" uid="uid://cs8r4h4yr3knc" path="res://scripts/environment/hanging_light_sway_3d.gd" id="53_light_sway"]
 [ext_resource type="Material" uid="uid://dk2h67ph6buix" path="res://assets/materials/rusty_metal_03.res" id="60_vhs81"]
 [ext_resource type="PackedScene" uid="uid://cfw7pu0e3ws7n" path="res://assets/3D/Rock2.glb" id="195_ox2y0"]
@@ -305,21 +305,27 @@ shader_parameter/refraction_strength = 0.009
 shader_parameter/near_roughness = 0.02999999932944
 shader_parameter/horizon_roughness = 0.23999999463552
 shader_parameter/water_specular = 0.5499999877064
+shader_parameter/underwater_surface_fog_color = Color(4.324247e-09, 0.006975944, 0.012207908, 1)
+shader_parameter/underwater_surface_fog_density = 0.015
+shader_parameter/underwater_surface_fog_start_distance = 0.0
+shader_parameter/underwater_visibility_radius = 248.0
+shader_parameter/underwater_visibility_blend = 150.0
+shader_parameter/underwater_surface_alpha = 1.0
 shader_parameter/foam_enabled = true
 shader_parameter/foam_noise_texture = ExtResource("34_cowfl")
 shader_parameter/foam_color = Color(0.82, 0.95, 1, 1)
-shader_parameter/shore_foam_width = 5.55000008270166
-shader_parameter/shore_foam_strength = 1.05
+shader_parameter/shore_foam_width = 6.20000009238744
+shader_parameter/shore_foam_strength = 0.57999998703584
 shader_parameter/vehicle_material_tag_roughness = 0.019608
 shader_parameter/vehicle_material_tag_tolerance = 0.05000000074506
 shader_parameter/crest_foam_start = 0.17999999597664
 shader_parameter/crest_foam_end = 1.71999996155456
-shader_parameter/crest_foam_strength = 1.97999995574304
+shader_parameter/crest_foam_strength = 1.15999997407168
 shader_parameter/ripple_foam_strength = 1.05999997630688
-shader_parameter/foam_macro_scale = 1.0
-shader_parameter/foam_detail_scale = 0.0150000007125
+shader_parameter/foam_macro_scale = 0.1390000066025
+shader_parameter/foam_detail_scale = 0.06500000308750001
 shader_parameter/foam_scroll_speed = 0.13
-shader_parameter/foam_roughness = 0.37999999150624
+shader_parameter/foam_roughness = 0.70999998413008
 shader_parameter/ocean_surface_enabled = true
 shader_parameter/ocean_snapped_origin_xz = Vector2(0, 0)
 shader_parameter/ocean_logical_origin_offset_xz = Vector2(0, 0)
@@ -384,45 +390,80 @@ shader_parameter/custom_reflection_minimum_surface_weight = 0.34
 shader_parameter/custom_reflection_maximum_surface_weight = 0.88
 shader_parameter/custom_reflection_emission_strength = 1.20999997295408
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_tkuhf"]
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_tkuhf"]
 resource_local_to_scene = true
-render_priority = 127
-shader = ExtResource("45_6j5nl")
-shader_parameter/ocean_enabled = true
-shader_parameter/water_level = 0.0
-shader_parameter/simulation_time = 0.0
-shader_parameter/wave_world_size_a = 180.0
-shader_parameter/wave_world_size_b = 72.0
-shader_parameter/wave_amplitude_a = 1.35
-shader_parameter/wave_amplitude_b = 0.42
-shader_parameter/wave_direction_a = Vector2(0.86, 0.51)
-shader_parameter/wave_direction_b = Vector2(-0.38, 0.92)
-shader_parameter/wave_travel_speed_a = 4.6
-shader_parameter/wave_travel_speed_b = 2.3
-shader_parameter/wave_mean_a = 0.5
-shader_parameter/wave_mean_b = 0.47
-shader_parameter/ocean_logical_origin_offset_xz = Vector2(0, 0)
-shader_parameter/ripple_active = PackedInt32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
-shader_parameter/ripple_positions = PackedVector2Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
-shader_parameter/ripple_start_times = PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
-shader_parameter/ripple_amplitudes = PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
-shader_parameter/ripple_speeds = PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
-shader_parameter/ripple_wavelengths = PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
-shader_parameter/ripple_decays = PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
-shader_parameter/ripple_lifetimes = PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+blend_mode = 1
+
+[sub_resource type="Gradient" id="Gradient_6j5nl"]
+offsets = PackedFloat32Array(0, 0.76025915)
+colors = PackedColorArray(0.9372549, 1, 1, 0.14509805, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_pl0kw"]
+gradient = SubResource("Gradient_6j5nl")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+
+[sub_resource type="Gradient" id="Gradient_tkuhf"]
+offsets = PackedFloat32Array(0, 0.10739857, 0.87350833, 1)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_q7ttk"]
+gradient = SubResource("Gradient_tkuhf")
+
+[sub_resource type="Curve" id="Curve_bubble_shrink"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.4, 1), 0.0, -1.6666666, 0, 0, Vector2(1, 0), -1.6666666, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_bubble_shrink"]
+curve = SubResource("Curve_bubble_shrink")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_pl0kw"]
+resource_local_to_scene = true
+particle_flag_disable_z = true
+emission_shape_offset = Vector3(0, 600, 0)
+emission_shape_scale = Vector3(1, 10, 1)
+emission_shape = 3
+emission_box_extents = Vector3(0.96, 0.16, 1)
+direction = Vector3(0, -24, 0)
+spread = 31.228
+initial_velocity_min = 28.97
+initial_velocity_max = 465.59
+gravity = Vector3(0, -200, 0)
+scale_max = 2.0
+scale_curve = SubResource("CurveTexture_bubble_shrink")
+color = Color(1, 1, 1, 0.4627451)
+color_ramp = SubResource("GradientTexture1D_q7ttk")
+turbulence_enabled = true
+turbulence_noise_strength = 5.94
+turbulence_influence_min = 0.0
+turbulence_influence_max = 0.082
+turbulence_initial_displacement_min = -47.5
+turbulence_initial_displacement_max = 94.5
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_y0n38"]
+resource_local_to_scene = true
+render_priority = -127
+shader = ExtResource("51_6j5nl")
 shader_parameter/camera_submersion = 0.0
-shader_parameter/camera_depth = -1.0
-shader_parameter/underwater_tint = Color(0.18, 0.58, 0.68, 1)
-shader_parameter/tint_strength = 0.24
-shader_parameter/contrast = 0.86
-shader_parameter/fog_color = Color(0.025, 0.22, 0.29, 1)
-shader_parameter/fog_density = 0.0325
-shader_parameter/absorption_density = 0.055
-shader_parameter/distortion_strength = 0.0014
+shader_parameter/underwater_tint = Color(0.16847566, 0.5668597, 0.6986189, 1)
+shader_parameter/tint_strength = 0.2
+shader_parameter/contrast = 0.99
+shader_parameter/fog_tint = Color(4.324247e-09, 0.006975944, 0.012207908, 1)
+shader_parameter/fog_density = 0.015
+shader_parameter/sky_fog_density = 0.0
+shader_parameter/sky_maximum_fog = 0.2
+shader_parameter/geometry_maximum_fog = 0.88
+shader_parameter/absorption_coefficients = Vector3(0.022, 0.01, 0.005)
+shader_parameter/minimum_scene_visibility = 0.18
+shader_parameter/near_clarity_distance = 7.0
+shader_parameter/fog_start_distance = 0.0
+shader_parameter/distortion_strength = 0.0068
 shader_parameter/distortion_speed = 0.7
-shader_parameter/waterline_blend_width = 0.12
 shader_parameter/maximum_effect_strength = 1.0
-shader_parameter/debug_mask_enabled = false
+shader_parameter/blur_strength = 5.0
+shader_parameter/underwater_visibility_radius = 248.0
+shader_parameter/underwater_visibility_blend = 150.0
+shader_parameter/debug_mode = 0
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4sljt"]
 albedo_color = Color(0.39688927, 0.39688927, 0.39688924, 1)
@@ -476,7 +517,7 @@ ambient_sky_contribution = 1.0
 environment = ExtResource("2_0pibt")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="Environment" unique_id=1488093793]
-transform = Transform3D(0.88294756, 0.3488854, -0.3141378, 0, 0.66913056, 0.74314487, 0.46947157, -0.656158, 0.5908072, 0, 0, 0)
+transform = Transform3D(0.8829475, 0.34888542, -0.3141378, 0, 0.66913056, 0.74314487, 0.46947157, -0.656158, 0.5908072, 0, 0, 0)
 light_color = Color(0.936434, 0.6636586, 4.1970015e-05, 1)
 light_energy = 1.88
 shadow_enabled = true
@@ -695,6 +736,7 @@ transform = Transform3D(0.9811287, 0, 0.19335571, 0, 1, 0, -0.19335571, 0, 0.981
 
 [node name="JetSki" parent="Gameplay" unique_id=328650943 instance=ExtResource("203_nrhvk")]
 transform = Transform3D(-1.5, 0, -2.2649371e-07, 0, 1.5, 0, 2.2649371e-07, 0, -1.5, 132.69096, 0.71555996, -133.7861)
+gravity_scale = 1.5
 center_of_mass = Vector3(0, -0.22, 0.1)
 ocean_path = NodePath("../../WaterIntegration/Ocean")
 forward_engine_force = 15000.0
@@ -879,10 +921,42 @@ base_fov = 45.0
 maximum_speed_fov = 50.0
 
 [node name="UnderwaterEffect" parent="CameraSystem/ChaseCamera/Camera3D" parent_id_path=PackedInt32Array(931334509, 1540503117) index="0" unique_id=997962906]
-waterline_include_ripples = true
+process_priority = 100
+underwater_tint = Color(0.16847566, 0.5668597, 0.6986189, 1)
+tint_strength = 0.2
+contrast = 0.99
+underwater_fog_color = Color(4.324247e-09, 0.006975944, 0.012207908, 1)
+fog_density = 0.015
+fog_start_distance = 0.0
+blur_strength = 5.0
+underwater_visibility_radius = 248.0
+underwater_visibility_blend = 150.0
+underwater_surface_alpha = 1.0
+entry_transition_duration = 2.0
+exit_transition_duration = 2.0
+crossing_transition_strength = 0.5
+wet_lens_zoom = 4.0
+wet_lens_warp_strength = 2.15
+wet_lens_fall_distance = 0.83
+wet_lens_wash_irregularity = 1.5
+wet_lens_wash_softness = 0.5
+wet_lens_texture_edge_feather = 0.1
+editor_preview_mode = 0
 
-[node name="UnderwaterPostProcess" parent="CameraSystem/ChaseCamera/Camera3D/UnderwaterEffect" index="0" unique_id=1854893749]
-material_override = SubResource("ShaderMaterial_tkuhf")
+[node name="EntryBubbles" parent="CameraSystem/ChaseCamera/Camera3D/UnderwaterEffect/WaterCrossingOverlay" index="0"]
+visible = false
+material = SubResource("CanvasItemMaterial_tkuhf")
+position = Vector2(1, 1.76)
+amount = 500
+texture = SubResource("GradientTexture2D_pl0kw")
+lifetime = 20.0
+speed_scale = 8.0
+explosiveness = 1.0
+randomness = 1.0
+process_material = SubResource("ParticleProcessMaterial_pl0kw")
+
+[node name="UnderwaterPostProcess" parent="CameraSystem/ChaseCamera/Camera3D/UnderwaterEffect" index="1" unique_id=1854893749]
+material_override = SubResource("ShaderMaterial_y0n38")
 
 [node name="Debug" type="Node" parent="." unique_id=1303880580]
 

@@ -615,7 +615,9 @@ func _configure_wake() -> void:
 		_ocean,
 		_propulsion_point,
 		_rear_left_marker,
-		_rear_right_marker
+		_rear_right_marker,
+		_front_left_marker,
+		_front_right_marker
 	)
 	_wake_trail.wake_enabled = wake_enabled
 	_wake_trail.wake_minimum_speed = wake_minimum_speed
@@ -1097,6 +1099,8 @@ func _apply_quality_profile() -> void:
 			_quality_profile.wake_mesh_update_interval,
 			_quality_profile.wake_sample_distance
 		)
+	if is_instance_valid(_ocean):
+		_ocean.set_vehicle_interaction_quality(quality_level)
 	if is_instance_valid(_spray_sheet):
 		_spray_sheet.set_refraction_enabled(_quality_profile.refraction_enabled)
 	if is_instance_valid(_turbine_controller):

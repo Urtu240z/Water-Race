@@ -20,4 +20,3 @@ heightmap_texture = ExtResource("Displacement")
 uv1_scale = Vector3(0.045, 0.045, 0.045)
 uv1_triplanar = true
 uv1_triplanar_sharpness = 6.8628936
-uv1_world_triplanar = true
