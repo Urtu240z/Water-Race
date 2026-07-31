@@ -83,6 +83,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2428, 0.679)
 [node name="RiderAssetRoot" type="Node3D" parent="VisualRoot/RiderMount" index="0" unique_id=1312466662]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
 
+[node name="FirstPersonSocket" type="Marker3D" parent="VisualRoot/RiderMount" index="1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4172, -0.899)
+gizmo_extents = 0.08
+
 [node name="RiderRig" parent="VisualRoot/RiderMount/RiderAssetRoot" index="0" unique_id=2001770911 instance=ExtResource("2_rider")]
 rider_skin = 4
 
