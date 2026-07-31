@@ -83,10 +83,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2428, 0.679)
 [node name="RiderAssetRoot" type="Node3D" parent="VisualRoot/RiderMount" index="0" unique_id=1312466662]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
 
-[node name="FirstPersonSocket" type="Marker3D" parent="VisualRoot/RiderMount" index="1"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4172, -0.899)
-gizmo_extents = 0.08
-
 [node name="RiderRig" parent="VisualRoot/RiderMount/RiderAssetRoot" index="0" unique_id=2001770911 instance=ExtResource("2_rider")]
 rider_skin = 4
 
@@ -98,7 +94,14 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.1578315e-08, 0.11282855, -0
 
 [node name="Skeleton3D" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/Rider_Bot/SKEL_Rider" index="0" unique_id=426480764]
 transform = Transform3D(0.9879613, 0.058283646, -0.1433027, -0.04260468, 0.9930024, 0.1101448, 0.14871976, -0.1027133, 0.98353034, -0.08274425, 0.07259053, -0.025370061)
-bones/1/scale = Vector3(1.0000002, 1.0000002, 1.0000005)
+bones/0/rotation = Quaternion(0.05192896, -0.0029018968, 0.029417818, 0.9982132)
+bones/0/scale = Vector3(1, 0.9999999, 0.99999976)
+bones/1/position = Vector3(-2.0918558e-08, 0.10182453, -5.8483344e-08)
+bones/1/scale = Vector3(1.0000002, 1.0000001, 1.0000004)
+bones/2/position = Vector3(-8.806175e-09, 0.10002696, 5.1289707e-08)
+bones/2/scale = Vector3(1.0000001, 1.0000001, 0.9999998)
+bones/3/position = Vector3(-3.633972e-09, 0.10010641, -5.8221215e-09)
+bones/3/scale = Vector3(1.0000001, 0.9999998, 0.99999976)
 bones/4/scale = Vector3(0.99999994, 1.0000001, 1)
 bones/5/scale = Vector3(1.0000018, 1.0000002, 1.0000005)
 bones/6/position = Vector3(-0.058524292, 0.10738471, -0.0041615376)
@@ -273,6 +276,10 @@ thumb_opposition_strength = 0.47
 
 [node name="AnimationTree" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig" index="2" unique_id=187453891]
 parameters/mounted_add/add_amount = 0.0
+
+[node name="FirstPersonSocket" type="Marker3D" parent="VisualRoot/RiderMount" index="1" unique_id=697184570]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4172, -0.899)
+gizmo_extents = 0.08
 
 [node name="RiderImpactResponse" type="Node" parent="." index="8" unique_id=966370299]
 script = ExtResource("6_impact_response")

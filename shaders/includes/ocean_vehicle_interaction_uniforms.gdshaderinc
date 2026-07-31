@@ -24,14 +24,6 @@ uniform float landing_impact_durations[4];
 uniform bool landing_impact_exaggerated_debug = false;
 uniform float landing_impact_debug_multiplier : hint_range(1.0, 5.0, 0.25) = 2.5;
 
-group_uniforms LandingImpactFoam;
-uniform bool landing_foam_enabled = true;
-uniform float landing_foam_strength : hint_range(0.0, 2.0, 0.01) = 0.035;
-uniform float landing_foam_minimum_impact_strength : hint_range(0.0, 1.0, 0.01) = 0.35;
-uniform float landing_foam_energy_threshold : hint_range(0.0, 1.0, 0.01) = 0.18;
-uniform float landing_foam_energy_softness : hint_range(0.01, 0.5, 0.01) = 0.12;
-uniform float landing_foam_generic_crest_suppression : hint_range(0.0, 1.0, 0.01) = 1.0;
-
 group_uniforms DirectionalWake;
 uniform bool directional_wake_enabled = true;
 uniform int directional_wake_active_count = 0;

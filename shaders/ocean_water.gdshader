@@ -36,7 +36,6 @@ uniform float ripple_speeds[12];
 uniform float ripple_wavelengths[12];
 uniform float ripple_decays[12];
 uniform float ripple_lifetimes[12];
-uniform int ripple_foam_suppressed[12];
 uniform int ripple_effective_count : hint_range(1, 12, 1) = 12;
 
 #include "res://shaders/includes/ocean_vehicle_interaction_uniforms.gdshaderinc"
@@ -126,8 +125,6 @@ group_uniforms;
 varying float interpolated_wave_height;
 varying float interpolated_wave_slope;
 varying float interpolated_ripple_energy;
-varying float interpolated_landing_impact_energy;
-varying float interpolated_landing_impact_strength;
 varying vec2 interpolated_world_xz;
 varying float interpolated_ocean_ring_id;
 
@@ -196,15 +193,9 @@ vec4 sample_ripple_state(vec2 logical_xz) {
 		if (center_distance > 0.0001) {
 			derivatives += center_delta / center_distance * derivative_distance;
 		}
-		float foam_contribution = 1.0 - float(clamp(
-			ripple_foam_suppressed[index],
-			0,
-			1
-		));
 		energy = max(
 			energy,
 			envelope * min(abs(amplitude) * 8.0, 1.0)
-				* foam_contribution
 		);
 	}
 	return vec4(height, derivatives, energy);
@@ -237,11 +228,7 @@ float clipmap_wave_scale(vec2 world_xz) {
 }
 
 
-vec4 sample_wave_state(
-	vec2 world_xz,
-	out float landing_energy,
-	out float landing_strength
-) {
+vec4 sample_wave_state(vec2 world_xz) {
 	vec2 logical_xz = world_xz + ocean_logical_origin_offset_xz;
 	float step_size = max(geometry_normal_step, 0.05);
 	float macro_height = sample_macro_height(logical_xz);
@@ -287,18 +274,9 @@ vec4 sample_wave_state(
 		vehicle_interaction_clipmap_distance,
 		ripple_distance
 	);
-	vec4 interaction = vec4(0.0);
-	float interaction_landing_energy = 0.0;
-	float interaction_landing_strength = 0.0;
-	if (interaction_scale > 0.0001) {
-		interaction = sample_vehicle_interaction_state_with_landing(
-			logical_xz,
-			interaction_landing_energy,
-			interaction_landing_strength
-		);
-	}
-	landing_energy = interaction_landing_energy * interaction_scale;
-	landing_strength = interaction_landing_strength;
+	vec4 interaction = interaction_scale > 0.0001
+		? sample_vehicle_interaction_state(logical_xz)
+		: vec4(0.0);
 	float ripple_weight = interaction_ripple_weight();
 	return vec4(
 		macro_height * macro_scale
@@ -307,27 +285,22 @@ vec4 sample_wave_state(
 		macro_derivatives * macro_scale
 			+ ripple.yz * ripple_scale * ripple_weight
 			+ interaction.yz * interaction_scale,
-		ripple.w * ripple_scale * ripple_weight
+		max(
+			ripple.w * ripple_scale * ripple_weight,
+			interaction.w * interaction_scale
+		)
 	);
 }
 
 
 void vertex() {
 	vec2 world_xz = VERTEX.xz;
-	float landing_energy = 0.0;
-	float landing_strength = 0.0;
-	vec4 wave_state = sample_wave_state(
-		world_xz,
-		landing_energy,
-		landing_strength
-	);
+	vec4 wave_state = sample_wave_state(world_xz);
 	VERTEX.y = water_level + wave_state.x;
 	NORMAL = normalize(vec3(-wave_state.y, 1.0, -wave_state.z));
 	interpolated_wave_height = wave_state.x;
 	interpolated_wave_slope = length(wave_state.yz);
 	interpolated_ripple_energy = wave_state.w;
-	interpolated_landing_impact_energy = landing_energy;
-	interpolated_landing_impact_strength = landing_strength;
 	interpolated_world_xz = world_xz;
 	interpolated_ocean_ring_id = COLOR.r;
 }
@@ -590,30 +563,10 @@ void fragment() {
 	float crest_foam = crest_height
 		* mix(0.54, 1.0, crest_slope)
 		* crest_foam_strength;
-	float landing_strength_gate = smoothstep(
-		landing_foam_minimum_impact_strength,
-		landing_foam_minimum_impact_strength + 0.10,
-		interpolated_landing_impact_strength
-	);
-	float landing_energy_gate = smoothstep(
-		landing_foam_energy_threshold,
-		landing_foam_energy_threshold
-			+ max(landing_foam_energy_softness, 0.01),
-		interpolated_landing_impact_energy
-	);
-	float landing_region = landing_energy_gate;
-	crest_foam *= 1.0 - landing_region
-		* landing_foam_generic_crest_suppression;
 	float ripple_foam = interpolated_ripple_energy * ripple_foam_strength;
-	float landing_foam = landing_foam_enabled
-		? interpolated_landing_impact_energy
-			* landing_foam_strength
-			* landing_strength_gate
-			* landing_energy_gate
-		: 0.0;
 	float foam_mask = foam_enabled
 		? clamp(
-			(shoreline + crest_foam + ripple_foam + landing_foam)
+			(shoreline + crest_foam + ripple_foam)
 				* mix(0.42, 1.0, foam_breakup)
 				* foam_distance_gate,
 			0.0,
