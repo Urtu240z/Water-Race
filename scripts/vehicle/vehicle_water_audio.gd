@@ -200,7 +200,16 @@ func _on_water_entered(
 		_last_splash_category = &"NONE"
 		return
 
-	var heavy := impact_down_speed >= heavy_landing_speed
+	var descriptor := _vehicle.last_landing_impact_descriptor
+	var special_impact_eligible := (
+		descriptor != null and descriptor.special_impact_eligible
+	)
+	# Rejected short contacts may keep an ordinary contact sound, but never
+	# select the dramatic heavy-landing bank.
+	var heavy := (
+		special_impact_eligible
+		and impact_down_speed >= heavy_landing_speed
+	)
 	var variants := heavy_splash_streams if heavy else normal_splash_streams
 	var previous := _last_heavy_stream if heavy else _last_normal_stream
 	var selected := _choose_stream(variants, previous)

@@ -1,9 +1,9 @@
 PASS: WaterAudio component exists.
 === VEHICLE WATER AUDIO FOCUSED VALIDATION ===
 PASS: Exactly three WaterAudio players exist.
-PASS: Three normal splash variants resolve.
-PASS: Four heavy splash variants resolve.
-PASS: Four running-water variants resolve.
+PASS: At least one configured normal splash variant resolves.
+PASS: At least one configured heavy splash variant resolves.
+PASS: At least one configured running-water variant resolves.
 PASS: All running-water OGG streams loop.
 PASS: Splash OGG streams do not loop.
 PASS: 1. Stopped on water: running water stays off.

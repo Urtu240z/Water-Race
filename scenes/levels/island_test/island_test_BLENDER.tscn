@@ -255,10 +255,10 @@ shader_parameter/water_level = 0.0
 shader_parameter/simulation_time = 0.0
 shader_parameter/wave_height_texture_a = ExtResource("34_cfiqe")
 shader_parameter/wave_height_texture_b = ExtResource("35_0pibt")
-shader_parameter/wave_world_size_a = 298.5
-shader_parameter/wave_world_size_b = 177.5
-shader_parameter/wave_amplitude_a = 0.77999998256544
-shader_parameter/wave_amplitude_b = 1.05999997630688
+shader_parameter/wave_world_size_a = 215.5
+shader_parameter/wave_world_size_b = 128.5
+shader_parameter/wave_amplitude_a = 0.0
+shader_parameter/wave_amplitude_b = 0.0
 shader_parameter/wave_direction_a = Vector2(0.86012906, 0.5100765)
 shader_parameter/wave_direction_b = Vector2(-0.38176018, 0.92426145)
 shader_parameter/wave_travel_speed_a = 9.0000004321348
@@ -388,7 +388,7 @@ shader_parameter/vehicle_material_tag_tolerance = 0.05000000074506
 shader_parameter/crest_foam_start = 0.17999999597664
 shader_parameter/crest_foam_end = 1.71999996155456
 shader_parameter/crest_foam_strength = 1.15999997407168
-shader_parameter/ripple_foam_strength = 1.05999997630688
+shader_parameter/ripple_foam_strength = 1.999999955296
 shader_parameter/foam_macro_scale = 0.1390000066025
 shader_parameter/foam_detail_scale = 0.06500000308750001
 shader_parameter/foam_scroll_speed = 0.13
@@ -786,15 +786,20 @@ mesh = SubResource("PlaneMesh_tpwhi")
 
 [node name="Ocean" parent="WaterIntegration" unique_id=1340264265 instance=ExtResource("32_wfhwd")]
 ocean_material = SubResource("ShaderMaterial_y0n38")
-wave_world_size_a = 298.5
-wave_world_size_b = 177.5
-wave_amplitude_a = 0.77999998256544
-wave_amplitude_b = 1.05999997630688
+wave_world_size_a = 215.5
+wave_world_size_b = 128.5
+wave_amplitude_a = 0.0
+wave_amplitude_b = 0.0
 wave_travel_speed_a = 9.0000004321348
 wave_travel_speed_b = 4.0000003576287995
 wave_mean_a = 0.638000030305
 wave_mean_b = 0.26800001273
 normal_sample_step = 2.0
+landing_wave_minimum_amplitude = 1.0
+landing_wave_maximum_amplitude = 1.0
+landing_wave_minimum_depression = 0.0
+landing_wave_minimum_wavelength = 4.55
+landing_wave_maximum_wavelength = 8.0
 
 [node name="AmbientWildlife" parent="." unique_id=1482046972 instance=ExtResource("224_wildlife")]
 ocean_path = NodePath("")
@@ -811,7 +816,6 @@ transform = Transform3D(0.9811287, 0, 0.19335571, 0, 1, 0, -0.19335571, 0, 0.981
 
 [node name="JetSki" parent="Gameplay" unique_id=328650943 instance=ExtResource("203_nrhvk")]
 transform = Transform3D(-1.5, 0, -2.2649371e-07, 0, 1.5, 0, 2.2649371e-07, 0, -1.5, 132.69096, 0.71555996, -133.7861)
-gravity_scale = 1.5
 center_of_mass = Vector3(0, -0.22, 0.1)
 ocean_path = NodePath("../../WaterIntegration/Ocean")
 forward_engine_force = 15000.0

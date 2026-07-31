@@ -53,6 +53,7 @@ func _run() -> void:
 	_validate_hull_tick_update(ocean, vehicle)
 	_validate_air_submarine_and_impacts(ocean, vehicle, wake)
 	_validate_landing_impact_system(ocean, vehicle, wake, effects)
+	_validate_landing_foam_controls(ocean, effects)
 	_validate_rebase(ocean, vehicle, wake)
 	_validate_foam_gpu_alignment(ocean, wake)
 	_validate_shader_and_uniform_contract(ocean)
@@ -335,9 +336,15 @@ func _validate_landing_impact_system(
 	wake: WakeTrail3D,
 	effects: VehicleWaterEffects3D
 ) -> void:
-	var small_strength := vehicle.calculate_landing_wave_strength(2.0, 0.20, 1)
-	var medium_strength := vehicle.calculate_landing_wave_strength(6.0, 0.80, 2)
-	var large_strength := vehicle.calculate_landing_wave_strength(11.0, 1.60, 4)
+	var small_strength := vehicle.calculate_landing_wave_strength(
+		2.0, 1.00, 1, true
+	)
+	var medium_strength := vehicle.calculate_landing_wave_strength(
+		6.0, 1.30, 2, true
+	)
+	var large_strength := vehicle.calculate_landing_wave_strength(
+		11.0, 1.60, 4, true
+	)
 	_expect(
 		small_strength < medium_strength
 		and medium_strength < large_strength,
@@ -366,6 +373,146 @@ func _validate_landing_impact_system(
 		bool(effects.get("_impact_valid")),
 		"El pool de partículas de impacto está configurado en la escena real."
 	)
+	var audio := vehicle.get_node_or_null("WaterAudio") as VehicleWaterAudio
+	_expect(audio != null, "El audio de agua real participa en el contrato.")
+	var rejected_geometry_before := ocean.landing_impact_count
+	var rejected_particles_before := effects.impact_burst_count
+	var rejected_ripples_before := _count_active_ripples(ocean)
+	if audio != null:
+		audio.set("_splash_cooldown_remaining", 0.0)
+	_emit_test_landing(
+		vehicle,
+		9.0,
+		0.99,
+		2,
+		JetSkiTypes.LandingEntryType.FLAT,
+		vehicle.global_position,
+		true
+	)
+	var short_descriptor := vehicle.last_landing_impact_descriptor
+	_expect(
+		not short_descriptor.special_impact_eligible
+		and short_descriptor.confirmed_airborne
+		and short_descriptor.rejection_reason
+			== LandingImpactDescriptor.REJECTION_AIRTIME_TOO_SHORT
+		and ocean.landing_impact_count == rejected_geometry_before
+		and effects.impact_burst_count == rejected_particles_before
+		and _count_active_ripples(ocean) == rejected_ripples_before
+		and ocean.last_landing_foam_energy <= EPSILON,
+		"0,99 s confirmado no crea paquete, espuma, ripple especial ni burst."
+	)
+	_expect(
+		audio == null or audio.last_splash_category != &"HEAVY",
+		"Un impacto rechazado nunca selecciona el audio fuerte."
+	)
+	_emit_test_landing(
+		vehicle,
+		9.0,
+		1.20,
+		2,
+		JetSkiTypes.LandingEntryType.FLAT,
+		vehicle.global_position,
+		false
+	)
+	var unconfirmed_descriptor := vehicle.last_landing_impact_descriptor
+	_expect(
+		not unconfirmed_descriptor.special_impact_eligible
+		and unconfirmed_descriptor.rejection_reason
+			== LandingImpactDescriptor.REJECTION_AIRBORNE_NOT_CONFIRMED
+		and ocean.landing_impact_count == rejected_geometry_before
+		and effects.impact_burst_count == rejected_particles_before,
+		"El tiempo suficiente sin AIRBORNE confirmado sigue rechazado."
+	)
+	_emit_test_landing(
+		vehicle,
+		3.0,
+		0.20,
+		1,
+		JetSkiTypes.LandingEntryType.SINGLE_POINT,
+		vehicle.global_position,
+		true
+	)
+	_expect(
+		not vehicle.last_landing_impact_descriptor.special_impact_eligible
+		and ocean.landing_impact_count == rejected_geometry_before
+		and effects.impact_burst_count == rejected_particles_before,
+		"Un rebote breve sobre una ola pequeña no crea impacto especial."
+	)
+	_emit_test_landing(
+		vehicle,
+		7.0,
+		1.20,
+		0,
+		JetSkiTypes.LandingEntryType.SINGLE_POINT,
+		vehicle.global_position,
+		true
+	)
+	_expect(
+		vehicle.last_landing_impact_descriptor.rejection_reason
+			== LandingImpactDescriptor.REJECTION_INVALID_DATA,
+		"Los datos de contacto inválidos tienen una causa de rechazo estable."
+	)
+	var original_minimum_airtime := vehicle.landing_impact_minimum_airtime
+	vehicle.landing_impact_minimum_airtime = 0.50
+	var configurable_geometry_before := ocean.landing_impact_count
+	_emit_test_landing(
+		vehicle,
+		7.0,
+		0.60,
+		2,
+		JetSkiTypes.LandingEntryType.FLAT,
+		vehicle.global_position,
+		true
+	)
+	_expect(
+		vehicle.last_landing_impact_descriptor.special_impact_eligible
+		and ocean.landing_impact_count == configurable_geometry_before + 1,
+		"El mínimo exportado acepta 0,60 s cuando se configura en 0,50 s."
+	)
+	vehicle.landing_impact_minimum_airtime = original_minimum_airtime
+	var exact_geometry_before := ocean.landing_impact_count
+	_emit_test_landing(
+		vehicle,
+		7.0,
+		1.00,
+		2,
+		JetSkiTypes.LandingEntryType.FLAT,
+		vehicle.global_position,
+		true
+	)
+	_expect(
+		vehicle.last_landing_impact_descriptor.special_impact_eligible
+		and vehicle.last_landing_impact_descriptor.rejection_reason
+			== LandingImpactDescriptor.REJECTION_ACCEPTED
+		and ocean.landing_impact_count == exact_geometry_before + 1,
+		"1,00 s confirmado se acepta con tolerancia decimal segura."
+	)
+	var confirmation_debug := vehicle.get_landing_impact_debug_status()
+	_expect(
+		bool(confirmation_debug["last_landing_confirmed_airborne"])
+		and bool(confirmation_debug["last_landing_special_impact_eligible"])
+		and int(confirmation_debug["accepted_landing_impact_count"]) >= 2
+		and int(confirmation_debug["rejected_landing_impact_count"]) >= 4
+		and not vehicle.landing_impact_allow_short_hard_impacts,
+		"El diagnóstico cuenta aceptados/rechazados y conserva el bypass apagado."
+	)
+	_expect(
+		LandingImpactDescriptor.calculate_strength(
+			0.0,
+			0.0,
+			2,
+			1.5,
+			11.0,
+			0.1,
+			1.8,
+			0.1
+		) <= EPSILON,
+		"El descriptor nunca asume confirmed_jump=true."
+	)
+
+	geometric_before = ocean.landing_impact_count
+	particle_before = effects.impact_burst_count
+	physical_ripple_before = _count_active_ripples(ocean)
 	_emit_test_landing(
 		vehicle,
 		9.0,
@@ -376,7 +523,8 @@ func _validate_landing_impact_system(
 	)
 	_expect(
 		ocean.landing_impact_count == geometric_before + 1
-		and ocean.last_landing_wave_strength > 0.0,
+		and ocean.last_landing_wave_strength > 0.0
+		and ocean.last_landing_foam_energy > 0.0,
 		"El impacto geométrico existe sin acelerador, estela ni Effects visibles."
 	)
 	_expect(
@@ -415,8 +563,8 @@ func _validate_landing_impact_system(
 	var durations := PackedFloat32Array()
 	var particles := PackedInt32Array()
 	for profile in [
-		[2.0, 0.20, 1],
-		[6.0, 0.80, 2],
+		[2.0, 1.00, 1],
+		[6.0, 1.30, 2],
 		[11.0, 1.60, 4],
 	]:
 		_emit_test_landing(
@@ -441,12 +589,25 @@ func _validate_landing_impact_system(
 		)
 		particles.append(effects.last_impact_particle_amount)
 	_expect(
-		_is_strictly_increasing(amplitudes)
-		and _is_strictly_increasing(initial_radii)
-		and _is_strictly_increasing(speeds)
-		and _is_strictly_increasing(durations)
-		and _is_strictly_increasing_int(particles),
-		"Amplitud, radio, velocidad, duración y partículas escalan monótonamente."
+		_is_non_decreasing(amplitudes),
+		"La amplitud respeta la curva artística configurada: %s."
+		% [amplitudes]
+	)
+	_expect(
+		_is_strictly_increasing(initial_radii),
+		"El radio inicial del landing escala monótonamente."
+	)
+	_expect(
+		_is_strictly_increasing(speeds),
+		"La velocidad del frente escala monótonamente."
+	)
+	_expect(
+		_is_strictly_increasing(durations),
+		"La duración del landing escala monótonamente."
+	)
+	_expect(
+		_is_strictly_increasing_int(particles),
+		"La cantidad de partículas escala monótonamente."
 	)
 
 	var radius_before := ocean.last_landing_wave_radius
@@ -488,7 +649,7 @@ func _validate_landing_impact_system(
 		_emit_test_landing(
 			vehicle,
 			7.0,
-			0.9,
+			1.1,
 			2,
 			entry_type,
 			vehicle.global_position
@@ -522,13 +683,211 @@ func _validate_landing_impact_system(
 	_prepare_contact_state(vehicle)
 
 
+func _validate_landing_foam_controls(
+	ocean: Ocean3D,
+	effects: VehicleWaterEffects3D
+) -> void:
+	_expect(
+		ocean.landing_foam_enabled
+		and absf(ocean.landing_foam_strength - 0.035) <= EPSILON
+		and absf(
+			ocean.landing_foam_minimum_impact_strength - 0.35
+		) <= EPSILON
+		and absf(ocean.landing_foam_energy_threshold - 0.18) <= EPSILON
+		and absf(ocean.landing_foam_energy_softness - 0.12) <= EPSILON
+		and absf(
+			ocean.landing_foam_generic_crest_suppression - 1.0
+		) <= EPSILON,
+		"Los seis controles de Landing Impact Foam tienen sus valores por defecto."
+	)
+	ocean.call("_push_static_parameters_to_all_materials")
+	var materials := ocean.call("_all_ocean_materials") as Array
+	_expect(
+		not materials.is_empty()
+		and _materials_have_landing_foam_settings(materials, ocean),
+		"El material principal y los externos reciben los seis uniforms de landing."
+	)
+	var geometry_before := ocean.landing_impact_count
+	var active_before := ocean.active_landing_impact_count
+	var bursts_before := effects.impact_burst_count
+	var amplitude_before := ocean.last_landing_wave_amplitude
+	for strength in [0.0, 0.035, 0.15]:
+		ocean.landing_foam_strength = float(strength)
+		_expect(
+			_materials_have_landing_foam_strength(
+				materials,
+				float(strength)
+			),
+			"Landing Foam Strength %.3f llega a todos los materiales."
+			% float(strength)
+		)
+	_expect(
+		ocean.landing_impact_count == geometry_before
+		and ocean.active_landing_impact_count == active_before
+		and effects.impact_burst_count == bursts_before
+		and absf(ocean.last_landing_wave_amplitude - amplitude_before) <= EPSILON,
+		"Cambiar la espuma no altera onda geométrica, pool ni salpicadura."
+	)
+	var manager := root.get_node_or_null("GraphicsQualityManager")
+	_expect(manager != null, "GraphicsQualityManager está activo en la escena real.")
+	if manager != null:
+		ocean.landing_foam_strength = 0.15
+		for quality in [2, 1, 0, 2]:
+			manager.call("set_quality", quality, false)
+			_expect(
+				absf(ocean.landing_foam_strength - 0.15) <= EPSILON
+				and _materials_have_landing_foam_strength(
+					materials,
+					0.15
+				),
+				"El preset %d conserva la intensidad artística configurada."
+				% quality
+			)
+	ocean.landing_foam_strength = 0.035
+
+	var base_source := FileAccess.get_file_as_string(
+		"res://shaders/ocean_water.gdshader"
+	)
+	var ssr_source := FileAccess.get_file_as_string(
+		"res://shaders/ocean_water_custom_ssr.gdshader"
+	)
+	var function_source := FileAccess.get_file_as_string(
+		"res://shaders/includes/ocean_vehicle_interaction_functions.gdshaderinc"
+	)
+	var uniform_source := FileAccess.get_file_as_string(
+		"res://shaders/includes/ocean_vehicle_interaction_uniforms.gdshaderinc"
+	)
+	var wake_source := FileAccess.get_file_as_string(
+		"res://shaders/wake_foam.gdshader"
+	)
+	var landing_loop := (
+		"for (int index = 0; index < MAX_LANDING_IMPACTS; index++)"
+	)
+	_expect(
+		function_source.count(landing_loop) == 1
+		and function_source.contains(
+			"sample_vehicle_interaction_state_with_landing"
+		)
+		and base_source.count(
+			"sample_vehicle_interaction_state_with_landing("
+		) == 1
+		and ssr_source.count(
+			"sample_vehicle_interaction_state_with_landing("
+		) == 1,
+		"Base y SSR obtienen energía/fuerza sin duplicar el loop de impactos."
+	)
+	_expect(
+		_base_shader_has_separate_landing_foam(base_source)
+		and _base_shader_has_separate_landing_foam(ssr_source),
+		"Shader base y SSR separan ripple foam, landing foam y supresión de cresta."
+	)
+	_expect(
+		uniform_source.contains("uniform bool landing_foam_enabled = true;")
+		and uniform_source.contains(
+			"uniform float landing_foam_strength : hint_range(0.0, 2.0, 0.01) = 0.035;"
+		)
+		and uniform_source.contains(
+			"uniform float landing_foam_generic_crest_suppression"
+		)
+		and wake_source.contains(
+			"sample_vehicle_interaction_state(logical_xz).x"
+		)
+		and not wake_source.contains("interpolated_landing_impact_energy"),
+		"Los uniforms son compartidos y wake_foam solo acompaña la geometría GPU."
+	)
+	var profile_source := FileAccess.get_file_as_string(
+		"res://scripts/settings/graphics_quality_profile.gd"
+	)
+	_expect(
+		not profile_source.contains("landing_foam_strength"),
+		"Los perfiles gráficos no pueden sobrescribir Landing Foam Strength."
+	)
+
+
+func _materials_have_landing_foam_strength(
+	materials: Array,
+	expected: float
+) -> bool:
+	for value in materials:
+		var material := value as ShaderMaterial
+		if material == null:
+			return false
+		var actual: Variant = material.get_shader_parameter(
+			&"landing_foam_strength"
+		)
+		if actual == null or absf(float(actual) - expected) > EPSILON:
+			return false
+	return true
+
+
+func _materials_have_landing_foam_settings(
+	materials: Array,
+	ocean: Ocean3D
+) -> bool:
+	for value in materials:
+		var material := value as ShaderMaterial
+		if material == null:
+			return false
+		if bool(material.get_shader_parameter(&"landing_foam_enabled")) != (
+			ocean.landing_foam_enabled
+		):
+			return false
+		if absf(
+			float(material.get_shader_parameter(
+				&"landing_foam_minimum_impact_strength"
+			)) - ocean.landing_foam_minimum_impact_strength
+		) > EPSILON:
+			return false
+		if absf(
+			float(material.get_shader_parameter(
+				&"landing_foam_energy_threshold"
+			)) - ocean.landing_foam_energy_threshold
+		) > EPSILON:
+			return false
+		if absf(
+			float(material.get_shader_parameter(
+				&"landing_foam_energy_softness"
+			)) - ocean.landing_foam_energy_softness
+		) > EPSILON:
+			return false
+		if absf(
+			float(material.get_shader_parameter(
+				&"landing_foam_generic_crest_suppression"
+			)) - ocean.landing_foam_generic_crest_suppression
+		) > EPSILON:
+			return false
+	return _materials_have_landing_foam_strength(
+		materials,
+		ocean.landing_foam_strength
+	)
+
+
+func _base_shader_has_separate_landing_foam(source: String) -> bool:
+	return (
+		source.contains("varying float interpolated_landing_impact_energy;")
+		and source.contains(
+			"float ripple_foam = interpolated_ripple_energy * ripple_foam_strength;"
+		)
+		and source.contains(
+			"interpolated_landing_impact_energy\n"
+				+ "\t\t\t* landing_foam_strength"
+		)
+		and source.contains("float landing_region = landing_energy_gate;")
+		and source.contains(
+			"landing_foam_generic_crest_suppression"
+		)
+		and source.contains("ripple_foam_suppressed[index]")
+	)
+
+
 func _emit_test_landing(
 	vehicle: JetSkiController,
 	normal_speed: float,
 	airtime: float,
 	contact_count: int,
 	entry_type: JetSkiTypes.LandingEntryType,
-	position: Vector3
+	position: Vector3,
+	confirmed_airborne: bool = true
 ) -> void:
 	var state := vehicle.navigation_system.state
 	state.last_landing_position = position
@@ -545,6 +904,10 @@ func _emit_test_landing(
 		contact_count
 	)
 	state.last_landing_entry_type = entry_type
+	vehicle.set(
+		"_airborne_state_confirmed_for_landing",
+		confirmed_airborne
+	)
 	vehicle.call(
 		"_on_navigation_system_water_entered",
 		state.last_landing_intensity,
@@ -597,6 +960,13 @@ func _count_active_ripples(ocean: Ocean3D) -> int:
 func _is_strictly_increasing(values: PackedFloat32Array) -> bool:
 	for index in range(1, values.size()):
 		if values[index] <= values[index - 1]:
+			return false
+	return true
+
+
+func _is_non_decreasing(values: PackedFloat32Array) -> bool:
+	for index in range(1, values.size()):
+		if values[index] + EPSILON < values[index - 1]:
 			return false
 	return true
 

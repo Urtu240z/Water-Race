@@ -102,6 +102,15 @@ var _depth_sampler: RID
 var _color_sampler: RID
 var _parameter_buffer: RID
 var _parameter_mutex: Mutex = Mutex.new()
+var _runtime_mutex: Mutex = Mutex.new()
+var _resource_initialization_attempted := false
+var _resource_initialization_failed := false
+var _resources_ready := false
+var _failure_reported := false
+var _last_error := ""
+var _render_callback_count := 0
+var _successful_render_count := 0
+var _last_render_size := Vector2i.ZERO
 var _effect_strength: float = 0.0
 var _blur_strength: float = 0.0
 var _blur_passes: int = 2
@@ -198,6 +207,10 @@ func _notification(what: int) -> void:
 	if what != NOTIFICATION_PREDELETE or _rendering_device == null:
 		return
 	for resource_rid in [
+		_copy_pipeline,
+		_horizontal_blur_pipeline,
+		_vertical_blur_pipeline,
+		_pipeline,
 		_copy_shader,
 		_horizontal_blur_shader,
 		_vertical_blur_shader,
@@ -210,11 +223,39 @@ func _notification(what: int) -> void:
 			_rendering_device.free_rid(resource_rid)
 
 
+## Builds and validates the compute route without enabling a visual pass.
+## Godot compositor effects commonly create RenderingDevice resources from the
+## main thread; keeping this explicit lets the controller select its fallback
+## before the first underwater frame.
+func initialize_compute_resources() -> bool:
+	return _ensure_compute_resources()
+
+
 func _ensure_compute_resources() -> bool:
 	if _rendering_device == null:
+		_rendering_device = RenderingServer.get_rendering_device()
+	if _rendering_device == null:
+		_set_runtime_failure("RenderingDevice is unavailable.", false)
+		return false
+
+	_runtime_mutex.lock()
+	var initialization_failed := _resource_initialization_failed
+	_resource_initialization_attempted = true
+	_runtime_mutex.unlock()
+	if initialization_failed:
 		return false
 	if _pipeline.is_valid():
+		_mark_resources_ready()
 		return true
+	if _compute_shader_source.is_empty():
+		_compute_shader_source = FileAccess.get_file_as_string(
+			COMPUTE_SHADER_PATH
+		).trim_prefix("#[compute]\n")
+	if _compute_shader_source.is_empty():
+		_set_runtime_failure(
+			"The underwater compositor GLSL source could not be loaded."
+		)
+		return false
 
 	var shader_source := RDShaderSource.new()
 	shader_source.language = RenderingDevice.SHADER_LANGUAGE_GLSL
@@ -223,13 +264,22 @@ func _ensure_compute_resources() -> bool:
 		_rendering_device.shader_compile_spirv_from_source(shader_source)
 	)
 	if not shader_spirv.compile_error_compute.is_empty():
-		push_error(shader_spirv.compile_error_compute)
+		_set_runtime_failure(
+			"Underwater fullscreen compositor shader compile failed: %s"
+			% shader_spirv.compile_error_compute
+		)
 		return false
 	_shader = _rendering_device.shader_create_from_spirv(shader_spirv)
 	if not _shader.is_valid():
+		_set_runtime_failure(
+			"Underwater fullscreen compositor shader RID is invalid."
+		)
 		return false
 	_pipeline = _rendering_device.compute_pipeline_create(_shader)
 	if not _pipeline.is_valid():
+		_set_runtime_failure(
+			"Underwater fullscreen compositor pipeline is invalid."
+		)
 		return false
 
 	var copy_shader_source := RDShaderSource.new()
@@ -239,15 +289,24 @@ func _ensure_compute_resources() -> bool:
 		_rendering_device.shader_compile_spirv_from_source(copy_shader_source)
 	)
 	if not copy_shader_spirv.compile_error_compute.is_empty():
-		push_error(copy_shader_spirv.compile_error_compute)
+		_set_runtime_failure(
+			"Underwater fullscreen copy shader compile failed: %s"
+			% copy_shader_spirv.compile_error_compute
+		)
 		return false
 	_copy_shader = _rendering_device.shader_create_from_spirv(
 		copy_shader_spirv
 	)
 	if not _copy_shader.is_valid():
+		_set_runtime_failure(
+			"Underwater fullscreen copy shader RID is invalid."
+		)
 		return false
 	_copy_pipeline = _rendering_device.compute_pipeline_create(_copy_shader)
 	if not _copy_pipeline.is_valid():
+		_set_runtime_failure(
+			"Underwater fullscreen copy pipeline is invalid."
+		)
 		return false
 
 	var horizontal_source := RDShaderSource.new()
@@ -260,17 +319,26 @@ func _ensure_compute_resources() -> bool:
 		_rendering_device.shader_compile_spirv_from_source(horizontal_source)
 	)
 	if not horizontal_spirv.compile_error_compute.is_empty():
-		push_error(horizontal_spirv.compile_error_compute)
+		_set_runtime_failure(
+			"Underwater horizontal blur shader compile failed: %s"
+			% horizontal_spirv.compile_error_compute
+		)
 		return false
 	_horizontal_blur_shader = _rendering_device.shader_create_from_spirv(
 		horizontal_spirv
 	)
 	if not _horizontal_blur_shader.is_valid():
+		_set_runtime_failure(
+			"Underwater horizontal blur shader RID is invalid."
+		)
 		return false
 	_horizontal_blur_pipeline = _rendering_device.compute_pipeline_create(
 		_horizontal_blur_shader
 	)
 	if not _horizontal_blur_pipeline.is_valid():
+		_set_runtime_failure(
+			"Underwater horizontal blur pipeline is invalid."
+		)
 		return false
 
 	var vertical_source := RDShaderSource.new()
@@ -283,17 +351,26 @@ func _ensure_compute_resources() -> bool:
 		_rendering_device.shader_compile_spirv_from_source(vertical_source)
 	)
 	if not vertical_spirv.compile_error_compute.is_empty():
-		push_error(vertical_spirv.compile_error_compute)
+		_set_runtime_failure(
+			"Underwater vertical blur shader compile failed: %s"
+			% vertical_spirv.compile_error_compute
+		)
 		return false
 	_vertical_blur_shader = _rendering_device.shader_create_from_spirv(
 		vertical_spirv
 	)
 	if not _vertical_blur_shader.is_valid():
+		_set_runtime_failure(
+			"Underwater vertical blur shader RID is invalid."
+		)
 		return false
 	_vertical_blur_pipeline = _rendering_device.compute_pipeline_create(
 		_vertical_blur_shader
 	)
 	if not _vertical_blur_pipeline.is_valid():
+		_set_runtime_failure(
+			"Underwater vertical blur pipeline is invalid."
+		)
 		return false
 
 	var depth_sampler_state := RDSamplerState.new()
@@ -319,21 +396,84 @@ func _ensure_compute_resources() -> bool:
 	_parameter_buffer = _rendering_device.storage_buffer_create(
 		PARAMETER_FLOAT_COUNT * 4
 	)
-	return (
+	var resources_valid := (
 		_depth_sampler.is_valid()
 		and _color_sampler.is_valid()
 		and _parameter_buffer.is_valid()
 	)
+	if not resources_valid:
+		_set_runtime_failure(
+			"One or more underwater compositor compute resources are invalid."
+		)
+		return false
+	_mark_resources_ready()
+	return true
+
+
+func _set_runtime_failure(message: String, report_error: bool = true) -> void:
+	_runtime_mutex.lock()
+	_resource_initialization_attempted = true
+	_resource_initialization_failed = true
+	_resources_ready = false
+	_last_error = message
+	var should_report := not _failure_reported
+	_failure_reported = true
+	_runtime_mutex.unlock()
+	if should_report and report_error:
+		push_error(message)
+
+
+func _mark_resources_ready() -> void:
+	_runtime_mutex.lock()
+	_resources_ready = true
+	_resource_initialization_failed = false
+	_last_error = ""
+	_runtime_mutex.unlock()
+
+
+func get_runtime_debug_status() -> Dictionary:
+	_runtime_mutex.lock()
+	var status := {
+		"rendering_device_valid": _rendering_device != null,
+		"resource_initialization_attempted":
+			_resource_initialization_attempted,
+		"resource_initialization_failed": _resource_initialization_failed,
+		"resources_ready": _resources_ready,
+		"last_error": _last_error,
+		"render_callback_count": _render_callback_count,
+		"successful_render_count": _successful_render_count,
+		"last_render_size": _last_render_size,
+	}
+	_runtime_mutex.unlock()
+	if _rendering_device != null:
+		status.merge(
+			{
+				"shader_valid": _shader.is_valid(),
+				"pipeline_valid": _pipeline.is_valid(),
+				"copy_pipeline_valid": _copy_pipeline.is_valid(),
+				"horizontal_blur_pipeline_valid":
+					_horizontal_blur_pipeline.is_valid(),
+				"vertical_blur_pipeline_valid":
+					_vertical_blur_pipeline.is_valid(),
+				"parameter_buffer_valid": _parameter_buffer.is_valid(),
+				"depth_sampler_valid": _depth_sampler.is_valid(),
+				"color_sampler_valid": _color_sampler.is_valid(),
+			},
+			true
+		)
+	return status
 
 
 func _render_callback(
 	callback_type: int,
 	render_data: RenderData
 ) -> void:
-	if (
-		callback_type != EFFECT_CALLBACK_TYPE_POST_TRANSPARENT
-		or not _ensure_compute_resources()
-	):
+	if callback_type != EFFECT_CALLBACK_TYPE_POST_TRANSPARENT:
+		return
+	_runtime_mutex.lock()
+	_render_callback_count += 1
+	_runtime_mutex.unlock()
+	if not _ensure_compute_resources():
 		return
 
 	var render_buffers := (
@@ -372,6 +512,7 @@ func _render_callback(
 
 	var group_count_x := ceili(float(render_size.x) / THREAD_GROUP_SIZE)
 	var group_count_y := ceili(float(render_size.y) / THREAD_GROUP_SIZE)
+	var rendered_any := false
 	for view_index in render_buffers.get_view_count():
 		var output_image := render_buffers.get_color_layer(view_index)
 		var source_image := render_buffers.get_texture_slice(
@@ -612,6 +753,13 @@ func _render_callback(
 			1
 		)
 		_rendering_device.compute_list_end()
+		rendered_any = true
+
+	if rendered_any:
+		_runtime_mutex.lock()
+		_successful_render_count += 1
+		_last_render_size = render_size
+		_runtime_mutex.unlock()
 
 
 func _build_parameter_data(

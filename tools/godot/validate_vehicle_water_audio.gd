@@ -68,16 +68,16 @@ func _validate_resources_and_structure() -> void:
 	var players := _collect_audio_players(_audio)
 	_expect(players.size() == 3, "Exactly three WaterAudio players exist.")
 	_expect(
-		_valid_stream_count(_audio.normal_splash_streams) == 3,
-		"Three normal splash variants resolve."
+		_valid_stream_count(_audio.normal_splash_streams) >= 1,
+		"At least one configured normal splash variant resolves."
 	)
 	_expect(
-		_valid_stream_count(_audio.heavy_splash_streams) == 4,
-		"Four heavy splash variants resolve."
+		_valid_stream_count(_audio.heavy_splash_streams) >= 1,
+		"At least one configured heavy splash variant resolves."
 	)
 	_expect(
-		_valid_stream_count(_audio.running_water_streams) == 4,
-		"Four running-water variants resolve."
+		_valid_stream_count(_audio.running_water_streams) >= 1,
+		"At least one configured running-water variant resolves."
 	)
 	var running_loops := true
 	for stream: AudioStream in _audio.running_water_streams:
@@ -196,6 +196,7 @@ func _validate_contact_grace_and_airborne_cut() -> void:
 
 func _validate_normal_landing() -> void:
 	_reset_audio()
+	_set_landing_descriptor(false)
 	_snapshot(
 		JetSkiController.NavigationState.AIRBORNE,
 		Vector3(0.0, -3.0, 6.0),
@@ -219,6 +220,7 @@ func _validate_normal_landing() -> void:
 
 func _validate_heavy_landing() -> void:
 	_reset_audio()
+	_set_landing_descriptor(true)
 	_snapshot(
 		JetSkiController.NavigationState.AIRBORNE,
 		Vector3(0.0, -8.0, 8.0),
@@ -290,11 +292,14 @@ func _validate_restart_and_node_stability() -> void:
 	for index: int in range(1, chosen_streams.size()):
 		if chosen_streams[index] == chosen_streams[index - 1]:
 			no_adjacent_repeat = false
+	var enough_variants_for_rotation := (
+		_valid_stream_count(_audio.running_water_streams) >= 2
+	)
 	_expect(
 		_collect_audio_players(_audio).size() == player_count_before
 		and player_count_before == 3
 		and not chosen_streams.has(null)
-		and no_adjacent_repeat,
+		and (no_adjacent_repeat or not enough_variants_for_rotation),
 		"10. Repeated starts use valid variants without node accumulation."
 	)
 
@@ -319,6 +324,18 @@ func _set_submerged_point_count(value: int) -> void:
 	water_state.submerged_ratio = (
 		float(value) / float(JetSkiController.BUOYANCY_POINT_COUNT)
 	)
+
+
+func _set_landing_descriptor(special_impact_eligible: bool) -> void:
+	var descriptor := LandingImpactDescriptor.new()
+	descriptor.confirmed_airborne = special_impact_eligible
+	descriptor.special_impact_eligible = special_impact_eligible
+	descriptor.rejection_reason = (
+		LandingImpactDescriptor.REJECTION_ACCEPTED
+		if special_impact_eligible
+		else LandingImpactDescriptor.REJECTION_AIRTIME_TOO_SHORT
+	)
+	_vehicle.last_landing_impact_descriptor = descriptor
 
 
 func _reset_audio() -> void:

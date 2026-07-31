@@ -93,6 +93,34 @@ const MACRO_MATERIAL_SYNC_INTERVAL: float = 0.25
 @export var landing_impact_exaggerated_debug: bool = false
 @export_range(1.0, 5.0, 0.25) var landing_impact_debug_multiplier: float = 2.5
 
+@export_group("Landing Impact Foam")
+@export var landing_foam_enabled: bool = true:
+	set(value):
+		landing_foam_enabled = value
+		_mark_landing_foam_settings_dirty()
+@export_range(0.0, 2.0, 0.01) var landing_foam_strength: float = 0.035:
+	set(value):
+		landing_foam_strength = value
+		_mark_landing_foam_settings_dirty()
+@export_range(0.0, 1.0, 0.01)
+var landing_foam_minimum_impact_strength: float = 0.35:
+	set(value):
+		landing_foam_minimum_impact_strength = value
+		_mark_landing_foam_settings_dirty()
+@export_range(0.0, 1.0, 0.01) var landing_foam_energy_threshold: float = 0.18:
+	set(value):
+		landing_foam_energy_threshold = value
+		_mark_landing_foam_settings_dirty()
+@export_range(0.01, 0.5, 0.01) var landing_foam_energy_softness: float = 0.12:
+	set(value):
+		landing_foam_energy_softness = value
+		_mark_landing_foam_settings_dirty()
+@export_range(0.0, 1.0, 0.01)
+var landing_foam_generic_crest_suppression: float = 1.0:
+	set(value):
+		landing_foam_generic_crest_suppression = value
+		_mark_landing_foam_settings_dirty()
+
 @export_group("Directional Wake")
 @export var directional_wake_enabled: bool = true
 @export_range(8, MAX_DIRECTIONAL_WAKE_SEGMENTS, 1) var directional_wake_sample_count: int = 16
@@ -159,6 +187,7 @@ var _ripple_speeds := PackedFloat32Array()
 var _ripple_wavelengths := PackedFloat32Array()
 var _ripple_decays := PackedFloat32Array()
 var _ripple_lifetimes := PackedFloat32Array()
+var _ripple_foam_suppressed := PackedInt32Array()
 
 var _landing_impact_active := PackedInt32Array()
 var _landing_impact_positions := PackedVector2Array()
@@ -188,6 +217,7 @@ var _last_landing_entry_type: int = 0
 var _last_landing_wave_amplitude: float = 0.0
 var _last_landing_wave_speed: float = 0.0
 var _last_landing_wave_radius: float = 0.0
+var _last_landing_foam_energy: float = 0.0
 
 var _wake_source: WakeTrail3D
 var _interaction_vehicle: JetSkiController
@@ -523,6 +553,11 @@ var last_landing_wave_radius: float:
 		return _last_landing_wave_radius
 
 
+var last_landing_foam_energy: float:
+	get:
+		return _last_landing_foam_energy
+
+
 func configure_ripple_emitter(target: Node3D) -> void:
 	if ripple_emitter_target == target:
 		_connect_ripple_emitter_signals()
@@ -632,6 +667,8 @@ func get_graphics_quality_debug_status() -> Dictionary:
 		"active_directional_segments": _directional_wake_active_count,
 		"effective_landing_impacts": _effective_landing_impact_count,
 		"active_landing_impacts": active_landings,
+		"last_landing_foam_energy": _last_landing_foam_energy,
+		"landing_foam_strength": landing_foam_strength,
 		"interaction_distance": vehicle_interaction_clipmap_distance,
 		"geometry_normal_quality": (
 			_graphics_quality_profile.ocean_geometry_normal_quality
@@ -677,7 +714,8 @@ func add_ripple(
 	speed: float = -1.0,
 	wavelength: float = -1.0,
 	decay: float = -1.0,
-	lifetime: float = -1.0
+	lifetime: float = -1.0,
+	suppress_generic_foam: bool = false
 ) -> void:
 	if not world_position.is_finite():
 		return
@@ -690,6 +728,7 @@ func add_ripple(
 	_ripple_wavelengths[slot] = ripple_wavelength if wavelength < 0.0 else maxf(wavelength, 0.05)
 	_ripple_decays[slot] = ripple_decay if decay < 0.0 else maxf(decay, 0.0)
 	_ripple_lifetimes[slot] = ripple_lifetime if lifetime < 0.0 else maxf(lifetime, 0.05)
+	_ripple_foam_suppressed[slot] = 1 if suppress_generic_foam else 0
 	_ripple_parameters_dirty = true
 
 
@@ -784,6 +823,12 @@ func get_logical_origin_offset_xz() -> Vector2:
 
 func get_active_water_material() -> ShaderMaterial:
 	return ocean_material
+
+
+func _mark_landing_foam_settings_dirty() -> void:
+	_static_parameters_dirty = true
+	if is_inside_tree():
+		_push_static_parameters_to_all_materials()
 
 
 func register_external_water_material(material: ShaderMaterial) -> void:
@@ -924,6 +969,7 @@ func _initialize_ripples() -> void:
 	_ripple_wavelengths.resize(MAX_RIPPLES)
 	_ripple_decays.resize(MAX_RIPPLES)
 	_ripple_lifetimes.resize(MAX_RIPPLES)
+	_ripple_foam_suppressed.resize(MAX_RIPPLES)
 	_ripple_active.fill(0)
 	_ripple_positions.fill(Vector2.ZERO)
 	_ripple_start_times.fill(-INF)
@@ -932,6 +978,7 @@ func _initialize_ripples() -> void:
 	_ripple_wavelengths.fill(ripple_wavelength)
 	_ripple_decays.fill(ripple_decay)
 	_ripple_lifetimes.fill(ripple_lifetime)
+	_ripple_foam_suppressed.fill(0)
 	_ripple_parameters_dirty = true
 
 
@@ -1068,6 +1115,16 @@ func _on_landing_water_entered(
 	):
 		return
 	_last_landing_descriptor_id = descriptor.event_id
+	_last_landing_normal_speed = descriptor.normal_speed
+	_last_landing_airtime = descriptor.airtime
+	_last_landing_entry_type = int(descriptor.entry_type)
+	if not descriptor.special_impact_eligible:
+		_last_landing_wave_strength = 0.0
+		_last_landing_wave_amplitude = 0.0
+		_last_landing_wave_speed = 0.0
+		_last_landing_wave_radius = 0.0
+		_last_landing_foam_energy = 0.0
+		return
 	var slot := _find_landing_impact_slot()
 	var strength := clampf(descriptor.strength, 0.0, 1.0)
 	var amplitude := lerpf(
@@ -1130,12 +1187,10 @@ func _on_landing_water_entered(
 	_landing_impact_parameters_dirty = true
 	_landing_impact_count += 1
 	_last_landing_wave_strength = strength
-	_last_landing_normal_speed = descriptor.normal_speed
-	_last_landing_airtime = descriptor.airtime
-	_last_landing_entry_type = int(descriptor.entry_type)
 	_last_landing_wave_amplitude = amplitude
 	_last_landing_wave_speed = propagation_speed
 	_last_landing_wave_radius = initial_radius
+	_last_landing_foam_energy = clampf(amplitude * 1.55, 0.0, 1.0)
 	var physical_amplitude := lerpf(
 		landing_physical_ripple_minimum_amplitude,
 		landing_physical_ripple_maximum_amplitude,
@@ -1147,7 +1202,8 @@ func _on_landing_water_entered(
 		lerpf(2.8, 4.2, strength),
 		lerpf(2.2, 3.6, strength),
 		ripple_decay,
-		lerpf(2.2, 3.8, strength)
+		lerpf(2.2, 3.8, strength),
+		true
 	)
 	_push_landing_impact_parameters_to_all_materials()
 
@@ -2077,6 +2133,24 @@ func _push_static_parameters(material: ShaderMaterial) -> void:
 		return
 	material.set_shader_parameter(&"ocean_enabled", true)
 	material.set_shader_parameter(&"water_level", water_level)
+	material.set_shader_parameter(&"landing_foam_enabled", landing_foam_enabled)
+	material.set_shader_parameter(&"landing_foam_strength", landing_foam_strength)
+	material.set_shader_parameter(
+		&"landing_foam_minimum_impact_strength",
+		landing_foam_minimum_impact_strength
+	)
+	material.set_shader_parameter(
+		&"landing_foam_energy_threshold",
+		landing_foam_energy_threshold
+	)
+	material.set_shader_parameter(
+		&"landing_foam_energy_softness",
+		landing_foam_energy_softness
+	)
+	material.set_shader_parameter(
+		&"landing_foam_generic_crest_suppression",
+		landing_foam_generic_crest_suppression
+	)
 	var shader_wave_texture_a: Texture2D = wave_height_texture_a
 	var shader_wave_texture_b: Texture2D = wave_height_texture_b
 
@@ -2296,6 +2370,7 @@ func _push_ripple_parameters(material: ShaderMaterial) -> void:
 	var wavelengths := _ripple_wavelengths.duplicate()
 	var decays := _ripple_decays.duplicate()
 	var lifetimes := _ripple_lifetimes.duplicate()
+	var foam_suppressed := _ripple_foam_suppressed.duplicate()
 	active.fill(0)
 	for target_index in indices.size():
 		var source_index: int = indices[target_index]
@@ -2307,6 +2382,9 @@ func _push_ripple_parameters(material: ShaderMaterial) -> void:
 		wavelengths[target_index] = _ripple_wavelengths[source_index]
 		decays[target_index] = _ripple_decays[source_index]
 		lifetimes[target_index] = _ripple_lifetimes[source_index]
+		foam_suppressed[target_index] = (
+			_ripple_foam_suppressed[source_index]
+		)
 	material.set_shader_parameter(&"ripple_active", active)
 	material.set_shader_parameter(&"ripple_positions", positions)
 	material.set_shader_parameter(&"ripple_start_times", start_times)
@@ -2315,6 +2393,10 @@ func _push_ripple_parameters(material: ShaderMaterial) -> void:
 	material.set_shader_parameter(&"ripple_wavelengths", wavelengths)
 	material.set_shader_parameter(&"ripple_decays", decays)
 	material.set_shader_parameter(&"ripple_lifetimes", lifetimes)
+	material.set_shader_parameter(
+		&"ripple_foam_suppressed",
+		foam_suppressed
+	)
 	material.set_shader_parameter(
 		&"ripple_effective_count",
 		_effective_ripple_count

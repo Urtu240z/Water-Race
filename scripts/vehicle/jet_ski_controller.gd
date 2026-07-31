@@ -175,6 +175,12 @@ const LEFT_CONTACT_MASK: int = (
 @export_range(0.0, 10.0, 0.01, "or_greater", "suffix:m") var deep_submersion_release_depth: float = 0.4
 @export_range(1, BUOYANCY_POINT_COUNT, 1) var deep_submersion_required_points: int = 4
 
+@export_group("Landing Impact Confirmation")
+@export var landing_impact_requires_confirmed_airborne: bool = true
+@export_range(0.0, 3.0, 0.05, "suffix:s")
+var landing_impact_minimum_airtime: float = 1.0
+@export var landing_impact_allow_short_hard_impacts: bool = false
+
 @export_group("Landing Wave Strength")
 @export_range(0.0, 20.0, 0.1, "suffix:m/s") var landing_wave_minimum_normal_speed: float = 1.5
 @export_range(0.1, 30.0, 0.1, "suffix:m/s") var landing_wave_full_normal_speed: float = 11.0
@@ -506,6 +512,16 @@ var last_landing_entry_type: JetSkiTypes.LandingEntryType:
 
 
 var last_landing_impact_descriptor: LandingImpactDescriptor
+var last_landing_confirmed_airborne: bool = false
+var last_landing_special_impact_eligible: bool = false
+var last_landing_rejection_reason: StringName = &""
+var accepted_landing_impact_count: int = 0
+var rejected_landing_impact_count: int = 0
+
+
+var last_landing_airtime: float:
+	get:
+		return last_airtime
 
 
 var last_landing_wave_strength: float:
@@ -536,6 +552,7 @@ var deep_submersion_count: int:
 var _respawn_transform: Transform3D
 var _has_respawn_transform: bool = false
 var _landing_impact_event_id: int = 0
+var _airborne_state_confirmed_for_landing: bool = false
 var _ocean: Ocean3D
 @onready var input_system: JetSkiInputSystem = $Systems/InputSystem
 @onready var water_physics_system: JetSkiWaterPhysicsSystem = (
@@ -658,6 +675,11 @@ func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 		water_physics_system,
 		state.step
 	)
+	if (
+		navigation_system.state.navigation_state
+		== NavigationState.AIRBORNE
+	):
+		_airborne_state_confirmed_for_landing = true
 	submarine_system.update_after_contacts(
 		input_system.state,
 		water_state,
@@ -763,6 +785,10 @@ func reset_vehicle(reason: StringName = &"manual") -> void:
 	submarine_system.reset_runtime_state(true)
 	trick_system.reset_runtime_state()
 	last_landing_impact_descriptor = null
+	last_landing_confirmed_airborne = false
+	last_landing_special_impact_eligible = false
+	last_landing_rejection_reason = &""
+	_airborne_state_confirmed_for_landing = false
 	reset_physics_interpolation()
 	reset_completed.emit(reason)
 
@@ -1131,15 +1157,31 @@ func _on_navigation_system_water_entered(
 	contact_position: Vector3
 ) -> void:
 	last_landing_impact_descriptor = _build_landing_impact_descriptor(
-		contact_position
+		contact_position,
+		_airborne_state_confirmed_for_landing
 	)
+	last_landing_confirmed_airborne = (
+		last_landing_impact_descriptor.confirmed_airborne
+	)
+	last_landing_special_impact_eligible = (
+		last_landing_impact_descriptor.special_impact_eligible
+	)
+	last_landing_rejection_reason = (
+		last_landing_impact_descriptor.rejection_reason
+	)
+	if last_landing_special_impact_eligible:
+		accepted_landing_impact_count += 1
+	else:
+		rejected_landing_impact_count += 1
+	_airborne_state_confirmed_for_landing = false
 	water_entered.emit(intensity, contact_position)
 
 
 func calculate_landing_wave_strength(
 	landing_normal_speed: float,
 	landing_airtime: float,
-	landing_contact_count: int
+	landing_contact_count: int,
+	confirmed_jump: bool = false
 ) -> float:
 	return LandingImpactDescriptor.calculate_strength(
 		landing_normal_speed,
@@ -1150,12 +1192,13 @@ func calculate_landing_wave_strength(
 		landing_wave_minimum_airtime,
 		landing_wave_full_airtime,
 		landing_wave_minimum_visible_strength,
-		true
+		confirmed_jump
 	)
 
 
 func _build_landing_impact_descriptor(
-	fallback_position: Vector3
+	fallback_position: Vector3,
+	confirmed_airborne_state: bool = false
 ) -> LandingImpactDescriptor:
 	var descriptor := LandingImpactDescriptor.new()
 	_landing_impact_event_id += 1
@@ -1167,13 +1210,24 @@ func _build_landing_impact_descriptor(
 	)
 	descriptor.normal_speed = maxf(last_landing_normal_speed, 0.0)
 	descriptor.airtime = maxf(last_airtime, 0.0)
+	descriptor.confirmed_airborne = confirmed_airborne_state
+	descriptor.minimum_required_airtime = maxf(
+		landing_impact_minimum_airtime,
+		0.0
+	)
 	descriptor.contact_mask = last_landing_contact_mask
 	descriptor.contact_count = last_landing_contact_count
 	descriptor.entry_type = last_landing_entry_type
-	descriptor.strength = calculate_landing_wave_strength(
-		descriptor.normal_speed,
-		descriptor.airtime,
-		descriptor.contact_count
+	_configure_landing_impact_eligibility(descriptor, fallback_position)
+	descriptor.strength = (
+		calculate_landing_wave_strength(
+			descriptor.normal_speed,
+			descriptor.airtime,
+			descriptor.contact_count,
+			descriptor.special_impact_eligible
+		)
+		if descriptor.special_impact_eligible
+		else 0.0
 	)
 	var vehicle_basis := (
 		global_basis if is_inside_tree() else basis
@@ -1227,6 +1281,69 @@ func _build_landing_impact_descriptor(
 			rear_center
 		)
 	return descriptor
+
+
+func _configure_landing_impact_eligibility(
+	descriptor: LandingImpactDescriptor,
+	fallback_position: Vector3
+) -> void:
+	var raw_normal_speed := last_landing_normal_speed
+	var raw_airtime := last_airtime
+	var has_valid_position := (
+		descriptor.position.is_finite() or fallback_position.is_finite()
+	)
+	var valid_landing_data := (
+		has_valid_position
+		and is_finite(raw_normal_speed)
+		and is_finite(raw_airtime)
+		and descriptor.contact_count > 0
+		and descriptor.contact_mask != 0
+	)
+	if not valid_landing_data:
+		descriptor.special_impact_eligible = false
+		descriptor.rejection_reason = (
+			LandingImpactDescriptor.REJECTION_INVALID_DATA
+		)
+		return
+	if (
+		landing_impact_requires_confirmed_airborne
+		and not descriptor.confirmed_airborne
+	):
+		descriptor.special_impact_eligible = false
+		descriptor.rejection_reason = (
+			LandingImpactDescriptor.REJECTION_AIRBORNE_NOT_CONFIRMED
+		)
+		return
+	var airtime_is_long_enough := (
+		descriptor.airtime + 0.0001
+		>= descriptor.minimum_required_airtime
+	)
+	var accepted_short_hard_impact := (
+		landing_impact_allow_short_hard_impacts
+		and descriptor.normal_speed >= hard_landing_speed
+	)
+	if not airtime_is_long_enough and not accepted_short_hard_impact:
+		descriptor.special_impact_eligible = false
+		descriptor.rejection_reason = (
+			LandingImpactDescriptor.REJECTION_AIRTIME_TOO_SHORT
+		)
+		return
+	descriptor.special_impact_eligible = true
+	descriptor.rejection_reason = LandingImpactDescriptor.REJECTION_ACCEPTED
+
+
+func get_landing_impact_debug_status() -> Dictionary:
+	return {
+		"last_landing_confirmed_airborne": last_landing_confirmed_airborne,
+		"last_landing_airtime": last_landing_airtime,
+		"landing_impact_minimum_airtime": landing_impact_minimum_airtime,
+		"last_landing_special_impact_eligible": (
+			last_landing_special_impact_eligible
+		),
+		"last_landing_rejection_reason": last_landing_rejection_reason,
+		"accepted_landing_impact_count": accepted_landing_impact_count,
+		"rejected_landing_impact_count": rejected_landing_impact_count,
+	}
 
 
 func _configure_landing_secondary_contacts(

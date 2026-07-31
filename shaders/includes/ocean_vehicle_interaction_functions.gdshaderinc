@@ -219,8 +219,14 @@ vec3 sample_landing_radial_packet(
 }
 
 
-// x: height, yz: spatial derivatives, w: deformation energy.
-vec4 sample_landing_impact_state(vec2 logical_xz) {
+// x: height, yz: spatial derivatives, w: landing deformation energy.
+// The strongest contributing impact is returned without evaluating the impact
+// pool a second time.
+vec4 sample_landing_impact_state_with_strength(
+	vec2 logical_xz,
+	out float strongest_impact
+) {
+	strongest_impact = 0.0;
 	if (!landing_impacts_enabled) {
 		return vec4(0.0);
 	}
@@ -285,6 +291,7 @@ vec4 sample_landing_impact_state(vec2 logical_xz) {
 			|| front_offset < -wavelength * 1.35) {
 			continue;
 		}
+		strongest_impact = max(strongest_impact, strength);
 		vec3 packet = sample_landing_radial_packet(
 			elliptical_coordinates,
 			radius,
@@ -427,7 +434,6 @@ vec4 sample_landing_impact_state(vec2 logical_xz) {
 					max(packet.x, 0.0) * abs(amplitude)
 					+ length(packet.yz) * abs(amplitude)
 						* arm_width * 0.12
-					+ depression * 0.30
 				) * 1.55,
 				0.0,
 				1.0
@@ -439,6 +445,15 @@ vec4 sample_landing_impact_state(vec2 logical_xz) {
 		height / normalization,
 		derivatives / normalization,
 		energy
+	);
+}
+
+
+vec4 sample_landing_impact_state(vec2 logical_xz) {
+	float strongest_impact = 0.0;
+	return sample_landing_impact_state_with_strength(
+		logical_xz,
+		strongest_impact
 	);
 }
 
@@ -560,7 +575,11 @@ vec4 sample_hull_pressure_state(vec2 logical_xz) {
 }
 
 
-vec4 sample_vehicle_interaction_state(vec2 logical_xz) {
+vec4 sample_vehicle_interaction_state_with_landing(
+	vec2 logical_xz,
+	out float landing_energy,
+	out float landing_strength
+) {
 	bool include_wake = ocean_interaction_debug_mode == 0
 		|| ocean_interaction_debug_mode == 2
 		|| ocean_interaction_debug_mode == 4;
@@ -576,9 +595,15 @@ vec4 sample_vehicle_interaction_state(vec2 logical_xz) {
 	vec4 hull_state = include_hull
 		? sample_hull_pressure_state(logical_xz)
 		: vec4(0.0);
-	vec4 landing_state = include_landing
-		? sample_landing_impact_state(logical_xz)
-		: vec4(0.0);
+	landing_strength = 0.0;
+	vec4 landing_state = vec4(0.0);
+	if (include_landing) {
+		landing_state = sample_landing_impact_state_with_strength(
+			logical_xz,
+			landing_strength
+		);
+	}
+	landing_energy = landing_state.w;
 	vec4 state = wake_state + hull_state + landing_state;
 	float debug_multiplier = vehicle_interaction_exaggerated_debug
 		? max(vehicle_interaction_debug_multiplier, 1.0)
@@ -613,6 +638,17 @@ vec4 sample_vehicle_interaction_state(vec2 logical_xz) {
 	state.yz *= mix(1.0, derivative_scale, derivative_blend);
 	state.w = max(max(wake_state.w, hull_state.w), landing_state.w);
 	return state;
+}
+
+
+vec4 sample_vehicle_interaction_state(vec2 logical_xz) {
+	float landing_energy = 0.0;
+	float landing_strength = 0.0;
+	return sample_vehicle_interaction_state_with_landing(
+		logical_xz,
+		landing_energy,
+		landing_strength
+	);
 }
 
 

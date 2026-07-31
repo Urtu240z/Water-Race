@@ -1,11 +1,20 @@
 class_name LandingImpactDescriptor
 extends RefCounted
 
+const REJECTION_AIRBORNE_NOT_CONFIRMED: StringName = &"airborne_not_confirmed"
+const REJECTION_AIRTIME_TOO_SHORT: StringName = &"airtime_too_short"
+const REJECTION_INVALID_DATA: StringName = &"invalid_landing_data"
+const REJECTION_ACCEPTED: StringName = &"accepted"
+
 var event_id: int = 0
 var position: Vector3 = Vector3.ZERO
 var normal_speed: float = 0.0
 var airtime: float = 0.0
 var strength: float = 0.0
+var confirmed_airborne: bool = false
+var special_impact_eligible: bool = false
+var rejection_reason: StringName = &""
+var minimum_required_airtime: float = 0.0
 var contact_mask: int = 0
 var contact_count: int = 0
 var entry_type: JetSkiTypes.LandingEntryType = (
@@ -32,7 +41,7 @@ static func calculate_strength(
 	minimum_airtime: float,
 	full_airtime: float,
 	minimum_visible_strength: float,
-	confirmed_jump: bool = true
+	confirmed_jump: bool = false
 ) -> float:
 	var normal_factor := smoothstep(
 		minimum_normal_speed,

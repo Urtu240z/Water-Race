@@ -111,6 +111,8 @@ var editor_preview_camera_depth: float = -0.10
 
 @export_group("Debug")
 @export var force_mode: DebugForceMode = DebugForceMode.AUTOMATIC
+## Test-only escape hatch used to verify the legacy full-screen quad route.
+@export var force_legacy_fallback: bool = false
 @export_enum(
 	"Final",
 	"Underwater Mask",
@@ -165,6 +167,11 @@ var _crossing_transition_elapsed: float = 0.0
 var _crossing_transition_progress: float = 1.0
 var _base_wet_lens_zoom: float = 1.0
 var _base_wet_lens_warp_strength: float = 1.0
+var _compositor_prewarm_started := false
+var _compositor_prewarm_in_progress := false
+var _compositor_prewarm_complete := false
+var _fallback_active := false
+var _fallback_reason := ""
 
 
 func _ready() -> void:
@@ -183,6 +190,7 @@ func _ready() -> void:
 	_base_wet_lens_warp_strength = wet_lens_warp_strength
 	_push_look_parameters(true)
 	call_deferred("_resolve_ocean")
+	call_deferred("_prewarm_fullscreen_compositor")
 
 
 func set_graphics_quality(
@@ -203,18 +211,29 @@ func set_graphics_quality(
 	)
 	if _bubble_particles != null:
 		_bubble_particles.amount = profile.underwater_entry_bubbles_amount
+	if not _fog_environment_original.is_empty():
+		# GraphicsQualityManager has just selected the new preset. Preserve it
+		# as the state to restore when the camera leaves the water.
+		_fog_environment_original[&"depth_fog_enabled"] = profile.fog
+		_fog_environment_original[&"enabled"] = (
+			profile.volumetric_fog
+		)
 	_push_look_parameters(true)
+	if _material != null:
+		_material.set_shader_parameter(
+			&"camera_submersion",
+			_effect_strength
+		)
+	_update_volumetric_fog(_effect_strength)
 	_update_fullscreen_compositor(_effect_strength)
 
 
 func get_graphics_quality_debug_status() -> Dictionary:
-	return {
+	var status := get_underwater_runtime_debug_status()
+	status.merge({
 		"postprocess_enabled": (
-			_compositor_effect != null and _compositor_effect.enabled
-		),
-		"compositor_attached": (
-			is_instance_valid(_compositor_camera)
-			and _compositor_camera.compositor == _active_compositor
+			(_compositor_effect != null and _compositor_effect.enabled)
+			or _fallback_active
 		),
 		"blur_strength": blur_strength,
 		"blur_passes": blur_passes,
@@ -225,6 +244,77 @@ func get_graphics_quality_debug_status() -> Dictionary:
 		"is_underwater": _is_underwater,
 		"transition_active": (
 			_crossing_transition != WaterCrossingTransition.NONE
+		),
+	}, true)
+	return status
+
+
+func get_underwater_runtime_debug_status() -> Dictionary:
+	var compositor_status: Dictionary = {}
+	if (
+		_compositor_effect != null
+		and _compositor_effect.has_method(&"get_runtime_debug_status")
+	):
+		compositor_status = _compositor_effect.call(
+			&"get_runtime_debug_status"
+		) as Dictionary
+	var attached := (
+		is_instance_valid(_compositor_camera)
+		and _active_compositor != null
+		and _compositor_camera.compositor == _active_compositor
+	)
+	var attached_effect_count := (
+		_count_underwater_effects(_active_compositor) if attached else 0
+	)
+	var legacy_submersion := 0.0
+	if _material != null:
+		var shader_value: Variant = _material.get_shader_parameter(
+			&"camera_submersion"
+		)
+		if shader_value is float:
+			legacy_submersion = shader_value
+	return {
+		"effect_enabled": effect_enabled,
+		"camera_valid": is_instance_valid(_camera),
+		"post_process_valid": is_instance_valid(_post_process),
+		"material_valid": is_instance_valid(_material),
+		"ocean_valid": is_instance_valid(_ocean),
+		"camera_position_y": (
+			_camera.global_position.y if is_instance_valid(_camera) else INF
+		),
+		"sampled_surface_height": _sampled_surface_height,
+		"camera_depth": _camera_depth,
+		"enter_depth": enter_depth,
+		"exit_clearance": exit_clearance,
+		"is_underwater": _is_underwater,
+		"effect_strength": _effect_strength,
+		"force_mode": int(force_mode),
+		"transition_mode": int(_crossing_transition),
+		"transition_progress": _crossing_transition_progress,
+		"compositor_effect_valid": _compositor_effect != null,
+		"compositor_effect_enabled": (
+			_compositor_effect != null and _compositor_effect.enabled
+		),
+		"compositor_attached": attached,
+		"attached_underwater_effect_count": attached_effect_count,
+		"compositor_prewarm_started": _compositor_prewarm_started,
+		"compositor_prewarm_complete": _compositor_prewarm_complete,
+		"compositor_runtime": compositor_status,
+		"fallback_active": _fallback_active,
+		"fallback_reason": _fallback_reason,
+		"legacy_quad_visible": (
+			is_instance_valid(_post_process) and _post_process.visible
+		),
+		"legacy_camera_submersion": legacy_submersion,
+		"active_visual_route": (
+			"legacy_quad"
+			if _fallback_active
+			else (
+				"compositor"
+				if _compositor_effect != null
+				and _compositor_effect.enabled
+				else "none"
+			)
 		),
 	}
 
@@ -313,12 +403,10 @@ func _process(delta: float) -> void:
 	# The visual state changes on the same frame as the water detector. Entry
 	# and exit clearances remain as spatial hysteresis against wave flicker.
 	_effect_strength = target_strength
-	_update_volumetric_fog(_effect_strength)
-	_update_fullscreen_compositor(_effect_strength)
-
 	_push_look_parameters(false)
 	_material.set_shader_parameter(&"camera_submersion", _effect_strength)
-	_post_process.visible = false
+	_update_volumetric_fog(_effect_strength)
+	_update_fullscreen_compositor(_effect_strength)
 
 
 func _process_editor_preview(delta: float) -> void:
@@ -362,45 +450,82 @@ func _process_editor_preview(delta: float) -> void:
 	var preview_submersion := 1.0 if _is_underwater else 0.0
 
 	_effect_strength = preview_submersion
-	_update_volumetric_fog(preview_submersion)
-	_update_fullscreen_compositor(preview_submersion)
 	_push_look_parameters(false)
 	_material.set_shader_parameter(&"camera_submersion", preview_submersion)
-	_post_process.visible = false
+	_update_volumetric_fog(preview_submersion)
+	_update_fullscreen_compositor(preview_submersion)
 
 
 func _update_fullscreen_compositor(strength: float) -> void:
-	if _compositor_effect == null:
-		return
-	var target_camera := _camera
-	if Engine.is_editor_hint():
-		target_camera = _get_editor_viewport_camera()
-	if target_camera == null:
-		return
 	var active_strength := clampf(strength, 0.0, 1.0)
 	var transition_active := (
 		_crossing_transition != WaterCrossingTransition.NONE
 		and crossing_transition_strength > 0.0001
 	)
-	if active_strength <= 0.0001 and not transition_active:
+	var visual_active := active_strength > 0.0001 or transition_active
+	if _compositor_effect == null:
+		_set_legacy_fallback(
+			visual_active,
+			"compositor_effect_missing",
+			active_strength
+		)
+		return
+	var target_camera := _camera
+	if Engine.is_editor_hint():
+		target_camera = _get_editor_viewport_camera()
+	if target_camera == null:
 		_compositor_effect.enabled = false
+		_set_legacy_fallback(
+			visual_active,
+			"target_camera_missing",
+			active_strength
+		)
 		return
-	if (
-		Engine.is_editor_hint()
-		and active_strength <= 0.0001
-		and not transition_active
+	if active_strength <= 0.0001 and not transition_active:
+		if not _compositor_prewarm_in_progress:
+			_compositor_effect.enabled = false
+		_set_legacy_fallback(false, "", 0.0)
+		return
+	if not _ensure_fullscreen_compositor(target_camera):
+		_compositor_effect.enabled = false
+		_set_legacy_fallback(
+			true,
+			"compositor_attachment_failed",
+			active_strength
+		)
+		return
+
+	# Parameters must be current before the effect can receive its first render
+	# callback. This avoids one-frame stale/default underwater output.
+	_push_compositor_parameters(active_strength)
+
+	var fallback_reason := ""
+	var runtime_status := _get_compositor_runtime_status()
+	if force_legacy_fallback:
+		fallback_reason = "forced_for_testing"
+	elif runtime_status.get("resource_initialization_failed", false):
+		fallback_reason = str(
+			runtime_status.get("last_error", "compute_initialization_failed")
+		)
+	elif (
+		_compositor_prewarm_complete
+		and runtime_status.get("resource_initialization_attempted", false)
+		and not runtime_status.get("resources_ready", false)
 	):
-		_restore_fullscreen_compositor()
-		# This project has no baseline editor compositor. Clearing the camera
-		# RID is the only deterministic way to discard effects orphaned by a
-		# previous @tool instance.
-		target_camera.compositor = null
+		fallback_reason = "compositor_compute_resources_unavailable"
+
+	if not fallback_reason.is_empty():
+		_compositor_effect.enabled = false
+		_set_legacy_fallback(true, fallback_reason, active_strength)
 		return
-	_ensure_fullscreen_compositor(target_camera)
-	_compositor_effect.enabled = (
-		active_strength > 0.0001
-		or transition_active
-	)
+
+	_set_legacy_fallback(false, "", active_strength)
+	_compositor_effect.enabled = true
+
+
+func _push_compositor_parameters(active_strength: float) -> void:
+	if _compositor_effect == null:
+		return
 	_compositor_effect.call(
 		&"update_parameters",
 		active_strength,
@@ -425,6 +550,66 @@ func _update_fullscreen_compositor(strength: float) -> void:
 		underwater_visibility_radius,
 		underwater_visibility_blend
 	)
+
+
+func _get_compositor_runtime_status() -> Dictionary:
+	if (
+		_compositor_effect == null
+		or not _compositor_effect.has_method(&"get_runtime_debug_status")
+	):
+		return {}
+	return _compositor_effect.call(&"get_runtime_debug_status") as Dictionary
+
+
+func _set_legacy_fallback(
+	active: bool,
+	reason: String,
+	active_strength: float
+) -> void:
+	_fallback_active = active
+	_fallback_reason = reason if active else ""
+	if _post_process == null:
+		return
+	var legacy_strength := clampf(active_strength, 0.0, 1.0)
+	if active and legacy_strength <= 0.0001:
+		match _crossing_transition:
+			WaterCrossingTransition.ENTERING:
+				legacy_strength = 1.0
+			WaterCrossingTransition.EXITING:
+				legacy_strength = 1.0 - _crossing_transition_progress
+	if _material != null:
+		_material.set_shader_parameter(
+			&"camera_submersion",
+			legacy_strength if active else active_strength
+		)
+	_post_process.visible = active and legacy_strength > 0.0001
+
+
+func _prewarm_fullscreen_compositor() -> void:
+	if (
+		_compositor_prewarm_started
+		or _compositor_effect == null
+		or not is_inside_tree()
+	):
+		return
+	_compositor_prewarm_started = true
+	_compositor_prewarm_in_progress = true
+	var target_camera := _camera
+	if Engine.is_editor_hint():
+		target_camera = _get_editor_viewport_camera()
+	if (
+		target_camera == null
+		or not _ensure_fullscreen_compositor(target_camera)
+	):
+		_compositor_prewarm_in_progress = false
+		_compositor_prewarm_complete = true
+		return
+	_push_compositor_parameters(0.0)
+	_compositor_effect.enabled = false
+	if _compositor_effect.has_method(&"initialize_compute_resources"):
+		_compositor_effect.call(&"initialize_compute_resources")
+	_compositor_prewarm_in_progress = false
+	_compositor_prewarm_complete = true
 
 
 func _start_crossing_transition(entering_water: bool) -> void:
@@ -497,12 +682,12 @@ func _update_bubble_particle_layout() -> void:
 		)
 
 
-func _ensure_fullscreen_compositor(target_camera: Camera3D) -> void:
+func _ensure_fullscreen_compositor(target_camera: Camera3D) -> bool:
 	if (
 		target_camera == _compositor_camera
 		and target_camera.compositor == _active_compositor
 	):
-		return
+		return _count_underwater_effects(_active_compositor) == 1
 	_restore_fullscreen_compositor()
 	_compositor_camera = target_camera
 	_original_compositor = _remove_orphaned_underwater_effects(
@@ -520,6 +705,20 @@ func _ensure_fullscreen_compositor(target_camera: Camera3D) -> void:
 	effects.append(_compositor_effect)
 	_active_compositor.compositor_effects = effects
 	target_camera.compositor = _active_compositor
+	return (
+		target_camera.compositor == _active_compositor
+		and _count_underwater_effects(_active_compositor) == 1
+	)
+
+
+func _count_underwater_effects(compositor: Compositor) -> int:
+	if compositor == null:
+		return 0
+	var count := 0
+	for existing_effect in compositor.compositor_effects:
+		if _is_underwater_compositor_effect(existing_effect):
+			count += 1
+	return count
 
 
 func _remove_orphaned_underwater_effects(

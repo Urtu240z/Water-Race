@@ -932,6 +932,8 @@ func _on_ocean_entered(_signal_intensity: float, impact_position: Vector3) -> vo
 	if not impact_splash_enabled or not _impact_valid:
 		return
 	var descriptor := _vehicle.last_landing_impact_descriptor
+	if descriptor == null or not descriptor.special_impact_eligible:
+		return
 	var visual_intensity := clampf(
 		descriptor.strength
 			if descriptor != null
