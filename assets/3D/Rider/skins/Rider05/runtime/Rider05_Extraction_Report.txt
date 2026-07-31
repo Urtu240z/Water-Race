@@ -6,9 +6,9 @@ Skeleton comparison: PASS
 Skin bind comparison: PASS
 Bone count: 52
 Bind count: 52
-Mesh stats: { "surfaces": 1, "vertices": 25446, "triangles": 19169, "materials": 1, "aabb_size": (1.791342, 1.878621, 0.317621) }
+Mesh stats: { "surfaces": 1, "vertices": 38660, "triangles": 69393, "materials": 1, "aabb_size": (1.808306, 1.894419, 0.315432) }
 Mesh resource: res://assets/3D/Rider/skins/Rider05/runtime/Rider05_Body_Mesh.res
 Skin resource: res://assets/3D/Rider/skins/Rider05/runtime/Rider05_Skin.res
-Surface 0 material: tripo_node_d3dddfb4-d82d-4b19-9a03-c8cce1b20561_material (StandardMaterial3D)
+Surface 0 material: tripo_material_d7b1c857-fc78-4e04-8388-961d6e314e33 (StandardMaterial3D)
 Persistent resource dependency check: PASS
 EXTRACTION_STATUS=PASS

@@ -7,50 +7,69 @@
   "reference_glb": "C:\\Users\\ehort\\Documents\\GODOT PROJECTS\\Water Race\\assets\\3D\\Rider\\Rider_Bot.glb",
   "output_blend": "C:\\Users\\ehort\\Documents\\GODOT PROJECTS\\Water Race\\tools\\blender\\generated_rider05\\Rider05_RiderCompatible.blend",
   "output_glb": "C:\\Users\\ehort\\Documents\\GODOT PROJECTS\\Water Race\\assets\\3D\\Rider\\skins\\Rider05\\Rider05_RiderCompatible.glb",
-  "source_armature": "Rider5",
+  "source_armature": "Armature",
   "source_bones": 52,
   "canonical_bones": 52,
   "canonical_bones_missing_in_source": [],
   "source_actions_removed": [
-    "Armature|mixamo.com|Layer0"
+    "Armature|mixamo.com|Layer0",
+    "Armature|mixamo.com|Layer0.001"
   ],
   "source_helper_objects_removed": [
     "Icosphere"
   ],
   "source_bounds": {
     "min": [
-      -0.8877714276313782,
-      -0.19964295625686646,
-      0.04027320444583893
+      -0.8832454085350037,
+      -0.34115755558013916,
+      -1.2266050577163696
     ],
     "max": [
-      0.8867350816726685,
-      0.18110328912734985,
-      1.8074325323104858
+      0.880144476890564,
+      -0.0070765018463134766,
+      0.5299437642097473
     ],
     "size": [
-      1.7745065689086914,
-      0.3807462453842163,
-      1.767159342765808
+      1.7633898258209229,
+      0.3340810537338257,
+      1.7565488815307617
     ]
   },
-  "vertices": 25364,
-  "triangles": 19169,
+  "vertices": 38655,
+  "triangles": 69393,
   "materials": [
-    "tripo_node_d3dddfb4-d82d-4b19-9a03-c8cce1b20561_material"
+    "tripo_material_d7b1c857-fc78-4e04-8388-961d6e314e33"
   ],
   "uv_layers": [
     "UVMap"
   ],
   "images": [
     {
-      "name": "male+fitness+model+3d+model_basecolor",
+      "name": "athletic+male+3d+model_basecolor.jpg",
       "size": [
         4096,
         4096
       ],
       "packed": true,
       "colorspace": "sRGB"
+    },
+    {
+      "name": "athletic+male+3d+model_normal.jpg",
+      "size": [
+        4096,
+        4096
+      ],
+      "packed": true,
+      "colorspace": "Non-Color"
+    },
+    {
+      "name": "athletic+male+3d+model_rm.jpg",
+      "size": [
+        4096,
+        4096
+      ],
+      "packed": true,
+      "colorspace": "Non-Color"
     }
   ],
   "weight_stats": {
@@ -63,19 +82,19 @@
   "maximum_influences": 4,
   "mapped_bounds": {
     "min": [
-      -0.8958728909492493,
-      -0.1587192863225937,
-      -0.01755782961845398
+      -0.9052914977073669,
+      -0.15464957058429718,
+      -0.021937089040875435
     ],
     "max": [
-      0.8954694271087646,
-      0.15890148282051086,
-      1.861063003540039
+      0.9030150771141052,
+      0.16078239679336548,
+      1.8724818229675293
     ],
     "size": [
-      1.7913422584533691,
-      0.31762075424194336,
-      1.8786208629608154
+      1.8083065748214722,
+      0.31543195247650146,
+      1.8944189548492432
     ]
   },
   "rest_deformation_error": 1.700626643078525e-07,
@@ -85,170 +104,172 @@
       "degrees": 12.0,
       "axis": "X",
       "moved_meshes": [
-        "tripo_node_d3dddfb4-d82d-4b19-9a03-c8cce1b20561.001"
+        "Rider_5"
       ],
-      "max_displacement_m": 0.22284123487641294
+      "max_displacement_m": 0.22363368691664962
     },
     {
       "bone": "mixamorig:Spine",
       "degrees": 12.0,
       "axis": "X",
       "moved_meshes": [
-        "tripo_node_d3dddfb4-d82d-4b19-9a03-c8cce1b20561.001"
+        "Rider_5"
       ],
-      "max_displacement_m": 0.14908902726587148
+      "max_displacement_m": 0.14979583614497702
     },
     {
       "bone": "mixamorig:Spine1",
       "degrees": 12.0,
       "axis": "X",
       "moved_meshes": [
-        "tripo_node_d3dddfb4-d82d-4b19-9a03-c8cce1b20561.001"
+        "Rider_5"
       ],
-      "max_displacement_m": 0.12870880526821543
+      "max_displacement_m": 0.12943307976193857
     },
     {
       "bone": "mixamorig:Spine2",
       "degrees": 12.0,
       "axis": "X",
       "moved_meshes": [
-        "tripo_node_d3dddfb4-d82d-4b19-9a03-c8cce1b20561.001"
+        "Rider_5"
       ],
-      "max_displacement_m": 0.10927312243928826
+      "max_displacement_m": 0.1102024363552789
     },
     {
       "bone": "mixamorig:Neck",
       "degrees": 12.0,
       "axis": "X",
       "moved_meshes": [
-        "tripo_node_d3dddfb4-d82d-4b19-9a03-c8cce1b20561.001"
+        "Rider_5"
       ],
-      "max_displacement_m": 0.07636538784535904
+      "max_displacement_m": 0.0775951733181133
     },
     {
       "bone": "mixamorig:Head",
       "degrees": 12.0,
       "axis": "X",
       "moved_meshes": [
-        "tripo_node_d3dddfb4-d82d-4b19-9a03-c8cce1b20561.001"
+        "Rider_5"
       ],
-      "max_displacement_m": 0.0560509156970979
+      "max_displacement_m": 0.05738728377049333
     },
     {
       "bone": "mixamorig:LeftArm",
       "degrees": 12.0,
       "axis": "X",
       "moved_meshes": [
-        "tripo_node_d3dddfb4-d82d-4b19-9a03-c8cce1b20561.001"
+        "Rider_5"
       ],
-      "max_displacement_m": 0.1555112952755421
+      "max_displacement_m": 0.15547969995359157
     },
     {
       "bone": "mixamorig:LeftForeArm",
       "degrees": 12.0,
       "axis": "X",
       "moved_meshes": [
-        "tripo_node_d3dddfb4-d82d-4b19-9a03-c8cce1b20561.001"
+        "Rider_5"
       ],
-      "max_displacement_m": 0.09727966594406157
+      "max_displacement_m": 0.09748168737772725
     },
     {
       "bone": "mixamorig:LeftHand",
       "degrees": 12.0,
       "axis": "X",
       "moved_meshes": [
-        "tripo_node_d3dddfb4-d82d-4b19-9a03-c8cce1b20561.001"
+        "Rider_5"
       ],
-      "max_displacement_m": 0.038090915977338824
+      "max_displacement_m": 0.03804484522438689
     },
     {
       "bone": "mixamorig:LeftUpLeg",
       "degrees": 12.0,
       "axis": "X",
       "moved_meshes": [
-        "tripo_node_d3dddfb4-d82d-4b19-9a03-c8cce1b20561.001"
+        "Rider_5"
       ],
-      "max_displacement_m": 0.2088222837480272
+      "max_displacement_m": 0.20900964859480192
     },
     {
       "bone": "mixamorig:LeftLeg",
       "degrees": 12.0,
       "axis": "X",
       "moved_meshes": [
-        "tripo_node_d3dddfb4-d82d-4b19-9a03-c8cce1b20561.001"
+        "Rider_5"
       ],
-      "max_displacement_m": 0.11875751920159162
+      "max_displacement_m": 0.11841363501133503
     },
     {
       "bone": "mixamorig:LeftFoot",
       "degrees": 12.0,
       "axis": "X",
       "moved_meshes": [
-        "tripo_node_d3dddfb4-d82d-4b19-9a03-c8cce1b20561.001"
+        "Rider_5"
       ],
-      "max_displacement_m": 0.04734176036943714
+      "max_displacement_m": 0.04504615871387986
     },
     {
       "bone": "mixamorig:RightArm",
       "degrees": 12.0,
       "axis": "X",
       "moved_meshes": [
-        "tripo_node_d3dddfb4-d82d-4b19-9a03-c8cce1b20561.001"
+        "Rider_5"
       ],
-      "max_displacement_m": 0.15503028466190874
+      "max_displacement_m": 0.15640794884984133
     },
     {
       "bone": "mixamorig:RightForeArm",
       "degrees": 12.0,
       "axis": "X",
       "moved_meshes": [
-        "tripo_node_d3dddfb4-d82d-4b19-9a03-c8cce1b20561.001"
+        "Rider_5"
       ],
-      "max_displacement_m": 0.09677174064143375
+      "max_displacement_m": 0.09821897990634253
     },
     {
       "bone": "mixamorig:RightHand",
       "degrees": 12.0,
       "axis": "X",
       "moved_meshes": [
-        "tripo_node_d3dddfb4-d82d-4b19-9a03-c8cce1b20561.001"
+        "Rider_5"
       ],
-      "max_displacement_m": 0.03754989982292471
+      "max_displacement_m": 0.03899553904827144
     },
     {
       "bone": "mixamorig:RightUpLeg",
       "degrees": 12.0,
       "axis": "X",
       "moved_meshes": [
-        "tripo_node_d3dddfb4-d82d-4b19-9a03-c8cce1b20561.001"
+        "Rider_5"
       ],
-      "max_displacement_m": 0.20898880144580104
+      "max_displacement_m": 0.20967418709841873
     },
     {
       "bone": "mixamorig:RightLeg",
       "degrees": 12.0,
       "axis": "X",
       "moved_meshes": [
-        "tripo_node_d3dddfb4-d82d-4b19-9a03-c8cce1b20561.001"
+        "Rider_5"
       ],
-      "max_displacement_m": 0.11894709765060898
+      "max_displacement_m": 0.11857613669198333
     },
     {
       "bone": "mixamorig:RightFoot",
       "degrees": 12.0,
       "axis": "X",
       "moved_meshes": [
-        "tripo_node_d3dddfb4-d82d-4b19-9a03-c8cce1b20561.001"
+        "Rider_5"
       ],
-      "max_displacement_m": 0.04632146094276603
+      "max_displacement_m": 0.04544398263924419
     }
   ],
   "pose_restore_error": 0.0,
   "actions_removed_during_cleanup": [
-    "Armature|mixamo.com|Layer0"
+    "Armature|mixamo.com|Layer0",
+    "Armature|mixamo.com|Layer0.001"
   ],
   "nla_removed_during_cleanup": [
-    "Rider5:Armature|mixamo.com|Layer0"
+    "Armature:Armature|mixamo.com|Layer0.001",
+    "Armature:Armature|mixamo.com|Layer0"
   ],
   "custom_bone_shapes_removed": 52,
   "final_collection": "Rider05_RiderCompatible",
@@ -276,7 +297,7 @@
     "export_draco_mesh_compression_enable": false,
     "export_rest_position_armature": true
   },
-  "output_glb_bytes": 5900436,
+  "output_glb_bytes": 5457804,
   "clean_reopen_validation": {
     "objects": [
       "Rider05_Body",

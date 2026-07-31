@@ -255,10 +255,10 @@ shader_parameter/water_level = 0.0
 shader_parameter/simulation_time = 0.0
 shader_parameter/wave_height_texture_a = ExtResource("34_cfiqe")
 shader_parameter/wave_height_texture_b = ExtResource("35_0pibt")
-shader_parameter/wave_world_size_a = 215.5
-shader_parameter/wave_world_size_b = 128.5
-shader_parameter/wave_amplitude_a = 0.0
-shader_parameter/wave_amplitude_b = 0.0
+shader_parameter/wave_world_size_a = 231.5
+shader_parameter/wave_world_size_b = 155.5
+shader_parameter/wave_amplitude_a = 1.35
+shader_parameter/wave_amplitude_b = 0.42
 shader_parameter/wave_direction_a = Vector2(0.86012906, 0.5100765)
 shader_parameter/wave_direction_b = Vector2(-0.38176018, 0.92426145)
 shader_parameter/wave_travel_speed_a = 9.0000004321348
@@ -275,6 +275,7 @@ shader_parameter/ripple_speeds = PackedFloat32Array(3.4, 3.4, 3.4, 3.4, 3.4, 3.4
 shader_parameter/ripple_wavelengths = PackedFloat32Array(2.6, 2.6, 2.6, 2.6, 2.6, 2.6, 2.6, 2.6, 2.6, 2.6, 2.6, 2.6)
 shader_parameter/ripple_decays = PackedFloat32Array(0.72, 0.72, 0.72, 0.72, 0.72, 0.72, 0.72, 0.72, 0.72, 0.72, 0.72, 0.72)
 shader_parameter/ripple_lifetimes = PackedFloat32Array(4.6, 4.6, 4.6, 4.6, 4.6, 4.6, 4.6, 4.6, 4.6, 4.6, 4.6, 4.6)
+shader_parameter/ripple_foam_suppressed = PackedInt32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 shader_parameter/ripple_effective_count = 12
 shader_parameter/landing_impacts_enabled = true
 shader_parameter/landing_impact_effective_count = 4
@@ -297,6 +298,12 @@ shader_parameter/landing_impact_wavelengths = PackedFloat32Array(0, 0, 0, 0)
 shader_parameter/landing_impact_durations = PackedFloat32Array(0, 0, 0, 0)
 shader_parameter/landing_impact_exaggerated_debug = false
 shader_parameter/landing_impact_debug_multiplier = 2.5
+shader_parameter/landing_foam_enabled = true
+shader_parameter/landing_foam_strength = 0.035
+shader_parameter/landing_foam_minimum_impact_strength = 0.35
+shader_parameter/landing_foam_energy_threshold = 0.18
+shader_parameter/landing_foam_energy_softness = 0.12
+shader_parameter/landing_foam_generic_crest_suppression = 1.0
 shader_parameter/directional_wake_enabled = true
 shader_parameter/directional_wake_active_count = 0
 shader_parameter/directional_wake_effective_count = 16
@@ -786,10 +793,8 @@ mesh = SubResource("PlaneMesh_tpwhi")
 
 [node name="Ocean" parent="WaterIntegration" unique_id=1340264265 instance=ExtResource("32_wfhwd")]
 ocean_material = SubResource("ShaderMaterial_y0n38")
-wave_world_size_a = 215.5
-wave_world_size_b = 128.5
-wave_amplitude_a = 0.0
-wave_amplitude_b = 0.0
+wave_world_size_a = 231.5
+wave_world_size_b = 155.5
 wave_travel_speed_a = 9.0000004321348
 wave_travel_speed_b = 4.0000003576287995
 wave_mean_a = 0.638000030305
@@ -846,13 +851,19 @@ volume_db = -60.0
 [node name="LeftGripTarget" parent="Gameplay/JetSki/VisualRoot/JetSkiVisual/HandlePivot/GripTargets" parent_id_path=PackedInt32Array(328650943, 1552986585) index="0" unique_id=133906918]
 transform = Transform3D(0.80945057, -0.3843369, -0.4439311, -0.56238306, -0.724853, -0.39788496, -0.1688622, 0.57172793, -0.8028763, 0.20600891, 0.697399, -1.4838791)
 
+[node name="LeftKneePole" parent="Gameplay/JetSki/VisualRoot/RiderTargets" parent_id_path=PackedInt32Array(328650943, 1856867832) index="4" unique_id=1917218786]
+transform = Transform3D(1, 0, 1.4210855e-14, 0, 1, 0, -1.4210855e-14, 0, 1, -0.21647644, 0.46570498, 0.25203705)
+
 [node name="RiderRig" parent="Gameplay/JetSki/VisualRoot/RiderMount/RiderAssetRoot" parent_id_path=PackedInt32Array(328650943, 1312466662) index="0" unique_id=2001770911]
 breathing_influence = 1.0
 
 [node name="Skeleton3D" parent="Gameplay/JetSki/VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/Rider_Bot/SKEL_Rider" parent_id_path=PackedInt32Array(328650943, 2001770911, 1075285769, 1348584656) index="0" unique_id=426480764]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.081000924, 0.0069850683, 0)
-bones/0/scale = Vector3(1, 0.99999994, 0.99999994)
+transform = Transform3D(0.9810575, -0.011237088, -0.19338982, 0.011280789, 0.99993587, -0.00087523926, 0.19338726, -0.0013229304, 0.98112124, 0.06955719, 0.0069850683, -0.110954285)
+bones/0/rotation = Quaternion(0.18325987, 0.103067584, 0.014143285, 0.9775443)
+bones/0/scale = Vector3(1.0000001, 1.0000001, 1.0000001)
 bones/1/scale = Vector3(1, 0.9999998, 0.99999994)
+bones/3/position = Vector3(-9.971121e-06, 0.10010851, 1.3415442e-06)
+bones/3/scale = Vector3(1.0000001, 1.0000001, 1.0000001)
 bones/4/scale = Vector3(1, 1, 1)
 bones/5/scale = Vector3(1, 0.99999994, 0.99999994)
 bones/7/scale = Vector3(0.99999994, 1, 0.99999994)
