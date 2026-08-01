@@ -43,7 +43,7 @@
 [ext_resource type="Texture2D" uid="uid://cmg3mg3yih3d1" path="res://assets/environment/sky/kloofendal_43d_clear_puresky_4k.hdr" id="42_1y1wo"]
 [ext_resource type="Shader" uid="uid://udpsvcumn1mh" path="res://shaders/effects/underwater_split_view_post_process.gdshader" id="51_6j5nl"]
 [ext_resource type="Script" uid="uid://cs8r4h4yr3knc" path="res://scripts/environment/hanging_light_sway_3d.gd" id="53_light_sway"]
-[ext_resource type="AudioStream" uid="uid://ugw47qn2mlq2" path="res://assets/music/Leave a Line.ogg" id="53_px0hy"]
+[ext_resource type="AudioStream" uid="uid://dq0xb5edi3237" path="res://assets/music/Storm Chaser.ogg" id="53_px0hy"]
 [ext_resource type="Material" uid="uid://dk2h67ph6buix" path="res://assets/materials/rusty_metal_03.res" id="60_vhs81"]
 [ext_resource type="PackedScene" uid="uid://cfw7pu0e3ws7n" path="res://assets/3D/Rock2.glb" id="195_ox2y0"]
 [ext_resource type="PackedScene" uid="uid://bgpsiyc4tr47u" path="res://assets/3D/Rock1.glb" id="196_t7md2"]
@@ -396,7 +396,7 @@ shader_parameter/foam_scroll_speed = 0.13
 shader_parameter/foam_roughness = 0.70999998413008
 shader_parameter/ocean_foam_detail_quality = 1
 shader_parameter/ocean_foam_evaluation_distance = 520.0
-shader_parameter/ocean_surface_enabled = false
+shader_parameter/ocean_surface_enabled = true
 shader_parameter/ocean_snapped_origin_xz = Vector2(0, 0)
 shader_parameter/ocean_logical_origin_offset_xz = Vector2(0, 0)
 shader_parameter/ocean_detail_center_xz = Vector2(0, 0)
@@ -929,7 +929,6 @@ autoplay = true
 
 [node name="Music" type="AudioStreamPlayer" parent="Gameplay/JetSki" unique_id=1584183376]
 stream = ExtResource("53_px0hy")
-volume_db = -8.0
 autoplay = true
 
 [node name="CameraSystem" type="Node3D" parent="." unique_id=1510457463]

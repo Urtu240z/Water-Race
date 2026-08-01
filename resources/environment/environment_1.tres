@@ -2,19 +2,21 @@
 
 [ext_resource type="Texture2D" uid="uid://dh4ygdetfbe7t" path="res://assets/environment/sky/kloofendal_48d_partly_cloudy_puresky_4k.hdr" id="1_ndf22"]
 
-[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_qid03"]
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_kroct"]
 panorama = ExtResource("1_ndf22")
+energy_multiplier = 0.45
 
-[sub_resource type="Sky" id="Sky_s3uqp"]
-sky_material = SubResource("PanoramaSkyMaterial_qid03")
+[sub_resource type="Sky" id="Sky_lusr1"]
+sky_material = SubResource("PanoramaSkyMaterial_kroct")
 process_mode = 1
 radiance_size = 5
 
 [resource]
 background_mode = 2
-background_energy_multiplier = 0.45
-sky = SubResource("Sky_s3uqp")
+background_energy_multiplier = 0.15
+sky = SubResource("Sky_lusr1")
 ambient_light_source = 3
+ambient_light_energy = 7.03
 reflected_light_source = 2
 tonemap_mode = 2
 tonemap_exposure = 2.04
@@ -31,7 +33,6 @@ ssil_intensity = 2.94
 sdfgi_use_occlusion = true
 sdfgi_min_cell_size = 1.4476563
 sdfgi_y_scale = 0
-glow_enabled = true
 glow_normalized = true
 glow_intensity = 0.67
 glow_strength = 0.83
@@ -45,6 +46,7 @@ fog_sky_affect = 0.454
 fog_depth_curve = 1.1095678
 fog_depth_begin = 0.0
 fog_depth_end = 1169.3
+volumetric_fog_enabled = true
 volumetric_fog_density = 0.001
 volumetric_fog_emission_energy = 10.0
 volumetric_fog_anisotropy = 0.9

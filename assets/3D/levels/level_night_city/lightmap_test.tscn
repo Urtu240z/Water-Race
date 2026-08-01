@@ -1,0 +1,103 @@
+[gd_scene format=3 uid="uid://c47rspv4bmk0k"]
+
+[ext_resource type="PackedScene" uid="uid://b3y5xp6677icq" path="res://assets/3D/levels/level_night_city/buildings/build1/build1.tscn" id="1_wjwvf"]
+[ext_resource type="LightmapGIData" uid="uid://bfo7vbeyoojcy" path="res://assets/3D/levels/level_night_city/lightmap_test.lmbake" id="2_ydxqw"]
+[ext_resource type="PackedScene" uid="uid://c3xovkcnf4rak" path="res://assets/3D/levels/level_night_city/atrezzo/stadium_lights.tscn" id="3_ydxqw"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wwatn"]
+albedo_color = Color(0.59717613, 0.59717613, 0.5971761, 1)
+roughness = 0.85
+
+[sub_resource type="BoxMesh" id="BoxMesh_tpwhi"]
+lightmap_size_hint = Vector2i(2004, 1011)
+material = SubResource("StandardMaterial3D_wwatn")
+add_uv2 = true
+size = Vector3(200, 0.5, 200)
+
+[sub_resource type="Environment" id="Environment_rk7g3"]
+background_mode = 1
+background_color = Color(0.0026000203, 0.022340659, 0.06305588, 1)
+ambient_light_source = 2
+ambient_light_color = Color(0.09411765, 0.14117648, 0.22745098, 1)
+ambient_light_energy = 0.12
+tonemap_mode = 4
+ssr_enabled = true
+glow_enabled = true
+glow_normalized = true
+glow_intensity = 3.0
+glow_bloom = 0.05
+glow_blend_mode = 0
+glow_hdr_threshold = 0.0
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_ydxqw"]
+frequency = 0.0111
+fractal_type = 2
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_wjwvf"]
+noise = SubResource("FastNoiseLite_ydxqw")
+as_normal_map = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_l0m2a"]
+albedo_color = Color(0.03137255, 0.09411765, 0.16470589, 1)
+roughness = 0.04
+normal_enabled = true
+normal_scale = -2.81
+normal_texture = SubResource("NoiseTexture2D_wjwvf")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_uvj42"]
+lightmap_size_hint = Vector2i(1002, 502)
+material = SubResource("StandardMaterial3D_l0m2a")
+add_uv2 = true
+size = Vector2(200, 100)
+
+[node name="NightCityLightmapTest" type="Node3D" unique_id=939322845]
+
+[node name="build1" parent="." unique_id=1230686511 instance=ExtResource("1_wjwvf")]
+
+[node name="Ground" type="MeshInstance3D" parent="." unique_id=1697280125]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.25, -86.05108)
+mesh = SubResource("BoxMesh_tpwhi")
+
+[node name="Moon" type="DirectionalLight3D" parent="." unique_id=1420011772]
+transform = Transform3D(0.8660254, 0.28678823, -0.40957603, 0, 0.81915206, 0.57357645, 0.5, -0.49673176, 0.7094065, 0, 0, 0)
+light_color = Color(0.72156864, 0.8235294, 1, 1)
+light_energy = 0.25
+light_angular_distance = 0.5
+shadow_enabled = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1715262298]
+environment = SubResource("Environment_rk7g3")
+
+[node name="LightmapGI" type="LightmapGI" parent="." unique_id=1362354795]
+bounces = 2
+directional = true
+light_data = ExtResource("2_ydxqw")
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=1505338886]
+transform = Transform3D(0.91777575, 0, -0.39709908, 0, 1, 0, 0.39709908, 0, 0.91777575, -12.211826, 6.304386, 38.56182)
+
+[node name="ReflectionProbe" type="ReflectionProbe" parent="." unique_id=931841033]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.611752, 15.288801, 50.27262)
+blend_distance = 2.0
+max_distance = 80.0
+size = Vector3(63.431007, 36.472656, 99.685715)
+box_projection = true
+cull_mask = 1
+reflection_mask = 2
+
+[node name="WaterTest" type="Node3D" parent="." unique_id=590627284]
+
+[node name="Water" type="MeshInstance3D" parent="WaterTest" unique_id=1139634315]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.25, 63.967056)
+layers = 2
+mesh = SubResource("PlaneMesh_uvj42")
+
+[node name="stadium_lights" parent="." unique_id=1504769906 instance=ExtResource("3_ydxqw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.04011, 0, 0)
+
+[node name="SpotLight3D" parent="stadium_lights" index="1" unique_id=252011559]
+spot_range = 150.83
+spot_attenuation = 0.4
+spot_angle = 40.0
+
+[editable path="stadium_lights"]
