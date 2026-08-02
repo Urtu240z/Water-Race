@@ -71,6 +71,8 @@ shader_parameter/mist_height_noise_strength = 0.28
 shader_parameter/mist_height_falloff = 1.45
 shader_parameter/mist_noise_scale = 3.2
 shader_parameter/mist_detail_scale = 11.0
+shader_parameter/mist_horizontal_edge_fade = 0.1
+shader_parameter/mist_emission_strength = 0.025
 shader_parameter/mist_wind_speed = 0.55
 shader_parameter/mist_wind_direction = Vector2(0.92, 0.38)
 
@@ -84,6 +86,8 @@ shader_parameter/mist_opacity = 0.115
 shader_parameter/microdrop_strength = 0.16
 shader_parameter/mist_noise_scale = 2.6
 shader_parameter/mist_detail_scale = 9.0
+shader_parameter/mist_horizontal_edge_fade = 0.12
+shader_parameter/mist_emission_strength = 0.015
 shader_parameter/mist_wind_speed = 0.55
 shader_parameter/mist_wind_direction = Vector2(0.92, 0.38)
 shader_parameter/soft_depth_distance = 0.65
@@ -126,14 +130,14 @@ draw_pass_1 = SubResource("QuadMesh_far")
 
 [node name="SeaMistVolumeNear" type="FogVolume" parent="SeaMistVolumeRig"]
 shape = 3
-size = Vector3(56, 1.5, 68)
-position = Vector3(0, 0.75, 0)
+size = Vector3(56, 6, 68)
+position = Vector3(0, 3, 0)
 material = SubResource("ShaderMaterial_mist_near")
 
 [node name="SeaMistVolumeFar" type="FogVolume" parent="SeaMistVolumeRig"]
 shape = 3
-size = Vector3(104, 2.4, 124)
-position = Vector3(0, 1.2, 0)
+size = Vector3(104, 10, 124)
+position = Vector3(0, 5, 0)
 material = SubResource("ShaderMaterial_mist_far")
 
 [node name="ScreenEffects" type="CanvasLayer" parent="." unique_id=677178498]

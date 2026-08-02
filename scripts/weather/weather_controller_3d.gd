@@ -48,6 +48,7 @@ signal full_storm_reached
 @export_range(0.0, 3.0, 0.01, "suffix:m") var sea_mist_height_offset: float = 0.12
 @export_range(0.0, 1.0, 0.01) var sea_mist_far_density_multiplier: float = 0.55
 @export_range(0.0, 1.0, 0.01) var sea_mist_underwater_fade: float = 0.0
+@export_range(32.0, 512.0, 1.0, "suffix:m") var sea_mist_volumetric_fog_length: float = 180.0
 @export_group("Storm Environment")
 @export_range(0.0, 1.0, 0.01) var storm_sun_energy_multiplier: float = 0.45
 @export_range(0.0, 1.0, 0.01) var storm_ambient_energy_multiplier: float = 0.60
@@ -98,6 +99,7 @@ var _original_fog_color: Color
 var _original_fog_end: float = 1000.0
 var _original_volumetric_fog_enabled: bool = false
 var _original_volumetric_fog_density: float = 0.0
+var _original_volumetric_fog_length: float = 64.0
 var _original_saturation: float = 1.0
 var _adjustment_enabled: bool = false
 var _original_wind_volume_db: float = 0.0
@@ -249,6 +251,7 @@ func _capture_original_state() -> void:
 		_original_fog_end = environment.fog_depth_end
 		_original_volumetric_fog_enabled = environment.volumetric_fog_enabled
 		_original_volumetric_fog_density = environment.volumetric_fog_density
+		_original_volumetric_fog_length = environment.volumetric_fog_length
 		_adjustment_enabled = environment.adjustment_enabled
 		_original_saturation = environment.adjustment_saturation
 	if _ocean_wind_player != null:
@@ -303,7 +306,7 @@ func _apply_particles() -> void:
 	)
 	var mist_ratio: float = 0.0
 	if sea_mist_enabled:
-		mist_ratio = smoothstep(sea_mist_start_rain_intensity, 1.0, rain_intensity) * sea_mist_density
+		mist_ratio = smoothstep(sea_mist_start_rain_intensity, 1.0, rain_intensity)
 	_sea_mist_ratio = clampf(mist_ratio, 0.0, 1.0)
 	_apply_sea_mist_materials(visible_particles)
 
@@ -356,6 +359,7 @@ func _apply_sea_mist_materials(visible_particles: bool) -> void:
 		var environment: Environment = _world_environment.environment
 		environment.volumetric_fog_enabled = _original_volumetric_fog_enabled or _sea_mist_ratio > 0.001
 		environment.volumetric_fog_density = _original_volumetric_fog_density
+		environment.volumetric_fog_length = minf(_original_volumetric_fog_length, sea_mist_volumetric_fog_length) if visible_particles and _sea_mist_ratio > 0.001 else _original_volumetric_fog_length
 	_apply_sea_mist_shader(_sea_mist_volume_near_material, _sea_mist_ratio if visible_particles else sea_mist_underwater_fade)
 	_apply_sea_mist_shader(_sea_mist_volume_far_material, _sea_mist_ratio * sea_mist_far_density_multiplier if visible_particles and _sea_mist_far_quality_enabled else sea_mist_underwater_fade)
 	if _sea_mist_volume_near != null:
