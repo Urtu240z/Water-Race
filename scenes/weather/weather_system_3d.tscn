@@ -1,9 +1,10 @@
-[gd_scene load_steps=14 format=3 uid="uid://cuckmkr67v1ms"]
+[gd_scene load_steps=16 format=3 uid="uid://cuckmkr67v1ms"]
 
 [ext_resource type="Script" uid="uid://yr3yadpx6ipx" path="res://scripts/weather/weather_controller_3d.gd" id="1_controller"]
 [ext_resource type="Shader" uid="uid://hrgxlpr5r3fs" path="res://shaders/weather/cloud_dome.gdshader" id="2_cloud"]
 [ext_resource type="Shader" uid="uid://cptu2amqsk4sw" path="res://shaders/weather/rain_streak.gdshader" id="3_streak"]
 [ext_resource type="Shader" path="res://shaders/weather/sea_mist_volume.gdshader" id="4_sea_mist"]
+[ext_resource type="Shader" path="res://shaders/weather/sea_mist_world.gdshader" id="5_sea_mist_world"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_cloud"]
 render_priority = 0
@@ -92,6 +93,21 @@ shader_parameter/mist_wind_speed = 0.55
 shader_parameter/mist_wind_direction = Vector2(0.92, 0.38)
 shader_parameter/soft_depth_distance = 0.65
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_mist_world"]
+resource_local_to_scene = true
+shader = ExtResource("5_sea_mist_world")
+shader_parameter/water_level = -1.02
+shader_parameter/mist_color = Color(0.56, 0.64, 0.70, 1)
+shader_parameter/mist_density = 0.10
+shader_parameter/mist_opacity = 0.0
+shader_parameter/mist_height = 0.75
+shader_parameter/mist_height_noise_strength = 0.25
+shader_parameter/mist_height_falloff = 1.60
+shader_parameter/mist_noise_scale = 6.0
+shader_parameter/mist_detail_scale = 16.0
+shader_parameter/mist_wind_speed = 0.25
+shader_parameter/mist_wind_direction = Vector2(0.92, 0.38)
+
 
 [node name="WeatherSystem3D" type="Node3D" unique_id=298647082 groups=["graphics_quality_weather"]]
 process_priority = 50
@@ -142,6 +158,11 @@ shape = 3
 size = Vector3(1500, 18, 1500)
 position = Vector3(0, 9, 0)
 material = SubResource("ShaderMaterial_mist_far")
+
+[node name="SeaMistWorld" type="FogVolume" parent="."]
+visible = false
+shape = 4
+material = SubResource("ShaderMaterial_mist_world")
 
 [node name="ScreenEffects" type="CanvasLayer" parent="." unique_id=677178498]
 layer = 40
