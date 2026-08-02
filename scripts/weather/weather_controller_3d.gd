@@ -340,6 +340,8 @@ func _apply_particles() -> void:
 	if (
 		sea_mist_enabled
 		and _sea_mist_quality_enabled
+		and rain_intensity
+			> sea_mist_start_rain_intensity
 	):
 		mist_ratio = smoothstep(
 			sea_mist_start_rain_intensity,
@@ -398,43 +400,151 @@ func _update_follow_rigs() -> void:
 	_apply_particles()
 
 
-func _apply_sea_mist_materials(visible_particles: bool) -> void:
-	var weather_sequence_active: bool = sequence_running or full_storm_active or storm_intensity > 0.001 or rain_intensity > 0.001
-	var volume_system_active: bool = sea_mist_enabled and _sea_mist_quality_enabled and weather_sequence_active
-	var mist_visible: bool = volume_system_active and visible_particles
-	var near_opacity: float = _sea_mist_ratio if mist_visible else sea_mist_underwater_fade
-	var far_opacity: float = _sea_mist_ratio * sea_mist_far_density_multiplier if mist_visible and _sea_mist_far_quality_enabled else sea_mist_underwater_fade
-	if _world_environment != null and _world_environment.environment != null:
-		var environment: Environment = _world_environment.environment
-		if volume_system_active:
+func _apply_sea_mist_materials(
+	visible_particles: bool
+) -> void:
+	var mist_active: bool = (
+		sea_mist_enabled
+		and _sea_mist_quality_enabled
+		and visible_particles
+		and rain_intensity
+			> sea_mist_start_rain_intensity
+		and _sea_mist_ratio > 0.0001
+	)
+
+	var world_opacity: float = (
+		_sea_mist_ratio
+		if mist_active
+		else 0.0
+	)
+
+	if (
+		_world_environment != null
+		and _world_environment.environment != null
+	):
+		var environment: Environment = (
+			_world_environment.environment
+		)
+
+		if mist_active:
 			environment.volumetric_fog_enabled = true
+
+			# SeaMistWorld es la única contribución volumétrica.
+			# No sumar densidad global.
 			environment.volumetric_fog_density = 0.0
-			environment.volumetric_fog_length = minf(maxf(_original_volumetric_fog_length, 32.0), sea_mist_volumetric_fog_length)
+
+			environment.volumetric_fog_length = (
+				sea_mist_volumetric_fog_length
+			)
 		else:
-			environment.volumetric_fog_enabled = _original_volumetric_fog_enabled
-			environment.volumetric_fog_density = _original_volumetric_fog_density
-			environment.volumetric_fog_length = _original_volumetric_fog_length
-	_apply_sea_mist_shader(_sea_mist_volume_near_material, near_opacity)
-	_apply_sea_mist_shader(_sea_mist_volume_far_material, far_opacity)
+			environment.volumetric_fog_enabled = (
+				_original_volumetric_fog_enabled
+			)
+
+			environment.volumetric_fog_density = (
+				_original_volumetric_fog_density
+			)
+
+			environment.volumetric_fog_length = (
+				_original_volumetric_fog_length
+			)
+
+	_apply_sea_mist_shader(
+		_sea_mist_world_material,
+		world_opacity
+	)
+
+	# Neutralizar completamente el sistema antiguo.
+	if _sea_mist_volume_near_material != null:
+		_sea_mist_volume_near_material.set_shader_parameter(
+			"mist_opacity",
+			0.0
+		)
+
+	if _sea_mist_volume_far_material != null:
+		_sea_mist_volume_far_material.set_shader_parameter(
+			"mist_opacity",
+			0.0
+		)
+
 	if _sea_mist_volume_near != null:
-		_sea_mist_volume_near.visible = volume_system_active
+		_sea_mist_volume_near.visible = false
+
 	if _sea_mist_volume_far != null:
-		_sea_mist_volume_far.visible = volume_system_active and _sea_mist_far_quality_enabled
+		_sea_mist_volume_far.visible = false
+
+	if _sea_mist_world != null:
+		_sea_mist_world.visible = mist_active
 
 
-func _apply_sea_mist_shader(material: ShaderMaterial, opacity: float) -> void:
+func _apply_sea_mist_shader(
+	material: ShaderMaterial,
+	opacity: float
+) -> void:
 	if material == null:
 		return
-	material.set_shader_parameter("mist_density", sea_mist_density)
-	material.set_shader_parameter("mist_opacity", opacity)
-	material.set_shader_parameter("mist_color", sea_mist_color)
-	material.set_shader_parameter("mist_height", sea_mist_height)
-	material.set_shader_parameter("mist_height_noise_strength", sea_mist_height_noise_strength)
-	material.set_shader_parameter("mist_height_falloff", sea_mist_height_falloff)
-	material.set_shader_parameter("mist_noise_scale", sea_mist_noise_scale)
-	material.set_shader_parameter("mist_detail_scale", sea_mist_detail_scale)
-	material.set_shader_parameter("mist_wind_speed", sea_mist_wind_speed)
-	material.set_shader_parameter("mist_wind_direction", wind_direction.normalized())
+
+	material.set_shader_parameter(
+		"water_level",
+		water_level
+	)
+
+	material.set_shader_parameter(
+		"mist_density",
+		sea_mist_density
+	)
+
+	material.set_shader_parameter(
+		"mist_opacity",
+		opacity
+	)
+
+	material.set_shader_parameter(
+		"mist_color",
+		sea_mist_color
+	)
+
+	material.set_shader_parameter(
+		"mist_height",
+		sea_mist_height
+	)
+
+	material.set_shader_parameter(
+		"mist_height_noise_strength",
+		sea_mist_height_noise_strength
+	)
+
+	material.set_shader_parameter(
+		"mist_height_falloff",
+		sea_mist_height_falloff
+	)
+
+	material.set_shader_parameter(
+		"mist_noise_scale",
+		sea_mist_noise_scale
+	)
+
+	material.set_shader_parameter(
+		"mist_detail_scale",
+		sea_mist_detail_scale
+	)
+
+	material.set_shader_parameter(
+		"mist_wind_speed",
+		sea_mist_wind_speed
+	)
+
+	var normalized_wind: Vector2 = (
+		wind_direction.normalized()
+	)
+
+	if normalized_wind.length_squared() <= 0.0001:
+		normalized_wind = Vector2(1.0, 0.0)
+
+	material.set_shader_parameter(
+		"mist_wind_direction",
+		normalized_wind
+	)
 
 
 func _update_lightning(delta: float) -> void:
