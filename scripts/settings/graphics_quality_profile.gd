@@ -104,6 +104,15 @@ extends Resource
 @export_range(1.0, 1000.0, 1.0) var wildlife_fish_visibility_distance: float = 360.0
 @export_range(1.0, 3000.0, 1.0) var wildlife_dolphin_visibility_distance: float = 1080.0
 
+@export_group("Weather")
+@export_range(1, 12000, 1) var weather_rain_near_amount: int = 6500
+@export_range(1, 16000, 1) var weather_rain_far_amount: int = 9000
+@export_range(1, 4000, 1) var weather_rain_splash_amount: int = 1200
+@export_range(1, 4, 1) var weather_cloud_octaves: int = 4
+@export var weather_far_rain_enabled: bool = true
+@export var weather_water_splashes_enabled: bool = true
+@export var weather_lightning_enabled: bool = true
+
 @export_group("Underwater Post-process")
 @export_range(0.0, 24.0, 0.1) var underwater_blur_strength: float = 5.0
 @export_range(1, 4, 1) var underwater_blur_passes: int = 2

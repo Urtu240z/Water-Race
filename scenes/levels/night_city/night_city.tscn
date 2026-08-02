@@ -10,7 +10,6 @@
 [ext_resource type="Texture2D" uid="uid://b7kfjl0vvcloa" path="res://assets/environment/sky/qwantani_dusk_1_puresky_4k.hdr" id="8_cty2f"]
 [ext_resource type="Texture2D" uid="uid://olqtngkjhlxu" path="res://assets/NightSkyHDRI003_4K_HDR.exr" id="9_me8nw"]
 [ext_resource type="Environment" uid="uid://bl1pfl5d074rp" path="res://resources/environment/environment_night_city.tres" id="10_4n5oi"]
-[ext_resource type="CompositorEffect" uid="uid://v0kty216hlxo" path="res://NewCloudsGD.tres" id="11_kppiq"]
 [ext_resource type="Script" uid="uid://det7bptrkw1dp" path="res://scripts/environment/terrain_quality_controller.gd" id="13_2dd7v"]
 [ext_resource type="PackedScene" uid="uid://c05chune2gu5n" path="res://assets/3D/levels/level_night_city/night_city.glb" id="14_8xr40"]
 [ext_resource type="PackedScene" uid="uid://1x3n2tx0xgj5" path="res://assets/3D/Terrain/independent_island.glb" id="14_x65hf"]
@@ -37,6 +36,8 @@
 [ext_resource type="PackedScene" uid="uid://cf3mdmbksb1m7" path="res://scenes/props/ramp_1.tscn" id="57_1jbpp"]
 [ext_resource type="PackedScene" uid="uid://c8qf6cnfoysg8" path="res://scenes/props/ramp_2.tscn" id="58_1vltr"]
 [ext_resource type="PackedScene" uid="uid://665ve8ouncoh" path="res://scenes/vegetation/palm_tree.tscn" id="59_iqhpi"]
+[ext_resource type="PackedScene" path="res://scenes/weather/weather_system_3d.tscn" id="68_weather_system"]
+[ext_resource type="PackedScene" path="res://scenes/weather/weather_trigger_3d.tscn" id="69_weather_trigger"]
 [ext_resource type="PackedScene" uid="uid://dphl8jrmqmgci" path="res://assets/3D/Boat_1.glb" id="60_dvscs"]
 [ext_resource type="PackedScene" uid="uid://df1oaix0ta45m" path="res://assets/3D/Boat_2.glb" id="61_pcjqk"]
 [ext_resource type="PackedScene" uid="uid://vls5xu5jnvyf" path="res://assets/3D/Rock3.glb" id="64_fwim1"]
@@ -75,9 +76,6 @@ energy_multiplier = 5.36
 
 [sub_resource type="Sky" id="Sky_lusr1"]
 sky_material = SubResource("PanoramaSkyMaterial_kroct")
-
-[sub_resource type="Compositor" id="Compositor_ep46c"]
-compositor_effects = Array[CompositorEffect]([ExtResource("11_kppiq")])
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ywlcx"]
 resource_name = "Sand"
@@ -466,7 +464,6 @@ custom_sky = SubResource("Sky_lusr1")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="Environment" unique_id=951090327 groups=["graphics_quality_environment"]]
 environment = ExtResource("10_4n5oi")
-compositor = SubResource("Compositor_ep46c")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="Environment" unique_id=1488093793 groups=["graphics_quality_directional_light"]]
 transform = Transform3D(0.8829475, 0.34888542, -0.3141378, 0, 0.66913056, 0.74314487, 0.46947157, -0.656158, 0.5908072, 0, 0, 0)
@@ -486,7 +483,7 @@ light_color = Color(0.82647467, 0.6933553, 0.57007265, 1)
 light_energy = 0.4
 light_volumetric_fog_energy = 16.0
 light_specular = 7.382
-shadow_enabled = true
+shadow_enabled = false
 directional_shadow_mode = 1
 directional_shadow_split_1 = 0.15
 directional_shadow_fade_start = 0.85
@@ -879,6 +876,10 @@ buoy_clearance = 20.0
 transform = Transform3D(0.8691581, 0, -0.49453428, 0, 1, 0, 0.49453428, 0, 0.8691581, 568.5645, 0.059731007, -578.67944)
 buoy_clearance = 20.0
 
+[node name="StormTrigger" parent="Circuit" instance=ExtResource("69_weather_trigger")]
+position = Vector3(568.5645, 4, -578.67944)
+weather_controller_path = NodePath("../../WeatherSystem")
+
 [node name="Buoy8" parent="Circuit" unique_id=1766253435 instance=ExtResource("67_04xx3")]
 transform = Transform3D(0.42169753, 0, -0.9067366, 0, 1, 0, 0.9067366, 0, 0.42169753, 541.2693, 0.059731007, -1245.6357)
 buoy_clearance = 20.0
@@ -909,6 +910,15 @@ transform = Transform3D(0.07044011, 0, 0.4495144, 0, 0.455, 0, -0.4495144, 0, 0.
 transform = Transform3D(0.9738013, 0, 0.22740054, 0, 1.0000004, 0, -0.22740054, 0, 0.9738013, 913.63635, -54.734367, -913.70654)
 surface_material_override/1 = SubResource("StandardMaterial3D_4sljt")
 surface_material_override/4 = SubResource("StandardMaterial3D_dbb74")
+
+[node name="WeatherSystem" parent="." instance=ExtResource("68_weather_system")]
+world_environment_path = NodePath("../Environment/WorldEnvironment")
+primary_light_path = NodePath("../Environment/DirectionalLight3D")
+lightning_light_path = NodePath("../Environment/DirectionalLight3D2")
+camera_path = NodePath("../CameraSystem/ChaseCamera/Camera3D")
+ocean_path = NodePath("../WaterIntegration/Ocean")
+ocean_wind_player_path = NodePath("../Gameplay/JetSki/OceanWind")
+water_level = -1.02
 
 [editable path="TerrainRoot/independent_island"]
 [editable path="TerrainRoot/independent_island2"]

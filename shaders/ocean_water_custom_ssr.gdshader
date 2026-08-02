@@ -59,6 +59,15 @@ uniform float surface_detail_fade_start : hint_range(0.0, 1000.0, 1.0) = 130.0;
 uniform float surface_detail_fade_end : hint_range(1.0, 2000.0, 1.0) = 520.0;
 uniform int ocean_surface_detail_quality : hint_range(0, 2, 1) = 2;
 
+group_uniforms Weather;
+uniform float weather_rain_intensity : hint_range(0.0, 1.0) = 0.0;
+uniform vec3 weather_storm_water_tint : source_color = vec3(0.025, 0.055, 0.085);
+uniform float weather_surface_normal_boost : hint_range(0.0, 1.0) = 0.30;
+uniform float weather_roughness_boost : hint_range(0.0, 0.5) = 0.16;
+uniform float weather_reflection_reduction : hint_range(0.0, 0.75) = 0.22;
+uniform float weather_crest_foam_boost : hint_range(0.0, 1.0) = 0.18;
+group_uniforms;
+
 group_uniforms Optics;
 uniform sampler2D screen_texture : hint_screen_texture, repeat_disable, filter_linear_mipmap;
 uniform sampler2D depth_texture : hint_depth_texture, repeat_disable, filter_nearest;
@@ -795,9 +804,10 @@ void fragment() {
 	vec3 world_up_view = normalize(
 		mat3(VIEW_MATRIX) * vec3(0.0, 1.0, 0.0)
 	);
+	float weather_detail_multiplier = 1.0 + weather_rain_intensity * weather_surface_normal_boost;
 	vec3 visual_normal = normalize(
 		geometric_normal
-			+ detail_offset_view * surface_normal_strength
+			+ detail_offset_view * surface_normal_strength * weather_detail_multiplier
 	);
 	vec3 ssr_trace_normal = normalize(
 		mix(
@@ -848,6 +858,11 @@ void fragment() {
 		body_color,
 		mix(trough_tint.rgb, crest_tint.rgb, height_position),
 		0.24
+	);
+	body_color = mix(
+		body_color,
+		weather_storm_water_tint,
+		weather_rain_intensity * 0.22
 	);
 
 	vec3 view_direction = normalize(VIEW);
@@ -952,6 +967,7 @@ void fragment() {
 	float crest_foam = crest_height
 		* mix(0.54, 1.0, crest_slope)
 		* crest_foam_strength;
+	crest_foam *= 1.0 + weather_rain_intensity * weather_crest_foam_boost;
 	float ripple_foam = interpolated_ripple_energy * ripple_foam_strength;
 	float foam_mask = foam_enabled
 		? clamp(
@@ -1245,6 +1261,7 @@ void fragment() {
 		0.08,
 		camera_underwater_factor
 	);
+	final_reflection_weight *= 1.0 - weather_rain_intensity * weather_reflection_reduction;
 	final_color *= 1.0 - final_reflection_weight;
 	vec3 underwater_surface_color = mix(
 		refracted_scene,
@@ -1287,12 +1304,18 @@ void fragment() {
 
 	NORMAL = visual_normal;
 	ALBEDO = final_color;
+	float base_water_roughness = mix(
+		near_roughness,
+		horizon_roughness,
+		max(distance_opacity, fresnel)
+	);
+	float weather_water_roughness = clamp(
+		base_water_roughness + weather_rain_intensity * weather_roughness_boost,
+		0.0,
+		1.0
+	);
 	ROUGHNESS = mix(
-		mix(
-			near_roughness,
-			horizon_roughness,
-			max(distance_opacity, fresnel)
-		),
+		weather_water_roughness,
 		foam_roughness,
 		foam_mask
 	);
@@ -1302,6 +1325,7 @@ void fragment() {
 		0.05,
 		final_reflection_weight
 	);
+	reflection_aware_specular *= 1.0 - weather_rain_intensity * 0.12;
 	SPECULAR = mix(
 		reflection_aware_specular,
 		0.16,
