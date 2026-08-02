@@ -25,12 +25,12 @@ gravity = Vector3(0, -8, 0)
 scale_min = 0.8
 scale_max = 1.2
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_streak_near"]
+shader = ExtResource("3_streak")
+
 [sub_resource type="QuadMesh" id="QuadMesh_near"]
 material = SubResource("ShaderMaterial_streak_near")
 size = Vector2(0.026, 1.55)
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_streak_near"]
-shader = ExtResource("3_streak")
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_far"]
 emission_shape = 3

@@ -221,12 +221,35 @@ func _apply_environment() -> void:
 
 
 func _apply_particles() -> void:
-	var visible_particles := not _camera_underwater
-	_apply_particle_state(_rain_near, rain_intensity, visible_particles)
-	var far_ratio := _smoothstep((rain_intensity - 0.05) / 0.50)
-	_apply_particle_state(_rain_far, far_ratio, visible_particles and _far_rain_quality_enabled)
-	var splash_ratio := _smoothstep((rain_intensity - 0.12) / 0.73)
-	_apply_particle_state(_rain_splashes, splash_ratio, visible_particles and _splashes_quality_enabled)
+	var visible_particles: bool = not _camera_underwater
+
+	_apply_particle_state(
+		_rain_near,
+		rain_intensity,
+		visible_particles
+	)
+
+	var far_ratio: float = smoothstep(
+		0.05,
+		0.55,
+		rain_intensity
+	)
+	_apply_particle_state(
+		_rain_far,
+		far_ratio,
+		visible_particles and _far_rain_quality_enabled
+	)
+
+	var splash_ratio: float = smoothstep(
+		0.12,
+		0.85,
+		rain_intensity
+	)
+	_apply_particle_state(
+		_rain_splashes,
+		splash_ratio,
+		visible_particles and _splashes_quality_enabled
+	)
 
 
 func _apply_particle_state(particles: GPUParticles3D, amount_ratio: float, visible_particles: bool) -> void:
