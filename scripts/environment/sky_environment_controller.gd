@@ -13,6 +13,8 @@ enum SkyEnvironmentPreset {
 	CUSTOM,
 }
 
+const BUILT_IN_SKY_PRESET_COUNT: int = 5
+
 @export_group("References")
 @export_node_path("WorldEnvironment") var world_environment_path: NodePath = NodePath("../WorldEnvironment")
 
@@ -41,14 +43,27 @@ enum SkyEnvironmentPreset {
 			return
 		overcast_soil_sky = value
 		_request_sky_update()
+## Extra Sky resources appended to the Sky Preset dropdown.
+## Use the Array '+' button in the Inspector, then assign a Sky resource.
+@export var additional_skies: Array[Sky] = []:
+	set(value):
+		additional_skies = value
+		if int(sky_preset) > _get_maximum_sky_preset_index():
+			sky_preset = SkyEnvironmentPreset.CUSTOM
+		notify_property_list_changed()
+		_request_sky_update()
 
 @export_group("Sky Environment")
-@export var sky_preset: SkyEnvironmentPreset = SkyEnvironmentPreset.ARISTEA_WRECK:
+@export var sky_preset: int = SkyEnvironmentPreset.ARISTEA_WRECK:
 	set(value):
-		var validated_value := clampi(int(value), 0, SkyEnvironmentPreset.size() - 1)
+		var validated_value := clampi(
+			int(value),
+			0,
+			_get_maximum_sky_preset_index()
+		)
 		if int(sky_preset) == validated_value:
 			return
-		sky_preset = validated_value as SkyEnvironmentPreset
+		sky_preset = validated_value
 		_request_sky_update()
 @export var custom_sky: Sky:
 	set(value):
@@ -93,7 +108,7 @@ var _sky_reference_valid_value: bool = false
 
 var sky_preset_name: StringName:
 	get:
-		return StringName(SkyEnvironmentPreset.keys()[int(sky_preset)])
+		return StringName(_get_sky_preset_display_name(int(sky_preset)))
 
 var sky_texture_path: String:
 	get:
@@ -164,6 +179,12 @@ func _request_sky_update() -> void:
 	_apply_active_preset()
 
 
+func _validate_property(property: Dictionary) -> void:
+	if property.name == &"sky_preset":
+		property.hint = PROPERTY_HINT_ENUM
+		property.hint_string = _get_sky_preset_hint_string()
+
+
 func _apply_active_preset() -> void:
 	if _environment == null:
 		return
@@ -193,6 +214,10 @@ func _apply_active_preset() -> void:
 		SkyEnvironmentPreset.CUSTOM:
 			selected_sky = custom_sky
 			active_reference_is_valid = custom_sky != null
+
+		_:
+			selected_sky = _get_additional_sky(int(sky_preset))
+			active_reference_is_valid = selected_sky != null
 
 	if selected_sky == null:
 		active_reference_is_valid = false
@@ -229,6 +254,75 @@ func _apply_active_preset() -> void:
 
 	_update_observational_sky_state(selected_sky)
 	_sky_change_count_value += 1
+
+
+func _get_maximum_sky_preset_index() -> int:
+	return BUILT_IN_SKY_PRESET_COUNT + additional_skies.size() - 1
+
+
+func _get_additional_sky(preset_index: int) -> Sky:
+	var additional_index := preset_index - BUILT_IN_SKY_PRESET_COUNT
+	if additional_index < 0 or additional_index >= additional_skies.size():
+		return null
+	return additional_skies[additional_index]
+
+
+func _get_sky_preset_hint_string() -> String:
+	var entries := PackedStringArray()
+	for preset_index in BUILT_IN_SKY_PRESET_COUNT:
+		entries.append(
+			"%s:%d" % [
+				_get_sky_preset_display_name(preset_index),
+				preset_index,
+			]
+		)
+	for additional_index in additional_skies.size():
+		var preset_index := BUILT_IN_SKY_PRESET_COUNT + additional_index
+		entries.append(
+			"%s:%d" % [
+				_get_sky_preset_display_name(preset_index),
+				preset_index,
+			]
+		)
+	return ",".join(entries)
+
+
+func _get_sky_preset_display_name(preset_index: int) -> String:
+	if preset_index >= 0 and preset_index < BUILT_IN_SKY_PRESET_COUNT:
+		return String(SkyEnvironmentPreset.keys()[preset_index]).replace("_", " ")
+
+	var additional_index := preset_index - BUILT_IN_SKY_PRESET_COUNT
+	if additional_index < 0 or additional_index >= additional_skies.size():
+		return "UNKNOWN"
+
+	var selected_sky := additional_skies[additional_index]
+	var resource_label := _get_sky_resource_label(selected_sky)
+	return "ADDED %d - %s" % [additional_index + 1, resource_label]
+
+
+func _get_sky_resource_label(sky: Sky) -> String:
+	if sky == null:
+		return "EMPTY"
+	if not sky.resource_name.strip_edges().is_empty():
+		return _sanitize_preset_label(sky.resource_name)
+	if not sky.resource_path.is_empty():
+		return _sanitize_preset_label(
+			sky.resource_path.get_file().get_basename()
+		)
+	var panorama_material := sky.sky_material as PanoramaSkyMaterial
+	if panorama_material != null and panorama_material.panorama != null:
+		var panorama := panorama_material.panorama
+		if not panorama.resource_name.strip_edges().is_empty():
+			return _sanitize_preset_label(panorama.resource_name)
+		if not panorama.resource_path.is_empty():
+			return _sanitize_preset_label(
+				panorama.resource_path.get_file().get_basename()
+			)
+	return "SKY RESOURCE"
+
+
+func _sanitize_preset_label(label: String) -> String:
+	return label.replace(",", " ").replace(":", " ")
 
 
 func _update_observational_sky_state(active_sky: Sky) -> void:

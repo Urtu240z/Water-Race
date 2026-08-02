@@ -586,7 +586,7 @@ overcast_soil_sky = SubResource("Sky_e7rpt")
 sky_preset = 2
 custom_sky = SubResource("Sky_lusr1")
 sky_energy_multiplier = 0.45
-ambient_sky_contribution = 1.0
+ambient_sky_contribution = 0.2
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="Environment" unique_id=951090327 groups=["graphics_quality_environment"]]
 environment = ExtResource("2_0pibt")
