@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://cuckmkr67v1ms"]
+[gd_scene load_steps=11 format=3 uid="uid://cuckmkr67v1ms"]
 
 [ext_resource type="Script" uid="uid://yr3yadpx6ipx" path="res://scripts/weather/weather_controller_3d.gd" id="1_controller"]
 [ext_resource type="Shader" uid="uid://hrgxlpr5r3fs" path="res://shaders/weather/cloud_dome.gdshader" id="2_cloud"]
@@ -31,7 +31,7 @@ scale_min = 0.8
 scale_max = 1.2
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_streak_near"]
-render_priority = 0
+render_priority = 10
 shader = ExtResource("3_streak")
 shader_parameter/streak_color = Color(0.6992, 0.8206401, 0.92, 0.5294118)
 
@@ -51,47 +51,13 @@ scale_min = 0.7
 scale_max = 1.1
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_streak_far"]
-render_priority = 0
+render_priority = 10
 shader = ExtResource("3_streak")
 shader_parameter/streak_color = Color(0.62, 0.72, 0.82, 0.42)
 
 [sub_resource type="QuadMesh" id="QuadMesh_far"]
 material = SubResource("ShaderMaterial_streak_far")
 size = Vector2(0.018, 0.9)
-
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_splash"]
-emission_shape = 3
-emission_box_extents = Vector3(30, 0.03, 35)
-direction = Vector3(0, 1, 0)
-spread = 35.0
-initial_velocity_min = 0.9
-initial_velocity_max = 2.6
-gravity = Vector3(0, -8, 0)
-scale_min = 0.08
-scale_max = 0.22
-
-[sub_resource type="Gradient" id="Gradient_dxoeo"]
-offsets = PackedFloat32Array(0.3089431, 0.4593496)
-colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_rk7g3"]
-gradient = SubResource("Gradient_dxoeo")
-width = 256
-height = 256
-fill = 1
-fill_from = Vector2(0.5, 0.5)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wwatn"]
-transparency = 2
-alpha_scissor_threshold = 0.793
-alpha_antialiasing_mode = 0
-albedo_color = Color(18.892157, 18.892157, 18.892157, 1)
-albedo_texture = SubResource("GradientTexture2D_rk7g3")
-roughness = 0.08
-
-[sub_resource type="QuadMesh" id="QuadMesh_splash"]
-material = SubResource("StandardMaterial3D_wwatn")
-size = Vector2(0.32, 0.18)
 
 [node name="WeatherSystem3D" type="Node3D" unique_id=298647082 groups=["graphics_quality_weather"]]
 process_priority = 50
@@ -125,18 +91,6 @@ fixed_fps = 24
 visibility_aabb = AABB(-52, -28, -62, 104, 68, 124)
 process_material = SubResource("ParticleProcessMaterial_far")
 draw_pass_1 = SubResource("QuadMesh_far")
-
-[node name="WaterImpactRig" type="Node3D" parent="." unique_id=969296031]
-
-[node name="RainSplashes" type="GPUParticles3D" parent="WaterImpactRig" unique_id=203503240]
-amount = 4000
-lifetime = 0.42
-preprocess = 0.3
-randomness = 0.6
-fixed_fps = 24
-visibility_aabb = AABB(-36, -3, -42, 72, 8, 84)
-process_material = SubResource("ParticleProcessMaterial_splash")
-draw_pass_1 = SubResource("QuadMesh_splash")
 
 [node name="ScreenEffects" type="CanvasLayer" parent="." unique_id=677178498]
 layer = 40

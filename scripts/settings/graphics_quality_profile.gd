@@ -107,10 +107,10 @@ extends Resource
 @export_group("Weather")
 @export_range(1, 12000, 1) var weather_rain_near_amount: int = 6500
 @export_range(1, 16000, 1) var weather_rain_far_amount: int = 9000
-@export_range(1, 4000, 1) var weather_rain_splash_amount: int = 1200
 @export_range(1, 4, 1) var weather_cloud_octaves: int = 4
 @export var weather_far_rain_enabled: bool = true
-@export var weather_water_splashes_enabled: bool = true
+@export_range(0, 2, 1) var weather_rain_impact_quality: int = 2
+@export_range(0.0, 100.0, 1.0, "suffix:m") var weather_rain_impact_distance: float = 55.0
 @export var weather_lightning_enabled: bool = true
 
 @export_group("Underwater Post-process")

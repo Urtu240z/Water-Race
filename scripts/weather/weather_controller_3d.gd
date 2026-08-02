@@ -18,6 +18,15 @@ signal full_storm_reached
 @export_range(1.0, 60.0, 0.5) var heavy_rain_duration: float = 11.0
 @export_group("Water")
 @export var water_level: float = -1.02
+
+@export_group("Water Rain Impacts")
+@export_range(0.0, 1.0, 0.01) var rain_impact_density: float = 0.70
+@export_range(0.1, 10.0, 0.1, "suffix:cycles/s") var rain_impact_rate: float = 4.2
+@export_range(0.30, 2.0, 0.01, "suffix:m") var rain_impact_cell_size: float = 0.72
+@export_range(0.03, 0.60, 0.01, "suffix:m") var rain_impact_radius: float = 0.18
+@export_range(0.005, 0.15, 0.005, "suffix:m") var rain_impact_ring_width: float = 0.035
+@export_range(0.0, 1.0, 0.01) var rain_impact_normal_strength: float = 0.22
+@export_range(0.0, 1.0, 0.01) var rain_impact_foam_strength: float = 0.24
 @export_group("Storm Environment")
 @export_range(0.0, 1.0, 0.01) var storm_sun_energy_multiplier: float = 0.45
 @export_range(0.0, 1.0, 0.01) var storm_ambient_energy_multiplier: float = 0.60
@@ -51,10 +60,8 @@ var _ocean: Ocean3D
 var _ocean_wind_player: AudioStreamPlayer
 var _cloud_dome: MeshInstance3D
 var _rain_follow_rig: Node3D
-var _water_impact_rig: Node3D
 var _rain_near: GPUParticles3D
 var _rain_far: GPUParticles3D
-var _rain_splashes: GPUParticles3D
 var _lightning_flash: ColorRect
 var _original_primary_energy: float = 0.0
 var _original_primary_color: Color
@@ -69,7 +76,8 @@ var _original_wind_volume_db: float = 0.0
 var _original_lightning_visible: bool = false
 var _original_lightning_energy: float = 0.0
 var _far_rain_quality_enabled: bool = true
-var _splashes_quality_enabled: bool = true
+var _rain_impact_quality: int = 2
+var _rain_impact_distance: float = 55.0
 var _lightning_quality_enabled: bool = true
 var _camera_underwater: bool = false
 var _lightning_elapsed: float = -1.0
@@ -86,10 +94,8 @@ func _ready() -> void:
 	_ocean_wind_player = get_node_or_null(ocean_wind_player_path) as AudioStreamPlayer
 	_cloud_dome = get_node_or_null("CloudDome") as MeshInstance3D
 	_rain_follow_rig = get_node_or_null("RainFollowRig") as Node3D
-	_water_impact_rig = get_node_or_null("WaterImpactRig") as Node3D
 	_rain_near = get_node_or_null("RainFollowRig/RainNear") as GPUParticles3D
 	_rain_far = get_node_or_null("RainFollowRig/RainFar") as GPUParticles3D
-	_rain_splashes = get_node_or_null("WaterImpactRig/RainSplashes") as GPUParticles3D
 	_lightning_flash = get_node_or_null("ScreenEffects/LightningFlash") as ColorRect
 	_validate_reference(_world_environment, "WorldEnvironment")
 	_validate_reference(_primary_light, "primary DirectionalLight3D")
@@ -153,17 +159,16 @@ func set_weather_immediate(new_storm_intensity: float, new_rain_intensity: float
 	weather_intensity_changed.emit(storm_intensity, rain_intensity)
 
 
-func set_graphics_quality(quality_level: int, profile: GraphicsQualityProfile) -> void:
+func set_graphics_quality(_quality_level: int, profile: GraphicsQualityProfile) -> void:
 	if profile == null:
 		return
 	if _rain_near != null:
 		_rain_near.amount = profile.weather_rain_near_amount
 	if _rain_far != null:
 		_rain_far.amount = profile.weather_rain_far_amount
-	if _rain_splashes != null:
-		_rain_splashes.amount = profile.weather_rain_splash_amount
 	_far_rain_quality_enabled = profile.weather_far_rain_enabled
-	_splashes_quality_enabled = profile.weather_water_splashes_enabled
+	_rain_impact_quality = profile.weather_rain_impact_quality
+	_rain_impact_distance = profile.weather_rain_impact_distance
 	_lightning_quality_enabled = profile.weather_lightning_enabled
 	if _cloud_dome != null and _cloud_dome.material_override is ShaderMaterial:
 		(_cloud_dome.material_override as ShaderMaterial).set_shader_parameter("quality_octaves", profile.weather_cloud_octaves)
@@ -173,7 +178,20 @@ func set_graphics_quality(quality_level: int, profile: GraphicsQualityProfile) -
 
 
 func get_graphics_quality_debug_status() -> Dictionary:
-	return {"storm_intensity": storm_intensity, "rain_intensity": rain_intensity, "sequence_running": sequence_running, "full_storm_active": full_storm_active, "rain_near_amount": _rain_near.amount if _rain_near != null else 0, "rain_far_amount": _rain_far.amount if _rain_far != null else 0, "rain_splash_amount": _rain_splashes.amount if _rain_splashes != null else 0, "far_rain_enabled": _far_rain_quality_enabled, "splashes_enabled": _splashes_quality_enabled, "lightning_enabled": _lightning_quality_enabled, "camera_underwater": _camera_underwater}
+	return {
+		"storm_intensity": storm_intensity,
+		"rain_intensity": rain_intensity,
+		"sequence_running": sequence_running,
+		"full_storm_active": full_storm_active,
+		"rain_near_amount": _rain_near.amount if _rain_near != null else 0,
+		"rain_far_amount": _rain_far.amount if _rain_far != null else 0,
+		"far_rain_enabled": _far_rain_quality_enabled,
+		"rain_impact_quality": _rain_impact_quality,
+		"rain_impact_distance": _rain_impact_distance,
+		"rain_impact_density": rain_impact_density,
+		"lightning_enabled": _lightning_quality_enabled,
+		"camera_underwater": _camera_underwater,
+	}
 
 
 func _capture_original_state() -> void:
@@ -240,18 +258,6 @@ func _apply_particles() -> void:
 		visible_particles and _far_rain_quality_enabled
 	)
 
-	var splash_ratio: float = smoothstep(
-		0.12,
-		0.85,
-		rain_intensity
-	)
-	_apply_particle_state(
-		_rain_splashes,
-		splash_ratio,
-		visible_particles and _splashes_quality_enabled
-	)
-
-
 func _apply_particle_state(particles: GPUParticles3D, amount_ratio: float, visible_particles: bool) -> void:
 	if particles == null:
 		return
@@ -261,21 +267,30 @@ func _apply_particle_state(particles: GPUParticles3D, amount_ratio: float, visib
 
 
 func _apply_ocean() -> void:
-	if _ocean != null and _ocean.ocean_material != null:
-		_ocean.ocean_material.set_shader_parameter("weather_rain_intensity", rain_intensity)
+	if _ocean == null or _ocean.ocean_material == null:
+		return
+	var ocean_material: ShaderMaterial = _ocean.ocean_material
+	ocean_material.set_shader_parameter("weather_rain_intensity", rain_intensity)
+	ocean_material.set_shader_parameter("weather_rain_impact_density", rain_impact_density)
+	ocean_material.set_shader_parameter("weather_rain_impact_rate", rain_impact_rate)
+	ocean_material.set_shader_parameter("weather_rain_impact_cell_size", rain_impact_cell_size)
+	ocean_material.set_shader_parameter("weather_rain_impact_radius", rain_impact_radius)
+	ocean_material.set_shader_parameter("weather_rain_impact_ring_width", rain_impact_ring_width)
+	ocean_material.set_shader_parameter("weather_rain_impact_normal_strength", rain_impact_normal_strength)
+	ocean_material.set_shader_parameter("weather_rain_impact_foam_strength", rain_impact_foam_strength)
+	ocean_material.set_shader_parameter("weather_rain_impact_quality", _rain_impact_quality)
+	ocean_material.set_shader_parameter("weather_rain_impact_distance", _rain_impact_distance)
 
 
 func _update_follow_rigs() -> void:
 	if _camera == null:
 		return
-	var position := _camera.global_position
-	_camera_underwater = position.y < water_level + 0.05
+	var camera_position: Vector3 = _camera.global_position
+	_camera_underwater = camera_position.y < water_level + 0.05
 	if _cloud_dome != null:
-		_cloud_dome.global_position = Vector3(position.x, water_level - 100.0, position.z)
+		_cloud_dome.global_position = Vector3(camera_position.x, water_level - 100.0, camera_position.z)
 	if _rain_follow_rig != null:
-		_rain_follow_rig.global_position = position
-	if _water_impact_rig != null:
-		_water_impact_rig.global_position = Vector3(position.x, water_level + 0.06, position.z)
+		_rain_follow_rig.global_position = camera_position
 	_apply_particles()
 
 
