@@ -27,6 +27,21 @@ signal full_storm_reached
 @export_range(0.005, 0.15, 0.005, "suffix:m") var rain_impact_ring_width: float = 0.035
 @export_range(0.0, 1.0, 0.01) var rain_impact_normal_strength: float = 0.22
 @export_range(0.0, 1.0, 0.01) var rain_impact_foam_strength: float = 0.24
+@export_range(0.05, 0.60, 0.005, "suffix:s") var rain_impact_lifetime: float = 0.22
+@export_range(0.0, 1.0, 0.01) var rain_impact_lifetime_randomness: float = 0.35
+@export_range(0.0, 1.0, 0.01) var rain_impact_size_randomness: float = 0.30
+@export_range(0.0, 1.0, 0.01) var rain_impact_center_flash_strength: float = 0.42
+@export_range(0.0, 1.0, 0.01) var rain_impact_crown_strength: float = 0.28
+
+@export_group("Sea Mist")
+@export var sea_mist_enabled: bool = true
+@export_range(0.0, 1.0, 0.01) var sea_mist_density: float = 0.72
+@export_range(0.0, 0.95, 0.01) var sea_mist_start_rain_intensity: float = 0.18
+@export_range(0.0, 1.0, 0.01) var sea_mist_opacity: float = 0.22
+@export_range(0.0, 1.0, 0.01) var sea_mist_microdrop_strength: float = 0.38
+@export var sea_mist_color: Color = Color(0.68, 0.78, 0.86, 1.0)
+@export_range(0.0, 2.0, 0.01, "suffix:m") var sea_mist_height_offset: float = 0.35
+@export_range(0.0, 4.0, 0.05, "suffix:m/s") var sea_mist_wind_speed: float = 0.90
 @export_group("Storm Environment")
 @export_range(0.0, 1.0, 0.01) var storm_sun_energy_multiplier: float = 0.45
 @export_range(0.0, 1.0, 0.01) var storm_ambient_energy_multiplier: float = 0.60
@@ -62,6 +77,13 @@ var _cloud_dome: MeshInstance3D
 var _rain_follow_rig: Node3D
 var _rain_near: GPUParticles3D
 var _rain_far: GPUParticles3D
+var _sea_mist_rig: Node3D
+var _sea_mist_near: GPUParticles3D
+var _sea_mist_far: GPUParticles3D
+var _sea_mist_near_shader: ShaderMaterial
+var _sea_mist_far_shader: ShaderMaterial
+var _sea_mist_near_process: ParticleProcessMaterial
+var _sea_mist_far_process: ParticleProcessMaterial
 var _lightning_flash: ColorRect
 var _original_primary_energy: float = 0.0
 var _original_primary_color: Color
@@ -76,6 +98,8 @@ var _original_wind_volume_db: float = 0.0
 var _original_lightning_visible: bool = false
 var _original_lightning_energy: float = 0.0
 var _far_rain_quality_enabled: bool = true
+var _sea_mist_far_quality_enabled: bool = true
+var _sea_mist_ratio: float = 0.0
 var _rain_impact_quality: int = 2
 var _rain_impact_distance: float = 55.0
 var _lightning_quality_enabled: bool = true
@@ -96,6 +120,15 @@ func _ready() -> void:
 	_rain_follow_rig = get_node_or_null("RainFollowRig") as Node3D
 	_rain_near = get_node_or_null("RainFollowRig/RainNear") as GPUParticles3D
 	_rain_far = get_node_or_null("RainFollowRig/RainFar") as GPUParticles3D
+	_sea_mist_rig = get_node_or_null("SeaMistRig") as Node3D
+	_sea_mist_near = get_node_or_null("SeaMistRig/SeaMistNear") as GPUParticles3D
+	_sea_mist_far = get_node_or_null("SeaMistRig/SeaMistFar") as GPUParticles3D
+	if _sea_mist_near != null:
+		_sea_mist_near_process = _sea_mist_near.process_material as ParticleProcessMaterial
+		_sea_mist_near_shader = _resolve_particle_shader_material(_sea_mist_near)
+	if _sea_mist_far != null:
+		_sea_mist_far_process = _sea_mist_far.process_material as ParticleProcessMaterial
+		_sea_mist_far_shader = _resolve_particle_shader_material(_sea_mist_far)
 	_lightning_flash = get_node_or_null("ScreenEffects/LightningFlash") as ColorRect
 	_validate_reference(_world_environment, "WorldEnvironment")
 	_validate_reference(_primary_light, "primary DirectionalLight3D")
@@ -166,7 +199,12 @@ func set_graphics_quality(_quality_level: int, profile: GraphicsQualityProfile) 
 		_rain_near.amount = profile.weather_rain_near_amount
 	if _rain_far != null:
 		_rain_far.amount = profile.weather_rain_far_amount
+	if _sea_mist_near != null:
+		_sea_mist_near.amount = profile.weather_sea_mist_near_amount
+	if _sea_mist_far != null:
+		_sea_mist_far.amount = profile.weather_sea_mist_far_amount
 	_far_rain_quality_enabled = profile.weather_far_rain_enabled
+	_sea_mist_far_quality_enabled = profile.weather_sea_mist_far_enabled
 	_rain_impact_quality = profile.weather_rain_impact_quality
 	_rain_impact_distance = profile.weather_rain_impact_distance
 	_lightning_quality_enabled = profile.weather_lightning_enabled
@@ -186,6 +224,10 @@ func get_graphics_quality_debug_status() -> Dictionary:
 		"rain_near_amount": _rain_near.amount if _rain_near != null else 0,
 		"rain_far_amount": _rain_far.amount if _rain_far != null else 0,
 		"far_rain_enabled": _far_rain_quality_enabled,
+		"sea_mist_ratio": _sea_mist_ratio,
+		"sea_mist_near_amount": _sea_mist_near.amount if _sea_mist_near != null else 0,
+		"sea_mist_far_amount": _sea_mist_far.amount if _sea_mist_far != null else 0,
+		"sea_mist_far_enabled": _sea_mist_far_quality_enabled,
 		"rain_impact_quality": _rain_impact_quality,
 		"rain_impact_distance": _rain_impact_distance,
 		"rain_impact_density": rain_impact_density,
@@ -257,6 +299,13 @@ func _apply_particles() -> void:
 		far_ratio,
 		visible_particles and _far_rain_quality_enabled
 	)
+	var mist_ratio: float = 0.0
+	if sea_mist_enabled:
+		mist_ratio = smoothstep(sea_mist_start_rain_intensity, 1.0, rain_intensity) * sea_mist_density
+	_sea_mist_ratio = clampf(mist_ratio, 0.0, 1.0)
+	_apply_particle_state(_sea_mist_near, _sea_mist_ratio, visible_particles)
+	_apply_particle_state(_sea_mist_far, _sea_mist_ratio * 0.82, visible_particles and _sea_mist_far_quality_enabled)
+	_apply_sea_mist_materials()
 
 func _apply_particle_state(particles: GPUParticles3D, amount_ratio: float, visible_particles: bool) -> void:
 	if particles == null:
@@ -280,6 +329,11 @@ func _apply_ocean() -> void:
 	ocean_material.set_shader_parameter("weather_rain_impact_foam_strength", rain_impact_foam_strength)
 	ocean_material.set_shader_parameter("weather_rain_impact_quality", _rain_impact_quality)
 	ocean_material.set_shader_parameter("weather_rain_impact_distance", _rain_impact_distance)
+	ocean_material.set_shader_parameter("weather_rain_impact_lifetime", rain_impact_lifetime)
+	ocean_material.set_shader_parameter("weather_rain_impact_lifetime_randomness", rain_impact_lifetime_randomness)
+	ocean_material.set_shader_parameter("weather_rain_impact_size_randomness", rain_impact_size_randomness)
+	ocean_material.set_shader_parameter("weather_rain_impact_center_flash_strength", rain_impact_center_flash_strength)
+	ocean_material.set_shader_parameter("weather_rain_impact_crown_strength", rain_impact_crown_strength)
 
 
 func _update_follow_rigs() -> void:
@@ -291,7 +345,44 @@ func _update_follow_rigs() -> void:
 		_cloud_dome.global_position = Vector3(camera_position.x, water_level - 100.0, camera_position.z)
 	if _rain_follow_rig != null:
 		_rain_follow_rig.global_position = camera_position
+	if _sea_mist_rig != null:
+		_sea_mist_rig.global_position = Vector3(camera_position.x, water_level + sea_mist_height_offset, camera_position.z)
 	_apply_particles()
+
+
+func _resolve_particle_shader_material(particles: GPUParticles3D) -> ShaderMaterial:
+	if particles == null:
+		return null
+	var draw_mesh: Mesh = particles.get_draw_pass_mesh(0)
+	if not draw_mesh is PrimitiveMesh:
+		return null
+	return (draw_mesh as PrimitiveMesh).material as ShaderMaterial
+
+
+func _apply_sea_mist_materials() -> void:
+	var normalized_wind: Vector2 = wind_direction.normalized()
+	if normalized_wind.length_squared() <= 0.0001:
+		normalized_wind = Vector2(1.0, 0.0)
+	var mist_direction := Vector3(normalized_wind.x, 0.025, normalized_wind.y).normalized()
+	if _sea_mist_near_process != null:
+		_sea_mist_near_process.direction = mist_direction
+		_sea_mist_near_process.initial_velocity_min = sea_mist_wind_speed * 0.45
+		_sea_mist_near_process.initial_velocity_max = sea_mist_wind_speed * 1.10
+	if _sea_mist_far_process != null:
+		_sea_mist_far_process.direction = mist_direction
+		_sea_mist_far_process.initial_velocity_min = sea_mist_wind_speed * 0.25
+		_sea_mist_far_process.initial_velocity_max = sea_mist_wind_speed * 0.75
+	_apply_sea_mist_shader(_sea_mist_near_shader, _sea_mist_ratio, sea_mist_color, sea_mist_opacity, sea_mist_microdrop_strength)
+	_apply_sea_mist_shader(_sea_mist_far_shader, _sea_mist_ratio * 0.82, sea_mist_color.darkened(0.10), sea_mist_opacity * 0.52, sea_mist_microdrop_strength * 0.42)
+
+
+func _apply_sea_mist_shader(material: ShaderMaterial, intensity: float, color: Color, opacity: float, microdrop: float) -> void:
+	if material == null:
+		return
+	material.set_shader_parameter("mist_intensity", intensity)
+	material.set_shader_parameter("mist_color", color)
+	material.set_shader_parameter("mist_opacity", opacity)
+	material.set_shader_parameter("microdrop_strength", microdrop)
 
 
 func _update_lightning(delta: float) -> void:

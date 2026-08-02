@@ -41,7 +41,7 @@
 [ext_resource type="PackedScene" uid="uid://vls5xu5jnvyf" path="res://assets/3D/Rock3.glb" id="64_fwim1"]
 [ext_resource type="Material" uid="uid://dk2h67ph6buix" path="res://assets/materials/rusty_metal_03.res" id="66_e6ey7"]
 [ext_resource type="PackedScene" uid="uid://dmqjonl673mxd" path="res://scenes/course/buoy.tscn" id="67_04xx3"]
-[ext_resource type="PackedScene" path="res://scenes/weather/weather_system_3d.tscn" id="68_weather_system"]
+[ext_resource type="PackedScene" uid="uid://cuckmkr67v1ms" path="res://scenes/weather/weather_system_3d.tscn" id="68_weather_system"]
 [ext_resource type="PackedScene" path="res://scenes/weather/weather_trigger_3d.tscn" id="69_weather_trigger"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_f0815"]
@@ -227,12 +227,26 @@ shader_parameter/surface_warp_strength = 1.2500000186265
 shader_parameter/surface_detail_fade_start = 130.0
 shader_parameter/surface_detail_fade_end = 520.0
 shader_parameter/ocean_surface_detail_quality = 2
-shader_parameter/weather_rain_intensity = 0.0
+shader_parameter/weather_rain_intensity = 1.0
 shader_parameter/weather_storm_water_tint = Color(0.025, 0.055, 0.085, 1)
-shader_parameter/weather_surface_normal_boost = 0.3
+shader_parameter/weather_surface_normal_boost = 0.70400003344
 shader_parameter/weather_roughness_boost = 0.16
 shader_parameter/weather_reflection_reduction = 0.22
 shader_parameter/weather_crest_foam_boost = 0.18
+shader_parameter/weather_rain_impact_density = 0.7
+shader_parameter/weather_rain_impact_rate = 4.2
+shader_parameter/weather_rain_impact_cell_size = 0.72
+shader_parameter/weather_rain_impact_radius = 0.02999999932945
+shader_parameter/weather_rain_impact_ring_width = 0.05499999877064
+shader_parameter/weather_rain_impact_normal_strength = 0.999999977648
+shader_parameter/weather_rain_impact_foam_strength = 0.999999977648
+shader_parameter/weather_rain_impact_quality = 2
+shader_parameter/weather_rain_impact_distance = 55.0
+shader_parameter/weather_rain_impact_lifetime = 0.22
+shader_parameter/weather_rain_impact_lifetime_randomness = 0.35
+shader_parameter/weather_rain_impact_size_randomness = 0.3
+shader_parameter/weather_rain_impact_center_flash_strength = 0.42
+shader_parameter/weather_rain_impact_crown_strength = 0.28
 shader_parameter/shallow_water_color = Color(0.035, 0.43, 0.55, 1)
 shader_parameter/deep_water_color = Color(0.004, 0.055, 0.115, 1)
 shader_parameter/horizon_water_color = Color(0.025, 0.22, 0.34, 1)
@@ -923,6 +937,11 @@ lightning_light_path = NodePath("../Environment/DirectionalLight3D2")
 camera_path = NodePath("../CameraSystem/ChaseCamera/Camera3D")
 ocean_path = NodePath("../WaterIntegration/Ocean")
 ocean_wind_player_path = NodePath("../Gameplay/JetSki/OceanWind")
+rain_impact_density = 1.0
+rain_impact_ring_width = 0.095
+rain_impact_normal_strength = 1.0
+rain_impact_foam_strength = 0.52
+rain_impact_lifetime_randomness = 1.0
 debug_start_storm_on_ready = true
 
 [editable path="TerrainRoot/independent_island"]

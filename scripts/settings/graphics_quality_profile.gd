@@ -111,6 +111,9 @@ extends Resource
 @export var weather_far_rain_enabled: bool = true
 @export_range(0, 2, 1) var weather_rain_impact_quality: int = 2
 @export_range(0.0, 100.0, 1.0, "suffix:m") var weather_rain_impact_distance: float = 55.0
+@export_range(1, 512, 1) var weather_sea_mist_near_amount: int = 160
+@export_range(1, 512, 1) var weather_sea_mist_far_amount: int = 220
+@export var weather_sea_mist_far_enabled: bool = true
 @export var weather_lightning_enabled: bool = true
 
 @export_group("Underwater Post-process")

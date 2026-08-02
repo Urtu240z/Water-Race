@@ -75,6 +75,11 @@ uniform float weather_rain_impact_normal_strength : hint_range(0.0, 1.0, 0.01) =
 uniform float weather_rain_impact_foam_strength : hint_range(0.0, 1.0, 0.01) = 0.24;
 uniform int weather_rain_impact_quality : hint_range(0, 2, 1) = 2;
 uniform float weather_rain_impact_distance : hint_range(0.0, 100.0, 1.0) = 55.0;
+uniform float weather_rain_impact_lifetime : hint_range(0.05, 0.60, 0.005) = 0.22;
+uniform float weather_rain_impact_lifetime_randomness : hint_range(0.0, 1.0, 0.01) = 0.35;
+uniform float weather_rain_impact_size_randomness : hint_range(0.0, 1.0, 0.01) = 0.30;
+uniform float weather_rain_impact_center_flash_strength : hint_range(0.0, 1.0, 0.01) = 0.42;
+uniform float weather_rain_impact_crown_strength : hint_range(0.0, 1.0, 0.01) = 0.28;
 group_uniforms;
 
 group_uniforms Optics;
@@ -813,7 +818,7 @@ vec3 sample_weather_rain_impacts(vec2 logical_position, float camera_distance) {
 			vec2 cell = base_cell + vec2(float(offset_x), float(offset_y));
 			float phase_seed = weather_hash12(cell + vec2(7.13, 19.71));
 			float impact_clock = simulation_time * max(weather_rain_impact_rate, 0.01) + phase_seed;
-			float impact_phase = fract(impact_clock);
+			float impact_phase_raw = fract(impact_clock);
 			float cycle_index = mod(floor(impact_clock), 4096.0);
 			float event_random = weather_hash12(
 				cell + vec2(cycle_index * 0.754877, cycle_index * 0.569840)
@@ -821,6 +826,27 @@ vec3 sample_weather_rain_impacts(vec2 logical_position, float camera_distance) {
 			if (event_random > event_probability) {
 				continue;
 			}
+			float lifetime_random = weather_hash12(
+				cell + vec2(cycle_index * 0.42331, cycle_index * 1.91357)
+			);
+			float lifetime_multiplier = mix(
+				1.0 - weather_rain_impact_lifetime_randomness,
+				1.0 + weather_rain_impact_lifetime_randomness,
+				lifetime_random
+			);
+			float event_duration_seconds = max(
+				weather_rain_impact_lifetime * lifetime_multiplier,
+				0.001
+			);
+			float duration_ratio = clamp(
+				event_duration_seconds * max(weather_rain_impact_rate, 0.01),
+				0.05,
+				0.92
+			);
+			if (impact_phase_raw > duration_ratio) {
+				continue;
+			}
+			float life_phase = impact_phase_raw / max(duration_ratio, 0.001);
 			vec2 center_random = weather_hash22(
 				cell + vec2(cycle_index * 1.31831, cycle_index * -0.73117)
 			);
@@ -839,17 +865,29 @@ vec3 sample_weather_rain_impacts(vec2 logical_position, float camera_distance) {
 			vec2 shaped_delta = impact_rotation * center_delta;
 			shaped_delta.x *= mix(0.82, 1.18, center_random.x);
 			float impact_distance = length(shaped_delta);
-			float maximum_radius = weather_rain_impact_radius * mix(0.72, 1.18, shape_random);
-			float ring_radius = maximum_radius * smoothstep(0.02, 0.84, impact_phase);
+			float size_random = weather_hash12(
+				cell + vec2(cycle_index * 1.731, cycle_index * -2.417)
+			);
+			float size_multiplier = mix(
+				1.0 - weather_rain_impact_size_randomness,
+				1.0 + weather_rain_impact_size_randomness,
+				size_random
+			);
+			float maximum_radius = weather_rain_impact_radius
+				* mix(0.72, 1.18, shape_random)
+				* size_multiplier;
+			float ring_radius = maximum_radius * smoothstep(0.0, 0.78, life_phase);
 			float ring_width = max(
-				weather_rain_impact_ring_width * mix(0.78, 1.18, center_random.y),
+				weather_rain_impact_ring_width
+					* mix(0.78, 1.18, center_random.y)
+					* mix(0.86, 1.14, size_multiplier),
 				0.002
 			);
 			float normalized_ring = (impact_distance - ring_radius) / ring_width;
 			float ring_profile = exp(-normalized_ring * normalized_ring * 2.4);
-			float life_appear = smoothstep(0.0, 0.045, impact_phase);
-			float life_fade = 1.0 - smoothstep(0.58, 1.0, impact_phase);
-			float life_envelope = life_appear * life_fade;
+			float ring_appear = smoothstep(0.10, 0.18, life_phase);
+			float life_fade = 1.0 - smoothstep(0.65, 1.0, life_phase);
+			float ring_envelope = ring_appear * life_fade;
 			float impact_angle = atan(shaped_delta.y, shaped_delta.x);
 			float angular_signal = 0.5 + 0.5 * sin(
 				impact_angle * mix(4.0, 7.0, shape_random) + shape_random * TAU_VALUE
@@ -858,12 +896,32 @@ vec3 sample_weather_rain_impacts(vec2 logical_position, float camera_distance) {
 			ring_profile *= irregularity;
 			vec2 radial_direction = impact_distance > 0.0001 ? shaped_delta / impact_distance : vec2(0.0);
 			radial_direction = transpose(impact_rotation) * radial_direction;
-			float slope_signal = -normalized_ring * ring_profile * life_envelope;
+			float slope_signal = -normalized_ring * ring_profile * ring_envelope;
 			accumulated_slope += radial_direction * slope_signal;
+
+			float center_envelope = 1.0 - smoothstep(0.0, 0.18, life_phase);
 			float center_flash = (
 				1.0 - smoothstep(0.0, max(maximum_radius * 0.16, 0.005), impact_distance)
-			) * (1.0 - smoothstep(0.03, 0.17, impact_phase));
-			accumulated_foam += ring_profile * life_envelope + center_flash * 0.20;
+			) * center_envelope * weather_rain_impact_center_flash_strength;
+			float center_slope = center_flash * 0.18;
+			accumulated_slope += radial_direction * center_slope;
+
+			float crown_lobes = mix(5.0, 9.0, weather_hash12(cell + vec2(31.7, 11.9)));
+			float crown_signal = 0.5 + 0.5 * sin(
+				impact_angle * crown_lobes + shape_random * TAU_VALUE * 1.71
+			);
+			float crown_radius = maximum_radius * mix(0.45, 0.82, smoothstep(0.10, 0.42, life_phase));
+			float crown_width = max(ring_width * mix(0.90, 1.45, size_multiplier), 0.003);
+			float crown_distance = (impact_distance - crown_radius) / crown_width;
+			float crown_profile = exp(-crown_distance * crown_distance * 2.8)
+				* smoothstep(0.42, 0.78, crown_signal);
+			float crown_envelope = smoothstep(0.10, 0.16, life_phase)
+				* (1.0 - smoothstep(0.42, 0.58, life_phase));
+			float crown_strength = weather_rain_impact_crown_strength
+				* crown_envelope
+				* crown_profile;
+			accumulated_slope += radial_direction * crown_strength * 0.38;
+			accumulated_foam += ring_profile * ring_envelope + center_flash + crown_strength;
 		}
 	}
 
