@@ -942,7 +942,16 @@ rain_impact_ring_width = 0.095
 rain_impact_normal_strength = 1.0
 rain_impact_foam_strength = 0.52
 rain_impact_lifetime_randomness = 1.0
+sea_mist_density = 0.5
 sea_mist_start_rain_intensity = 0.0
+sea_mist_height = 0.23
+sea_mist_noise_scale = 12.9
+sea_mist_detail_scale = 22.5
+sea_mist_wind_speed = 4.0
+sea_mist_height_offset = 0.58
+sea_mist_far_density_multiplier = 1.0
+sea_mist_underwater_fade = 0.2
+sea_mist_volumetric_fog_length = 242.0
 debug_start_storm_on_ready = true
 
 [editable path="TerrainRoot/independent_island"]
