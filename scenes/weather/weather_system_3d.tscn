@@ -1,9 +1,9 @@
-[gd_scene load_steps=18 format=3 uid="uid://cuckmkr67v1ms"]
+[gd_scene load_steps=14 format=3 uid="uid://cuckmkr67v1ms"]
 
 [ext_resource type="Script" uid="uid://yr3yadpx6ipx" path="res://scripts/weather/weather_controller_3d.gd" id="1_controller"]
 [ext_resource type="Shader" uid="uid://hrgxlpr5r3fs" path="res://shaders/weather/cloud_dome.gdshader" id="2_cloud"]
 [ext_resource type="Shader" uid="uid://cptu2amqsk4sw" path="res://shaders/weather/rain_streak.gdshader" id="3_streak"]
-[ext_resource type="Shader" path="res://shaders/weather/sea_mist.gdshader" id="4_sea_mist"]
+[ext_resource type="Shader" path="res://shaders/weather/sea_mist_volume.gdshader" id="4_sea_mist"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_cloud"]
 render_priority = 0
@@ -60,45 +60,17 @@ shader_parameter/streak_color = Color(0.62, 0.72, 0.82, 0.42)
 material = SubResource("ShaderMaterial_streak_far")
 size = Vector2(0.018, 0.9)
 
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_mist_near"]
-resource_local_to_scene = true
-emission_shape = 3
-emission_box_extents = Vector3(24, 0.45, 30)
-direction = Vector3(0.924, 0.025, 0.381)
-spread = 34.0
-initial_velocity_min = 0.4
-initial_velocity_max = 1.0
-gravity = Vector3(0, 0, 0)
-scale_min = 0.65
-scale_max = 1.35
-
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_mist_near"]
 resource_local_to_scene = true
-render_priority = 5
 shader = ExtResource("4_sea_mist")
 shader_parameter/mist_color = Color(0.68, 0.78, 0.86, 1)
-shader_parameter/mist_intensity = 0.0
-shader_parameter/mist_opacity = 0.22
-shader_parameter/microdrop_strength = 0.38
+shader_parameter/mist_density = 0.42
+shader_parameter/mist_opacity = 0.0
+shader_parameter/mist_height = 0.75
+shader_parameter/mist_height_noise_strength = 0.28
+shader_parameter/mist_height_falloff = 1.45
 shader_parameter/mist_noise_scale = 3.2
 shader_parameter/mist_detail_scale = 11.0
-shader_parameter/soft_depth_distance = 0.35
-
-[sub_resource type="QuadMesh" id="QuadMesh_mist_near"]
-material = SubResource("ShaderMaterial_mist_near")
-size = Vector2(3.0, 1.2)
-
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_mist_far"]
-resource_local_to_scene = true
-emission_shape = 3
-emission_box_extents = Vector3(44, 0.9, 52)
-direction = Vector3(0.924, 0.025, 0.381)
-spread = 44.0
-initial_velocity_min = 0.25
-initial_velocity_max = 0.7
-gravity = Vector3(0, 0, 0)
-scale_min = 0.8
-scale_max = 1.6
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_mist_far"]
 resource_local_to_scene = true
@@ -112,9 +84,6 @@ shader_parameter/mist_noise_scale = 2.6
 shader_parameter/mist_detail_scale = 9.0
 shader_parameter/soft_depth_distance = 0.65
 
-[sub_resource type="QuadMesh" id="QuadMesh_mist_far"]
-material = SubResource("ShaderMaterial_mist_far")
-size = Vector2(6.5, 2.4)
 
 [node name="WeatherSystem3D" type="Node3D" unique_id=298647082 groups=["graphics_quality_weather"]]
 process_priority = 50
@@ -149,39 +118,17 @@ visibility_aabb = AABB(-52, -28, -62, 104, 68, 124)
 process_material = SubResource("ParticleProcessMaterial_far")
 draw_pass_1 = SubResource("QuadMesh_far")
 
-[node name="SeaMistRig" type="Node3D" parent="."]
+[node name="SeaMistVolumeRig" type="Node3D" parent="."]
 
-[node name="SeaMistNear" type="GPUParticles3D" parent="SeaMistRig"]
-emitting = false
-amount = 160
-amount_ratio = 0.0
-lifetime = 2.2
-preprocess = 1.0
-randomness = 0.62
-local_coords = true
-fixed_fps = 24
-interpolate = true
-fract_delta = true
-visibility_aabb = AABB(-28, -2, -34, 56, 5, 68)
-cast_shadow = 0
-process_material = SubResource("ParticleProcessMaterial_mist_near")
-draw_pass_1 = SubResource("QuadMesh_mist_near")
+[node name="SeaMistVolumeNear" type="FogVolume" parent="SeaMistVolumeRig"]
+shape = 3
+size = Vector3(56, 1.5, 68)
+material = SubResource("ShaderMaterial_mist_near")
 
-[node name="SeaMistFar" type="GPUParticles3D" parent="SeaMistRig"]
-emitting = false
-amount = 220
-amount_ratio = 0.0
-lifetime = 3.4
-preprocess = 1.5
-randomness = 0.72
-local_coords = true
-fixed_fps = 20
-interpolate = true
-fract_delta = true
-visibility_aabb = AABB(-52, -3, -62, 104, 8, 124)
-cast_shadow = 0
-process_material = SubResource("ParticleProcessMaterial_mist_far")
-draw_pass_1 = SubResource("QuadMesh_mist_far")
+[node name="SeaMistVolumeFar" type="FogVolume" parent="SeaMistVolumeRig"]
+shape = 3
+size = Vector3(104, 2.4, 124)
+material = SubResource("ShaderMaterial_mist_far")
 
 [node name="ScreenEffects" type="CanvasLayer" parent="." unique_id=677178498]
 layer = 40
