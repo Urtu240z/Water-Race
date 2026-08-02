@@ -96,6 +96,8 @@ var _original_sky_energy: float = 1.0
 var _original_fog_density: float = 0.0
 var _original_fog_color: Color
 var _original_fog_end: float = 1000.0
+var _original_volumetric_fog_enabled: bool = false
+var _original_volumetric_fog_density: float = 0.0
 var _original_saturation: float = 1.0
 var _adjustment_enabled: bool = false
 var _original_wind_volume_db: float = 0.0
@@ -245,6 +247,8 @@ func _capture_original_state() -> void:
 		_original_fog_density = environment.fog_density
 		_original_fog_color = environment.fog_light_color
 		_original_fog_end = environment.fog_depth_end
+		_original_volumetric_fog_enabled = environment.volumetric_fog_enabled
+		_original_volumetric_fog_density = environment.volumetric_fog_density
 		_adjustment_enabled = environment.adjustment_enabled
 		_original_saturation = environment.adjustment_saturation
 	if _ocean_wind_player != null:
@@ -348,6 +352,10 @@ func _update_follow_rigs() -> void:
 
 
 func _apply_sea_mist_materials(visible_particles: bool) -> void:
+	if _world_environment != null and _world_environment.environment != null:
+		var environment: Environment = _world_environment.environment
+		environment.volumetric_fog_enabled = _original_volumetric_fog_enabled or _sea_mist_ratio > 0.001
+		environment.volumetric_fog_density = _original_volumetric_fog_density
 	_apply_sea_mist_shader(_sea_mist_volume_near_material, _sea_mist_ratio if visible_particles else sea_mist_underwater_fade)
 	_apply_sea_mist_shader(_sea_mist_volume_far_material, _sea_mist_ratio * sea_mist_far_density_multiplier if visible_particles and _sea_mist_far_quality_enabled else sea_mist_underwater_fade)
 	if _sea_mist_volume_near != null:
