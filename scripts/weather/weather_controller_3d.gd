@@ -367,8 +367,6 @@ func _update_follow_rigs() -> void:
 		_cloud_dome.global_position = Vector3(camera_position.x, water_level - 100.0, camera_position.z)
 	if _rain_follow_rig != null:
 		_rain_follow_rig.global_position = camera_position
-	if _sea_mist_volume_rig != null:
-		_sea_mist_volume_rig.global_position = Vector3(camera_position.x, water_level + sea_mist_height_offset, camera_position.z)
 	_apply_particles()
 
 

@@ -129,15 +129,17 @@ draw_pass_1 = SubResource("QuadMesh_far")
 [node name="SeaMistVolumeRig" type="Node3D" parent="."]
 
 [node name="SeaMistVolumeNear" type="FogVolume" parent="SeaMistVolumeRig"]
+visible = false
 shape = 3
-size = Vector3(56, 6, 68)
-position = Vector3(0, 3, 0)
+size = Vector3(900, 14, 900)
+position = Vector3(0, 7, 0)
 material = SubResource("ShaderMaterial_mist_near")
 
 [node name="SeaMistVolumeFar" type="FogVolume" parent="SeaMistVolumeRig"]
+visible = false
 shape = 3
-size = Vector3(104, 10, 124)
-position = Vector3(0, 5, 0)
+size = Vector3(1500, 18, 1500)
+position = Vector3(0, 9, 0)
 material = SubResource("ShaderMaterial_mist_far")
 
 [node name="ScreenEffects" type="CanvasLayer" parent="." unique_id=677178498]
