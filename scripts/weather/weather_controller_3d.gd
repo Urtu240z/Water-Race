@@ -82,6 +82,15 @@ var _ocean_wind_player: AudioStreamPlayer
 var _rain_follow_rig: Node3D
 var _rain_near: GPUParticles3D
 var _rain_far: GPUParticles3D
+var _cloud_dome: MeshInstance3D
+
+var _sea_mist_volume_rig: Node3D
+var _sea_mist_volume_near: FogVolume
+var _sea_mist_volume_far: FogVolume
+
+var _sea_mist_volume_near_material: ShaderMaterial
+var _sea_mist_volume_far_material: ShaderMaterial
+
 var _sea_mist_world: FogVolume
 var _sea_mist_world_material: ShaderMaterial
 var _lightning_flash: ColorRect
@@ -102,6 +111,7 @@ var _original_lightning_visible: bool = false
 var _original_lightning_energy: float = 0.0
 var _far_rain_quality_enabled: bool = true
 var _sea_mist_quality_enabled: bool = true
+var _sea_mist_far_quality_enabled: bool = true
 var _sea_mist_ratio: float = 0.0
 var _rain_impact_quality: int = 2
 var _rain_impact_distance: float = 55.0
@@ -122,6 +132,34 @@ func _ready() -> void:
 	_rain_follow_rig = get_node_or_null("RainFollowRig") as Node3D
 	_rain_near = get_node_or_null("RainFollowRig/RainNear") as GPUParticles3D
 	_rain_far = get_node_or_null("RainFollowRig/RainFar") as GPUParticles3D
+	_cloud_dome = get_node_or_null(
+		"CloudDome"
+	) as MeshInstance3D
+
+	_sea_mist_volume_rig = get_node_or_null(
+		"SeaMistVolumeRig"
+	) as Node3D
+
+	_sea_mist_volume_near = get_node_or_null(
+		"SeaMistVolumeRig/SeaMistVolumeNear"
+	) as FogVolume
+
+	_sea_mist_volume_far = get_node_or_null(
+		"SeaMistVolumeRig/SeaMistVolumeFar"
+	) as FogVolume
+
+	if _sea_mist_volume_near != null:
+		_sea_mist_volume_near_material = (
+			_sea_mist_volume_near.material
+			as ShaderMaterial
+		)
+
+	if _sea_mist_volume_far != null:
+		_sea_mist_volume_far_material = (
+			_sea_mist_volume_far.material
+			as ShaderMaterial
+		)
+
 	_sea_mist_world = get_node_or_null("SeaMistWorld") as FogVolume
 	if _sea_mist_world != null:
 		_sea_mist_world_material = _sea_mist_world.material as ShaderMaterial
