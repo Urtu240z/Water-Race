@@ -79,15 +79,11 @@ var _lightning_light: DirectionalLight3D
 var _camera: Camera3D
 var _ocean: Ocean3D
 var _ocean_wind_player: AudioStreamPlayer
-var _cloud_dome: MeshInstance3D
 var _rain_follow_rig: Node3D
 var _rain_near: GPUParticles3D
 var _rain_far: GPUParticles3D
-var _sea_mist_volume_rig: Node3D
-var _sea_mist_volume_near: FogVolume
-var _sea_mist_volume_far: FogVolume
-var _sea_mist_volume_near_material: ShaderMaterial
-var _sea_mist_volume_far_material: ShaderMaterial
+var _sea_mist_world: FogVolume
+var _sea_mist_world_material: ShaderMaterial
 var _lightning_flash: ColorRect
 var _original_primary_energy: float = 0.0
 var _original_primary_color: Color
@@ -106,7 +102,6 @@ var _original_lightning_visible: bool = false
 var _original_lightning_energy: float = 0.0
 var _far_rain_quality_enabled: bool = true
 var _sea_mist_quality_enabled: bool = true
-var _sea_mist_far_quality_enabled: bool = true
 var _sea_mist_ratio: float = 0.0
 var _rain_impact_quality: int = 2
 var _rain_impact_distance: float = 55.0
@@ -124,17 +119,12 @@ func _ready() -> void:
 	_camera = get_node_or_null(camera_path) as Camera3D
 	_ocean = get_node_or_null(ocean_path) as Ocean3D
 	_ocean_wind_player = get_node_or_null(ocean_wind_player_path) as AudioStreamPlayer
-	_cloud_dome = get_node_or_null("CloudDome") as MeshInstance3D
 	_rain_follow_rig = get_node_or_null("RainFollowRig") as Node3D
 	_rain_near = get_node_or_null("RainFollowRig/RainNear") as GPUParticles3D
 	_rain_far = get_node_or_null("RainFollowRig/RainFar") as GPUParticles3D
-	_sea_mist_volume_rig = get_node_or_null("SeaMistVolumeRig") as Node3D
-	_sea_mist_volume_near = get_node_or_null("SeaMistVolumeRig/SeaMistVolumeNear") as FogVolume
-	_sea_mist_volume_far = get_node_or_null("SeaMistVolumeRig/SeaMistVolumeFar") as FogVolume
-	if _sea_mist_volume_near != null:
-		_sea_mist_volume_near_material = _sea_mist_volume_near.material as ShaderMaterial
-	if _sea_mist_volume_far != null:
-		_sea_mist_volume_far_material = _sea_mist_volume_far.material as ShaderMaterial
+	_sea_mist_world = get_node_or_null("SeaMistWorld") as FogVolume
+	if _sea_mist_world != null:
+		_sea_mist_world_material = _sea_mist_world.material as ShaderMaterial
 	_lightning_flash = get_node_or_null("ScreenEffects/LightningFlash") as ColorRect
 	_validate_reference(_world_environment, "WorldEnvironment")
 	_validate_reference(_primary_light, "primary DirectionalLight3D")

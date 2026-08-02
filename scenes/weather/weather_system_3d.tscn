@@ -98,6 +98,7 @@ process_priority = 50
 script = ExtResource("1_controller")
 
 [node name="CloudDome" type="MeshInstance3D" parent="." unique_id=488378236]
+visible = false
 material_override = SubResource("ShaderMaterial_cloud")
 cast_shadow = 0
 extra_cull_margin = 10000.0
