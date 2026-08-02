@@ -577,7 +577,7 @@ dolphin_breach_duration_max = 0.9
 [node name="Gameplay" type="Node3D" parent="." unique_id=1639068913]
 
 [node name="PlayerSpawn" type="Marker3D" parent="Gameplay" unique_id=434866168]
-transform = Transform3D(0.9811287, 0, 0.19335571, 0, 1, 0, -0.19335571, 0, 0.9811287, 238.76416, 1.98, -264.6429)
+transform = Transform3D(0.9811287, 0, 0.19335571, 0, 1, 0, -0.19335571, 0, 0.9811287, 555.4296, 1.98, -662.0702)
 
 [node name="JetSki" parent="Gameplay" unique_id=328650943 instance=ExtResource("49_7blqs")]
 transform = Transform3D(-1.5, 0, -2.2649371e-07, 0, 1.5, 0, 2.2649371e-07, 0, -1.5, 132.69096, 0.71555996, -133.7861)
@@ -942,8 +942,6 @@ rain_impact_ring_width = 0.095
 rain_impact_normal_strength = 1.0
 rain_impact_foam_strength = 0.52
 rain_impact_lifetime_randomness = 1.0
-sea_mist_start_rain_intensity = 0.3
-debug_start_storm_on_ready = false
 
 [editable path="TerrainRoot/independent_island"]
 [editable path="TerrainRoot/independent_island2"]
