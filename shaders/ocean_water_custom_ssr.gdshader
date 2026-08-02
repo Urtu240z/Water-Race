@@ -2,7 +2,7 @@
 // The macro displacement and CPU sampling model are adapted from the
 // texture-driven approach in Taillight Games' MIT-licensed texture-driven water shader.
 shader_type spatial;
-render_mode blend_mix, world_vertex_coords, cull_disabled, depth_draw_always, diffuse_burley, specular_schlick_ggx, fog_disabled;
+render_mode blend_mix, world_vertex_coords, cull_disabled, depth_draw_always, diffuse_burley, specular_schlick_ggx;
 
 const int MAX_RIPPLES = 12;
 const float TAU_VALUE = 6.28318530718;
