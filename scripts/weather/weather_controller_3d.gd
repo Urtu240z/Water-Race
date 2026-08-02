@@ -35,18 +35,17 @@ signal full_storm_reached
 
 @export_group("Sea Mist Volume")
 @export var sea_mist_enabled: bool = true
-@export_range(0.0, 1.0, 0.01) var sea_mist_density: float = 0.42
-@export_range(0.0, 0.95, 0.01) var sea_mist_start_rain_intensity: float = 0.18
-@export var sea_mist_color: Color = Color(0.66, 0.74, 0.80, 1.0)
+@export_range(0.0, 0.5, 0.005) var sea_mist_density: float = 0.10
+@export_range(0.0, 0.95, 0.01) var sea_mist_start_rain_intensity: float = 0.30
+@export var sea_mist_color: Color = Color(0.56, 0.64, 0.70, 1.0)
 @export_range(0.0, 2.0, 0.01, "suffix:m") var sea_mist_height: float = 0.75
-@export_range(0.0, 1.5, 0.01, "suffix:m") var sea_mist_height_noise_strength: float = 0.28
-@export_range(0.1, 4.0, 0.01) var sea_mist_height_falloff: float = 1.45
-@export_range(0.1, 20.0, 0.1) var sea_mist_noise_scale: float = 2.6
-@export_range(0.1, 40.0, 0.1) var sea_mist_detail_scale: float = 9.0
-@export_range(0.0, 4.0, 0.05, "suffix:m/s") var sea_mist_wind_speed: float = 0.55
-@export_range(4.0, 64.0, 1.0, "suffix:m") var sea_mist_follow_snap: float = 24.0
-@export_range(0.0, 3.0, 0.01, "suffix:m") var sea_mist_height_offset: float = 0.12
-@export_range(0.0, 1.0, 0.01) var sea_mist_far_density_multiplier: float = 0.55
+@export_range(0.0, 1.5, 0.01, "suffix:m") var sea_mist_height_noise_strength: float = 0.25
+@export_range(0.1, 4.0, 0.01) var sea_mist_height_falloff: float = 1.60
+@export_range(0.1, 20.0, 0.1) var sea_mist_noise_scale: float = 6.0
+@export_range(0.1, 40.0, 0.1) var sea_mist_detail_scale: float = 16.0
+@export_range(0.0, 4.0, 0.05, "suffix:m/s") var sea_mist_wind_speed: float = 0.25
+@export_range(0.0, 3.0, 0.01, "suffix:m") var sea_mist_height_offset: float = 0.0
+@export_range(0.0, 1.0, 0.01) var sea_mist_far_density_multiplier: float = 0.18
 @export_range(0.0, 1.0, 0.01) var sea_mist_underwater_fade: float = 0.0
 @export_range(32.0, 512.0, 1.0, "suffix:m") var sea_mist_volumetric_fog_length: float = 180.0
 @export_group("Storm Environment")
@@ -106,6 +105,7 @@ var _original_wind_volume_db: float = 0.0
 var _original_lightning_visible: bool = false
 var _original_lightning_energy: float = 0.0
 var _far_rain_quality_enabled: bool = true
+var _sea_mist_quality_enabled: bool = true
 var _sea_mist_far_quality_enabled: bool = true
 var _sea_mist_ratio: float = 0.0
 var _rain_impact_quality: int = 2
@@ -206,7 +206,7 @@ func set_graphics_quality(_quality_level: int, profile: GraphicsQualityProfile) 
 	if _rain_far != null:
 		_rain_far.amount = profile.weather_rain_far_amount
 	_far_rain_quality_enabled = profile.weather_far_rain_enabled
-	sea_mist_enabled = profile.weather_sea_mist_volume_enabled
+	_sea_mist_quality_enabled = profile.weather_sea_mist_volume_enabled
 	_sea_mist_far_quality_enabled = profile.weather_sea_mist_far_volume_enabled
 	_rain_impact_quality = profile.weather_rain_impact_quality
 	_rain_impact_distance = profile.weather_rain_impact_distance
@@ -299,16 +299,35 @@ func _apply_particles() -> void:
 		0.55,
 		rain_intensity
 	)
+
 	_apply_particle_state(
 		_rain_far,
 		far_ratio,
-		visible_particles and _far_rain_quality_enabled
+		visible_particles
+			and _far_rain_quality_enabled
 	)
+
 	var mist_ratio: float = 0.0
-	if sea_mist_enabled:
-		mist_ratio = smoothstep(sea_mist_start_rain_intensity, 1.0, rain_intensity)
-	_sea_mist_ratio = clampf(mist_ratio, 0.0, 1.0)
-	_apply_sea_mist_materials(visible_particles)
+
+	if (
+		sea_mist_enabled
+		and _sea_mist_quality_enabled
+	):
+		mist_ratio = smoothstep(
+			sea_mist_start_rain_intensity,
+			1.0,
+			rain_intensity
+		)
+
+	_sea_mist_ratio = clampf(
+		mist_ratio,
+		0.0,
+		1.0
+	)
+
+	_apply_sea_mist_materials(
+		visible_particles
+	)
 
 func _apply_particle_state(particles: GPUParticles3D, amount_ratio: float, visible_particles: bool) -> void:
 	if particles == null:
@@ -349,23 +368,32 @@ func _update_follow_rigs() -> void:
 	if _rain_follow_rig != null:
 		_rain_follow_rig.global_position = camera_position
 	if _sea_mist_volume_rig != null:
-		var snap_size: float = maxf(sea_mist_follow_snap, 0.001)
-		_sea_mist_volume_rig.global_position = Vector3(snappedf(camera_position.x, snap_size), water_level + sea_mist_height_offset, snappedf(camera_position.z, snap_size))
+		_sea_mist_volume_rig.global_position = Vector3(camera_position.x, water_level + sea_mist_height_offset, camera_position.z)
 	_apply_particles()
 
 
 func _apply_sea_mist_materials(visible_particles: bool) -> void:
+	var weather_sequence_active: bool = sequence_running or full_storm_active or storm_intensity > 0.001 or rain_intensity > 0.001
+	var volume_system_active: bool = sea_mist_enabled and _sea_mist_quality_enabled and weather_sequence_active
+	var mist_visible: bool = volume_system_active and visible_particles
+	var near_opacity: float = _sea_mist_ratio if mist_visible else sea_mist_underwater_fade
+	var far_opacity: float = _sea_mist_ratio * sea_mist_far_density_multiplier if mist_visible and _sea_mist_far_quality_enabled else sea_mist_underwater_fade
 	if _world_environment != null and _world_environment.environment != null:
 		var environment: Environment = _world_environment.environment
-		environment.volumetric_fog_enabled = _original_volumetric_fog_enabled or _sea_mist_ratio > 0.001
-		environment.volumetric_fog_density = _original_volumetric_fog_density
-		environment.volumetric_fog_length = minf(_original_volumetric_fog_length, sea_mist_volumetric_fog_length) if visible_particles and _sea_mist_ratio > 0.001 else _original_volumetric_fog_length
-	_apply_sea_mist_shader(_sea_mist_volume_near_material, _sea_mist_ratio if visible_particles else sea_mist_underwater_fade)
-	_apply_sea_mist_shader(_sea_mist_volume_far_material, _sea_mist_ratio * sea_mist_far_density_multiplier if visible_particles and _sea_mist_far_quality_enabled else sea_mist_underwater_fade)
+		if volume_system_active:
+			environment.volumetric_fog_enabled = true
+			environment.volumetric_fog_density = 0.0
+			environment.volumetric_fog_length = minf(maxf(_original_volumetric_fog_length, 32.0), sea_mist_volumetric_fog_length)
+		else:
+			environment.volumetric_fog_enabled = _original_volumetric_fog_enabled
+			environment.volumetric_fog_density = _original_volumetric_fog_density
+			environment.volumetric_fog_length = _original_volumetric_fog_length
+	_apply_sea_mist_shader(_sea_mist_volume_near_material, near_opacity)
+	_apply_sea_mist_shader(_sea_mist_volume_far_material, far_opacity)
 	if _sea_mist_volume_near != null:
-		_sea_mist_volume_near.visible = visible_particles and sea_mist_enabled
+		_sea_mist_volume_near.visible = volume_system_active
 	if _sea_mist_volume_far != null:
-		_sea_mist_volume_far.visible = visible_particles and sea_mist_enabled and _sea_mist_far_quality_enabled
+		_sea_mist_volume_far.visible = volume_system_active and _sea_mist_far_quality_enabled
 
 
 func _apply_sea_mist_shader(material: ShaderMaterial, opacity: float) -> void:
