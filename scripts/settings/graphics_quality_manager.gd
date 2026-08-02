@@ -20,7 +20,6 @@ const VEHICLE_EFFECTS_GROUP: StringName = &"graphics_quality_vehicle_effects"
 const TERRAIN_GROUP: StringName = &"graphics_quality_terrain"
 const VEGETATION_GROUP: StringName = &"graphics_quality_vegetation"
 const WILDLIFE_GROUP: StringName = &"graphics_quality_wildlife"
-const WEATHER_GROUP: StringName = &"graphics_quality_weather"
 const UNDERWATER_GROUP: StringName = &"graphics_quality_underwater"
 
 const SETTINGS_PATH := "user://graphics_settings.cfg"
@@ -52,7 +51,6 @@ var _vehicle_effects_refs: Array[WeakRef] = []
 var _terrain_refs: Array[WeakRef] = []
 var _vegetation_refs: Array[WeakRef] = []
 var _wildlife_refs: Array[WeakRef] = []
-var _weather_refs: Array[WeakRef] = []
 var _underwater_refs: Array[WeakRef] = []
 var _scene_refresh_queued: bool = false
 var _application_revision: int = 0
@@ -114,7 +112,6 @@ func get_graphics_quality_debug_status() -> Dictionary:
 		"terrain": _collect_debug_status(_terrain_refs),
 		"vegetation": _collect_debug_status(_vegetation_refs),
 		"wildlife": _collect_debug_status(_wildlife_refs),
-		"weather": _collect_debug_status(_weather_refs),
 		"underwater": _collect_debug_status(_underwater_refs),
 	}
 
@@ -234,7 +231,6 @@ func _on_tree_node_added(node: Node) -> void:
 		or node.is_in_group(TERRAIN_GROUP)
 		or node.is_in_group(VEGETATION_GROUP)
 		or node.is_in_group(WILDLIFE_GROUP)
-		or node.is_in_group(WEATHER_GROUP)
 		or node.is_in_group(UNDERWATER_GROUP)
 	):
 		_queue_scene_refresh()
@@ -264,7 +260,6 @@ func _refresh_targets() -> void:
 	_terrain_refs.clear()
 	_vegetation_refs.clear()
 	_wildlife_refs.clear()
-	_weather_refs.clear()
 	_underwater_refs.clear()
 	var current_scene := get_tree().current_scene
 	if current_scene != null:
@@ -290,7 +285,6 @@ func _collect_targets(node: Node) -> void:
 	_collect_quality_target(node, TERRAIN_GROUP, _terrain_refs)
 	_collect_quality_target(node, VEGETATION_GROUP, _vegetation_refs)
 	_collect_quality_target(node, WILDLIFE_GROUP, _wildlife_refs)
-	_collect_quality_target(node, WEATHER_GROUP, _weather_refs)
 	_collect_quality_target(node, UNDERWATER_GROUP, _underwater_refs)
 	for child: Node in node.get_children():
 		_collect_targets(child)
@@ -309,7 +303,6 @@ func _apply_current_profile() -> void:
 	_apply_quality_targets(_terrain_refs, current_profile)
 	_apply_quality_targets(_vegetation_refs, current_profile)
 	_apply_quality_targets(_wildlife_refs, current_profile)
-	_apply_quality_targets(_weather_refs, current_profile)
 	_apply_quality_targets(_underwater_refs, current_profile)
 
 

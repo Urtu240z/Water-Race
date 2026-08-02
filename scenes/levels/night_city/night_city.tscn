@@ -10,6 +10,7 @@
 [ext_resource type="Texture2D" uid="uid://b7kfjl0vvcloa" path="res://assets/environment/sky/qwantani_dusk_1_puresky_4k.hdr" id="8_cty2f"]
 [ext_resource type="Texture2D" uid="uid://olqtngkjhlxu" path="res://assets/NightSkyHDRI003_4K_HDR.exr" id="9_me8nw"]
 [ext_resource type="Environment" uid="uid://bl1pfl5d074rp" path="res://resources/environment/environment_night_city.tres" id="10_4n5oi"]
+[ext_resource type="CompositorEffect" uid="uid://v0kty216hlxo" path="res://NewCloudsGD.tres" id="11_kppiq"]
 [ext_resource type="Script" uid="uid://det7bptrkw1dp" path="res://scripts/environment/terrain_quality_controller.gd" id="13_2dd7v"]
 [ext_resource type="PackedScene" uid="uid://c05chune2gu5n" path="res://assets/3D/levels/level_night_city/night_city.glb" id="14_8xr40"]
 [ext_resource type="PackedScene" uid="uid://1x3n2tx0xgj5" path="res://assets/3D/Terrain/independent_island.glb" id="14_x65hf"]
@@ -41,8 +42,6 @@
 [ext_resource type="PackedScene" uid="uid://vls5xu5jnvyf" path="res://assets/3D/Rock3.glb" id="64_fwim1"]
 [ext_resource type="Material" uid="uid://dk2h67ph6buix" path="res://assets/materials/rusty_metal_03.res" id="66_e6ey7"]
 [ext_resource type="PackedScene" uid="uid://dmqjonl673mxd" path="res://scenes/course/buoy.tscn" id="67_04xx3"]
-[ext_resource type="PackedScene" uid="uid://cuckmkr67v1ms" path="res://scenes/weather/weather_system_3d.tscn" id="68_weather_system"]
-[ext_resource type="PackedScene" path="res://scenes/weather/weather_trigger_3d.tscn" id="69_weather_trigger"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_f0815"]
 panorama = ExtResource("6_g5j8w")
@@ -76,6 +75,9 @@ energy_multiplier = 5.36
 
 [sub_resource type="Sky" id="Sky_lusr1"]
 sky_material = SubResource("PanoramaSkyMaterial_kroct")
+
+[sub_resource type="Compositor" id="Compositor_ep46c"]
+compositor_effects = Array[CompositorEffect]([ExtResource("11_kppiq")])
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ywlcx"]
 resource_name = "Sand"
@@ -121,7 +123,7 @@ shadow_mesh = SubResource("ArrayMesh_u40r8")
 material = ExtResource("15_7xt3c")
 size = Vector2(10000, 10000)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_0ka6b"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_8xr40"]
 resource_local_to_scene = true
 render_priority = 0
 shader = ExtResource("41_bivmj")
@@ -227,26 +229,6 @@ shader_parameter/surface_warp_strength = 1.2500000186265
 shader_parameter/surface_detail_fade_start = 130.0
 shader_parameter/surface_detail_fade_end = 520.0
 shader_parameter/ocean_surface_detail_quality = 2
-shader_parameter/weather_rain_intensity = 1.0
-shader_parameter/weather_storm_water_tint = Color(0.025, 0.055, 0.085, 1)
-shader_parameter/weather_surface_normal_boost = 0.70400003344
-shader_parameter/weather_roughness_boost = 0.16
-shader_parameter/weather_reflection_reduction = 0.22
-shader_parameter/weather_crest_foam_boost = 0.18
-shader_parameter/weather_rain_impact_density = 0.7
-shader_parameter/weather_rain_impact_rate = 4.2
-shader_parameter/weather_rain_impact_cell_size = 0.72
-shader_parameter/weather_rain_impact_radius = 0.02999999932945
-shader_parameter/weather_rain_impact_ring_width = 0.05499999877064
-shader_parameter/weather_rain_impact_normal_strength = 0.999999977648
-shader_parameter/weather_rain_impact_foam_strength = 0.999999977648
-shader_parameter/weather_rain_impact_quality = 2
-shader_parameter/weather_rain_impact_distance = 55.0
-shader_parameter/weather_rain_impact_lifetime = 0.22
-shader_parameter/weather_rain_impact_lifetime_randomness = 0.35
-shader_parameter/weather_rain_impact_size_randomness = 0.3
-shader_parameter/weather_rain_impact_center_flash_strength = 0.42
-shader_parameter/weather_rain_impact_crown_strength = 0.28
 shader_parameter/shallow_water_color = Color(0.035, 0.43, 0.55, 1)
 shader_parameter/deep_water_color = Color(0.004, 0.055, 0.115, 1)
 shader_parameter/horizon_water_color = Color(0.025, 0.22, 0.34, 1)
@@ -354,7 +336,7 @@ shader_parameter/custom_reflection_minimum_surface_weight = 0.34
 shader_parameter/custom_reflection_maximum_surface_weight = 0.88
 shader_parameter/custom_reflection_emission_strength = 1.20999997295408
 
-[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_4n5oi"]
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_0ka6b"]
 resource_local_to_scene = true
 blend_mode = 1
 
@@ -381,7 +363,7 @@ point_count = 3
 [sub_resource type="CurveTexture" id="CurveTexture_bubble_shrink"]
 curve = SubResource("Curve_bubble_shrink")
 
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_kppiq"]
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_4n5oi"]
 resource_local_to_scene = true
 particle_flag_disable_z = true
 emission_shape_offset = Vector3(0, 600, 0)
@@ -404,7 +386,7 @@ turbulence_influence_max = 0.082
 turbulence_initial_displacement_min = -47.5
 turbulence_initial_displacement_max = 94.5
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_nnnop"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_kppiq"]
 resource_local_to_scene = true
 render_priority = -127
 shader = ExtResource("55_y53au")
@@ -484,6 +466,7 @@ custom_sky = SubResource("Sky_lusr1")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="Environment" unique_id=951090327 groups=["graphics_quality_environment"]]
 environment = ExtResource("10_4n5oi")
+compositor = SubResource("Compositor_ep46c")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="Environment" unique_id=1488093793 groups=["graphics_quality_directional_light"]]
 transform = Transform3D(0.8829475, 0.34888542, -0.3141378, 0, 0.66913056, 0.74314487, 0.46947157, -0.656158, 0.5908072, 0, 0, 0)
@@ -503,6 +486,7 @@ light_color = Color(0.82647467, 0.6933553, 0.57007265, 1)
 light_energy = 0.4
 light_volumetric_fog_energy = 16.0
 light_specular = 7.382
+shadow_enabled = true
 directional_shadow_mode = 1
 directional_shadow_split_1 = 0.15
 directional_shadow_fade_start = 0.85
@@ -551,7 +535,7 @@ transform = Transform3D(4.33, 0, 0, 0, 4.33, 0, 0, 0, 4.33, -851.555, -7.84, 501
 [node name="WaterIntegration" type="Node3D" parent="." unique_id=1889730552]
 
 [node name="Ocean" parent="WaterIntegration" unique_id=1340264265 instance=ExtResource("40_5rutu")]
-ocean_material = SubResource("ShaderMaterial_0ka6b")
+ocean_material = SubResource("ShaderMaterial_8xr40")
 wave_world_size_a = 231.5
 wave_world_size_b = 155.5
 wave_travel_speed_a = 9.0000004321348
@@ -577,7 +561,7 @@ dolphin_breach_duration_max = 0.9
 [node name="Gameplay" type="Node3D" parent="." unique_id=1639068913]
 
 [node name="PlayerSpawn" type="Marker3D" parent="Gameplay" unique_id=434866168]
-transform = Transform3D(0.9811287, 0, 0.19335571, 0, 1, 0, -0.19335571, 0, 0.9811287, 555.4296, 1.98, -662.0702)
+transform = Transform3D(0.9811287, 0, 0.19335571, 0, 1, 0, -0.19335571, 0, 0.9811287, 238.76416, 1.98, -264.6429)
 
 [node name="JetSki" parent="Gameplay" unique_id=328650943 instance=ExtResource("49_7blqs")]
 transform = Transform3D(-1.5, 0, -2.2649371e-07, 0, 1.5, 0, 2.2649371e-07, 0, -1.5, 132.69096, 0.71555996, -133.7861)
@@ -748,7 +732,7 @@ editor_preview_mode = 0
 
 [node name="EntryBubbles" parent="CameraSystem/ChaseCamera/Camera3D/UnderwaterEffect/WaterCrossingOverlay" index="0"]
 visible = false
-material = SubResource("CanvasItemMaterial_4n5oi")
+material = SubResource("CanvasItemMaterial_0ka6b")
 position = Vector2(1, 1.76)
 amount = 500
 texture = SubResource("GradientTexture2D_pl0kw")
@@ -756,10 +740,10 @@ lifetime = 20.0
 speed_scale = 8.0
 explosiveness = 1.0
 randomness = 1.0
-process_material = SubResource("ParticleProcessMaterial_kppiq")
+process_material = SubResource("ParticleProcessMaterial_4n5oi")
 
 [node name="UnderwaterPostProcess" parent="CameraSystem/ChaseCamera/Camera3D/UnderwaterEffect" index="1" unique_id=1854893749]
-material_override = SubResource("ShaderMaterial_nnnop")
+material_override = SubResource("ShaderMaterial_kppiq")
 
 [node name="Debug" type="Node" parent="." unique_id=1303880580]
 
@@ -895,10 +879,6 @@ buoy_clearance = 20.0
 transform = Transform3D(0.8691581, 0, -0.49453428, 0, 1, 0, 0.49453428, 0, 0.8691581, 568.5645, 0.059731007, -578.67944)
 buoy_clearance = 20.0
 
-[node name="StormTrigger" parent="Circuit" unique_id=376148594 instance=ExtResource("69_weather_trigger")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 568.5645, 4, -578.67944)
-weather_controller_path = NodePath("../../WeatherSystem")
-
 [node name="Buoy8" parent="Circuit" unique_id=1766253435 instance=ExtResource("67_04xx3")]
 transform = Transform3D(0.42169753, 0, -0.9067366, 0, 1, 0, 0.9067366, 0, 0.42169753, 541.2693, 0.059731007, -1245.6357)
 buoy_clearance = 20.0
@@ -929,19 +909,6 @@ transform = Transform3D(0.07044011, 0, 0.4495144, 0, 0.455, 0, -0.4495144, 0, 0.
 transform = Transform3D(0.9738013, 0, 0.22740054, 0, 1.0000004, 0, -0.22740054, 0, 0.9738013, 913.63635, -54.734367, -913.70654)
 surface_material_override/1 = SubResource("StandardMaterial3D_4sljt")
 surface_material_override/4 = SubResource("StandardMaterial3D_dbb74")
-
-[node name="WeatherSystem" parent="." unique_id=394937737 instance=ExtResource("68_weather_system")]
-world_environment_path = NodePath("../Environment/WorldEnvironment")
-primary_light_path = NodePath("../Environment/DirectionalLight3D")
-lightning_light_path = NodePath("../Environment/DirectionalLight3D2")
-camera_path = NodePath("../CameraSystem/ChaseCamera/Camera3D")
-ocean_path = NodePath("../WaterIntegration/Ocean")
-ocean_wind_player_path = NodePath("../Gameplay/JetSki/OceanWind")
-rain_impact_density = 1.0
-rain_impact_ring_width = 0.095
-rain_impact_normal_strength = 1.0
-rain_impact_foam_strength = 0.52
-rain_impact_lifetime_randomness = 1.0
 
 [editable path="TerrainRoot/independent_island"]
 [editable path="TerrainRoot/independent_island2"]

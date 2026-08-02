@@ -2,7 +2,7 @@
 // The macro displacement and CPU sampling model are adapted from the
 // texture-driven approach in Taillight Games' MIT-licensed texture-driven water shader.
 shader_type spatial;
-render_mode blend_mix, world_vertex_coords, cull_disabled, depth_draw_always, diffuse_burley, specular_schlick_ggx;
+render_mode blend_mix, world_vertex_coords, cull_disabled, depth_draw_always, diffuse_burley, specular_schlick_ggx, fog_disabled;
 
 const int MAX_RIPPLES = 12;
 const float TAU_VALUE = 6.28318530718;
@@ -58,29 +58,6 @@ uniform float surface_warp_strength : hint_range(0.0, 12.0, 0.05) = 2.4;
 uniform float surface_detail_fade_start : hint_range(0.0, 1000.0, 1.0) = 130.0;
 uniform float surface_detail_fade_end : hint_range(1.0, 2000.0, 1.0) = 520.0;
 uniform int ocean_surface_detail_quality : hint_range(0, 2, 1) = 2;
-
-group_uniforms Weather;
-uniform float weather_rain_intensity : hint_range(0.0, 1.0) = 0.0;
-uniform vec3 weather_storm_water_tint : source_color = vec3(0.025, 0.055, 0.085);
-uniform float weather_surface_normal_boost : hint_range(0.0, 1.0) = 0.30;
-uniform float weather_roughness_boost : hint_range(0.0, 0.5) = 0.16;
-uniform float weather_reflection_reduction : hint_range(0.0, 0.75) = 0.22;
-uniform float weather_crest_foam_boost : hint_range(0.0, 1.0) = 0.18;
-uniform float weather_rain_impact_density : hint_range(0.0, 1.0, 0.01) = 0.70;
-uniform float weather_rain_impact_rate : hint_range(0.1, 10.0, 0.1) = 4.2;
-uniform float weather_rain_impact_cell_size : hint_range(0.30, 2.0, 0.01) = 0.72;
-uniform float weather_rain_impact_radius : hint_range(0.03, 0.60, 0.01) = 0.18;
-uniform float weather_rain_impact_ring_width : hint_range(0.005, 0.15, 0.005) = 0.035;
-uniform float weather_rain_impact_normal_strength : hint_range(0.0, 1.0, 0.01) = 0.22;
-uniform float weather_rain_impact_foam_strength : hint_range(0.0, 1.0, 0.01) = 0.24;
-uniform int weather_rain_impact_quality : hint_range(0, 2, 1) = 2;
-uniform float weather_rain_impact_distance : hint_range(0.0, 100.0, 1.0) = 55.0;
-uniform float weather_rain_impact_lifetime : hint_range(0.05, 0.60, 0.005) = 0.22;
-uniform float weather_rain_impact_lifetime_randomness : hint_range(0.0, 1.0, 0.01) = 0.35;
-uniform float weather_rain_impact_size_randomness : hint_range(0.0, 1.0, 0.01) = 0.30;
-uniform float weather_rain_impact_center_flash_strength : hint_range(0.0, 1.0, 0.01) = 0.42;
-uniform float weather_rain_impact_crown_strength : hint_range(0.0, 1.0, 0.01) = 0.28;
-group_uniforms;
 
 group_uniforms Optics;
 uniform sampler2D screen_texture : hint_screen_texture, repeat_disable, filter_linear_mipmap;
@@ -766,175 +743,6 @@ vec3 debug_ring_color(float ring_id) {
 }
 
 
-float weather_hash12(vec2 value) {
-	vec3 value3 = fract(vec3(value.xyx) * 0.1031);
-	value3 += dot(value3, value3.yzx + 33.33);
-	return fract((value3.x + value3.y) * value3.z);
-}
-
-
-vec2 weather_hash22(vec2 value) {
-	return vec2(
-		weather_hash12(value),
-		weather_hash12(value + vec2(19.19, 47.77))
-	);
-}
-
-
-// xy: spatial slope applied to the visual normal.
-// z: small irregular foam mask.
-vec3 sample_weather_rain_impacts(vec2 logical_position, float camera_distance) {
-	if (
-		weather_rain_impact_quality <= 0
-		|| weather_rain_intensity <= 0.001
-		|| weather_rain_impact_distance <= 0.001
-		|| camera_distance >= weather_rain_impact_distance
-	) {
-		return vec3(0.0);
-	}
-
-	float safe_distance = max(weather_rain_impact_distance, 0.001);
-	float distance_fade = 1.0 - smoothstep(
-		safe_distance * 0.72,
-		safe_distance,
-		camera_distance
-	);
-	float rain_factor = pow(clamp(weather_rain_intensity, 0.0, 1.0), 1.35);
-	float event_probability = clamp(rain_factor * weather_rain_impact_density, 0.0, 0.95);
-	if (distance_fade <= 0.0001 || event_probability <= 0.0001) {
-		return vec3(0.0);
-	}
-
-	float cell_size = max(weather_rain_impact_cell_size, 0.05);
-	vec2 base_cell = floor(logical_position / cell_size);
-	vec2 accumulated_slope = vec2(0.0);
-	float accumulated_foam = 0.0;
-
-	for (int offset_y = -1; offset_y <= 1; offset_y++) {
-		for (int offset_x = -1; offset_x <= 1; offset_x++) {
-			if (weather_rain_impact_quality == 1 && offset_x != 0 && offset_y != 0) {
-				continue;
-			}
-			vec2 cell = base_cell + vec2(float(offset_x), float(offset_y));
-			float phase_seed = weather_hash12(cell + vec2(7.13, 19.71));
-			float impact_clock = simulation_time * max(weather_rain_impact_rate, 0.01) + phase_seed;
-			float impact_phase_raw = fract(impact_clock);
-			float cycle_index = mod(floor(impact_clock), 4096.0);
-			float event_random = weather_hash12(
-				cell + vec2(cycle_index * 0.754877, cycle_index * 0.569840)
-			);
-			if (event_random > event_probability) {
-				continue;
-			}
-			float lifetime_random = weather_hash12(
-				cell + vec2(cycle_index * 0.42331, cycle_index * 1.91357)
-			);
-			float lifetime_multiplier = mix(
-				1.0 - weather_rain_impact_lifetime_randomness,
-				1.0 + weather_rain_impact_lifetime_randomness,
-				lifetime_random
-			);
-			float event_duration_seconds = max(
-				weather_rain_impact_lifetime * lifetime_multiplier,
-				0.001
-			);
-			float duration_ratio = clamp(
-				event_duration_seconds * max(weather_rain_impact_rate, 0.01),
-				0.05,
-				0.92
-			);
-			if (impact_phase_raw > duration_ratio) {
-				continue;
-			}
-			float life_phase = impact_phase_raw / max(duration_ratio, 0.001);
-			vec2 center_random = weather_hash22(
-				cell + vec2(cycle_index * 1.31831, cycle_index * -0.73117)
-			);
-			vec2 impact_center = (cell + mix(vec2(0.10), vec2(0.90), center_random)) * cell_size;
-			vec2 center_delta = logical_position - impact_center;
-			float shape_random = weather_hash12(
-				cell + vec2(cycle_index * 2.171, cycle_index * 0.913)
-			);
-			float angle = shape_random * TAU_VALUE;
-			float angle_cos = cos(angle);
-			float angle_sin = sin(angle);
-			mat2 impact_rotation = mat2(
-				vec2(angle_cos, -angle_sin),
-				vec2(angle_sin, angle_cos)
-			);
-			vec2 shaped_delta = impact_rotation * center_delta;
-			shaped_delta.x *= mix(0.82, 1.18, center_random.x);
-			float impact_distance = length(shaped_delta);
-			float size_random = weather_hash12(
-				cell + vec2(cycle_index * 1.731, cycle_index * -2.417)
-			);
-			float size_multiplier = mix(
-				1.0 - weather_rain_impact_size_randomness,
-				1.0 + weather_rain_impact_size_randomness,
-				size_random
-			);
-			float maximum_radius = weather_rain_impact_radius
-				* mix(0.72, 1.18, shape_random)
-				* size_multiplier;
-			float ring_radius = maximum_radius * smoothstep(0.0, 0.78, life_phase);
-			float ring_width = max(
-				weather_rain_impact_ring_width
-					* mix(0.78, 1.18, center_random.y)
-					* mix(0.86, 1.14, size_multiplier),
-				0.002
-			);
-			float normalized_ring = (impact_distance - ring_radius) / ring_width;
-			float ring_profile = exp(-normalized_ring * normalized_ring * 2.4);
-			float ring_appear = smoothstep(0.10, 0.18, life_phase);
-			float life_fade = 1.0 - smoothstep(0.65, 1.0, life_phase);
-			float ring_envelope = ring_appear * life_fade;
-			float impact_angle = atan(shaped_delta.y, shaped_delta.x);
-			float angular_signal = 0.5 + 0.5 * sin(
-				impact_angle * mix(4.0, 7.0, shape_random) + shape_random * TAU_VALUE
-			);
-			float irregularity = mix(0.42, 1.0, smoothstep(0.12, 0.88, angular_signal));
-			ring_profile *= irregularity;
-			vec2 radial_direction = impact_distance > 0.0001 ? shaped_delta / impact_distance : vec2(0.0);
-			radial_direction = transpose(impact_rotation) * radial_direction;
-			float slope_signal = -normalized_ring * ring_profile * ring_envelope;
-			accumulated_slope += radial_direction * slope_signal;
-
-			float center_envelope = 1.0 - smoothstep(0.0, 0.18, life_phase);
-			float center_flash = (
-				1.0 - smoothstep(0.0, max(maximum_radius * 0.16, 0.005), impact_distance)
-			) * center_envelope * weather_rain_impact_center_flash_strength;
-			float center_slope = center_flash * 0.18;
-			accumulated_slope += radial_direction * center_slope;
-
-			float crown_lobes = mix(5.0, 9.0, weather_hash12(cell + vec2(31.7, 11.9)));
-			float crown_signal = 0.5 + 0.5 * sin(
-				impact_angle * crown_lobes + shape_random * TAU_VALUE * 1.71
-			);
-			float crown_radius = maximum_radius * mix(0.45, 0.82, smoothstep(0.10, 0.42, life_phase));
-			float crown_width = max(ring_width * mix(0.90, 1.45, size_multiplier), 0.003);
-			float crown_distance = (impact_distance - crown_radius) / crown_width;
-			float crown_profile = exp(-crown_distance * crown_distance * 2.8)
-				* smoothstep(0.42, 0.78, crown_signal);
-			float crown_envelope = smoothstep(0.10, 0.16, life_phase)
-				* (1.0 - smoothstep(0.42, 0.58, life_phase));
-			float crown_strength = weather_rain_impact_crown_strength
-				* crown_envelope
-				* crown_profile;
-			accumulated_slope += radial_direction * crown_strength * 0.38;
-			accumulated_foam += ring_profile * ring_envelope + center_flash + crown_strength;
-		}
-	}
-
-	accumulated_slope *= weather_rain_impact_normal_strength * rain_factor * distance_fade;
-	accumulated_foam = clamp(
-		accumulated_foam * weather_rain_impact_foam_strength * rain_factor * distance_fade,
-		0.0,
-		1.0
-	);
-	return vec3(accumulated_slope, accumulated_foam);
-}
-
-
 void fragment() {
 	vec3 world_fragment_position = vec3(
 		interpolated_world_xz.x,
@@ -976,11 +784,6 @@ void fragment() {
 		underwater_radius_extinction
 	);
 	vec2 logical_xz = interpolated_world_xz + ocean_logical_origin_offset_xz;
-	vec3 weather_rain_impact_state = sample_weather_rain_impacts(
-		logical_xz,
-		camera_distance
-	);
-	weather_rain_impact_state *= 1.0 - camera_underwater_factor;
 	vec3 detail_normal = sample_surface_detail(logical_xz, camera_distance);
 	vec2 detail_slope = detail_normal.xy / max(detail_normal.z, 0.08);
 	vec3 detail_offset_view = mat3(VIEW_MATRIX) * vec3(
@@ -988,20 +791,13 @@ void fragment() {
 		0.0,
 		detail_slope.y
 	);
-	vec3 rain_impact_offset_view = mat3(VIEW_MATRIX) * vec3(
-		weather_rain_impact_state.x,
-		0.0,
-		weather_rain_impact_state.y
-	);
 	vec3 geometric_normal = normalize(NORMAL);
 	vec3 world_up_view = normalize(
 		mat3(VIEW_MATRIX) * vec3(0.0, 1.0, 0.0)
 	);
-	float weather_detail_multiplier = 1.0 + weather_rain_intensity * weather_surface_normal_boost;
 	vec3 visual_normal = normalize(
 		geometric_normal
-			+ detail_offset_view * surface_normal_strength * weather_detail_multiplier
-			+ rain_impact_offset_view
+			+ detail_offset_view * surface_normal_strength
 	);
 	vec3 ssr_trace_normal = normalize(
 		mix(
@@ -1052,11 +848,6 @@ void fragment() {
 		body_color,
 		mix(trough_tint.rgb, crest_tint.rgb, height_position),
 		0.24
-	);
-	body_color = mix(
-		body_color,
-		weather_storm_water_tint,
-		weather_rain_intensity * 0.22
 	);
 
 	vec3 view_direction = normalize(VIEW);
@@ -1161,12 +952,10 @@ void fragment() {
 	float crest_foam = crest_height
 		* mix(0.54, 1.0, crest_slope)
 		* crest_foam_strength;
-	crest_foam *= 1.0 + weather_rain_intensity * weather_crest_foam_boost;
 	float ripple_foam = interpolated_ripple_energy * ripple_foam_strength;
-	float rain_impact_foam = weather_rain_impact_state.z;
 	float foam_mask = foam_enabled
 		? clamp(
-			(shoreline + crest_foam + ripple_foam + rain_impact_foam)
+			(shoreline + crest_foam + ripple_foam)
 				* mix(0.42, 1.0, foam_breakup)
 				* foam_distance_gate,
 			0.0,
@@ -1456,7 +1245,6 @@ void fragment() {
 		0.08,
 		camera_underwater_factor
 	);
-	final_reflection_weight *= 1.0 - weather_rain_intensity * weather_reflection_reduction;
 	final_color *= 1.0 - final_reflection_weight;
 	vec3 underwater_surface_color = mix(
 		refracted_scene,
@@ -1499,18 +1287,12 @@ void fragment() {
 
 	NORMAL = visual_normal;
 	ALBEDO = final_color;
-	float base_water_roughness = mix(
-		near_roughness,
-		horizon_roughness,
-		max(distance_opacity, fresnel)
-	);
-	float weather_water_roughness = clamp(
-		base_water_roughness + weather_rain_intensity * weather_roughness_boost,
-		0.0,
-		1.0
-	);
 	ROUGHNESS = mix(
-		weather_water_roughness,
+		mix(
+			near_roughness,
+			horizon_roughness,
+			max(distance_opacity, fresnel)
+		),
 		foam_roughness,
 		foam_mask
 	);
@@ -1520,7 +1302,6 @@ void fragment() {
 		0.05,
 		final_reflection_weight
 	);
-	reflection_aware_specular *= 1.0 - weather_rain_intensity * 0.12;
 	SPECULAR = mix(
 		reflection_aware_specular,
 		0.16,
