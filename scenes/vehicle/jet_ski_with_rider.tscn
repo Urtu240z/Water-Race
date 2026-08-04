@@ -13,7 +13,7 @@
 [ext_resource type="Script" uid="uid://clycxmofcu2k5" path="res://scripts/rider/rider_grip_finger_modifier_3d.gd" id="7_grip_fingers"]
 [ext_resource type="Script" uid="uid://44vr286e106h" path="res://scripts/rider/rider_mounted_lean_controller.gd" id="8_mounted_lean"]
 
-[node name="JetSki2" unique_id=117969959 instance=ExtResource("1_base")]
+[node name="JetSki" unique_id=117969959 instance=ExtResource("1_base")]
 
 [node name="EngineAudio" parent="." index="1" unique_id=1603778743]
 full_throttle_pitch = 3.5
@@ -104,12 +104,9 @@ bones/3/position = Vector3(-3.633972e-09, 0.10010641, -5.8221215e-09)
 bones/3/scale = Vector3(1.0000001, 0.9999998, 0.99999976)
 bones/4/scale = Vector3(0.99999994, 1.0000001, 1)
 bones/5/scale = Vector3(1.0000018, 1.0000002, 1.0000005)
-bones/6/position = Vector3(-0.058524292, 0.10738471, -0.0041615376)
 bones/6/scale = Vector3(0.99999976, 1.0000001, 1)
-bones/7/position = Vector3(0.006084124, 0.12903093, -0.0029388438)
 bones/7/scale = Vector3(0.99999994, 1, 1)
 bones/25/scale = Vector3(1, 1, 0.9999999)
-bones/26/position = Vector3(-0.004356565, 0.15057576, 0.0042278697)
 bones/26/scale = Vector3(1.0000001, 1.0000004, 1)
 
 [node name="RiderImpactPose" type="SkeletonModifier3D" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D" index="0" unique_id=1959462542]

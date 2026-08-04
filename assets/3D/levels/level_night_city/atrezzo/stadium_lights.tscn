@@ -6,9 +6,9 @@
 
 [node name="SpotLight3D" type="SpotLight3D" parent="." index="1" unique_id=252011559]
 transform = Transform3D(-1, 0, -8.742278e-08, -4.16227e-08, 0.8793867, 0.47610825, 7.687842e-08, 0.47610825, -0.8793867, 1.9513631, 28.15399, 0)
-light_energy = 16.0
+light_energy = 6.0
+light_size = 1.0
 light_bake_mode = 1
 shadow_enabled = true
-spot_range = 50.0
-spot_attenuation = 0.1
+spot_range = 700.0
 spot_angle = 42.61

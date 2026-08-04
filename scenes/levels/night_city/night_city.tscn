@@ -11,14 +11,16 @@
 [ext_resource type="Texture2D" uid="uid://olqtngkjhlxu" path="res://assets/NightSkyHDRI003_4K_HDR.exr" id="9_me8nw"]
 [ext_resource type="Environment" uid="uid://bl1pfl5d074rp" path="res://resources/environment/environment_night_city.tres" id="10_4n5oi"]
 [ext_resource type="Script" uid="uid://det7bptrkw1dp" path="res://scripts/environment/terrain_quality_controller.gd" id="13_2dd7v"]
-[ext_resource type="PackedScene" uid="uid://c05chune2gu5n" path="res://assets/3D/levels/level_night_city/night_city.glb" id="14_8xr40"]
+[ext_resource type="PackedScene" uid="uid://uyhpcochr5q4" path="res://assets/3D/levels/level_night_city/Gold_City.glb" id="14_0ka6b"]
 [ext_resource type="PackedScene" uid="uid://1x3n2tx0xgj5" path="res://assets/3D/Terrain/independent_island.glb" id="14_x65hf"]
 [ext_resource type="Material" uid="uid://dmj6dyip8ab0w" path="res://assets/materials/sand_02.res" id="15_7xt3c"]
+[ext_resource type="PackedScene" uid="uid://c3xovkcnf4rak" path="res://assets/3D/levels/level_night_city/atrezzo/stadium_lights.tscn" id="31_0ka6b"]
 [ext_resource type="Material" uid="uid://cwtgldc4ahbeu" path="res://assets/materials/aerial_rocks_02.res" id="33_f5hqs"]
 [ext_resource type="PackedScene" uid="uid://b3y5xp6677icq" path="res://assets/3D/levels/level_night_city/buildings/build1/build1.tscn" id="40_0ka6b"]
 [ext_resource type="PackedScene" uid="uid://1d3iohmalk05" path="res://scenes/water/ocean_3d.tscn" id="40_5rutu"]
 [ext_resource type="Shader" uid="uid://dh7o8h2pae1kd" path="res://shaders/ocean_water_custom_ssr.gdshader" id="41_bivmj"]
 [ext_resource type="Texture2D" uid="uid://dpb0qhgywdm05" path="res://resources/water/foam_breakup_noise.tres" id="42_jnoq4"]
+[ext_resource type="LightmapGIData" uid="uid://cqxbpqu2qf340" path="res://scenes/levels/night_city/night_city.lmbake" id="43_4n5oi"]
 [ext_resource type="Texture2D" uid="uid://cdlm681krlrvi" path="res://resources/water/organic_surface/surface_normal_a.tres" id="43_q1qm3"]
 [ext_resource type="Texture2D" uid="uid://biv8w5n57xhjr" path="res://resources/water/organic_surface/surface_normal_b.tres" id="44_ls1yi"]
 [ext_resource type="Texture2D" uid="uid://bblan7rbfrudb" path="res://resources/water/organic_surface/surface_warp_noise.tres" id="45_f572k"]
@@ -54,7 +56,6 @@ panorama = ExtResource("7_swhwu")
 [sub_resource type="Sky" id="Sky_s3uqp"]
 sky_material = SubResource("PanoramaSkyMaterial_qid03")
 process_mode = 1
-radiance_size = 5
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_r1j62"]
 panorama = ExtResource("8_cty2f")
@@ -76,7 +77,6 @@ energy_multiplier = 5.36
 sky_material = SubResource("PanoramaSkyMaterial_kroct")
 
 [sub_resource type="Compositor" id="Compositor_ep46c"]
-compositor_effects = Array[CompositorEffect]([])
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ywlcx"]
 resource_name = "Sand"
@@ -122,7 +122,7 @@ shadow_mesh = SubResource("ArrayMesh_u40r8")
 material = ExtResource("15_7xt3c")
 size = Vector2(10000, 10000)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_8xr40"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0ka6b"]
 resource_local_to_scene = true
 render_priority = 0
 shader = ExtResource("41_bivmj")
@@ -131,10 +131,10 @@ shader_parameter/water_level = 0.0
 shader_parameter/simulation_time = 0.0
 shader_parameter/wave_height_texture_a = ExtResource("46_ciigv")
 shader_parameter/wave_height_texture_b = ExtResource("47_55hbu")
-shader_parameter/wave_world_size_a = 231.5
-shader_parameter/wave_world_size_b = 155.5
-shader_parameter/wave_amplitude_a = 1.35
-shader_parameter/wave_amplitude_b = 0.42
+shader_parameter/wave_world_size_a = 232.5
+shader_parameter/wave_world_size_b = 158.0
+shader_parameter/wave_amplitude_a = 0.53999998792992
+shader_parameter/wave_amplitude_b = 0.36999999172976
 shader_parameter/wave_direction_a = Vector2(0.86012906, 0.5100765)
 shader_parameter/wave_direction_b = Vector2(-0.38176018, 0.92426145)
 shader_parameter/wave_travel_speed_a = 9.0000004321348
@@ -335,7 +335,7 @@ shader_parameter/custom_reflection_minimum_surface_weight = 0.34
 shader_parameter/custom_reflection_maximum_surface_weight = 0.88
 shader_parameter/custom_reflection_emission_strength = 1.20999997295408
 
-[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_0ka6b"]
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_4n5oi"]
 resource_local_to_scene = true
 blend_mode = 1
 
@@ -362,7 +362,7 @@ point_count = 3
 [sub_resource type="CurveTexture" id="CurveTexture_bubble_shrink"]
 curve = SubResource("Curve_bubble_shrink")
 
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_4n5oi"]
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_kppiq"]
 resource_local_to_scene = true
 particle_flag_disable_z = true
 emission_shape_offset = Vector3(0, 600, 0)
@@ -385,7 +385,7 @@ turbulence_influence_max = 0.082
 turbulence_initial_displacement_min = -47.5
 turbulence_initial_displacement_max = 94.5
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_kppiq"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_nnnop"]
 resource_local_to_scene = true
 render_priority = -127
 shader = ExtResource("55_y53au")
@@ -424,6 +424,9 @@ data = PackedVector3Array(8.577499, 2.925, 4.5074997, 8.577499, -2.925, 4.507499
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_rtwgq"]
 friction = 0.0
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lcj2a"]
+albedo_color = Color(0.3854925, 0.38549247, 0.38549247, 1)
+
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4sljt"]
 albedo_color = Color(0.39688927, 0.39688927, 0.39688924, 1)
 metallic = 1.0
@@ -460,8 +463,9 @@ aristea_wreck_sky = SubResource("Sky_k0dft")
 kloofendal_48d_sky = SubResource("Sky_s3uqp")
 overcast_soil_sky = SubResource("Sky_e7rpt")
 additional_skies = Array[Sky]([SubResource("Sky_pfddk")])
-sky_preset = 5
+sky_preset = 2
 custom_sky = SubResource("Sky_lusr1")
+sky_rotation_degrees = 24.0
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="Environment" unique_id=951090327 groups=["graphics_quality_environment"]]
 environment = ExtResource("10_4n5oi")
@@ -469,9 +473,13 @@ compositor = SubResource("Compositor_ep46c")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="Environment" unique_id=1488093793 groups=["graphics_quality_directional_light"]]
 transform = Transform3D(0.8829475, 0.34888542, -0.3141378, 0, 0.66913056, 0.74314487, 0.46947157, -0.656158, 0.5908072, 0, 0, 0)
-light_color = Color(0, 0.057874627, 0.10977959, 1)
-light_energy = 7.39
-light_indirect_energy = 6.406
+visible = false
+light_color = Color(1.2032687e-07, 0.15931353, 0.25530243, 1)
+light_energy = 8.178
+light_indirect_energy = 16.0
+light_angular_distance = 0.5
+light_specular = 8.394
+light_bake_mode = 1
 shadow_enabled = true
 shadow_blur = 3.796
 directional_shadow_mode = 1
@@ -480,7 +488,6 @@ directional_shadow_max_distance = 500.0
 
 [node name="DirectionalLight3D2" type="DirectionalLight3D" parent="Environment" unique_id=1424115820 groups=["graphics_quality_directional_light"]]
 transform = Transform3D(0.9195691, 0.09848075, -0.38038722, 0.2341794, 0.64000714, 0.73181343, 0.31552005, -0.7620319, 0.56546843, 0, 0, 0)
-visible = false
 light_color = Color(0.82647467, 0.6933553, 0.57007265, 1)
 light_energy = 0.4
 light_volumetric_fog_energy = 16.0
@@ -496,24 +503,28 @@ script = ExtResource("13_2dd7v")
 
 [node name="independent_island" parent="TerrainRoot" unique_id=135701482 instance=ExtResource("14_x65hf")]
 transform = Transform3D(0.71981424, 0, -0.6941668, 0, 1, 0, 0.6941668, 0, 0.71981424, 2427.3716, -15.736182, 136.60822)
+visible = false
 
 [node name="Island_1_VIS" parent="TerrainRoot/independent_island" index="0" unique_id=1301992944]
 surface_material_override/0 = ExtResource("15_7xt3c")
 
 [node name="independent_island2" parent="TerrainRoot" unique_id=318732152 instance=ExtResource("14_x65hf")]
 transform = Transform3D(2.5448968, 0, 2.17237, 0, 1.375, 0, -2.0929704, 0, 2.6414409, 1964.7793, -5.60398, -2256.5737)
+visible = false
 
 [node name="Island_1_VIS" parent="TerrainRoot/independent_island2" index="0" unique_id=1301992944]
 surface_material_override/0 = ExtResource("15_7xt3c")
 
 [node name="independent_island3" parent="TerrainRoot" unique_id=538394509 instance=ExtResource("14_x65hf")]
 transform = Transform3D(-0.17687668, 0, -6.3775477, 0, 6.38, 0, 6.3775477, 0, -0.17687668, -2022.6855, -45.85874, -2256.5737)
+visible = false
 
 [node name="Island_1_VIS" parent="TerrainRoot/independent_island3" index="0" unique_id=1301992944]
 surface_material_override/0 = ExtResource("15_7xt3c")
 
 [node name="independent_island4" parent="TerrainRoot" unique_id=522839329 instance=ExtResource("14_x65hf")]
 transform = Transform3D(7.6843944, 0, 3.4050117, 0, 16.9, 0, -3.4050117, 0, 7.6843944, -4529.758, -45.85874, 4123.0527)
+visible = false
 
 [node name="Island_1_VIS" parent="TerrainRoot/independent_island4" index="0" unique_id=1301992944]
 transform = Transform3D(0.5352785, 0.09100684, -0.006567538, -0.07122277, 0.6827822, -0.09906116, -0.0020920038, 0.040325806, 1.6920902, 310.06567, -0.8341303, -127.680214)
@@ -528,15 +539,20 @@ surface_material_override/0 = ExtResource("15_7xt3c")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -68.184326, 0)
 mesh = SubResource("PlaneMesh_tpwhi")
 
-[node name="night_city" parent="TerrainRoot" unique_id=418054662 instance=ExtResource("14_8xr40")]
-transform = Transform3D(4.33, 0, 0, 0, 4.33, 0, 0, 0, 4.33, -851.555, -7.84, 501.352)
+[node name="Gold_City" parent="TerrainRoot" unique_id=297389943 instance=ExtResource("14_0ka6b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -131.304, 0, -218.843)
+
+[node name="build1" parent="TerrainRoot" unique_id=1230686511 instance=ExtResource("40_0ka6b")]
+transform = Transform3D(0.625, 0, 0, 0, 0.625, 0, 0, 0, 0.625, -615.5505, 9.018271, -97.15556)
 
 [node name="WaterIntegration" type="Node3D" parent="." unique_id=1889730552]
 
 [node name="Ocean" parent="WaterIntegration" unique_id=1340264265 instance=ExtResource("40_5rutu")]
-ocean_material = SubResource("ShaderMaterial_8xr40")
-wave_world_size_a = 231.5
-wave_world_size_b = 155.5
+ocean_material = SubResource("ShaderMaterial_0ka6b")
+wave_world_size_a = 232.5
+wave_world_size_b = 158.0
+wave_amplitude_a = 0.53999998792992
+wave_amplitude_b = 0.36999999172976
 wave_travel_speed_a = 9.0000004321348
 wave_travel_speed_b = 4.0000003576287995
 wave_mean_a = 0.638000030305
@@ -560,10 +576,10 @@ dolphin_breach_duration_max = 0.9
 [node name="Gameplay" type="Node3D" parent="." unique_id=1639068913]
 
 [node name="PlayerSpawn" type="Marker3D" parent="Gameplay" unique_id=434866168]
-transform = Transform3D(0.9811287, 0, 0.19335571, 0, 1, 0, -0.19335571, 0, 0.9811287, 238.76416, 1.98, -264.6429)
+transform = Transform3D(-0.9697527, 0, 0.24408983, 0, 1, 0, -0.24408983, 0, -0.9697527, -529.48364, 1.98, -686.8822)
 
 [node name="JetSki" parent="Gameplay" unique_id=328650943 instance=ExtResource("49_7blqs")]
-transform = Transform3D(-1.5, 0, -2.2649371e-07, 0, 1.5, 0, 2.2649371e-07, 0, -1.5, 132.69096, 0.71555996, -133.7861)
+transform = Transform3D(-1, 0, -1.509958e-07, 0, 1, 0, 1.509958e-07, 0, -1, -528.04553, 2.2097774, -683.84753)
 center_of_mass = Vector3(0, -0.22, 0.1)
 ocean_path = NodePath("../../WaterIntegration/Ocean")
 forward_engine_force = 15000.0
@@ -602,15 +618,88 @@ breathing_influence = 1.0
 
 [node name="Skeleton3D" parent="Gameplay/JetSki/VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/Rider_Bot/SKEL_Rider" parent_id_path=PackedInt32Array(328650943, 2001770911, 1075285769, 1348584656) index="0" unique_id=426480764]
 transform = Transform3D(0.9810575, -0.011237088, -0.19338982, 0.011280789, 0.99993587, -0.00087523926, 0.19338726, -0.0013229304, 0.98112124, 0.06955719, 0.0069850683, -0.110954285)
-bones/0/rotation = Quaternion(0.18325987, 0.103067584, 0.014143285, 0.9775443)
-bones/0/scale = Vector3(1.0000001, 1.0000001, 1.0000001)
+bones/0/rotation = Quaternion(0.0064583384, 1.6179755e-09, 2.5050662e-07, 0.99997914)
+bones/0/scale = Vector3(1, 0.99999994, 0.99999994)
+bones/1/position = Vector3(-4.8325298e-12, 0.10182449, 3.2595353e-09)
 bones/1/scale = Vector3(1, 0.9999998, 0.99999994)
-bones/3/position = Vector3(-9.971121e-06, 0.10010851, 1.3415442e-06)
-bones/3/scale = Vector3(1.0000001, 1.0000001, 1.0000001)
+bones/2/position = Vector3(-2.4344415e-13, 0.10002686, 8.3823934e-09)
+bones/2/scale = Vector3(1, 1, 0.9999999)
+bones/3/position = Vector3(1.364242e-12, 0.10010647, -1.8094065e-08)
+bones/3/scale = Vector3(1, 0.99999994, 0.9999999)
+bones/4/position = Vector3(-3.710018e-06, 0.16292441, -0.0025706573)
 bones/4/scale = Vector3(1, 1, 1)
+bones/5/position = Vector3(-1.0776875e-09, 0.09341913, 0.028410386)
 bones/5/scale = Vector3(1, 0.99999994, 0.99999994)
+bones/6/position = Vector3(-0.045697533, 0.10575647, -0.00599908)
+bones/6/scale = Vector3(0.99999994, 1.0000001, 1)
+bones/7/position = Vector3(-1.1175871e-08, 0.11116077, 2.3283064e-10)
 bones/7/scale = Vector3(0.99999994, 1, 0.99999994)
+bones/9/rotation = Quaternion(2.2111117e-16, -6.0766336e-11, -3.5107657e-08, 1)
+bones/10/position = Vector3(0.026818521, 0.02464804, 0.015739927)
+bones/10/rotation = Quaternion(0.2532839, 0.061619177, -0.22821042, 0.9380674)
+bones/11/position = Vector3(-3.934838e-08, 0.04188987, -2.1098005e-07)
+bones/11/rotation = Quaternion(-0.0023141836, -0.0011703466, 0.009300497, 0.9999534)
+bones/12/position = Vector3(1.3504177e-08, 0.034162637, 8.756131e-08)
+bones/12/rotation = Quaternion(-0.0016660402, -0.00080820406, 0.006919737, 0.9999743)
+bones/13/rotation = Quaternion(-0.05324761, -0.05324781, 0.15012597, 0.9857949)
+bones/14/rotation = Quaternion(0.053246345, 0.05324396, -0.1500353, 0.98580897)
+bones/15/position = Vector3(-3.3280543e-09, 0.028500233, -4.8838544e-08)
+bones/15/rotation = Quaternion(0.09837924, 0.09835267, -0.18223341, 0.9733649)
+bones/16/position = Vector3(-2.678558e-07, 0.09532508, 4.9202913e-07)
+bones/16/rotation = Quaternion(-0.053269494, -0.05326953, 0.14982367, 0.98583853)
+bones/17/rotation = Quaternion(0.053286072, 0.05325134, -0.14948025, 0.98589075)
+bones/18/position = Vector3(-7.347012e-10, 0.029499862, 8.831161e-08)
+bones/18/rotation = Quaternion(0.09208112, 0.09201529, -0.17354263, 0.976185)
+bones/19/position = Vector3(-0.018651372, 0.091035925, 0.0004307226)
+bones/19/rotation = Quaternion(-0.057171095, -0.05717098, 0.16369338, 0.98319244)
+bones/20/rotation = Quaternion(0.05716534, 0.057175197, -0.16375771, 0.98318183)
+bones/21/position = Vector3(2.8478553e-10, 0.028896932, -1.3136172e-08)
+bones/21/rotation = Quaternion(0.10377321, 0.103785165, -0.18961848, 0.9708268)
+bones/22/position = Vector3(-0.038062822, 0.08076676, 0.0048671006)
+bones/22/rotation = Quaternion(-0.05437109, -0.05437682, 0.15464939, 0.98497236)
+bones/23/rotation = Quaternion(0.05444816, 0.05430212, -0.15330318, 0.98518264)
+bones/24/position = Vector3(-6.3593575e-10, 0.020999873, 6.254597e-08)
+bones/24/rotation = Quaternion(0.13183951, 0.13147534, -0.2248103, 0.9564481)
+bones/25/rotation = Quaternion(0.43952805, 0.59007734, -0.55047023, 0.39446965)
+bones/25/scale = Vector3(1.0000001, 1.0000001, 1)
+bones/26/position = Vector3(1.1175871e-08, 0.11112894, 1.9185245e-07)
 bones/26/scale = Vector3(1, 0.99999994, 0.9999999)
+bones/27/position = Vector3(-2.9825742e-10, 0.27841514, 4.8592856e-08)
+bones/29/position = Vector3(-0.026817312, 0.024661459, 0.015761862)
+bones/29/rotation = Quaternion(0.25309613, -0.0613242, 0.22735296, 0.93834555)
+bones/30/position = Vector3(-3.958121e-09, 0.04187095, 1.1144547e-07)
+bones/30/rotation = Quaternion(-0.0020654905, 0.001043728, -0.00821381, 0.9999636)
+bones/31/position = Vector3(1.6298145e-08, 0.034183986, 7.630609e-09)
+bones/31/rotation = Quaternion(-0.0015297808, 0.00074413355, -0.00607335, 0.9999801)
+bones/32/position = Vector3(-0.022598632, 0.091093086, 0.0051802727)
+bones/32/rotation = Quaternion(-0.053266168, 0.053267147, -0.15042141, 0.9857478)
+bones/33/rotation = Quaternion(0.05326424, -0.053270143, 0.1504817, 0.9857386)
+bones/34/position = Vector3(-2.49929e-09, 0.028500063, 6.991251e-08)
+bones/34/rotation = Quaternion(0.09814278, -0.098153286, 0.1817879, 0.97349226)
+bones/35/position = Vector3(-3.5860938e-07, 0.09533393, -4.479784e-07)
+bones/35/rotation = Quaternion(-0.0532684, 0.053267583, -0.1504098, 0.9857494)
+bones/36/rotation = Quaternion(0.05327221, -0.05326654, 0.15039994, 0.9857508)
+bones/37/position = Vector3(-4.1668073e-09, 0.029499896, -3.3597452e-08)
+bones/37/rotation = Quaternion(0.09173783, -0.09173937, 0.1727996, 0.9763751)
+bones/38/position = Vector3(0.018650819, 0.091045246, 0.00043014373)
+bones/38/rotation = Quaternion(-0.06039615, 0.060395323, -0.17464446, 0.98092)
+bones/39/rotation = Quaternion(0.060399, -0.06039511, 0.17465097, 0.9809187)
+bones/40/position = Vector3(-7.558647e-09, 0.0294999, 6.4542704e-08)
+bones/40/rotation = Quaternion(0.1034078, -0.10341266, 0.18905726, 0.9710149)
+bones/41/rotation = Quaternion(-0.0545863, 0.054581683, -0.15248315, 0.98528683)
+bones/42/rotation = Quaternion(0.05447704, -0.054683316, 0.15428944, 0.985006)
+bones/43/position = Vector3(2.8401814e-09, 0.021000098, 2.9347216e-08)
+bones/43/rotation = Quaternion(0.13074756, -0.13122135, 0.22274286, 0.9571163)
+bones/44/position = Vector3(-0.0820779, -0.0677175, -0.01512219)
+bones/45/position = Vector3(-6.982418e-09, 0.43905485, -2.2728273e-09)
+bones/46/position = Vector3(9.280655e-09, 0.4452782, -2.0814248e-09)
+bones/47/position = Vector3(-1.2781584e-08, 0.14997412, -1.344597e-08)
+bones/47/rotation = Quaternion(0.3242161, -0.00014739741, -1.0539367e-07, 0.94598305)
+bones/48/position = Vector3(0.08207788, -0.067718, -0.015122137)
+bones/49/position = Vector3(-1.2923408e-08, 0.43905368, -2.2650966e-09)
+bones/50/position = Vector3(-1.0939593e-09, 0.44527858, 3.188938e-09)
+bones/51/position = Vector3(-6.275741e-09, 0.1499741, 1.0166332e-08)
+bones/51/rotation = Quaternion(0.32421583, -0.00014736943, -1.4682928e-07, 0.9459832)
 
 [node name="FootOrientation" parent="Gameplay/JetSki/VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D" index="3" unique_id=1357917683]
 left_foot_rotation_correction_degrees = Vector3(240, 0, 0)
@@ -687,13 +776,14 @@ autoplay = true
 vehicle_body_path = NodePath("../../Gameplay/JetSki")
 camera_target_path = NodePath("../../Gameplay/JetSki/CameraTarget")
 first_person_socket_path = NodePath("../../Gameplay/JetSki/VisualRoot/RiderMount/FirstPersonSocket")
-base_distance = 3.0
+base_distance = 1.0
 base_height = 1.0
 base_look_ahead = 3.0
 look_height_offset = 0.0
 position_sharpness = 6.109999999999999
 rotation_sharpness = 9.01
 distance_sharpness = 2.01
+distance_extension_end_speed = 100.0
 maximum_speed_distance_extension = 0.0
 base_fov = 45.0
 maximum_speed_fov = 50.0
@@ -731,7 +821,7 @@ editor_preview_mode = 0
 
 [node name="EntryBubbles" parent="CameraSystem/ChaseCamera/Camera3D/UnderwaterEffect/WaterCrossingOverlay" index="0"]
 visible = false
-material = SubResource("CanvasItemMaterial_0ka6b")
+material = SubResource("CanvasItemMaterial_4n5oi")
 position = Vector2(1, 1.76)
 amount = 500
 texture = SubResource("GradientTexture2D_pl0kw")
@@ -739,14 +829,38 @@ lifetime = 20.0
 speed_scale = 8.0
 explosiveness = 1.0
 randomness = 1.0
-process_material = SubResource("ParticleProcessMaterial_4n5oi")
+process_material = SubResource("ParticleProcessMaterial_kppiq")
 
 [node name="UnderwaterPostProcess" parent="CameraSystem/ChaseCamera/Camera3D/UnderwaterEffect" index="1" unique_id=1854893749]
-material_override = SubResource("ShaderMaterial_kppiq")
+material_override = SubResource("ShaderMaterial_nnnop")
 
 [node name="Debug" type="Node" parent="." unique_id=1303880580]
 
 [node name="Atrezzo" type="Node3D" parent="." unique_id=1365592301]
+
+[node name="stadium_lights" parent="Atrezzo" unique_id=1504769906 instance=ExtResource("31_0ka6b")]
+transform = Transform3D(-0.55417806, 0, 0.8323982, 0, 1, 0, -0.8323982, 0, -0.55417806, 244.04736, 5.0887012, 148.96098)
+visible = false
+
+[node name="stadium_lights3" parent="Atrezzo" unique_id=2032795749 instance=ExtResource("31_0ka6b")]
+transform = Transform3D(-0.55417806, 0, 0.8323982, 0, 1, 0, -0.8323982, 0, -0.55417806, 959.9877, 13.464918, -1060.1991)
+visible = false
+
+[node name="stadium_lights4" parent="Atrezzo" unique_id=94233362 instance=ExtResource("31_0ka6b")]
+transform = Transform3D(-0.55417806, 0, 0.8323982, 0, 1, 0, -0.8323982, 0, -0.55417806, 1045.0687, 13.464888, -768.6257)
+visible = false
+
+[node name="stadium_lights5" parent="Atrezzo" unique_id=1254506732 instance=ExtResource("31_0ka6b")]
+transform = Transform3D(-0.55417806, 0, 0.8323982, 0, 1, 0, -0.8323982, 0, -0.55417806, 981.28326, 13.464888, -902.1736)
+visible = false
+
+[node name="stadium_lights6" parent="Atrezzo" unique_id=1401669665 instance=ExtResource("31_0ka6b")]
+transform = Transform3D(-0.9411731, 0, 0.3379249, 0, 1, 0, -0.3379249, 0, -0.9411731, 831.3978, 13.464918, -1112.7375)
+visible = false
+
+[node name="stadium_lights2" parent="Atrezzo" unique_id=1103214157 instance=ExtResource("31_0ka6b")]
+transform = Transform3D(0.9168664, 0, 0.39919424, 0, 1, 0, -0.39919424, 0, 0.9168664, 244.04736, 5.0887012, 265.51746)
+visible = false
 
 [node name="Ramp1" parent="Atrezzo" unique_id=178349614 instance=ExtResource("57_1jbpp")]
 transform = Transform3D(-1.5056189, 0, 2.0169966, 0, 1.31, 0, -0.88212013, 0, -3.442647, 476.5722, -4.256017, -543.31067)
@@ -755,7 +869,7 @@ transform = Transform3D(-1.5056189, 0, 2.0169966, 0, 1.31, 0, -0.88212013, 0, -3
 transform = Transform3D(-1.7124417, 0, 0.7671602, 0, 1.31, 0, -0.3355124, 0, -3.915554, 1496.1028, -4.256017, -223.9528)
 
 [node name="Ramp4" parent="Atrezzo" unique_id=1765982400 instance=ExtResource("57_1jbpp")]
-transform = Transform3D(-0.67075574, 0, 3.1996584, 0, 1.5849998, 0, -1.5129812, 0, -1.4185166, 904.50024, -3.43675, 296.4156)
+transform = Transform3D(-1.5950521, 0, 0.9334754, 0, 1.5849997, 0, -0.4414004, 0, -3.373222, -849.6606, -3.43675, -1341.6696)
 
 [node name="Ramp5" parent="Atrezzo" unique_id=198907615 instance=ExtResource("57_1jbpp")]
 transform = Transform3D(-6.0789266, 0, -1.8685522, 0, 1.31, 0, 3.221965, 0, -3.5254242, 1508.0144, -4.256017, -907.5454)
@@ -898,16 +1012,22 @@ buoy_clearance = 20.0
 
 [node name="Buildings" type="Node3D" parent="." unique_id=1322261863]
 
-[node name="build1" parent="Buildings" unique_id=1230686511 instance=ExtResource("40_0ka6b")]
-transform = Transform3D(-0.44829965, 0, 0.8938833, 0, 1, 0, -0.8938833, 0, -0.44829965, -63.499924, 5.8305273, 223.02748)
+[node name="build1" parent="Buildings" unique_id=1874864562 instance=ExtResource("40_0ka6b")]
+transform = Transform3D(-0.44829965, 0, 0.8938833, 0, 1, 0, -0.8938833, 0, -0.44829965, -63.499924, 5.1504884, 223.02748)
 
 [node name="beach_hotel" parent="Buildings" unique_id=240417991 instance=ExtResource("56_7771p")]
 transform = Transform3D(0.07044011, 0, 0.4495144, 0, 0.455, 0, -0.4495144, 0, 0.07044011, -123.22586, 30.086075, -150.12727)
 
 [node name="beach_hotel_VIS" parent="Buildings/beach_hotel" index="0" unique_id=1447352137]
-transform = Transform3D(0.9738013, 0, 0.22740054, 0, 1.0000004, 0, -0.22740054, 0, 0.9738013, 913.63635, -54.734367, -913.70654)
+transform = Transform3D(0.77904105, 0, 0.18192044, 0, 0.80000013, 0, -0.18192044, 0, 0.77904105, 2211.5557, -67.00827, -1512.6923)
+surface_material_override/0 = SubResource("StandardMaterial3D_lcj2a")
 surface_material_override/1 = SubResource("StandardMaterial3D_4sljt")
 surface_material_override/4 = SubResource("StandardMaterial3D_dbb74")
+
+[node name="LightmapGI" type="LightmapGI" parent="." unique_id=1117524579]
+bounces = 2
+directional = true
+light_data = ExtResource("43_4n5oi")
 
 [editable path="TerrainRoot/independent_island"]
 [editable path="TerrainRoot/independent_island2"]
