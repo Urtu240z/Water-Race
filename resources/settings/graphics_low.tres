@@ -1,24 +1,17 @@
-[gd_resource type="Resource" script_class="GraphicsQualityProfile" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="GraphicsQualityProfile" format=3 uid="uid://c545xyu1udao4"]
 
-[ext_resource type="Script" path="res://scripts/settings/graphics_quality_profile.gd" id="1_profile"]
+[ext_resource type="Script" uid="uid://cjj22fsei5dtt" path="res://scripts/settings/graphics_quality_profile.gd" id="1_profile"]
 
 [resource]
 script = ExtResource("1_profile")
 scaling_3d_scale = 0.5
-scaling_3d_mode = 1
-msaa_3d = 0
 screen_space_aa = 1
-use_taa = false
 anisotropic_filtering = 1
 texture_mipmap_bias = 0.75
 mesh_lod_bias = 0.5
-built_in_ssr = false
 ssao = false
 ssil = false
 glow = false
-fog = true
-volumetric_fog = false
-sdfgi = false
 directional_shadow_max_distance = 120.0
 directional_shadow_mode = 0
 directional_shadow_blur = 0.8
@@ -54,7 +47,6 @@ ocean_custom_ssr_max_distance = 0.0
 ocean_custom_ssr_distance_fade_start = 0.0
 ocean_custom_ssr_distance_fade_end = 1.0
 ocean_custom_ssr_blur_lod = 0.0
-ocean_mirrored_reflection_enabled = true
 ocean_mirrored_reflection_strength = 0.55
 ocean_mirrored_reflection_blur_lod = 0.0
 ocean_shore_foam_strength = 0.0

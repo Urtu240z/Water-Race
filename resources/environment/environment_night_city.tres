@@ -1,20 +1,19 @@
 [gd_resource type="Environment" format=3 uid="uid://bl1pfl5d074rp"]
 
-[ext_resource type="Texture2D" uid="uid://dh4ygdetfbe7t" path="res://assets/environment/sky/kloofendal_48d_partly_cloudy_puresky_4k.hdr" id="1_hgyb2"]
+[ext_resource type="Texture2D" uid="uid://olqtngkjhlxu" path="res://assets/NightSkyHDRI003_4K_HDR.exr" id="1_hgyb2"]
 
-[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_qid03"]
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_54t36"]
 panorama = ExtResource("1_hgyb2")
 
-[sub_resource type="Sky" id="Sky_s3uqp"]
-sky_material = SubResource("PanoramaSkyMaterial_qid03")
-process_mode = 1
+[sub_resource type="Sky" id="Sky_pfddk"]
+sky_material = SubResource("PanoramaSkyMaterial_54t36")
 
 [resource]
 background_mode = 2
-sky = SubResource("Sky_s3uqp")
-sky_rotation = Vector3(0, 0.41887903, 0)
+background_energy_multiplier = 0.35
+sky = SubResource("Sky_pfddk")
+sky_rotation = Vector3(0.07531096, 0.06161012, 0)
 ambient_light_source = 3
-ambient_light_sky_contribution = 0.85
 reflected_light_source = 2
 tonemap_mode = 4
 tonemap_white = 1.74

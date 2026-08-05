@@ -1,0 +1,7 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://c4xk3c2qffdrf"]
+
+[resource]
+resource_name = "GhostWhite.002"
+cull_mode = 2
+albedo_color = Color(0.987835, 0.987835, 1, 1)
+roughness = 0.5

@@ -5,6 +5,8 @@ extends Node
 const ORIGINAL_SKY_ENERGY: float = 1.0
 const ORIGINAL_AMBIENT_SKY_CONTRIBUTION: float = 0.8
 
+var _syncing_panorama_rotation: bool = false
+
 enum SkyEnvironmentPreset {
 	ORIGINAL,
 	ARISTEA_WRECK,
@@ -71,12 +73,37 @@ const BUILT_IN_SKY_PRESET_COUNT: int = 5
 			return
 		custom_sky = value
 		_request_sky_update()
-@export_range(-180.0, 180.0, 1.0) var sky_rotation_degrees: float = 0.0:
+## Euler rotation applied to the active panorama, in degrees.
+@export var panorama_rotation_degrees: Vector3 = Vector3.ZERO:
+	set(value):
+		var validated_value := Vector3(
+			clampf(value.x, -180.0, 180.0),
+			clampf(value.y, -180.0, 180.0),
+			clampf(value.z, -180.0, 180.0)
+		)
+		if panorama_rotation_degrees.is_equal_approx(validated_value):
+			return
+		panorama_rotation_degrees = validated_value
+		if _syncing_panorama_rotation:
+			return
+		_syncing_panorama_rotation = true
+		sky_rotation_degrees = validated_value.y
+		_syncing_panorama_rotation = false
+		_request_sky_update()
+## Legacy Y-only property retained for existing scenes.
+@export_storage var sky_rotation_degrees: float = 0.0:
 	set(value):
 		var validated_value := clampf(value, -180.0, 180.0)
 		if is_equal_approx(sky_rotation_degrees, validated_value):
 			return
 		sky_rotation_degrees = validated_value
+		if _syncing_panorama_rotation:
+			return
+		_syncing_panorama_rotation = true
+		var migrated_rotation := panorama_rotation_degrees
+		migrated_rotation.y = validated_value
+		panorama_rotation_degrees = migrated_rotation
+		_syncing_panorama_rotation = false
 		_request_sky_update()
 @export_range(0.05, 4.0, 0.05) var sky_energy_multiplier: float = 1.0:
 	set(value):
@@ -226,9 +253,9 @@ func _apply_active_preset() -> void:
 	_environment.background_mode = Environment.BG_SKY
 	_environment.sky = selected_sky
 	_environment.sky_rotation = Vector3(
-		0.0,
-		deg_to_rad(sky_rotation_degrees),
-		0.0
+		deg_to_rad(panorama_rotation_degrees.x),
+		deg_to_rad(panorama_rotation_degrees.y),
+		deg_to_rad(panorama_rotation_degrees.z)
 	)
 	_environment.background_energy_multiplier = selected_energy
 	_environment.ambient_light_source = (

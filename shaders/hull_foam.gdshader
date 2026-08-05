@@ -1,5 +1,5 @@
 shader_type spatial;
-render_mode unshaded, blend_mix, depth_prepass_alpha, cull_disabled;
+render_mode blend_mix, depth_prepass_alpha, cull_disabled;
 
 uniform sampler2D foam_noise_texture : repeat_enable, filter_linear_mipmap;
 uniform vec4 foam_color : source_color = vec4(0.82, 0.94, 0.98, 0.82);

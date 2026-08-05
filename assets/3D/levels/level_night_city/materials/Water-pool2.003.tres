@@ -1,0 +1,13 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://cse506rurvjw"]
+
+[ext_resource type="Texture2D" uid="uid://poiob286i24l" path="res://assets/3D/levels/level_night_city/Gold_City_Image_0_9.png" id="1_wgf3p"]
+
+[resource]
+resource_name = "Water-pool2.003"
+transparency = 2
+alpha_scissor_threshold = 0.5
+alpha_antialiasing_mode = 0
+cull_mode = 2
+albedo_texture = ExtResource("1_wgf3p")
+roughness = 0.5
+metadata/_gltf_primary_texture_coord = 0

@@ -656,11 +656,24 @@ func _validate_normals_axes_and_turn_lean() -> void:
 	_set_support(15, false, true)
 	_set_motion_inputs(2.0, 1.0, 0.0, 1.0, Vector2.ZERO)
 	_system.state.turn_lean_landing_ramp = 1.0
-	await _run_harness()
+	await _run_harness(
+		Transform3D.IDENTITY,
+		Vector3.ZERO,
+		Vector3.FORWARD
+	)
 	_expect_numbered(
 		35,
-		is_zero_approx(_system.state.turn_lean_speed_factor),
-		"La velocidad inferior al inicio no tiene autoridad."
+		is_zero_approx(_system.state.turn_lean_speed_factor)
+		and _scalar_close(
+			_system.state.turn_lean_requested_torque,
+			clampf(
+				_system.state.turn_lean_roll_error
+				* _system.turn_lean_stiffness,
+				-_system.turn_lean_max_torque,
+				_system.turn_lean_max_torque
+			)
+		),
+		"La velocidad inferior al inicio conserva stiffness sin damping."
 	)
 	var middle_speed := 9.5
 	_reset_case()
@@ -803,20 +816,22 @@ func _validate_normals_axes_and_turn_lean() -> void:
 		Vector3.ZERO,
 		Vector3.FORWARD
 	)
+	var synthetic_limited_damping := (
+		_system._limit_turn_lean_damping_torque(
+			-4200.0,
+			1.0,
+			1.0,
+			PHYSICS_DELTA,
+			1.0
+		)
+	)
 	_expect_numbered(
 		46,
-		_scalar_close(
-			_system.state.turn_lean_requested_torque,
-			clampf(
-				_system.state.turn_lean_roll_error
-				* _system.turn_lean_stiffness
-				- _system.state.turn_lean_roll_rate
-				* _system.turn_lean_damping,
-				-_system.turn_lean_max_torque,
-				_system.turn_lean_max_torque
-			)
-		),
-		"El término damping conserva roll rate y signo."
+		_system.state.turn_lean_requested_torque < 0.0
+		and absf(_system.state.turn_lean_requested_torque)
+		<= _system.turn_lean_damping
+		and _scalar_close(synthetic_limited_damping, -30.0),
+		"El damping conserva signo y queda limitado de forma estable."
 	)
 	var large_roll := Transform3D(
 		Basis(Vector3.FORWARD, deg_to_rad(-60.0)),

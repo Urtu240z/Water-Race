@@ -1,0 +1,13 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://cnx0lrx16dcip"]
+
+[ext_resource type="Texture2D" uid="uid://dregmp05lkt1v" path="res://assets/3D/levels/level_night_city/Gold_City_Image_2_6.png" id="1_h2kcw"]
+
+[resource]
+resource_name = "*2.001"
+transparency = 2
+alpha_scissor_threshold = 0.5
+alpha_antialiasing_mode = 0
+cull_mode = 2
+albedo_texture = ExtResource("1_h2kcw")
+roughness = 0.5
+metadata/_gltf_primary_texture_coord = 0

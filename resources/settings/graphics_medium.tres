@@ -1,35 +1,24 @@
-[gd_resource type="Resource" script_class="GraphicsQualityProfile" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="GraphicsQualityProfile" format=3 uid="uid://hmwfoqc6w566"]
 
-[ext_resource type="Script" path="res://scripts/settings/graphics_quality_profile.gd" id="1_profile"]
+[ext_resource type="Script" uid="uid://cjj22fsei5dtt" path="res://scripts/settings/graphics_quality_profile.gd" id="1_profile"]
 
 [resource]
 script = ExtResource("1_profile")
 scaling_3d_scale = 0.67
-scaling_3d_mode = 1
-msaa_3d = 0
-screen_space_aa = 2
-use_taa = false
 anisotropic_filtering = 2
 texture_mipmap_bias = 0.25
 mesh_lod_bias = 0.75
-built_in_ssr = false
-ssao = true
+ssao = false
 ssao_radius = 1.5
 ssao_detail = 0.35
 ssao_power = 1.15
 ssil = false
-glow = true
 glow_intensity = 0.4
-fog = true
-volumetric_fog = false
-sdfgi = false
 directional_shadow_max_distance = 250.0
-directional_shadow_mode = 1
 directional_shadow_blur = 1.8
 directional_shadow_atlas_size = 2048
 positional_shadow_atlas_size = 2048
 omni_shadows = false
-reflection_probe = true
 reflection_probe_shadows = false
 sky_radiance = 2
 ocean_near_radius = 190.0
@@ -51,30 +40,25 @@ ocean_geometry_normal_quality = 1
 ocean_surface_detail_quality = 1
 ocean_surface_detail_fade_start = 100.0
 ocean_surface_detail_fade_end = 320.0
-ocean_custom_ssr_enabled = true
 ocean_custom_ssr_steps = 8
 ocean_custom_ssr_refinement_steps = 0
 ocean_custom_ssr_max_distance = 120.0
 ocean_custom_ssr_distance_fade_start = 70.0
 ocean_custom_ssr_distance_fade_end = 140.0
 ocean_custom_ssr_blur_lod = 0.0
-ocean_mirrored_reflection_enabled = true
-ocean_mirrored_reflection_strength = 0.70
+ocean_mirrored_reflection_strength = 0.7
 ocean_mirrored_reflection_blur_lod = 0.0
 ocean_shore_foam_strength = 0.55
 ocean_crest_foam_strength = 0.65
-ocean_foam_detail_quality = 1
 ocean_foam_evaluation_distance = 320.0
 vehicle_effects_quality_level = 1
 terrain_hex_tiling_mode = 1
 vegetation_full_3d_range = 220.0
 vegetation_impostor_range = 1800.0
 vegetation_ground_shadow_range = 800.0
-vegetation_ground_shadows_enabled = true
-vegetation_real_shadows_enabled = true
 vegetation_update_rate_hz = 8.0
 vegetation_future_density_ratio = 0.75
-wildlife_population_ratio = 0.50
+wildlife_population_ratio = 0.5
 wildlife_update_rate_hz = 30.0
 wildlife_bird_visibility_distance = 700.0
 wildlife_fish_visibility_distance = 220.0

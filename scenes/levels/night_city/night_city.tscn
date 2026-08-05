@@ -14,6 +14,22 @@
 [ext_resource type="PackedScene" uid="uid://b6ny8tx1gom7c" path="res://assets/3D/levels/level_night_city/Gold_City.glb" id="14_0ka6b"]
 [ext_resource type="PackedScene" uid="uid://1x3n2tx0xgj5" path="res://assets/3D/Terrain/independent_island.glb" id="14_x65hf"]
 [ext_resource type="Material" uid="uid://dmj6dyip8ab0w" path="res://assets/materials/sand_02.res" id="15_7xt3c"]
+[ext_resource type="Shader" uid="uid://bpcwf528qbo27" path="res://shaders/terrain/terrain_master.gdshader" id="15_ql7ri"]
+[ext_resource type="Texture2D" uid="uid://c3cl7hgc1cf2o" path="res://assets/materials/sand_02_textures/sand_02_albedo_2k.jpg" id="16_niyfo"]
+[ext_resource type="Texture2D" uid="uid://cwfms7i1fbbg8" path="res://assets/materials/sand_02_textures/sand_02_normal_2k.jpg" id="17_f5ebn"]
+[ext_resource type="Texture2D" uid="uid://byoqy1w5x6hyq" path="res://assets/materials/sand_02_textures/sand_02_orm_2k.jpg" id="18_hx176"]
+[ext_resource type="Texture2D" uid="uid://do03pewy7xrqu" path="res://assets/materials/terrain_master_textures/grass_albedo.png" id="19_ra6oy"]
+[ext_resource type="Texture2D" uid="uid://cpw3o0egt3xhj" path="res://assets/materials/terrain_master_textures/grass_normal.png" id="20_2w8ey"]
+[ext_resource type="Texture2D" uid="uid://bjbtr4wpa2non" path="res://assets/materials/terrain_master_textures/grass_orm.png" id="21_v3gmp"]
+[ext_resource type="Texture2D" uid="uid://u0a4uawsdt4x" path="res://assets/materials/terrain_master_textures/moss_albedo.png" id="22_5h1yh"]
+[ext_resource type="Texture2D" uid="uid://dgxnwr48qllj6" path="res://assets/materials/terrain_master_textures/moss_normal.png" id="23_sfswf"]
+[ext_resource type="Texture2D" uid="uid://dw445jkd1svoe" path="res://assets/materials/terrain_master_textures/moss_orm.png" id="24_x6dv6"]
+[ext_resource type="Texture2D" uid="uid://qjc5ek17whfb" path="res://assets/materials/aerial_rocks_02_textures/aerial_rocks_02_albedo_2k.jpg" id="25_wf1ac"]
+[ext_resource type="Texture2D" uid="uid://ceat1hobxlurl" path="res://assets/materials/aerial_rocks_02_textures/aerial_rocks_02_normal_2k.jpg" id="26_tgr2b"]
+[ext_resource type="Texture2D" uid="uid://c3ntf6cnhrjri" path="res://assets/materials/aerial_rocks_02_textures/aerial_rocks_02_orm_2k.jpg" id="27_hgey6"]
+[ext_resource type="Texture2D" uid="uid://cvvyxbgnxwgtw" path="res://assets/materials/terrain_master_textures/wet_sand_albedo.png" id="28_g5j8w"]
+[ext_resource type="Texture2D" uid="uid://cm7w5uwuuwkx8" path="res://assets/materials/terrain_master_textures/wet_sand_normal.png" id="29_swhwu"]
+[ext_resource type="Texture2D" uid="uid://cexe4l4551x8v" path="res://assets/materials/terrain_master_textures/wet_sand_orm.png" id="30_cty2f"]
 [ext_resource type="PackedScene" uid="uid://c3xovkcnf4rak" path="res://assets/3D/levels/level_night_city/atrezzo/stadium_lights.tscn" id="31_0ka6b"]
 [ext_resource type="Material" uid="uid://cwtgldc4ahbeu" path="res://assets/materials/aerial_rocks_02.res" id="33_f5hqs"]
 [ext_resource type="PackedScene" uid="uid://b3y5xp6677icq" path="res://assets/3D/levels/level_night_city/buildings/build1/build1.tscn" id="40_0ka6b"]
@@ -122,7 +138,70 @@ shadow_mesh = SubResource("ArrayMesh_u40r8")
 material = ExtResource("15_7xt3c")
 size = Vector2(10000, 10000)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_0ka6b"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_nutsd"]
+render_priority = 0
+shader = ExtResource("15_ql7ri")
+shader_parameter/dry_sand_albedo = ExtResource("16_niyfo")
+shader_parameter/dry_sand_orm = ExtResource("18_hx176")
+shader_parameter/dry_sand_normal = ExtResource("17_f5ebn")
+shader_parameter/dry_sand_tint = Color(1, 1, 1, 1)
+shader_parameter/dry_sand_brightness = 1.0
+shader_parameter/dry_sand_contrast = 1.0
+shader_parameter/dry_sand_saturation = 1.0
+shader_parameter/wet_sand_albedo = ExtResource("28_g5j8w")
+shader_parameter/wet_sand_orm = ExtResource("30_cty2f")
+shader_parameter/wet_sand_normal = ExtResource("29_swhwu")
+shader_parameter/wet_sand_tint = Color(1, 1, 1, 1)
+shader_parameter/wet_sand_brightness = 0.32999999262384
+shader_parameter/wet_sand_contrast = 0.5999999865888
+shader_parameter/wet_sand_saturation = 1.45999996736608
+shader_parameter/grass_albedo = ExtResource("19_ra6oy")
+shader_parameter/grass_orm = ExtResource("21_v3gmp")
+shader_parameter/grass_normal = ExtResource("20_2w8ey")
+shader_parameter/grass_tint = Color(0.75, 1, 0.65, 1)
+shader_parameter/grass_brightness = 0.749999983236
+shader_parameter/grass_contrast = 1.27999997138944
+shader_parameter/grass_saturation = 1.42999996803664
+shader_parameter/rock_albedo = ExtResource("25_wf1ac")
+shader_parameter/rock_orm = ExtResource("27_hgey6")
+shader_parameter/rock_normal = ExtResource("26_tgr2b")
+shader_parameter/rock_tint = Color(1, 1, 1, 1)
+shader_parameter/rock_brightness = 0.15999999642368
+shader_parameter/rock_contrast = 1.0
+shader_parameter/rock_saturation = 1.21999997273056
+shader_parameter/moss_albedo = ExtResource("22_5h1yh")
+shader_parameter/moss_orm = ExtResource("24_x6dv6")
+shader_parameter/moss_normal = ExtResource("23_sfswf")
+shader_parameter/moss_tint = Color(1, 1, 1, 1)
+shader_parameter/moss_brightness = 1.0
+shader_parameter/moss_contrast = 1.0
+shader_parameter/moss_saturation = 1.0
+shader_parameter/sand_tile_size = 7.0000001005831
+shader_parameter/grass_tile_size = 14.40000021085198
+shader_parameter/rock_tile_size = 62.95000093430524
+shader_parameter/moss_tile_size = 12.60000018402982
+shader_parameter/triplanar_sharpness = 1.0
+shader_parameter/dry_sand_normal_strength = 0.60000000894072
+shader_parameter/wet_sand_normal_strength = 0.55000000819566
+shader_parameter/grass_normal_strength = 1.8000000268221599
+shader_parameter/rock_normal_strength = 1.70000002533204
+shader_parameter/moss_normal_strength = 1.20000001788144
+shader_parameter/hex_tiling_mode = 3
+shader_parameter/hex_rotation_strength = 0.999999977648
+shader_parameter/hex_weight_contrast = 0.75
+shader_parameter/hex_luminance_influence = 0.6
+shader_parameter/hex_blend_exponent = 1.0
+shader_parameter/material_sample_threshold = 0.002
+shader_parameter/water_level = 0.89
+shader_parameter/wet_sand_height = 1.05000001564626
+shader_parameter/debug_view = 0
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_ql7ri"]
+rough = true
+bounce = 0.08
+absorbent = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_6hchx"]
 resource_local_to_scene = true
 render_priority = 0
 shader = ExtResource("41_bivmj")
@@ -131,16 +210,16 @@ shader_parameter/water_level = 0.0
 shader_parameter/simulation_time = 0.0
 shader_parameter/wave_height_texture_a = ExtResource("46_ciigv")
 shader_parameter/wave_height_texture_b = ExtResource("47_55hbu")
-shader_parameter/wave_world_size_a = 232.5
-shader_parameter/wave_world_size_b = 158.0
-shader_parameter/wave_amplitude_a = 0.53999998792992
-shader_parameter/wave_amplitude_b = 0.36999999172976
+shader_parameter/wave_world_size_a = 153.5
+shader_parameter/wave_world_size_b = 104.0
+shader_parameter/wave_amplitude_a = 0.7999999821184
+shader_parameter/wave_amplitude_b = 0.61999998614176
 shader_parameter/wave_direction_a = Vector2(0.86012906, 0.5100765)
 shader_parameter/wave_direction_b = Vector2(-0.38176018, 0.92426145)
-shader_parameter/wave_travel_speed_a = 9.0000004321348
-shader_parameter/wave_travel_speed_b = 4.0000003576287995
-shader_parameter/wave_mean_a = 0.638000030305
-shader_parameter/wave_mean_b = 0.26800001273
+shader_parameter/wave_travel_speed_a = 4.6
+shader_parameter/wave_travel_speed_b = 2.3
+shader_parameter/wave_mean_a = 0.1050000049875
+shader_parameter/wave_mean_b = 0.0650000030875
 shader_parameter/geometry_normal_step = 2.0
 shader_parameter/ocean_geometry_normal_quality = 2
 shader_parameter/ripple_active = PackedInt32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
@@ -216,38 +295,38 @@ shader_parameter/vehicle_interaction_debug_multiplier = 3.5
 shader_parameter/surface_normal_texture_a = ExtResource("43_q1qm3")
 shader_parameter/surface_normal_texture_b = ExtResource("44_ls1yi")
 shader_parameter/surface_warp_texture = ExtResource("45_f572k")
-shader_parameter/surface_normal_world_size_a = 7.5
-shader_parameter/surface_normal_world_size_b = 3.25
-shader_parameter/surface_normal_strength = 0.62
+shader_parameter/surface_normal_world_size_a = 24.7500003650794
+shader_parameter/surface_normal_world_size_b = 17.30000025406546
+shader_parameter/surface_normal_strength = 1.26999997161296
 shader_parameter/surface_flow_direction_a = Vector2(0.82, 0.57)
 shader_parameter/surface_flow_direction_b = Vector2(-0.46, 0.89)
-shader_parameter/surface_flow_speed_a = 0.01999993249695997
-shader_parameter/surface_flow_speed_b = -0.2000000625856
-shader_parameter/surface_warp_world_size = 212.0
-shader_parameter/surface_warp_strength = 1.2500000186265
+shader_parameter/surface_flow_speed_a = 0.24
+shader_parameter/surface_flow_speed_b = -0.17
+shader_parameter/surface_warp_world_size = 46.0
+shader_parameter/surface_warp_strength = 2.4
 shader_parameter/surface_detail_fade_start = 130.0
 shader_parameter/surface_detail_fade_end = 520.0
 shader_parameter/ocean_surface_detail_quality = 2
-shader_parameter/shallow_water_color = Color(0.035, 0.43, 0.55, 1)
+shader_parameter/shallow_water_color = Color(0.0040557077, 0.13852105, 0.18527466, 1)
 shader_parameter/deep_water_color = Color(0.004, 0.055, 0.115, 1)
-shader_parameter/horizon_water_color = Color(0.025, 0.22, 0.34, 1)
-shader_parameter/reflection_tint = Color(0.36, 0.7, 0.86, 1)
+shader_parameter/horizon_water_color = Color(0.007562869, 0.11598236, 0.19166547, 1)
+shader_parameter/reflection_tint = Color(0.035323698, 0.14712092, 0.19565243, 1)
 shader_parameter/trough_tint = Color(0.002, 0.025, 0.075, 1)
-shader_parameter/crest_tint = Color(0.044608742, 0.33985612, 0.3741427, 1)
-shader_parameter/absorption_density = 0.13
-shader_parameter/maximum_optical_depth = 38.0
-shader_parameter/shallow_depth_range = 5.5
-shader_parameter/near_water_alpha = 0.76999999396496
+shader_parameter/crest_tint = Color(0.0044133584, 0.0963913, 0.10836192, 1)
+shader_parameter/absorption_density = 0.11999999731776
+shader_parameter/maximum_optical_depth = 7.0
+shader_parameter/shallow_depth_range = 7.800000116229359
+shader_parameter/near_water_alpha = 0.8699999917297601
 shader_parameter/deep_water_alpha = 0.999999988824
 shader_parameter/horizon_water_alpha = 1.0
 shader_parameter/opacity_distance_start = 80.0
 shader_parameter/opacity_distance_end = 220.0
-shader_parameter/fresnel_power = 9.70000013709104
-shader_parameter/reflection_strength = 0.82
-shader_parameter/refraction_strength = 0.009
-shader_parameter/near_roughness = 0.02999999932944
-shader_parameter/horizon_roughness = 0.23999999463552
-shader_parameter/water_specular = 0.5499999877064
+shader_parameter/fresnel_power = 2.2000000253320398
+shader_parameter/reflection_strength = 0.71999998390656
+shader_parameter/refraction_strength = 0.01600000076
+shader_parameter/near_roughness = 0.0
+shader_parameter/horizon_roughness = 0.21999999508256
+shader_parameter/water_specular = 1.0
 shader_parameter/underwater_surface_fog_color = Color(4.324247e-09, 0.006975944, 0.012207908, 1)
 shader_parameter/underwater_surface_fog_density = 0.015
 shader_parameter/underwater_surface_fog_start_distance = 0.0
@@ -256,19 +335,19 @@ shader_parameter/underwater_visibility_blend = 150.0
 shader_parameter/underwater_surface_alpha = 1.0
 shader_parameter/foam_enabled = true
 shader_parameter/foam_noise_texture = ExtResource("42_jnoq4")
-shader_parameter/foam_color = Color(0.82, 0.95, 1, 1)
-shader_parameter/shore_foam_width = 6.20000009238744
-shader_parameter/shore_foam_strength = 0.57999998703584
+shader_parameter/foam_color = Color(0, 0.62518233, 0.7789871, 1)
+shader_parameter/shore_foam_width = 3.60000005364432
+shader_parameter/shore_foam_strength = 1.7099999617780801
 shader_parameter/vehicle_material_tag_roughness = 0.019608
 shader_parameter/vehicle_material_tag_tolerance = 0.05000000074506
 shader_parameter/crest_foam_start = 0.17999999597664
 shader_parameter/crest_foam_end = 1.71999996155456
 shader_parameter/crest_foam_strength = 1.15999997407168
 shader_parameter/ripple_foam_strength = 1.05999997630688
-shader_parameter/foam_macro_scale = 0.1390000066025
-shader_parameter/foam_detail_scale = 0.06500000308750001
-shader_parameter/foam_scroll_speed = 0.13
-shader_parameter/foam_roughness = 0.70999998413008
+shader_parameter/foam_macro_scale = 0.470000022325
+shader_parameter/foam_detail_scale = 0.5370000255075
+shader_parameter/foam_scroll_speed = 0.00999999977648
+shader_parameter/foam_roughness = 0.15999999642368
 shader_parameter/ocean_foam_detail_quality = 1
 shader_parameter/ocean_foam_evaluation_distance = 520.0
 shader_parameter/ocean_surface_enabled = true
@@ -282,16 +361,16 @@ shader_parameter/ocean_middle_wave_amplitude_ratio = 0.55
 shader_parameter/ocean_far_wave_amplitude_ratio = 0.08
 shader_parameter/ocean_debug_show_rings = false
 shader_parameter/custom_ssr_enabled = true
-shader_parameter/custom_ssr_steps = 24
-shader_parameter/custom_ssr_refinement_steps = 2
-shader_parameter/custom_ssr_strength = 0.85
-shader_parameter/custom_ssr_max_distance = 280.0
+shader_parameter/custom_ssr_steps = 30
+shader_parameter/custom_ssr_refinement_steps = 5
+shader_parameter/custom_ssr_strength = 0.00999999977648
+shader_parameter/custom_ssr_max_distance = 500.0
 shader_parameter/custom_ssr_start_bias = 0.2
 shader_parameter/custom_ssr_base_step = 0.35
 shader_parameter/custom_ssr_step_growth = 1.1
-shader_parameter/custom_ssr_thickness = 1.1
+shader_parameter/custom_ssr_thickness = 4.99999988824
 shader_parameter/custom_ssr_min_fresnel = 0.0
-shader_parameter/custom_ssr_edge_fade = 0.04
+shader_parameter/custom_ssr_edge_fade = 0.0010000000475
 shader_parameter/custom_ssr_distance_fade_start = 190.0
 shader_parameter/custom_ssr_distance_fade_end = 300.0
 shader_parameter/custom_ssr_blur_lod = 0.15
@@ -302,23 +381,23 @@ shader_parameter/custom_ssr_minimum_hit_visibility = 0.55
 shader_parameter/custom_ssr_hit_contrast = 1.1
 shader_parameter/custom_ssr_hit_brightness = 1.05
 shader_parameter/custom_ssr_debug_mode = 0
-shader_parameter/mirrored_reflection_enabled = true
-shader_parameter/mirrored_reflection_strength = 0.66999998502416
+shader_parameter/mirrored_reflection_enabled = false
+shader_parameter/mirrored_reflection_strength = 0.82
 shader_parameter/mirrored_reflection_vertical_scale = 1.0
 shader_parameter/mirrored_reflection_geometry_strength = 1.0
 shader_parameter/mirrored_reflection_sky_strength = 0.15
 shader_parameter/mirrored_reflection_reference_distance = 220.0
 shader_parameter/mirrored_reflection_macro_distortion = 0.008
 shader_parameter/mirrored_reflection_detail_distortion = 0.002
-shader_parameter/mirrored_reflection_blur_lod = 3.85000005736962
+shader_parameter/mirrored_reflection_blur_lod = 0.2
 shader_parameter/mirrored_reflection_edge_fade = 0.04
 shader_parameter/mirrored_reflection_near_fade = 0.05
 shader_parameter/mirrored_reflection_far_fade_start = 250.0
 shader_parameter/mirrored_reflection_far_fade_end = 600.0
-shader_parameter/mirrored_reflection_tint = Color(0.042177573, 0.13501707, 0.17365214, 1)
-shader_parameter/mirrored_reflection_saturation = 0.01999999955296
-shader_parameter/mirrored_reflection_contrast = 1.18999998457712
-shader_parameter/mirrored_reflection_brightness = 0.51999999396496
+shader_parameter/mirrored_reflection_tint = Color(0.78, 0.9, 0.96, 1)
+shader_parameter/mirrored_reflection_saturation = 0.82
+shader_parameter/mirrored_reflection_contrast = 1.08
+shader_parameter/mirrored_reflection_brightness = 0.92
 shader_parameter/reflection_wave_distortion_enabled = true
 shader_parameter/reflection_macro_distortion_x = 0.1150000054625
 shader_parameter/reflection_macro_distortion_y = 0.10850000515375
@@ -333,9 +412,9 @@ shader_parameter/reflection_coast_breakup_strength = 0.2
 shader_parameter/reflection_coast_breakup_distance = 10.0
 shader_parameter/custom_reflection_minimum_surface_weight = 0.34
 shader_parameter/custom_reflection_maximum_surface_weight = 0.88
-shader_parameter/custom_reflection_emission_strength = 1.20999997295408
+shader_parameter/custom_reflection_emission_strength = 0.2999999932944
 
-[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_4n5oi"]
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_c2l6c"]
 resource_local_to_scene = true
 blend_mode = 1
 
@@ -362,7 +441,7 @@ point_count = 3
 [sub_resource type="CurveTexture" id="CurveTexture_bubble_shrink"]
 curve = SubResource("Curve_bubble_shrink")
 
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_kppiq"]
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_4h5fo"]
 resource_local_to_scene = true
 particle_flag_disable_z = true
 emission_shape_offset = Vector3(0, 600, 0)
@@ -385,7 +464,7 @@ turbulence_influence_max = 0.082
 turbulence_initial_displacement_min = -47.5
 turbulence_initial_displacement_max = 94.5
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_nnnop"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2dd7v"]
 resource_local_to_scene = true
 render_priority = -127
 shader = ExtResource("55_y53au")
@@ -409,6 +488,12 @@ shader_parameter/blur_strength = 5.0
 shader_parameter/underwater_visibility_radius = 248.0
 shader_parameter/underwater_visibility_blend = 150.0
 shader_parameter/debug_mode = 0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ql7ri"]
+albedo_color = Color(0.44785076, 0.73607266, 9.62615e-06, 1)
+emission_enabled = true
+emission = Color(0.3034523, 0.5302026, 1.3091564e-05, 1)
+emission_energy_multiplier = 16.0
 
 [sub_resource type="PrismMesh" id="PrismMesh_tpwhi"]
 material = ExtResource("66_e6ey7")
@@ -463,31 +548,33 @@ aristea_wreck_sky = SubResource("Sky_k0dft")
 kloofendal_48d_sky = SubResource("Sky_s3uqp")
 overcast_soil_sky = SubResource("Sky_e7rpt")
 additional_skies = Array[Sky]([SubResource("Sky_pfddk")])
-sky_preset = 2
+sky_preset = 5
 custom_sky = SubResource("Sky_lusr1")
-sky_rotation_degrees = 24.0
+panorama_rotation_degrees = Vector3(4.315, 3.53, 0)
+sky_rotation_degrees = 3.53
+sky_energy_multiplier = 0.35
+ambient_sky_contribution = 1.0
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="Environment" unique_id=951090327 groups=["graphics_quality_environment"]]
 environment = ExtResource("10_4n5oi")
 compositor = SubResource("Compositor_ep46c")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="Environment" unique_id=1488093793 groups=["graphics_quality_directional_light"]]
-transform = Transform3D(0.8829475, 0.34888542, -0.3141378, 0, 0.66913056, 0.74314487, 0.46947157, -0.656158, 0.5908072, 0, 0, 0)
-visible = false
-light_color = Color(1.2032687e-07, 0.15931353, 0.25530243, 1)
-light_energy = 8.178
+transform = Transform3D(0.9426294, -0.33240783, 0.030902265, 0.24282515, 0.74621695, 0.6198357, -0.22909802, -0.5767714, 0.784123, 0, 0, 1468.894)
+light_color = Color(0.75789475, 0.8186881, 0.7836006, 1)
+light_energy = 0.1
 light_indirect_energy = 16.0
-light_angular_distance = 0.5
-light_specular = 8.394
+light_specular = 7.281
 light_bake_mode = 1
 shadow_enabled = true
-shadow_blur = 3.796
+shadow_blur = 3.5
 directional_shadow_mode = 1
-directional_shadow_fade_start = 0.85
-directional_shadow_max_distance = 500.0
+directional_shadow_fade_start = 0.876
+directional_shadow_max_distance = 8192.0
 
 [node name="DirectionalLight3D2" type="DirectionalLight3D" parent="Environment" unique_id=1424115820 groups=["graphics_quality_directional_light"]]
 transform = Transform3D(0.9195691, 0.09848075, -0.38038722, 0.2341794, 0.64000714, 0.73181343, 0.31552005, -0.7620319, 0.56546843, 0, 0, 0)
+visible = false
 light_color = Color(0.82647467, 0.6933553, 0.57007265, 1)
 light_energy = 0.4
 light_volumetric_fog_energy = 16.0
@@ -542,21 +629,26 @@ mesh = SubResource("PlaneMesh_tpwhi")
 [node name="Gold_City" parent="TerrainRoot" unique_id=297389943 instance=ExtResource("14_0ka6b")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -131.304, 0, -218.843)
 
+[node name="Terrain_VIS" parent="TerrainRoot/Gold_City" index="5" unique_id=1510643192]
+surface_material_override/0 = SubResource("ShaderMaterial_nutsd")
+
+[node name="Terrain_COL" parent="TerrainRoot/Gold_City" index="6" unique_id=881381010]
+visible = false
+physics_material_override = SubResource("PhysicsMaterial_ql7ri")
+
 [node name="build1" parent="TerrainRoot" unique_id=1230686511 instance=ExtResource("40_0ka6b")]
 transform = Transform3D(0.625, 0, 0, 0, 0.625, 0, 0, 0, 0.625, -615.5505, 9.018271, -97.15556)
 
 [node name="WaterIntegration" type="Node3D" parent="." unique_id=1889730552]
 
 [node name="Ocean" parent="WaterIntegration" unique_id=1340264265 instance=ExtResource("40_5rutu")]
-ocean_material = SubResource("ShaderMaterial_0ka6b")
-wave_world_size_a = 232.5
-wave_world_size_b = 158.0
-wave_amplitude_a = 0.53999998792992
-wave_amplitude_b = 0.36999999172976
-wave_travel_speed_a = 9.0000004321348
-wave_travel_speed_b = 4.0000003576287995
-wave_mean_a = 0.638000030305
-wave_mean_b = 0.26800001273
+ocean_material = SubResource("ShaderMaterial_6hchx")
+wave_world_size_a = 153.5
+wave_world_size_b = 104.0
+wave_amplitude_a = 0.7999999821184
+wave_amplitude_b = 0.61999998614176
+wave_mean_a = 0.1050000049875
+wave_mean_b = 0.0650000030875
 normal_sample_step = 2.0
 landing_wave_minimum_amplitude = 1.0
 landing_wave_maximum_amplitude = 1.0
@@ -751,7 +843,7 @@ impact_sprite_emission = 0.0
 full_core_length = 2.0
 jet_foam_core_strength = 2.0
 jet_foam_core_opacity = 1.0
-jet_foam_emission = 1.72
+jet_foam_emission = 0.0
 jet_radius_multiplier = 0.5
 jet_droplet_quad_size = Vector2(0.01, 0.1)
 
@@ -821,7 +913,7 @@ editor_preview_mode = 0
 
 [node name="EntryBubbles" parent="CameraSystem/ChaseCamera/Camera3D/UnderwaterEffect/WaterCrossingOverlay" index="0"]
 visible = false
-material = SubResource("CanvasItemMaterial_4n5oi")
+material = SubResource("CanvasItemMaterial_c2l6c")
 position = Vector2(1, 1.76)
 amount = 500
 texture = SubResource("GradientTexture2D_pl0kw")
@@ -829,10 +921,10 @@ lifetime = 20.0
 speed_scale = 8.0
 explosiveness = 1.0
 randomness = 1.0
-process_material = SubResource("ParticleProcessMaterial_kppiq")
+process_material = SubResource("ParticleProcessMaterial_4h5fo")
 
 [node name="UnderwaterPostProcess" parent="CameraSystem/ChaseCamera/Camera3D/UnderwaterEffect" index="1" unique_id=1854893749]
-material_override = SubResource("ShaderMaterial_nnnop")
+material_override = SubResource("ShaderMaterial_2dd7v")
 
 [node name="Debug" type="Node" parent="." unique_id=1303880580]
 
@@ -870,6 +962,9 @@ transform = Transform3D(-1.7124417, 0, 0.7671602, 0, 1.31, 0, -0.3355124, 0, -3.
 
 [node name="Ramp4" parent="Atrezzo" unique_id=1765982400 instance=ExtResource("57_1jbpp")]
 transform = Transform3D(-1.6307858, 0, 0.5965202, 0, 1.5849994, 0, -0.2820688, 0, -3.4487915, -504.4909, -3.43675, -694.3363)
+
+[node name="Ramp1_VIS" parent="Atrezzo/Ramp4/RampVisual" parent_id_path=PackedInt32Array(1765982400, 141630341) index="0" unique_id=1244819218]
+surface_material_override/1 = SubResource("StandardMaterial3D_ql7ri")
 
 [node name="Ramp5" parent="Atrezzo" unique_id=198907615 instance=ExtResource("57_1jbpp")]
 transform = Transform3D(-6.0789266, 0, -1.8685522, 0, 1.31, 0, 3.221965, 0, -3.5254242, 1508.0144, -4.256017, -907.5454)
@@ -1029,10 +1124,27 @@ bounces = 2
 directional = true
 light_data = ExtResource("43_4n5oi")
 
+[node name="Lights" type="Node3D" parent="." unique_id=2124831812]
+
+[node name="AreaLight3D" type="AreaLight3D" parent="Lights" unique_id=256488282]
+transform = Transform3D(-0.37862873, -0.9255487, 7.356241e-09, -8.742278e-08, 4.371139e-08, 1, -0.9255487, 0.37862873, -9.7464415e-08, -457.86844, 10.781677, -854.1971)
+light_color = Color(1, 0, 0.5666666, 1)
+light_energy = 400.0
+light_specular = 0.513
+light_bake_mode = 1
+shadow_enabled = true
+shadow_bias = 0.0
+shadow_opacity = 0.85
+shadow_blur = 0.87
+area_range = 22.836
+area_attenuation = 0.827
+area_size = Vector2(184.906, 3.268)
+
 [editable path="TerrainRoot/independent_island"]
 [editable path="TerrainRoot/independent_island2"]
 [editable path="TerrainRoot/independent_island3"]
 [editable path="TerrainRoot/independent_island4"]
+[editable path="TerrainRoot/Gold_City"]
 [editable path="Gameplay/JetSki"]
 [editable path="Gameplay/JetSki/VisualRoot/JetSkiVisual"]
 [editable path="Gameplay/JetSki/VisualRoot/JetSkiVisual/HullModel/Hull"]
@@ -1042,6 +1154,8 @@ light_data = ExtResource("43_4n5oi")
 [editable path="Gameplay/JetSki/VisualRoot/RiderMount/RiderAssetRoot/RiderRig"]
 [editable path="Gameplay/JetSki/VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/Rider_Bot"]
 [editable path="CameraSystem/ChaseCamera"]
+[editable path="Atrezzo/Ramp4"]
+[editable path="Atrezzo/Ramp4/RampVisual"]
 [editable path="Atrezzo/Boat_3"]
 [editable path="Atrezzo/Boat_4"]
 [editable path="Atrezzo/Boat_2"]

@@ -6,6 +6,7 @@ const FRONT_POINT_COUNT: int = 2
 const FRONT_CONTACT_MASK: int = 3
 const REAR_CONTACT_MASK: int = 12
 const TURN_LEAN_STEERING_EXPONENT: float = 0.9
+const TURN_LEAN_DAMPING_RATE_REDUCTION_LIMIT: float = 0.5
 const HALF_LIFE_LOG_TWO: float = 0.6931471805599453
 const RIDER_SOFT_LIMIT_BLEND_DEGREES: float = 8.0
 const SUBMARINE_MANUAL_DAMPING_FACTOR: float = 0.35
@@ -395,6 +396,7 @@ func apply_supported_torque(
 	var combined_torque := Vector3.ZERO
 	if turn_lean_enabled:
 		combined_torque += _calculate_turn_lean_pd_torque(
+			body_state,
 			submarine_upright_factor
 		)
 	if (
@@ -494,6 +496,7 @@ func _update_rider_shift_obsolete_target_metrics() -> void:
 
 
 func _calculate_turn_lean_pd_torque(
+	body_state: PhysicsDirectBodyState3D,
 	submarine_upright_factor: float
 ) -> Vector3:
 	if state.turn_lean_contact_factor <= 0.0:
@@ -502,11 +505,28 @@ func _calculate_turn_lean_pd_torque(
 		turn_lean_stiffness * submarine_upright_factor
 	)
 	var effective_damping := (
-		turn_lean_damping * submarine_upright_factor
+		turn_lean_damping
+		* submarine_upright_factor
+		* state.turn_lean_speed_factor
+	)
+	var stiffness_torque := (
+		state.turn_lean_roll_error * effective_stiffness
+	)
+	var damping_torque := (
+		-state.turn_lean_roll_rate * effective_damping
+	)
+	var axis_inverse_inertia := state.reference_forward.dot(
+		body_state.inverse_inertia_tensor * state.reference_forward
+	)
+	damping_torque = _limit_turn_lean_damping_torque(
+		damping_torque,
+		state.turn_lean_roll_rate,
+		axis_inverse_inertia,
+		body_state.step,
+		state.turn_lean_contact_factor
 	)
 	state.turn_lean_requested_torque = clampf(
-		state.turn_lean_roll_error * effective_stiffness
-		- state.turn_lean_roll_rate * effective_damping,
+		stiffness_torque + damping_torque,
 		-turn_lean_max_torque,
 		turn_lean_max_torque
 	)
@@ -516,6 +536,35 @@ func _calculate_turn_lean_pd_torque(
 		* state.turn_lean_contact_factor
 	)
 	return state.turn_lean_applied_torque_vector
+
+
+func _limit_turn_lean_damping_torque(
+	requested_damping_torque: float,
+	roll_rate: float,
+	axis_inverse_inertia: float,
+	delta: float,
+	contact_factor: float
+) -> float:
+	if (
+		is_zero_approx(requested_damping_torque)
+		or absf(roll_rate) <= 0.000001
+		or axis_inverse_inertia <= 0.000001
+		or delta <= 0.000001
+		or contact_factor <= 0.000001
+	):
+		return requested_damping_torque
+	# Prevent damping from reversing the roll rate in one physics tick.
+	# The half-step limit remains stable when scene scale changes inertia.
+	var maximum_non_reversing_torque := (
+		absf(roll_rate)
+		* TURN_LEAN_DAMPING_RATE_REDUCTION_LIMIT
+		/ (axis_inverse_inertia * delta * contact_factor)
+	)
+	return clampf(
+		requested_damping_torque,
+		-maximum_non_reversing_torque,
+		maximum_non_reversing_torque
+	)
 
 
 func _calculate_virtual_rider_weight_torque(

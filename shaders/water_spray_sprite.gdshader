@@ -1,5 +1,5 @@
 shader_type spatial;
-render_mode unshaded, blend_mix, depth_prepass_alpha, cull_disabled;
+render_mode blend_mix, depth_prepass_alpha, cull_disabled;
 
 uniform vec4 spray_color : source_color = vec4(0.78, 0.95, 1.0, 0.94);
 uniform vec4 edge_color : source_color = vec4(0.96, 1.0, 1.0, 1.0);
@@ -54,6 +54,7 @@ void vertex() {
 		vec4(0.0, 0.0, scale_z, 0.0),
 		particle_modelview[3]
 	);
+	MODELVIEW_NORMAL_MATRIX = mat3(1.0);
 }
 
 
