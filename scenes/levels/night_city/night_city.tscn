@@ -11,7 +11,7 @@
 [ext_resource type="Texture2D" uid="uid://olqtngkjhlxu" path="res://assets/NightSkyHDRI003_4K_HDR.exr" id="9_me8nw"]
 [ext_resource type="Environment" uid="uid://bl1pfl5d074rp" path="res://resources/environment/environment_night_city.tres" id="10_4n5oi"]
 [ext_resource type="Script" uid="uid://det7bptrkw1dp" path="res://scripts/environment/terrain_quality_controller.gd" id="13_2dd7v"]
-[ext_resource type="PackedScene" uid="uid://uyhpcochr5q4" path="res://assets/3D/levels/level_night_city/Gold_City.glb" id="14_0ka6b"]
+[ext_resource type="PackedScene" uid="uid://b6ny8tx1gom7c" path="res://assets/3D/levels/level_night_city/Gold_City.glb" id="14_0ka6b"]
 [ext_resource type="PackedScene" uid="uid://1x3n2tx0xgj5" path="res://assets/3D/Terrain/independent_island.glb" id="14_x65hf"]
 [ext_resource type="Material" uid="uid://dmj6dyip8ab0w" path="res://assets/materials/sand_02.res" id="15_7xt3c"]
 [ext_resource type="PackedScene" uid="uid://c3xovkcnf4rak" path="res://assets/3D/levels/level_night_city/atrezzo/stadium_lights.tscn" id="31_0ka6b"]
@@ -576,10 +576,10 @@ dolphin_breach_duration_max = 0.9
 [node name="Gameplay" type="Node3D" parent="." unique_id=1639068913]
 
 [node name="PlayerSpawn" type="Marker3D" parent="Gameplay" unique_id=434866168]
-transform = Transform3D(-0.9697527, 0, 0.24408983, 0, 1, 0, -0.24408983, 0, -0.9697527, -529.48364, 1.98, -686.8822)
+transform = Transform3D(-0.50096864, 0, 0.8654656, 0, 1, 0, -0.8654656, 0, -0.50096864, -437.48184, 1.98, -959.8083)
 
 [node name="JetSki" parent="Gameplay" unique_id=328650943 instance=ExtResource("49_7blqs")]
-transform = Transform3D(-1, 0, -1.509958e-07, 0, 1, 0, 1.509958e-07, 0, -1, -528.04553, 2.2097774, -683.84753)
+transform = Transform3D(-1, 0, -1.509958e-07, 0, 1, 0, 1.509958e-07, 0, -1, -535.4405, 0.41961348, -469.88773)
 center_of_mass = Vector3(0, -0.22, 0.1)
 ocean_path = NodePath("../../WaterIntegration/Ocean")
 forward_engine_force = 15000.0
@@ -869,7 +869,7 @@ transform = Transform3D(-1.5056189, 0, 2.0169966, 0, 1.31, 0, -0.88212013, 0, -3
 transform = Transform3D(-1.7124417, 0, 0.7671602, 0, 1.31, 0, -0.3355124, 0, -3.915554, 1496.1028, -4.256017, -223.9528)
 
 [node name="Ramp4" parent="Atrezzo" unique_id=1765982400 instance=ExtResource("57_1jbpp")]
-transform = Transform3D(-1.5950521, 0, 0.9334754, 0, 1.5849997, 0, -0.4414004, 0, -3.373222, -849.6606, -3.43675, -1341.6696)
+transform = Transform3D(-1.6307858, 0, 0.5965202, 0, 1.5849994, 0, -0.2820688, 0, -3.4487915, -504.4909, -3.43675, -694.3363)
 
 [node name="Ramp5" parent="Atrezzo" unique_id=198907615 instance=ExtResource("57_1jbpp")]
 transform = Transform3D(-6.0789266, 0, -1.8685522, 0, 1.31, 0, 3.221965, 0, -3.5254242, 1508.0144, -4.256017, -907.5454)
