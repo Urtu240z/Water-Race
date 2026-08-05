@@ -3,6 +3,21 @@ extends CanvasLayer
 const RIDER_SETTINGS_PATH := "user://rider_settings.cfg"
 const RIDER_SETTINGS_SECTION := "rider"
 const RIDER_SETTINGS_KEY := "selected_id"
+const AUDIO_SETTINGS_PATH := "user://audio_settings.cfg"
+const AUDIO_SETTINGS_SECTION := "audio"
+const AUDIO_SETTINGS_KEY := "master_volume_percent"
+const MASTER_BUS_NAME := &"Master"
+const MINIMUM_VOLUME_DB := -80.0
+const LEVEL_OPTIONS: Array[Dictionary] = [
+	{
+		"display_name": "Island Test Blender",
+		"scene_path": "res://scenes/levels/island_test/island_test_BLENDER.tscn",
+	},
+	{
+		"display_name": "Night City",
+		"scene_path": "res://scenes/levels/night_city/night_city.tscn",
+	},
+]
 
 @onready var _low_button: Button = %LowButton
 @onready var _medium_button: Button = %MediumButton
@@ -10,20 +25,30 @@ const RIDER_SETTINGS_KEY := "selected_id"
 @onready var _preset_label: Label = %PresetLabel
 @onready var _applying_label: Label = %ApplyingLabel
 @onready var _fps_label: Label = %FpsLabel
+@onready var _volume_slider: HSlider = %VolumeSlider
+@onready var _volume_value_label: Label = %VolumeValueLabel
 @onready var _previous_rider_button: Button = %PreviousRiderButton
 @onready var _rider_option_button: OptionButton = %RiderOptionButton
 @onready var _next_rider_button: Button = %NextRiderButton
 @onready var _rider_status_label: Label = %RiderStatusLabel
+@onready var _previous_level_button: Button = %PreviousLevelButton
+@onready var _level_option_button: OptionButton = %LevelOptionButton
+@onready var _next_level_button: Button = %NextLevelButton
+@onready var _load_level_button: Button = %LoadLevelButton
 @onready var _continue_button: Button = %ContinueButton
 
 var _quality_buttons: Dictionary = {}
 var _rider_rig: RiderRig
 var _rider_options: Array[Dictionary] = []
 var _rider_settings_path: String = RIDER_SETTINGS_PATH
+var _audio_settings_path: String = AUDIO_SETTINGS_PATH
 var _last_toggle_frame: int = -1
 var _applying_quality: bool = false
+var _changing_level: bool = false
 var _previous_mouse_mode: Input.MouseMode = Input.MOUSE_MODE_VISIBLE
 var _fps_refresh_time: float = 0.0
+var _master_bus_index: int = -1
+var _volume_dirty: bool = false
 
 
 func _ready() -> void:
@@ -43,13 +68,20 @@ func _ready() -> void:
 		_on_quality_button_pressed.bind(GraphicsQualityManager.Quality.HIGH)
 	)
 	_continue_button.pressed.connect(_close_menu)
+	_volume_slider.value_changed.connect(_on_volume_changed)
 	_previous_rider_button.pressed.connect(_cycle_rider.bind(-1))
 	_rider_option_button.item_selected.connect(_on_rider_selected)
 	_next_rider_button.pressed.connect(_cycle_rider.bind(1))
+	_previous_level_button.pressed.connect(_cycle_level.bind(-1))
+	_level_option_button.item_selected.connect(_on_level_selected)
+	_next_level_button.pressed.connect(_cycle_level.bind(1))
+	_load_level_button.pressed.connect(_on_load_level_pressed)
 	GraphicsQualityManager.quality_changed.connect(_on_quality_changed)
 	_fps_label.visible = OS.is_debug_build()
 	_applying_label.visible = false
 	visible = false
+	_initialize_volume_control()
+	_refresh_level_selector()
 	_update_quality_display()
 	call_deferred("_initialize_rider_selector")
 
@@ -61,7 +93,7 @@ func _input(event: InputEvent) -> void:
 		return
 	get_viewport().set_input_as_handled()
 	var event_frame := Engine.get_process_frames()
-	if event_frame == _last_toggle_frame or _applying_quality:
+	if event_frame == _last_toggle_frame or _applying_quality or _changing_level:
 		return
 	_last_toggle_frame = event_frame
 	if visible:
@@ -81,6 +113,7 @@ func _process(delta: float) -> void:
 
 
 func _exit_tree() -> void:
+	_save_volume_if_needed()
 	if visible and get_tree() != null:
 		get_tree().paused = false
 
@@ -94,15 +127,99 @@ func _open_menu() -> void:
 	_fps_refresh_time = 0.0
 	_update_quality_display()
 	_refresh_rider_selector()
+	_refresh_level_selector()
 	_get_current_quality_button().grab_focus()
 
 
 func _close_menu() -> void:
-	if not visible or _applying_quality:
+	if not visible or _applying_quality or _changing_level:
 		return
+	_save_volume_if_needed()
 	visible = false
 	get_tree().paused = false
 	Input.mouse_mode = _previous_mouse_mode
+
+
+func _initialize_volume_control() -> void:
+	_master_bus_index = AudioServer.get_bus_index(MASTER_BUS_NAME)
+	if _master_bus_index < 0:
+		_volume_slider.editable = false
+		_volume_value_label.text = "No disponible"
+		push_warning("PauseMenu could not find the Master audio bus.")
+		return
+	var current_percent := 100.0
+	if AudioServer.is_bus_mute(_master_bus_index):
+		current_percent = 0.0
+	else:
+		current_percent = clampf(
+			db_to_linear(AudioServer.get_bus_volume_db(_master_bus_index)) * 100.0,
+			0.0,
+			100.0
+		)
+	var saved_percent := _load_saved_volume_percent(current_percent)
+	_volume_slider.set_value_no_signal(saved_percent)
+	_apply_master_volume(saved_percent)
+	_update_volume_label(saved_percent)
+	_volume_dirty = false
+
+
+func _on_volume_changed(value: float) -> void:
+	if _master_bus_index < 0:
+		return
+	_apply_master_volume(value)
+	_update_volume_label(value)
+	_volume_dirty = true
+
+
+func _apply_master_volume(volume_percent: float) -> void:
+	var clamped_percent := clampf(volume_percent, 0.0, 100.0)
+	var muted := is_zero_approx(clamped_percent)
+	AudioServer.set_bus_mute(_master_bus_index, muted)
+	AudioServer.set_bus_volume_db(
+		_master_bus_index,
+		MINIMUM_VOLUME_DB
+		if muted
+		else linear_to_db(clamped_percent / 100.0)
+	)
+
+
+func _update_volume_label(volume_percent: float) -> void:
+	_volume_value_label.text = "%d%%" % roundi(volume_percent)
+
+
+func _load_saved_volume_percent(fallback: float) -> float:
+	var config := ConfigFile.new()
+	if config.load(_audio_settings_path) != OK:
+		return fallback
+	var stored_value: Variant = config.get_value(
+		AUDIO_SETTINGS_SECTION,
+		AUDIO_SETTINGS_KEY,
+		fallback
+	)
+	if stored_value is not int and stored_value is not float:
+		return fallback
+	return clampf(float(stored_value), 0.0, 100.0)
+
+
+func _save_volume_if_needed() -> void:
+	if not _volume_dirty or _master_bus_index < 0:
+		return
+	var config := ConfigFile.new()
+	if FileAccess.file_exists(_audio_settings_path):
+		config.load(_audio_settings_path)
+	config.set_value(
+		AUDIO_SETTINGS_SECTION,
+		AUDIO_SETTINGS_KEY,
+		clampf(_volume_slider.value, 0.0, 100.0)
+	)
+	var error := config.save(_audio_settings_path)
+	if error != OK:
+		push_warning(
+			"PauseMenu could not save master volume: %s."
+			% error_string(error)
+		)
+		return
+	_volume_dirty = false
 
 
 func _on_quality_button_pressed(quality: int) -> void:
@@ -271,6 +388,127 @@ func _set_rider_controls_disabled(disabled: bool) -> void:
 	var cycle_disabled := disabled or _rider_options.size() <= 1
 	_previous_rider_button.disabled = cycle_disabled
 	_next_rider_button.disabled = cycle_disabled
+
+
+func _refresh_level_selector() -> void:
+	var current_path := _get_current_level_path()
+	var previous_selection_path := _get_selected_level_path()
+	_level_option_button.clear()
+	var selected_index := -1
+	for option_index: int in LEVEL_OPTIONS.size():
+		var option := LEVEL_OPTIONS[option_index]
+		var scene_path := String(option["scene_path"])
+		_level_option_button.add_item(String(option["display_name"]))
+		_level_option_button.set_item_metadata(option_index, scene_path)
+		if scene_path == current_path:
+			selected_index = option_index
+		elif selected_index < 0 and scene_path == previous_selection_path:
+			selected_index = option_index
+	if selected_index < 0 and not LEVEL_OPTIONS.is_empty():
+		selected_index = 0
+	if selected_index >= 0:
+		_level_option_button.select(selected_index)
+	_set_level_controls_disabled(LEVEL_OPTIONS.is_empty())
+	_update_level_load_button()
+
+
+func _on_level_selected(option_index: int) -> void:
+	if option_index < 0 or option_index >= LEVEL_OPTIONS.size():
+		return
+	_level_option_button.select(option_index)
+	_update_level_load_button()
+
+
+func _cycle_level(direction: int) -> void:
+	if _changing_level or LEVEL_OPTIONS.size() <= 1:
+		return
+	var current_index := _level_option_button.selected
+	if current_index < 0 or current_index >= LEVEL_OPTIONS.size():
+		current_index = 0
+	var next_index := wrapi(
+		current_index + signi(direction),
+		0,
+		LEVEL_OPTIONS.size()
+	)
+	_on_level_selected(next_index)
+	_level_option_button.grab_focus()
+
+
+func _on_load_level_pressed() -> void:
+	if _changing_level:
+		return
+	var scene_path := _get_selected_level_path()
+	if scene_path.is_empty() or scene_path == _get_current_level_path():
+		return
+	if not ResourceLoader.exists(scene_path, "PackedScene"):
+		_applying_label.text = "No se ha encontrado el nivel"
+		_applying_label.visible = true
+		push_warning("PauseMenu could not find level scene: %s." % scene_path)
+		return
+	_changing_level = true
+	_save_volume_if_needed()
+	_set_level_controls_disabled(true)
+	_set_quality_buttons_disabled(true)
+	_set_rider_controls_disabled(true)
+	_volume_slider.editable = false
+	_continue_button.disabled = true
+	_applying_label.text = "Cargando nivel…"
+	_applying_label.visible = true
+	await get_tree().process_frame
+	get_tree().paused = false
+	visible = false
+	Input.mouse_mode = _previous_mouse_mode
+	var error := get_tree().change_scene_to_file(scene_path)
+	if error == OK:
+		return
+	_changing_level = false
+	visible = true
+	get_tree().paused = true
+	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	_set_level_controls_disabled(false)
+	_set_quality_buttons_disabled(false)
+	_set_rider_controls_disabled(false)
+	_volume_slider.editable = _master_bus_index >= 0
+	_continue_button.disabled = false
+	_applying_label.text = "No se pudo cargar el nivel"
+	push_warning(
+		"PauseMenu could not change level to %s: %s."
+		% [scene_path, error_string(error)]
+	)
+
+
+func _get_current_level_path() -> String:
+	if get_tree() == null or get_tree().current_scene == null:
+		return ""
+	return get_tree().current_scene.scene_file_path
+
+
+func _get_selected_level_path() -> String:
+	var selected_index := _level_option_button.selected
+	if selected_index < 0 or selected_index >= _level_option_button.item_count:
+		return ""
+	var metadata: Variant = _level_option_button.get_item_metadata(selected_index)
+	return String(metadata) if metadata != null else ""
+
+
+func _update_level_load_button() -> void:
+	var selected_path := _get_selected_level_path()
+	var is_current := (
+		selected_path.is_empty() or selected_path == _get_current_level_path()
+	)
+	_load_level_button.disabled = is_current or _changing_level
+	_load_level_button.text = "ACTUAL" if is_current else "CARGAR"
+
+
+func _set_level_controls_disabled(disabled: bool) -> void:
+	_level_option_button.disabled = disabled
+	var cycle_disabled := disabled or LEVEL_OPTIONS.size() <= 1
+	_previous_level_button.disabled = cycle_disabled
+	_next_level_button.disabled = cycle_disabled
+	if disabled:
+		_load_level_button.disabled = true
+	else:
+		_update_level_load_button()
 
 
 func _update_quality_display() -> void:

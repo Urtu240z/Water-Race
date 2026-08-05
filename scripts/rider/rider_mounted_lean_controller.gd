@@ -162,6 +162,20 @@ func _ready() -> void:
 	_reset_blends(false)
 
 
+func _exit_tree() -> void:
+	_grip_reach_guard_available = false
+	set_physics_process(false)
+	if (
+		is_instance_valid(_skeleton)
+		and _skeleton.skeleton_updated.is_connected(
+			_measure_post_ik_hand_distances
+		)
+	):
+		_skeleton.skeleton_updated.disconnect(
+			_measure_post_ik_hand_distances
+		)
+
+
 func _physics_process(delta: float) -> void:
 	if _reset_hold_physics_frames > 0:
 		_reset_hold_physics_frames -= 1
@@ -525,6 +539,8 @@ func _reset_manual_reach_guards() -> void:
 
 
 func _measure_arm_reach() -> void:
+	if not _are_grip_reach_nodes_inside_tree():
+		return
 	var left_arm_position := _skeleton.get_bone_global_pose(
 		_left_arm_bone
 	).origin
@@ -572,8 +588,7 @@ func _measure_arm_reach() -> void:
 func _measure_post_ik_hand_distances() -> void:
 	if (
 		not _grip_reach_guard_available
-		or not is_instance_valid(_left_grip_target)
-		or not is_instance_valid(_right_grip_target)
+		or not _are_grip_reach_nodes_inside_tree()
 	):
 		return
 	var left_hand_position := _skeleton.get_bone_global_pose(
@@ -607,6 +622,18 @@ func _measure_post_ik_hand_distances() -> void:
 		return
 	_left_hand_to_grip_distance = left_distance
 	_right_hand_to_grip_distance = right_distance
+
+
+func _are_grip_reach_nodes_inside_tree() -> bool:
+	return (
+		is_inside_tree()
+		and is_instance_valid(_skeleton)
+		and _skeleton.is_inside_tree()
+		and is_instance_valid(_left_grip_target)
+		and _left_grip_target.is_inside_tree()
+		and is_instance_valid(_right_grip_target)
+		and _right_grip_target.is_inside_tree()
+	)
 
 
 func _warn_about_invalid_post_ik_metrics() -> void:

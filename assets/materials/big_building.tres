@@ -1,0 +1,14 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://clllkwesvhm0g"]
+
+[ext_resource type="Texture2D" uid="uid://jmrjx8oeq055" path="res://assets/3D/levels/level_night_city/buildings/build1/textures/build1_front_emissive.png" id="1_gv1k8"]
+
+[resource]
+metallic = 1.0
+metallic_specular = 1.0
+roughness = 0.0
+emission_enabled = true
+emission_energy_multiplier = 16.0
+emission_texture = ExtResource("1_gv1k8")
+uv1_scale = Vector3(0.015, 0.015, 0.015)
+uv1_triplanar = true
+uv1_triplanar_sharpness = 0.0011444093

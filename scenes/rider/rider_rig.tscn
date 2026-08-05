@@ -167,12 +167,12 @@ skin = ExtResource("7_rider01_skin")
 skeleton = NodePath("..")
 
 [node name="Rider04_Body" type="MeshInstance3D" parent="RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D" index="8" unique_id=1837524736 groups=["rider_skin_rider04"]]
-visible = false
 mesh = ExtResource("14_rider04_body_mesh")
 skin = ExtResource("15_rider04_skin")
 skeleton = NodePath("..")
 
 [node name="Rider05_Body" type="MeshInstance3D" parent="RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D" index="9" unique_id=417895057 groups=["rider_skin_rider05"]]
+visible = false
 mesh = ExtResource("16_rider05_body_mesh")
 skin = ExtResource("17_rider05_skin")
 skeleton = NodePath("..")

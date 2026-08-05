@@ -13,21 +13,24 @@
 [ext_resource type="Script" uid="uid://det7bptrkw1dp" path="res://scripts/environment/terrain_quality_controller.gd" id="13_2dd7v"]
 [ext_resource type="PackedScene" uid="uid://b6ny8tx1gom7c" path="res://assets/3D/levels/level_night_city/Gold_City.glb" id="14_0ka6b"]
 [ext_resource type="PackedScene" uid="uid://1x3n2tx0xgj5" path="res://assets/3D/Terrain/independent_island.glb" id="14_x65hf"]
+[ext_resource type="Material" uid="uid://clllkwesvhm0g" path="res://assets/materials/big_building.tres" id="15_4n5oi"]
 [ext_resource type="Material" uid="uid://dmj6dyip8ab0w" path="res://assets/materials/sand_02.res" id="15_7xt3c"]
 [ext_resource type="Shader" uid="uid://bpcwf528qbo27" path="res://shaders/terrain/terrain_master.gdshader" id="15_ql7ri"]
-[ext_resource type="Texture2D" uid="uid://c3cl7hgc1cf2o" path="res://assets/materials/sand_02_textures/sand_02_albedo_2k.jpg" id="16_niyfo"]
-[ext_resource type="Texture2D" uid="uid://cwfms7i1fbbg8" path="res://assets/materials/sand_02_textures/sand_02_normal_2k.jpg" id="17_f5ebn"]
-[ext_resource type="Texture2D" uid="uid://byoqy1w5x6hyq" path="res://assets/materials/sand_02_textures/sand_02_orm_2k.jpg" id="18_hx176"]
+[ext_resource type="Material" uid="uid://bq72x3ygqg4gf" path="res://assets/materials/Metal003_1K-PNG/Metal003_1K-PNG.tres" id="16_hx176"]
+[ext_resource type="Texture2D" uid="uid://vttu2tsbnprq" path="res://assets/materials/sand_03_textures/sand_03_albedo_2k.jpg" id="17_niyfo"]
+[ext_resource type="Material" uid="uid://cd2ujmstnmfva" path="res://assets/materials/Plastic005_1K-PNG/Plastic005_1K-PNG.tres" id="17_ra6oy"]
+[ext_resource type="Texture2D" uid="uid://dsbmyv262kqsl" path="res://assets/materials/sand_03_textures/sand_03_normal_2k.jpg" id="18_f5ebn"]
+[ext_resource type="Texture2D" uid="uid://dwwasntn4v8ps" path="res://assets/materials/sand_03_textures/sand_03_orm_2k.jpg" id="19_hx176"]
 [ext_resource type="Texture2D" uid="uid://do03pewy7xrqu" path="res://assets/materials/terrain_master_textures/grass_albedo.png" id="19_ra6oy"]
 [ext_resource type="Texture2D" uid="uid://cpw3o0egt3xhj" path="res://assets/materials/terrain_master_textures/grass_normal.png" id="20_2w8ey"]
 [ext_resource type="Texture2D" uid="uid://bjbtr4wpa2non" path="res://assets/materials/terrain_master_textures/grass_orm.png" id="21_v3gmp"]
 [ext_resource type="Texture2D" uid="uid://u0a4uawsdt4x" path="res://assets/materials/terrain_master_textures/moss_albedo.png" id="22_5h1yh"]
 [ext_resource type="Texture2D" uid="uid://dgxnwr48qllj6" path="res://assets/materials/terrain_master_textures/moss_normal.png" id="23_sfswf"]
 [ext_resource type="Texture2D" uid="uid://dw445jkd1svoe" path="res://assets/materials/terrain_master_textures/moss_orm.png" id="24_x6dv6"]
-[ext_resource type="Texture2D" uid="uid://qjc5ek17whfb" path="res://assets/materials/aerial_rocks_02_textures/aerial_rocks_02_albedo_2k.jpg" id="25_wf1ac"]
-[ext_resource type="Texture2D" uid="uid://ceat1hobxlurl" path="res://assets/materials/aerial_rocks_02_textures/aerial_rocks_02_normal_2k.jpg" id="26_tgr2b"]
-[ext_resource type="Texture2D" uid="uid://c3ntf6cnhrjri" path="res://assets/materials/aerial_rocks_02_textures/aerial_rocks_02_orm_2k.jpg" id="27_hgey6"]
+[ext_resource type="Texture2D" uid="uid://q5yx1piuynov" path="res://assets/materials/terrain_master_textures/rock_albedo.png" id="26_ra6oy"]
+[ext_resource type="Texture2D" uid="uid://dvs2rgjqdk2vl" path="res://assets/materials/terrain_master_textures/rock_normal.png" id="27_2w8ey"]
 [ext_resource type="Texture2D" uid="uid://cvvyxbgnxwgtw" path="res://assets/materials/terrain_master_textures/wet_sand_albedo.png" id="28_g5j8w"]
+[ext_resource type="Texture2D" uid="uid://ccasg8oxv3yji" path="res://assets/materials/terrain_master_textures/rock_orm.png" id="28_v3gmp"]
 [ext_resource type="Texture2D" uid="uid://cm7w5uwuuwkx8" path="res://assets/materials/terrain_master_textures/wet_sand_normal.png" id="29_swhwu"]
 [ext_resource type="Texture2D" uid="uid://cexe4l4551x8v" path="res://assets/materials/terrain_master_textures/wet_sand_orm.png" id="30_cty2f"]
 [ext_resource type="PackedScene" uid="uid://c3xovkcnf4rak" path="res://assets/3D/levels/level_night_city/atrezzo/stadium_lights.tscn" id="31_0ka6b"]
@@ -40,6 +43,7 @@
 [ext_resource type="Texture2D" uid="uid://cdlm681krlrvi" path="res://resources/water/organic_surface/surface_normal_a.tres" id="43_q1qm3"]
 [ext_resource type="Texture2D" uid="uid://biv8w5n57xhjr" path="res://resources/water/organic_surface/surface_normal_b.tres" id="44_ls1yi"]
 [ext_resource type="Texture2D" uid="uid://bblan7rbfrudb" path="res://resources/water/organic_surface/surface_warp_noise.tres" id="45_f572k"]
+[ext_resource type="AudioStream" uid="uid://b2gl1t6k4yhtk" path="res://assets/music/Gold City After Dark.ogg" id="45_ql7ri"]
 [ext_resource type="Texture2D" uid="uid://c0kex04xga83k" path="res://resources/water/ocean/macro_wave_a.png" id="46_ciigv"]
 [ext_resource type="Texture2D" uid="uid://bs48vn7ihhfp" path="res://resources/water/ocean/macro_wave_b.png" id="47_55hbu"]
 [ext_resource type="PackedScene" uid="uid://cisubjold2oac" path="res://scenes/wildlife/ambient_wildlife.tscn" id="48_jg0dm"]
@@ -47,7 +51,6 @@
 [ext_resource type="AudioStream" uid="uid://tn1we3rfc1hp" path="res://assets/audio/Motor_Idle.ogg" id="50_71uy5"]
 [ext_resource type="AudioStream" uid="uid://doxjcciq5t4q3" path="res://assets/audio/Ocean_Waves.ogg" id="51_guaay"]
 [ext_resource type="AudioStream" uid="uid://cioy3ls4ryjq2" path="res://assets/audio/Ocean_Wind.ogg" id="52_a41v7"]
-[ext_resource type="AudioStream" uid="uid://ugw47qn2mlq2" path="res://assets/music/Leave a Line.ogg" id="53_04q5y"]
 [ext_resource type="PackedScene" uid="uid://dewy0j55fasc8" path="res://scenes/camera/chase_camera.tscn" id="54_s16xr"]
 [ext_resource type="Shader" uid="uid://udpsvcumn1mh" path="res://shaders/effects/underwater_split_view_post_process.gdshader" id="55_y53au"]
 [ext_resource type="PackedScene" uid="uid://byqrxgrtjkcgm" path="res://assets/3D/buildings/beach_hotel.glb" id="56_7771p"]
@@ -138,70 +141,65 @@ shadow_mesh = SubResource("ArrayMesh_u40r8")
 material = ExtResource("15_7xt3c")
 size = Vector2(10000, 10000)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_nutsd"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5h1yh"]
 render_priority = 0
 shader = ExtResource("15_ql7ri")
-shader_parameter/dry_sand_albedo = ExtResource("16_niyfo")
-shader_parameter/dry_sand_orm = ExtResource("18_hx176")
-shader_parameter/dry_sand_normal = ExtResource("17_f5ebn")
+shader_parameter/dry_sand_albedo = ExtResource("17_niyfo")
+shader_parameter/dry_sand_orm = ExtResource("19_hx176")
+shader_parameter/dry_sand_normal = ExtResource("18_f5ebn")
 shader_parameter/dry_sand_tint = Color(1, 1, 1, 1)
-shader_parameter/dry_sand_brightness = 1.0
+shader_parameter/dry_sand_brightness = 1.999999955296
 shader_parameter/dry_sand_contrast = 1.0
 shader_parameter/dry_sand_saturation = 1.0
 shader_parameter/wet_sand_albedo = ExtResource("28_g5j8w")
 shader_parameter/wet_sand_orm = ExtResource("30_cty2f")
 shader_parameter/wet_sand_normal = ExtResource("29_swhwu")
 shader_parameter/wet_sand_tint = Color(1, 1, 1, 1)
-shader_parameter/wet_sand_brightness = 0.32999999262384
-shader_parameter/wet_sand_contrast = 0.5999999865888
-shader_parameter/wet_sand_saturation = 1.45999996736608
+shader_parameter/wet_sand_brightness = 0.42999999038864
+shader_parameter/wet_sand_contrast = 0.22999999485904
+shader_parameter/wet_sand_saturation = 1.06999997608336
 shader_parameter/grass_albedo = ExtResource("19_ra6oy")
 shader_parameter/grass_orm = ExtResource("21_v3gmp")
 shader_parameter/grass_normal = ExtResource("20_2w8ey")
 shader_parameter/grass_tint = Color(0.75, 1, 0.65, 1)
-shader_parameter/grass_brightness = 0.749999983236
-shader_parameter/grass_contrast = 1.27999997138944
-shader_parameter/grass_saturation = 1.42999996803664
-shader_parameter/rock_albedo = ExtResource("25_wf1ac")
-shader_parameter/rock_orm = ExtResource("27_hgey6")
-shader_parameter/rock_normal = ExtResource("26_tgr2b")
+shader_parameter/grass_brightness = 0.8999999798832
+shader_parameter/grass_contrast = 1.0
+shader_parameter/grass_saturation = 0.749999983236
+shader_parameter/rock_albedo = ExtResource("26_ra6oy")
+shader_parameter/rock_orm = ExtResource("28_v3gmp")
+shader_parameter/rock_normal = ExtResource("27_2w8ey")
 shader_parameter/rock_tint = Color(1, 1, 1, 1)
-shader_parameter/rock_brightness = 0.15999999642368
+shader_parameter/rock_brightness = 0.35999999195328
 shader_parameter/rock_contrast = 1.0
-shader_parameter/rock_saturation = 1.21999997273056
+shader_parameter/rock_saturation = 0.4499999899416
 shader_parameter/moss_albedo = ExtResource("22_5h1yh")
 shader_parameter/moss_orm = ExtResource("24_x6dv6")
 shader_parameter/moss_normal = ExtResource("23_sfswf")
 shader_parameter/moss_tint = Color(1, 1, 1, 1)
 shader_parameter/moss_brightness = 1.0
 shader_parameter/moss_contrast = 1.0
-shader_parameter/moss_saturation = 1.0
-shader_parameter/sand_tile_size = 7.0000001005831
-shader_parameter/grass_tile_size = 14.40000021085198
-shader_parameter/rock_tile_size = 62.95000093430524
-shader_parameter/moss_tile_size = 12.60000018402982
-shader_parameter/triplanar_sharpness = 1.0
-shader_parameter/dry_sand_normal_strength = 0.60000000894072
-shader_parameter/wet_sand_normal_strength = 0.55000000819566
-shader_parameter/grass_normal_strength = 1.8000000268221599
-shader_parameter/rock_normal_strength = 1.70000002533204
-shader_parameter/moss_normal_strength = 1.20000001788144
+shader_parameter/moss_saturation = 0.82999998144784
+shader_parameter/sand_tile_size = 5.40000007674118
+shader_parameter/grass_tile_size = 13.80000020191126
+shader_parameter/rock_tile_size = 88.80000131950126
+shader_parameter/moss_tile_size = 12.45000018179464
+shader_parameter/triplanar_sharpness = 2.5
+shader_parameter/dry_sand_normal_strength = 0.55000000819566
+shader_parameter/wet_sand_normal_strength = 0.80000001192096
+shader_parameter/grass_normal_strength = 1.55000002309686
+shader_parameter/rock_normal_strength = 1.60000002384192
+shader_parameter/moss_normal_strength = 1.30000001937156
 shader_parameter/hex_tiling_mode = 3
-shader_parameter/hex_rotation_strength = 0.999999977648
+shader_parameter/hex_rotation_strength = 0.05999999865888
 shader_parameter/hex_weight_contrast = 0.75
 shader_parameter/hex_luminance_influence = 0.6
 shader_parameter/hex_blend_exponent = 1.0
 shader_parameter/material_sample_threshold = 0.002
-shader_parameter/water_level = 0.89
-shader_parameter/wet_sand_height = 1.05000001564626
+shader_parameter/water_level = 2.0
+shader_parameter/wet_sand_height = 4.10000006109492
 shader_parameter/debug_view = 0
 
-[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_ql7ri"]
-rough = true
-bounce = 0.08
-absorbent = true
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_6hchx"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hx176"]
 resource_local_to_scene = true
 render_priority = 0
 shader = ExtResource("41_bivmj")
@@ -321,7 +319,7 @@ shader_parameter/deep_water_alpha = 0.999999988824
 shader_parameter/horizon_water_alpha = 1.0
 shader_parameter/opacity_distance_start = 80.0
 shader_parameter/opacity_distance_end = 220.0
-shader_parameter/fresnel_power = 2.2000000253320398
+shader_parameter/fresnel_power = 2.20000002533204
 shader_parameter/reflection_strength = 0.71999998390656
 shader_parameter/refraction_strength = 0.01600000076
 shader_parameter/near_roughness = 0.0
@@ -337,7 +335,7 @@ shader_parameter/foam_enabled = true
 shader_parameter/foam_noise_texture = ExtResource("42_jnoq4")
 shader_parameter/foam_color = Color(0, 0.62518233, 0.7789871, 1)
 shader_parameter/shore_foam_width = 3.60000005364432
-shader_parameter/shore_foam_strength = 1.7099999617780801
+shader_parameter/shore_foam_strength = 1.70999996177808
 shader_parameter/vehicle_material_tag_roughness = 0.019608
 shader_parameter/vehicle_material_tag_tolerance = 0.05000000074506
 shader_parameter/crest_foam_start = 0.17999999597664
@@ -350,7 +348,7 @@ shader_parameter/foam_scroll_speed = 0.00999999977648
 shader_parameter/foam_roughness = 0.15999999642368
 shader_parameter/ocean_foam_detail_quality = 1
 shader_parameter/ocean_foam_evaluation_distance = 520.0
-shader_parameter/ocean_surface_enabled = true
+shader_parameter/ocean_surface_enabled = false
 shader_parameter/ocean_snapped_origin_xz = Vector2(0, 0)
 shader_parameter/ocean_logical_origin_offset_xz = Vector2(0, 0)
 shader_parameter/ocean_detail_center_xz = Vector2(0, 0)
@@ -414,7 +412,7 @@ shader_parameter/custom_reflection_minimum_surface_weight = 0.34
 shader_parameter/custom_reflection_maximum_surface_weight = 0.88
 shader_parameter/custom_reflection_emission_strength = 0.2999999932944
 
-[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_c2l6c"]
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_ra6oy"]
 resource_local_to_scene = true
 blend_mode = 1
 
@@ -441,7 +439,7 @@ point_count = 3
 [sub_resource type="CurveTexture" id="CurveTexture_bubble_shrink"]
 curve = SubResource("Curve_bubble_shrink")
 
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_4h5fo"]
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_2w8ey"]
 resource_local_to_scene = true
 particle_flag_disable_z = true
 emission_shape_offset = Vector3(0, 600, 0)
@@ -464,7 +462,7 @@ turbulence_influence_max = 0.082
 turbulence_initial_displacement_min = -47.5
 turbulence_initial_displacement_max = 94.5
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_2dd7v"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_v3gmp"]
 resource_local_to_scene = true
 render_priority = -127
 shader = ExtResource("55_y53au")
@@ -532,6 +530,11 @@ ocean_path = NodePath("WaterIntegration/Ocean")
 player_spawn_path = NodePath("Gameplay/PlayerSpawn")
 vehicle_path = NodePath("Gameplay/JetSki")
 chase_camera_path = NodePath("CameraSystem/ChaseCamera")
+
+[node name="LightmapGI" type="LightmapGI" parent="." unique_id=1117524579]
+bounces = 2
+directional = true
+light_data = ExtResource("43_4n5oi")
 
 [node name="PauseMenu" parent="." unique_id=885050825 instance=ExtResource("2_x6dv6")]
 
@@ -629,12 +632,473 @@ mesh = SubResource("PlaneMesh_tpwhi")
 [node name="Gold_City" parent="TerrainRoot" unique_id=297389943 instance=ExtResource("14_0ka6b")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -131.304, 0, -218.843)
 
-[node name="Terrain_VIS" parent="TerrainRoot/Gold_City" index="5" unique_id=1510643192]
-surface_material_override/0 = SubResource("ShaderMaterial_nutsd")
+[node name="Bridge_1" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Terrain" parent_id_path=PackedInt32Array(297389943, 871595889) index="0" unique_id=1573117391]
+surface_material_override/0 = ExtResource("16_hx176")
 
-[node name="Terrain_COL" parent="TerrainRoot/Gold_City" index="6" unique_id=881381010]
+[node name="Bridge_3" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Terrain" parent_id_path=PackedInt32Array(297389943, 871595889) index="1" unique_id=1075713917]
+surface_material_override/0 = ExtResource("16_hx176")
+
+[node name="Bridges_1" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Terrain" parent_id_path=PackedInt32Array(297389943, 871595889) index="2" unique_id=416671003]
+surface_material_override/0 = ExtResource("16_hx176")
+
+[node name="Bridge_4" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Terrain" parent_id_path=PackedInt32Array(297389943, 871595889) index="3" unique_id=1434651222]
+surface_material_override/0 = ExtResource("16_hx176")
+
+[node name="Bridge_P_1" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Terrain" parent_id_path=PackedInt32Array(297389943, 871595889) index="4" unique_id=1040615296]
+surface_material_override/0 = ExtResource("17_ra6oy")
+
+[node name="Terrain_VIS" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Terrain" parent_id_path=PackedInt32Array(297389943, 871595889) index="5" unique_id=1072907535]
+surface_material_override/0 = SubResource("ShaderMaterial_5h1yh")
+
+[node name="Terrain_COL" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Terrain" parent_id_path=PackedInt32Array(297389943, 871595889) index="6" unique_id=254082338]
 visible = false
-physics_material_override = SubResource("PhysicsMaterial_ql7ri")
+
+[node name="big_b_89" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="0" unique_id=156782432]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_136" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="1" unique_id=1812132642]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_146" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="2" unique_id=135843267]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_27" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="3" unique_id=1511263297]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_5" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="4" unique_id=1847605280]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_64" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="5" unique_id=409281561]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_45" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="6" unique_id=1570708690]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_101" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="7" unique_id=842072452]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_28" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="8" unique_id=851124795]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_6" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="9" unique_id=456506803]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_46" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="10" unique_id=264502541]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_100" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="11" unique_id=1582617916]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_63" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="12" unique_id=1651051785]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_51" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="13" unique_id=1933560378]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_12" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="14" unique_id=1699694762]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_32" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="15" unique_id=1832030288]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_117" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="16" unique_id=297932632]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_104" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="17" unique_id=1169306438]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_133" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="18" unique_id=1834929490]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_108" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="19" unique_id=1270619166]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_85" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="20" unique_id=1973988233]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_17" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="21" unique_id=1447642174]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_110" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="22" unique_id=1989288919]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_8" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="23" unique_id=1780637666]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_20" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="24" unique_id=994701350]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_38" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="25" unique_id=294457917]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_1" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="26" unique_id=2069459458]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_54" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="27" unique_id=607024638]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_23" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="28" unique_id=397090497]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_98" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="29" unique_id=249480394]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_111" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="30" unique_id=1074880428]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_49" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="31" unique_id=102729553]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_102" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="32" unique_id=940451203]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_26" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="33" unique_id=2001954307]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_39" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="34" unique_id=43527643]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_24" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="35" unique_id=1365431755]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_19" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="36" unique_id=1156293636]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_47" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="37" unique_id=673281690]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_75" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="38" unique_id=77879706]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_76" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="39" unique_id=1197191123]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_77" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="40" unique_id=1902048415]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_103" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="41" unique_id=420623505]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_105" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="42" unique_id=143618655]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_97" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="43" unique_id=1269545595]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_10" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="44" unique_id=1702269537]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_122" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="45" unique_id=415601242]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_125" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="46" unique_id=271986658]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_127" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="47" unique_id=1564366091]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_43" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="48" unique_id=805712423]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_88" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="49" unique_id=82240660]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_126" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="50" unique_id=1915413436]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_36" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="51" unique_id=244833615]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_87" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="52" unique_id=844133824]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_30" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="53" unique_id=6104182]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_61" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="54" unique_id=1833379154]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_62" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="55" unique_id=301276077]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_128" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="56" unique_id=990126679]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_21" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="57" unique_id=758676677]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_115" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="58" unique_id=440705801]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_112" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="59" unique_id=205397930]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_9" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="60" unique_id=2033012639]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_65" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="61" unique_id=106099901]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_143" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="62" unique_id=720990287]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_135" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="63" unique_id=2058781263]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_69" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="64" unique_id=1701195205]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_96" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="65" unique_id=1535802182]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_139" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="66" unique_id=1377682337]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_70" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="67" unique_id=919589449]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_31" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="68" unique_id=1059967600]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_41" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="69" unique_id=489155019]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_86" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="70" unique_id=511640029]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_114" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="71" unique_id=1903729990]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_53" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="72" unique_id=223365423]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_48" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="73" unique_id=1209562889]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_130" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="74" unique_id=1100695668]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_84" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="75" unique_id=1070718483]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_142" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="76" unique_id=58859805]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_44" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="77" unique_id=1897620975]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_52" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="78" unique_id=1245979090]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_79" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="79" unique_id=173983083]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_107" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="80" unique_id=1096887677]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_140" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="81" unique_id=445588907]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_40" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="82" unique_id=991080818]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_132" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="83" unique_id=2034532868]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_113" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="84" unique_id=1484757852]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_68" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="85" unique_id=1735960683]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_144" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="86" unique_id=2007615865]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_13" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="87" unique_id=489602868]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_22" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="88" unique_id=1791965327]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_137" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="89" unique_id=1532414823]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_35" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="90" unique_id=1652214889]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_80" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="91" unique_id=1598680997]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_141" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="92" unique_id=2086296445]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_29" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="93" unique_id=1820383459]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_95" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="94" unique_id=851772428]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_37" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="95" unique_id=584107990]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_16" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="96" unique_id=914752363]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_42" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="97" unique_id=2074555596]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_145" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="98" unique_id=923442487]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_124" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="99" unique_id=12631662]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_15" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="100" unique_id=1159572853]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_56" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="101" unique_id=661369986]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_67" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="102" unique_id=90333522]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_58" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="103" unique_id=897855477]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_25" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="104" unique_id=524998416]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_94" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="105" unique_id=218385]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_14" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="106" unique_id=941225643]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_60" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="107" unique_id=773444652]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_116" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="108" unique_id=590824399]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_18" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="109" unique_id=387055633]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_11" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="110" unique_id=940508459]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_78" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="111" unique_id=1425820887]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_57" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="112" unique_id=1369075772]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_72" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="113" unique_id=1785980959]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_118" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="114" unique_id=863934325]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_83" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="115" unique_id=1577154412]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_73" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="116" unique_id=1412813696]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_2" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="117" unique_id=1616143169]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_129" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="118" unique_id=1358059162]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_119" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="119" unique_id=749567478]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_4" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="120" unique_id=1575925784]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_34" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="121" unique_id=354922257]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_50" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="122" unique_id=143358615]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_55" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="123" unique_id=1776304216]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_138" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="124" unique_id=2071106763]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_109" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="125" unique_id=426008653]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_74" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="126" unique_id=1202627831]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_92" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="127" unique_id=1363855303]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_33" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="128" unique_id=125842522]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_90" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="129" unique_id=1245975017]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_121" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="130" unique_id=1204131244]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_82" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="131" unique_id=2083640695]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_59" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="132" unique_id=1567502018]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_7" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="133" unique_id=2138789783]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_99" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="134" unique_id=307583331]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_149" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="135" unique_id=293705578]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_148" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="136" unique_id=1955973212]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_106" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="137" unique_id=807879687]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_123" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="138" unique_id=649760208]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_120" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="139" unique_id=1839133552]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_91" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="140" unique_id=535231675]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_93" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="141" unique_id=742752343]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_131" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="142" unique_id=2084076647]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_71" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="143" unique_id=2061065269]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_81" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="144" unique_id=385163925]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_66" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="145" unique_id=1851754561]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_3" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="146" unique_id=729084966]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_134" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="147" unique_id=1639296825]
+surface_material_override/0 = ExtResource("15_4n5oi")
+
+[node name="big_b_147" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1009774372) index="148" unique_id=183979560]
+surface_material_override/0 = ExtResource("15_4n5oi")
 
 [node name="build1" parent="TerrainRoot" unique_id=1230686511 instance=ExtResource("40_0ka6b")]
 transform = Transform3D(0.625, 0, 0, 0, 0.625, 0, 0, 0, 0.625, -615.5505, 9.018271, -97.15556)
@@ -642,7 +1106,7 @@ transform = Transform3D(0.625, 0, 0, 0, 0.625, 0, 0, 0, 0.625, -615.5505, 9.0182
 [node name="WaterIntegration" type="Node3D" parent="." unique_id=1889730552]
 
 [node name="Ocean" parent="WaterIntegration" unique_id=1340264265 instance=ExtResource("40_5rutu")]
-ocean_material = SubResource("ShaderMaterial_6hchx")
+ocean_material = SubResource("ShaderMaterial_hx176")
 wave_world_size_a = 153.5
 wave_world_size_b = 104.0
 wave_amplitude_a = 0.7999999821184
@@ -671,12 +1135,12 @@ dolphin_breach_duration_max = 0.9
 transform = Transform3D(-0.50096864, 0, 0.8654656, 0, 1, 0, -0.8654656, 0, -0.50096864, -437.48184, 1.98, -959.8083)
 
 [node name="JetSki" parent="Gameplay" unique_id=328650943 instance=ExtResource("49_7blqs")]
-transform = Transform3D(-1, 0, -1.509958e-07, 0, 1, 0, 1.509958e-07, 0, -1, -535.4405, 0.41961348, -469.88773)
+transform = Transform3D(-0.6067518, 0, 0.79489124, 0, 1, 0, -0.79489124, 0, -0.6067518, -493.66312, 0.41961348, -842.17035)
 center_of_mass = Vector3(0, -0.22, 0.1)
 ocean_path = NodePath("../../WaterIntegration/Ocean")
-forward_engine_force = 15000.0
+forward_engine_force = 8910.0
 reverse_engine_force = 4500.0
-forward_thrust_falloff_end_speed = 150.0
+forward_thrust_falloff_end_speed = 100.4
 reverse_thrust_falloff_end_speed = 14.2
 
 [node name="EngineAudio" parent="Gameplay/JetSki" index="1" unique_id=1603778743]
@@ -802,6 +1266,12 @@ left_hand_rotation_correction_degrees = Vector3(-18.44, 32.09, -21.11)
 [node name="GripFingers" parent="Gameplay/JetSki/VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D" index="7" unique_id=940560861]
 left_grip_strength = 0.75
 
+[node name="Rider04_Body" parent="Gameplay/JetSki/VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D" index="16" unique_id=1837524736]
+visible = false
+
+[node name="Rider05_Body" parent="Gameplay/JetSki/VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D" index="17" unique_id=417895057]
+visible = true
+
 [node name="BuoyancyPoints" parent="Gameplay/JetSki" index="6" unique_id=1093517847]
 visible = true
 
@@ -858,9 +1328,20 @@ volume_db = -8.0
 autoplay = true
 
 [node name="Music" type="AudioStreamPlayer" parent="Gameplay/JetSki" unique_id=1584183376]
-stream = ExtResource("53_04q5y")
-volume_db = -8.0
+stream = ExtResource("45_ql7ri")
 autoplay = true
+
+[node name="SpotLight3D" type="SpotLight3D" parent="Gameplay/JetSki" unique_id=493387046]
+transform = Transform3D(1, 5.6704632e-08, 1.10518386e-08, -5.6704632e-08, 0.9268071, 0.3755378, 1.1051824e-08, -0.3755378, 0.9268071, 0, 1.2250204, -2.0679932)
+light_color = Color(0.57181007, 0.5800569, 0.47265047, 1)
+light_energy = 10.296
+light_indirect_energy = 5.939
+light_volumetric_fog_energy = 5.174
+light_specular = 14.691
+spot_range = 70.0
+spot_attenuation = 1.09
+spot_angle = 48.9
+spot_angle_attenuation = 1.569163
 
 [node name="CameraSystem" type="Node3D" parent="." unique_id=1510457463]
 
@@ -868,9 +1349,9 @@ autoplay = true
 vehicle_body_path = NodePath("../../Gameplay/JetSki")
 camera_target_path = NodePath("../../Gameplay/JetSki/CameraTarget")
 first_person_socket_path = NodePath("../../Gameplay/JetSki/VisualRoot/RiderMount/FirstPersonSocket")
-base_distance = 1.0
-base_height = 1.0
-base_look_ahead = 3.0
+base_distance = 2.0
+base_height = 0.6666667
+base_look_ahead = 2.0
 look_height_offset = 0.0
 position_sharpness = 6.109999999999999
 rotation_sharpness = 9.01
@@ -879,9 +1360,9 @@ distance_extension_end_speed = 100.0
 maximum_speed_distance_extension = 0.0
 base_fov = 45.0
 maximum_speed_fov = 50.0
-airborne_extra_height = 0.2
-airborne_extra_distance = 0.2
-airborne_extra_look_ahead = 0.2
+airborne_extra_height = 0.1333333
+airborne_extra_distance = 0.1333333
+airborne_extra_look_ahead = 0.1333333
 first_person_fov = 69.1
 first_person_position_sharpness = 60.01
 first_person_rotation_sharpness = 60.01
@@ -913,7 +1394,7 @@ editor_preview_mode = 0
 
 [node name="EntryBubbles" parent="CameraSystem/ChaseCamera/Camera3D/UnderwaterEffect/WaterCrossingOverlay" index="0"]
 visible = false
-material = SubResource("CanvasItemMaterial_c2l6c")
+material = SubResource("CanvasItemMaterial_ra6oy")
 position = Vector2(1, 1.76)
 amount = 500
 texture = SubResource("GradientTexture2D_pl0kw")
@@ -921,38 +1402,32 @@ lifetime = 20.0
 speed_scale = 8.0
 explosiveness = 1.0
 randomness = 1.0
-process_material = SubResource("ParticleProcessMaterial_4h5fo")
+process_material = SubResource("ParticleProcessMaterial_2w8ey")
 
 [node name="UnderwaterPostProcess" parent="CameraSystem/ChaseCamera/Camera3D/UnderwaterEffect" index="1" unique_id=1854893749]
-material_override = SubResource("ShaderMaterial_2dd7v")
+material_override = SubResource("ShaderMaterial_v3gmp")
 
 [node name="Debug" type="Node" parent="." unique_id=1303880580]
 
 [node name="Atrezzo" type="Node3D" parent="." unique_id=1365592301]
 
 [node name="stadium_lights" parent="Atrezzo" unique_id=1504769906 instance=ExtResource("31_0ka6b")]
-transform = Transform3D(-0.55417806, 0, 0.8323982, 0, 1, 0, -0.8323982, 0, -0.55417806, 244.04736, 5.0887012, 148.96098)
-visible = false
+transform = Transform3D(0.8801215, 0, -0.47474855, 0, 1, 0, 0.47474855, 0, 0.8801215, -462.62894, 13.570871, -871.0526)
 
 [node name="stadium_lights3" parent="Atrezzo" unique_id=2032795749 instance=ExtResource("31_0ka6b")]
-transform = Transform3D(-0.55417806, 0, 0.8323982, 0, 1, 0, -0.8323982, 0, -0.55417806, 959.9877, 13.464918, -1060.1991)
-visible = false
+transform = Transform3D(0.13619766, 0, 0.99068177, 0, 1, 0, -0.99068177, 0, 0.13619766, -143.51196, 7.3275585, -366.8247)
 
 [node name="stadium_lights4" parent="Atrezzo" unique_id=94233362 instance=ExtResource("31_0ka6b")]
-transform = Transform3D(-0.55417806, 0, 0.8323982, 0, 1, 0, -0.8323982, 0, -0.55417806, 1045.0687, 13.464888, -768.6257)
-visible = false
+transform = Transform3D(0.8521489, 0, 0.5232994, 0, 1, 0, -0.5232994, 0, 0.8521489, -398.46, 4.6413307, -75.25128)
 
 [node name="stadium_lights5" parent="Atrezzo" unique_id=1254506732 instance=ExtResource("31_0ka6b")]
-transform = Transform3D(-0.55417806, 0, 0.8323982, 0, 1, 0, -0.8323982, 0, -0.55417806, 981.28326, 13.464888, -902.1736)
-visible = false
+transform = Transform3D(0.9311607, 0, 0.36460894, 0, 1, 0, -0.36460894, 0, 0.9311607, -600.09924, 3.6972828, -53.8114)
 
 [node name="stadium_lights6" parent="Atrezzo" unique_id=1401669665 instance=ExtResource("31_0ka6b")]
-transform = Transform3D(-0.9411731, 0, 0.3379249, 0, 1, 0, -0.3379249, 0, -0.9411731, 831.3978, 13.464918, -1112.7375)
-visible = false
+transform = Transform3D(-0.41627455, 0, -0.90923893, 0, 1, 0, 0.90923893, 0, -0.41627455, -607.1144, 3.3426533, -63.273056)
 
 [node name="stadium_lights2" parent="Atrezzo" unique_id=1103214157 instance=ExtResource("31_0ka6b")]
-transform = Transform3D(0.9168664, 0, 0.39919424, 0, 1, 0, -0.39919424, 0, 0.9168664, 244.04736, 5.0887012, 265.51746)
-visible = false
+transform = Transform3D(0.86182266, 0, -0.50720966, 0, 1, 0, 0.50720966, 0, 0.86182266, -380.7411, 3.3303223, 384.54788)
 
 [node name="Ramp1" parent="Atrezzo" unique_id=178349614 instance=ExtResource("57_1jbpp")]
 transform = Transform3D(-1.5056189, 0, 2.0169966, 0, 1.31, 0, -0.88212013, 0, -3.442647, 476.5722, -4.256017, -543.31067)
@@ -963,7 +1438,7 @@ transform = Transform3D(-1.7124417, 0, 0.7671602, 0, 1.31, 0, -0.3355124, 0, -3.
 [node name="Ramp4" parent="Atrezzo" unique_id=1765982400 instance=ExtResource("57_1jbpp")]
 transform = Transform3D(-1.6307858, 0, 0.5965202, 0, 1.5849994, 0, -0.2820688, 0, -3.4487915, -504.4909, -3.43675, -694.3363)
 
-[node name="Ramp1_VIS" parent="Atrezzo/Ramp4/RampVisual" parent_id_path=PackedInt32Array(1765982400, 141630341) index="0" unique_id=1244819218]
+[node name="Ramp1_VIS" parent="Atrezzo/Ramp4/RampVisual" parent_id_path=PackedInt32Array(1765982400, 141630341) index="0" unique_id=519514837]
 surface_material_override/1 = SubResource("StandardMaterial3D_ql7ri")
 
 [node name="Ramp5" parent="Atrezzo" unique_id=198907615 instance=ExtResource("57_1jbpp")]
@@ -1118,11 +1593,6 @@ transform = Transform3D(0.77904105, 0, 0.18192044, 0, 0.80000013, 0, -0.18192044
 surface_material_override/0 = SubResource("StandardMaterial3D_lcj2a")
 surface_material_override/1 = SubResource("StandardMaterial3D_4sljt")
 surface_material_override/4 = SubResource("StandardMaterial3D_dbb74")
-
-[node name="LightmapGI" type="LightmapGI" parent="." unique_id=1117524579]
-bounces = 2
-directional = true
-light_data = ExtResource("43_4n5oi")
 
 [node name="Lights" type="Node3D" parent="." unique_id=2124831812]
 
