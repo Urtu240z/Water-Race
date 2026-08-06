@@ -59,7 +59,10 @@
 [ext_resource type="PackedScene" uid="uid://665ve8ouncoh" path="res://scenes/vegetation/palm_tree.tscn" id="59_iqhpi"]
 [ext_resource type="PackedScene" uid="uid://dphl8jrmqmgci" path="res://assets/3D/Boat_1.glb" id="60_dvscs"]
 [ext_resource type="PackedScene" uid="uid://df1oaix0ta45m" path="res://assets/3D/Boat_2.glb" id="61_pcjqk"]
+[ext_resource type="PackedScene" uid="uid://7ts3l4tox5ot" path="res://scenes/course/arrow_curve.tscn" id="62_v3gmp"]
+[ext_resource type="PackedScene" uid="uid://bxadsuvcf1767" path="res://scenes/course/arrow_flat.tscn" id="63_5h1yh"]
 [ext_resource type="PackedScene" uid="uid://vls5xu5jnvyf" path="res://assets/3D/Rock3.glb" id="64_fwim1"]
+[ext_resource type="PackedScene" uid="uid://butnwowen433j" path="res://scenes/course/wrong_flat.tscn" id="64_sfswf"]
 [ext_resource type="Material" uid="uid://dk2h67ph6buix" path="res://assets/materials/rusty_metal_03.res" id="66_e6ey7"]
 [ext_resource type="PackedScene" uid="uid://dmqjonl673mxd" path="res://scenes/course/buoy.tscn" id="67_04xx3"]
 
@@ -199,7 +202,7 @@ shader_parameter/water_level = 2.0
 shader_parameter/wet_sand_height = 4.10000006109492
 shader_parameter/debug_view = 0
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_hx176"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_v3gmp"]
 resource_local_to_scene = true
 render_priority = 0
 shader = ExtResource("41_bivmj")
@@ -348,7 +351,7 @@ shader_parameter/foam_scroll_speed = 0.00999999977648
 shader_parameter/foam_roughness = 0.15999999642368
 shader_parameter/ocean_foam_detail_quality = 1
 shader_parameter/ocean_foam_evaluation_distance = 520.0
-shader_parameter/ocean_surface_enabled = false
+shader_parameter/ocean_surface_enabled = true
 shader_parameter/ocean_snapped_origin_xz = Vector2(0, 0)
 shader_parameter/ocean_logical_origin_offset_xz = Vector2(0, 0)
 shader_parameter/ocean_detail_center_xz = Vector2(0, 0)
@@ -412,7 +415,7 @@ shader_parameter/custom_reflection_minimum_surface_weight = 0.34
 shader_parameter/custom_reflection_maximum_surface_weight = 0.88
 shader_parameter/custom_reflection_emission_strength = 0.2999999932944
 
-[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_ra6oy"]
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_5h1yh"]
 resource_local_to_scene = true
 blend_mode = 1
 
@@ -439,7 +442,7 @@ point_count = 3
 [sub_resource type="CurveTexture" id="CurveTexture_bubble_shrink"]
 curve = SubResource("Curve_bubble_shrink")
 
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_2w8ey"]
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_sfswf"]
 resource_local_to_scene = true
 particle_flag_disable_z = true
 emission_shape_offset = Vector3(0, 600, 0)
@@ -462,7 +465,7 @@ turbulence_influence_max = 0.082
 turbulence_initial_displacement_min = -47.5
 turbulence_initial_displacement_max = 94.5
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_v3gmp"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_x6dv6"]
 resource_local_to_scene = true
 render_priority = -127
 shader = ExtResource("55_y53au")
@@ -1106,7 +1109,7 @@ transform = Transform3D(0.625, 0, 0, 0, 0.625, 0, 0, 0, 0.625, -615.5505, 9.0182
 [node name="WaterIntegration" type="Node3D" parent="." unique_id=1889730552]
 
 [node name="Ocean" parent="WaterIntegration" unique_id=1340264265 instance=ExtResource("40_5rutu")]
-ocean_material = SubResource("ShaderMaterial_hx176")
+ocean_material = SubResource("ShaderMaterial_v3gmp")
 wave_world_size_a = 153.5
 wave_world_size_b = 104.0
 wave_amplitude_a = 0.7999999821184
@@ -1394,7 +1397,7 @@ editor_preview_mode = 0
 
 [node name="EntryBubbles" parent="CameraSystem/ChaseCamera/Camera3D/UnderwaterEffect/WaterCrossingOverlay" index="0"]
 visible = false
-material = SubResource("CanvasItemMaterial_ra6oy")
+material = SubResource("CanvasItemMaterial_5h1yh")
 position = Vector2(1, 1.76)
 amount = 500
 texture = SubResource("GradientTexture2D_pl0kw")
@@ -1402,10 +1405,10 @@ lifetime = 20.0
 speed_scale = 8.0
 explosiveness = 1.0
 randomness = 1.0
-process_material = SubResource("ParticleProcessMaterial_2w8ey")
+process_material = SubResource("ParticleProcessMaterial_sfswf")
 
 [node name="UnderwaterPostProcess" parent="CameraSystem/ChaseCamera/Camera3D/UnderwaterEffect" index="1" unique_id=1854893749]
-material_override = SubResource("ShaderMaterial_v3gmp")
+material_override = SubResource("ShaderMaterial_x6dv6")
 
 [node name="Debug" type="Node" parent="." unique_id=1303880580]
 
@@ -1416,6 +1419,9 @@ transform = Transform3D(0.8801215, 0, -0.47474855, 0, 1, 0, 0.47474855, 0, 0.880
 
 [node name="stadium_lights3" parent="Atrezzo" unique_id=2032795749 instance=ExtResource("31_0ka6b")]
 transform = Transform3D(0.13619766, 0, 0.99068177, 0, 1, 0, -0.99068177, 0, 0.13619766, -143.51196, 7.3275585, -366.8247)
+
+[node name="stadium_lights7" parent="Atrezzo" unique_id=903606905 instance=ExtResource("31_0ka6b")]
+transform = Transform3D(0.8112684, 0, -0.58467394, 0, 1, 0, 0.58467394, 0, 0.8112684, -313.9654, 6.9531336, -627.03955)
 
 [node name="stadium_lights4" parent="Atrezzo" unique_id=94233362 instance=ExtResource("31_0ka6b")]
 transform = Transform3D(0.8521489, 0, 0.5232994, 0, 1, 0, -0.5232994, 0, 0.8521489, -398.46, 4.6413307, -75.25128)
@@ -1579,6 +1585,24 @@ buoy_clearance = 20.0
 transform = Transform3D(0.71017504, 0, -0.7040251, 0, 1, 0, 0.7040251, 0, 0.71017504, 854.3672, 0.059731007, 352.38397)
 buoy_side = 1
 buoy_clearance = 20.0
+
+[node name="Signals" type="Node3D" parent="Circuit" unique_id=1195469230]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.867004, 59.53058, -101.229706)
+
+[node name="arrow_curve" parent="Circuit/Signals" unique_id=132415122 instance=ExtResource("62_v3gmp")]
+transform = Transform3D(0.88989013, 0, -0.01571159, 0, 1.525, 0, 0.013983316, 0, 0.99987656, -104.12897, -59.993694, -261.68628)
+
+[node name="arrow_flat" parent="Circuit/Signals" unique_id=345620739 instance=ExtResource("63_5h1yh")]
+transform = Transform3D(-0.59623325, 0, 1.1480199, 0, 2.5099998, 0, 0.80281126, 0, 0.85261357, -446.80585, -61.048744, -541.82605)
+
+[node name="arrow_flat2" parent="Circuit/Signals" unique_id=190905890 instance=ExtResource("63_5h1yh")]
+transform = Transform3D(0.10513171, 2.3069163e-08, -1.422075, -8.7422755e-08, 2.5099995, -7.160282e-15, 0.99445826, 2.1821513e-07, 0.1503384, -580.54266, -61.048744, -579.2175)
+
+[node name="wrong_flat" parent="Circuit/Signals" unique_id=1105777576 instance=ExtResource("64_sfswf")]
+transform = Transform3D(1.2528567, 0, 0.32768086, 0, 1.46, 0, -0.32768086, 0, 1.2528567, -551.7255, -60.730453, -200.46915)
+
+[node name="wrong_flat2" parent="Circuit/Signals" unique_id=1632051520 instance=ExtResource("64_sfswf")]
+transform = Transform3D(1.2938095, 0, 0.055514902, 0, 1.46, 0, -0.055514902, 0, 1.2938095, -549.8305, -60.730453, -152.81003)
 
 [node name="Buildings" type="Node3D" parent="." unique_id=1322261863]
 

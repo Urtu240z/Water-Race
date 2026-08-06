@@ -1,0 +1,15 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://dwgm67d3qn0xb"]
+
+[ext_resource type="Texture2D" uid="uid://cujlihmu3omrd" path="res://assets/3D/levels/Arrow_texture.png" id="1_cbx81"]
+
+[resource]
+resource_name = "*3"
+cull_mode = 2
+albedo_texture = ExtResource("1_cbx81")
+roughness = 0.5
+emission_enabled = true
+emission_energy_multiplier = 2.7
+emission_texture = ExtResource("1_cbx81")
+uv1_scale = Vector3(0.205, 0.2, -0.205)
+uv1_offset = Vector3(0, 0, -0.31)
+uv1_triplanar = true

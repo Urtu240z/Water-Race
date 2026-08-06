@@ -1,0 +1,19 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://dsj0770kwb7vh"]
+
+[ext_resource type="Shader" uid="uid://bugx0465khbjf" path="res://assets/shaders/animated_arrow_emission.gdshader" id="1_shader"]
+[ext_resource type="Texture2D" uid="uid://cujlihmu3omrd" path="res://assets/3D/levels/Arrow_texture.png" id="2_texture"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_shader")
+shader_parameter/albedo_texture = ExtResource("2_texture")
+shader_parameter/albedo_tint = Color(1, 0.9982742, 0.7075556, 1)
+shader_parameter/roughness = 0.5
+shader_parameter/use_uv2 = false
+shader_parameter/swap_uv_axes = false
+shader_parameter/uv_scale = Vector2(0.175, 1)
+shader_parameter/uv_offset = Vector2(0, 0)
+shader_parameter/uv_speed = -1.0000000670559999
+shader_parameter/emission_min = 2.0000000298024
+shader_parameter/emission_max = 12.0
+shader_parameter/pulse_speed = 7.999999821184

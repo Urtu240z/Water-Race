@@ -1,0 +1,18 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://dxqhdols1qeq6"]
+
+[ext_resource type="Shader" uid="uid://b65sfq8cd4k2i" path="res://assets/shaders/pulsing_emission.gdshader" id="1_shader"]
+[ext_resource type="Texture2D" uid="uid://b4551os4lg6u1" path="res://assets/3D/levels/Wrong_texture.png" id="2_texture"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_shader")
+shader_parameter/albedo_texture = ExtResource("2_texture")
+shader_parameter/albedo_tint = Color(1, 0.6910111, 0.73921806, 1)
+shader_parameter/roughness = 0.5
+shader_parameter/use_uv2 = true
+shader_parameter/swap_uv_axes = true
+shader_parameter/uv_scale = Vector2(4.199948, -4.720009)
+shader_parameter/uv_offset = Vector2(-0.0112895, 2.460003)
+shader_parameter/emission_min = 2.0
+shader_parameter/emission_max = 16.0
+shader_parameter/pulse_speed = 7.999999821184

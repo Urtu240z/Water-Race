@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://7ts3l4tox5ot"]
+
+[ext_resource type="PackedScene" uid="uid://cfo5xns6ymxxc" path="res://assets/3D/levels/arrow_curve.glb" id="1_86v0k"]
+[ext_resource type="Material" uid="uid://dsj0770kwb7vh" path="res://assets/materials/arrow_curve_animated.tres" id="2_animated"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cpekw"]
+albedo_color = Color(0.09239707, 0.09239706, 0.09239706, 1)
+metallic = 1.0
+roughness = 0.0
+
+[node name="arrow_curve" unique_id=132415122 instance=ExtResource("1_86v0k")]
+
+[node name="arrow_curve_VIS" parent="." index="0" unique_id=1290500348]
+surface_material_override/1 = ExtResource("2_animated")
+surface_material_override/2 = SubResource("StandardMaterial3D_cpekw")
+
+[node name="arrow_curve_COL" parent="." index="1" unique_id=1202358111]
+visible = false

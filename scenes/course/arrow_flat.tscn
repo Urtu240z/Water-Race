@@ -1,0 +1,12 @@
+[gd_scene format=3 uid="uid://bxadsuvcf1767"]
+
+[ext_resource type="PackedScene" uid="uid://bla2pela0rtpo" path="res://assets/3D/levels/arrow_flat.glb" id="1_koxpq"]
+[ext_resource type="Material" path="res://assets/materials/arrow_flat_animated.tres" id="2_animated"]
+
+[node name="arrow_flat" unique_id=345620739 instance=ExtResource("1_koxpq")]
+
+[node name="arrow_flat_VIS" parent="." index="0"]
+surface_material_override/1 = ExtResource("2_animated")
+
+[node name="arrow_flat_COL" parent="." index="1" unique_id=791222353]
+visible = false
