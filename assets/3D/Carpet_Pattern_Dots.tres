@@ -1,0 +1,10 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://br6i5omogg7vh"]
+
+[ext_resource type="Texture2D" uid="uid://8lsbbaw5rxg4" path="res://assets/3D/Boat_2_5.jpg" id="1_5e2jh"]
+
+[resource]
+resource_name = "Carpet_Pattern_Dots"
+cull_mode = 2
+albedo_texture = ExtResource("1_5e2jh")
+roughness = 0.5
+metadata/_gltf_primary_texture_coord = 0

@@ -3,7 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://brnnlowoahuxx" path="res://assets/3D/levels/wrong_flat.glb" id="1_7ftab"]
 [ext_resource type="Material" uid="uid://dxqhdols1qeq6" path="res://assets/materials/wrong_flat_pulsing.tres" id="2_pulsing"]
 
-[node name="wrong_flat" unique_id=1105777576 instance=ExtResource("1_7ftab")]
+[node name="wrong_flat" unique_id=1105777576 groups=["course_emissive_wrong_sign"] instance=ExtResource("1_7ftab")]
 
 [node name="wrong_flat_VIS" parent="." index="0" unique_id=442398964]
 surface_material_override/0 = ExtResource("2_pulsing")

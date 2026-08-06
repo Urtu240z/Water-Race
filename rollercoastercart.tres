@@ -1,0 +1,18 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://d04kanspxoceo"]
+
+[ext_resource type="Texture2D" uid="uid://do4xwbsob4v6m" path="res://animated_roller_coaster_rollercoastercart2_diffuse.png" id="1_b0ocm"]
+[ext_resource type="Texture2D" uid="uid://d13hpy1yog1g7" path="res://animated_roller_coaster_rollercoastercart_metalness-rollercoastercart_roughness.png" id="2_wqskh"]
+[ext_resource type="Texture2D" uid="uid://2eipuiykiklx" path="res://animated_roller_coaster_rollercoastercart2_normalmap.png" id="3_3k2d6"]
+
+[resource]
+resource_name = "rollercoastercart"
+cull_mode = 2
+albedo_texture = ExtResource("1_b0ocm")
+metallic = 1.0
+metallic_texture = ExtResource("2_wqskh")
+metallic_texture_channel = 2
+roughness_texture = ExtResource("2_wqskh")
+roughness_texture_channel = 1
+normal_enabled = true
+normal_texture = ExtResource("3_3k2d6")
+metadata/_gltf_primary_texture_coord = 0

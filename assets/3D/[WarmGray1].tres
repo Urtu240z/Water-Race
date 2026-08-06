@@ -1,0 +1,5 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://bhj36qfgxr7xl"]
+
+[resource]
+resource_name = "[WarmGray1]"
+roughness = 0.5

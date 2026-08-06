@@ -1,0 +1,24 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://6pjxblwq5jfo"]
+
+[ext_resource type="Shader" uid="uid://clymns4nlremd" path="res://shaders/effects/stadium_light_beam.gdshader" id="1_beam"]
+
+[resource]
+resource_name = "M_Stadium_Light_Beam"
+render_priority = 1
+shader = ExtResource("1_beam")
+shader_parameter/light_color = Color(0.8551028, 0.8264678, 0.680308, 1)
+shader_parameter/beam_opacity = 0.14499999675896
+shader_parameter/emission_energy = 2.2
+shader_parameter/base_density = 0.21999999508256
+shader_parameter/edge_fade_start = 0.0
+shader_parameter/edge_fade_end = 0.9999999776480001
+shader_parameter/edge_fade_power = 4.0
+shader_parameter/near_fade_end = 0.40000000596046
+shader_parameter/far_fade_start = 0.5300000030547
+shader_parameter/length_falloff = 0.85000001266602
+shader_parameter/dust_strength = 0.20000000298024
+shader_parameter/dust_scale = 0.1499999966472
+shader_parameter/dust_detail = 0.80000001192096
+shader_parameter/dust_threshold = 0.25999999418848
+shader_parameter/dust_softness = 0.499999988824
+shader_parameter/dust_velocity = Vector3(0.1, -0.14, -0.16)

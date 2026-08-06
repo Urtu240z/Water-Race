@@ -268,6 +268,11 @@ shader_parameter/wave_mean_a = 0.638000030305
 shader_parameter/wave_mean_b = 0.26800001273
 shader_parameter/geometry_normal_step = 2.0
 shader_parameter/ocean_geometry_normal_quality = 2
+shader_parameter/calm_zone_count = 0
+shader_parameter/calm_zone_centers_shapes = PackedVector4Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/calm_zone_axes = PackedVector4Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/calm_zone_extents_transitions = PackedVector4Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/calm_zone_strengths = PackedVector4Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1)
 shader_parameter/ripple_active = PackedInt32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 shader_parameter/ripple_positions = PackedVector2Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 shader_parameter/ripple_start_times = PackedFloat32Array(-inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf)
@@ -396,7 +401,7 @@ shader_parameter/foam_scroll_speed = 0.13
 shader_parameter/foam_roughness = 0.70999998413008
 shader_parameter/ocean_foam_detail_quality = 1
 shader_parameter/ocean_foam_evaluation_distance = 520.0
-shader_parameter/ocean_surface_enabled = false
+shader_parameter/ocean_surface_enabled = true
 shader_parameter/ocean_snapped_origin_xz = Vector2(0, 0)
 shader_parameter/ocean_logical_origin_offset_xz = Vector2(0, 0)
 shader_parameter/ocean_detail_center_xz = Vector2(0, 0)
@@ -603,7 +608,6 @@ directional_shadow_max_distance = 500.0
 
 [node name="DirectionalLight3D2" type="DirectionalLight3D" parent="Environment" unique_id=1424115820 groups=["graphics_quality_directional_light"]]
 transform = Transform3D(0.9195691, 0.09848075, -0.38038722, 0.2341794, 0.64000714, 0.73181343, 0.31552005, -0.7620319, 0.56546843, 0, 0, 0)
-visible = false
 light_color = Color(0.82647467, 0.6933553, 0.57007265, 1)
 light_energy = 0.4
 light_volumetric_fog_energy = 16.0
@@ -872,6 +876,12 @@ left_hand_rotation_correction_degrees = Vector3(-18.44, 32.09, -21.11)
 [node name="GripFingers" parent="Gameplay/JetSki/VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D" index="7" unique_id=940560861]
 left_grip_strength = 0.75
 
+[node name="Rider04_Body" parent="Gameplay/JetSki/VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D" index="16" unique_id=1837524736]
+visible = false
+
+[node name="Rider05_Body" parent="Gameplay/JetSki/VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D" index="17" unique_id=417895057]
+visible = true
+
 [node name="BuoyancyPoints" parent="Gameplay/JetSki" index="6" unique_id=1093517847]
 visible = true
 
@@ -1047,25 +1057,25 @@ surface_material_override/0 = ExtResource("5_kmjc7")
 [node name="Rock2" parent="Atrezzo" unique_id=2094025158 instance=ExtResource("195_ox2y0")]
 transform = Transform3D(3.1803858, 0.6325982, -6.2092667, 0.09665962, 6.963099, 0.75890744, 6.2406597, -0.4302361, 3.152633, -551.9645, -16.910297, -180.97124)
 
-[node name="Rock2_VIS" parent="Atrezzo/Rock2" index="0" unique_id=1604875007]
+[node name="Rock2_VIS" parent="Atrezzo/Rock2" index="0" unique_id=434099864]
 surface_material_override/0 = ExtResource("5_kmjc7")
 
 [node name="Rock3" parent="Atrezzo" unique_id=32409294 instance=ExtResource("195_ox2y0")]
 transform = Transform3D(2.1527746, -0.58318883, 5.0766606, 0.07651358, 5.5118313, 0.60073394, -5.1094747, -0.16317603, 2.1479445, -636.2675, -9.634373, -123.952194)
 
-[node name="Rock2_VIS" parent="Atrezzo/Rock3" index="0" unique_id=1604875007]
+[node name="Rock2_VIS" parent="Atrezzo/Rock3" index="0" unique_id=434099864]
 surface_material_override/0 = ExtResource("5_kmjc7")
 
 [node name="Rock4" parent="Atrezzo" unique_id=732379558 instance=ExtResource("195_ox2y0")]
 transform = Transform3D(-0.9700894, 3.5165074, -7.616502, 0.44429702, 7.678032, 3.488327, 8.377321, -3.245338e-08, -1.0669926, -567.65735, -46.195744, -141.59525)
 
-[node name="Rock2_VIS" parent="Atrezzo/Rock4" index="0" unique_id=1604875007]
+[node name="Rock2_VIS" parent="Atrezzo/Rock4" index="0" unique_id=434099864]
 surface_material_override/0 = ExtResource("5_kmjc7")
 
 [node name="Rock5" parent="Atrezzo" unique_id=765989064 instance=ExtResource("195_ox2y0")]
 transform = Transform3D(-1.1396358, 2.6904924, -5.6494913, 0.5078428, 6.037661, 2.5175169, 9.795862, -2.4660984e-08, -0.7877678, -235.79329, -52.84747, -148.51874)
 
-[node name="Rock2_VIS" parent="Atrezzo/Rock5" index="0" unique_id=1604875007]
+[node name="Rock2_VIS" parent="Atrezzo/Rock5" index="0" unique_id=434099864]
 surface_material_override/0 = ExtResource("5_kmjc7")
 
 [node name="Rock6" parent="Atrezzo" unique_id=712207501 instance=ExtResource("197_3j4p0")]

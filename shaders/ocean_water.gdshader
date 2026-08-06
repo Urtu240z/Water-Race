@@ -5,6 +5,7 @@ shader_type spatial;
 render_mode blend_mix, world_vertex_coords, cull_disabled, depth_draw_always, diffuse_burley, specular_schlick_ggx, fog_disabled;
 
 const int MAX_RIPPLES = 12;
+const int MAX_CALM_WATER_ZONES = 4;
 const float TAU_VALUE = 6.28318530718;
 
 uniform bool ocean_enabled = true;
@@ -26,6 +27,13 @@ uniform float wave_mean_a : hint_range(0.0, 1.0, 0.001) = 0.50;
 uniform float wave_mean_b : hint_range(0.0, 1.0, 0.001) = 0.47;
 uniform float geometry_normal_step : hint_range(0.05, 2.0, 0.05) = 0.40;
 uniform int ocean_geometry_normal_quality : hint_range(0, 2, 1) = 2;
+
+group_uniforms CalmWater;
+uniform int calm_zone_count : hint_range(0, 4, 1) = 0;
+uniform vec4 calm_zone_centers_shapes[4];
+uniform vec4 calm_zone_axes[4];
+uniform vec4 calm_zone_extents_transitions[4];
+uniform vec4 calm_zone_strengths[4];
 
 group_uniforms Ripples;
 uniform int ripple_active[12];
@@ -226,16 +234,64 @@ float clipmap_wave_scale(vec2 world_xz) {
 	);
 	return mix(distant_scale, 1.0, detailed_factor);
 }
+vec3 calm_water_scales(vec2 world_xz) {
+	vec3 result = vec3(1.0);
+	for (int index = 0; index < MAX_CALM_WATER_ZONES; index++) {
+		if (index >= calm_zone_count) {
+			break;
+		}
+		vec4 center_shape = calm_zone_centers_shapes[index];
+		vec4 axes = calm_zone_axes[index];
+		vec4 extents_transition = calm_zone_extents_transitions[index];
+		vec2 center_delta = world_xz - center_shape.xy;
+		float signed_distance = 0.0;
+		if (center_shape.z > 0.5) {
+			signed_distance = length(center_delta)
+				- max(extents_transition.x, 0.001);
+		} else {
+			vec2 local_position = vec2(
+				dot(center_delta, axes.xy),
+				dot(center_delta, axes.zw)
+			);
+			vec2 outside_delta = abs(local_position)
+				- extents_transition.xy;
+			float outside_distance = length(max(outside_delta, vec2(0.0)));
+			float inside_distance = min(
+				max(outside_delta.x, outside_delta.y),
+				0.0
+			);
+			signed_distance = outside_distance + inside_distance;
+		}
+		float transition_distance = max(extents_transition.z, 0.001);
+		float zone_weight = 1.0 - smoothstep(
+			0.0,
+			transition_distance,
+			max(signed_distance, 0.0)
+		);
+		result = min(
+			result,
+			mix(vec3(1.0), calm_zone_strengths[index].xyz, zone_weight)
+		);
+	}
+	return result;
+}
+
+
+float sample_calm_macro_height(vec2 world_xz) {
+	vec2 logical_xz = world_xz + ocean_logical_origin_offset_xz;
+	return sample_macro_height(logical_xz) * calm_water_scales(world_xz).x;
+}
+
 
 
 vec4 sample_wave_state(vec2 world_xz) {
 	vec2 logical_xz = world_xz + ocean_logical_origin_offset_xz;
 	float step_size = max(geometry_normal_step, 0.05);
-	float macro_height = sample_macro_height(logical_xz);
+	float macro_height = sample_calm_macro_height(world_xz);
 	vec2 macro_derivatives = vec2(0.0);
 	if (ocean_geometry_normal_quality <= 0) {
-		float diagonal_height = sample_macro_height(
-			logical_xz + vec2(step_size)
+		float diagonal_height = sample_calm_macro_height(
+			world_xz + vec2(step_size)
 		);
 		macro_derivatives = vec2(
 			(diagonal_height - macro_height) / step_size
@@ -243,23 +299,23 @@ vec4 sample_wave_state(vec2 world_xz) {
 	} else if (ocean_geometry_normal_quality == 1) {
 		macro_derivatives = vec2(
 			(
-				sample_macro_height(logical_xz + vec2(step_size, 0.0))
+				sample_calm_macro_height(world_xz + vec2(step_size, 0.0))
 				- macro_height
 			) / step_size,
 			(
-				sample_macro_height(logical_xz + vec2(0.0, step_size))
+				sample_calm_macro_height(world_xz + vec2(0.0, step_size))
 				- macro_height
 			) / step_size
 		);
 	} else {
 		macro_derivatives = vec2(
 			(
-				sample_macro_height(logical_xz + vec2(step_size, 0.0))
-				- sample_macro_height(logical_xz - vec2(step_size, 0.0))
+				sample_calm_macro_height(world_xz + vec2(step_size, 0.0))
+				- sample_calm_macro_height(world_xz - vec2(step_size, 0.0))
 			) / (2.0 * step_size),
 			(
-				sample_macro_height(logical_xz + vec2(0.0, step_size))
-				- sample_macro_height(logical_xz - vec2(0.0, step_size))
+				sample_calm_macro_height(world_xz + vec2(0.0, step_size))
+				- sample_calm_macro_height(world_xz - vec2(0.0, step_size))
 			) / (2.0 * step_size)
 		);
 	}
@@ -407,6 +463,7 @@ void fragment() {
 		underwater_radius_extinction
 	);
 	vec2 logical_xz = interpolated_world_xz + ocean_logical_origin_offset_xz;
+	vec3 calm_scales = calm_water_scales(interpolated_world_xz);
 	vec3 detail_normal = sample_surface_detail(logical_xz, camera_distance);
 	vec2 detail_slope = detail_normal.xy / max(detail_normal.z, 0.08);
 	vec3 detail_offset_view = mat3(VIEW_MATRIX) * vec3(
@@ -415,7 +472,7 @@ void fragment() {
 		detail_slope.y
 	);
 	vec3 visual_normal = normalize(
-		NORMAL + detail_offset_view * surface_normal_strength
+		NORMAL + detail_offset_view * surface_normal_strength * calm_scales.y
 	);
 
 	float scene_raw_depth = textureLod(depth_texture, SCREEN_UV, 0.0).r;
@@ -562,7 +619,8 @@ void fragment() {
 	float crest_slope = smoothstep(0.06, 0.32, interpolated_wave_slope);
 	float crest_foam = crest_height
 		* mix(0.54, 1.0, crest_slope)
-		* crest_foam_strength;
+		* crest_foam_strength
+		* calm_scales.z;
 	float ripple_foam = interpolated_ripple_energy * ripple_foam_strength;
 	float foam_mask = foam_enabled
 		? clamp(

@@ -1,19 +1,58 @@
 [gd_resource type="ShaderMaterial" format=3 uid="uid://by183gvu5i7vp"]
 
-[ext_resource type="Shader" uid="uid://bugx0465khbjf" path="res://assets/shaders/animated_arrow_emission.gdshader" id="1_shader"]
-[ext_resource type="Texture2D" uid="uid://cujlihmu3omrd" path="res://assets/3D/levels/Arrow_texture.png" id="2_texture"]
+[sub_resource type="Shader" id="Shader_q484w"]
+code = "shader_type spatial;
+render_mode cull_disabled;
+
+uniform sampler2D albedo_texture : source_color, filter_linear_mipmap_anisotropic, repeat_enable;
+uniform vec4 albedo_tint : source_color = vec4(1.0);
+uniform float roughness : hint_range(0.0, 1.0, 0.01) = 0.5;
+
+uniform bool use_uv2 = false;
+uniform bool swap_uv_axes = false;
+uniform vec2 uv_scale = vec2(1.0);
+uniform vec2 uv_offset = vec2(0.0);
+uniform float uv_speed : hint_range(-4.0, 4.0, 0.01) = -0.6;
+
+uniform float emission_min : hint_range(0.0, 32.0, 0.1) = 4.0;
+uniform float emission_max : hint_range(0.0, 32.0, 0.1) = 12.0;
+uniform float pulse_speed : hint_range(0.0, 20.0, 0.01) = 4.48799;
+
+
+void fragment() {
+	vec2 source_uv = use_uv2 ? UV2 : UV;
+	if (swap_uv_axes) {
+		source_uv = source_uv.yx;
+	}
+
+	vec2 moving_uv = source_uv * uv_scale + uv_offset;
+	moving_uv.x += TIME * uv_speed;
+	vec4 texture_color = texture(albedo_texture, moving_uv);
+
+	float pulse = sin(TIME * pulse_speed) * 0.5 + 0.5;
+	float emission_strength = mix(emission_min, emission_max, pulse);
+	vec3 tinted_color = texture_color.rgb * albedo_tint.rgb;
+
+	ALBEDO = tinted_color;
+	ROUGHNESS = roughness;
+	EMISSION = tinted_color * emission_strength;
+}
+"
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_wwqsh"]
+load_path = "res://.godot/imported/Arrow_texture.png-20784c24da4f5b6c07bc6152ebec13eb.s3tc.ctex"
 
 [resource]
 render_priority = 0
-shader = ExtResource("1_shader")
-shader_parameter/albedo_texture = ExtResource("2_texture")
+shader = SubResource("Shader_q484w")
+shader_parameter/albedo_texture = SubResource("CompressedTexture2D_wwqsh")
 shader_parameter/albedo_tint = Color(1, 1, 1, 1)
 shader_parameter/roughness = 0.5
 shader_parameter/use_uv2 = true
 shader_parameter/swap_uv_axes = false
-shader_parameter/uv_scale = Vector2(7.53444, -5.040018)
+shader_parameter/uv_scale = Vector2(8.534, -5.04)
 shader_parameter/uv_offset = Vector2(-0.0202526, 3.58001)
-shader_parameter/uv_speed = -1.0000000670559999
+shader_parameter/uv_speed = -1.000000067056
 shader_parameter/emission_min = 2.0000000298024
 shader_parameter/emission_max = 12.0
 shader_parameter/pulse_speed = 7.999999821184

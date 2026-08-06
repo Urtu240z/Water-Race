@@ -8,7 +8,7 @@ albedo_color = Color(0.09239707, 0.09239706, 0.09239706, 1)
 metallic = 1.0
 roughness = 0.0
 
-[node name="arrow_curve" unique_id=132415122 instance=ExtResource("1_86v0k")]
+[node name="arrow_curve" unique_id=132415122 groups=["course_emissive_arrow_sign"] instance=ExtResource("1_86v0k")]
 
 [node name="arrow_curve_VIS" parent="." index="0" unique_id=1290500348]
 surface_material_override/1 = ExtResource("2_animated")

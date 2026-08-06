@@ -1,0 +1,9 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://cfi3yty746485"]
+
+[resource]
+resource_name = "LV_Resorts_1_CarPark_Inside_1"
+cull_mode = 2
+albedo_color = Color(0.3652521, 0.3652521, 0.3652521, 1)
+roughness = 0.5
+emission = Color(1, 1, 1, 1)
+emission_energy_multiplier = 16.0

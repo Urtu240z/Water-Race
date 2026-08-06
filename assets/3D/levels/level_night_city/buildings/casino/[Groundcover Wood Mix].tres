@@ -1,0 +1,13 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://bxuqc06hhi5s4"]
+
+[ext_resource type="Texture2D" uid="uid://bo1spmlt0nes3" path="res://assets/3D/levels/level_night_city/buildings/casino/casino_Image_1.png" id="1_hftea"]
+
+[resource]
+resource_name = "[Groundcover Wood Mix]"
+transparency = 2
+alpha_scissor_threshold = 0.5
+alpha_antialiasing_mode = 0
+cull_mode = 2
+albedo_texture = ExtResource("1_hftea")
+roughness = 0.5
+metadata/_gltf_primary_texture_coord = 0

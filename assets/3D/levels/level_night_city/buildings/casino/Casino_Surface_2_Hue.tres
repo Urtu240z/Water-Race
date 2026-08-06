@@ -1,0 +1,17 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://cftxxlrjcjm4x"]
+
+[ext_resource type="Shader" uid="uid://c3fvdhaa8vw8g" path="res://shaders/effects/casino_hue_emission.gdshader" id="1_shader"]
+
+[resource]
+resource_name = "Casino_Surface_2_Hue"
+render_priority = 0
+shader = ExtResource("1_shader")
+shader_parameter/albedo_color = Color(1, 1, 1, 1)
+shader_parameter/roughness = 0.0
+shader_parameter/metallic = 0.999999977648
+shader_parameter/emission_color = Color(0.99999994, 0.19041154, 0.75634706, 1)
+shader_parameter/emission_energy = 3.40000005066408
+shader_parameter/hue_speed = 0.17499997373640008
+shader_parameter/hue_offset = 0.0
+shader_parameter/saturation_multiplier = 1.999999955296
+shader_parameter/brightness_multiplier = 1.0

@@ -4,5 +4,5 @@
 
 [node name="PolyHavenDownloader" type="Node" unique_id=1914829004]
 script = ExtResource("1_nwibj")
-requested_texture = "rusty_metal_03"
+requested_texture = "plastered_stone_wall"
 texture_size = "2k"

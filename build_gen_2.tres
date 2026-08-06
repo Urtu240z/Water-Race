@@ -1,0 +1,19 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://ct6d71v0f2t5u"]
+
+[ext_resource type="Texture2D" uid="uid://dyw2mkhxexhjv" path="res://animated_roller_coaster_materials_generic_diffuse.png" id="1_kxgiq"]
+[ext_resource type="Texture2D" uid="uid://c0eh6p5qp6aru" path="res://animated_roller_coaster_materials_generic_metalness.png-materials_generic_roughness.png" id="2_0xbfe"]
+[ext_resource type="Texture2D" uid="uid://b3ejqbpsj04xm" path="res://animated_roller_coaster_materials_generic_normalmap.png" id="3_0vfv0"]
+
+[resource]
+resource_name = "build_gen_2"
+transparency = 4
+cull_mode = 2
+albedo_texture = ExtResource("1_kxgiq")
+metallic = 1.0
+metallic_texture = ExtResource("2_0xbfe")
+metallic_texture_channel = 2
+roughness_texture = ExtResource("2_0xbfe")
+roughness_texture_channel = 1
+normal_enabled = true
+normal_texture = ExtResource("3_0vfv0")
+metadata/_gltf_primary_texture_coord = 0

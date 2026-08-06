@@ -1,13 +1,25 @@
 [gd_scene format=3 uid="uid://c3xovkcnf4rak"]
 
 [ext_resource type="PackedScene" uid="uid://dh4fso6nq4cdk" path="res://assets/3D/levels/level_night_city/atrezzo/stadium_lights.glb" id="1_junfx"]
+[ext_resource type="PackedScene" uid="uid://c4cwdmabh5coe" path="res://assets/3D/levels/level_night_city/atrezzo/stadium_with_light.glb" id="2_ifyus"]
 
 [node name="stadium_lights" unique_id=1504769906 instance=ExtResource("1_junfx")]
+
+[node name="stadium_light_VIS" parent="." index="0" unique_id=419962129]
+visible = false
 
 [node name="SpotLight3D" type="SpotLight3D" parent="." index="1" unique_id=252011559]
 transform = Transform3D(-1, 0, -8.742278e-08, -4.16227e-08, 0.8793867, 0.47610825, 7.687842e-08, 0.47610825, -0.8793867, 1.9513631, 28.15399, 0)
 light_color = Color(0.8127932, 0.8307585, 0.6756087, 1)
-light_energy = 14.139
+light_energy = 90.0
 light_size = 1.0
 shadow_enabled = true
-spot_range = 180.0
+shadow_reverse_cull_face = true
+shadow_blur = 3.0
+spot_range = 140.167
+spot_angle = 30.0
+spot_angle_attenuation = 2.3784142
+
+[node name="stadium_with_light" parent="." index="2" unique_id=761977969 instance=ExtResource("2_ifyus")]
+
+[editable path="stadium_with_light"]

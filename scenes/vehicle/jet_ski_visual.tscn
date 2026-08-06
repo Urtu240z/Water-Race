@@ -76,15 +76,16 @@ emission = Color(1, 0, 0, 1)
 emission_energy_multiplier = 15.4
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_w1gxf"]
+albedo_color = Color(0.8089983, 0.8089983, 0.8089982, 1)
 albedo_texture = ExtResource("17_hpoxi")
-metallic = 0.87
-metallic_specular = 0.59
+metallic = 0.32
+metallic_specular = 0.16
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jp5tv"]
 albedo_texture = ExtResource("17_hpoxi")
-metallic = 0.71
-metallic_specular = 0.68
-roughness = 0.24
+metallic = 0.8
+metallic_specular = 0.31
+roughness = 0.44
 
 [node name="JetSkiVisual" type="Node3D" unique_id=1835512432]
 script = ExtResource("1_controller")

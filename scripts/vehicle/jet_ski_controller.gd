@@ -192,6 +192,14 @@ var landing_impact_minimum_airtime: float = 1.0
 @export var minimum_safe_y: float = -25.0
 @export_range(10.0, 100000.0, 1.0, "or_greater", "suffix:m") var maximum_distance_from_spawn: float = 4096.0
 
+@export_group("Water Recovery")
+@export var water_recovery_enabled: bool = true
+@export_range(2.0, 30.0, 0.5, "suffix:m") var recovery_backtrack_distance: float = 8.0
+@export_range(1.0, 12.0, 0.5, "suffix:m") var recovery_shore_clearance: float = 4.0
+@export_range(0.5, 5.0, 0.1, "suffix:m") var recovery_checkpoint_spacing: float = 1.5
+@export_range(8, 256, 1) var recovery_maximum_checkpoint_count: int = 64
+@export_range(0.0, 1.0, 0.05) var recovery_minimum_upright_dot: float = 0.6
+
 var submerged_point_count: int:
 	get:
 		return water_physics_system.state.submerged_point_count
@@ -551,6 +559,7 @@ var deep_submersion_count: int:
 
 var _respawn_transform: Transform3D
 var _has_respawn_transform: bool = false
+var _water_recovery_history: Array[Dictionary] = []
 var _landing_impact_event_id: int = 0
 var _airborne_state_confirmed_for_landing: bool = false
 var _ocean: Ocean3D
@@ -706,12 +715,17 @@ func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 
 
 func _physics_process(_delta: float) -> void:
+	if Input.is_action_just_pressed("recover_vehicle"):
+		recover_vehicle()
+		return
 	if Input.is_action_just_pressed("reset_vehicle"):
 		reset_vehicle(&"manual_input")
 		return
 	var safety_reason := _get_safety_reset_reason()
 	if not safety_reason.is_empty():
 		reset_vehicle(safety_reason)
+		return
+	_update_water_recovery_history()
 
 
 func set_respawn_transform(value: Transform3D) -> void:
@@ -746,6 +760,12 @@ func apply_world_rebase(shift: Vector3) -> void:
 		shifted_transform
 	)
 	global_position -= horizontal_shift
+	if _has_respawn_transform:
+		_respawn_transform.origin -= horizontal_shift
+	for checkpoint: Dictionary in _water_recovery_history:
+		var checkpoint_transform: Transform3D = checkpoint.get("transform")
+		checkpoint_transform.origin -= horizontal_shift
+		checkpoint["transform"] = checkpoint_transform
 	submarine_system.apply_world_rebase(horizontal_shift)
 	PhysicsServer3D.body_set_state(
 		get_rid(),
@@ -768,9 +788,37 @@ func reset_vehicle(reason: StringName = &"manual") -> void:
 	if not _has_respawn_transform:
 		_respawn_transform = global_transform
 		_has_respawn_transform = true
+	_water_recovery_history.clear()
+	_teleport_and_reset(_respawn_transform, reason)
+
+
+func recover_vehicle() -> void:
+	if not water_recovery_enabled:
+		return
+	var checkpoint := _select_water_recovery_checkpoint()
+	if checkpoint.is_empty():
+		reset_vehicle(&"water_recovery_fallback")
+		return
+	var recovery_transform: Transform3D = checkpoint.get("transform")
+	if is_instance_valid(_ocean):
+		var water_height := _ocean.sample_height(recovery_transform.origin)
+		if is_finite(water_height):
+			recovery_transform.origin.y = (
+				water_height + float(checkpoint.get("surface_offset", 0.0))
+			)
+	_teleport_and_reset(recovery_transform, &"water_recovery")
+	_water_recovery_history.clear()
+	_store_water_recovery_checkpoint(recovery_transform)
+
+
+func get_water_recovery_checkpoint_count() -> int:
+	return _water_recovery_history.size()
+
+
+func _teleport_and_reset(target_transform: Transform3D, reason: StringName) -> void:
 	var was_frozen := freeze
 	freeze = true
-	global_transform = _respawn_transform
+	global_transform = target_transform
 	linear_velocity = Vector3.ZERO
 	angular_velocity = Vector3.ZERO
 	constant_force = Vector3.ZERO
@@ -791,6 +839,123 @@ func reset_vehicle(reason: StringName = &"manual") -> void:
 	_airborne_state_confirmed_for_landing = false
 	reset_physics_interpolation()
 	reset_completed.emit(reason)
+
+
+func _update_water_recovery_history() -> void:
+	if not water_recovery_enabled or not _is_safe_water_recovery_state():
+		return
+	var safe_transform := _build_upright_recovery_transform(global_transform)
+	if _water_recovery_history.is_empty():
+		_store_water_recovery_checkpoint(safe_transform)
+		return
+	var last_checkpoint: Dictionary = _water_recovery_history.back()
+	var last_transform: Transform3D = last_checkpoint.get("transform")
+	if (
+		_horizontal_distance(last_transform.origin, safe_transform.origin)
+		< recovery_checkpoint_spacing
+	):
+		return
+	_store_water_recovery_checkpoint(safe_transform)
+
+
+func _is_safe_water_recovery_state() -> bool:
+	if (
+		not is_instance_valid(_ocean)
+		or not _has_finite_state()
+		or water_physics_system.state.raw_contact_mask != 15
+		or navigation_system.state.physical_contact_count > 0
+		or navigation_system.state.has_solid_support
+		or navigation_system.state.navigation_state == NavigationState.DEEP_SUBMERGED
+	):
+		return false
+	var upright_dot := global_transform.basis.orthonormalized().y.dot(Vector3.UP)
+	return upright_dot >= recovery_minimum_upright_dot
+
+
+func _build_upright_recovery_transform(source: Transform3D) -> Transform3D:
+	var source_basis := source.basis
+	var forward := -source_basis.orthonormalized().z
+	forward.y = 0.0
+	if forward.length_squared() <= 0.000001:
+		forward = Vector3.FORWARD
+	else:
+		forward = forward.normalized()
+	var upright_basis := Basis.looking_at(forward, Vector3.UP)
+	upright_basis = upright_basis.scaled(source_basis.get_scale())
+	return Transform3D(upright_basis, source.origin)
+
+
+func _store_water_recovery_checkpoint(safe_transform: Transform3D) -> void:
+	var surface_offset := 0.0
+	if is_instance_valid(_ocean):
+		var water_height := _ocean.sample_height(safe_transform.origin)
+		if is_finite(water_height):
+			surface_offset = safe_transform.origin.y - water_height
+	_water_recovery_history.append(
+		{
+			"transform": safe_transform,
+			"surface_offset": surface_offset,
+		}
+	)
+	while _water_recovery_history.size() > recovery_maximum_checkpoint_count:
+		_water_recovery_history.pop_front()
+
+
+func _select_water_recovery_checkpoint() -> Dictionary:
+	if _water_recovery_history.is_empty():
+		return {}
+	var path_distance := 0.0
+	var previous_position := global_position
+	var oldest_clear_checkpoint: Dictionary = {}
+	for index in range(_water_recovery_history.size() - 1, -1, -1):
+		var checkpoint: Dictionary = _water_recovery_history[index]
+		var checkpoint_transform: Transform3D = checkpoint.get("transform")
+		path_distance += _horizontal_distance(
+			previous_position,
+			checkpoint_transform.origin
+		)
+		previous_position = checkpoint_transform.origin
+		if not _is_recovery_checkpoint_clear(checkpoint_transform.origin):
+			continue
+		oldest_clear_checkpoint = checkpoint
+		if path_distance >= recovery_backtrack_distance:
+			return checkpoint
+	return oldest_clear_checkpoint
+
+
+func _is_recovery_checkpoint_clear(checkpoint_position: Vector3) -> bool:
+	if recovery_shore_clearance <= 0.0 or not is_inside_tree():
+		return true
+	var world := get_world_3d()
+	if world == null:
+		return true
+	var water_height := checkpoint_position.y
+	if is_instance_valid(_ocean):
+		var sampled_height := _ocean.sample_height(checkpoint_position)
+		if is_finite(sampled_height):
+			water_height = sampled_height
+	var clearance_shape := CylinderShape3D.new()
+	clearance_shape.radius = recovery_shore_clearance
+	clearance_shape.height = 1.5
+	var query := PhysicsShapeQueryParameters3D.new()
+	query.shape = clearance_shape
+	query.transform = Transform3D(
+		Basis.IDENTITY,
+		Vector3(
+			checkpoint_position.x,
+			water_height + 0.5,
+			checkpoint_position.z
+		)
+	)
+	query.collision_mask = collision_mask
+	query.collide_with_areas = false
+	query.collide_with_bodies = true
+	query.exclude = [get_rid()]
+	return world.direct_space_state.intersect_shape(query, 1).is_empty()
+
+
+func _horizontal_distance(first: Vector3, second: Vector3) -> float:
+	return Vector2(first.x - second.x, first.z - second.z).length()
 
 
 func _get_safety_reset_reason() -> StringName:

@@ -1,0 +1,7 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://b0s3fit5bwvw8"]
+
+[resource]
+resource_name = "[0074_SeaGreen]"
+cull_mode = 2
+albedo_color = Color(0.4618246, 0.7643137, 0.6190008, 1)
+roughness = 0.5

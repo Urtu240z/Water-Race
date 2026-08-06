@@ -11,6 +11,7 @@ extends Node3D
 const MAX_RIPPLES: int = 12
 const MAX_LANDING_IMPACTS: int = 4
 const MAX_DIRECTIONAL_WAKE_SEGMENTS: int = 16
+const MAX_CALM_WATER_AREAS: int = 4
 const MIN_SAMPLE_STEP: float = 0.05
 const MACRO_MATERIAL_SYNC_INTERVAL: float = 0.25
 
@@ -150,6 +151,13 @@ var _runtime_wave_texture_a: Texture2D
 var _runtime_wave_texture_b: Texture2D
 var _external_materials: Array[ShaderMaterial] = []
 var _material_cache: Array[ShaderMaterial] = []
+var _calm_water_area_refs: Array[WeakRef] = []
+var _calm_water_zones: Array[Dictionary] = []
+var _calm_zone_centers_shapes := PackedVector4Array()
+var _calm_zone_axes := PackedVector4Array()
+var _calm_zone_extents_transitions := PackedVector4Array()
+var _calm_zone_strengths := PackedVector4Array()
+var _calm_water_areas_dirty: bool = true
 
 var _ripple_active := PackedInt32Array()
 var _ripple_positions := PackedVector2Array()
@@ -241,6 +249,7 @@ var _macro_material_signature: int = -1
 
 
 func _enter_tree() -> void:
+	add_to_group(&"ocean_3d")
 	if Engine.is_editor_hint():
 		call_deferred(&"_refresh_editor_preview")
 
@@ -278,6 +287,9 @@ func _process(delta: float) -> void:
 	_resolve_targets()
 	_configure_surface()
 	_push_time_parameter_to_all_materials()
+	if _calm_water_areas_dirty:
+		_rebuild_calm_water_zones()
+		_push_calm_water_parameters_to_all_materials()
 	if _static_parameters_dirty:
 		_push_static_parameters_to_all_materials()
 	if _ripple_parameters_dirty:
@@ -316,6 +328,9 @@ func _physics_process(delta: float) -> void:
 		_push_directional_wake_parameters_to_all_materials()
 	_update_interaction_metrics()
 	_push_time_parameter_to_all_materials()
+	if _calm_water_areas_dirty:
+		_rebuild_calm_water_zones()
+		_push_calm_water_parameters_to_all_materials()
 	if _static_parameters_dirty:
 		_push_static_parameters_to_all_materials()
 	if _ripple_parameters_dirty:
@@ -378,6 +393,41 @@ func get_surface() -> OceanSurface3D:
 
 func get_foam_settings() -> WaterFoamSettings:
 	return foam_settings
+
+
+func register_calm_water_area(calm_area: Node3D) -> void:
+	if not is_instance_valid(calm_area):
+		return
+	for area_ref: WeakRef in _calm_water_area_refs:
+		if area_ref.get_ref() == calm_area:
+			return
+	_calm_water_area_refs.append(weakref(calm_area))
+	queue_calm_water_area_update()
+
+
+func unregister_calm_water_area(calm_area: Node3D) -> void:
+	for index in range(_calm_water_area_refs.size() - 1, -1, -1):
+		var registered_area := _calm_water_area_refs[index].get_ref() as Node3D
+		if registered_area == null or registered_area == calm_area:
+			_calm_water_area_refs.remove_at(index)
+	queue_calm_water_area_update()
+
+
+func queue_calm_water_area_update() -> void:
+	_calm_water_areas_dirty = true
+	if Engine.is_editor_hint() and is_inside_tree():
+		call_deferred("_finish_deferred_calm_water_update")
+
+
+func get_active_calm_water_area_count() -> int:
+	return _calm_water_zones.size()
+
+
+func _finish_deferred_calm_water_update() -> void:
+	if not is_node_ready() or not _calm_water_areas_dirty:
+		return
+	_rebuild_calm_water_zones()
+	_push_calm_water_parameters_to_all_materials()
 
 
 var directional_wake_active_samples: int:
@@ -851,7 +901,45 @@ func _configure_surface() -> void:
 
 
 func _sample_surface_offset(logical_xz: Vector2, sample_time: float) -> float:
-	return _sample_macro_height(logical_xz, sample_time) + _sample_ripple_height(logical_xz, sample_time)
+	var world_xz := logical_to_world_xz(logical_xz)
+	return (
+		_sample_macro_height(logical_xz, sample_time)
+		* _sample_calm_wave_scale(world_xz)
+		+ _sample_ripple_height(logical_xz, sample_time)
+	)
+
+
+func _sample_calm_wave_scale(world_xz: Vector2) -> float:
+	var wave_scale := 1.0
+	for zone: Dictionary in _calm_water_zones:
+		var zone_weight := _sample_calm_zone_weight(zone, world_xz)
+		wave_scale = minf(
+			wave_scale,
+			lerpf(1.0, float(zone.get("wave_strength", 1.0)), zone_weight)
+		)
+	return wave_scale
+
+
+func _sample_calm_zone_weight(zone: Dictionary, world_xz: Vector2) -> float:
+	var center: Vector2 = zone.get("center", Vector2.ZERO)
+	var delta := world_xz - center
+	var half_extents: Vector2 = zone.get("half_extents", Vector2.ONE)
+	var signed_distance: float
+	if int(zone.get("shape_type", 0)) == 1:
+		signed_distance = delta.length() - maxf(half_extents.x, 0.001)
+	else:
+		var axis_x: Vector2 = zone.get("axis_x", Vector2.RIGHT)
+		var axis_z: Vector2 = zone.get("axis_z", Vector2.DOWN)
+		var local_coordinates := Vector2(delta.dot(axis_x), delta.dot(axis_z))
+		var outside_delta := local_coordinates.abs() - half_extents
+		var outside_distance := Vector2(
+			maxf(outside_delta.x, 0.0),
+			maxf(outside_delta.y, 0.0)
+		).length()
+		var inside_distance := minf(maxf(outside_delta.x, outside_delta.y), 0.0)
+		signed_distance = outside_distance + inside_distance
+	var transition := maxf(float(zone.get("transition_distance", 0.25)), 0.001)
+	return 1.0 - smoothstep(0.0, transition, maxf(signed_distance, 0.0))
 
 
 func _sample_macro_height(logical_xz: Vector2, sample_time: float) -> float:
@@ -2016,11 +2104,14 @@ func _sync_macro_waves_from_material(
 
 
 func _push_all_shader_parameters() -> void:
+	if _calm_water_areas_dirty:
+		_rebuild_calm_water_zones()
 	for material in _all_ocean_materials():
 		_push_all_parameters_to_material(material)
 	_static_parameters_dirty = false
 	_ripple_parameters_dirty = false
 	_landing_impact_parameters_dirty = false
+	_calm_water_areas_dirty = false
 
 
 func _push_all_parameters_to_material(material: ShaderMaterial) -> void:
@@ -2030,6 +2121,7 @@ func _push_all_parameters_to_material(material: ShaderMaterial) -> void:
 	_push_ripple_parameters(material)
 	_push_landing_impact_parameters(material)
 	_push_vehicle_interaction_parameters(material)
+	_push_calm_water_parameters(material)
 
 
 func _push_static_parameters_to_all_materials() -> void:
@@ -2076,6 +2168,80 @@ func _push_hull_pressure_parameters_to_all_materials() -> void:
 	for material in _all_ocean_materials():
 		_push_hull_pressure_parameters(material)
 	_interaction_uniform_update_count += 1
+
+
+func _push_calm_water_parameters_to_all_materials() -> void:
+	for material in _all_ocean_materials():
+		_push_calm_water_parameters(material)
+	_calm_water_areas_dirty = false
+
+
+func _push_calm_water_parameters(material: ShaderMaterial) -> void:
+	if material == null or material.shader == null:
+		return
+	material.set_shader_parameter(&"calm_zone_count", _calm_water_zones.size())
+	material.set_shader_parameter(&"calm_zone_centers_shapes", _calm_zone_centers_shapes)
+	material.set_shader_parameter(&"calm_zone_axes", _calm_zone_axes)
+	material.set_shader_parameter(
+		&"calm_zone_extents_transitions",
+		_calm_zone_extents_transitions
+	)
+	material.set_shader_parameter(&"calm_zone_strengths", _calm_zone_strengths)
+
+
+func _rebuild_calm_water_zones() -> void:
+	_calm_water_zones.clear()
+	for index in range(_calm_water_area_refs.size() - 1, -1, -1):
+		var calm_area := _calm_water_area_refs[index].get_ref() as Node3D
+		if not is_instance_valid(calm_area):
+			_calm_water_area_refs.remove_at(index)
+			continue
+		if _calm_water_zones.size() >= MAX_CALM_WATER_AREAS:
+			continue
+		if not calm_area.has_method(&"get_calm_zone_data"):
+			continue
+		var zone_data: Dictionary = calm_area.call(&"get_calm_zone_data")
+		if not zone_data.is_empty():
+			_calm_water_zones.append(zone_data)
+
+	_calm_zone_centers_shapes.resize(MAX_CALM_WATER_AREAS)
+	_calm_zone_axes.resize(MAX_CALM_WATER_AREAS)
+	_calm_zone_extents_transitions.resize(MAX_CALM_WATER_AREAS)
+	_calm_zone_strengths.resize(MAX_CALM_WATER_AREAS)
+	_calm_zone_centers_shapes.fill(Vector4.ZERO)
+	_calm_zone_axes.fill(Vector4.ZERO)
+	_calm_zone_extents_transitions.fill(Vector4.ZERO)
+	_calm_zone_strengths.fill(Vector4.ONE)
+	for zone_index in _calm_water_zones.size():
+		var zone: Dictionary = _calm_water_zones[zone_index]
+		var center: Vector2 = zone.get("center", Vector2.ZERO)
+		var axis_x: Vector2 = zone.get("axis_x", Vector2.RIGHT)
+		var axis_z: Vector2 = zone.get("axis_z", Vector2.DOWN)
+		var half_extents: Vector2 = zone.get("half_extents", Vector2.ONE)
+		_calm_zone_centers_shapes[zone_index] = Vector4(
+			center.x,
+			center.y,
+			float(zone.get("shape_type", 0)),
+			0.0
+		)
+		_calm_zone_axes[zone_index] = Vector4(
+			axis_x.x,
+			axis_x.y,
+			axis_z.x,
+			axis_z.y
+		)
+		_calm_zone_extents_transitions[zone_index] = Vector4(
+			half_extents.x,
+			half_extents.y,
+			float(zone.get("transition_distance", 20.0)),
+			0.0
+		)
+		_calm_zone_strengths[zone_index] = Vector4(
+			float(zone.get("wave_strength", 1.0)),
+			float(zone.get("surface_detail_strength", 1.0)),
+			float(zone.get("crest_foam_strength", 1.0)),
+			1.0
+		)
 
 
 func _push_static_parameters(material: ShaderMaterial) -> void:

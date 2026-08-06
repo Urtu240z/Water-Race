@@ -1,0 +1,10 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://bgntmgf2ioi25"]
+
+[ext_resource type="Texture2D" uid="uid://g2o83hahuqs5" path="res://assets/3D/Rock2_Rock2_0.jpg" id="1_vmytv"]
+
+[resource]
+resource_name = "Massive Nordic Coastal Cliff_Massive Nordic Coastal Cliff"
+cull_mode = 2
+albedo_texture = ExtResource("1_vmytv")
+roughness = 0.5
+metadata/_gltf_primary_texture_coord = 0

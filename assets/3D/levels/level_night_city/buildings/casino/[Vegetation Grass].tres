@@ -1,0 +1,14 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://clvescuy8jn86"]
+
+[ext_resource type="Texture2D" uid="uid://ci6i17rcqyqwm" path="res://assets/3D/levels/level_night_city/buildings/casino/casino_Image_4.png" id="1_bfdo0"]
+
+[resource]
+resource_name = "[Vegetation Grass]"
+transparency = 2
+alpha_scissor_threshold = 0.5
+alpha_antialiasing_mode = 0
+cull_mode = 2
+albedo_texture = ExtResource("1_bfdo0")
+roughness = 0.5
+emission = Color(0.92099476, 0.9209946, 0.9209946, 1)
+metadata/_gltf_primary_texture_coord = 0
