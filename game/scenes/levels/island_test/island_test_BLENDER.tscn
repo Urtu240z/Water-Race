@@ -1,6 +1,6 @@
 [gd_scene format=4 uid="uid://cf71so1prahki"]
 
-[ext_resource type="Script" uid="uid://8h4lqtd66nw0" path="res://scripts/levels/island_test_blender_bootstrap.gd" id="1_yqko0"]
+[ext_resource type="Script" uid="uid://8h4lqtd66nw0" path="res://gameplay/race/race_level_bootstrap.gd" id="1_yqko0"]
 [ext_resource type="Environment" uid="uid://dxw5rtrc0obhl" path="res://resources/environment/environment_1.tres" id="2_0pibt"]
 [ext_resource type="Sky" uid="uid://bhe1h7h061jon" path="res://resources/environment/sky/sky_original.tres" id="2_tfoy1"]
 [ext_resource type="PackedScene" uid="uid://b6twl23g087ar" path="res://assets/3D/Atrezzo/Light.glb" id="3_djt2o"]
@@ -42,7 +42,7 @@
 [ext_resource type="Texture2D" uid="uid://b7kfjl0vvcloa" path="res://assets/environment/skies/qwantani_dusk_1_puresky_4k.hdr" id="41_7fon7"]
 [ext_resource type="Texture2D" uid="uid://cmg3mg3yih3d1" path="res://assets/environment/skies/kloofendal_43d_clear_puresky_4k.hdr" id="42_1y1wo"]
 [ext_resource type="Shader" uid="uid://udpsvcumn1mh" path="res://systems/camera/underwater/shaders/underwater_split_view_post_process.gdshader" id="51_6j5nl"]
-[ext_resource type="Script" uid="uid://cs8r4h4yr3knc" path="res://scripts/environment/hanging_light_sway_3d.gd" id="53_light_sway"]
+[ext_resource type="Script" uid="uid://cs8r4h4yr3knc" path="res://levels/paradise_island/props/lights/hanging_light_sway_3d.gd" id="53_light_sway"]
 [ext_resource type="AudioStream" uid="uid://dq0xb5edi3237" path="res://assets/music/Storm Chaser.ogg" id="53_px0hy"]
 [ext_resource type="Material" uid="uid://dk2h67ph6buix" path="res://assets/materials/rusty_metal_03.res" id="60_vhs81"]
 [ext_resource type="PackedScene" uid="uid://cfw7pu0e3ws7n" path="res://assets/3D/Rock2.glb" id="195_ox2y0"]
@@ -52,7 +52,7 @@
 [ext_resource type="AudioStream" uid="uid://doxjcciq5t4q3" path="res://assets/audio/Ocean_Waves.ogg" id="204_4tj3w"]
 [ext_resource type="AudioStream" uid="uid://cioy3ls4ryjq2" path="res://assets/audio/Ocean_Wind.ogg" id="205_wm0j8"]
 [ext_resource type="PackedScene" uid="uid://dewy0j55fasc8" path="res://systems/camera/chase_camera.tscn" id="206_ckn4c"]
-[ext_resource type="Script" uid="uid://b6855v0gxv4ik" path="res://scripts/environment/sky_environment_controller.gd" id="209_hytvj"]
+[ext_resource type="Script" uid="uid://b6855v0gxv4ik" path="res://world/environment/sky/sky_environment_controller.gd" id="209_hytvj"]
 [ext_resource type="PackedScene" uid="uid://cf3mdmbksb1m7" path="res://scenes/props/ramp_1.tscn" id="213_xm5l5"]
 [ext_resource type="PackedScene" uid="uid://c8qf6cnfoysg8" path="res://scenes/props/ramp_2.tscn" id="214_32xe8"]
 [ext_resource type="PackedScene" uid="uid://665ve8ouncoh" path="res://world/vegetation/palms/palm_tree.tscn" id="216_ua3oo"]
@@ -65,7 +65,7 @@
 [ext_resource type="Shader" uid="uid://cmnqja2yvxste" path="res://shaders/vegetation/palm_impostor_ground_shadow.gdshader" id="223_palm_shadow_shader"]
 [ext_resource type="PackedScene" uid="uid://cisubjold2oac" path="res://levels/paradise_island/wildlife/ambient_wildlife.tscn" id="224_wildlife"]
 [ext_resource type="PackedScene" path="res://scenes/ui/pause_menu.tscn" id="225_pause_menu"]
-[ext_resource type="Script" uid="uid://det7bptrkw1dp" path="res://scripts/environment/terrain_quality_controller.gd" id="226_terrain_quality"]
+[ext_resource type="Script" uid="uid://det7bptrkw1dp" path="res://world/terrain/terrain_quality_controller.gd" id="226_terrain_quality"]
 [ext_resource type="Script" uid="uid://bhgjw8t7kbunx" path="res://world/vegetation/vegetation_quality_controller.gd" id="227_vegetation_quality"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_f0815"]
@@ -399,7 +399,7 @@ shader_parameter/foam_scroll_speed = 0.13
 shader_parameter/foam_roughness = 0.70999998413008
 shader_parameter/ocean_foam_detail_quality = 1
 shader_parameter/ocean_foam_evaluation_distance = 520.0
-shader_parameter/ocean_surface_enabled = false
+shader_parameter/ocean_surface_enabled = true
 shader_parameter/ocean_logical_origin_offset_xz = Vector2(0, 0)
 shader_parameter/ocean_detail_center_xz = Vector2(0, 0)
 shader_parameter/ocean_detailed_wave_fade_start = 170.0

@@ -1,4 +1,4 @@
-class_name IslandTestBlenderBootstrap
+class_name RaceLevelBootstrap
 extends Node3D
 
 const COURSE_SIGN_LIGHT_POOL_SCRIPT := preload(
@@ -87,17 +87,17 @@ func _place_vehicle_at_spawn() -> void:
 
 func _validate_references() -> void:
 	if not is_instance_valid(_ocean):
-		push_error("IslandTestBlender: Ocean3D is missing.")
+		push_error("RaceLevelBootstrap: Ocean3D is missing.")
 	elif not is_instance_valid(_ocean.get_surface()):
-		push_error("IslandTestBlender: Ocean3D has no valid OceanSurface3D child.")
+		push_error("RaceLevelBootstrap: Ocean3D has no valid OceanSurface3D child.")
 	elif not _ocean.get_surface().visible:
-		push_error("IslandTestBlender: OceanSurface3D must remain visible.")
+		push_error("RaceLevelBootstrap: OceanSurface3D must remain visible.")
 	if not is_instance_valid(_player_spawn):
-		push_error("IslandTestBlender: PlayerSpawn is missing.")
+		push_error("RaceLevelBootstrap: PlayerSpawn is missing.")
 	if not is_instance_valid(_vehicle):
-		push_error("IslandTestBlender: JetSki is missing.")
+		push_error("RaceLevelBootstrap: JetSki is missing.")
 	if not is_instance_valid(_chase_camera):
-		push_error("IslandTestBlender: ChaseCamera is missing.")
+		push_error("RaceLevelBootstrap: ChaseCamera is missing.")
 
 
 func _install_course_sign_light_pool() -> void:

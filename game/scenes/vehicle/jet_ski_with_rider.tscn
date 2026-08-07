@@ -4,14 +4,14 @@
 [ext_resource type="PackedScene" uid="uid://3htphu61qseo" path="res://scenes/rider/rider_rig.tscn" id="2_rider"]
 [ext_resource type="AudioStream" uid="uid://n6ydetcej3es" path="res://assets/audio/Splash_2.ogg" id="2_s0jot"]
 [ext_resource type="AudioStream" uid="uid://bpwibglyb4koa" path="res://assets/audio/Splash_Heavy_3.ogg" id="3_dyy3r"]
-[ext_resource type="Script" uid="uid://bk28pr20t1b8q" path="res://scripts/rider/rider_grip_orientation_modifier_3d.gd" id="3_grip_orientation"]
-[ext_resource type="Script" uid="uid://dbqp5gmdnuxmf" path="res://scripts/rider/rider_impact_pose_modifier_3d.gd" id="4_impact_pose"]
+[ext_resource type="Script" uid="uid://bk28pr20t1b8q" path="res://gameplay/riders/common/modifiers/rider_grip_orientation_modifier_3d.gd" id="3_grip_orientation"]
+[ext_resource type="Script" uid="uid://dbqp5gmdnuxmf" path="res://gameplay/riders/common/modifiers/rider_impact_pose_modifier_3d.gd" id="4_impact_pose"]
 [ext_resource type="AudioStream" uid="uid://dqwxbrecfnfno" path="res://assets/audio/Splash_Heavy_4.ogg" id="4_m6xd3"]
-[ext_resource type="Script" uid="uid://1mx1c4y02pnl" path="res://scripts/rider/rider_foot_orientation_modifier_3d.gd" id="5_foot_orientation"]
+[ext_resource type="Script" uid="uid://1mx1c4y02pnl" path="res://gameplay/riders/common/modifiers/rider_foot_orientation_modifier_3d.gd" id="5_foot_orientation"]
 [ext_resource type="AudioStream" uid="uid://bk01pfc1hsy55" path="res://assets/audio/Running_Water_3.ogg" id="5_o21br"]
-[ext_resource type="Script" uid="uid://b3kfrm0a2yu83" path="res://scripts/rider/rider_impact_response_controller.gd" id="6_impact_response"]
-[ext_resource type="Script" uid="uid://clycxmofcu2k5" path="res://scripts/rider/rider_grip_finger_modifier_3d.gd" id="7_grip_fingers"]
-[ext_resource type="Script" uid="uid://44vr286e106h" path="res://scripts/rider/rider_mounted_lean_controller.gd" id="8_mounted_lean"]
+[ext_resource type="Script" uid="uid://b3kfrm0a2yu83" path="res://gameplay/vehicles/common/rider/rider_impact_response_controller.gd" id="6_impact_response"]
+[ext_resource type="Script" uid="uid://clycxmofcu2k5" path="res://gameplay/riders/common/modifiers/rider_grip_finger_modifier_3d.gd" id="7_grip_fingers"]
+[ext_resource type="Script" uid="uid://44vr286e106h" path="res://gameplay/vehicles/common/rider/rider_mounted_lean_controller.gd" id="8_mounted_lean"]
 
 [node name="JetSki" unique_id=117969959 instance=ExtResource("1_base")]
 
@@ -89,10 +89,10 @@ rider_skin = 4
 [node name="Rider_Bot" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot" parent_id_path=PackedInt32Array(2001770911, 226906520) index="0" unique_id=1075285769]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.18724537, 0)
 
-[node name="SKEL_Rider" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/Rider_Bot" index="0" unique_id=1348584656]
+[node name="SKEL_Rider" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/Rider_Bot" index="0" unique_id=1123472187]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.1578315e-08, 0.11282855, -0.13244057)
 
-[node name="Skeleton3D" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/Rider_Bot/SKEL_Rider" index="0" unique_id=426480764]
+[node name="Skeleton3D" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/Rider_Bot/SKEL_Rider" index="0" unique_id=1404074567]
 transform = Transform3D(0.9879613, 0.058283646, -0.1433027, -0.04260468, 0.9930024, 0.1101448, 0.14871976, -0.1027133, 0.98353034, -0.08274425, 0.07259053, -0.025370061)
 bones/0/rotation = Quaternion(0.05192896, -0.0029018968, 0.029417818, 0.9982132)
 bones/0/scale = Vector3(1, 0.9999999, 0.99999976)
@@ -270,6 +270,12 @@ script = ExtResource("7_grip_fingers")
 left_grip_strength = 0.87
 right_grip_strength = 0.93
 thumb_opposition_strength = 0.47
+
+[node name="Rider04_Body" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D" index="16" unique_id=1837524736]
+visible = false
+
+[node name="Rider05_Body" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D" index="17" unique_id=417895057]
+visible = true
 
 [node name="AnimationTree" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig" index="2" unique_id=187453891]
 parameters/mounted_add/add_amount = 0.0
