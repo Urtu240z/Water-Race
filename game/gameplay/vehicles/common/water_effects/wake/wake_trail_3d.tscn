@@ -1,7 +1,7 @@
 [gd_scene format=3]
 
-[ext_resource type="Script" uid="uid://hhpmkypwig63" path="res://scripts/effects/wake_trail_3d.gd" id="1_wake"]
-[ext_resource type="Shader" uid="uid://xdieol0hf4gi" path="res://shaders/wake_foam.gdshader" id="2_shader"]
+[ext_resource type="Script" uid="uid://hhpmkypwig63" path="res://gameplay/vehicles/common/water_effects/wake/wake_trail_3d.gd" id="1_wake"]
+[ext_resource type="Shader" uid="uid://xdieol0hf4gi" path="res://gameplay/vehicles/common/water_effects/wake/wake_foam.gdshader" id="2_shader"]
 [ext_resource type="Texture2D" uid="uid://dpb0qhgywdm05" path="res://world/water/ocean/foam/foam_breakup_noise.tres" id="3_noise"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_wake"]

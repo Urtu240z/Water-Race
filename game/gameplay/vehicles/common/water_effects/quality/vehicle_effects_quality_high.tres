@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="VehicleWaterEffectsQuality" format=3 uid="uid://dcevsmjwlqguq"]
 
-[ext_resource type="Script" uid="uid://d5waquerhq4u" path="res://scripts/effects/vehicle_water_effects_quality.gd" id="1_quality"]
+[ext_resource type="Script" uid="uid://d5waquerhq4u" path="res://gameplay/vehicles/common/water_effects/vehicle_water_effects_quality.gd" id="1_quality"]
 
 [resource]
 script = ExtResource("1_quality")

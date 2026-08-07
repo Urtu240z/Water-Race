@@ -1,7 +1,7 @@
 [gd_scene format=3]
 
-[ext_resource type="Script" uid="uid://41280g1qra5k" path="res://scripts/effects/hull_foam_3d.gd" id="1_hull"]
-[ext_resource type="Shader" uid="uid://do1ro1nmgji8m" path="res://shaders/hull_foam.gdshader" id="2_shader"]
+[ext_resource type="Script" uid="uid://41280g1qra5k" path="res://gameplay/vehicles/common/water_effects/hull/hull_foam_3d.gd" id="1_hull"]
+[ext_resource type="Shader" uid="uid://do1ro1nmgji8m" path="res://gameplay/vehicles/common/water_effects/hull/hull_foam.gdshader" id="2_shader"]
 [ext_resource type="Texture2D" uid="uid://dpb0qhgywdm05" path="res://world/water/ocean/foam/foam_breakup_noise.tres" id="3_noise"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_hull_foam"]
