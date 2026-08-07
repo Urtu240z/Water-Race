@@ -3,7 +3,7 @@ class_name UnderwaterFullscreenCompositorEffect
 extends CompositorEffect
 
 const COMPUTE_SHADER_PATH: String = (
-	"res://shaders/effects/underwater_fullscreen_compositor.glsl"
+    "res://systems/camera/underwater/shaders/underwater_fullscreen_compositor.glsl"
 )
 const COPY_SHADER_SOURCE: String = """
 #version 450

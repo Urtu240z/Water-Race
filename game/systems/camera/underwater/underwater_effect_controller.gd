@@ -3,14 +3,14 @@ class_name UnderwaterEffectController
 extends Node3D
 
 const UNDERWATER_POST_PROCESS_SHADER: Shader = preload(
-	"res://shaders/effects/underwater_split_view_post_process.gdshader"
+    "res://systems/camera/underwater/shaders/underwater_split_view_post_process.gdshader"
 )
 const UNDERWATER_COMPOSITOR_EFFECT_SCRIPT: Script = preload(
-	"res://scripts/camera/underwater_fullscreen_compositor_effect.gd"
+    "res://systems/camera/underwater/underwater_fullscreen_compositor_effect.gd"
 )
 const UNDERWATER_POST_PROCESS_RENDER_PRIORITY: int = -127
 const DEFAULT_WET_LENS_HEIGHT: Texture2D = preload(
-	"res://assets/effects/underwater/wet_lens_height.png"
+    "res://systems/camera/underwater/textures/wet_lens_height.png"
 )
 
 enum DebugForceMode {

@@ -1,0 +1,14 @@
+[remap]
+
+importer="glsl"
+type="RDShaderFile"
+uid="uid://bq6c1khhk36pb"
+path="res://.godot/imported/underwater_fullscreen_compositor.glsl-681807fd09e2686eaf6499447385b61c.res"
+
+[deps]
+
+source_file="res://systems/camera/underwater/shaders/underwater_fullscreen_compositor.glsl"
+dest_files=["res://.godot/imported/underwater_fullscreen_compositor.glsl-681807fd09e2686eaf6499447385b61c.res"]
+
+[params]
+

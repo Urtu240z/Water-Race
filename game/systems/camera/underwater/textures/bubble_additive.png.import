@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://p0jx0pgixxrk"
-path="res://.godot/imported/wet_lens_height.png-bdf6cf0fb8b9de5a7e3ade9657f710ea.ctex"
+uid="uid://dt41md6x88s0u"
+path="res://.godot/imported/bubble_additive.png-b808e4914a37540ca7bf81c25c405a25.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/effects/underwater/wet_lens_height.png"
-dest_files=["res://.godot/imported/wet_lens_height.png-bdf6cf0fb8b9de5a7e3ade9657f710ea.ctex"]
+source_file="res://systems/camera/underwater/textures/bubble_additive.png"
+dest_files=["res://.godot/imported/bubble_additive.png-b808e4914a37540ca7bf81c25c405a25.ctex"]
 
 [params]
 

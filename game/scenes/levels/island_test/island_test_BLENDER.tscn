@@ -41,7 +41,7 @@
 [ext_resource type="Texture2D" uid="uid://dh4ygdetfbe7t" path="res://assets/environment/skies/kloofendal_48d_partly_cloudy_puresky_4k.hdr" id="40_armhu"]
 [ext_resource type="Texture2D" uid="uid://b7kfjl0vvcloa" path="res://assets/environment/skies/qwantani_dusk_1_puresky_4k.hdr" id="41_7fon7"]
 [ext_resource type="Texture2D" uid="uid://cmg3mg3yih3d1" path="res://assets/environment/skies/kloofendal_43d_clear_puresky_4k.hdr" id="42_1y1wo"]
-[ext_resource type="Shader" uid="uid://udpsvcumn1mh" path="res://shaders/effects/underwater_split_view_post_process.gdshader" id="51_6j5nl"]
+[ext_resource type="Shader" uid="uid://udpsvcumn1mh" path="res://systems/camera/underwater/shaders/underwater_split_view_post_process.gdshader" id="51_6j5nl"]
 [ext_resource type="Script" uid="uid://cs8r4h4yr3knc" path="res://scripts/environment/hanging_light_sway_3d.gd" id="53_light_sway"]
 [ext_resource type="AudioStream" uid="uid://dq0xb5edi3237" path="res://assets/music/Storm Chaser.ogg" id="53_px0hy"]
 [ext_resource type="Material" uid="uid://dk2h67ph6buix" path="res://assets/materials/rusty_metal_03.res" id="60_vhs81"]
@@ -399,7 +399,7 @@ shader_parameter/foam_scroll_speed = 0.13
 shader_parameter/foam_roughness = 0.70999998413008
 shader_parameter/ocean_foam_detail_quality = 1
 shader_parameter/ocean_foam_evaluation_distance = 520.0
-shader_parameter/ocean_surface_enabled = true
+shader_parameter/ocean_surface_enabled = false
 shader_parameter/ocean_logical_origin_offset_xz = Vector2(0, 0)
 shader_parameter/ocean_detail_center_xz = Vector2(0, 0)
 shader_parameter/ocean_detailed_wave_fade_start = 170.0
@@ -565,7 +565,7 @@ data = PackedVector3Array(8.577499, 2.925, 4.5074997, 8.577499, -2.925, 4.507499
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_rtwgq"]
 friction = 0.0
 
-[node name="IslandTestBlender" type="Node3D" unique_id=2091620036]
+[node name="ParadiseIsland" type="Node3D" unique_id=2091620036]
 script = ExtResource("1_yqko0")
 ocean_path = NodePath("WaterIntegration/Ocean")
 player_spawn_path = NodePath("Gameplay/PlayerSpawn")
