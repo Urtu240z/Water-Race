@@ -1,8 +1,8 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene format=3]
 
-[ext_resource type="Script" path="res://scripts/effects/hull_foam_3d.gd" id="1_hull"]
-[ext_resource type="Shader" path="res://shaders/hull_foam.gdshader" id="2_shader"]
-[ext_resource type="Texture2D" path="res://resources/water/foam_breakup_noise.tres" id="3_noise"]
+[ext_resource type="Script" uid="uid://41280g1qra5k" path="res://scripts/effects/hull_foam_3d.gd" id="1_hull"]
+[ext_resource type="Shader" uid="uid://do1ro1nmgji8m" path="res://shaders/hull_foam.gdshader" id="2_shader"]
+[ext_resource type="Texture2D" uid="uid://dpb0qhgywdm05" path="res://world/water/ocean/foam/foam_breakup_noise.tres" id="3_noise"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_hull_foam"]
 render_priority = 5

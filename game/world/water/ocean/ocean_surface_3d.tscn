@@ -1,7 +1,7 @@
 [gd_scene format=3]
 
-[ext_resource type="Script" path="res://scripts/water/ocean_surface_3d.gd" id="1_ocean"]
-[ext_resource type="Shader" path="res://shaders/ocean_water.gdshader" id="3_legacy_shader"]
+[ext_resource type="Script" uid="uid://cvjaiwjh2aui2" path="res://world/water/ocean/ocean_surface_3d.gd" id="1_ocean"]
+[ext_resource type="Shader" uid="uid://cu3bm250n7pis" path="res://world/water/ocean/shaders/ocean_water.gdshader" id="3_legacy_shader"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ocean_legacy"]
 resource_local_to_scene = true

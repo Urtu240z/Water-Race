@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://cisubjold2oac"]
 
-[ext_resource type="Script" uid="uid://cn5tfwpu4tojc" path="res://scripts/wildlife/ambient_wildlife_controller.gd" id="1_wildlife"]
+[ext_resource type="Script" uid="uid://cn5tfwpu4tojc" path="res://levels/paradise_island/wildlife/ambient_wildlife_controller.gd" id="1_wildlife"]
 
 [node name="AmbientWildlife" type="Node3D" unique_id=2132751686 groups=["graphics_quality_wildlife"]]
 script = ExtResource("1_wildlife")

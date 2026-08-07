@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://dpbrf2uq6o5xp"
-path="res://.godot/imported/Dolphin.glb-dd0c34dc8a8e5e2caa706f1af9aa1963.scn"
+path="res://.godot/imported/dolphin.glb-53a1ca3f7b111185eb8a1567857126e6.scn"
 
 [deps]
 
-source_file="res://assets/3D/wildlife/dolphin/Dolphin.glb"
-dest_files=["res://.godot/imported/Dolphin.glb-dd0c34dc8a8e5e2caa706f1af9aa1963.scn"]
+source_file="res://world/wildlife/dolphin/dolphin.glb"
+dest_files=["res://.godot/imported/dolphin.glb-53a1ca3f7b111185eb8a1567857126e6.scn"]
 
 [params]
 

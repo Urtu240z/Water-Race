@@ -1,9 +1,9 @@
 class_name AmbientWildlifeController
 extends Node3D
 
-const SEAGULL_SCENE: PackedScene = preload("res://assets/3D/wildlife/seagull/Seagull.glb")
-const DOLPHIN_SCENE: PackedScene = preload("res://assets/3D/wildlife/dolphin/Dolphin.glb")
-const FISH_SCENE: PackedScene = preload("res://assets/3D/wildlife/fish/Fish.glb")
+const SEAGULL_SCENE: PackedScene = preload("res://world/wildlife/seagull/seagull.glb")
+const DOLPHIN_SCENE: PackedScene = preload("res://world/wildlife/dolphin/dolphin.glb")
+const FISH_SCENE: PackedScene = preload("res://world/wildlife/fish/fish.glb")
 const DOLPHIN_BREACH_ANIMATION_SECONDS: float = 31.0 / 24.0
 
 const BIRD_GROUPS := [

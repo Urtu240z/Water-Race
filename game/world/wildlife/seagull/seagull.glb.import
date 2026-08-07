@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://ckj1bk8y1ju46"
-path="res://.godot/imported/Seagull.glb-cb400aff7199e95d7d84c488f566f256.scn"
+path="res://.godot/imported/seagull.glb-bddaeddcbac177cc061cda74032db5a4.scn"
 
 [deps]
 
-source_file="res://assets/3D/wildlife/seagull/Seagull.glb"
-dest_files=["res://.godot/imported/Seagull.glb-cb400aff7199e95d7d84c488f566f256.scn"]
+source_file="res://world/wildlife/seagull/seagull.glb"
+dest_files=["res://.godot/imported/seagull.glb-bddaeddcbac177cc061cda74032db5a4.scn"]
 
 [params]
 

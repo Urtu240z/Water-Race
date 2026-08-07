@@ -1,12 +1,12 @@
-[gd_resource type="ShaderMaterial" load_steps=9 format=3]
+[gd_resource type="ShaderMaterial" format=3]
 
-[ext_resource type="Shader" path="res://shaders/ocean_water.gdshader" id="1_shader"]
-[ext_resource type="Texture2D" path="res://resources/water/ocean/macro_wave_a.png" id="2_wave_a"]
-[ext_resource type="Texture2D" path="res://resources/water/ocean/macro_wave_b.png" id="3_wave_b"]
-[ext_resource type="Texture2D" path="res://resources/water/organic_surface/surface_normal_a.tres" id="4_normal_a"]
-[ext_resource type="Texture2D" path="res://resources/water/organic_surface/surface_normal_b.tres" id="5_normal_b"]
-[ext_resource type="Texture2D" path="res://resources/water/organic_surface/surface_warp_noise.tres" id="6_warp"]
-[ext_resource type="Texture2D" path="res://resources/water/foam_breakup_noise.tres" id="7_foam"]
+[ext_resource type="Shader" uid="uid://cu3bm250n7pis" path="res://world/water/ocean/shaders/ocean_water.gdshader" id="1_shader"]
+[ext_resource type="Texture2D" uid="uid://c0kex04xga83k" path="res://world/water/ocean/waves/macro_wave_a.png" id="2_wave_a"]
+[ext_resource type="Texture2D" uid="uid://bs48vn7ihhfp" path="res://world/water/ocean/waves/macro_wave_b.png" id="3_wave_b"]
+[ext_resource type="Texture2D" uid="uid://cdlm681krlrvi" path="res://world/water/ocean/surface_detail/surface_normal_a.tres" id="4_normal_a"]
+[ext_resource type="Texture2D" uid="uid://biv8w5n57xhjr" path="res://world/water/ocean/surface_detail/surface_normal_b.tres" id="5_normal_b"]
+[ext_resource type="Texture2D" uid="uid://bblan7rbfrudb" path="res://world/water/ocean/surface_detail/surface_warp_noise.tres" id="6_warp"]
+[ext_resource type="Texture2D" uid="uid://dpb0qhgywdm05" path="res://world/water/ocean/foam/foam_breakup_noise.tres" id="7_foam"]
 
 [resource]
 resource_local_to_scene = true

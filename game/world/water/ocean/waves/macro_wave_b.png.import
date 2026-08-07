@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://bs48vn7ihhfp"
-path="res://.godot/imported/macro_wave_b.png-d1c53a384ab990ede532e360c0c2b486.ctex"
+path="res://.godot/imported/macro_wave_b.png-5522ae38f12da84fd11dcb973da2b2e5.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://resources/water/ocean/macro_wave_b.png"
-dest_files=["res://.godot/imported/macro_wave_b.png-d1c53a384ab990ede532e360c0c2b486.ctex"]
+source_file="res://world/water/ocean/waves/macro_wave_b.png"
+dest_files=["res://.godot/imported/macro_wave_b.png-5522ae38f12da84fd11dcb973da2b2e5.ctex"]
 
 [params]
 

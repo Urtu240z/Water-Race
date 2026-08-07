@@ -1,6 +1,6 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene format=3]
 
-[ext_resource type="Script" path="res://scripts/water/calm_water_area_3d.gd" id="1_calm_area"]
+[ext_resource type="Script" uid="uid://bdhnquov3yfyr" path="res://world/water/ocean/calm_water_area_3d.gd" id="1_calm_area"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_calm_area"]
 size = Vector3(40, 4, 40)
