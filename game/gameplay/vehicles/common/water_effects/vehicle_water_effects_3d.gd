@@ -1,10 +1,10 @@
 class_name VehicleWaterEffects3D
 extends Node3D
 
-const SPRAY_SPRITE_SHADER := preload("res://shaders/water_spray_sprite.gdshader")
-const QUALITY_LOW := preload("res://resources/water/vehicle_effects_quality_low.tres")
-const QUALITY_MEDIUM := preload("res://resources/water/vehicle_effects_quality_medium.tres")
-const QUALITY_HIGH := preload("res://resources/water/vehicle_effects_quality_high.tres")
+const SPRAY_SPRITE_SHADER := preload("res://gameplay/vehicles/common/water_effects/shaders/water_spray_sprite.gdshader")
+const QUALITY_LOW := preload("res://gameplay/vehicles/common/water_effects/quality/vehicle_effects_quality_low.tres")
+const QUALITY_MEDIUM := preload("res://gameplay/vehicles/common/water_effects/quality/vehicle_effects_quality_medium.tres")
+const QUALITY_HIGH := preload("res://gameplay/vehicles/common/water_effects/quality/vehicle_effects_quality_high.tres")
 const IMPACT_POOL_CAPACITY: int = 4
 
 enum QualityLevel {

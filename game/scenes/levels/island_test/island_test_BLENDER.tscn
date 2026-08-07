@@ -25,7 +25,7 @@
 [ext_resource type="Texture2D" uid="uid://cm7w5uwuuwkx8" path="res://assets/materials/terrain_master_textures/wet_sand_normal.png" id="21_fsh7y"]
 [ext_resource type="Texture2D" uid="uid://cexe4l4551x8v" path="res://assets/materials/terrain_master_textures/wet_sand_orm.png" id="22_cfiqe"]
 [ext_resource type="Texture2D" uid="uid://co0du6jbk56x6" path="res://world/vegetation/palms/textures/palm_billboard_albedo.png" id="24_wath7"]
-[ext_resource type="Shader" uid="uid://dh7o8h2pae1kd" path="res://shaders/ocean_water_custom_ssr.gdshader" id="32_djt2o"]
+[ext_resource type="Shader" uid="uid://dh7o8h2pae1kd" path="res://world/water/ocean/shaders/ocean_water_custom_ssr.gdshader" id="32_djt2o"]
 [ext_resource type="PackedScene" uid="uid://1d3iohmalk05" path="res://world/water/ocean/ocean_3d.tscn" id="32_wfhwd"]
 [ext_resource type="Texture2D" uid="uid://c0kex04xga83k" path="res://world/water/ocean/waves/macro_wave_a.png" id="34_cfiqe"]
 [ext_resource type="Texture2D" uid="uid://dpb0qhgywdm05" path="res://world/water/ocean/foam/foam_breakup_noise.tres" id="34_cowfl"]
@@ -251,7 +251,6 @@ size = Vector2(10000, 10000)
 resource_local_to_scene = true
 render_priority = 0
 shader = ExtResource("32_djt2o")
-shader_parameter/ocean_enabled = true
 shader_parameter/water_level = 0.0
 shader_parameter/simulation_time = 0.0
 shader_parameter/wave_height_texture_a = ExtResource("34_cfiqe")
@@ -320,7 +319,6 @@ shader_parameter/directional_wake_propagation_speed = 2.8
 shader_parameter/directional_wake_opening_slope = 0.085
 shader_parameter/directional_wake_arm_width = 0.62
 shader_parameter/directional_wake_center_depression = 0.065
-shader_parameter/directional_wake_maximum_distance = 46.0
 shader_parameter/directional_wake_duration = 5.2
 shader_parameter/directional_wake_attenuation = 0.16
 shader_parameter/directional_wake_turn_strength = 0.65
@@ -402,7 +400,6 @@ shader_parameter/foam_roughness = 0.70999998413008
 shader_parameter/ocean_foam_detail_quality = 1
 shader_parameter/ocean_foam_evaluation_distance = 520.0
 shader_parameter/ocean_surface_enabled = true
-shader_parameter/ocean_snapped_origin_xz = Vector2(0, 0)
 shader_parameter/ocean_logical_origin_offset_xz = Vector2(0, 0)
 shader_parameter/ocean_detail_center_xz = Vector2(0, 0)
 shader_parameter/ocean_detailed_wave_fade_start = 170.0

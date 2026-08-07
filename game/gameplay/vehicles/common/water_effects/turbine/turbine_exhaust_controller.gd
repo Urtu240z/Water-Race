@@ -1,11 +1,11 @@
 class_name TurbineExhaustController
 extends Node3D
 
-const STREAM_SHADER := preload("res://shaders/water_stream.gdshader")
-const DROPLET_SHADER := preload("res://shaders/water_particle.gdshader")
-const QUALITY_LOW := preload("res://resources/water/vehicle_effects_quality_low.tres")
-const QUALITY_MEDIUM := preload("res://resources/water/vehicle_effects_quality_medium.tres")
-const QUALITY_HIGH := preload("res://resources/water/vehicle_effects_quality_high.tres")
+const STREAM_SHADER := preload("res://gameplay/vehicles/common/water_effects/shaders/water_stream.gdshader")
+const DROPLET_SHADER := preload("res://gameplay/vehicles/common/water_effects/shaders/water_particle.gdshader")
+const QUALITY_LOW := preload("res://gameplay/vehicles/common/water_effects/quality/vehicle_effects_quality_low.tres")
+const QUALITY_MEDIUM := preload("res://gameplay/vehicles/common/water_effects/quality/vehicle_effects_quality_medium.tres")
+const QUALITY_HIGH := preload("res://gameplay/vehicles/common/water_effects/quality/vehicle_effects_quality_high.tres")
 
 enum QualityLevel {
 	LOW,

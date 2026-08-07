@@ -1,6 +1,6 @@
 [gd_resource type="ShaderMaterial" format=3]
 
-[ext_resource type="Shader" uid="uid://dh7o8h2pae1kd" path="res://shaders/ocean_water_custom_ssr.gdshader" id="1_shader"]
+[ext_resource type="Shader" uid="uid://dh7o8h2pae1kd" path="res://world/water/ocean/shaders/ocean_water_custom_ssr.gdshader" id="1_shader"]
 [ext_resource type="Texture2D" uid="uid://c0kex04xga83k" path="res://world/water/ocean/waves/macro_wave_a.png" id="2_wave_a"]
 [ext_resource type="Texture2D" uid="uid://bs48vn7ihhfp" path="res://world/water/ocean/waves/macro_wave_b.png" id="3_wave_b"]
 [ext_resource type="Texture2D" uid="uid://cdlm681krlrvi" path="res://world/water/ocean/surface_detail/surface_normal_a.tres" id="4_normal_a"]
