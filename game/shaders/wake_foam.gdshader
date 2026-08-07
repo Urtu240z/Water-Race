@@ -15,6 +15,8 @@ uniform float opacity_boost : hint_range(0.0, 4.0, 0.01) = 1.0;
 uniform float core_opacity : hint_range(0.0, 1.0, 0.01) = 0.22;
 uniform float emission_strength : hint_range(0.0, 2.0, 0.01) = 0.05;
 
+#define OCEAN_INTERACTION_CONTEXT
+
 #include "res://world/water/ocean/shaders/includes/ocean_vehicle_interaction_uniforms.gdshaderinc"
 #include "res://world/water/ocean/shaders/includes/ocean_vehicle_interaction_functions.gdshaderinc"
 

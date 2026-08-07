@@ -614,10 +614,15 @@ vec4 sample_vehicle_interaction_state(vec2 logical_xz) {
 	return state;
 }
 
+#ifdef OCEAN_INTERACTION_FULL_OCEAN
+
 float interaction_ripple_weight() {
 	return vehicle_interaction_exaggerated_debug ? 0.0 : (
 		ocean_interaction_debug_mode == 2
 		|| ocean_interaction_debug_mode == 3
 	) ? 0.0 : 1.0;
 }
+
+#endif
+
 #endif

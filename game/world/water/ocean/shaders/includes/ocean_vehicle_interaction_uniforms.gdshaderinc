@@ -43,7 +43,6 @@ uniform float directional_wake_propagation_speed : hint_range(0.0, 12.0, 0.05) =
 uniform float directional_wake_opening_slope : hint_range(0.0, 0.5, 0.005) = 0.085;
 uniform float directional_wake_arm_width : hint_range(0.1, 4.0, 0.05) = 0.62;
 uniform float directional_wake_center_depression : hint_range(0.0, 0.5, 0.005) = 0.065;
-uniform float directional_wake_maximum_distance : hint_range(4.0, 100.0, 1.0) = 46.0;
 uniform float directional_wake_duration : hint_range(0.25, 12.0, 0.05) = 5.2;
 uniform float directional_wake_attenuation : hint_range(0.0, 1.0, 0.005) = 0.16;
 uniform float directional_wake_turn_strength : hint_range(0.0, 2.0, 0.01) = 0.65;
@@ -66,7 +65,9 @@ uniform float hull_pressure_maximum_distance : hint_range(2.0, 30.0, 0.25) = 9.0
 group_uniforms VehicleInteraction;
 uniform float vehicle_interaction_maximum_displacement : hint_range(0.05, 2.0, 0.01) = 0.55;
 uniform float vehicle_interaction_maximum_derivative : hint_range(0.1, 4.0, 0.05) = 1.35;
+#ifdef OCEAN_INTERACTION_FULL_OCEAN
 uniform float vehicle_interaction_clipmap_distance : hint_range(8.0, 200.0, 1.0) = 86.0;
+#endif
 uniform int ocean_interaction_debug_mode : hint_enum("Off", "Ripples", "Directional Wake", "Hull Pressure", "Total") = 0;
 uniform bool vehicle_interaction_exaggerated_debug = false;
 uniform float vehicle_interaction_debug_multiplier : hint_range(1.0, 8.0, 0.25) = 3.5;

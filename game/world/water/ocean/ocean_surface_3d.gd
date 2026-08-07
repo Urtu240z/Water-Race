@@ -862,10 +862,6 @@ func _update_material_uniforms(force_static: bool = false) -> void:
 	# Parámetros dinámicos de la superficie.
 	_visual_material.set_shader_parameter(&"water_level", resolved_water_level)
 	_visual_material.set_shader_parameter(
-		&"ocean_snapped_origin_xz",
-		snapped_origin_xz
-	)
-	_visual_material.set_shader_parameter(
 		&"ocean_logical_origin_offset_xz",
 		logical_origin_offset_xz
 	)

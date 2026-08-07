@@ -10,7 +10,6 @@ const float TAU_VALUE = 6.28318530718;
 const int CUSTOM_SSR_MAX_STEPS = 32;
 const int CUSTOM_SSR_MAX_REFINEMENT_STEPS = 5;
 
-uniform bool ocean_enabled = true;
 uniform float water_level = 0.0;
 uniform float simulation_time = 0.0;
 
@@ -47,6 +46,9 @@ uniform float ripple_wavelengths[12];
 uniform float ripple_decays[12];
 uniform float ripple_lifetimes[12];
 uniform int ripple_effective_count : hint_range(1, 12, 1) = 12;
+
+#define OCEAN_INTERACTION_CONTEXT
+#define OCEAN_INTERACTION_FULL_OCEAN
 
 #include "res://world/water/ocean/shaders/includes/ocean_vehicle_interaction_uniforms.gdshaderinc"
 
@@ -121,7 +123,6 @@ uniform float ocean_foam_evaluation_distance : hint_range(1.0, 2000.0, 1.0) = 52
 
 group_uniforms Clipmap;
 uniform bool ocean_surface_enabled = false;
-uniform vec2 ocean_snapped_origin_xz = vec2(0.0);
 uniform vec2 ocean_logical_origin_offset_xz = vec2(0.0);
 uniform vec2 ocean_detail_center_xz = vec2(0.0);
 uniform float ocean_detailed_wave_fade_start = 170.0;

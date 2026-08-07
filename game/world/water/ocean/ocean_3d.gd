@@ -2247,7 +2247,6 @@ func _rebuild_calm_water_zones() -> void:
 func _push_static_parameters(material: ShaderMaterial) -> void:
 	if material == null or material.shader == null:
 		return
-	material.set_shader_parameter(&"ocean_enabled", true)
 	material.set_shader_parameter(&"water_level", water_level)
 	var shader_wave_texture_a: Texture2D = wave_height_texture_a
 	var shader_wave_texture_b: Texture2D = wave_height_texture_b
@@ -2390,10 +2389,6 @@ func _push_static_parameters(material: ShaderMaterial) -> void:
 	material.set_shader_parameter(
 		&"directional_wake_center_depression",
 		directional_wake_center_depression
-	)
-	material.set_shader_parameter(
-		&"directional_wake_maximum_distance",
-		directional_wake_maximum_distance
 	)
 	material.set_shader_parameter(&"directional_wake_duration", directional_wake_duration)
 	material.set_shader_parameter(
