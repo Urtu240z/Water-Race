@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://bxadsuvcf1767"]
 
-[ext_resource type="PackedScene" uid="uid://bla2pela0rtpo" path="res://assets/3D/levels/arrow_flat.glb" id="1_koxpq"]
-[ext_resource type="Material" uid="uid://by183gvu5i7vp" path="res://assets/materials/arrow_flat_animated.tres" id="2_animated"]
+[ext_resource type="PackedScene" uid="uid://bla2pela0rtpo" path="res://gameplay/race/course/signs/models/arrow_flat.glb" id="1_koxpq"]
+[ext_resource type="Material" uid="uid://by183gvu5i7vp" path="res://gameplay/race/course/signs/materials/arrow_flat_animated.tres" id="2_animated"]
 
 [node name="arrow_flat" unique_id=345620739 groups=["course_emissive_arrow_sign"] instance=ExtResource("1_koxpq")]
 

@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://brnnlowoahuxx"
-path="res://.godot/imported/wrong_flat.glb-f293d72fe3fd2f1aacd47664d770e121.scn"
+uid="uid://bnmb82tvpclwj"
+path="res://.godot/imported/buoyL.glb-c4a20b846803c8127dc599e83dbbae7a.scn"
 
 [deps]
 
-source_file="res://assets/3D/levels/wrong_flat.glb"
-dest_files=["res://.godot/imported/wrong_flat.glb-f293d72fe3fd2f1aacd47664d770e121.scn"]
+source_file="res://gameplay/race/course/buoys/models/buoyL.glb"
+dest_files=["res://.godot/imported/buoyL.glb-c4a20b846803c8127dc599e83dbbae7a.scn"]
 
 [params]
 
@@ -36,7 +36,7 @@ animation/trimming=false
 animation/remove_immutable_tracks=true
 animation/import_rest_as_RESET=false
 import_script/path=""
-materials/extract=2
+materials/extract=0
 materials/extract_format=0
 materials/extract_path=""
 _subresources={}

@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://b144vhkdjlt67"
-path="res://.godot/imported/BoyaR.glb-907ea082b440dae3958f3b363d1dc342.scn"
+uid="uid://cfo5xns6ymxxc"
+path="res://.godot/imported/arrow_curve.glb-aed21bddd2d53b47f51463f47229a7f5.scn"
 
 [deps]
 
-source_file="res://assets/3D/BoyaR.glb"
-dest_files=["res://.godot/imported/BoyaR.glb-907ea082b440dae3958f3b363d1dc342.scn"]
+source_file="res://gameplay/race/course/signs/models/arrow_curve.glb"
+dest_files=["res://.godot/imported/arrow_curve.glb-aed21bddd2d53b47f51463f47229a7f5.scn"]
 
 [params]
 
@@ -36,7 +36,7 @@ animation/trimming=false
 animation/remove_immutable_tracks=true
 animation/import_rest_as_RESET=false
 import_script/path=""
-materials/extract=0
+materials/extract=2
 materials/extract_format=0
 materials/extract_path=""
 _subresources={}

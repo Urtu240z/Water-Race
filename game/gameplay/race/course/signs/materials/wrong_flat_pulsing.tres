@@ -1,7 +1,7 @@
 [gd_resource type="ShaderMaterial" format=3 uid="uid://dxqhdols1qeq6"]
 
-[ext_resource type="Shader" uid="uid://b65sfq8cd4k2i" path="res://assets/shaders/pulsing_emission.gdshader" id="1_shader"]
-[ext_resource type="Texture2D" uid="uid://b4551os4lg6u1" path="res://assets/3D/levels/Wrong_texture.png" id="2_texture"]
+[ext_resource type="Shader" uid="uid://b65sfq8cd4k2i" path="res://gameplay/race/course/signs/shaders/pulsing_emission.gdshader" id="1_shader"]
+[ext_resource type="Texture2D" uid="uid://b4551os4lg6u1" path="res://gameplay/race/course/signs/textures/Wrong_texture.png" id="2_texture"]
 
 [resource]
 render_priority = 0

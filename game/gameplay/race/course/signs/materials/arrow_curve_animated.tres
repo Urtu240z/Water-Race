@@ -1,7 +1,7 @@
 [gd_resource type="ShaderMaterial" format=3 uid="uid://dsj0770kwb7vh"]
 
-[ext_resource type="Shader" uid="uid://bugx0465khbjf" path="res://assets/shaders/animated_arrow_emission.gdshader" id="1_shader"]
-[ext_resource type="Texture2D" uid="uid://cujlihmu3omrd" path="res://assets/3D/levels/Arrow_texture.png" id="2_texture"]
+[ext_resource type="Shader" uid="uid://bugx0465khbjf" path="res://gameplay/race/course/signs/shaders/animated_arrow_emission.gdshader" id="1_shader"]
+[ext_resource type="Texture2D" uid="uid://cujlihmu3omrd" path="res://gameplay/race/course/signs/textures/Arrow_texture.png" id="2_texture"]
 
 [resource]
 render_priority = 0

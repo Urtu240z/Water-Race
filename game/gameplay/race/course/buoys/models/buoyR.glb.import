@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://bnmb82tvpclwj"
-path="res://.godot/imported/BoyaL.glb-7d29c195153317168b4ad0ce1e9b2e27.scn"
+uid="uid://b144vhkdjlt67"
+path="res://.godot/imported/buoyR.glb-1d9e71895437efd14558bdebbbe9cc58.scn"
 
 [deps]
 
-source_file="res://assets/3D/BoyaL.glb"
-dest_files=["res://.godot/imported/BoyaL.glb-7d29c195153317168b4ad0ce1e9b2e27.scn"]
+source_file="res://gameplay/race/course/buoys/models/buoyR.glb"
+dest_files=["res://.godot/imported/buoyR.glb-1d9e71895437efd14558bdebbbe9cc58.scn"]
 
 [params]
 

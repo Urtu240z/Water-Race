@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://bla2pela0rtpo"
-path="res://.godot/imported/arrow_flat.glb-234a430823efc58fb192c773b49972eb.scn"
+uid="uid://brnnlowoahuxx"
+path="res://.godot/imported/wrong_flat.glb-f5bf6af4cc2502cc8a99083103724420.scn"
 
 [deps]
 
-source_file="res://assets/3D/levels/arrow_flat.glb"
-dest_files=["res://.godot/imported/arrow_flat.glb-234a430823efc58fb192c773b49972eb.scn"]
+source_file="res://gameplay/race/course/signs/models/wrong_flat.glb"
+dest_files=["res://.godot/imported/wrong_flat.glb-f5bf6af4cc2502cc8a99083103724420.scn"]
 
 [params]
 

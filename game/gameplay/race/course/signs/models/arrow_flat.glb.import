@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://cfo5xns6ymxxc"
-path="res://.godot/imported/arrow_curve.glb-f1e05e268ad9b163d412dd14500a54f9.scn"
+uid="uid://bla2pela0rtpo"
+path="res://.godot/imported/arrow_flat.glb-d88aca05a769c78b544e637000a9a5f5.scn"
 
 [deps]
 
-source_file="res://assets/3D/levels/arrow_curve.glb"
-dest_files=["res://.godot/imported/arrow_curve.glb-f1e05e268ad9b163d412dd14500a54f9.scn"]
+source_file="res://gameplay/race/course/signs/models/arrow_flat.glb"
+dest_files=["res://.godot/imported/arrow_flat.glb-d88aca05a769c78b544e637000a9a5f5.scn"]
 
 [params]
 

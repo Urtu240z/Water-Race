@@ -2,17 +2,20 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b4551os4lg6u1"
-path.s3tc="res://.godot/imported/Wrong_texture.png-b28a7b876c64bc592adbfa6056859b4d.s3tc.ctex"
+uid="uid://d1w22iuetqdvx"
+path.s3tc="res://.godot/imported/buoyR_Sphere Base Color.png-9d76018db2ced29fcbe10ea675154ab5.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
 }
+generator_parameters={
+"md5": "98dfdc153a0438b3a8851b5df0bdc33f"
+}
 
 [deps]
 
-source_file="res://assets/3D/levels/Wrong_texture.png"
-dest_files=["res://.godot/imported/Wrong_texture.png-b28a7b876c64bc592adbfa6056859b4d.s3tc.ctex"]
+source_file="res://gameplay/race/course/buoys/models/buoyR_Sphere Base Color.png"
+dest_files=["res://.godot/imported/buoyR_Sphere Base Color.png-9d76018db2ced29fcbe10ea675154ab5.s3tc.ctex"]
 
 [params]
 

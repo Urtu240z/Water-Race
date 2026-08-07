@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://7ts3l4tox5ot"]
 
-[ext_resource type="PackedScene" uid="uid://cfo5xns6ymxxc" path="res://assets/3D/levels/arrow_curve.glb" id="1_86v0k"]
-[ext_resource type="Material" uid="uid://dsj0770kwb7vh" path="res://assets/materials/arrow_curve_animated.tres" id="2_animated"]
+[ext_resource type="PackedScene" uid="uid://cfo5xns6ymxxc" path="res://gameplay/race/course/signs/models/arrow_curve.glb" id="1_86v0k"]
+[ext_resource type="Material" uid="uid://dsj0770kwb7vh" path="res://gameplay/race/course/signs/materials/arrow_curve_animated.tres" id="2_animated"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cpekw"]
 albedo_color = Color(0.09239707, 0.09239706, 0.09239706, 1)
