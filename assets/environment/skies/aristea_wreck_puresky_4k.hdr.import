@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dh4ygdetfbe7t"
-path.bptc="res://.godot/imported/kloofendal_48d_partly_cloudy_puresky_4k.hdr-1d3cfa00d3ecaa713b606b19ccd9ed4c.bptc.ctex"
+uid="uid://cq8kw5o6ssrwc"
+path.bptc="res://.godot/imported/aristea_wreck_puresky_4k.hdr-667f976bb42ff2e0003ed3f41c9f3273.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://assets/environment/sky/kloofendal_48d_partly_cloudy_puresky_4k.hdr"
-dest_files=["res://.godot/imported/kloofendal_48d_partly_cloudy_puresky_4k.hdr-1d3cfa00d3ecaa713b606b19ccd9ed4c.bptc.ctex"]
+source_file="res://assets/environment/skies/aristea_wreck_puresky_4k.hdr"
+dest_files=["res://.godot/imported/aristea_wreck_puresky_4k.hdr-667f976bb42ff2e0003ed3f41c9f3273.bptc.ctex"]
 
 [params]
 
