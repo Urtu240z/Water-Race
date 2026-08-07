@@ -2,7 +2,7 @@ class_name IslandTestBlenderBootstrap
 extends Node3D
 
 const COURSE_SIGN_LIGHT_POOL_SCRIPT := preload(
-	"res://scripts/course/course_sign_light_pool.gd"
+	"res://gameplay/race/course/signs/course_sign_light_pool.gd"
 )
 
 @export_group("Integration")

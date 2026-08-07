@@ -2,17 +2,20 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://mo8d7pcdm41v"
-path.s3tc="res://.godot/imported/palm_billboard_continuous_height.png-e4cc72f1b260a1809085e178e9462dd1.s3tc.ctex"
+uid="uid://co0du6jbk56x6"
+path.s3tc="res://.godot/imported/palm_billboard_albedo.png-8a373025b724734927004cdc1a858a11.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
 }
+generator_parameters={
+"md5": "37ccb26844294ba5f12bef49bb17c2c4"
+}
 
 [deps]
 
-source_file="res://assets/vegetation/palm_billboard_continuous_height.png"
-dest_files=["res://.godot/imported/palm_billboard_continuous_height.png-e4cc72f1b260a1809085e178e9462dd1.s3tc.ctex"]
+source_file="res://world/vegetation/palms/textures/palm_billboard_albedo.png"
+dest_files=["res://.godot/imported/palm_billboard_albedo.png-8a373025b724734927004cdc1a858a11.s3tc.ctex"]
 
 [params]
 
@@ -26,8 +29,8 @@ compress/normal_map=0
 compress/channel_pack=0
 mipmaps/generate=true
 mipmaps/limit=-1
-roughness/mode=7
-roughness/src_normal="res://assets/vegetation/palm_billboard_continuous_normal.png"
+roughness/mode=0
+roughness/src_normal=""
 process/channel_remap/red=0
 process/channel_remap/green=1
 process/channel_remap/blue=2

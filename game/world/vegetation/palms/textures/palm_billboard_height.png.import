@@ -2,20 +2,17 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://co0du6jbk56x6"
-path.s3tc="res://.godot/imported/test_island_palm_billboard_continuous_atlas.png-6ae1c9a47e7941234c1cc4641f222c60.s3tc.ctex"
+uid="uid://mo8d7pcdm41v"
+path.s3tc="res://.godot/imported/palm_billboard_height.png-ca3c8b60ccd26a2fe42ba655917fbab3.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
 }
-generator_parameters={
-"md5": "37ccb26844294ba5f12bef49bb17c2c4"
-}
 
 [deps]
 
-source_file="res://assets/3D/Terrain/test_island_palm_billboard_continuous_atlas.png"
-dest_files=["res://.godot/imported/test_island_palm_billboard_continuous_atlas.png-6ae1c9a47e7941234c1cc4641f222c60.s3tc.ctex"]
+source_file="res://world/vegetation/palms/textures/palm_billboard_height.png"
+dest_files=["res://.godot/imported/palm_billboard_height.png-ca3c8b60ccd26a2fe42ba655917fbab3.s3tc.ctex"]
 
 [params]
 
@@ -29,8 +26,8 @@ compress/normal_map=0
 compress/channel_pack=0
 mipmaps/generate=true
 mipmaps/limit=-1
-roughness/mode=0
-roughness/src_normal=""
+roughness/mode=7
+roughness/src_normal="res://assets/vegetation/palm_billboard_continuous_normal.png"
 process/channel_remap/red=0
 process/channel_remap/green=1
 process/channel_remap/blue=2

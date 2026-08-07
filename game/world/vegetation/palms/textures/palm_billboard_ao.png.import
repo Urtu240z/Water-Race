@@ -2,20 +2,17 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://6q2ym2ab6aql"
-path.s3tc="res://.godot/imported/Gold_City_test_island_palm_billboard_continuous_atlas.png-dd4078b0020e08b80d0a7dfece0770fc.s3tc.ctex"
+uid="uid://dyqb0w4inbtpk"
+path.s3tc="res://.godot/imported/palm_billboard_ao.png-2760a172968c1a0e3a091439616bd000.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
 }
-generator_parameters={
-"md5": "37ccb26844294ba5f12bef49bb17c2c4"
-}
 
 [deps]
 
-source_file="res://assets/3D/levels/level_night_city/Gold_City_test_island_palm_billboard_continuous_atlas.png"
-dest_files=["res://.godot/imported/Gold_City_test_island_palm_billboard_continuous_atlas.png-dd4078b0020e08b80d0a7dfece0770fc.s3tc.ctex"]
+source_file="res://world/vegetation/palms/textures/palm_billboard_ao.png"
+dest_files=["res://.godot/imported/palm_billboard_ao.png-2760a172968c1a0e3a091439616bd000.s3tc.ctex"]
 
 [params]
 
@@ -29,8 +26,8 @@ compress/normal_map=0
 compress/channel_pack=0
 mipmaps/generate=true
 mipmaps/limit=-1
-roughness/mode=0
-roughness/src_normal=""
+roughness/mode=8
+roughness/src_normal="res://assets/vegetation/palm_billboard_continuous_normal.png"
 process/channel_remap/red=0
 process/channel_remap/green=1
 process/channel_remap/blue=2
