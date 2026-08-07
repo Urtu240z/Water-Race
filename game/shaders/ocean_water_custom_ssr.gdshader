@@ -48,7 +48,7 @@ uniform float ripple_decays[12];
 uniform float ripple_lifetimes[12];
 uniform int ripple_effective_count : hint_range(1, 12, 1) = 12;
 
-#include "res://shaders/includes/ocean_vehicle_interaction_uniforms.gdshaderinc"
+#include "res://world/water/ocean/shaders/includes/ocean_vehicle_interaction_uniforms.gdshaderinc"
 
 group_uniforms SurfaceDetail;
 uniform sampler2D surface_normal_texture_a : hint_normal, repeat_enable, filter_linear_mipmap_anisotropic;
@@ -275,7 +275,7 @@ vec4 sample_ripple_state(vec2 logical_xz) {
 	return vec4(height, derivatives, energy);
 }
 
-#include "res://shaders/includes/ocean_vehicle_interaction_functions.gdshaderinc"
+#include "res://world/water/ocean/shaders/includes/ocean_vehicle_interaction_functions.gdshaderinc"
 
 
 float clipmap_wave_scale(vec2 world_xz) {

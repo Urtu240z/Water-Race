@@ -1,3 +1,4 @@
+#ifdef OCEAN_INTERACTION_CONTEXT
 vec2 interaction_safe_direction(vec2 direction, vec2 fallback) {
 	float magnitude = length(direction);
 	return magnitude > 0.00001 ? direction / magnitude : fallback;
@@ -619,3 +620,4 @@ float interaction_ripple_weight() {
 		|| ocean_interaction_debug_mode == 3
 	) ? 0.0 : 1.0;
 }
+#endif

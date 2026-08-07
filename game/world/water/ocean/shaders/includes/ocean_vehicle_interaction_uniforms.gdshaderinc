@@ -1,3 +1,4 @@
+#ifdef OCEAN_INTERACTION_CONTEXT
 const int MAX_DIRECTIONAL_WAKE_SAMPLES = 16;
 const int MAX_LANDING_IMPACTS = 4;
 
@@ -70,3 +71,4 @@ uniform int ocean_interaction_debug_mode : hint_enum("Off", "Ripples", "Directio
 uniform bool vehicle_interaction_exaggerated_debug = false;
 uniform float vehicle_interaction_debug_multiplier : hint_range(1.0, 8.0, 0.25) = 3.5;
 group_uniforms;
+#endif
