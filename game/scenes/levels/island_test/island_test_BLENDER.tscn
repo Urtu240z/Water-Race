@@ -51,7 +51,7 @@
 [ext_resource type="PackedScene" uid="uid://tl6lotex1356" path="res://scenes/vehicle/jet_ski_with_rider.tscn" id="203_nrhvk"]
 [ext_resource type="AudioStream" uid="uid://doxjcciq5t4q3" path="res://assets/audio/Ocean_Waves.ogg" id="204_4tj3w"]
 [ext_resource type="AudioStream" uid="uid://cioy3ls4ryjq2" path="res://assets/audio/Ocean_Wind.ogg" id="205_wm0j8"]
-[ext_resource type="PackedScene" uid="uid://dewy0j55fasc8" path="res://scenes/camera/chase_camera.tscn" id="206_ckn4c"]
+[ext_resource type="PackedScene" uid="uid://dewy0j55fasc8" path="res://systems/camera/chase_camera.tscn" id="206_ckn4c"]
 [ext_resource type="Script" uid="uid://b6855v0gxv4ik" path="res://scripts/environment/sky_environment_controller.gd" id="209_hytvj"]
 [ext_resource type="PackedScene" uid="uid://cf3mdmbksb1m7" path="res://scenes/props/ramp_1.tscn" id="213_xm5l5"]
 [ext_resource type="PackedScene" uid="uid://c8qf6cnfoysg8" path="res://scenes/props/ramp_2.tscn" id="214_32xe8"]
@@ -636,7 +636,7 @@ pivot_offset_local = Vector3(0, 19.381, 0)
 sway_x_degrees = 5.7
 sway_z_degrees = 4.0
 
-[node name="Light_VIS" parent="Environment/Light" index="0" unique_id=1401331510]
+[node name="Light_VIS" parent="Environment/Light" index="0" unique_id=2081391133]
 transform = Transform3D(0.32, 0, 0, 0, 0.32, 0, 0, 0, 0.32, 0, -0.7512207, 0)
 surface_material_override/0 = SubResource("StandardMaterial3D_cyvr6")
 
@@ -659,7 +659,7 @@ sway_z_degrees = 3.9
 sway_frequency_hz = 0.31
 secondary_frequency_ratio = 0.44000000000000006
 
-[node name="Light_VIS" parent="Environment/Light2" index="0" unique_id=1401331510]
+[node name="Light_VIS" parent="Environment/Light2" index="0" unique_id=2081391133]
 transform = Transform3D(0.32, 0, 0, 0, 0.32, 0, 0, 0, 0.32, 0, -0.7512207, 0)
 surface_material_override/0 = SubResource("StandardMaterial3D_cyvr6")
 
@@ -680,25 +680,25 @@ script = ExtResource("226_terrain_quality")
 [node name="independent_island" parent="TerrainRoot" unique_id=135701482 instance=ExtResource("3_oieqv")]
 transform = Transform3D(0.71981424, 0, -0.6941668, 0, 1, 0, 0.6941668, 0, 0.71981424, 2427.3716, -15.736182, 136.60822)
 
-[node name="Island_1_VIS" parent="TerrainRoot/independent_island" index="0" unique_id=1301992944]
+[node name="Island_1_VIS" parent="TerrainRoot/independent_island" index="0" unique_id=1145179072]
 surface_material_override/0 = ExtResource("34_h01lt")
 
 [node name="independent_island2" parent="TerrainRoot" unique_id=318732152 instance=ExtResource("3_oieqv")]
 transform = Transform3D(2.5448968, 0, 2.17237, 0, 1.375, 0, -2.0929704, 0, 2.6414409, 1964.7793, -5.60398, -2256.5737)
 
-[node name="Island_1_VIS" parent="TerrainRoot/independent_island2" index="0" unique_id=1301992944]
+[node name="Island_1_VIS" parent="TerrainRoot/independent_island2" index="0" unique_id=1145179072]
 surface_material_override/0 = ExtResource("34_h01lt")
 
 [node name="independent_island3" parent="TerrainRoot" unique_id=538394509 instance=ExtResource("3_oieqv")]
 transform = Transform3D(-0.17687668, 0, -6.3775477, 0, 6.38, 0, 6.3775477, 0, -0.17687668, -2022.6855, -45.85874, -2256.5737)
 
-[node name="Island_1_VIS" parent="TerrainRoot/independent_island3" index="0" unique_id=1301992944]
+[node name="Island_1_VIS" parent="TerrainRoot/independent_island3" index="0" unique_id=1145179072]
 surface_material_override/0 = ExtResource("34_h01lt")
 
 [node name="independent_island4" parent="TerrainRoot" unique_id=522839329 instance=ExtResource("3_oieqv")]
 transform = Transform3D(7.6843944, 0, 3.4050117, 0, 16.9, 0, -3.4050117, 0, 7.6843944, -4529.758, -45.85874, 4123.0527)
 
-[node name="Island_1_VIS" parent="TerrainRoot/independent_island4" index="0" unique_id=1301992944]
+[node name="Island_1_VIS" parent="TerrainRoot/independent_island4" index="0" unique_id=1145179072]
 transform = Transform3D(0.5352785, 0.09100684, -0.006567538, -0.07122277, 0.6827822, -0.09906116, -0.0020920038, 0.040325806, 1.6920902, 310.06567, -0.8341303, -127.680214)
 surface_material_override/0 = ExtResource("34_h01lt")
 
@@ -710,72 +710,72 @@ surface_material_override/0 = ExtResource("34_h01lt")
 [node name="test_island" parent="TerrainRoot" unique_id=1352578102 instance=ExtResource("8_3whiu")]
 transform = Transform3D(0.86, 0, 0, 0, 0.86, 0, 0, 0, 0.86, 149, 1.8, 120.1001)
 
-[node name="Terrain_Master_VIS" parent="TerrainRoot/test_island" index="0" unique_id=1375938674]
+[node name="Terrain_Master_VIS" parent="TerrainRoot/test_island" index="0" unique_id=976213362]
 material_override = SubResource("ShaderMaterial_tpwhi")
 
-[node name="Cave_01_VIS" parent="TerrainRoot/test_island" index="1" unique_id=1283060270]
+[node name="Cave_01_VIS" parent="TerrainRoot/test_island" index="1" unique_id=104155991]
 surface_material_override/0 = ExtResource("5_kmjc7")
 
-[node name="Cave_Entrance_Rock_A_VIS" parent="TerrainRoot/test_island" index="2" unique_id=841494517]
+[node name="Cave_Entrance_Rock_A_VIS" parent="TerrainRoot/test_island" index="2" unique_id=564024366]
 surface_material_override/0 = ExtResource("5_kmjc7")
 
-[node name="Rock2_VIS" parent="TerrainRoot/test_island" index="3" unique_id=2064300636]
+[node name="Rock2_VIS" parent="TerrainRoot/test_island" index="3" unique_id=395260365]
 surface_material_override/0 = ExtResource("5_kmjc7")
 
-[node name="Rock3_VIS" parent="TerrainRoot/test_island" index="4" unique_id=43567803]
+[node name="Rock3_VIS" parent="TerrainRoot/test_island" index="4" unique_id=1632139168]
 surface_material_override/0 = ExtResource("5_kmjc7")
 
-[node name="Cave_Entrance_Rock_B_VIS" parent="TerrainRoot/test_island" index="5" unique_id=1207676467]
+[node name="Cave_Entrance_Rock_B_VIS" parent="TerrainRoot/test_island" index="5" unique_id=1283115105]
 surface_material_override/0 = ExtResource("5_kmjc7")
 
-[node name="Cabana_4_VIS" parent="TerrainRoot/test_island" index="9" unique_id=1402229413]
+[node name="Cabana_4_VIS" parent="TerrainRoot/test_island" index="9" unique_id=1829178341]
 transform = Transform3D(1.3555894, 0, 0.07078268, 0, 1.3574358, 0, -0.07078268, 0, 1.3555894, 208.27293, -8.906912, 331.88815)
 
-[node name="Rock4_VIS" parent="TerrainRoot/test_island" index="14" unique_id=741954569]
+[node name="Rock4_VIS" parent="TerrainRoot/test_island" index="14" unique_id=2091099275]
 surface_material_override/0 = ExtResource("5_kmjc7")
 
-[node name="SM_Palm_Impostor_Zone_001_VIS" parent="TerrainRoot/test_island" index="15" unique_id=648193269]
+[node name="SM_Palm_Impostor_Zone_001_VIS" parent="TerrainRoot/test_island" index="15" unique_id=2127654978]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.3975904, 0)
 material_override = SubResource("StandardMaterial3D_7fon7")
 cast_shadow = 0
 
-[node name="SM_Palm_Impostor_Zone_002_VIS" parent="TerrainRoot/test_island" index="16" unique_id=2143775362]
+[node name="SM_Palm_Impostor_Zone_002_VIS" parent="TerrainRoot/test_island" index="16" unique_id=1392556844]
 material_override = SubResource("StandardMaterial3D_7fon7")
 cast_shadow = 0
 
-[node name="Cave_01_COL" parent="TerrainRoot/test_island" index="17" unique_id=1117751917]
+[node name="Cave_01_COL" parent="TerrainRoot/test_island" index="17" unique_id=1105187080]
 visible = false
 
-[node name="Rock2_COL" parent="TerrainRoot/test_island" index="18" unique_id=1727616432]
+[node name="Rock2_COL" parent="TerrainRoot/test_island" index="18" unique_id=359502371]
 visible = false
 
-[node name="Cabana_4_COL" parent="TerrainRoot/test_island" index="19" unique_id=549389224]
+[node name="Cabana_4_COL" parent="TerrainRoot/test_island" index="19" unique_id=1358311821]
 visible = false
 
-[node name="Cave_Entrance_Rock_A_COL" parent="TerrainRoot/test_island" index="20" unique_id=1604545446]
+[node name="Cave_Entrance_Rock_A_COL" parent="TerrainRoot/test_island" index="20" unique_id=1374324262]
 visible = false
 
-[node name="Cave_Entrance_Rock_B_COL" parent="TerrainRoot/test_island" index="21" unique_id=37302326]
+[node name="Cave_Entrance_Rock_B_COL" parent="TerrainRoot/test_island" index="21" unique_id=1549100588]
 visible = false
 
-[node name="Rock3_COL" parent="TerrainRoot/test_island" index="22" unique_id=612646220]
+[node name="Rock3_COL" parent="TerrainRoot/test_island" index="22" unique_id=539487353]
 visible = false
 
-[node name="Terrain_Master_COL" parent="TerrainRoot/test_island" index="23" unique_id=1532878649]
+[node name="Terrain_Master_COL" parent="TerrainRoot/test_island" index="23" unique_id=1609329318]
 visible = false
 physics_material_override = SubResource("PhysicsMaterial_cfiqe")
 
-[node name="Rock4_COL" parent="TerrainRoot/test_island" index="24" unique_id=1449967284]
+[node name="Rock4_COL" parent="TerrainRoot/test_island" index="24" unique_id=690717578]
 visible = false
 
 [node name="PalmImpostorGroundShadows" parent="TerrainRoot/test_island" unique_id=671848398 instance=ExtResource("222_palm_shadow")]
 
-[node name="SM_Palm_Impostor_Zone_001_SHADOW" parent="TerrainRoot/test_island/PalmImpostorGroundShadows" index="0" unique_id=594011052]
+[node name="SM_Palm_Impostor_Zone_001_SHADOW" parent="TerrainRoot/test_island/PalmImpostorGroundShadows" index="0" unique_id=1322488669]
 material_override = SubResource("ShaderMaterial_palm_ground_shadow")
 cast_shadow = 0
 visibility_range_end = 4000.0
 
-[node name="SM_Palm_Impostor_Zone_002_SHADOW" parent="TerrainRoot/test_island/PalmImpostorGroundShadows" index="1" unique_id=871576886]
+[node name="SM_Palm_Impostor_Zone_002_SHADOW" parent="TerrainRoot/test_island/PalmImpostorGroundShadows" index="1" unique_id=8340118]
 material_override = SubResource("ShaderMaterial_palm_ground_shadow")
 cast_shadow = 0
 visibility_range_end = 4000.0
@@ -855,7 +855,7 @@ transform = Transform3D(1, 0, 1.4210855e-14, 0, 1, 0, -1.4210855e-14, 0, 1, -0.2
 [node name="RiderRig" parent="Gameplay/JetSki/VisualRoot/RiderMount/RiderAssetRoot" parent_id_path=PackedInt32Array(328650943, 1312466662) index="0" unique_id=2001770911]
 breathing_influence = 1.0
 
-[node name="Skeleton3D" parent="Gameplay/JetSki/VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/Rider_Bot/SKEL_Rider" parent_id_path=PackedInt32Array(328650943, 2001770911, 1075285769, 1348584656) index="0" unique_id=426480764]
+[node name="Skeleton3D" parent="Gameplay/JetSki/VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/Rider_Bot/SKEL_Rider" parent_id_path=PackedInt32Array(328650943, 2001770911, 1075285769, 1123472187) index="0" unique_id=1404074567]
 transform = Transform3D(0.9810575, -0.011237088, -0.19338982, 0.011280789, 0.99993587, -0.00087523926, 0.19338726, -0.0013229304, 0.98112124, 0.06955719, 0.0069850683, -0.110954285)
 bones/0/rotation = Quaternion(0.18325987, 0.103067584, 0.014143285, 0.9775443)
 bones/0/scale = Vector3(1.0000001, 1.0000001, 1.0000001)
@@ -1011,7 +1011,7 @@ material_override = SubResource("ShaderMaterial_cvngh")
 [node name="beach_hotel" parent="Atrezzo" unique_id=240417991 instance=ExtResource("36_kotkt")]
 transform = Transform3D(0.07044011, 0, 0.4495144, 0, 0.455, 0, -0.4495144, 0, 0.07044011, -123.22586, 30.086075, -150.12727)
 
-[node name="beach_hotel_VIS" parent="Atrezzo/beach_hotel" index="0" unique_id=1447352137]
+[node name="beach_hotel_VIS" parent="Atrezzo/beach_hotel" index="0" unique_id=1289781085]
 surface_material_override/1 = SubResource("StandardMaterial3D_4sljt")
 surface_material_override/4 = SubResource("StandardMaterial3D_dbb74")
 
@@ -1051,50 +1051,50 @@ transform = Transform3D(0.5118447, 0, 1.0853641, 0, 1.2, 0, -1.0853641, 0, 0.511
 [node name="Rock1" parent="Atrezzo" unique_id=897258125 instance=ExtResource("196_t7md2")]
 transform = Transform3D(2.5107322, 0, -1.5284144, 0, 2.3749995, 0, 1.3486009, 0, 2.8454967, 298.25534, -21.29904, 36.365036)
 
-[node name="Rock1_VIS" parent="Atrezzo/Rock1" index="0" unique_id=252999628]
+[node name="Rock1_VIS" parent="Atrezzo/Rock1" index="0" unique_id=773284548]
 surface_material_override/0 = ExtResource("5_kmjc7")
 
 [node name="Rock2" parent="Atrezzo" unique_id=2094025158 instance=ExtResource("195_ox2y0")]
 transform = Transform3D(3.1803858, 0.6325982, -6.2092667, 0.09665962, 6.963099, 0.75890744, 6.2406597, -0.4302361, 3.152633, -551.9645, -16.910297, -180.97124)
 
-[node name="Rock2_VIS" parent="Atrezzo/Rock2" index="0" unique_id=434099864]
+[node name="Rock2_VIS" parent="Atrezzo/Rock2" index="0" unique_id=1078197120]
 surface_material_override/0 = ExtResource("5_kmjc7")
 
 [node name="Rock3" parent="Atrezzo" unique_id=32409294 instance=ExtResource("195_ox2y0")]
 transform = Transform3D(2.1527746, -0.58318883, 5.0766606, 0.07651358, 5.5118313, 0.60073394, -5.1094747, -0.16317603, 2.1479445, -636.2675, -9.634373, -123.952194)
 
-[node name="Rock2_VIS" parent="Atrezzo/Rock3" index="0" unique_id=434099864]
+[node name="Rock2_VIS" parent="Atrezzo/Rock3" index="0" unique_id=1078197120]
 surface_material_override/0 = ExtResource("5_kmjc7")
 
 [node name="Rock4" parent="Atrezzo" unique_id=732379558 instance=ExtResource("195_ox2y0")]
 transform = Transform3D(-0.9700894, 3.5165074, -7.616502, 0.44429702, 7.678032, 3.488327, 8.377321, -3.245338e-08, -1.0669926, -567.65735, -46.195744, -141.59525)
 
-[node name="Rock2_VIS" parent="Atrezzo/Rock4" index="0" unique_id=434099864]
+[node name="Rock2_VIS" parent="Atrezzo/Rock4" index="0" unique_id=1078197120]
 surface_material_override/0 = ExtResource("5_kmjc7")
 
 [node name="Rock5" parent="Atrezzo" unique_id=765989064 instance=ExtResource("195_ox2y0")]
 transform = Transform3D(-1.1396358, 2.6904924, -5.6494913, 0.5078428, 6.037661, 2.5175169, 9.795862, -2.4660984e-08, -0.7877678, -235.79329, -52.84747, -148.51874)
 
-[node name="Rock2_VIS" parent="Atrezzo/Rock5" index="0" unique_id=434099864]
+[node name="Rock2_VIS" parent="Atrezzo/Rock5" index="0" unique_id=1078197120]
 surface_material_override/0 = ExtResource("5_kmjc7")
 
 [node name="Rock6" parent="Atrezzo" unique_id=712207501 instance=ExtResource("197_3j4p0")]
 transform = Transform3D(18.05736, -10.612488, 0, 10.612488, 18.05736, 0, 0, 0, 20.945002, -217.55464, -24.05898, -25.681166)
 
-[node name="Rock3_VIS" parent="Atrezzo/Rock6" index="0" unique_id=977166469]
+[node name="Rock3_VIS" parent="Atrezzo/Rock6" index="0" unique_id=219684860]
 transform = Transform3D(1.2727225, 0.58904827, -1.7913191, 0.5890485, 1.9288102, 1.0527757, 1.791319, -1.0527761, 0.926533, -0.5910263, -1.0056431, 0)
 surface_material_override/0 = ExtResource("5_kmjc7")
 
 [node name="Rock7" parent="Atrezzo" unique_id=1710166104 instance=ExtResource("197_3j4p0")]
 transform = Transform3D(-12.991967, -3.3479185e-07, -43.01585, 9.234303, 43.887394, -2.7890134, 42.012985, -9.646292, -12.6890745, -269.192, -62.774254, -70.82382)
 
-[node name="Rock3_VIS" parent="Atrezzo/Rock7" index="0" unique_id=977166469]
+[node name="Rock3_VIS" parent="Atrezzo/Rock7" index="0" unique_id=219684860]
 surface_material_override/0 = ExtResource("5_kmjc7")
 
 [node name="Rock8" parent="Atrezzo" unique_id=571328736 instance=ExtResource("197_3j4p0")]
 transform = Transform3D(33.475, 0, 0, 0, 33.475, 0, 0, 0, 33.475, 39.93125, -40.529305, 376.03717)
 
-[node name="Rock3_VIS" parent="Atrezzo/Rock8" index="0" unique_id=977166469]
+[node name="Rock3_VIS" parent="Atrezzo/Rock8" index="0" unique_id=219684860]
 surface_material_override/0 = ExtResource("5_kmjc7")
 
 [node name="PalmsMultiMesh" parent="Atrezzo" unique_id=302165511 instance=ExtResource("3_un2uv")]

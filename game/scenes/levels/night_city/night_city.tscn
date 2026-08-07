@@ -55,7 +55,7 @@
 [ext_resource type="AudioStream" uid="uid://tn1we3rfc1hp" path="res://assets/audio/Motor_Idle.ogg" id="50_71uy5"]
 [ext_resource type="AudioStream" uid="uid://doxjcciq5t4q3" path="res://assets/audio/Ocean_Waves.ogg" id="51_guaay"]
 [ext_resource type="AudioStream" uid="uid://cioy3ls4ryjq2" path="res://assets/audio/Ocean_Wind.ogg" id="52_a41v7"]
-[ext_resource type="PackedScene" uid="uid://dewy0j55fasc8" path="res://scenes/camera/chase_camera.tscn" id="54_s16xr"]
+[ext_resource type="PackedScene" uid="uid://dewy0j55fasc8" path="res://systems/camera/chase_camera.tscn" id="54_s16xr"]
 [ext_resource type="Shader" uid="uid://udpsvcumn1mh" path="res://shaders/effects/underwater_split_view_post_process.gdshader" id="55_y53au"]
 [ext_resource type="PackedScene" uid="uid://byqrxgrtjkcgm" path="res://assets/3D/buildings/beach_hotel.glb" id="56_7771p"]
 [ext_resource type="PackedScene" uid="uid://cf3mdmbksb1m7" path="res://scenes/props/ramp_1.tscn" id="57_1jbpp"]

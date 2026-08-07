@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="GraphicsQualityProfile" format=3 uid="uid://c545xyu1udao4"]
 
-[ext_resource type="Script" uid="uid://cjj22fsei5dtt" path="res://scripts/settings/graphics_quality_profile.gd" id="1_profile"]
+[ext_resource type="Script" uid="uid://cjj22fsei5dtt" path="res://systems/graphics/graphics_quality_profile.gd" id="1_profile"]
 
 [resource]
 script = ExtResource("1_profile")

@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://dewy0j55fasc8"]
 
-[ext_resource type="Script" uid="uid://bt8dcn7r2hxqv" path="res://scripts/camera/chase_camera.gd" id="1_chase"]
+[ext_resource type="Script" uid="uid://bt8dcn7r2hxqv" path="res://systems/camera/chase_camera.gd" id="1_chase"]
 [ext_resource type="Script" uid="uid://cqeki8dba3dyx" path="res://scripts/camera/underwater_effect_controller.gd" id="2_underwater"]
 [ext_resource type="Shader" uid="uid://udpsvcumn1mh" path="res://shaders/effects/underwater_split_view_post_process.gdshader" id="3_underwater_shader"]
 [ext_resource type="Texture2D" uid="uid://dt41md6x88s0u" path="res://assets/effects/underwater/bubble_additive.png" id="4_bubble"]
