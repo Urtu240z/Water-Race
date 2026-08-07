@@ -3,7 +3,5 @@
 [resource]
 resource_name = "*2.002"
 cull_mode = 2
-albedo_color = Color(0.15487596, 0.154876, 0.15487587, 1)
-metallic = 1.0
-metallic_specular = 0.75
-roughness = 0.08
+albedo_color = Color(0.7417776, 0.7417776, 0.7417776, 1)
+roughness = 0.5

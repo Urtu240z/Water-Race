@@ -1,7 +1,6 @@
 [gd_resource type="StandardMaterial3D" format=3 uid="uid://dko184ytydcys"]
 
 [ext_resource type="Texture2D" uid="uid://02fayuucji5n" path="res://assets/3D/levels/level_night_city/buildings/casino/casino_Image_6.png" id="1_jd4fl"]
-[ext_resource type="Texture2D" uid="uid://jmrjx8oeq055" path="res://assets/3D/levels/level_night_city/buildings/build1/textures/build1_front_emissive.png" id="2_47d21"]
 
 [resource]
 resource_name = "Morongo_1"
@@ -10,11 +9,5 @@ alpha_scissor_threshold = 0.5
 alpha_antialiasing_mode = 0
 cull_mode = 2
 albedo_texture = ExtResource("1_jd4fl")
-metallic = 0.83
-metallic_specular = 0.25
-roughness = 0.26
-emission_enabled = true
-emission_energy_multiplier = 14.89
-emission_texture = ExtResource("2_47d21")
-uv1_scale = Vector3(0.3, 0.3, 0.3)
+roughness = 0.5
 metadata/_gltf_primary_texture_coord = 0

@@ -5,6 +5,3 @@ resource_name = "light"
 cull_mode = 2
 albedo_color = Color(1, 0.97559226, 0, 1)
 roughness = 0.5
-emission_enabled = true
-emission = Color(0.9361501, 0.8889192, 0.76217484, 1)
-emission_energy_multiplier = 16.0

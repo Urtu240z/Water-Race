@@ -1,16 +1,7 @@
 [gd_resource type="StandardMaterial3D" format=3 uid="uid://c2xaeauxyniry"]
 
-[ext_resource type="Texture2D" uid="uid://b4551os4lg6u1" path="res://assets/3D/levels/Wrong_texture.png" id="1_kv1vt"]
-
 [resource]
 resource_name = "*4"
 cull_mode = 2
 albedo_color = Color(1, 0.6910111, 0.73921806, 1)
-albedo_texture = ExtResource("1_kv1vt")
 roughness = 0.5
-emission_enabled = true
-emission_energy_multiplier = 6.0
-emission_texture = ExtResource("1_kv1vt")
-uv1_scale = Vector3(0.2, 0.2, 0.115)
-uv1_triplanar = true
-uv1_triplanar_sharpness = 150.0
