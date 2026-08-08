@@ -1,0 +1,623 @@
+[remap]
+
+importer="scene"
+importer_version=1
+type="PackedScene"
+uid="uid://d05s8vs217tvh"
+path="res://.godot/imported/paradise_island.glb-3ab9dd93986f71f41046ee169ed3b9cc.scn"
+
+[deps]
+
+source_file="res://levels/paradise_island/terrain/paradise_island.glb"
+dest_files=["res://.godot/imported/paradise_island.glb-3ab9dd93986f71f41046ee169ed3b9cc.scn"]
+
+[params]
+
+nodes/root_type=""
+nodes/root_name=""
+nodes/root_script=null
+mesh_library/use_node_names_as_mesh_names=false
+array_mesh/deduplicate_surfaces=true
+nodes/apply_root_scale=true
+nodes/root_scale=1.0
+nodes/import_as_skeleton_bones=false
+nodes/use_name_suffixes=true
+nodes/use_node_type_suffixes=true
+meshes/ensure_tangents=true
+meshes/generate_lods=true
+meshes/create_shadow_meshes=true
+meshes/light_baking=1
+meshes/lightmap_texel_size=0.2
+meshes/force_disable_compression=false
+skins/use_named_skins=true
+animation/import=true
+animation/fps=30
+animation/trimming=false
+animation/remove_immutable_tracks=true
+animation/import_rest_as_RESET=false
+import_script/path=""
+materials/extract=0
+materials/extract_format=0
+materials/extract_path="res://levels/paradise_island/terrain/materials"
+_subresources={
+"materials": {
+"*2": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_material_01.tres",
+"use_external/path": "uid://b5wb2d6vr6x50"
+},
+"*2.001": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_material_03.tres",
+"use_external/path": "uid://co0co1dh1l51b"
+},
+"*2.002": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_material_04.tres",
+"use_external/path": "uid://c1elucpy5qwt6"
+},
+"672118_EP05": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_ep.tres",
+"use_external/path": "uid://xaudwj2dsvak"
+},
+"<Charcoal>": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_charcoal.tres",
+"use_external/path": "uid://dbygmqbpvobv6"
+},
+"<CorrogateShiny>": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_corrogate_shiny_01.tres",
+"use_external/path": "uid://csq58qgj3ebsy"
+},
+"<CorrogateShiny>.001": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_corrogate_shiny_04.tres",
+"use_external/path": "uid://nec0rar0u65u"
+},
+"<CorrogateShiny>1": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_corrogate_shiny_02.tres",
+"use_external/path": "uid://bb0nehnh54ref"
+},
+"<CorrogateShiny>1.001": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_corrogate_shiny_05.tres",
+"use_external/path": "uid://ccm3ajtovvgmo"
+},
+"<CorrogateShiny>3": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_corrogate_shiny_03.tres",
+"use_external/path": "uid://dhu45kdjyuqh7"
+},
+"<DarkGray>": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_dark_gray_01.tres",
+"use_external/path": "uid://ctr8wem0xgsum"
+},
+"<DimGray>": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_dim_gray.tres",
+"use_external/path": "uid://xe4f4x7yqnfm"
+},
+"<Glass Blue Tint>": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_glass_blue_tint.tres",
+"use_external/path": "uid://cioqrak52dr26"
+},
+"<Linen>": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_linen_01.tres",
+"use_external/path": "uid://b3ylphgau3tlf"
+},
+"<Linen>.001": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_linen_01.tres",
+"use_external/path": "uid://b3ylphgau3tlf"
+},
+"<Metal-floor>": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_metal_floor_01.tres",
+"use_external/path": "uid://bma0gaisp3bjn"
+},
+"<Metal-floor>.001": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_metal_floor_02.tres",
+"use_external/path": "uid://omsdcg6q3mll"
+},
+"<Silver>": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_silver.tres",
+"use_external/path": "uid://b4wtvaygiv5y6"
+},
+"<Yellow>": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_yellow_01.tres",
+"use_external/path": "uid://co58o2bdu3np4"
+},
+"<Yellow>.001": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_yellow_02.tres",
+"use_external/path": "uid://bveiqlfrphmkj"
+},
+"Basculante": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_basculante.tres",
+"use_external/path": "uid://cbdrc0g7qai8x"
+},
+"Carpet_01_1K": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_carpet_01.tres",
+"use_external/path": "uid://d1qnlef67dytk"
+},
+"Carpet_01_1K.001": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_carpet_02.tres",
+"use_external/path": "uid://b3v5qgdyajnvd"
+},
+"Concrete_Gray": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_concrete_gray.tres",
+"use_external/path": "uid://d1wxdy3aj2ys2"
+},
+"Janela": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_janela.tres",
+"use_external/path": "uid://cpfd3yhtj65wq"
+},
+"MAT_Palm_Billboard_Continuous": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_palm_billboard_continuous.tres",
+"use_external/path": "uid://qxgyqayadwxs"
+},
+"MAT_Terrain_Master": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_terrain_master.tres",
+"use_external/path": "uid://ccjbsoj8527r7"
+},
+"Material~1": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_material_02.tres",
+"use_external/path": "uid://dcanlov0cf0yj"
+},
+"Metal Panel1": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_metal_panel.tres",
+"use_external/path": "uid://wl56ofxmtbv1"
+},
+"Metal_06_1K": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_metal_01.tres",
+"use_external/path": "uid://qji6oamm8qm8"
+},
+"Metal_06_1K.001": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_metal_02.tres",
+"use_external/path": "uid://c3ou0yhxa5yvn"
+},
+"Metal_06_1K.002": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_metal_03.tres",
+"use_external/path": "uid://fakeb8pytn4l"
+},
+"Porta_3": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_porta.tres",
+"use_external/path": "uid://bi1eihuymawr"
+},
+"Rock1": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_rock.tres",
+"use_external/path": "uid://ce66mmfr4ueai"
+},
+"TwiLight": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_twilight.tres",
+"use_external/path": "uid://ci2x7qyyru1tw"
+},
+"Wicker Rattan": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_wicker_rattan_01.tres",
+"use_external/path": "uid://bpkabjkgh2pnu"
+},
+"Wicker Rattan.001": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_wicker_rattan_02.tres",
+"use_external/path": "uid://cbcqqi3cghlgl"
+},
+"Wood 1": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_wood_01.tres",
+"use_external/path": "uid://7i3reek02tdl"
+},
+"Wood 2": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_wood_02.tres",
+"use_external/path": "uid://lyd025el0lwp"
+},
+"Wood_Bamboo_Stalks": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_wood_bamboo_stalks.tres",
+"use_external/path": "uid://1tv2fy0c4mr"
+},
+"Wood_Grain_Dark": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_wood_grain_dark.tres",
+"use_external/path": "uid://733wef4s3bw0"
+},
+"Wood_house": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_wood_house.tres",
+"use_external/path": "uid://dklrd6a3hmfi2"
+},
+"Yellow": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_yellow_02.tres",
+"use_external/path": "uid://bveiqlfrphmkj"
+},
+"[0043_SaddleBrown]": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_saddle_brown.tres",
+"use_external/path": "uid://brxgfayg6vpjj"
+},
+"[0135_DarkGray]": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_dark_gray_02.tres",
+"use_external/path": "uid://cfbfhe74flkwv"
+},
+"[Aluminum]": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_aluminum.tres",
+"use_external/path": "uid://cqpodb5jijsdl"
+},
+"[Asphalt New]": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_asphalt_new.tres",
+"use_external/path": "uid://vu1buyg1qdxg"
+},
+"[Blacktop Old 01]": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_blacktop_old.tres",
+"use_external/path": "uid://bpd5w33ybn63v"
+},
+"[Brick Rough Dark]": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_brick_rough_dark.tres",
+"use_external/path": "uid://6lc4r7i2ha5q"
+},
+"[Brick_Antique]": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_brick_antique.tres",
+"use_external/path": "uid://b1xolwy7jjubf"
+},
+"[Cinder Block]": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_cinder_block.tres",
+"use_external/path": "uid://dvmfy8nmap3ol"
+},
+"[Cladding Siding White]": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_cladding_siding_white.tres",
+"use_external/path": "uid://jy0ci43f6gnq"
+},
+"[Color B05]": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_color_01.tres",
+"use_external/path": "uid://22ic4fq3tj47"
+},
+"[Color C04]": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_color_02.tres",
+"use_external/path": "uid://df3nckgvgxx10"
+},
+"[Color M04]": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_color_03.tres",
+"use_external/path": "uid://cv73omilllvl1"
+},
+"[Color M05]": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_color_04.tres",
+"use_external/path": "uid://k6jswxyxvyvk"
+},
+"[Color M06]": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_color_05.tres",
+"use_external/path": "uid://s0neu47ks0lr"
+},
+"[Color M07]": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_color_06.tres",
+"use_external/path": "uid://cu54t3qormb8i"
+},
+"[Color M08]": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_color_07.tres",
+"use_external/path": "uid://bstyfu5cbtypu"
+},
+"[Color_009]": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_color_08.tres",
+"use_external/path": "uid://ci0ee3a81bqd5"
+},
+"[Color_009].001": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_color_08.tres",
+"use_external/path": "uid://ci0ee3a81bqd5"
+},
+"[Concrete Stamped Ashlar]": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_concrete_stamped_ashlar.tres",
+"use_external/path": "uid://cue3i1fo6r2mq"
+},
+"[Granite Dark Gray]": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_granite_dark_gray.tres",
+"use_external/path": "uid://bgv5fwln2v0ko"
+},
+"[Grass Light Green]": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_grass_light_green.tres",
+"use_external/path": "uid://dsuxfhch0ds1k"
+},
+"[Metal Aluminum Anodized]": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_metal_aluminum_anodized.tres",
+"use_external/path": "uid://ia1dcqelvp48"
+},
+"[Metal Rough]": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_metal_rough.tres",
+"use_external/path": "uid://wqvto6vj2ap8"
+},
+"[Metal Seamed]": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_metal_seamed_01.tres",
+"use_external/path": "uid://brgy5ybqs7ri"
+},
+"[Metal Seamed]1": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_metal_seamed_02.tres",
+"use_external/path": "uid://bb2mpvylqa5nx"
+},
+"[Mirror 01]": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_mirror.tres",
+"use_external/path": "uid://c7fudgfsglg3k"
+},
+"[Pavers with Grass Herringbone]": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_pavers_with_grass_herringbone.tres",
+"use_external/path": "uid://dlumdqr0l1bjl"
+},
+"[Steel Brushed Stainless]": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_steel_brushed_stainless.tres",
+"use_external/path": "uid://c2bfd7yop06il"
+},
+"[Stone_Coursed_Rough]": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_stone_coursed_rough.tres",
+"use_external/path": "uid://qij14peslt0q"
+},
+"[Translucent Glass Block Dark]": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_translucent_glass_block_dark.tres",
+"use_external/path": "uid://dq1l63gqtrf48"
+},
+"[Translucent Glass Gray]": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_translucent_glass_gray.tres",
+"use_external/path": "uid://jq43rqpqg0sv"
+},
+"[Translucent Glass Sky Reflection]": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_translucent_glass_sky_reflection.tres",
+"use_external/path": "uid://bwvsvh4e42vl5"
+},
+"[Translucent Glass Tinted]": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_translucent_glass_tinted.tres",
+"use_external/path": "uid://k6n8ycbj6qp3"
+},
+"[Translucent_Glass_Blue]": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_translucent_glass_blue.tres",
+"use_external/path": "uid://bbiisnrtsgdqa"
+},
+"[Wood_ Floor]": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_wood_floor.tres",
+"use_external/path": "uid://rx3tpw5pyb0j"
+},
+"aerial_rocks_02": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_aerial_rocks_01.tres",
+"use_external/path": "uid://bh7kxhqweasxj"
+},
+"aerial_rocks_02.001": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_aerial_rocks_02.tres",
+"use_external/path": "uid://oolwk4qpwdgu"
+},
+"aerial_rocks_02.002": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_aerial_rocks_03.tres",
+"use_external/path": "uid://dm7b8emb3bdp1"
+},
+"cerca_wood": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_cerca_wood.tres",
+"use_external/path": "uid://bq2y1e4gnd5fi"
+},
+"jean blue": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_jean_blue.tres",
+"use_external/path": "uid://cogwqhmxgqwt6"
+},
+"medeek_concrete": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_medeek_concrete.tres",
+"use_external/path": "uid://e6dyfc24c8yt"
+},
+"medeek_lumber": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_medeek_lumber.tres",
+"use_external/path": "uid://bosgk35rgm7br"
+},
+"medeek_lumberpt": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_medeek_lumberpt.tres",
+"use_external/path": "uid://bkk8s16mlemu6"
+},
+"orange": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_orange.tres",
+"use_external/path": "uid://cp7b2ns2sbmsf"
+},
+"photo-1522140243784-a1df85e3c0f4": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_photo.tres",
+"use_external/path": "uid://dr6nc8pdx0725"
+},
+"roof": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_roof.tres",
+"use_external/path": "uid://cbnjckd5qblgk"
+},
+"rufo": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_rufo_01.tres",
+"use_external/path": "uid://cosgell8c04k4"
+},
+"rufo.001": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_rufo_02.tres",
+"use_external/path": "uid://c21e1regtm4b1"
+},
+"rufo.002": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_rufo_03.tres",
+"use_external/path": "uid://bnmwfr10no2hb"
+},
+"rufo.003": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_rufo_04.tres",
+"use_external/path": "uid://dbm3kd6lxwbke"
+},
+"rufo.004": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_rufo_05.tres",
+"use_external/path": "uid://d0rvtb4fhpcgk"
+},
+"rufo.005": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_rufo_06.tres",
+"use_external/path": "uid://cvaiqhvm3sq1o"
+},
+"rufo.006": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_rufo_07.tres",
+"use_external/path": "uid://giuwx5d0d4tx"
+},
+"rufo.007": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_rufo_08.tres",
+"use_external/path": "uid://c14oo28dpkaxs"
+},
+"rufo.008": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_rufo_09.tres",
+"use_external/path": "uid://64dhiq3aebhd"
+},
+"rufo.009": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_rufo_10.tres",
+"use_external/path": "uid://ca84fwx7rvr32"
+},
+"rufo.010": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_rufo_11.tres",
+"use_external/path": "uid://66r7iauhoibk"
+},
+"rufo.011": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_rufo_12.tres",
+"use_external/path": "uid://dohugpxodwmt"
+},
+"rufo.012": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_rufo_13.tres",
+"use_external/path": "uid://bgyumivb8crln"
+},
+"rufo.013": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_rufo_14.tres",
+"use_external/path": "uid://je8gopwe8f0s"
+},
+"rufo.014": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_rufo_15.tres",
+"use_external/path": "uid://quxl2k7h2f50"
+},
+"rufo.015": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_rufo_16.tres",
+"use_external/path": "uid://bspjui06padnj"
+},
+"rufo.016": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_rufo_17.tres",
+"use_external/path": "uid://dtlxm8fc0g4da"
+},
+"rufo.017": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_rufo_18.tres",
+"use_external/path": "uid://dojl8grpsdjk0"
+},
+"rufo.018": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_rufo_19.tres",
+"use_external/path": "uid://cc004l0stankq"
+},
+"rufo.019": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_rufo_20.tres",
+"use_external/path": "uid://ms3c4kfm2mps"
+},
+"rufo.020": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_rufo_21.tres",
+"use_external/path": "uid://bld6ryiuawl6e"
+},
+"rufo.021": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_rufo_22.tres",
+"use_external/path": "uid://cs2uojnqqolak"
+},
+"thatched": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_thatched.tres",
+"use_external/path": "uid://dvfxs87tgwerm"
+},
+"white": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_white_01.tres",
+"use_external/path": "uid://ba2bwugyowenq"
+},
+"white1": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_white_02.tres",
+"use_external/path": "uid://bb8jig2mo3pcf"
+},
+"zoolingerF": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/paradise_island/terrain/materials/paradise_island_zoolingerf.tres",
+"use_external/path": "uid://5abe27lw034l"
+}
+}
+}
+gltf/naming_version=2
+gltf/embedded_image_handling=2
+gltf/texture_map_mode=1

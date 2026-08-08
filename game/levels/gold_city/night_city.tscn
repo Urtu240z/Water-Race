@@ -12,7 +12,7 @@
 [ext_resource type="Texture2D" uid="uid://olqtngkjhlxu" path="res://world/environment/sky/hdris/NightSkyHDRI003_4K_HDR.exr" id="10_qsne5"]
 [ext_resource type="Environment" uid="uid://bl1pfl5d074rp" path="res://world/environment/presets/environment_night_city.tres" id="11_npe65"]
 [ext_resource type="Script" uid="uid://det7bptrkw1dp" path="res://world/terrain/terrain_quality_controller.gd" id="12_hh2mw"]
-[ext_resource type="PackedScene" uid="uid://1x3n2tx0xgj5" path="res://assets/3D/Terrain/independent_island.glb" id="13_x750q"]
+[ext_resource type="PackedScene" uid="uid://1x3n2tx0xgj5" path="res://world/props/terrain/independent_island.glb" id="13_x750q"]
 [ext_resource type="Material" uid="uid://dmj6dyip8ab0w" path="res://shared/materials/terrain/materials/sand_02.res" id="14_oau3k"]
 [ext_resource type="PackedScene" uid="uid://b6ny8tx1gom7c" path="res://assets/3D/levels/level_night_city/Gold_City.glb" id="15_t65j4"]
 [ext_resource type="Material" uid="uid://bq72x3ygqg4gf" path="res://shared/materials/metal/materials/gray_metal.tres" id="16_w15id"]
@@ -69,7 +69,7 @@
 [ext_resource type="PackedScene" uid="uid://butnwowen433j" path="res://gameplay/race/course/signs/wrong_flat.tscn" id="67_3vxop"]
 [ext_resource type="PackedScene" uid="uid://bdou42x601ov0" path="res://assets/3D/levels/level_night_city/buildings/casino/casino.glb" id="68_lr477"]
 [ext_resource type="Material" uid="uid://cftxxlrjcjm4x" path="res://assets/3D/levels/level_night_city/buildings/casino/Casino_Surface_2_Hue.tres" id="69_5owjo"]
-[ext_resource type="PackedScene" uid="uid://byqrxgrtjkcgm" path="res://assets/3D/buildings/beach_hotel.glb" id="70_pheaw"]
+[ext_resource type="PackedScene" uid="uid://byqrxgrtjkcgm" path="res://world/props/buildings/beach_hotel.glb" id="70_pheaw"]
 [ext_resource type="Material" uid="uid://diw4mvukd0v3f" path="res://shared/materials/generic/materials/emisive.tres" id="71_ambj4"]
 [ext_resource type="PackedScene" uid="uid://cfw7pu0e3ws7n" path="res://world/props/rocks/rock_02.glb" id="72_hbj0a"]
 [ext_resource type="PackedScene" uid="uid://dk85eu2oeyca2" path="res://levels/gold_city/props/roller_coaster/animated_roller_coaster.glb" id="73_e6itw"]
@@ -1093,28 +1093,28 @@ script = ExtResource("12_hh2mw")
 transform = Transform3D(0.71981424, 0, -0.6941668, 0, 1, 0, 0.6941668, 0, 0.71981424, 2427.3716, -15.736182, 136.60822)
 visible = false
 
-[node name="Island_1_VIS" parent="TerrainRoot/independent_island" index="0" unique_id=1145179072]
+[node name="Island_1_VIS" parent="TerrainRoot/independent_island" index="0" unique_id=511692718]
 surface_material_override/0 = ExtResource("14_oau3k")
 
 [node name="independent_island2" parent="TerrainRoot" unique_id=318732152 instance=ExtResource("13_x750q")]
 transform = Transform3D(2.5448968, 0, 2.17237, 0, 1.375, 0, -2.0929704, 0, 2.6414409, 1964.7793, -5.60398, -2256.5737)
 visible = false
 
-[node name="Island_1_VIS" parent="TerrainRoot/independent_island2" index="0" unique_id=1145179072]
+[node name="Island_1_VIS" parent="TerrainRoot/independent_island2" index="0" unique_id=511692718]
 surface_material_override/0 = ExtResource("14_oau3k")
 
 [node name="independent_island3" parent="TerrainRoot" unique_id=538394509 instance=ExtResource("13_x750q")]
 transform = Transform3D(-0.17687668, 0, -6.3775477, 0, 6.38, 0, 6.3775477, 0, -0.17687668, -2022.6855, -45.85874, -2256.5737)
 visible = false
 
-[node name="Island_1_VIS" parent="TerrainRoot/independent_island3" index="0" unique_id=1145179072]
+[node name="Island_1_VIS" parent="TerrainRoot/independent_island3" index="0" unique_id=511692718]
 surface_material_override/0 = ExtResource("14_oau3k")
 
 [node name="independent_island4" parent="TerrainRoot" unique_id=522839329 instance=ExtResource("13_x750q")]
 transform = Transform3D(7.6843944, 0, 3.4050117, 0, 16.9, 0, -3.4050117, 0, 7.6843944, -4529.758, -45.85874, 4123.0527)
 visible = false
 
-[node name="Island_1_VIS" parent="TerrainRoot/independent_island4" index="0" unique_id=1145179072]
+[node name="Island_1_VIS" parent="TerrainRoot/independent_island4" index="0" unique_id=511692718]
 transform = Transform3D(0.5352785, 0.09100684, -0.006567538, -0.07122277, 0.6827822, -0.09906116, -0.0020920038, 0.040325806, 1.6920902, 310.06567, -0.8341303, -127.680214)
 surface_material_override/0 = ExtResource("14_oau3k")
 
@@ -2462,41 +2462,41 @@ transform = Transform3D(0.99558884, 0, 0.09382483, 0, 1, 0, -0.09382483, 0, 0.99
 [node name="Ramp1" parent="Atrezzo" unique_id=178349614 instance=ExtResource("57_hdcng")]
 transform = Transform3D(-0.95937294, 0, -0.41327736, 0, 1.08, 0, 0.12121299, 0, -3.2709954, 168.65465, -5.0557194, -415.32965)
 
-[node name="Ramp1_VIS" parent="Atrezzo/Ramp1/RampVisual" parent_id_path=PackedInt32Array(178349614, 141630341) index="0" unique_id=334619810]
+[node name="Ramp1_VIS" parent="Atrezzo/Ramp1/RampVisual" parent_id_path=PackedInt32Array(178349614, 141630341) index="0" unique_id=476034807]
 transform = Transform3D(1, 0, 0, 0, 0.99999994, 0, 0, 0, 1, 0, 2.7152433, 0)
 surface_material_override/1 = SubResource("StandardMaterial3D_ql7ri")
 
-[node name="Ramp1_COL" parent="Atrezzo/Ramp1/RampVisual" parent_id_path=PackedInt32Array(178349614, 141630341) index="1" unique_id=1088348174]
+[node name="Ramp1_COL" parent="Atrezzo/Ramp1/RampVisual" parent_id_path=PackedInt32Array(178349614, 141630341) index="1" unique_id=2133539196]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.7152433, 0)
 
 [node name="Ramp4" parent="Atrezzo" unique_id=1765982400 instance=ExtResource("57_hdcng")]
 transform = Transform3D(-1.6307858, 0, 0.5965202, 0, 1.5849994, 0, -0.2820688, 0, -3.4487915, -504.4909, -3.43675, -694.3363)
 
-[node name="Ramp1_VIS" parent="Atrezzo/Ramp4/RampVisual" parent_id_path=PackedInt32Array(1765982400, 141630341) index="0" unique_id=334619810]
+[node name="Ramp1_VIS" parent="Atrezzo/Ramp4/RampVisual" parent_id_path=PackedInt32Array(1765982400, 141630341) index="0" unique_id=476034807]
 surface_material_override/1 = SubResource("StandardMaterial3D_ql7ri")
 
 [node name="Ramp7" parent="Atrezzo" unique_id=1894132247 instance=ExtResource("57_hdcng")]
 transform = Transform3D(-1.5953267, 0, -0.93137383, 0, 1.5849994, 0, 0.44040683, 0, -3.3738027, -717.6485, -5.0831523, -518.3982)
 
-[node name="Ramp1_VIS" parent="Atrezzo/Ramp7/RampVisual" parent_id_path=PackedInt32Array(1894132247, 141630341) index="0" unique_id=334619810]
+[node name="Ramp1_VIS" parent="Atrezzo/Ramp7/RampVisual" parent_id_path=PackedInt32Array(1894132247, 141630341) index="0" unique_id=476034807]
 surface_material_override/1 = SubResource("StandardMaterial3D_ql7ri")
 
 [node name="Ramp6" parent="Atrezzo" unique_id=1849485335 instance=ExtResource("57_hdcng")]
 transform = Transform3D(-1.1449878, 0, -1.0748183, 0, 1.585, 0, 0.52593046, 0, -2.3399553, -438.68048, -3.43675, -173.87032)
 
-[node name="Ramp1_VIS" parent="Atrezzo/Ramp6/RampVisual" parent_id_path=PackedInt32Array(1849485335, 141630341) index="0" unique_id=334619810]
+[node name="Ramp1_VIS" parent="Atrezzo/Ramp6/RampVisual" parent_id_path=PackedInt32Array(1849485335, 141630341) index="0" unique_id=476034807]
 surface_material_override/1 = SubResource("StandardMaterial3D_ql7ri")
 
 [node name="Ramp2" parent="Atrezzo" unique_id=915163340 instance=ExtResource("58_nsw8i")]
 transform = Transform3D(-0.9921864, 0, -0.12476432, 0, 1, 0, 0.12476432, 0, -0.9921864, 197.6113, -2.0325766, -363.5325)
 
-[node name="Ramp_VIS" parent="Atrezzo/Ramp2/RampVisual" parent_id_path=PackedInt32Array(915163340, 1569065180) index="0" unique_id=1742399433]
+[node name="Ramp_VIS" parent="Atrezzo/Ramp2/RampVisual" parent_id_path=PackedInt32Array(915163340, 1569065180) index="0" unique_id=357845018]
 surface_material_override/0 = SubResource("StandardMaterial3D_enow4")
 
 [node name="Boat_3" parent="Atrezzo" unique_id=1995262324 instance=ExtResource("59_2cchu")]
 transform = Transform3D(0.30743515, 0, 0.3943142, 0, 0.5, 0, -0.3943142, 0, 0.30743515, 164.09297, -4.05779, 378.38086)
 
-[node name="Boat_1_VIS" parent="Atrezzo/Boat_3" index="0" unique_id=1858129855]
+[node name="Boat_1_VIS" parent="Atrezzo/Boat_3" index="0" unique_id=699190203]
 transform = Transform3D(1.0000001, 0, 0, 0, 1, 0, 0, 0, 1.0000001, 0, 0, 0)
 
 [node name="Boat_4" parent="Atrezzo" unique_id=100018014 instance=ExtResource("59_2cchu")]
@@ -2505,11 +2505,11 @@ transform = Transform3D(0.3716938, 0, -0.33443052, 0, 0.5, 0, 0.33443052, 0, 0.3
 [node name="Boat_2" parent="Atrezzo" unique_id=1280069477 instance=ExtResource("60_2cq5j")]
 transform = Transform3D(-0.82091784, 0, 0.87526774, 0, 1.1999999, 0, -0.87526774, 0, -0.82091784, 345.85632, -10.093709, 219.55032)
 
-[node name="Boat_2_VIS" parent="Atrezzo/Boat_2" index="0" unique_id=981303783]
+[node name="Boat_2_VIS" parent="Atrezzo/Boat_2" index="0" unique_id=1711130682]
 transform = Transform3D(1.0000001, 0, 0, 0, 1, 0, 0, 0, 1.0000001, 0, 0, 0)
 surface_material_override/4 = SubResource("StandardMaterial3D_yrkm7")
 
-[node name="Boat_2_COL" parent="Atrezzo/Boat_2" index="1" unique_id=1256386193]
+[node name="Boat_2_COL" parent="Atrezzo/Boat_2" index="1" unique_id=1628030358]
 visible = false
 
 [node name="OmniLight3D" type="OmniLight3D" parent="Atrezzo/Boat_2" unique_id=455881687]
@@ -2530,7 +2530,7 @@ omni_attenuation = 0.826
 [node name="Rock8" parent="Atrezzo" unique_id=571328736 instance=ExtResource("61_874od")]
 transform = Transform3D(33.475, 0, 0, 0, 33.475, 0, 0, 0, 33.475, 157.0853, -40.529305, 376.03717)
 
-[node name="Rock3_VIS" parent="Atrezzo/Rock8" index="0" unique_id=520423883]
+[node name="Rock3_VIS" parent="Atrezzo/Rock8" index="0" unique_id=2025684856]
 transform = Transform3D(0.9999998, 0, 0, 0, 0.9999998, 0, 0, 0, 0.9999998, -3.267583, 0.22736257, 0)
 surface_material_override/0 = ExtResource("62_gecxy")
 
@@ -2749,7 +2749,7 @@ transform = Transform3D(-0.44829965, 0, 0.8938833, 0, 1, 0, -0.8938833, 0, -0.44
 [node name="beach_hotel" parent="Buildings" unique_id=240417991 instance=ExtResource("70_pheaw")]
 transform = Transform3D(0.07044011, 0, 0.4495144, 0, 0.455, 0, -0.4495144, 0, 0.07044011, -123.22586, 30.086075, -150.12727)
 
-[node name="beach_hotel_VIS" parent="Buildings/beach_hotel" index="0" unique_id=2018774500]
+[node name="beach_hotel_VIS" parent="Buildings/beach_hotel" index="0" unique_id=1307570647]
 transform = Transform3D(0.46002525, 0, -0.6545049, 0, 0.8000006, 0, 0.6545049, 0, 0.46002525, 1374.2222, -25.256031, -1464.4923)
 surface_material_override/0 = SubResource("StandardMaterial3D_g5j8w")
 surface_material_override/1 = SubResource("StandardMaterial3D_4sljt")
@@ -2787,28 +2787,28 @@ mesh = SubResource("BoxMesh_c2l6c")
 [node name="Rock2" parent="." unique_id=1467108677 instance=ExtResource("72_hbj0a")]
 transform = Transform3D(1.3358884, 0, -2.11315, 0, 2.5, 0, 2.11315, 0, 1.3358884, -125.10258, -10.050808, -531.91595)
 
-[node name="Rock2_VIS" parent="Rock2" index="0" unique_id=362180073]
+[node name="Rock2_VIS" parent="Rock2" index="0" unique_id=110660900]
 surface_material_override/0 = ExtResource("62_gecxy")
 
-[node name="Rock2_COL" parent="Rock2" index="1" unique_id=842957957]
+[node name="Rock2_COL" parent="Rock2" index="1" unique_id=194461357]
 visible = false
 
 [node name="Rock3" parent="." unique_id=381828738 instance=ExtResource("72_hbj0a")]
 transform = Transform3D(3.2300122, 0, -0.43976325, 0, 3.225, 0, 0.2542075, 0, 5.5877213, -143.86502, -10.050808, -553.5112)
 
-[node name="Rock2_VIS" parent="Rock3" index="0" unique_id=362180073]
+[node name="Rock2_VIS" parent="Rock3" index="0" unique_id=110660900]
 surface_material_override/0 = ExtResource("62_gecxy")
 
-[node name="Rock2_COL" parent="Rock3" index="1" unique_id=842957957]
+[node name="Rock2_COL" parent="Rock3" index="1" unique_id=194461357]
 visible = false
 
 [node name="Rock4" parent="." unique_id=1764313507 instance=ExtResource("72_hbj0a")]
 transform = Transform3D(1.4559095, 0, -5.0072455, 0, 3.2250004, 0, 2.894465, 0, 2.5186334, -161.80075, -10.050808, -582.4298)
 
-[node name="Rock2_VIS" parent="Rock4" index="0" unique_id=362180073]
+[node name="Rock2_VIS" parent="Rock4" index="0" unique_id=110660900]
 surface_material_override/0 = ExtResource("62_gecxy")
 
-[node name="Rock2_COL" parent="Rock4" index="1" unique_id=842957957]
+[node name="Rock2_COL" parent="Rock4" index="1" unique_id=194461357]
 visible = false
 
 [node name="Sketchfab_Scene" parent="." unique_id=308938919 instance=ExtResource("73_e6itw")]
@@ -2871,10 +2871,8 @@ speed_scale = 0.2
 [editable path="TerrainRoot/Gold_City"]
 [editable path="TerrainRoot/CalmWaterArea3D"]
 [editable path="Gameplay/JetSki"]
-[editable path="Gameplay/JetSki/VisualRoot/JetSkiVisual/HullModel/Hull"]
-[editable path="Gameplay/JetSki/VisualRoot/JetSkiVisual/HullModel/Hull/NewJetSki_Hull"]
-[editable path="Gameplay/JetSki/VisualRoot/JetSkiVisual/HandlePivot/HandleModel/Handle"]
-[editable path="Gameplay/JetSki/VisualRoot/JetSkiVisual/HandlePivot/HandleModel/Handle/NewJetSki_Handle"]
+[editable path="Gameplay/JetSki/VisualRoot/JetSkiVisual/HullModel/NewJetSki_Hull"]
+[editable path="Gameplay/JetSki/VisualRoot/JetSkiVisual/HandlePivot/HandleModel/NewJetSki_Handle"]
 [editable path="Gameplay/JetSki/VisualRoot/RiderMount/RiderAssetRoot/RiderRig"]
 [editable path="Gameplay/JetSki/VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/Rider_Bot"]
 [editable path="CameraSystem/ChaseCamera"]

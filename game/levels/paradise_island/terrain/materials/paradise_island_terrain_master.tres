@@ -1,0 +1,6 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://ccjbsoj8527r7"]
+
+[resource]
+resource_name = "MAT_Terrain_Master"
+cull_mode = 2
+roughness = 0.5

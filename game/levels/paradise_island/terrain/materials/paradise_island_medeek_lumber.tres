@@ -1,0 +1,7 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://bosgk35rgm7br"]
+
+[resource]
+resource_name = "medeek_lumber"
+cull_mode = 2
+albedo_color = Color(1, 0.9772474, 0.9063318, 1)
+roughness = 0.5

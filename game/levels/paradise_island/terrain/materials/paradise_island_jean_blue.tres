@@ -1,0 +1,8 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://cogwqhmxgqwt6"]
+
+[resource]
+resource_name = "jean blue"
+transparency = 4
+cull_mode = 2
+albedo_color = Color(0.6825429, 0.7692052, 0.8944481, 0.36862746)
+roughness = 0.5

@@ -1,0 +1,6 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://bjruirenaige5"]
+
+[resource]
+resource_name = "Marble_01_1K.001"
+cull_mode = 2
+albedo_color = Color(0.735357, 0.735357, 0.735357, 1)

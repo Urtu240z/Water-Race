@@ -1,0 +1,7 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://c4pukh7vfatoj"]
+
+[resource]
+resource_name = "Roofing_01_1K.001"
+cull_mode = 2
+albedo_color = Color(0.5680038, 0.31176716, 0.10466325, 1)
+roughness = 0.64909095

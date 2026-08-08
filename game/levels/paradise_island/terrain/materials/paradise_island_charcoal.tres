@@ -1,0 +1,7 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://dbygmqbpvobv6"]
+
+[resource]
+resource_name = "<Charcoal>"
+cull_mode = 2
+albedo_color = Color(0.40619975, 0.40619975, 0.40619975, 1)
+roughness = 0.5

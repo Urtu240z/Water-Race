@@ -1,0 +1,7 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://brxgfayg6vpjj"]
+
+[resource]
+resource_name = "[0043_SaddleBrown]"
+cull_mode = 2
+albedo_color = Color(0.7643137, 0.556948, 0.3025538, 1)
+roughness = 0.5

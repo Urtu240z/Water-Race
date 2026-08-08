@@ -1,0 +1,7 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://de8hj4ia626gu"]
+
+[resource]
+resource_name = "Plaster_02_1K.001"
+cull_mode = 2
+albedo_color = Color(0.1680015, 0.06852017, 0.055638872, 1)
+metallic = 0.7854546

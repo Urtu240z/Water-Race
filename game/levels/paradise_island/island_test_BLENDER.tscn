@@ -10,12 +10,12 @@
 [ext_resource type="Texture2D" uid="uid://b7kfjl0vvcloa" path="res://world/environment/sky/hdris/qwantani_dusk_1_puresky_4k.hdr" id="8_dcqcg"]
 [ext_resource type="Texture2D" uid="uid://cmg3mg3yih3d1" path="res://world/environment/sky/hdris/kloofendal_43d_clear_puresky_4k.hdr" id="9_o1yum"]
 [ext_resource type="Environment" uid="uid://dxw5rtrc0obhl" path="res://world/environment/presets/environment_1.tres" id="10_ucd3t"]
-[ext_resource type="PackedScene" uid="uid://b6twl23g087ar" path="res://assets/3D/Atrezzo/Light.glb" id="11_bifka"]
+[ext_resource type="PackedScene" uid="uid://b6twl23g087ar" path="res://levels/paradise_island/props/lights/hanging_light.glb" id="11_bifka"]
 [ext_resource type="Script" uid="uid://cs8r4h4yr3knc" path="res://levels/paradise_island/props/lights/hanging_light_sway_3d.gd" id="12_6ipkk"]
 [ext_resource type="Script" uid="uid://det7bptrkw1dp" path="res://world/terrain/terrain_quality_controller.gd" id="13_b224r"]
-[ext_resource type="PackedScene" uid="uid://1x3n2tx0xgj5" path="res://assets/3D/Terrain/independent_island.glb" id="14_pell1"]
+[ext_resource type="PackedScene" uid="uid://1x3n2tx0xgj5" path="res://world/props/terrain/independent_island.glb" id="14_pell1"]
 [ext_resource type="Material" uid="uid://dmj6dyip8ab0w" path="res://shared/materials/terrain/materials/sand_02.res" id="15_wtvuo"]
-[ext_resource type="PackedScene" uid="uid://d05s8vs217tvh" path="res://assets/3D/Terrain/test_island.glb" id="16_xwvxt"]
+[ext_resource type="PackedScene" uid="uid://d05s8vs217tvh" path="res://levels/paradise_island/terrain/paradise_island.glb" id="16_xwvxt"]
 [ext_resource type="Shader" uid="uid://bpcwf528qbo27" path="res://world/terrain/shaders/terrain_master.gdshader" id="17_dwfdr"]
 [ext_resource type="Texture2D" uid="uid://vttu2tsbnprq" path="res://shared/materials/terrain/textures/sand_03/sand_03_albedo.jpg" id="18_fuy2c"]
 [ext_resource type="Texture2D" uid="uid://dsbmyv262kqsl" path="res://shared/materials/terrain/textures/sand_03/sand_03_normal.jpg" id="19_c6fkl"]
@@ -37,7 +37,7 @@
 [ext_resource type="Texture2D" uid="uid://dyqb0w4inbtpk" path="res://world/vegetation/palms/textures/palm_billboard_ao.png" id="35_xfsn7"]
 [ext_resource type="Texture2D" uid="uid://mo8d7pcdm41v" path="res://world/vegetation/palms/textures/palm_billboard_height.png" id="36_g5mgl"]
 [ext_resource type="Texture2D" uid="uid://cnptmjx1cd2rj" path="res://world/vegetation/palms/textures/palm_billboard_normal.png" id="37_qcyq5"]
-[ext_resource type="PackedScene" uid="uid://c08rfa066ud8" path="res://assets/3D/Terrain/palm_impostor_ground_shadows.glb" id="38_7bksg"]
+[ext_resource type="PackedScene" uid="uid://c08rfa066ud8" path="res://world/vegetation/palms/palm_impostor_ground_shadows.glb" id="38_7bksg"]
 [ext_resource type="Shader" uid="uid://cmnqja2yvxste" path="res://world/vegetation/palms/shaders/palm_impostor_ground_shadow.gdshader" id="39_1ei5q"]
 [ext_resource type="PackedScene" uid="uid://1d3iohmalk05" path="res://world/water/ocean/ocean_3d.tscn" id="40_bioit"]
 [ext_resource type="Shader" uid="uid://dh7o8h2pae1kd" path="res://world/water/ocean/shaders/ocean_water_custom_ssr.gdshader" id="41_6h42o"]
@@ -55,7 +55,7 @@
 [ext_resource type="AudioStream" uid="uid://dq0xb5edi3237" path="res://audio/music/Storm Chaser.ogg" id="53_0vktn"]
 [ext_resource type="PackedScene" uid="uid://dewy0j55fasc8" path="res://systems/camera/chase_camera.tscn" id="54_50ksj"]
 [ext_resource type="Shader" uid="uid://udpsvcumn1mh" path="res://systems/camera/underwater/shaders/underwater_split_view_post_process.gdshader" id="55_33cck"]
-[ext_resource type="PackedScene" uid="uid://byqrxgrtjkcgm" path="res://assets/3D/buildings/beach_hotel.glb" id="56_ksrt0"]
+[ext_resource type="PackedScene" uid="uid://byqrxgrtjkcgm" path="res://world/props/buildings/beach_hotel.glb" id="56_ksrt0"]
 [ext_resource type="PackedScene" uid="uid://cf3mdmbksb1m7" path="res://gameplay/race/course/ramps/ramp_01.tscn" id="57_8fseg"]
 [ext_resource type="PackedScene" uid="uid://c8qf6cnfoysg8" path="res://gameplay/race/course/ramps/ramp_02.tscn" id="58_1gyqb"]
 [ext_resource type="PackedScene" uid="uid://665ve8ouncoh" path="res://world/vegetation/palms/palm_tree.tscn" id="59_e6dyr"]
@@ -634,7 +634,7 @@ pivot_offset_local = Vector3(0, 19.381, 0)
 sway_x_degrees = 5.7
 sway_z_degrees = 4.0
 
-[node name="Light_VIS" parent="Environment/Light" index="0" unique_id=2081391133]
+[node name="Light_VIS" parent="Environment/Light" index="0" unique_id=831880620]
 transform = Transform3D(0.32, 0, 0, 0, 0.32, 0, 0, 0, 0.32, 0, -0.7512207, 0)
 surface_material_override/0 = SubResource("StandardMaterial3D_cyvr6")
 
@@ -657,7 +657,7 @@ sway_z_degrees = 3.9
 sway_frequency_hz = 0.31
 secondary_frequency_ratio = 0.44000000000000006
 
-[node name="Light_VIS" parent="Environment/Light2" index="0" unique_id=2081391133]
+[node name="Light_VIS" parent="Environment/Light2" index="0" unique_id=831880620]
 transform = Transform3D(0.32, 0, 0, 0, 0.32, 0, 0, 0, 0.32, 0, -0.7512207, 0)
 surface_material_override/0 = SubResource("StandardMaterial3D_cyvr6")
 
@@ -678,25 +678,25 @@ script = ExtResource("13_b224r")
 [node name="independent_island" parent="TerrainRoot" unique_id=135701482 instance=ExtResource("14_pell1")]
 transform = Transform3D(0.71981424, 0, -0.6941668, 0, 1, 0, 0.6941668, 0, 0.71981424, 2427.3716, -15.736182, 136.60822)
 
-[node name="Island_1_VIS" parent="TerrainRoot/independent_island" index="0" unique_id=1145179072]
+[node name="Island_1_VIS" parent="TerrainRoot/independent_island" index="0" unique_id=433189918]
 surface_material_override/0 = ExtResource("15_wtvuo")
 
 [node name="independent_island2" parent="TerrainRoot" unique_id=318732152 instance=ExtResource("14_pell1")]
 transform = Transform3D(2.5448968, 0, 2.17237, 0, 1.375, 0, -2.0929704, 0, 2.6414409, 1964.7793, -5.60398, -2256.5737)
 
-[node name="Island_1_VIS" parent="TerrainRoot/independent_island2" index="0" unique_id=1145179072]
+[node name="Island_1_VIS" parent="TerrainRoot/independent_island2" index="0" unique_id=433189918]
 surface_material_override/0 = ExtResource("15_wtvuo")
 
 [node name="independent_island3" parent="TerrainRoot" unique_id=538394509 instance=ExtResource("14_pell1")]
 transform = Transform3D(-0.17687668, 0, -6.3775477, 0, 6.38, 0, 6.3775477, 0, -0.17687668, -2022.6855, -45.85874, -2256.5737)
 
-[node name="Island_1_VIS" parent="TerrainRoot/independent_island3" index="0" unique_id=1145179072]
+[node name="Island_1_VIS" parent="TerrainRoot/independent_island3" index="0" unique_id=433189918]
 surface_material_override/0 = ExtResource("15_wtvuo")
 
 [node name="independent_island4" parent="TerrainRoot" unique_id=522839329 instance=ExtResource("14_pell1")]
 transform = Transform3D(7.6843944, 0, 3.4050117, 0, 16.9, 0, -3.4050117, 0, 7.6843944, -4529.758, -45.85874, 4123.0527)
 
-[node name="Island_1_VIS" parent="TerrainRoot/independent_island4" index="0" unique_id=1145179072]
+[node name="Island_1_VIS" parent="TerrainRoot/independent_island4" index="0" unique_id=433189918]
 transform = Transform3D(0.5352785, 0.09100684, -0.006567538, -0.07122277, 0.6827822, -0.09906116, -0.0020920038, 0.040325806, 1.6920902, 310.06567, -0.8341303, -127.680214)
 surface_material_override/0 = ExtResource("15_wtvuo")
 
@@ -708,72 +708,72 @@ surface_material_override/0 = ExtResource("15_wtvuo")
 [node name="test_island" parent="TerrainRoot" unique_id=1352578102 instance=ExtResource("16_xwvxt")]
 transform = Transform3D(0.86, 0, 0, 0, 0.86, 0, 0, 0, 0.86, 149, 1.8, 120.1001)
 
-[node name="Terrain_Master_VIS" parent="TerrainRoot/test_island" index="0" unique_id=976213362]
+[node name="Terrain_Master_VIS" parent="TerrainRoot/test_island" index="0" unique_id=1159521263]
 material_override = SubResource("ShaderMaterial_tpwhi")
 
-[node name="Cave_01_VIS" parent="TerrainRoot/test_island" index="1" unique_id=104155991]
+[node name="Cave_01_VIS" parent="TerrainRoot/test_island" index="1" unique_id=1044537081]
 surface_material_override/0 = ExtResource("33_g88yb")
 
-[node name="Cave_Entrance_Rock_A_VIS" parent="TerrainRoot/test_island" index="2" unique_id=564024366]
+[node name="Cave_Entrance_Rock_A_VIS" parent="TerrainRoot/test_island" index="2" unique_id=181690084]
 surface_material_override/0 = ExtResource("33_g88yb")
 
-[node name="Rock2_VIS" parent="TerrainRoot/test_island" index="3" unique_id=395260365]
+[node name="Rock2_VIS" parent="TerrainRoot/test_island" index="3" unique_id=197552293]
 surface_material_override/0 = ExtResource("33_g88yb")
 
-[node name="Rock3_VIS" parent="TerrainRoot/test_island" index="4" unique_id=1632139168]
+[node name="Rock3_VIS" parent="TerrainRoot/test_island" index="4" unique_id=1345939949]
 surface_material_override/0 = ExtResource("33_g88yb")
 
-[node name="Cave_Entrance_Rock_B_VIS" parent="TerrainRoot/test_island" index="5" unique_id=1283115105]
+[node name="Cave_Entrance_Rock_B_VIS" parent="TerrainRoot/test_island" index="5" unique_id=2106143218]
 surface_material_override/0 = ExtResource("33_g88yb")
 
-[node name="Cabana_4_VIS" parent="TerrainRoot/test_island" index="9" unique_id=1829178341]
+[node name="Cabana_4_VIS" parent="TerrainRoot/test_island" index="9" unique_id=32828794]
 transform = Transform3D(1.3555894, 0, 0.07078268, 0, 1.3574358, 0, -0.07078268, 0, 1.3555894, 208.27293, -8.906912, 331.88815)
 
-[node name="Rock4_VIS" parent="TerrainRoot/test_island" index="14" unique_id=2091099275]
+[node name="Rock4_VIS" parent="TerrainRoot/test_island" index="14" unique_id=1139448221]
 surface_material_override/0 = ExtResource("33_g88yb")
 
-[node name="SM_Palm_Impostor_Zone_001_VIS" parent="TerrainRoot/test_island" index="15" unique_id=2127654978]
+[node name="SM_Palm_Impostor_Zone_001_VIS" parent="TerrainRoot/test_island" index="15" unique_id=622550987]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.3975904, 0)
 material_override = SubResource("StandardMaterial3D_7fon7")
 cast_shadow = 0
 
-[node name="SM_Palm_Impostor_Zone_002_VIS" parent="TerrainRoot/test_island" index="16" unique_id=1392556844]
+[node name="SM_Palm_Impostor_Zone_002_VIS" parent="TerrainRoot/test_island" index="16" unique_id=1796971716]
 material_override = SubResource("StandardMaterial3D_7fon7")
 cast_shadow = 0
 
-[node name="Cave_01_COL" parent="TerrainRoot/test_island" index="17" unique_id=1105187080]
+[node name="Cave_01_COL" parent="TerrainRoot/test_island" index="17" unique_id=1248273720]
 visible = false
 
-[node name="Rock2_COL" parent="TerrainRoot/test_island" index="18" unique_id=359502371]
+[node name="Rock2_COL" parent="TerrainRoot/test_island" index="18" unique_id=1833541179]
 visible = false
 
-[node name="Cabana_4_COL" parent="TerrainRoot/test_island" index="19" unique_id=1358311821]
+[node name="Cabana_4_COL" parent="TerrainRoot/test_island" index="19" unique_id=1459475476]
 visible = false
 
-[node name="Cave_Entrance_Rock_A_COL" parent="TerrainRoot/test_island" index="20" unique_id=1374324262]
+[node name="Cave_Entrance_Rock_A_COL" parent="TerrainRoot/test_island" index="20" unique_id=1698010337]
 visible = false
 
-[node name="Cave_Entrance_Rock_B_COL" parent="TerrainRoot/test_island" index="21" unique_id=1549100588]
+[node name="Cave_Entrance_Rock_B_COL" parent="TerrainRoot/test_island" index="21" unique_id=1465938636]
 visible = false
 
-[node name="Rock3_COL" parent="TerrainRoot/test_island" index="22" unique_id=539487353]
+[node name="Rock3_COL" parent="TerrainRoot/test_island" index="22" unique_id=326792480]
 visible = false
 
-[node name="Terrain_Master_COL" parent="TerrainRoot/test_island" index="23" unique_id=1609329318]
+[node name="Terrain_Master_COL" parent="TerrainRoot/test_island" index="23" unique_id=553415098]
 visible = false
 physics_material_override = SubResource("PhysicsMaterial_cfiqe")
 
-[node name="Rock4_COL" parent="TerrainRoot/test_island" index="24" unique_id=690717578]
+[node name="Rock4_COL" parent="TerrainRoot/test_island" index="24" unique_id=1692312148]
 visible = false
 
 [node name="PalmImpostorGroundShadows" parent="TerrainRoot/test_island" unique_id=671848398 instance=ExtResource("38_7bksg")]
 
-[node name="SM_Palm_Impostor_Zone_001_SHADOW" parent="TerrainRoot/test_island/PalmImpostorGroundShadows" index="0" unique_id=1322488669]
+[node name="SM_Palm_Impostor_Zone_001_SHADOW" parent="TerrainRoot/test_island/PalmImpostorGroundShadows" index="0" unique_id=617546464]
 material_override = SubResource("ShaderMaterial_palm_ground_shadow")
 cast_shadow = 0
 visibility_range_end = 4000.0
 
-[node name="SM_Palm_Impostor_Zone_002_SHADOW" parent="TerrainRoot/test_island/PalmImpostorGroundShadows" index="1" unique_id=8340118]
+[node name="SM_Palm_Impostor_Zone_002_SHADOW" parent="TerrainRoot/test_island/PalmImpostorGroundShadows" index="1" unique_id=307511129]
 material_override = SubResource("ShaderMaterial_palm_ground_shadow")
 cast_shadow = 0
 visibility_range_end = 4000.0
@@ -835,15 +835,88 @@ breathing_influence = 1.0
 
 [node name="Skeleton3D" parent="Gameplay/JetSki/VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/Rider_Bot/SKEL_Rider" parent_id_path=PackedInt32Array(328650943, 2001770911, 1075285769, 1123472187) index="0" unique_id=1404074567]
 transform = Transform3D(0.9810575, -0.011237088, -0.19338982, 0.011280789, 0.99993587, -0.00087523926, 0.19338726, -0.0013229304, 0.98112124, 0.06955719, 0.0069850683, -0.110954285)
-bones/0/rotation = Quaternion(0.18325987, 0.103067584, 0.014143285, 0.9775443)
-bones/0/scale = Vector3(1.0000001, 1.0000001, 1.0000001)
+bones/0/rotation = Quaternion(0.0064583384, 1.6179755e-09, 2.5050662e-07, 0.99997914)
+bones/0/scale = Vector3(1, 0.99999994, 0.99999994)
+bones/1/position = Vector3(-4.8325298e-12, 0.10182449, 3.2595353e-09)
 bones/1/scale = Vector3(1, 0.9999998, 0.99999994)
-bones/3/position = Vector3(-9.971121e-06, 0.10010851, 1.3415442e-06)
-bones/3/scale = Vector3(1.0000001, 1.0000001, 1.0000001)
+bones/2/position = Vector3(-2.4344415e-13, 0.10002686, 8.3823934e-09)
+bones/2/scale = Vector3(1, 1, 0.9999999)
+bones/3/position = Vector3(1.364242e-12, 0.10010647, -1.8094065e-08)
+bones/3/scale = Vector3(1, 0.99999994, 0.9999999)
+bones/4/position = Vector3(-3.710018e-06, 0.16292441, -0.0025706573)
 bones/4/scale = Vector3(1, 1, 1)
+bones/5/position = Vector3(-1.0776875e-09, 0.09341913, 0.028410386)
 bones/5/scale = Vector3(1, 0.99999994, 0.99999994)
+bones/6/position = Vector3(-0.045697533, 0.10575647, -0.00599908)
+bones/6/scale = Vector3(0.99999994, 1.0000001, 1)
+bones/7/position = Vector3(-1.1175871e-08, 0.11116077, 2.3283064e-10)
 bones/7/scale = Vector3(0.99999994, 1, 0.99999994)
+bones/9/rotation = Quaternion(2.2111117e-16, -6.0766336e-11, -3.5107657e-08, 1)
+bones/10/position = Vector3(0.026818521, 0.02464804, 0.015739927)
+bones/10/rotation = Quaternion(0.2532839, 0.061619177, -0.22821042, 0.9380674)
+bones/11/position = Vector3(-3.934838e-08, 0.04188987, -2.1098005e-07)
+bones/11/rotation = Quaternion(-0.0023141836, -0.0011703466, 0.009300497, 0.9999534)
+bones/12/position = Vector3(1.3504177e-08, 0.034162637, 8.756131e-08)
+bones/12/rotation = Quaternion(-0.0016660402, -0.00080820406, 0.006919737, 0.9999743)
+bones/13/rotation = Quaternion(-0.05324761, -0.05324781, 0.15012597, 0.9857949)
+bones/14/rotation = Quaternion(0.053246345, 0.05324396, -0.1500353, 0.98580897)
+bones/15/position = Vector3(-3.3280543e-09, 0.028500233, -4.8838544e-08)
+bones/15/rotation = Quaternion(0.09837924, 0.09835267, -0.18223341, 0.9733649)
+bones/16/position = Vector3(-2.678558e-07, 0.09532508, 4.9202913e-07)
+bones/16/rotation = Quaternion(-0.053269494, -0.05326953, 0.14982367, 0.98583853)
+bones/17/rotation = Quaternion(0.053286072, 0.05325134, -0.14948025, 0.98589075)
+bones/18/position = Vector3(-7.347012e-10, 0.029499862, 8.831161e-08)
+bones/18/rotation = Quaternion(0.09208112, 0.09201529, -0.17354263, 0.976185)
+bones/19/position = Vector3(-0.018651372, 0.091035925, 0.0004307226)
+bones/19/rotation = Quaternion(-0.057171095, -0.05717098, 0.16369338, 0.98319244)
+bones/20/rotation = Quaternion(0.05716534, 0.057175197, -0.16375771, 0.98318183)
+bones/21/position = Vector3(2.8478553e-10, 0.028896932, -1.3136172e-08)
+bones/21/rotation = Quaternion(0.10377321, 0.103785165, -0.18961848, 0.9708268)
+bones/22/position = Vector3(-0.038062822, 0.08076676, 0.0048671006)
+bones/22/rotation = Quaternion(-0.05437109, -0.05437682, 0.15464939, 0.98497236)
+bones/23/rotation = Quaternion(0.05444816, 0.05430212, -0.15330318, 0.98518264)
+bones/24/position = Vector3(-6.3593575e-10, 0.020999873, 6.254597e-08)
+bones/24/rotation = Quaternion(0.13183951, 0.13147534, -0.2248103, 0.9564481)
+bones/25/rotation = Quaternion(0.43952805, 0.59007734, -0.55047023, 0.39446965)
+bones/25/scale = Vector3(1.0000001, 1.0000001, 1)
+bones/26/position = Vector3(1.1175871e-08, 0.11112894, 1.9185245e-07)
 bones/26/scale = Vector3(1, 0.99999994, 0.9999999)
+bones/27/position = Vector3(-2.9825742e-10, 0.27841514, 4.8592856e-08)
+bones/29/position = Vector3(-0.026817312, 0.024661459, 0.015761862)
+bones/29/rotation = Quaternion(0.25309613, -0.0613242, 0.22735296, 0.93834555)
+bones/30/position = Vector3(-3.958121e-09, 0.04187095, 1.1144547e-07)
+bones/30/rotation = Quaternion(-0.0020654905, 0.001043728, -0.00821381, 0.9999636)
+bones/31/position = Vector3(1.6298145e-08, 0.034183986, 7.630609e-09)
+bones/31/rotation = Quaternion(-0.0015297808, 0.00074413355, -0.00607335, 0.9999801)
+bones/32/position = Vector3(-0.022598632, 0.091093086, 0.0051802727)
+bones/32/rotation = Quaternion(-0.053266168, 0.053267147, -0.15042141, 0.9857478)
+bones/33/rotation = Quaternion(0.05326424, -0.053270143, 0.1504817, 0.9857386)
+bones/34/position = Vector3(-2.49929e-09, 0.028500063, 6.991251e-08)
+bones/34/rotation = Quaternion(0.09814278, -0.098153286, 0.1817879, 0.97349226)
+bones/35/position = Vector3(-3.5860938e-07, 0.09533393, -4.479784e-07)
+bones/35/rotation = Quaternion(-0.0532684, 0.053267583, -0.1504098, 0.9857494)
+bones/36/rotation = Quaternion(0.05327221, -0.05326654, 0.15039994, 0.9857508)
+bones/37/position = Vector3(-4.1668073e-09, 0.029499896, -3.3597452e-08)
+bones/37/rotation = Quaternion(0.09173783, -0.09173937, 0.1727996, 0.9763751)
+bones/38/position = Vector3(0.018650819, 0.091045246, 0.00043014373)
+bones/38/rotation = Quaternion(-0.06039615, 0.060395323, -0.17464446, 0.98092)
+bones/39/rotation = Quaternion(0.060399, -0.06039511, 0.17465097, 0.9809187)
+bones/40/position = Vector3(-7.558647e-09, 0.0294999, 6.4542704e-08)
+bones/40/rotation = Quaternion(0.1034078, -0.10341266, 0.18905726, 0.9710149)
+bones/41/rotation = Quaternion(-0.0545863, 0.054581683, -0.15248315, 0.98528683)
+bones/42/rotation = Quaternion(0.05447704, -0.054683316, 0.15428944, 0.985006)
+bones/43/position = Vector3(2.8401814e-09, 0.021000098, 2.9347216e-08)
+bones/43/rotation = Quaternion(0.13074756, -0.13122135, 0.22274286, 0.9571163)
+bones/44/position = Vector3(-0.0820779, -0.0677175, -0.01512219)
+bones/45/position = Vector3(-6.982418e-09, 0.43905485, -2.2728273e-09)
+bones/46/position = Vector3(9.280655e-09, 0.4452782, -2.0814248e-09)
+bones/47/position = Vector3(-1.2781584e-08, 0.14997412, -1.344597e-08)
+bones/47/rotation = Quaternion(0.3242161, -0.00014739741, -1.0539367e-07, 0.94598305)
+bones/48/position = Vector3(0.08207788, -0.067718, -0.015122137)
+bones/49/position = Vector3(-1.2923408e-08, 0.43905368, -2.2650966e-09)
+bones/50/position = Vector3(-1.0939593e-09, 0.44527858, 3.188938e-09)
+bones/51/position = Vector3(-6.275741e-09, 0.1499741, 1.0166332e-08)
+bones/51/rotation = Quaternion(0.32421583, -0.00014736943, -1.4682928e-07, 0.9459832)
 
 [node name="FootOrientation" parent="Gameplay/JetSki/VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D" index="3" unique_id=1357917683]
 left_foot_rotation_correction_degrees = Vector3(240, 0, 0)
@@ -1006,7 +1079,7 @@ material_override = SubResource("ShaderMaterial_6pfav")
 [node name="beach_hotel" parent="Atrezzo" unique_id=240417991 instance=ExtResource("56_ksrt0")]
 transform = Transform3D(0.07044011, 0, 0.4495144, 0, 0.455, 0, -0.4495144, 0, 0.07044011, -123.22586, 30.086075, -150.12727)
 
-[node name="beach_hotel_VIS" parent="Atrezzo/beach_hotel" index="0" unique_id=2018774500]
+[node name="beach_hotel_VIS" parent="Atrezzo/beach_hotel" index="0" unique_id=1307570647]
 surface_material_override/1 = SubResource("StandardMaterial3D_4sljt")
 surface_material_override/4 = SubResource("StandardMaterial3D_dbb74")
 
@@ -1046,50 +1119,50 @@ transform = Transform3D(0.5118447, 0, 1.0853641, 0, 1.2, 0, -1.0853641, 0, 0.511
 [node name="Rock1" parent="Atrezzo" unique_id=897258125 instance=ExtResource("62_fl35x")]
 transform = Transform3D(2.5107322, 0, -1.5284144, 0, 2.3749995, 0, 1.3486009, 0, 2.8454967, 298.25534, -21.29904, 36.365036)
 
-[node name="Rock1_VIS" parent="Atrezzo/Rock1" index="0" unique_id=1668464500]
+[node name="Rock1_VIS" parent="Atrezzo/Rock1" index="0" unique_id=1553526623]
 surface_material_override/0 = ExtResource("33_g88yb")
 
 [node name="Rock2" parent="Atrezzo" unique_id=2094025158 instance=ExtResource("63_m67h8")]
 transform = Transform3D(3.1803858, 0.6325982, -6.2092667, 0.09665962, 6.963099, 0.75890744, 6.2406597, -0.4302361, 3.152633, -551.9645, -16.910297, -180.97124)
 
-[node name="Rock2_VIS" parent="Atrezzo/Rock2" index="0" unique_id=362180073]
+[node name="Rock2_VIS" parent="Atrezzo/Rock2" index="0" unique_id=110660900]
 surface_material_override/0 = ExtResource("33_g88yb")
 
 [node name="Rock3" parent="Atrezzo" unique_id=32409294 instance=ExtResource("63_m67h8")]
 transform = Transform3D(2.1527746, -0.58318883, 5.0766606, 0.07651358, 5.5118313, 0.60073394, -5.1094747, -0.16317603, 2.1479445, -636.2675, -9.634373, -123.952194)
 
-[node name="Rock2_VIS" parent="Atrezzo/Rock3" index="0" unique_id=362180073]
+[node name="Rock2_VIS" parent="Atrezzo/Rock3" index="0" unique_id=110660900]
 surface_material_override/0 = ExtResource("33_g88yb")
 
 [node name="Rock4" parent="Atrezzo" unique_id=732379558 instance=ExtResource("63_m67h8")]
 transform = Transform3D(-0.9700894, 3.5165074, -7.616502, 0.44429702, 7.678032, 3.488327, 8.377321, -3.245338e-08, -1.0669926, -567.65735, -46.195744, -141.59525)
 
-[node name="Rock2_VIS" parent="Atrezzo/Rock4" index="0" unique_id=362180073]
+[node name="Rock2_VIS" parent="Atrezzo/Rock4" index="0" unique_id=110660900]
 surface_material_override/0 = ExtResource("33_g88yb")
 
 [node name="Rock5" parent="Atrezzo" unique_id=765989064 instance=ExtResource("63_m67h8")]
 transform = Transform3D(-1.1396358, 2.6904924, -5.6494913, 0.5078428, 6.037661, 2.5175169, 9.795862, -2.4660984e-08, -0.7877678, -235.79329, -52.84747, -148.51874)
 
-[node name="Rock2_VIS" parent="Atrezzo/Rock5" index="0" unique_id=362180073]
+[node name="Rock2_VIS" parent="Atrezzo/Rock5" index="0" unique_id=110660900]
 surface_material_override/0 = ExtResource("33_g88yb")
 
 [node name="Rock6" parent="Atrezzo" unique_id=712207501 instance=ExtResource("64_3s10b")]
 transform = Transform3D(18.05736, -10.612488, 0, 10.612488, 18.05736, 0, 0, 0, 20.945002, -217.55464, -24.05898, -25.681166)
 
-[node name="Rock3_VIS" parent="Atrezzo/Rock6" index="0" unique_id=520423883]
+[node name="Rock3_VIS" parent="Atrezzo/Rock6" index="0" unique_id=2025684856]
 transform = Transform3D(1.2727225, 0.58904827, -1.7913191, 0.5890485, 1.9288102, 1.0527757, 1.791319, -1.0527761, 0.926533, -0.5910263, -1.0056431, 0)
 surface_material_override/0 = ExtResource("33_g88yb")
 
 [node name="Rock7" parent="Atrezzo" unique_id=1710166104 instance=ExtResource("64_3s10b")]
 transform = Transform3D(-12.991967, -3.3479185e-07, -43.01585, 9.234303, 43.887394, -2.7890134, 42.012985, -9.646292, -12.6890745, -269.192, -62.774254, -70.82382)
 
-[node name="Rock3_VIS" parent="Atrezzo/Rock7" index="0" unique_id=520423883]
+[node name="Rock3_VIS" parent="Atrezzo/Rock7" index="0" unique_id=2025684856]
 surface_material_override/0 = ExtResource("33_g88yb")
 
 [node name="Rock8" parent="Atrezzo" unique_id=571328736 instance=ExtResource("64_3s10b")]
 transform = Transform3D(33.475, 0, 0, 0, 33.475, 0, 0, 0, 33.475, 39.93125, -40.529305, 376.03717)
 
-[node name="Rock3_VIS" parent="Atrezzo/Rock8" index="0" unique_id=520423883]
+[node name="Rock3_VIS" parent="Atrezzo/Rock8" index="0" unique_id=2025684856]
 surface_material_override/0 = ExtResource("33_g88yb")
 
 [node name="PalmsMultiMesh" parent="Atrezzo" unique_id=302165511 instance=ExtResource("65_fgcfm")]
@@ -1209,10 +1282,8 @@ buoy_clearance = 20.0
 [editable path="TerrainRoot/test_island"]
 [editable path="TerrainRoot/test_island/PalmImpostorGroundShadows"]
 [editable path="Gameplay/JetSki"]
-[editable path="Gameplay/JetSki/VisualRoot/JetSkiVisual/HullModel/Hull"]
-[editable path="Gameplay/JetSki/VisualRoot/JetSkiVisual/HullModel/Hull/NewJetSki_Hull"]
-[editable path="Gameplay/JetSki/VisualRoot/JetSkiVisual/HandlePivot/HandleModel/Handle"]
-[editable path="Gameplay/JetSki/VisualRoot/JetSkiVisual/HandlePivot/HandleModel/Handle/NewJetSki_Handle"]
+[editable path="Gameplay/JetSki/VisualRoot/JetSkiVisual/HullModel/NewJetSki_Hull"]
+[editable path="Gameplay/JetSki/VisualRoot/JetSkiVisual/HandlePivot/HandleModel/NewJetSki_Handle"]
 [editable path="Gameplay/JetSki/VisualRoot/RiderMount/RiderAssetRoot/RiderRig"]
 [editable path="Gameplay/JetSki/VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/Rider_Bot"]
 [editable path="CameraSystem/ChaseCamera"]
