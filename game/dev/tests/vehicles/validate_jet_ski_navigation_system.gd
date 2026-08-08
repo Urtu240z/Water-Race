@@ -1,14 +1,14 @@
 extends SceneTree
 
-const JET_SKI_SCENE := "res://scenes/vehicle/jet_ski.tscn"
+const JET_SKI_SCENE := "res://gameplay/vehicles/jet_ski_01/jet_ski_01.tscn"
 const MAIN_SCENE := (
-	"res://scenes/levels/island_test/island_test_BLENDER.tscn"
+	"res://levels/paradise_island/island_test_BLENDER.tscn"
 )
 const CONTROLLER_SOURCE := (
-	"res://scripts/vehicle/jet_ski_controller.gd"
+	"res://gameplay/vehicles/common/core/jet_ski_controller.gd"
 )
 const NAVIGATION_SOURCE := (
-	"res://scripts/vehicle/systems/jet_ski_navigation_system.gd"
+	"res://gameplay/vehicles/common/systems/jet_ski_navigation_system.gd"
 )
 const FLOAT_TOLERANCE: float = 0.00001
 
@@ -567,13 +567,13 @@ func _validate_compatibility(controller_source: String) -> void:
 		"Los nombres de aterrizaje coinciden."
 	)
 	var consumers_load := (
-		load("res://scripts/camera/chase_camera.gd") != null
-		and load("res://scripts/vehicle/vehicle_water_audio.gd") != null
+	load("res://systems/camera/chase_camera.gd") != null
+		and load("res://gameplay/vehicles/common/audio/vehicle_water_audio.gd") != null
 		and load(
-			"res://scripts/effects/vehicle_water_effects_3d.gd"
+			"res://gameplay/vehicles/common/water_effects/vehicle_water_effects_3d.gd"
 		) != null
 		and load(
-			"res://scenes/vehicle/jet_ski_with_rider.tscn"
+			"res://gameplay/vehicles/jet_ski_01/jet_ski_with_rider.tscn"
 		) != null
 	)
 	_expect_numbered(
@@ -644,7 +644,7 @@ func _validate_compatibility(controller_source: String) -> void:
 		66,
 		controller_source.contains("navigation_system.state,")
 		and FileAccess.get_file_as_string(
-			"res://scripts/vehicle/systems/jet_ski_trick_system.gd"
+			"res://gameplay/vehicles/common/systems/jet_ski_trick_system.gd"
 		).contains(
 			"if navigation_state.true_takeoff_this_tick:"
 		),

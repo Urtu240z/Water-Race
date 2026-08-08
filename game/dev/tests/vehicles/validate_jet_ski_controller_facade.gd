@@ -1,31 +1,31 @@
 extends SceneTree
 
-const JET_SKI_SCENE := "res://scenes/vehicle/jet_ski.tscn"
-const RIDER_SCENE := "res://scenes/vehicle/jet_ski_with_rider.tscn"
+const JET_SKI_SCENE := "res://gameplay/vehicles/jet_ski_01/jet_ski_01.tscn"
+const RIDER_SCENE := "res://gameplay/vehicles/jet_ski_01/jet_ski_with_rider.tscn"
 const MAIN_SCENE := (
-	"res://scenes/levels/island_test/island_test_BLENDER.tscn"
+	"res://levels/paradise_island/island_test_BLENDER.tscn"
 )
 const CONTROLLER_SOURCE := (
-	"res://scripts/vehicle/jet_ski_controller.gd"
+	"res://gameplay/vehicles/common/core/jet_ski_controller.gd"
 )
 const SYSTEM_SOURCES: Array[String] = [
-	"res://scripts/vehicle/systems/jet_ski_input_system.gd",
-	"res://scripts/vehicle/systems/jet_ski_water_physics_system.gd",
-	"res://scripts/vehicle/systems/jet_ski_navigation_system.gd",
-	"res://scripts/vehicle/systems/jet_ski_drive_system.gd",
-	"res://scripts/vehicle/systems/jet_ski_rider_dynamics_system.gd",
-	"res://scripts/vehicle/systems/jet_ski_submarine_system.gd",
-	"res://scripts/vehicle/systems/jet_ski_trick_system.gd",
+	"res://gameplay/vehicles/common/systems/jet_ski_input_system.gd",
+	"res://gameplay/vehicles/common/systems/jet_ski_water_physics_system.gd",
+	"res://gameplay/vehicles/common/systems/jet_ski_navigation_system.gd",
+	"res://gameplay/vehicles/common/systems/jet_ski_drive_system.gd",
+	"res://gameplay/vehicles/common/systems/jet_ski_rider_dynamics_system.gd",
+	"res://gameplay/vehicles/common/systems/jet_ski_submarine_system.gd",
+	"res://gameplay/vehicles/common/systems/jet_ski_trick_system.gd",
 ]
 const VALIDATOR_PATHS: Array[String] = [
-	"res://tools/godot/validate_jet_ski_input_system.gd",
-	"res://tools/godot/validate_jet_ski_water_physics_system.gd",
-	"res://tools/godot/validate_jet_ski_navigation_system.gd",
-	"res://tools/godot/validate_jet_ski_drive_system.gd",
-	"res://tools/godot/validate_jet_ski_rider_dynamics_system.gd",
-	"res://tools/godot/validate_jet_ski_submarine_system.gd",
-	"res://tools/godot/validate_jet_ski_trick_system.gd",
-	"res://tools/godot/validate_vehicle_water_audio.gd",
+	"res://dev/tests/vehicles/validate_jet_ski_input_system.gd",
+	"res://dev/tests/vehicles/validate_jet_ski_water_physics_system.gd",
+	"res://dev/tests/vehicles/validate_jet_ski_navigation_system.gd",
+	"res://dev/tests/vehicles/validate_jet_ski_drive_system.gd",
+	"res://dev/tests/vehicles/validate_jet_ski_rider_dynamics_system.gd",
+	"res://dev/tests/vehicles/validate_jet_ski_submarine_system.gd",
+	"res://dev/tests/vehicles/validate_jet_ski_trick_system.gd",
+	"res://dev/tests/vehicles/validate_vehicle_water_audio.gd",
 ]
 const REMOVED_PROPERTIES: Array[String] = [
 	"current_steering_angle_degrees",

@@ -1,6 +1,6 @@
 extends SceneTree
 
-const MAIN_SCENE := "res://scenes/levels/island_test/island_test_BLENDER.tscn"
+const MAIN_SCENE := "res://levels/paradise_island/island_test_BLENDER.tscn"
 const CAPTURE_DIRECTORY := "res://.godot"
 const MINIMUM_VISIBLE_DIFFERENCE := 0.025
 

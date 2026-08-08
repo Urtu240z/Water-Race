@@ -1,6 +1,6 @@
 extends SceneTree
 
-const MAIN_SCENE := "res://scenes/levels/island_test/island_test_BLENDER.tscn"
+const MAIN_SCENE := "res://levels/paradise_island/island_test_BLENDER.tscn"
 const EPSILON := 0.001
 
 var _failed := false
@@ -378,13 +378,13 @@ func _expected_ocean_geometry(level: int) -> Dictionary:
 
 func _validate_shader_early_exits() -> void:
 	var base_source := FileAccess.get_file_as_string(
-		"res://shaders/ocean_water.gdshader"
+		"res://world/water/ocean/shaders/ocean_water.gdshader"
 	)
 	var ssr_source := FileAccess.get_file_as_string(
-		"res://shaders/ocean_water_custom_ssr.gdshader"
+		"res://world/water/ocean/shaders/ocean_water_custom_ssr.gdshader"
 	)
 	var interaction_source := FileAccess.get_file_as_string(
-		"res://shaders/includes/ocean_vehicle_interaction_functions.gdshaderinc"
+		"res://world/water/ocean/shaders/includes/ocean_vehicle_interaction_functions.gdshaderinc"
 	)
 	_expect(
 		"index >= ripple_effective_count" in base_source

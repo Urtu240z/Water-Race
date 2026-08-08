@@ -39,18 +39,18 @@ class SubmarineHarness:
 		action = Action.NONE
 
 
-const JET_SKI_SCENE := "res://scenes/vehicle/jet_ski.tscn"
+const JET_SKI_SCENE := "res://gameplay/vehicles/jet_ski_01/jet_ski_01.tscn"
 const MAIN_SCENE := (
-	"res://scenes/levels/island_test/island_test_BLENDER.tscn"
+	"res://levels/paradise_island/island_test_BLENDER.tscn"
 )
 const CONTROLLER_SOURCE := (
-	"res://scripts/vehicle/jet_ski_controller.gd"
+	"res://gameplay/vehicles/common/core/jet_ski_controller.gd"
 )
 const SYSTEM_SOURCE := (
-	"res://scripts/vehicle/systems/jet_ski_submarine_system.gd"
+	"res://gameplay/vehicles/common/systems/jet_ski_submarine_system.gd"
 )
 const STATE_SOURCE := (
-	"res://scripts/vehicle/state/jet_ski_submarine_state.gd"
+	"res://gameplay/vehicles/common/state/jet_ski_submarine_state.gd"
 )
 const SCALAR_EPSILON: float = 0.0001
 const VECTOR_EPSILON: float = 0.0005
@@ -1099,40 +1099,40 @@ func _validate_integration_and_reset() -> void:
 	)
 	_expect(
 		120,
-		load("res://scripts/vehicle/systems/jet_ski_input_system.gd")
+		load("res://gameplay/vehicles/common/systems/jet_ski_input_system.gd")
 		!= null,
 		"Contrato Input disponible para su validador."
 	)
 	_expect(
 		121,
 		load(
-			"res://scripts/vehicle/systems/jet_ski_water_physics_system.gd"
+			"res://gameplay/vehicles/common/systems/jet_ski_water_physics_system.gd"
 		) != null,
 		"Contrato Water Physics disponible para su validador."
 	)
 	_expect(
 		122,
 		load(
-			"res://scripts/vehicle/systems/jet_ski_navigation_system.gd"
+			"res://gameplay/vehicles/common/systems/jet_ski_navigation_system.gd"
 		) != null,
 		"Contrato Navigation disponible para su validador."
 	)
 	_expect(
 		123,
-		load("res://scripts/vehicle/systems/jet_ski_drive_system.gd")
+		load("res://gameplay/vehicles/common/systems/jet_ski_drive_system.gd")
 		!= null,
 		"Contrato Drive disponible para su validador."
 	)
 	_expect(
 		124,
 		load(
-			"res://scripts/vehicle/systems/jet_ski_rider_dynamics_system.gd"
+			"res://gameplay/vehicles/common/systems/jet_ski_rider_dynamics_system.gd"
 		) != null,
 		"Contrato Rider Dynamics disponible para su validador."
 	)
 	_expect(
 		125,
-		load("res://scripts/vehicle/vehicle_water_audio.gd") != null,
+	load("res://gameplay/vehicles/common/audio/vehicle_water_audio.gd") != null,
 		"Contrato VehicleWaterAudio disponible para su validador."
 	)
 	_expect(

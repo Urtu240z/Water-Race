@@ -1,6 +1,6 @@
 extends SceneTree
 
-const MAIN_SCENE := "res://scenes/levels/island_test/island_test_BLENDER.tscn"
+const MAIN_SCENE := "res://levels/paradise_island/island_test_BLENDER.tscn"
 const EPSILON := 0.0005
 
 var _failed := false
@@ -746,19 +746,19 @@ func _validate_landing_foam_controls(
 	ocean.landing_foam_strength = 0.035
 
 	var base_source := FileAccess.get_file_as_string(
-		"res://shaders/ocean_water.gdshader"
+		"res://world/water/ocean/shaders/ocean_water.gdshader"
 	)
 	var ssr_source := FileAccess.get_file_as_string(
-		"res://shaders/ocean_water_custom_ssr.gdshader"
+		"res://world/water/ocean/shaders/ocean_water_custom_ssr.gdshader"
 	)
 	var function_source := FileAccess.get_file_as_string(
-		"res://shaders/includes/ocean_vehicle_interaction_functions.gdshaderinc"
+		"res://world/water/ocean/shaders/includes/ocean_vehicle_interaction_functions.gdshaderinc"
 	)
 	var uniform_source := FileAccess.get_file_as_string(
-		"res://shaders/includes/ocean_vehicle_interaction_uniforms.gdshaderinc"
+		"res://world/water/ocean/shaders/includes/ocean_vehicle_interaction_uniforms.gdshaderinc"
 	)
 	var wake_source := FileAccess.get_file_as_string(
-		"res://shaders/wake_foam.gdshader"
+		"res://gameplay/vehicles/common/water_effects/wake/wake_foam.gdshader"
 	)
 	var landing_loop := (
 		"for (int index = 0; index < MAX_LANDING_IMPACTS; index++)"
@@ -796,7 +796,7 @@ func _validate_landing_foam_controls(
 		"Los uniforms son compartidos y wake_foam solo acompaña la geometría GPU."
 	)
 	var profile_source := FileAccess.get_file_as_string(
-		"res://scripts/settings/graphics_quality_profile.gd"
+		"res://systems/graphics/graphics_quality_profile.gd"
 	)
 	_expect(
 		not profile_source.contains("landing_foam_strength"),
@@ -1008,19 +1008,19 @@ func _validate_rebase(
 
 func _validate_shader_and_uniform_contract(ocean: Ocean3D) -> void:
 	var base_source := FileAccess.get_file_as_string(
-		"res://shaders/ocean_water.gdshader"
+		"res://world/water/ocean/shaders/ocean_water.gdshader"
 	)
 	var ssr_source := FileAccess.get_file_as_string(
-		"res://shaders/ocean_water_custom_ssr.gdshader"
+		"res://world/water/ocean/shaders/ocean_water_custom_ssr.gdshader"
 	)
 	var function_source := FileAccess.get_file_as_string(
-		"res://shaders/includes/ocean_vehicle_interaction_functions.gdshaderinc"
+		"res://world/water/ocean/shaders/includes/ocean_vehicle_interaction_functions.gdshaderinc"
 	)
 	var shared_uniform_include := (
-		"res://shaders/includes/ocean_vehicle_interaction_uniforms.gdshaderinc"
+		"res://world/water/ocean/shaders/includes/ocean_vehicle_interaction_uniforms.gdshaderinc"
 	)
 	var shared_function_include := (
-		"res://shaders/includes/ocean_vehicle_interaction_functions.gdshaderinc"
+		"res://world/water/ocean/shaders/includes/ocean_vehicle_interaction_functions.gdshaderinc"
 	)
 	_expect(
 		base_source.contains(shared_uniform_include)
@@ -1092,7 +1092,7 @@ func _validate_foam_gpu_alignment(
 		"Cada vértice lateral parte de su propia altura macro/ripple CPU."
 	)
 	var foam_source := FileAccess.get_file_as_string(
-		"res://shaders/wake_foam.gdshader"
+		"res://gameplay/vehicles/common/water_effects/wake/wake_foam.gdshader"
 	)
 	_expect(
 		foam_source.contains(

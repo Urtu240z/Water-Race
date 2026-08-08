@@ -1,7 +1,7 @@
 extends SceneTree
 
 const MAIN_SCENE := \
-	"res://scenes/levels/island_test/island_test_BLENDER.tscn"
+	"res://levels/paradise_island/island_test_BLENDER.tscn"
 const REPORT_PATH := \
 	"res://tools/godot/vehicle_water_audio_validation_report.txt"
 const STEP := 1.0 / 60.0

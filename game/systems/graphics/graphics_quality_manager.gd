@@ -28,9 +28,9 @@ const SETTINGS_KEY := "quality"
 const STEAM_DECK_HIGH_SCALE := 0.77
 
 const PROFILE_PATHS := {
-	Quality.LOW: "res://resources/settings/graphics_low.tres",
-	Quality.MEDIUM: "res://resources/settings/graphics_medium.tres",
-	Quality.HIGH: "res://resources/settings/graphics_high.tres",
+	Quality.LOW: "res://systems/graphics/profiles/graphics_low.tres",
+	Quality.MEDIUM: "res://systems/graphics/profiles/graphics_medium.tres",
+	Quality.HIGH: "res://systems/graphics/profiles/graphics_high.tres",
 }
 
 var is_steam_deck: bool = false

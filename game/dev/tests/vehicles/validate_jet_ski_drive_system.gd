@@ -35,18 +35,18 @@ class DriveHarness:
 		)
 
 
-const JET_SKI_SCENE := "res://scenes/vehicle/jet_ski.tscn"
+const JET_SKI_SCENE := "res://gameplay/vehicles/jet_ski_01/jet_ski_01.tscn"
 const MAIN_SCENE := (
-	"res://scenes/levels/island_test/island_test_BLENDER.tscn"
+	"res://levels/paradise_island/island_test_BLENDER.tscn"
 )
 const CONTROLLER_SOURCE := (
-	"res://scripts/vehicle/jet_ski_controller.gd"
+	"res://gameplay/vehicles/common/core/jet_ski_controller.gd"
 )
 const DRIVE_SOURCE := (
-	"res://scripts/vehicle/systems/jet_ski_drive_system.gd"
+	"res://gameplay/vehicles/common/systems/jet_ski_drive_system.gd"
 )
 const RIDER_DYNAMICS_SOURCE := (
-	"res://scripts/vehicle/systems/jet_ski_rider_dynamics_system.gd"
+	"res://gameplay/vehicles/common/systems/jet_ski_rider_dynamics_system.gd"
 )
 const SCALAR_EPSILON: float = 0.0001
 const SCALAR_RELATIVE_EPSILON: float = 0.000001
@@ -1063,7 +1063,7 @@ func _validate_compatibility() -> void:
 		68,
 		_vehicle.get_node_or_null("ArcadeHandling") != null
 		and not FileAccess.get_file_as_string(
-			"res://scripts/vehicle/jet_ski_arcade_handling.gd"
+			"res://gameplay/vehicles/common/handling/jet_ski_arcade_handling.gd"
 		).contains("JetSkiDriveSystem"),
 		"ArcadeHandling carga y continúa separado."
 	)

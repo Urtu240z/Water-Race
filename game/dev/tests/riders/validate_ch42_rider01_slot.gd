@@ -1,6 +1,6 @@
 extends SceneTree
 
-const SCENE_PATH := "res://scenes/vehicle/jet_ski_with_rider.tscn"
+const SCENE_PATH := "res://gameplay/vehicles/jet_ski_01/jet_ski_with_rider.tscn"
 const RIDER_PATH := "VisualRoot/RiderMount/RiderAssetRoot/RiderRig"
 const SKELETON_PATH := (
 	"RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D"

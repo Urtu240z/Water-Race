@@ -1,7 +1,7 @@
 extends SceneTree
 
-const JET_SKI_SCENE := "res://scenes/vehicle/jet_ski.tscn"
-const MAIN_SCENE := "res://scenes/levels/island_test/island_test_BLENDER.tscn"
+const JET_SKI_SCENE := "res://gameplay/vehicles/jet_ski_01/jet_ski_01.tscn"
+const MAIN_SCENE := "res://levels/paradise_island/island_test_BLENDER.tscn"
 const STEP := 1.0 / 60.0
 const EPSILON := 0.00001
 const INPUT_ACTIONS: Array[StringName] = [

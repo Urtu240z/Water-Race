@@ -29,18 +29,18 @@ class TrickHarness:
 		run_update = false
 
 
-const JET_SKI_SCENE := "res://scenes/vehicle/jet_ski.tscn"
+const JET_SKI_SCENE := "res://gameplay/vehicles/jet_ski_01/jet_ski_01.tscn"
 const MAIN_SCENE := (
-	"res://scenes/levels/island_test/island_test_BLENDER.tscn"
+	"res://levels/paradise_island/island_test_BLENDER.tscn"
 )
 const CONTROLLER_SOURCE := (
-	"res://scripts/vehicle/jet_ski_controller.gd"
+	"res://gameplay/vehicles/common/core/jet_ski_controller.gd"
 )
 const SYSTEM_SOURCE := (
-	"res://scripts/vehicle/systems/jet_ski_trick_system.gd"
+	"res://gameplay/vehicles/common/systems/jet_ski_trick_system.gd"
 )
 const STATE_SOURCE := (
-	"res://scripts/vehicle/state/jet_ski_trick_state.gd"
+	"res://gameplay/vehicles/common/state/jet_ski_trick_state.gd"
 )
 const SCALAR_EPSILON: float = 0.0001
 const VECTOR_EPSILON: float = 0.0005
@@ -1241,48 +1241,48 @@ func _validate_integration() -> void:
 	_expect(
 		160,
 		load(
-			"res://tools/godot/validate_jet_ski_input_system.gd"
+			"res://dev/tests/vehicles/validate_jet_ski_input_system.gd"
 		) != null,
 		"Validador Input disponible."
 	)
 	_expect(
 		161,
 		load(
-			"res://tools/godot/validate_jet_ski_water_physics_system.gd"
+			"res://dev/tests/vehicles/validate_jet_ski_water_physics_system.gd"
 		) != null,
 		"Validador Water Physics disponible."
 	)
 	_expect(
 		162,
 		load(
-			"res://tools/godot/validate_jet_ski_navigation_system.gd"
+			"res://dev/tests/vehicles/validate_jet_ski_navigation_system.gd"
 		) != null,
 		"Validador Navigation disponible."
 	)
 	_expect(
 		163,
 		load(
-			"res://tools/godot/validate_jet_ski_drive_system.gd"
+			"res://dev/tests/vehicles/validate_jet_ski_drive_system.gd"
 		) != null,
 		"Validador Drive disponible."
 	)
 	_expect(
 		164,
 		load(
-			"res://tools/godot/validate_jet_ski_rider_dynamics_system.gd"
+			"res://dev/tests/vehicles/validate_jet_ski_rider_dynamics_system.gd"
 		) != null,
 		"Validador Rider Dynamics disponible."
 	)
 	_expect(
 		165,
 		load(
-			"res://tools/godot/validate_jet_ski_submarine_system.gd"
+			"res://dev/tests/vehicles/validate_jet_ski_submarine_system.gd"
 		) != null,
 		"Validador Submarine disponible."
 	)
 	_expect(
 		166,
-		load("res://tools/godot/validate_vehicle_water_audio.gd")
+		load("res://dev/tests/vehicles/validate_vehicle_water_audio.gd")
 		!= null,
 		"Validador VehicleWaterAudio disponible."
 	)

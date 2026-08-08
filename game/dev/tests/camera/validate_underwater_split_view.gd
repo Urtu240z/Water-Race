@@ -1,16 +1,16 @@
 extends SceneTree
 
-const CHASE_CAMERA_SCENE := "res://scenes/camera/chase_camera.tscn"
-const MAIN_SCENE := "res://scenes/levels/island_test/island_test_BLENDER.tscn"
-const CONTROLLER_PATH := "res://scripts/camera/underwater_effect_controller.gd"
+const CHASE_CAMERA_SCENE := "res://systems/camera/chase_camera.tscn"
+const MAIN_SCENE := "res://levels/paradise_island/island_test_BLENDER.tscn"
+const CONTROLLER_PATH := "res://systems/camera/underwater/underwater_effect_controller.gd"
 const COMPOSITOR_PATH := (
-	"res://scripts/camera/underwater_fullscreen_compositor_effect.gd"
+	"res://systems/camera/underwater/underwater_fullscreen_compositor_effect.gd"
 )
 const COMPOSITOR_SHADER_PATH := (
-	"res://shaders/effects/underwater_fullscreen_compositor.glsl"
+	"res://systems/camera/underwater/shaders/underwater_fullscreen_compositor.glsl"
 )
 const LEGACY_SHADER_PATH := (
-	"res://shaders/effects/underwater_split_view_post_process.gdshader"
+	"res://systems/camera/underwater/shaders/underwater_split_view_post_process.gdshader"
 )
 
 var _failed := false

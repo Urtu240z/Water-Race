@@ -1,6 +1,6 @@
 extends SceneTree
 
-const RIDER_RIG_PATH := "res://scenes/rider/rider_rig.tscn"
+const RIDER_RIG_PATH := "res://gameplay/riders/common/rider_rig.tscn"
 const RIDER_SKELETON_PATH := \
 	"RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D"
 const TRANSFORM_TOLERANCE := 0.0002

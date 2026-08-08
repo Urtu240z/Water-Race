@@ -1,7 +1,7 @@
 class_name TerrainQualityController
 extends Node3D
 
-const TERRAIN_SHADER_PATH := "res://shaders/terrain/terrain_master.gdshader"
+const TERRAIN_SHADER_PATH := "res://world/terrain/shaders/terrain_master.gdshader"
 
 var _materials: Array[ShaderMaterial] = []
 var _quality_level: int = 2

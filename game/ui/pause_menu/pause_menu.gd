@@ -11,11 +11,11 @@ const MINIMUM_VOLUME_DB := -80.0
 const LEVEL_OPTIONS: Array[Dictionary] = [
 	{
 		"display_name": "Island Test Blender",
-		"scene_path": "res://scenes/levels/island_test/island_test_BLENDER.tscn",
+		"scene_path": "res://levels/paradise_island/island_test_BLENDER.tscn",
 	},
 	{
 		"display_name": "Night City",
-		"scene_path": "res://scenes/levels/night_city/night_city.tscn",
+		"scene_path": "res://levels/gold_city/night_city.tscn",
 	},
 ]
 

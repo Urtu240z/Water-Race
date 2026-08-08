@@ -1,7 +1,7 @@
 extends SceneTree
 
-const VEHICLE_SCENE := preload("res://scenes/vehicle/jet_ski_with_rider.tscn")
-const CAMERA_SCENE := preload("res://scenes/camera/chase_camera.tscn")
+const VEHICLE_SCENE := preload("res://gameplay/vehicles/jet_ski_01/jet_ski_with_rider.tscn")
+const CAMERA_SCENE := preload("res://systems/camera/chase_camera.tscn")
 
 var _failures: Array[String] = []
 

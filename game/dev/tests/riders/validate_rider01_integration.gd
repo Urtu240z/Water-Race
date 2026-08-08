@@ -1,10 +1,10 @@
 extends SceneTree
 
-const RIDER_RIG_SCENE := "res://scenes/rider/rider_rig.tscn"
+const RIDER_RIG_SCENE := "res://gameplay/riders/common/rider_rig.tscn"
 const JET_SKI_RIDER_SCENE := \
-	"res://scenes/vehicle/jet_ski_with_rider.tscn"
+	"res://gameplay/vehicles/jet_ski_01/jet_ski_with_rider.tscn"
 const ISLAND_SCENE := \
-	"res://scenes/levels/island_test/island_test_BLENDER.tscn"
+	"res://levels/paradise_island/island_test_BLENDER.tscn"
 const REPORT_PATH := \
 	"res://assets/3D/Rider/skins/Rider01/runtime/Rider01_Integration_Report.txt"
 const RACER_GROUP := &"rider_skin_racer"

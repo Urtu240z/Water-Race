@@ -59,20 +59,20 @@ class RiderHarness:
 		)
 
 
-const JET_SKI_SCENE := "res://scenes/vehicle/jet_ski.tscn"
-const RIDER_SCENE := "res://scenes/vehicle/jet_ski_with_rider.tscn"
+const JET_SKI_SCENE := "res://gameplay/vehicles/jet_ski_01/jet_ski_01.tscn"
+const RIDER_SCENE := "res://gameplay/vehicles/jet_ski_01/jet_ski_with_rider.tscn"
 const MAIN_SCENE := (
-	"res://scenes/levels/island_test/island_test_BLENDER.tscn"
+	"res://levels/paradise_island/island_test_BLENDER.tscn"
 )
 const CONTROLLER_SOURCE := (
-	"res://scripts/vehicle/jet_ski_controller.gd"
+	"res://gameplay/vehicles/common/core/jet_ski_controller.gd"
 )
 const SYSTEM_SOURCE := (
-	"res://scripts/vehicle/systems/"
+	"res://gameplay/vehicles/common/systems/"
 	+ "jet_ski_rider_dynamics_system.gd"
 )
 const STATE_SOURCE := (
-	"res://scripts/vehicle/state/"
+	"res://gameplay/vehicles/common/state/"
 	+ "jet_ski_rider_dynamics_state.gd"
 )
 const SCALAR_EPSILON: float = 0.0001
@@ -2122,14 +2122,14 @@ func _validate_air_control_5b() -> void:
 	_expect_5b(
 		71,
 		load(
-			"res://tools/godot/validate_jet_ski_input_system.gd"
+			"res://dev/tests/vehicles/validate_jet_ski_input_system.gd"
 		) != null,
 		"Input continÃºa disponible."
 	)
 	_expect_5b(
 		72,
 		load(
-			"res://tools/godot/"
+			"res://dev/tests/vehicles/"
 			+ "validate_jet_ski_water_physics_system.gd"
 		) != null,
 		"Water Physics continÃºa disponible."
@@ -2137,7 +2137,7 @@ func _validate_air_control_5b() -> void:
 	_expect_5b(
 		73,
 		load(
-			"res://tools/godot/"
+			"res://dev/tests/vehicles/"
 			+ "validate_jet_ski_navigation_system.gd"
 		) != null,
 		"Navigation continÃºa disponible."
@@ -2145,14 +2145,14 @@ func _validate_air_control_5b() -> void:
 	_expect_5b(
 		74,
 		load(
-			"res://tools/godot/validate_jet_ski_drive_system.gd"
+			"res://dev/tests/vehicles/validate_jet_ski_drive_system.gd"
 		) != null,
 		"Drive continÃºa disponible."
 	)
 	_expect_5b(
 		75,
 		load(
-			"res://tools/godot/validate_vehicle_water_audio.gd"
+			"res://dev/tests/vehicles/validate_vehicle_water_audio.gd"
 		) != null,
 		"VehicleWaterAudio continÃºa disponible."
 	)
@@ -2363,14 +2363,14 @@ func _validate_compatibility() -> void:
 	_expect_numbered(
 		81,
 		load(
-			"res://tools/godot/validate_jet_ski_input_system.gd"
+			"res://dev/tests/vehicles/validate_jet_ski_input_system.gd"
 		) != null,
 		"El validador InputSystem continúa disponible."
 	)
 	_expect_numbered(
 		82,
 		load(
-			"res://tools/godot/"
+			"res://dev/tests/vehicles/"
 			+ "validate_jet_ski_water_physics_system.gd"
 		) != null,
 		"El validador WaterPhysicsSystem continúa disponible."
@@ -2378,7 +2378,7 @@ func _validate_compatibility() -> void:
 	_expect_numbered(
 		83,
 		load(
-			"res://tools/godot/"
+			"res://dev/tests/vehicles/"
 			+ "validate_jet_ski_navigation_system.gd"
 		) != null,
 		"El validador NavigationSystem continúa disponible."
@@ -2386,14 +2386,14 @@ func _validate_compatibility() -> void:
 	_expect_numbered(
 		84,
 		load(
-			"res://tools/godot/validate_jet_ski_drive_system.gd"
+			"res://dev/tests/vehicles/validate_jet_ski_drive_system.gd"
 		) != null,
 		"El validador DriveSystem continúa disponible."
 	)
 	_expect_numbered(
 		85,
 		load(
-			"res://tools/godot/validate_vehicle_water_audio.gd"
+			"res://dev/tests/vehicles/validate_vehicle_water_audio.gd"
 		) != null,
 		"El validador VehicleWaterAudio continúa disponible."
 	)
