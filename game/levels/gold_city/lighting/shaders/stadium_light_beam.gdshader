@@ -15,6 +15,12 @@ uniform float near_fade_end : hint_range(0.001, 0.4, 0.005) = 0.055;
 uniform float far_fade_start : hint_range(0.4, 0.999, 0.005) = 0.73;
 uniform float length_falloff : hint_range(0.0, 4.0, 0.05) = 0.75;
 
+group_uniforms SoftIntersection;
+uniform sampler2D scene_depth_texture : hint_depth_texture, repeat_disable, filter_nearest;
+uniform float intersection_fade_strength : hint_range(0.0, 1.0, 0.01) = 1.0;
+uniform float intersection_fade_distance : hint_range(0.05, 20.0, 0.05) = 4.0;
+uniform float intersection_fade_power : hint_range(0.25, 4.0, 0.05) = 1.0;
+
 group_uniforms MovingDust;
 uniform float dust_strength : hint_range(0.0, 4.0, 0.05) = 1.35;
 uniform float dust_scale : hint_range(0.01, 2.0, 0.01) = 0.16;
@@ -32,6 +38,16 @@ float drifting_field(vec3 position) {
 	float wave_b = sin(dot(position, vec3(-0.83, 1.71, 2.41)) + wave_a * 1.65);
 	float wave_c = sin(dot(position, vec3(2.31, -0.57, 1.19)) + wave_b * 1.25);
 	return clamp(0.5 + 0.5 * (wave_a * 0.38 + wave_b * 0.37 + wave_c * 0.25), 0.0, 1.0);
+}
+
+// Soft-particle style depth fade. The beam becomes transparent before its
+// geometry reaches the first opaque surface stored in the scene depth buffer.
+float scene_linear_depth(vec2 screen_uv, mat4 inverse_projection) {
+	float raw_depth = texture(scene_depth_texture, screen_uv).r;
+	vec3 ndc_position = vec3(screen_uv * 2.0 - 1.0, raw_depth);
+	vec4 view_position = inverse_projection * vec4(ndc_position, 1.0);
+	view_position.xyz /= view_position.w;
+	return -view_position.z;
 }
 
 void vertex() {
@@ -64,7 +80,35 @@ void fragment() {
 	);
 
 	float density = base_density + dust * dust_strength;
-	float alpha = beam_opacity * light_color.a * near_fade * far_fade * distance_fade * soft_edge * density;
+
+	float opaque_depth = scene_linear_depth(SCREEN_UV, INV_PROJECTION_MATRIX);
+	float beam_depth = max(-VERTEX.z, 0.0);
+	float surface_gap = opaque_depth - beam_depth;
+	float intersection_fade = smoothstep(
+		0.0,
+		max(intersection_fade_distance, 0.0001),
+		surface_gap
+	);
+	intersection_fade = pow(
+		clamp(intersection_fade, 0.0, 1.0),
+		intersection_fade_power
+	);
+	intersection_fade = mix(
+		1.0,
+		intersection_fade,
+		intersection_fade_strength
+	);
+
+	float alpha = (
+		beam_opacity
+		* light_color.a
+		* near_fade
+		* far_fade
+		* distance_fade
+		* soft_edge
+		* intersection_fade
+		* density
+	);
 
 	ALBEDO = light_color.rgb;
 	EMISSION = light_color.rgb * emission_energy * (0.72 + dust * 0.55);
