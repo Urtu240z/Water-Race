@@ -1,6 +1,6 @@
 [gd_resource type="ShaderMaterial" format=3 uid="uid://cftxxlrjcjm4x"]
 
-[ext_resource type="Shader" uid="uid://c3fvdhaa8vw8g" path="res://shaders/effects/casino_hue_emission.gdshader" id="1_shader"]
+[ext_resource type="Shader" uid="uid://c3fvdhaa8vw8g" path="res://levels/gold_city/city/buildings/shaders/casino_hue_emission.gdshader" id="1_shader"]
 
 [resource]
 resource_name = "Casino_Surface_2_Hue"

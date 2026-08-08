@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://dq0xb5edi3237"
+path="res://.godot/imported/Storm Chaser.ogg-da6f27f6c80537902cb55bbf419c04a9.oggvorbisstr"
+
+[deps]
+
+source_file="res://audio/music/Storm Chaser.ogg"
+dest_files=["res://.godot/imported/Storm Chaser.ogg-da6f27f6c80537902cb55bbf419c04a9.oggvorbisstr"]
+
+[params]
+
+loop=true
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

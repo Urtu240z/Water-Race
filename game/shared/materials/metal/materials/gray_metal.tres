@@ -1,0 +1,21 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://bq72x3ygqg4gf"]
+
+[ext_resource type="Texture2D" uid="uid://dukwkvb67xvxr" path="res://shared/materials/metal/textures/gray_metal/gray_metal_height.png" id="Displacement"]
+[ext_resource type="Texture2D" uid="uid://mqplskl8o1ys" path="res://shared/materials/metal/textures/gray_metal/gray_metal_metallic.png" id="Metalness"]
+[ext_resource type="Texture2D" uid="uid://d4avcd6orq7p" path="res://shared/materials/metal/textures/gray_metal/gray_metal_normal.png" id="NormalGL"]
+
+[resource]
+metallic = 0.93
+metallic_specular = 1.0
+metallic_texture = ExtResource("Metalness")
+metallic_texture_channel = 4
+roughness = 0.08
+roughness_texture_channel = 4
+normal_enabled = true
+normal_scale = 0.46
+normal_texture = ExtResource("NormalGL")
+heightmap_scale = 1.0
+heightmap_texture = ExtResource("Displacement")
+uv1_scale = Vector3(0.155, 0.155, 0.155)
+uv1_triplanar = true
+uv1_triplanar_sharpness = 6.8628936

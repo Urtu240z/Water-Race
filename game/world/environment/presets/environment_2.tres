@@ -1,0 +1,23 @@
+[gd_resource type="Environment" format=3 uid="uid://bsa4bf3bhy5pm"]
+
+[ext_resource type="Texture2D" uid="uid://cmg3mg3yih3d1" path="res://world/environment/sky/hdris/kloofendal_43d_clear_puresky_4k.hdr" id="1_jdski"]
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_jrck1"]
+panorama = ExtResource("1_jdski")
+
+[sub_resource type="Sky" id="Sky_0pibt"]
+sky_material = SubResource("PanoramaSkyMaterial_jrck1")
+radiance_size = 5
+
+[resource]
+background_mode = 2
+sky = SubResource("Sky_0pibt")
+sky_rotation = Vector3(0, 0.3298672, 0)
+reflected_light_source = 2
+tonemap_mode = 2
+tonemap_exposure = 0.79
+tonemap_white = 3.89
+adjustment_enabled = true
+adjustment_brightness = 1.09
+adjustment_contrast = 0.905
+adjustment_saturation = 1.38
