@@ -51,6 +51,10 @@ var landing_timer: float = 0.0
 var _vehicle: JetSkiController
 var _previous_had_water_contact: bool = false
 var _drive_input: JetSkiInputState = JetSkiInputState.new()
+var _frame_water_normal: Vector3 = Vector3.UP
+var _frame_forward_tangent: Vector3 = Vector3.FORWARD
+var _frame_right_tangent: Vector3 = Vector3.RIGHT
+var _frame_tangential_velocity: Vector3 = Vector3.ZERO
 
 
 func _ready() -> void:
@@ -77,33 +81,62 @@ func _physics_process(delta: float) -> void:
 	var ocean := _vehicle.get_ocean()
 	if not is_instance_valid(ocean):
 		return
-	var frame := _sample_handling_frame(
-		_vehicle.global_transform,
-		_vehicle.linear_velocity,
-		ocean
-	)
-	if frame.is_empty():
+
+	var water_normal := ocean.sample_normal(_vehicle.global_position)
+	var water_velocity := ocean.sample_water_velocity(_vehicle.global_position)
+
+	if not water_normal.is_finite() or water_normal.length_squared() <= 0.000001:
+		water_normal = Vector3.UP
+	else:
+		water_normal = water_normal.normalized()
+
+	if water_normal.y < 0.0:
+		water_normal = -water_normal
+	if not water_velocity.is_finite():
+		water_velocity = Vector3.ZERO
+
+	var body_forward := -_vehicle.global_basis.z
+	var forward_tangent := body_forward - water_normal * body_forward.dot(water_normal)
+
+	if forward_tangent.length_squared() <= 0.000001:
 		return
 
-	var tangential_velocity: Vector3 = frame[&"tangential_velocity"]
+	forward_tangent = forward_tangent.normalized()
+	var right_tangent := forward_tangent.cross(water_normal)
+
+	if right_tangent.length_squared() <= 0.000001:
+		return
+
+	right_tangent = right_tangent.normalized()
+
+	var relative_velocity := _vehicle.linear_velocity - water_velocity
+	var tangential_velocity := relative_velocity - water_normal * relative_velocity.dot(water_normal)
 	var tangential_speed := tangential_velocity.length()
-	var centered_blend := _centered_steering_blend(_vehicle.steering_input)
+
+	var steering_amount := clampf(absf(_vehicle.steering_input), 0.0, 1.0)
+	var steering_blend := smoothstep(steering_dead_zone, 1.0, steering_amount)
+	var centered_blend := 1.0 - steering_blend
 	var contact_factor := smoothstep(0.0, 0.75, _vehicle.submerged_ratio)
-	var speed_factor := _speed_factor(tangential_speed)
+	var speed_factor := smoothstep(
+		minimum_handling_speed,
+		minimum_handling_speed + 3.0,
+		tangential_speed
+	)
 	var handling_authority := contact_factor * speed_factor
+
 	if handling_authority <= 0.0:
 		return
 
 	_apply_lateral_grip(
 		delta,
-		frame[&"right_tangent"],
+		right_tangent,
 		tangential_velocity,
 		centered_blend,
 		handling_authority
 	)
 	_apply_yaw_damping(
 		delta,
-		frame[&"water_normal"],
+		water_normal,
 		centered_blend,
 		handling_authority
 	)
@@ -118,23 +151,22 @@ func step_turn_continuity(
 ) -> void:
 	steering_input = clampf(input_state.steering, -1.0, 1.0)
 	water_contact_ratio = clampf(water_state.submerged_ratio, 0.0, 1.0)
-	_update_contact_memory(delta)
 	_update_landing_blend(delta)
+	_update_contact_memory(delta)
 
-	var frame := _sample_handling_frame(
+	if not _sample_handling_frame(
 		body_state.transform,
 		body_state.linear_velocity,
 		ocean
-	)
-	if frame.is_empty():
+	):
 		_clear_dynamic_telemetry()
 		return
 
-	var water_normal: Vector3 = frame[&"water_normal"]
-	var right_tangent: Vector3 = frame[&"right_tangent"]
-	var tangential_velocity: Vector3 = frame[&"tangential_velocity"]
+	var water_normal := _frame_water_normal
+	var right_tangent := _frame_right_tangent
+	var tangential_velocity := _frame_tangential_velocity
 	var forward_speed: float = tangential_velocity.dot(
-		frame[&"forward_tangent"]
+		_frame_forward_tangent
 	)
 	lateral_speed = tangential_velocity.dot(right_tangent)
 	actual_yaw_rate = body_state.angular_velocity.dot(water_normal)
@@ -161,23 +193,30 @@ func step_turn_continuity(
 		return
 
 	var centered_blend := _centered_steering_blend(steering_input)
-	if use_progressive_lateral_grip:
-		_apply_lateral_grip(
-			delta,
-			right_tangent,
-			tangential_velocity,
-			centered_blend,
-			force_authority
-		)
-	else:
-		var legacy_contact := smoothstep(0.0, 0.75, water_contact_ratio)
-		_apply_lateral_grip(
-			delta,
-			right_tangent,
-			tangential_velocity,
-			centered_blend,
-			legacy_contact * speed_factor
-		)
+	if water_contact_ratio > 0.0:
+		if use_progressive_lateral_grip:
+			_apply_continuity_lateral_grip(
+				delta,
+				right_tangent,
+				tangential_velocity,
+				centered_blend,
+				force_authority,
+				body_state
+			)
+		else:
+			var legacy_contact := smoothstep(
+				0.0,
+				0.75,
+				water_contact_ratio
+			)
+			_apply_continuity_lateral_grip(
+				delta,
+				right_tangent,
+				tangential_velocity,
+				centered_blend,
+				legacy_contact * speed_factor,
+				body_state
+			)
 
 	if use_yaw_rate_controller:
 		_apply_yaw_rate_controller(
@@ -186,11 +225,12 @@ func step_turn_continuity(
 			force_authority
 		)
 	else:
-		_apply_yaw_damping(
+		_apply_continuity_yaw_damping(
 			delta,
 			water_normal,
 			centered_blend,
-			force_authority
+			force_authority,
+			body_state
 		)
 
 
@@ -242,7 +282,7 @@ func _update_contact_memory(delta: float) -> void:
 		if use_effective_water_contact:
 			effective_water_contact = move_toward(
 				effective_water_contact,
-				water_contact_ratio,
+				1.0,
 				safe_delta / maxf(water_contact_rise_time, 0.001)
 			)
 		else:
@@ -266,7 +306,7 @@ func _update_landing_blend(delta: float) -> void:
 		use_landing_blend
 		and has_water_contact
 		and not _previous_had_water_contact
-		and airborne_time <= maxf(water_contact_release_time, delta)
+		and airborne_time > 0.0
 	):
 		landing_timer = landing_blend_time
 	if use_landing_blend and landing_timer > 0.0:
@@ -283,10 +323,19 @@ func _update_landing_blend(delta: float) -> void:
 
 
 func _get_turn_contact_authority() -> float:
-	if water_contact_ratio > 0.0:
-		return effective_water_contact
 	if not use_effective_water_contact:
-		return 0.0
+		return smoothstep(0.0, 0.75, water_contact_ratio)
+	if water_contact_ratio > 0.0:
+		var physical_contact_authority := smoothstep(
+			0.0,
+			0.75,
+			water_contact_ratio
+		)
+		return effective_water_contact * lerpf(
+			micro_air_steering_ratio,
+			1.0,
+			physical_contact_authority
+		)
 	return effective_water_contact * micro_air_steering_ratio
 
 
@@ -343,9 +392,9 @@ func _sample_handling_frame(
 	body_transform: Transform3D,
 	body_linear_velocity: Vector3,
 	ocean: Ocean3D
-) -> Dictionary:
+) -> bool:
 	if not is_instance_valid(ocean):
-		return {}
+		return false
 	var water_normal := ocean.sample_normal(body_transform.origin)
 	var water_velocity := ocean.sample_water_velocity(body_transform.origin)
 	if not water_normal.is_finite() or water_normal.length_squared() <= DIRECTION_EPSILON_SQUARED:
@@ -360,23 +409,22 @@ func _sample_handling_frame(
 	var body_forward := -body_transform.basis.z
 	var forward_tangent := body_forward - water_normal * body_forward.dot(water_normal)
 	if forward_tangent.length_squared() <= DIRECTION_EPSILON_SQUARED:
-		return {}
+		return false
 	forward_tangent = forward_tangent.normalized()
 	var right_tangent := forward_tangent.cross(water_normal)
 	if right_tangent.length_squared() <= DIRECTION_EPSILON_SQUARED:
-		return {}
+		return false
 	right_tangent = right_tangent.normalized()
 	var relative_velocity := body_linear_velocity - water_velocity
 	var tangential_velocity := (
 		relative_velocity
 		- water_normal * relative_velocity.dot(water_normal)
 	)
-	return {
-		&"water_normal": water_normal,
-		&"forward_tangent": forward_tangent,
-		&"right_tangent": right_tangent,
-		&"tangential_velocity": tangential_velocity,
-	}
+	_frame_water_normal = water_normal
+	_frame_forward_tangent = forward_tangent
+	_frame_right_tangent = right_tangent
+	_frame_tangential_velocity = tangential_velocity
+	return true
 
 
 func _clear_dynamic_telemetry() -> void:
@@ -410,6 +458,52 @@ func _apply_lateral_grip(
 	centered_blend: float,
 	handling_authority: float
 ) -> void:
+	var lateral_speed := tangential_velocity.dot(right_tangent)
+
+	if absf(lateral_speed) <= 0.001:
+		return
+
+	var steering_grip := lerpf(lateral_grip_while_steering, 1.0, centered_blend)
+	var effective_grip_rate := lateral_grip_rate * steering_grip * handling_authority
+	var safe_delta := maxf(delta, 0.0001)
+	var removal_fraction := 1.0 - exp(-effective_grip_rate * safe_delta)
+	var correction_velocity := -right_tangent * lateral_speed * removal_fraction
+	var correction_acceleration := correction_velocity / safe_delta
+
+	if correction_acceleration.length() > maximum_lateral_acceleration:
+		correction_acceleration = (
+			correction_acceleration.normalized() * maximum_lateral_acceleration
+		)
+
+	_vehicle.apply_central_force(correction_acceleration * _vehicle.mass)
+
+
+func _apply_yaw_damping(
+	delta: float,
+	water_normal: Vector3,
+	centered_blend: float,
+	handling_authority: float
+) -> void:
+	var yaw_speed := _vehicle.angular_velocity.dot(water_normal)
+
+	if absf(yaw_speed) <= 0.0001:
+		return
+
+	var steering_damping := lerpf(yaw_damping_while_steering, 1.0, centered_blend)
+	var effective_damping_rate := yaw_damping_rate * steering_damping * handling_authority
+	var removal_fraction := 1.0 - exp(-effective_damping_rate * maxf(delta, 0.0001))
+
+	_vehicle.angular_velocity -= water_normal * yaw_speed * removal_fraction
+
+
+func _apply_continuity_lateral_grip(
+	delta: float,
+	right_tangent: Vector3,
+	tangential_velocity: Vector3,
+	centered_blend: float,
+	handling_authority: float,
+	body_state: PhysicsDirectBodyState3D
+) -> void:
 	var current_lateral_speed := tangential_velocity.dot(right_tangent)
 	if absf(current_lateral_speed) <= 0.001:
 		return
@@ -432,16 +526,18 @@ func _apply_lateral_grip(
 			correction_acceleration.normalized()
 			* maximum_lateral_acceleration
 		)
-	_vehicle.apply_central_force(correction_acceleration * _vehicle.mass)
+	body_state.apply_central_force(correction_acceleration * _vehicle.mass)
 
 
-func _apply_yaw_damping(
+func _apply_continuity_yaw_damping(
 	delta: float,
 	water_normal: Vector3,
 	centered_blend: float,
-	handling_authority: float
+	handling_authority: float,
+	body_state: PhysicsDirectBodyState3D
 ) -> void:
-	var yaw_speed := _vehicle.angular_velocity.dot(water_normal)
+	var angular_velocity := body_state.angular_velocity
+	var yaw_speed := angular_velocity.dot(water_normal)
 	if absf(yaw_speed) <= 0.0001:
 		return
 	var steering_damping := lerpf(
@@ -455,7 +551,8 @@ func _apply_yaw_damping(
 	var removal_fraction := 1.0 - exp(
 		-effective_damping_rate * maxf(delta, 0.0001)
 	)
-	_vehicle.angular_velocity -= water_normal * yaw_speed * removal_fraction
+	angular_velocity -= water_normal * yaw_speed * removal_fraction
+	body_state.angular_velocity = angular_velocity
 
 
 func _inverse_lerp_clamped(from: float, to: float, value: float) -> float:

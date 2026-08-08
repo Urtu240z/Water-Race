@@ -67,6 +67,15 @@ const LEFT_CONTACT_MASK: int = (
 @export_range(0.0, 500.0, 0.1, "or_greater", "suffix:N/(m/s)^2") var coasting_steering_force_per_speed_squared: float = 2.0
 @export_range(0.0, 20000.0, 10.0, "or_greater", "suffix:N") var max_coasting_steering_force: float = 1500.0
 
+@export_group("Arcade Turn Continuity")
+@export var use_arcade_turn_continuity: bool = false:
+	set(value):
+		if use_arcade_turn_continuity == value:
+			return
+		use_arcade_turn_continuity = value
+		if is_node_ready():
+			arcade_handling_system.reset_turn_continuity_state()
+
 @export_group("Turn Lean")
 @export var turn_lean_enabled: bool = true
 @export_range(0.0, 35.0, 0.5) var turn_lean_max_angle_degrees: float = 18.0
@@ -271,6 +280,38 @@ var brake_input: float:
 var steering_input: float:
 	get:
 		return input_system.state.steering
+
+var water_contact_ratio: float:
+	get:
+		return water_physics_system.state.submerged_ratio
+
+var effective_water_contact: float:
+	get:
+		return arcade_handling_system.effective_water_contact
+
+var turn_continuity_airborne_time: float:
+	get:
+		return arcade_handling_system.airborne_time
+
+var desired_yaw_rate: float:
+	get:
+		return arcade_handling_system.desired_yaw_rate
+
+var actual_yaw_rate: float:
+	get:
+		return arcade_handling_system.actual_yaw_rate
+
+var turn_continuity_lateral_speed: float:
+	get:
+		return arcade_handling_system.lateral_speed
+
+var turn_continuity_landing_blend: float:
+	get:
+		return arcade_handling_system.landing_blend
+
+var turn_continuity_landing_timer: float:
+	get:
+		return arcade_handling_system.landing_timer
 
 var propulsion_depth: float:
 	get:
@@ -567,6 +608,7 @@ var _ocean: Ocean3D
 @onready var water_physics_system: JetSkiWaterPhysicsSystem = (
 	$Systems/WaterPhysicsSystem
 )
+@onready var arcade_handling_system: JetSkiArcadeHandling = $ArcadeHandling
 var _navigation_system: JetSkiNavigationSystem
 var navigation_system: JetSkiNavigationSystem:
 	get:
@@ -632,6 +674,7 @@ func _ready() -> void:
 	input_system.reset_rider_shift()
 	submarine_system.reset_runtime_state(false)
 	trick_system.reset_runtime_state()
+	arcade_handling_system.reset_turn_continuity_state()
 	reset_physics_interpolation()
 
 
@@ -705,12 +748,27 @@ func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 		submarine_system.is_dive_active(),
 		state.step
 	)
-	drive_system.step(
-		state,
-		_ocean,
-		input_system.state,
-		submarine_system.state.propulsion_factor_current
-	)
+	if use_arcade_turn_continuity:
+		arcade_handling_system.step_turn_continuity(
+			state,
+			input_system.state,
+			water_state,
+			_ocean,
+			state.step
+		)
+		drive_system.step(
+			state,
+			_ocean,
+			arcade_handling_system.get_drive_input(input_system.state),
+			submarine_system.state.propulsion_factor_current
+		)
+	else:
+		drive_system.step(
+			state,
+			_ocean,
+			input_system.state,
+			submarine_system.state.propulsion_factor_current
+		)
 	_apply_rider_dynamics(state)
 
 
@@ -739,6 +797,12 @@ func get_respawn_transform() -> Transform3D:
 
 func get_ocean() -> Ocean3D:
 	return _ocean
+
+
+func get_turn_continuity_debug_status() -> Dictionary:
+	var status := arcade_handling_system.get_turn_continuity_debug_status()
+	status[&"enabled"] = use_arcade_turn_continuity
+	return status
 
 
 func apply_world_rebase(shift: Vector3) -> void:
@@ -832,6 +896,7 @@ func _teleport_and_reset(target_transform: Transform3D, reason: StringName) -> v
 	input_system.reset_rider_shift()
 	submarine_system.reset_runtime_state(true)
 	trick_system.reset_runtime_state()
+	arcade_handling_system.reset_turn_continuity_state()
 	last_landing_impact_descriptor = null
 	last_landing_confirmed_airborne = false
 	last_landing_special_impact_eligible = false
