@@ -1,0 +1,192 @@
+[gd_scene format=3 uid="uid://qiqduyrfwah7"]
+
+[ext_resource type="Script" uid="uid://delisbxxqqsyy" path="res://gameplay/vehicles/common/core/jet_ski_controller.gd" id="1_xdmyy"]
+[ext_resource type="Script" uid="uid://b5kbcibppj4n4" path="res://gameplay/vehicles/common/visual/jet_ski_visual_controller.gd" id="2_wk74t"]
+[ext_resource type="PackedScene" uid="uid://bfsj1pnssopof" path="res://gameplay/vehicles/jet_ski_01/jet_ski_01_hull.glb" id="3_50xeh"]
+[ext_resource type="PackedScene" uid="uid://d4dvm3t7i4613" path="res://gameplay/vehicles/jet_ski_01/jet_ski_01_handle.glb" id="4_8e6lb"]
+[ext_resource type="Script" uid="uid://dws0h1ur7ader" path="res://gameplay/vehicles/common/systems/jet_ski_input_system.gd" id="5_w68e4"]
+[ext_resource type="Script" uid="uid://dxfvny0douflh" path="res://gameplay/vehicles/common/systems/jet_ski_water_physics_system.gd" id="6_7ngms"]
+[ext_resource type="Script" uid="uid://di5h50ifw1vmd" path="res://gameplay/vehicles/common/systems/jet_ski_navigation_system.gd" id="7_yu1kr"]
+[ext_resource type="Script" uid="uid://ri7meu32mp23" path="res://gameplay/vehicles/common/systems/jet_ski_drive_system.gd" id="8_n14gu"]
+[ext_resource type="Script" uid="uid://d00oqe3fqhubf" path="res://gameplay/vehicles/common/systems/jet_ski_rider_dynamics_system.gd" id="9_j0aup"]
+[ext_resource type="Script" uid="uid://dd35vwelqjkpb" path="res://gameplay/vehicles/common/systems/jet_ski_submarine_system.gd" id="10_4nwre"]
+[ext_resource type="Script" uid="uid://t7bh13fqh7dp" path="res://gameplay/vehicles/common/systems/jet_ski_trick_system.gd" id="11_mqnsu"]
+[ext_resource type="Script" uid="uid://dn8rdqs3rho8l" path="res://gameplay/vehicles/common/handling/jet_ski_arcade_handling.gd" id="12_tl3ay"]
+[ext_resource type="AudioStream" uid="uid://c5bbvguxmykwh" path="res://audio/sfx/vehicles/jet_ski/engine/Motor.ogg" id="13_6te4x"]
+[ext_resource type="Script" uid="uid://63m2q41d8l0h" path="res://gameplay/vehicles/common/audio/jet_ski_engine_audio_3d.gd" id="14_rkqt1"]
+[ext_resource type="Script" uid="uid://bylif8g0ck2ip" path="res://gameplay/vehicles/common/audio/vehicle_water_audio.gd" id="15_8itso"]
+[ext_resource type="AudioStream" uid="uid://f5c8o82uqp2u" path="res://audio/sfx/vehicles/jet_ski/water/Splash_1.ogg" id="16_yi7yu"]
+[ext_resource type="AudioStream" uid="uid://n6ydetcej3es" path="res://audio/sfx/vehicles/jet_ski/water/Splash_2.ogg" id="17_0sb03"]
+[ext_resource type="AudioStream" uid="uid://ck3x5p2cabrpg" path="res://audio/sfx/vehicles/jet_ski/water/Splash_3.ogg" id="18_v7aol"]
+[ext_resource type="AudioStream" uid="uid://dco2xp7wdjpwq" path="res://audio/sfx/vehicles/jet_ski/water/Splash_Heavy_1.ogg" id="19_udfk3"]
+[ext_resource type="AudioStream" uid="uid://ing22covlye8" path="res://audio/sfx/vehicles/jet_ski/water/Splash_Heavy_2.ogg" id="20_v4egb"]
+[ext_resource type="AudioStream" uid="uid://bpwibglyb4koa" path="res://audio/sfx/vehicles/jet_ski/water/Splash_Heavy_3.ogg" id="21_d3x8q"]
+[ext_resource type="AudioStream" uid="uid://dqwxbrecfnfno" path="res://audio/sfx/vehicles/jet_ski/water/Splash_Heavy_4.ogg" id="22_u8qcw"]
+[ext_resource type="AudioStream" uid="uid://d0ew5y885bpwc" path="res://audio/sfx/vehicles/jet_ski/water/Running_Water_1.ogg" id="23_s0s12"]
+[ext_resource type="AudioStream" uid="uid://41gs20c2usbp" path="res://audio/sfx/vehicles/jet_ski/water/Running_Water_2.ogg" id="24_ryitk"]
+[ext_resource type="AudioStream" uid="uid://bk01pfc1hsy55" path="res://audio/sfx/vehicles/jet_ski/water/Running_Water_3.ogg" id="25_cl0jx"]
+[ext_resource type="AudioStream" uid="uid://4a4u6ec21n5a" path="res://audio/sfx/vehicles/jet_ski/water/Running_Water_4.ogg" id="26_yblil"]
+[ext_resource type="PackedScene" path="res://gameplay/vehicles/common/water_effects/vehicle_water_effects_3d.tscn" id="27_n7xsb"]
+[ext_resource type="Script" uid="uid://ccpq0is7w8h55" path="res://gameplay/vehicles/common/water_effects/turbine/turbine_exhaust_controller.gd" id="28_ga7r5"]
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_hull"]
+points = PackedVector3Array(0, 0.22, -1.55, 0.071, 0.185, -1.55, 0.1, 0.1, -1.55, 0.071, 0.015, -1.55, 0, -0.02, -1.55, -0.071, 0.015, -1.55, -0.1, 0.1, -1.55, -0.071, 0.185, -1.55, 0, 0.28, -1.15, 0.325, 0.198, -1.15, 0.46, 0, -1.15, 0.325, -0.198, -1.15, 0, -0.28, -1.15, -0.325, -0.198, -1.15, -0.46, 0, -1.15, -0.325, 0.198, -1.15, 0, 0.3, 0.55, 0.424, 0.212, 0.55, 0.6, 0, 0.55, 0.424, -0.212, 0.55, 0, -0.3, 0.55, -0.424, -0.212, 0.55, -0.6, 0, 0.55, -0.424, 0.212, 0.55, 0, 0.26, 1.55, 0.311, 0.19, 1.55, 0.44, 0.02, 1.55, 0.311, -0.15, 1.55, 0, -0.22, 1.55, -0.311, -0.15, 1.55, -0.44, 0.02, 1.55, -0.311, 0.19, 1.55)
+
+[node name="JetSki" type="RigidBody3D" unique_id=683755769]
+mass = 300.0
+center_of_mass_mode = 1
+center_of_mass = Vector3(0, -0.22, 0)
+can_sleep = false
+contact_monitor = true
+max_contacts_reported = 8
+script = ExtResource("1_xdmyy")
+
+[node name="VisualRoot" type="Node3D" parent="." unique_id=1832404346]
+
+[node name="JetSkiVisual" type="Node3D" parent="VisualRoot" unique_id=556077452]
+transform = Transform3D(-1, 0, -1.509958e-07, 0, 1, 0, 1.509958e-07, 0, -1, 0.372027, -0.324537, -1.316655)
+script = ExtResource("2_wk74t")
+
+[node name="HullModel" type="Node3D" parent="VisualRoot/JetSkiVisual" unique_id=2052411101]
+unique_name_in_owner = true
+
+[node name="NewJetSki_Hull" parent="VisualRoot/JetSkiVisual/HullModel" unique_id=1418367438 instance=ExtResource("3_50xeh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.023672342, -0.026179433)
+
+[node name="HandlePivot" type="Node3D" parent="VisualRoot/JetSkiVisual" unique_id=1724927576]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.37203, 0.456944, -0.33678)
+
+[node name="HandleModel" type="Node3D" parent="VisualRoot/JetSkiVisual/HandlePivot" unique_id=99318137]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.264548, 0, 0.018117)
+
+[node name="NewJetSki_Handle" parent="VisualRoot/JetSkiVisual/HandlePivot/HandleModel" unique_id=1303283041 instance=ExtResource("4_8e6lb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.10748199, -0.43334556, 0.25957632)
+
+[node name="Systems" type="Node" parent="." unique_id=388330452]
+
+[node name="InputSystem" type="Node" parent="Systems" unique_id=885842622]
+script = ExtResource("5_w68e4")
+
+[node name="WaterPhysicsSystem" type="Node" parent="Systems" unique_id=981548732]
+script = ExtResource("6_7ngms")
+
+[node name="NavigationSystem" type="Node" parent="Systems" unique_id=2090706970]
+script = ExtResource("7_yu1kr")
+
+[node name="DriveSystem" type="Node" parent="Systems" unique_id=769548430]
+script = ExtResource("8_n14gu")
+
+[node name="RiderDynamicsSystem" type="Node" parent="Systems" unique_id=1452568871]
+script = ExtResource("9_j0aup")
+
+[node name="SubmarineSystem" type="Node" parent="Systems" unique_id=1064117230]
+script = ExtResource("10_4nwre")
+
+[node name="TrickSystem" type="Node" parent="Systems" unique_id=1720461229]
+script = ExtResource("11_mqnsu")
+
+[node name="ArcadeHandling" type="Node" parent="." unique_id=232523693]
+script = ExtResource("12_tl3ay")
+
+[node name="EngineAudio" type="AudioStreamPlayer3D" parent="." unique_id=1603778743]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.15, 0.45)
+visible = false
+stream = ExtResource("13_6te4x")
+volume_db = -14.0
+autoplay = true
+max_distance = 85.0
+attenuation_filter_cutoff_hz = 8000.0
+doppler_tracking = 2
+script = ExtResource("14_rkqt1")
+idle_pitch = 0.41
+full_throttle_pitch = 1.64
+free_rev_pitch = 2.5
+idle_volume_db = -2.0
+full_throttle_volume_db = 6.0
+response_speed = 1.8
+free_rev_rise_speed = 6.1
+free_rev_fall_speed = 18.700000000000003
+nose_down_pitch_boost = 0.125
+nose_up_pitch_drop = 0.135
+
+[node name="WaterAudio" type="Node3D" parent="." unique_id=1620158886]
+script = ExtResource("15_8itso")
+normal_splash_streams = Array[AudioStream]([ExtResource("16_yi7yu"), ExtResource("17_0sb03"), ExtResource("18_v7aol")])
+heavy_splash_streams = Array[AudioStream]([ExtResource("19_udfk3"), ExtResource("20_v4egb"), ExtResource("21_d3x8q"), ExtResource("22_u8qcw")])
+running_water_streams = Array[AudioStream]([ExtResource("23_s0s12"), ExtResource("24_ryitk"), ExtResource("25_cl0jx"), ExtResource("26_yblil")])
+running_water_start_speed = 0.5
+running_water_min_volume_db = -17.0
+running_water_max_volume_db = 6.0
+
+[node name="ImpactPlayerA" type="AudioStreamPlayer3D" parent="WaterAudio" unique_id=1953105028]
+top_level = true
+volume_db = -60.0
+max_distance = 85.0
+doppler_tracking = 2
+
+[node name="ImpactPlayerB" type="AudioStreamPlayer3D" parent="WaterAudio" unique_id=1841260080]
+top_level = true
+volume_db = -60.0
+max_distance = 85.0
+doppler_tracking = 2
+
+[node name="RunningWaterPlayer" type="AudioStreamPlayer3D" parent="WaterAudio" unique_id=140702410]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.12, 0.45)
+max_distance = 85.0
+doppler_tracking = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=2026230859]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1129114, 0)
+visible = false
+shape = SubResource("ConvexPolygonShape3D_hull")
+
+[node name="BuoyancyPoints" type="Node3D" parent="." unique_id=1093517847]
+visible = false
+
+[node name="FrontLeft" type="Marker3D" parent="BuoyancyPoints" unique_id=2110467738]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.45, -0.15, -1.15)
+
+[node name="FrontRight" type="Marker3D" parent="BuoyancyPoints" unique_id=1182120854]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.45, -0.15, -1.15)
+
+[node name="RearLeft" type="Marker3D" parent="BuoyancyPoints" unique_id=1202848357]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, -0.15, 1.05)
+
+[node name="RearRight" type="Marker3D" parent="BuoyancyPoints" unique_id=223900091]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, -0.15, 1.05)
+
+[node name="PropulsionPoint" type="Marker3D" parent="." unique_id=1814486558]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.18, 1.25)
+
+[node name="CameraTarget" type="Marker3D" parent="." unique_id=1770908444]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0747211, 1.1450217)
+
+[node name="Effects" type="Node3D" parent="." unique_id=1733691099]
+
+[node name="VehicleWaterEffects3D" parent="Effects" unique_id=1574631450 instance=ExtResource("27_n7xsb")]
+top_level = true
+vehicle_path = NodePath("../..")
+front_left_marker_path = NodePath("../../BuoyancyPoints/FrontLeft")
+front_right_marker_path = NodePath("../../BuoyancyPoints/FrontRight")
+rear_left_marker_path = NodePath("../../BuoyancyPoints/RearLeft")
+rear_right_marker_path = NodePath("../../BuoyancyPoints/RearRight")
+propulsion_point_path = NodePath("../../PropulsionPoint")
+turbine_controller_path = NodePath("../TurbineExhaust")
+
+[node name="TurbineExhaust" type="Node3D" parent="Effects" unique_id=1478477575]
+script = ExtResource("28_ga7r5")
+
+[node name="TurbineOutlet" type="Marker3D" parent="Effects/TurbineExhaust" unique_id=1829776583]
+transform = Transform3D(1, 0, 0, 0, 0.43973684, 0.8981266, 0, -0.8981266, 0.43973684, 0, -0.18, 1.34)
+
+[node name="JetCore" type="MeshInstance3D" parent="Effects/TurbineExhaust/TurbineOutlet" unique_id=1314280869]
+cast_shadow = 0
+
+[node name="JetSpray" type="GPUParticles3D" parent="Effects/TurbineExhaust/TurbineOutlet" unique_id=360848479]
+cast_shadow = 0
+emitting = false
+
+[editable path="VisualRoot/JetSkiVisual/HullModel/NewJetSki_Hull"]
+[editable path="VisualRoot/JetSkiVisual/HandlePivot/HandleModel/NewJetSki_Handle"]

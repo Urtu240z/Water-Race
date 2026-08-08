@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://tl6lotex1356"]
 
-[ext_resource type="PackedScene" uid="uid://qiqduyrfwah7" path="res://gameplay/vehicles/jet_ski_01/jet_ski.tscn" id="1_base"]
+[ext_resource type="PackedScene" uid="uid://qiqduyrfwah7" path="res://gameplay/vehicles/jet_ski_01/jet_ski_01.tscn" id="1_base"]
 [ext_resource type="PackedScene" uid="uid://3htphu61qseo" path="res://gameplay/riders/common/rider_rig.tscn" id="2_rider"]
 [ext_resource type="AudioStream" uid="uid://n6ydetcej3es" path="res://audio/sfx/vehicles/jet_ski/water/Splash_2.ogg" id="2_s0jot"]
 [ext_resource type="AudioStream" uid="uid://bpwibglyb4koa" path="res://audio/sfx/vehicles/jet_ski/water/Splash_Heavy_3.ogg" id="3_dyy3r"]
