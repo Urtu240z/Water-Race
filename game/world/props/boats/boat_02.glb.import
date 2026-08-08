@@ -36,10 +36,163 @@ animation/trimming=false
 animation/remove_immutable_tracks=true
 animation/import_rest_as_RESET=false
 import_script/path=""
-materials/extract=1
+materials/extract=0
 materials/extract_format=0
 materials/extract_path="res://world/props/boats/materials"
-_subresources={}
+_subresources={
+"materials": {
+"<Gray6>": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://world/props/boats/materials/boat_02_gray.tres",
+"use_external/path": "uid://b3b6pu34fnraq"
+},
+"Blinds_Mini_Blue": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://world/props/boats/materials/boat_02_blinds_mini_blue.tres",
+"use_external/path": "uid://b40dq8xpc1dyg"
+},
+"Blinds_Vertical_Stripe_Blue": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://world/props/boats/materials/boat_02_blinds_vertical_blue.tres",
+"use_external/path": "uid://dc201bo0e747u"
+},
+"Carpet_Pattern_Dots": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://world/props/boats/materials/boat_02_carpet_dots.tres",
+"use_external/path": "uid://s0kdaty6jalh"
+},
+"Carpet_Pattern_Leaves": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://world/props/boats/materials/boat_02_carpet_leaves.tres",
+"use_external/path": "uid://ckfjvgegev4u5"
+},
+"Metal_Brushed": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://world/props/boats/materials/boat_02_metal_brushed.tres",
+"use_external/path": "uid://bygidpkmrw5ob"
+},
+"Metal_Corrogated_Rust": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://world/props/boats/materials/boat_02_metal_rust.tres",
+"use_external/path": "uid://dat71bxbdgvjd"
+},
+"Textile_Stripes_Pastels": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://world/props/boats/materials/boat_02_textile_pastels.tres",
+"use_external/path": "uid://dij1nmvjhjxe4"
+},
+"Tile_Ceiling_Drop": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://world/props/boats/materials/boat_02_ceiling_drop.tres",
+"use_external/path": "uid://blrfa4s0y3odm"
+},
+"Tile_Squares_Neutral": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://world/props/boats/materials/boat_02_tile_neutral.tres",
+"use_external/path": "uid://dqp5iwqu45q2d"
+},
+"Wood_Floor2": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://world/props/boats/materials/boat_02_wood_floor.tres",
+"use_external/path": "uid://df3rtq6wddoq1"
+},
+"[0016_Tomato]": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://world/props/boats/materials/boat_02_tomato.tres",
+"use_external/path": "uid://c8nhy1a5iglyg"
+},
+"[0020_Red]": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://world/props/boats/materials/boat_02_red.tres",
+"use_external/path": "uid://cyr8vimv0ajlj"
+},
+"[0025_Coral]": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://world/props/boats/materials/boat_02_coral.tres",
+"use_external/path": "uid://deyxi7itayxw8"
+},
+"[0074_SeaGreen]": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://world/props/boats/materials/boat_02_seagreen.tres",
+"use_external/path": "uid://cmc4bj02oreo7"
+},
+"[0099_LightSteelBlue]": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://world/props/boats/materials/boat_02_lightsteelblue.tres",
+"use_external/path": "uid://dfblwgpvdk1qd"
+},
+"[Blue]": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://world/props/boats/materials/boat_02_blue.tres",
+"use_external/path": "uid://b8anqodsmi1po"
+},
+"[Carpet_Diamond_Olive]": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://world/props/boats/materials/boat_02_carpet_olive.tres",
+"use_external/path": "uid://b2t00xbhqmkrg"
+},
+"[CoolGray6]": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://world/props/boats/materials/boat_02_coolgray.tres",
+"use_external/path": "uid://bxt2ws8nne1ke"
+},
+"[Tile_Ceramic_Natural]": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://world/props/boats/materials/boat_02_tile_natural.tres",
+"use_external/path": "uid://3jc0c2ieixfh"
+},
+"[Translucent_Glass_Blue]": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://world/props/boats/materials/boat_02_glass_blue.tres",
+"use_external/path": "uid://pac6xklh1uai"
+},
+"[Translucent_Glass_Gray]": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://world/props/boats/materials/boat_02_glass_gray.tres",
+"use_external/path": "uid://68inxlmqe14g"
+},
+"[WarmGray1]": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://world/props/boats/materials/boat_02_warmgray.tres",
+"use_external/path": "uid://bibahjsxd6iv"
+},
+"[Water_Pool]": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://world/props/boats/materials/boat_02_pool.tres",
+"use_external/path": "uid://b60pus766w87s"
+},
+"[Wood_Cherry_Original]": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://world/props/boats/materials/boat_02_wood_cherry.tres",
+"use_external/path": "uid://d3g4epnrxuf2f"
+},
+"[Wood_Floor_Parquet]": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://world/props/boats/materials/boat_02_wood_parquet.tres",
+"use_external/path": "uid://bugnfoiucumtf"
+},
+"[Yellow]": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://world/props/boats/materials/boat_02_yellow.tres",
+"use_external/path": "uid://b6y7wgnsv8sl4"
+},
+"_Gray6_": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://world/props/boats/materials/boat_02_gray.tres",
+"use_external/path": "uid://b3b6pu34fnraq"
+},
+"cuadro": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://world/props/boats/materials/boat_02_cuadro.tres",
+"use_external/path": "uid://d4jsa1f07ovwj"
+},
+"subby": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://world/props/boats/materials/boat_02_subby.tres",
+"use_external/path": "uid://6f8du5b7welq"
+}
+}
+}
 gltf/naming_version=2
 gltf/embedded_image_handling=2
 gltf/texture_map_mode=1

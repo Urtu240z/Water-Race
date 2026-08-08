@@ -36,10 +36,28 @@ animation/trimming=false
 animation/remove_immutable_tracks=true
 animation/import_rest_as_RESET=false
 import_script/path=""
-materials/extract=1
+materials/extract=0
 materials/extract_format=0
 materials/extract_path="res://world/props/boats/materials"
-_subresources={}
+_subresources={
+"materials": {
+"*": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://world/props/boats/materials/boat_01_hull.tres",
+"use_external/path": "uid://ckoqnl4do4b8f"
+},
+"_BoatRailings_GF": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://world/props/boats/materials/boat_01_railings.tres",
+"use_external/path": "uid://77welyu3jr8o"
+},
+"_BoatYacth_GFX": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://world/props/boats/materials/boat_01_yatch.tres",
+"use_external/path": "uid://b2onsn35j5y6r"
+}
+}
+}
 gltf/naming_version=2
 gltf/embedded_image_handling=2
 gltf/texture_map_mode=1

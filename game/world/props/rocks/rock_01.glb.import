@@ -36,10 +36,18 @@ animation/trimming=false
 animation/remove_immutable_tracks=true
 animation/import_rest_as_RESET=false
 import_script/path=""
-materials/extract=1
+materials/extract=0
 materials/extract_format=0
 materials/extract_path="res://world/props/rocks/materials"
-_subresources={}
+_subresources={
+"materials": {
+"Rock1": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://world/props/rocks/materials/rock_01.tres",
+"use_external/path": "uid://bipo3hnkc7086"
+}
+}
+}
 gltf/naming_version=2
 gltf/embedded_image_handling=2
 gltf/texture_map_mode=1
