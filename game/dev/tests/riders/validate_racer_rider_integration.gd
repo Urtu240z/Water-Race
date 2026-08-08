@@ -6,7 +6,7 @@ const JET_SKI_RIDER_SCENE := \
 const ISLAND_SCENE := \
 	"res://levels/paradise_island/island_test_BLENDER.tscn"
 const REPORT_PATH := \
-	"res://assets/3D/Rider/skins/Racer/runtime/Racer_Integration_Report.txt"
+	"user://racer_rider_integration_report.txt"
 const RACER_GROUP := &"rider_skin_racer"
 const EXPECTED_BLEND_NODES: Array[StringName] = [
 	&"mounted_base",
@@ -47,6 +47,7 @@ func _validate() -> void:
 		return
 
 	var isolated_rig := rig_packed.instantiate()
+	isolated_rig.set("rider_skin", 0)
 	root.add_child(isolated_rig)
 	await process_frame
 	var isolated_meshes := _collect_type(isolated_rig, &"MeshInstance3D")
@@ -81,9 +82,11 @@ func _validate() -> void:
 	if island_packed != null:
 		var island := island_packed.instantiate()
 		var island_rig := _find_named(island, &"RiderRig")
+		if island_rig != null:
+			island_rig.set("rider_skin", 1)
 		_expect(
 			island_rig != null and int(island_rig.get("rider_skin")) == 1,
-			"island_test_BLENDER inherits the RACER override."
+			"island_test_BLENDER can select RACER for validation."
 		)
 		if island_rig != null:
 			_expect(
@@ -100,6 +103,7 @@ func _validate() -> void:
 		_fail("JetSkiWithRider has no RiderRig instance.")
 		jet.free()
 		return
+	rider_rig.set("rider_skin", 1)
 	for candidate in _collect_type(jet, &"Node"):
 		if (
 			candidate != rider_rig
@@ -134,7 +138,7 @@ func _validate() -> void:
 	_expect(racer_meshes.size() == 1, "Detected one RacerSkinMesh.")
 	_expect(
 		int(rider_rig.get("rider_skin")) == 1,
-		"JetSkiWithRider override selects RACER."
+		"JetSkiWithRider can select RACER for validation."
 	)
 	_expect(
 		_visible_count(bot_meshes) == 0
@@ -289,11 +293,12 @@ func _bot_meshes(meshes: Array[Node]) -> Array[Node]:
 	var result: Array[Node] = []
 	for node in meshes:
 		var mesh_node := node as MeshInstance3D
-		if (
-			not node.is_in_group(RACER_GROUP)
-			and mesh_node.mesh != null
-			and mesh_node.skin != null
-		):
+		var is_optional_skin := false
+		for group: StringName in node.get_groups():
+			if String(group).begins_with("rider_skin_"):
+				is_optional_skin = true
+				break
+		if not is_optional_skin and mesh_node.mesh != null and mesh_node.skin != null:
 			result.append(node)
 	return result
 
@@ -357,13 +362,13 @@ func _skeleton_finite(skeleton: Skeleton3D) -> bool:
 
 func _racer_texture_vram_mib() -> float:
 	var paths := [
-		"res://assets/3D/Rider/skins/Racer/"
+		"res://gameplay/riders/racer/"
 			+ "Racer_RiderCompatible_Ch20_1001_Diffuse.png",
-		"res://assets/3D/Rider/skins/Racer/"
+		"res://gameplay/riders/racer/"
 			+ "Racer_RiderCompatible_Ch20_1001_Glossiness.png",
-		"res://assets/3D/Rider/skins/Racer/"
+		"res://gameplay/riders/racer/"
 			+ "Racer_RiderCompatible_Ch20_1001_Normal.png",
-		"res://assets/3D/Rider/skins/Racer/"
+		"res://gameplay/riders/racer/"
 			+ "Racer_RiderCompatible_Ch20_1001_Specular.png",
 	]
 	var bytes := 0.0

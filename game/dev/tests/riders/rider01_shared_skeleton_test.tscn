@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://hdtiq7vwasl2" path="res://dev/tests/riders/test_rider01_original_skin.gd" id="1_test"]
 [ext_resource type="PackedScene" uid="uid://3htphu61qseo" path="res://gameplay/riders/common/rider_rig.tscn" id="2_rig"]
-[ext_resource type="PackedScene" uid="uid://crfw7qxauxcm6" path="res://assets/3D/Rider/skins/Rider01/Rider01.glb" id="3_original"]
+[ext_resource type="PackedScene" uid="uid://crfw7qxauxcm6" path="res://gameplay/riders/rider_01/Rider01.glb" id="3_original"]
 
 [sub_resource type="Environment" id="Environment_test"]
 background_mode = 1

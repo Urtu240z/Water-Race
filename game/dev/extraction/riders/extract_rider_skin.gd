@@ -1,9 +1,11 @@
 extends SceneTree
 
-const RIDER_RIG_PATH := "res://gameplay/riders/common/rider_rig.tscn"
-const RIDER_SKELETON_PATH := \
-	"RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D"
+const RIDER_BOT_SCENE_PATH := "res://gameplay/riders/bot/Rider_Bot.glb"
 const TRANSFORM_TOLERANCE := 0.0002
+const RIDER_DIRECTORIES := {
+	"Rider05": "rider_05",
+	"Rider06": "rider_06",
+}
 
 var _skin_id := ""
 var _report: PackedStringArray = []
@@ -37,35 +39,39 @@ func _read_skin_id() -> String:
 
 
 func _extract_and_validate() -> int:
+	var rider_directory := String(RIDER_DIRECTORIES.get(_skin_id, ""))
+	if rider_directory.is_empty():
+		push_error("Unsupported rider skin id: %s." % _skin_id)
+		return 2
 	var compatible_scene_path := (
-		"res://assets/3D/Rider/skins/%s/%s_RiderCompatible.glb"
-		% [_skin_id, _skin_id]
+		"res://gameplay/riders/%s/%s_RiderCompatible.glb"
+		% [rider_directory, _skin_id]
 	)
 	var output_dir := (
-		"res://assets/3D/Rider/skins/%s/runtime" % _skin_id
+		"res://gameplay/riders/%s/runtime" % rider_directory
 	)
 	var mesh_output := (
 		"%s/%s_Body_Mesh.res" % [output_dir, _skin_id]
 	)
 	var skin_output := "%s/%s_Skin.res" % [output_dir, _skin_id]
 	var report_output := (
-		"%s/%s_Extraction_Report.txt" % [output_dir, _skin_id]
+		"user://%s_extraction_report.txt" % rider_directory
 	)
 	_report.append("=== %s GODOT EXTRACTION ===" % _skin_id.to_upper())
 	_report.append("Godot: %s" % Engine.get_version_info().string)
 
 	var compatible_packed := load(compatible_scene_path) as PackedScene
-	var rig_packed := load(RIDER_RIG_PATH) as PackedScene
-	if compatible_packed == null or rig_packed == null:
+	var bot_packed := load(RIDER_BOT_SCENE_PATH) as PackedScene
+	if compatible_packed == null or bot_packed == null:
 		return _fail(
-			"Could not load compatible GLB or RiderRig.",
+			"Could not load compatible GLB or canonical Rider_Bot.",
 			report_output,
 		)
 	var compatible_root := compatible_packed.instantiate()
-	var rig_root := rig_packed.instantiate()
-	if compatible_root == null or rig_root == null:
+	var bot_root := bot_packed.instantiate()
+	if compatible_root == null or bot_root == null:
 		return _fail(
-			"Could not instantiate compatible GLB or RiderRig.",
+			"Could not instantiate compatible GLB or Rider_Bot.",
 			report_output,
 		)
 
@@ -88,17 +94,15 @@ func _extract_and_validate() -> int:
 		)
 	var compatible_skeleton := compatible_skeletons[0] as Skeleton3D
 	var compatible_mesh := compatible_meshes[0]
-	var rig_skeleton := rig_root.get_node_or_null(
-		RIDER_SKELETON_PATH
-	) as Skeleton3D
-	if rig_skeleton == null:
+	var bot_skeletons := _collect_type(bot_root, &"Skeleton3D")
+	if bot_skeletons.size() != 1:
 		return _fail(
-			"Canonical RiderRig Skeleton3D is missing.",
+			"Rider_Bot has %d Skeleton3D nodes; expected 1."
+			% bot_skeletons.size(),
 			report_output,
 		)
-	var bot_meshes := _collect_bot_meshes(
-		rig_root.get_node("RiderModelRoot/Rider_Bot")
-	)
+	var rig_skeleton := bot_skeletons[0] as Skeleton3D
+	var bot_meshes := _collect_bot_meshes(bot_root)
 	if bot_meshes.size() != 1:
 		return _fail(
 			"RiderRig has %d canonical BOT meshes; expected 1."
@@ -161,7 +165,10 @@ func _extract_and_validate() -> int:
 		)
 
 	_report.append("Compatible scene: %s" % compatible_scene_path)
-	_report.append("Canonical Skeleton3D: %s" % RIDER_SKELETON_PATH)
+	_report.append(
+		"Canonical Skeleton3D: %s"
+		% _relative_path(rig_skeleton, bot_root)
+	)
 	_report.append("Skeleton comparison: PASS")
 	_report.append("Skin bind comparison: PASS")
 	_report.append(
@@ -191,7 +198,7 @@ func _extract_and_validate() -> int:
 	_report.append("EXTRACTION_STATUS=PASS")
 	_write_report(report_output)
 	compatible_root.free()
-	rig_root.free()
+	bot_root.free()
 	return 0
 
 
@@ -227,6 +234,17 @@ func _collect_bot_meshes(root: Node) -> Array[MeshInstance3D]:
 		if not is_optional_skin:
 			result.append(mesh_instance)
 	return result
+
+
+func _relative_path(node: Node, root: Node) -> String:
+	var names: PackedStringArray = []
+	var current := node
+	while current != null:
+		names.insert(0, String(current.name))
+		if current == root:
+			break
+		current = current.get_parent()
+	return "/".join(names)
 
 
 func _compare_skeletons(left: Skeleton3D, right: Skeleton3D) -> String:

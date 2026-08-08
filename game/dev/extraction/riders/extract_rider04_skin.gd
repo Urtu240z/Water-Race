@@ -1,15 +1,13 @@
 extends SceneTree
 
 const RIDER04_SCENE_PATH := \
-	"res://assets/3D/Rider/skins/Rider04/Rider04_RiderCompatible.glb"
-const RIDER_RIG_PATH := "res://gameplay/riders/common/rider_rig.tscn"
-const RIDER_SKELETON_PATH := \
-	"RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D"
+	"res://gameplay/riders/rider_04/Rider04_RiderCompatible.glb"
+const RIDER_BOT_SCENE_PATH := "res://gameplay/riders/bot/Rider_Bot.glb"
 const OUTPUT_DIR := \
-	"res://assets/3D/Rider/skins/Rider04/runtime"
+	"res://gameplay/riders/rider_04/runtime"
 const MESH_OUTPUT := OUTPUT_DIR + "/Rider04_Body_Mesh.res"
 const SKIN_OUTPUT := OUTPUT_DIR + "/Rider04_Skin.res"
-const REPORT_OUTPUT := OUTPUT_DIR + "/Rider04_Extraction_Report.txt"
+const REPORT_OUTPUT := "user://rider_04_extraction_report.txt"
 const TRANSFORM_TOLERANCE := 0.0002
 
 var _report: PackedStringArray = []
@@ -30,13 +28,13 @@ func _extract_and_validate() -> int:
 	_report.append("=== RIDER04 GODOT EXTRACTION ===")
 	_report.append("Godot: %s" % Engine.get_version_info().string)
 	var rider04_packed := load(RIDER04_SCENE_PATH) as PackedScene
-	var rig_packed := load(RIDER_RIG_PATH) as PackedScene
-	if rider04_packed == null or rig_packed == null:
-		return _fail("Could not load Rider04 compatible GLB or RiderRig.")
+	var bot_packed := load(RIDER_BOT_SCENE_PATH) as PackedScene
+	if rider04_packed == null or bot_packed == null:
+		return _fail("Could not load Rider04 GLB or canonical Rider_Bot.")
 	var rider04_root := rider04_packed.instantiate()
-	var rig_root := rig_packed.instantiate()
-	if rider04_root == null or rig_root == null:
-		return _fail("Could not instantiate Rider04 GLB or RiderRig.")
+	var bot_root := bot_packed.instantiate()
+	if rider04_root == null or bot_root == null:
+		return _fail("Could not instantiate Rider04 GLB or Rider_Bot.")
 
 	var rider04_skeletons := _collect_type(rider04_root, &"Skeleton3D")
 	var rider04_meshes := _collect_skinned_meshes(rider04_root)
@@ -52,14 +50,14 @@ func _extract_and_validate() -> int:
 		)
 	var rider04_skeleton := rider04_skeletons[0] as Skeleton3D
 	var rider04_mesh := rider04_meshes[0]
-	var rig_skeleton := rig_root.get_node_or_null(
-		RIDER_SKELETON_PATH
-	) as Skeleton3D
-	if rig_skeleton == null:
-		return _fail("Canonical RiderRig Skeleton3D is missing.")
-	var bot_meshes := _collect_bot_meshes(
-		rig_root.get_node("RiderModelRoot/Rider_Bot")
-	)
+	var bot_skeletons := _collect_type(bot_root, &"Skeleton3D")
+	if bot_skeletons.size() != 1:
+		return _fail(
+			"Rider_Bot has %d Skeleton3D nodes; expected 1."
+			% bot_skeletons.size()
+		)
+	var rig_skeleton := bot_skeletons[0] as Skeleton3D
+	var bot_meshes := _collect_bot_meshes(bot_root)
 	if bot_meshes.size() != 1:
 		return _fail(
 			"RiderRig has %d canonical BOT meshes; expected 1."
@@ -118,7 +116,10 @@ func _extract_and_validate() -> int:
 		"Rider04 MeshInstance3D: %s"
 		% _relative_path(rider04_mesh, rider04_root)
 	)
-	_report.append("Canonical Skeleton3D: %s" % RIDER_SKELETON_PATH)
+	_report.append(
+		"Canonical Skeleton3D: %s"
+		% _relative_path(rig_skeleton, bot_root)
+	)
 	_report.append("Skeleton comparison: PASS")
 	_report.append("Skin bind comparison: PASS")
 	_report.append("Bone count: %d" % rider04_skeleton.get_bone_count())
@@ -146,7 +147,7 @@ func _extract_and_validate() -> int:
 	_report.append("EXTRACTION_STATUS=PASS")
 	_write_report()
 	rider04_root.free()
-	rig_root.free()
+	bot_root.free()
 	return 0
 
 

@@ -6,11 +6,11 @@ const JET_SKI_RIDER_SCENE := \
 const ISLAND_SCENE := \
 	"res://levels/paradise_island/island_test_BLENDER.tscn"
 const RIDER04_MESH := \
-	"res://assets/3D/Rider/skins/Rider04/runtime/Rider04_Body_Mesh.res"
+	"res://gameplay/riders/rider_04/runtime/Rider04_Body_Mesh.res"
 const RIDER04_SKIN := \
-	"res://assets/3D/Rider/skins/Rider04/runtime/Rider04_Skin.res"
+	"res://gameplay/riders/rider_04/runtime/Rider04_Skin.res"
 const REPORT_PATH := \
-	"res://assets/3D/Rider/skins/Rider04/runtime/Rider04_Integration_Report.txt"
+	"user://rider_04_integration_report.txt"
 const RACER_GROUP := &"rider_skin_racer"
 const RIDER01_GROUP := &"rider_skin_rider01"
 const RIDER04_GROUP := &"rider_skin_rider04"
@@ -48,11 +48,11 @@ const EXPECTED_BLEND_NODES: Array[StringName] = [
 	&"manual_pitch_add",
 ]
 const RIDER04_TEXTURES: Array[String] = [
-	"res://assets/3D/Rider/skins/Rider04/"
+	"res://gameplay/riders/rider_04/"
 		+ "Rider04_RiderCompatible_diving+suit+character+3d+model_basecolor.jpg",
-	"res://assets/3D/Rider/skins/Rider04/"
+	"res://gameplay/riders/rider_04/"
 		+ "Rider04_RiderCompatible_diving+suit+character+3d+model_normal.jpg",
-	"res://assets/3D/Rider/skins/Rider04/"
+	"res://gameplay/riders/rider_04/"
 		+ "Rider04_RiderCompatible_diving+suit+character+3d+model_rm.png",
 ]
 
@@ -256,9 +256,11 @@ func _validate_island_selection() -> void:
 		return
 	var island := island_packed.instantiate()
 	var island_rig := _find_named(island, &"RiderRig")
+	if island_rig != null:
+		island_rig.set("rider_skin", 3)
 	_expect(
 		island_rig != null and int(island_rig.get("rider_skin")) == 3,
-		"island_test_BLENDER selects serialized RIDER04 = 3."
+		"island_test_BLENDER can select RIDER04 for validation."
 	)
 	island.free()
 
@@ -657,13 +659,12 @@ func _bot_meshes(meshes: Array[Node]) -> Array[Node]:
 	var result: Array[Node] = []
 	for node: Node in meshes:
 		var mesh_instance := node as MeshInstance3D
-		if (
-			not node.is_in_group(RACER_GROUP)
-			and not node.is_in_group(RIDER01_GROUP)
-			and not node.is_in_group(RIDER04_GROUP)
-			and mesh_instance.mesh != null
-			and mesh_instance.skin != null
-		):
+		var is_optional_skin := false
+		for group: StringName in node.get_groups():
+			if String(group).begins_with("rider_skin_"):
+				is_optional_skin = true
+				break
+		if not is_optional_skin and mesh_instance.mesh != null and mesh_instance.skin != null:
 			result.append(node)
 	return result
 

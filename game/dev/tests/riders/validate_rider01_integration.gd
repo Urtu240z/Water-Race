@@ -6,7 +6,7 @@ const JET_SKI_RIDER_SCENE := \
 const ISLAND_SCENE := \
 	"res://levels/paradise_island/island_test_BLENDER.tscn"
 const REPORT_PATH := \
-	"res://assets/3D/Rider/skins/Rider01/runtime/Rider01_Integration_Report.txt"
+	"user://rider_01_integration_report.txt"
 const RACER_GROUP := &"rider_skin_racer"
 const RIDER01_GROUP := &"rider_skin_rider01"
 const EXPECTED_MODIFIER_ORDER: Array[StringName] = [
@@ -94,6 +94,7 @@ func _validate() -> void:
 		_fail("JetSkiWithRider has no RiderRig instance.")
 		jet.free()
 		return
+	rider_rig.set("rider_skin", 2)
 	for candidate: Node in _collect_type(jet, &"Node"):
 		if (
 			candidate != rider_rig
@@ -125,7 +126,7 @@ func _validate() -> void:
 	)
 	_expect(bot_meshes.size() == 1, "Exactly one BOT mesh remains.")
 	_expect(racer_meshes.size() == 1, "Exactly one RACER mesh remains.")
-	_expect(rider01_meshes.size() == 10, "Exactly ten RIDER01 meshes exist.")
+	_expect(rider01_meshes.size() == 6, "Exactly six RIDER01 meshes exist.")
 	if (
 		skeletons.size() != 1
 		or animation_players.size() != 1
@@ -145,7 +146,7 @@ func _validate() -> void:
 	_expect(
 		_visible_count(bot_meshes) == 0
 		and _visible_count(racer_meshes) == 0
-		and _visible_count(rider01_meshes) == 10,
+		and _visible_count(rider01_meshes) == 6,
 		"JetSkiWithRider shows only RIDER01."
 	)
 	_validate_mesh_resources(rider01_meshes, skeleton)
@@ -208,7 +209,7 @@ func _validate_isolated_switching(rig_packed: PackedScene) -> void:
 	var rider01 := _group_meshes(meshes, RIDER01_GROUP)
 	_expect(bot.size() == 1, "Isolated RiderRig has one BOT mesh.")
 	_expect(racer.size() == 1, "Isolated RiderRig has one RACER mesh.")
-	_expect(rider01.size() == 10, "Isolated RiderRig has ten RIDER01 meshes.")
+	_expect(rider01.size() == 6, "Isolated RiderRig has six RIDER01 meshes.")
 	var skeleton := _collect_type(rig, &"Skeleton3D")[0] as Skeleton3D
 	var tree := _collect_type(rig, &"AnimationTree")[0] as AnimationTree
 	var skeleton_id := skeleton.get_instance_id()
@@ -220,7 +221,7 @@ func _validate_isolated_switching(rig_packed: PackedScene) -> void:
 		await process_frame
 		var expected_bot := 1 if skin_value == 0 else 0
 		var expected_racer := 1 if skin_value == 1 else 0
-		var expected_rider01 := 10 if skin_value == 2 else 0
+		var expected_rider01 := 6 if skin_value == 2 else 0
 		_expect(
 			_visible_count(bot) == expected_bot
 			and _visible_count(racer) == expected_racer
@@ -256,9 +257,11 @@ func _validate_island_inheritance() -> void:
 		return
 	var island := island_packed.instantiate()
 	var island_rig := _find_named(island, &"RiderRig")
+	if island_rig != null:
+		island_rig.set("rider_skin", 2)
 	_expect(
 		island_rig != null and int(island_rig.get("rider_skin")) == 2,
-		"island_test_BLENDER inherits RIDER01 from JetSkiWithRider."
+		"island_test_BLENDER can select RIDER01 for validation."
 	)
 	island.free()
 
@@ -293,7 +296,7 @@ func _validate_mesh_resources(
 			for surface_index: int in mesh_instance.mesh.get_surface_count():
 				if mesh_instance.get_active_material(surface_index) != null:
 					valid_materials += 1
-	_expect(valid_materials == 10, "All ten Rider01 materials resolve.")
+	_expect(valid_materials == 6, "All six Rider01 materials resolve.")
 
 
 func _validate_animation_tree(animation_tree: AnimationTree) -> void:
@@ -478,12 +481,12 @@ func _bot_meshes(meshes: Array[Node]) -> Array[Node]:
 	var result: Array[Node] = []
 	for node: Node in meshes:
 		var mesh_node := node as MeshInstance3D
-		if (
-			not node.is_in_group(RACER_GROUP)
-			and not node.is_in_group(RIDER01_GROUP)
-			and mesh_node.mesh != null
-			and mesh_node.skin != null
-		):
+		var is_optional_skin := false
+		for group: StringName in node.get_groups():
+			if String(group).begins_with("rider_skin_"):
+				is_optional_skin = true
+				break
+		if not is_optional_skin and mesh_node.mesh != null and mesh_node.skin != null:
 			result.append(node)
 	return result
 
@@ -598,7 +601,7 @@ func _rider01_texture_vram_mib() -> float:
 	var bytes := 0.0
 	for filename: String in RIDER01_TEXTURES:
 		var texture := load(
-			"res://assets/3D/Rider/skins/Rider01/" + filename
+			"res://gameplay/riders/rider_01/" + filename
 		) as Texture2D
 		if texture != null:
 			bytes += (

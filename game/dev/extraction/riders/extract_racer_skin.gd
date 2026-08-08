@@ -1,15 +1,13 @@
 extends SceneTree
 
 const RACER_SCENE_PATH := \
-	"res://assets/3D/Rider/skins/Racer/Racer_RiderCompatible.glb"
-const RIDER_RIG_PATH := "res://gameplay/riders/common/rider_rig.tscn"
-const RIDER_SKELETON_PATH := \
-	"RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D"
+	"res://gameplay/riders/racer/Racer_RiderCompatible.glb"
+const RIDER_BOT_SCENE_PATH := "res://gameplay/riders/bot/Rider_Bot.glb"
 const OUTPUT_DIR := \
-	"res://assets/3D/Rider/skins/Racer/runtime"
+	"res://gameplay/riders/racer/runtime"
 const MESH_OUTPUT := OUTPUT_DIR + "/Racer_Mesh.res"
 const SKIN_OUTPUT := OUTPUT_DIR + "/Racer_Skin.res"
-const REPORT_OUTPUT := OUTPUT_DIR + "/Racer_Extraction_Report.txt"
+const REPORT_OUTPUT := "user://racer_extraction_report.txt"
 const TRANSFORM_TOLERANCE := 0.0002
 
 var _report: PackedStringArray = []
@@ -30,13 +28,13 @@ func _extract_and_validate() -> int:
 	_report.append("=== RACER GODOT EXTRACTION ===")
 	_report.append("Godot: %s" % Engine.get_version_info().string)
 	var racer_packed := load(RACER_SCENE_PATH) as PackedScene
-	var rig_packed := load(RIDER_RIG_PATH) as PackedScene
-	if racer_packed == null or rig_packed == null:
-		return _fail("Could not load Racer GLB or RiderRig.")
+	var bot_packed := load(RIDER_BOT_SCENE_PATH) as PackedScene
+	if racer_packed == null or bot_packed == null:
+		return _fail("Could not load Racer GLB or canonical Rider_Bot.")
 	var racer_root := racer_packed.instantiate()
-	var rig_root := rig_packed.instantiate()
-	if racer_root == null or rig_root == null:
-		return _fail("Could not instantiate Racer GLB or RiderRig.")
+	var bot_root := bot_packed.instantiate()
+	if racer_root == null or bot_root == null:
+		return _fail("Could not instantiate Racer GLB or Rider_Bot.")
 
 	var racer_skeletons := _collect_nodes_of_type(racer_root, "Skeleton3D")
 	var racer_meshes := _collect_nodes_of_type(racer_root, "MeshInstance3D")
@@ -56,16 +54,14 @@ func _extract_and_validate() -> int:
 	if racer_mesh == null:
 		return _fail("Racer GLB has no persistent skinned MeshInstance3D.")
 
-	var rig_skeleton := rig_root.get_node_or_null(
-		RIDER_SKELETON_PATH
-	) as Skeleton3D
-	if rig_skeleton == null:
+	var bot_skeletons := _collect_nodes_of_type(bot_root, "Skeleton3D")
+	if bot_skeletons.size() != 1:
 		return _fail(
-			"RiderRig skeleton not found at %s." % RIDER_SKELETON_PATH
+			"Rider_Bot has %d Skeleton3D nodes; expected 1."
+			% bot_skeletons.size()
 		)
-	var bot_meshes := _collect_skinned_meshes(
-		rig_root.get_node("RiderModelRoot/Rider_Bot")
-	)
+	var rig_skeleton := bot_skeletons[0] as Skeleton3D
+	var bot_meshes := _collect_skinned_meshes(bot_root)
 	if bot_meshes.size() != 1:
 		return _fail(
 			"Rider_Bot has %d skinned visual meshes; expected 1."
@@ -81,10 +77,13 @@ func _extract_and_validate() -> int:
 		"Racer MeshInstance3D: %s"
 		% _relative_path(racer_mesh, racer_root)
 	)
-	_report.append("Rider Skeleton3D: %s" % RIDER_SKELETON_PATH)
+	_report.append(
+		"Rider Skeleton3D: %s"
+		% _relative_path(rig_skeleton, bot_root)
+	)
 	_report.append(
 		"Bot MeshInstance3D: %s"
-		% _relative_path(bot_mesh, rig_root)
+		% _relative_path(bot_mesh, bot_root)
 	)
 	var skeleton_error := _compare_skeletons(racer_skeleton, rig_skeleton)
 	if not skeleton_error.is_empty():
@@ -131,7 +130,7 @@ func _extract_and_validate() -> int:
 	_report.append("EXTRACTION_STATUS=PASS")
 	_write_report()
 	racer_root.free()
-	rig_root.free()
+	bot_root.free()
 	return 0
 
 
@@ -289,7 +288,9 @@ func _fail(message: String) -> int:
 
 
 func _write_report() -> void:
-	var absolute_dir := ProjectSettings.globalize_path(OUTPUT_DIR)
+	var absolute_dir := ProjectSettings.globalize_path(
+		REPORT_OUTPUT.get_base_dir()
+	)
 	DirAccess.make_dir_recursive_absolute(absolute_dir)
 	var file := FileAccess.open(REPORT_OUTPUT, FileAccess.WRITE)
 	if file != null:

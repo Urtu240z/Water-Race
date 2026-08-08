@@ -3,7 +3,7 @@ extends SceneTree
 const MAIN_SCENE := \
 	"res://levels/paradise_island/island_test_BLENDER.tscn"
 const REPORT_PATH := \
-	"res://assets/3D/Rider/skins/Rider01/runtime/Rider01_Performance_Report.txt"
+	"user://rider_01_performance_report.txt"
 const WARMUP_FRAMES := 90
 const SAMPLE_FRAMES := 180
 

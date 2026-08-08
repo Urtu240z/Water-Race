@@ -1,10 +1,9 @@
 extends Node3D
 
 const REPORT_PATH := \
-	"res://assets/3D/Rider/skins/Rider01/runtime/" \
-	+ "Rider01_OriginalSkin_SharedSkeleton_Test.txt"
+	"user://rider_01_original_skin_shared_skeleton_test.txt"
 const CAPTURE_DIRECTORY := \
-	"res://assets/3D/Rider/skins/Rider01/runtime/original_skin_test_captures"
+	"user://rider_01_original_skin_test_captures"
 const TARGET_SKELETON_PATH := \
 	"RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D"
 const TEST_MESH_PREFIX := "OriginalSkinTest_"
