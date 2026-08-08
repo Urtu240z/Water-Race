@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://c8qf6cnfoysg8"]
 
-[ext_resource type="PackedScene" uid="uid://c70bvyokp1i18" path="res://gameplay/race/course/ramps/models/ramp_02.glb" id="2_model"]
+[ext_resource type="PackedScene" uid="uid://c70bvyokp1i18" path="res://gameplay/race/course/ramps/ramp_02.glb" id="2_model"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_tpwhi"]
 friction = 0.1

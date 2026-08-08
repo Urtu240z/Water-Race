@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://dmqjonl673mxd"]
 
 [ext_resource type="Script" uid="uid://bvirr66mq426q" path="res://gameplay/race/course/buoys/buoy_3d.gd" id="1_script"]
-[ext_resource type="PackedScene" uid="uid://bnmb82tvpclwj" path="res://gameplay/race/course/buoys/models/buoy_left.glb" id="2_left"]
-[ext_resource type="PackedScene" uid="uid://b144vhkdjlt67" path="res://gameplay/race/course/buoys/models/buoy_right.glb" id="3_right"]
+[ext_resource type="PackedScene" uid="uid://bnmb82tvpclwj" path="res://gameplay/race/course/buoys/buoy_left.glb" id="2_left"]
+[ext_resource type="PackedScene" uid="uid://b144vhkdjlt67" path="res://gameplay/race/course/buoys/buoy_right.glb" id="3_right"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_c4sgn"]
 bounce = 0.15

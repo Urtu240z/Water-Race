@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://bxj72jgph4ua"
-path="res://.godot/imported/ramp_01.glb-e968a5382342cb1ac43dcefe9343526a.scn"
+uid="uid://c70bvyokp1i18"
+path="res://.godot/imported/ramp_02.glb-fd70422f5d15500d5ff4f31f91e6d4f6.scn"
 
 [deps]
 
-source_file="res://gameplay/race/course/ramps/models/ramp_01.glb"
-dest_files=["res://.godot/imported/ramp_01.glb-e968a5382342cb1ac43dcefe9343526a.scn"]
+source_file="res://gameplay/race/course/ramps/ramp_02.glb"
+dest_files=["res://.godot/imported/ramp_02.glb-fd70422f5d15500d5ff4f31f91e6d4f6.scn"]
 
 [params]
 
@@ -41,14 +41,14 @@ materials/extract_format=0
 materials/extract_path="res://gameplay/race/course/ramps/materials"
 _subresources={
 "materials": {
-"MAT_Plastic.001": {
+"MAT_Plastic": {
 "use_external/enabled": true,
-"use_external/fallback_path": "res://gameplay/race/course/ramps/materials/MAT_Plastic.tres",
+"use_external/fallback_path": "res://gameplay/race/course/ramps/materials/ramp_plastic.tres",
 "use_external/path": "uid://bgtmqlgvo7tnw"
 },
-"MAT_Wood.001": {
+"MAT_Wood": {
 "use_external/enabled": true,
-"use_external/fallback_path": "res://gameplay/race/course/ramps/materials/MAT_Wood.tres",
+"use_external/fallback_path": "res://gameplay/race/course/ramps/materials/ramp_wood.tres",
 "use_external/path": "uid://i16lr5v7yvhg"
 }
 }
