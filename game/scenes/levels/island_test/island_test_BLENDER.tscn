@@ -64,7 +64,7 @@
 [ext_resource type="PackedScene" uid="uid://c08rfa066ud8" path="res://assets/3D/Terrain/palm_impostor_ground_shadows.glb" id="222_palm_shadow"]
 [ext_resource type="Shader" uid="uid://cmnqja2yvxste" path="res://shaders/vegetation/palm_impostor_ground_shadow.gdshader" id="223_palm_shadow_shader"]
 [ext_resource type="PackedScene" uid="uid://cisubjold2oac" path="res://levels/paradise_island/wildlife/ambient_wildlife.tscn" id="224_wildlife"]
-[ext_resource type="PackedScene" path="res://scenes/ui/pause_menu.tscn" id="225_pause_menu"]
+[ext_resource type="PackedScene" path="res://ui/pause_menu/pause_menu.tscn" id="225_pause_menu"]
 [ext_resource type="Script" uid="uid://det7bptrkw1dp" path="res://world/terrain/terrain_quality_controller.gd" id="226_terrain_quality"]
 [ext_resource type="Script" uid="uid://bhgjw8t7kbunx" path="res://world/vegetation/vegetation_quality_controller.gd" id="227_vegetation_quality"]
 
@@ -873,12 +873,6 @@ left_hand_rotation_correction_degrees = Vector3(-18.44, 32.09, -21.11)
 
 [node name="GripFingers" parent="Gameplay/JetSki/VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D" index="7" unique_id=940560861]
 left_grip_strength = 0.75
-
-[node name="Rider04_Body" parent="Gameplay/JetSki/VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D" index="16" unique_id=1837524736]
-visible = false
-
-[node name="Rider05_Body" parent="Gameplay/JetSki/VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D" index="17" unique_id=417895057]
-visible = true
 
 [node name="BuoyancyPoints" parent="Gameplay/JetSki" index="6" unique_id=1093517847]
 visible = true

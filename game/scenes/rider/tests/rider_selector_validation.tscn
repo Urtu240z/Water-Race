@@ -1,8 +1,8 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene format=3]
 
-[ext_resource type="Script" path="res://tools/godot/validate_rider_selector.gd" id="1_validator"]
-[ext_resource type="PackedScene" path="res://scenes/rider/rider_rig.tscn" id="2_rider"]
-[ext_resource type="PackedScene" path="res://scenes/ui/pause_menu.tscn" id="3_pause"]
+[ext_resource type="Script" uid="uid://c35dfoiolmxi1" path="res://tools/godot/validate_rider_selector.gd" id="1_validator"]
+[ext_resource type="PackedScene" uid="uid://3htphu61qseo" path="res://scenes/rider/rider_rig.tscn" id="2_rider"]
+[ext_resource type="PackedScene" path="res://ui/pause_menu/pause_menu.tscn" id="3_pause"]
 
 [node name="RiderSelectorValidation" type="Node"]
 script = ExtResource("1_validator")

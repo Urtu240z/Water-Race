@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://dmqcpj4cfigqe"]
 
-[ext_resource type="Script" uid="uid://b5kbcibppj4n4" path="res://scripts/vehicle/jet_ski_visual_controller.gd" id="1_controller"]
+[ext_resource type="Script" uid="uid://b5kbcibppj4n4" path="res://gameplay/vehicles/common/visual/jet_ski_visual_controller.gd" id="1_controller"]
 [ext_resource type="PackedScene" uid="uid://bfdfllkchuttq" path="res://assets/3D/Hull.glb" id="2_hull"]
 [ext_resource type="PackedScene" uid="uid://c0hougvfmuunm" path="res://assets/3D/Handle.glb" id="3_handle"]
 [ext_resource type="Material" uid="uid://rye5ifjwsjhc" path="res://assets/materials/Plastic003_1K-PNG/Plastic003_1K-PNG.tres" id="3_lydg7"]
