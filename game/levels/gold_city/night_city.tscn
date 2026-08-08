@@ -56,11 +56,11 @@
 [ext_resource type="PackedScene" uid="uid://dewy0j55fasc8" path="res://systems/camera/chase_camera.tscn" id="54_v86mw"]
 [ext_resource type="Shader" uid="uid://udpsvcumn1mh" path="res://systems/camera/underwater/shaders/underwater_split_view_post_process.gdshader" id="55_5sm3d"]
 [ext_resource type="PackedScene" uid="uid://c3xovkcnf4rak" path="res://assets/3D/levels/level_night_city/atrezzo/stadium_lights.tscn" id="56_mihog"]
-[ext_resource type="PackedScene" uid="uid://cf3mdmbksb1m7" path="res://gameplay/race/course/ramps/ramp_1.tscn" id="57_hdcng"]
-[ext_resource type="PackedScene" uid="uid://c8qf6cnfoysg8" path="res://gameplay/race/course/ramps/ramp_2.tscn" id="58_nsw8i"]
-[ext_resource type="PackedScene" uid="uid://dphl8jrmqmgci" path="res://assets/3D/Boat_1.glb" id="59_2cchu"]
-[ext_resource type="PackedScene" uid="uid://df1oaix0ta45m" path="res://assets/3D/Boat_2.glb" id="60_2cq5j"]
-[ext_resource type="PackedScene" uid="uid://vls5xu5jnvyf" path="res://assets/3D/Rock3.glb" id="61_874od"]
+[ext_resource type="PackedScene" uid="uid://cf3mdmbksb1m7" path="res://gameplay/race/course/ramps/ramp_01.tscn" id="57_hdcng"]
+[ext_resource type="PackedScene" uid="uid://c8qf6cnfoysg8" path="res://gameplay/race/course/ramps/ramp_02.tscn" id="58_nsw8i"]
+[ext_resource type="PackedScene" uid="uid://dphl8jrmqmgci" path="res://world/props/boats/boat_01.glb" id="59_2cchu"]
+[ext_resource type="PackedScene" uid="uid://df1oaix0ta45m" path="res://world/props/boats/boat_02.glb" id="60_2cq5j"]
+[ext_resource type="PackedScene" uid="uid://vls5xu5jnvyf" path="res://world/props/rocks/rock_03.glb" id="61_874od"]
 [ext_resource type="Material" uid="uid://cwtgldc4ahbeu" path="res://shared/materials/terrain/materials/aerial_rocks_02.res" id="62_gecxy"]
 [ext_resource type="Material" uid="uid://dk2h67ph6buix" path="res://shared/materials/metal/materials/rusty_metal_03.res" id="63_mnvpt"]
 [ext_resource type="PackedScene" uid="uid://dmqjonl673mxd" path="res://gameplay/race/course/buoys/buoy.tscn" id="64_f7uhg"]
@@ -71,8 +71,8 @@
 [ext_resource type="Material" uid="uid://cftxxlrjcjm4x" path="res://assets/3D/levels/level_night_city/buildings/casino/Casino_Surface_2_Hue.tres" id="69_5owjo"]
 [ext_resource type="PackedScene" uid="uid://byqrxgrtjkcgm" path="res://assets/3D/buildings/beach_hotel.glb" id="70_pheaw"]
 [ext_resource type="Material" uid="uid://diw4mvukd0v3f" path="res://shared/materials/generic/materials/emisive.tres" id="71_ambj4"]
-[ext_resource type="PackedScene" uid="uid://cfw7pu0e3ws7n" path="res://assets/3D/Rock2.glb" id="72_hbj0a"]
-[ext_resource type="PackedScene" uid="uid://dk85eu2oeyca2" path="res://animated_roller_coaster.glb" id="73_e6itw"]
+[ext_resource type="PackedScene" uid="uid://cfw7pu0e3ws7n" path="res://world/props/rocks/rock_02.glb" id="72_hbj0a"]
+[ext_resource type="PackedScene" uid="uid://dk85eu2oeyca2" path="res://levels/gold_city/props/roller_coaster/animated_roller_coaster.glb" id="73_e6itw"]
 [ext_resource type="PackedScene" uid="uid://cpr1u70kmlafe" path="res://assets/3D/levels/level_night_city/buildings/ferris_wheel.glb" id="74_gtyq1"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_f0815"]
@@ -578,11 +578,11 @@ shader_parameter/wave_mean_a = 0.1050000049875
 shader_parameter/wave_mean_b = 0.0650000030875
 shader_parameter/geometry_normal_step = 2.0
 shader_parameter/ocean_geometry_normal_quality = 2
-shader_parameter/calm_zone_count = 1
-shader_parameter/calm_zone_centers_shapes = PackedVector4Array(-606.7354, 16.41954, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
-shader_parameter/calm_zone_axes = PackedVector4Array(1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
-shader_parameter/calm_zone_extents_transitions = PackedVector4Array(535.7999, 1601.943, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
-shader_parameter/calm_zone_strengths = PackedVector4Array(0.64, 0.81, 0.47, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1)
+shader_parameter/calm_zone_count = 0
+shader_parameter/calm_zone_centers_shapes = PackedVector4Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/calm_zone_axes = PackedVector4Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/calm_zone_extents_transitions = PackedVector4Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/calm_zone_strengths = PackedVector4Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1)
 shader_parameter/ripple_active = PackedInt32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 shader_parameter/ripple_positions = PackedVector2Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 shader_parameter/ripple_start_times = PackedFloat32Array(-inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf)
@@ -710,7 +710,7 @@ shader_parameter/foam_scroll_speed = 0.00999999977648
 shader_parameter/foam_roughness = 0.15999999642368
 shader_parameter/ocean_foam_detail_quality = 1
 shader_parameter/ocean_foam_evaluation_distance = 520.0
-shader_parameter/ocean_surface_enabled = false
+shader_parameter/ocean_surface_enabled = true
 shader_parameter/ocean_logical_origin_offset_xz = Vector2(0, 0)
 shader_parameter/ocean_detail_center_xz = Vector2(0, 0)
 shader_parameter/ocean_detailed_wave_fade_start = 170.0
@@ -2462,29 +2462,29 @@ transform = Transform3D(0.99558884, 0, 0.09382483, 0, 1, 0, -0.09382483, 0, 0.99
 [node name="Ramp1" parent="Atrezzo" unique_id=178349614 instance=ExtResource("57_hdcng")]
 transform = Transform3D(-0.95937294, 0, -0.41327736, 0, 1.08, 0, 0.12121299, 0, -3.2709954, 168.65465, -5.0557194, -415.32965)
 
-[node name="Ramp1_VIS" parent="Atrezzo/Ramp1/RampVisual" parent_id_path=PackedInt32Array(178349614, 141630341) index="0" unique_id=2129460786]
+[node name="Ramp1_VIS" parent="Atrezzo/Ramp1/RampVisual" parent_id_path=PackedInt32Array(178349614, 141630341) index="0" unique_id=334619810]
 transform = Transform3D(1, 0, 0, 0, 0.99999994, 0, 0, 0, 1, 0, 2.7152433, 0)
 surface_material_override/1 = SubResource("StandardMaterial3D_ql7ri")
 
-[node name="Ramp1_COL" parent="Atrezzo/Ramp1/RampVisual" parent_id_path=PackedInt32Array(178349614, 141630341) index="1" unique_id=879666961]
+[node name="Ramp1_COL" parent="Atrezzo/Ramp1/RampVisual" parent_id_path=PackedInt32Array(178349614, 141630341) index="1" unique_id=1088348174]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.7152433, 0)
 
 [node name="Ramp4" parent="Atrezzo" unique_id=1765982400 instance=ExtResource("57_hdcng")]
 transform = Transform3D(-1.6307858, 0, 0.5965202, 0, 1.5849994, 0, -0.2820688, 0, -3.4487915, -504.4909, -3.43675, -694.3363)
 
-[node name="Ramp1_VIS" parent="Atrezzo/Ramp4/RampVisual" parent_id_path=PackedInt32Array(1765982400, 141630341) index="0" unique_id=2129460786]
+[node name="Ramp1_VIS" parent="Atrezzo/Ramp4/RampVisual" parent_id_path=PackedInt32Array(1765982400, 141630341) index="0" unique_id=334619810]
 surface_material_override/1 = SubResource("StandardMaterial3D_ql7ri")
 
 [node name="Ramp7" parent="Atrezzo" unique_id=1894132247 instance=ExtResource("57_hdcng")]
 transform = Transform3D(-1.5953267, 0, -0.93137383, 0, 1.5849994, 0, 0.44040683, 0, -3.3738027, -717.6485, -5.0831523, -518.3982)
 
-[node name="Ramp1_VIS" parent="Atrezzo/Ramp7/RampVisual" parent_id_path=PackedInt32Array(1894132247, 141630341) index="0" unique_id=2129460786]
+[node name="Ramp1_VIS" parent="Atrezzo/Ramp7/RampVisual" parent_id_path=PackedInt32Array(1894132247, 141630341) index="0" unique_id=334619810]
 surface_material_override/1 = SubResource("StandardMaterial3D_ql7ri")
 
 [node name="Ramp6" parent="Atrezzo" unique_id=1849485335 instance=ExtResource("57_hdcng")]
 transform = Transform3D(-1.1449878, 0, -1.0748183, 0, 1.585, 0, 0.52593046, 0, -2.3399553, -438.68048, -3.43675, -173.87032)
 
-[node name="Ramp1_VIS" parent="Atrezzo/Ramp6/RampVisual" parent_id_path=PackedInt32Array(1849485335, 141630341) index="0" unique_id=2129460786]
+[node name="Ramp1_VIS" parent="Atrezzo/Ramp6/RampVisual" parent_id_path=PackedInt32Array(1849485335, 141630341) index="0" unique_id=334619810]
 surface_material_override/1 = SubResource("StandardMaterial3D_ql7ri")
 
 [node name="Ramp2" parent="Atrezzo" unique_id=915163340 instance=ExtResource("58_nsw8i")]
@@ -2496,7 +2496,7 @@ surface_material_override/0 = SubResource("StandardMaterial3D_enow4")
 [node name="Boat_3" parent="Atrezzo" unique_id=1995262324 instance=ExtResource("59_2cchu")]
 transform = Transform3D(0.30743515, 0, 0.3943142, 0, 0.5, 0, -0.3943142, 0, 0.30743515, 164.09297, -4.05779, 378.38086)
 
-[node name="Boat_1_VIS" parent="Atrezzo/Boat_3" index="0" unique_id=32510060]
+[node name="Boat_1_VIS" parent="Atrezzo/Boat_3" index="0" unique_id=1858129855]
 transform = Transform3D(1.0000001, 0, 0, 0, 1, 0, 0, 0, 1.0000001, 0, 0, 0)
 
 [node name="Boat_4" parent="Atrezzo" unique_id=100018014 instance=ExtResource("59_2cchu")]
@@ -2505,11 +2505,11 @@ transform = Transform3D(0.3716938, 0, -0.33443052, 0, 0.5, 0, 0.33443052, 0, 0.3
 [node name="Boat_2" parent="Atrezzo" unique_id=1280069477 instance=ExtResource("60_2cq5j")]
 transform = Transform3D(-0.82091784, 0, 0.87526774, 0, 1.1999999, 0, -0.87526774, 0, -0.82091784, 345.85632, -10.093709, 219.55032)
 
-[node name="Boat_2_VIS" parent="Atrezzo/Boat_2" index="0" unique_id=1999061110]
+[node name="Boat_2_VIS" parent="Atrezzo/Boat_2" index="0" unique_id=981303783]
 transform = Transform3D(1.0000001, 0, 0, 0, 1, 0, 0, 0, 1.0000001, 0, 0, 0)
 surface_material_override/4 = SubResource("StandardMaterial3D_yrkm7")
 
-[node name="Boat_2_COL" parent="Atrezzo/Boat_2" index="1" unique_id=1345104733]
+[node name="Boat_2_COL" parent="Atrezzo/Boat_2" index="1" unique_id=1256386193]
 visible = false
 
 [node name="OmniLight3D" type="OmniLight3D" parent="Atrezzo/Boat_2" unique_id=455881687]
@@ -2530,7 +2530,7 @@ omni_attenuation = 0.826
 [node name="Rock8" parent="Atrezzo" unique_id=571328736 instance=ExtResource("61_874od")]
 transform = Transform3D(33.475, 0, 0, 0, 33.475, 0, 0, 0, 33.475, 157.0853, -40.529305, 376.03717)
 
-[node name="Rock3_VIS" parent="Atrezzo/Rock8" index="0" unique_id=219684860]
+[node name="Rock3_VIS" parent="Atrezzo/Rock8" index="0" unique_id=520423883]
 transform = Transform3D(0.9999998, 0, 0, 0, 0.9999998, 0, 0, 0, 0.9999998, -3.267583, 0.22736257, 0)
 surface_material_override/0 = ExtResource("62_gecxy")
 
@@ -2749,7 +2749,7 @@ transform = Transform3D(-0.44829965, 0, 0.8938833, 0, 1, 0, -0.8938833, 0, -0.44
 [node name="beach_hotel" parent="Buildings" unique_id=240417991 instance=ExtResource("70_pheaw")]
 transform = Transform3D(0.07044011, 0, 0.4495144, 0, 0.455, 0, -0.4495144, 0, 0.07044011, -123.22586, 30.086075, -150.12727)
 
-[node name="beach_hotel_VIS" parent="Buildings/beach_hotel" index="0" unique_id=1289781085]
+[node name="beach_hotel_VIS" parent="Buildings/beach_hotel" index="0" unique_id=2018774500]
 transform = Transform3D(0.46002525, 0, -0.6545049, 0, 0.8000006, 0, 0.6545049, 0, 0.46002525, 1374.2222, -25.256031, -1464.4923)
 surface_material_override/0 = SubResource("StandardMaterial3D_g5j8w")
 surface_material_override/1 = SubResource("StandardMaterial3D_4sljt")
@@ -2787,37 +2787,37 @@ mesh = SubResource("BoxMesh_c2l6c")
 [node name="Rock2" parent="." unique_id=1467108677 instance=ExtResource("72_hbj0a")]
 transform = Transform3D(1.3358884, 0, -2.11315, 0, 2.5, 0, 2.11315, 0, 1.3358884, -125.10258, -10.050808, -531.91595)
 
-[node name="Rock2_VIS" parent="Rock2" index="0" unique_id=1078197120]
+[node name="Rock2_VIS" parent="Rock2" index="0" unique_id=362180073]
 surface_material_override/0 = ExtResource("62_gecxy")
 
-[node name="Rock2_COL" parent="Rock2" index="1" unique_id=1338951066]
+[node name="Rock2_COL" parent="Rock2" index="1" unique_id=842957957]
 visible = false
 
 [node name="Rock3" parent="." unique_id=381828738 instance=ExtResource("72_hbj0a")]
 transform = Transform3D(3.2300122, 0, -0.43976325, 0, 3.225, 0, 0.2542075, 0, 5.5877213, -143.86502, -10.050808, -553.5112)
 
-[node name="Rock2_VIS" parent="Rock3" index="0" unique_id=1078197120]
+[node name="Rock2_VIS" parent="Rock3" index="0" unique_id=362180073]
 surface_material_override/0 = ExtResource("62_gecxy")
 
-[node name="Rock2_COL" parent="Rock3" index="1" unique_id=1338951066]
+[node name="Rock2_COL" parent="Rock3" index="1" unique_id=842957957]
 visible = false
 
 [node name="Rock4" parent="." unique_id=1764313507 instance=ExtResource("72_hbj0a")]
 transform = Transform3D(1.4559095, 0, -5.0072455, 0, 3.2250004, 0, 2.894465, 0, 2.5186334, -161.80075, -10.050808, -582.4298)
 
-[node name="Rock2_VIS" parent="Rock4" index="0" unique_id=1078197120]
+[node name="Rock2_VIS" parent="Rock4" index="0" unique_id=362180073]
 surface_material_override/0 = ExtResource("62_gecxy")
 
-[node name="Rock2_COL" parent="Rock4" index="1" unique_id=1338951066]
+[node name="Rock2_COL" parent="Rock4" index="1" unique_id=842957957]
 visible = false
 
 [node name="Sketchfab_Scene" parent="." unique_id=308938919 instance=ExtResource("73_e6itw")]
 transform = Transform3D(0.7135859, 0.15710068, 0.6827257, -0.11351439, 0.98758256, -0.10860528, -0.69131005, 0, 0.72255826, -161.73608, 26.382015, -953.0141)
 
-[node name="RollerCoaster_Static_VIS" parent="Sketchfab_Scene" index="0" unique_id=1271540863]
+[node name="RollerCoaster_Static_VIS" parent="Sketchfab_Scene" index="0" unique_id=1042203054]
 surface_material_override/0 = SubResource("StandardMaterial3D_nutsd")
 
-[node name="RollerCoaster_Cart_001_VIS" parent="Sketchfab_Scene" index="1" unique_id=795404568]
+[node name="RollerCoaster_Cart_001_VIS" parent="Sketchfab_Scene" index="1" unique_id=2023390110]
 transform = Transform3D(-0.10945192, -0.9864509, 0.12220883, 0.97542036, -0.13024749, -0.17773773, 0.19124694, 0.09975126, 0.9764601, 27.319956, 36.23281, 106.43869)
 surface_material_override/0 = SubResource("StandardMaterial3D_c2l6c")
 
@@ -2827,27 +2827,27 @@ light_color = Color(1, 0, 0, 1)
 light_energy = 16.0
 omni_range = 29.666
 
-[node name="RollerCoaster_Cart_002_VIS" parent="Sketchfab_Scene" index="2" unique_id=1252298769]
+[node name="RollerCoaster_Cart_002_VIS" parent="Sketchfab_Scene" index="2" unique_id=305355234]
 transform = Transform3D(-0.092543714, -0.98032045, 0.17437738, 0.98160696, -0.119192794, -0.1491339, 0.16698356, 0.15736865, 0.9733199, 26.95912, 36.534878, 104.42142)
 surface_material_override/0 = SubResource("StandardMaterial3D_4h5fo")
 
-[node name="RollerCoaster_Cart_003_VIS" parent="Sketchfab_Scene" index="3" unique_id=237174068]
+[node name="RollerCoaster_Cart_003_VIS" parent="Sketchfab_Scene" index="3" unique_id=131928044]
 transform = Transform3D(-0.07741581, -0.9714291, 0.22434862, 0.9866495, -0.106986135, -0.12278734, 0.1432814, 0.21184778, 0.96674246, 26.506525, 36.77994, 102.4072)
 surface_material_override/0 = SubResource("StandardMaterial3D_4h5fo")
 
-[node name="RollerCoaster_Cart_004_VIS" parent="Sketchfab_Scene" index="4" unique_id=1588475700]
+[node name="RollerCoaster_Cart_004_VIS" parent="Sketchfab_Scene" index="4" unique_id=279029465]
 transform = Transform3D(-0.06352311, -0.9596091, 0.27407157, 0.990898, -0.09330702, -0.09703063, 0.11868427, 0.26541328, 0.9568019, 26.05393, 37.025005, 100.39299)
 surface_material_override/0 = SubResource("StandardMaterial3D_4h5fo")
 
-[node name="RollerCoaster_Cart_005_VIS" parent="Sketchfab_Scene" index="5" unique_id=1335165082]
+[node name="RollerCoaster_Cart_005_VIS" parent="Sketchfab_Scene" index="5" unique_id=738604093]
 transform = Transform3D(-0.05024334, -0.9401022, 0.33716986, 0.9946591, -0.077576734, -0.068081595, 0.0901602, 0.33194846, 0.93897885, 25.491982, 37.22215, 98.410805)
 surface_material_override/0 = SubResource("StandardMaterial3D_4h5fo")
 
-[node name="RollerCoaster_Cart_006_VIS" parent="Sketchfab_Scene" index="6" unique_id=1096221687]
+[node name="RollerCoaster_Cart_006_VIS" parent="Sketchfab_Scene" index="6" unique_id=1742318932]
 transform = Transform3D(-0.038250234, -0.9018476, 0.43035764, 0.9978567, -0.057355266, -0.03150278, 0.053093992, 0.42823026, 0.9021085, 24.673435, 37.30685, 96.50379)
 surface_material_override/0 = SubResource("StandardMaterial3D_4h5fo")
 
-[node name="AnimationPlayer" parent="Sketchfab_Scene" index="7" unique_id=1895516416]
+[node name="AnimationPlayer" parent="Sketchfab_Scene" index="7" unique_id=1927204223]
 autoplay = &"RollerCoaster"
 speed_scale = 0.5
 

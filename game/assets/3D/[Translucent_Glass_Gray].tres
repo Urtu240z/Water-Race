@@ -1,8 +1,0 @@
-[gd_resource type="StandardMaterial3D" format=3 uid="uid://db5t4gdyx74h4"]
-
-[resource]
-resource_name = "[Translucent_Glass_Gray]"
-transparency = 4
-cull_mode = 2
-albedo_color = Color(0.63174367, 0.63174367, 0.63174367, 0.8117647)
-roughness = 0.5

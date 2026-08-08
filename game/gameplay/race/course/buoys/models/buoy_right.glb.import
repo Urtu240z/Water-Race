@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://byqrxgrtjkcgm"
-path="res://.godot/imported/beach_hotel.glb-631b6452727e3a165cc3ad56233b3bb6.scn"
+uid="uid://b144vhkdjlt67"
+path="res://.godot/imported/buoy_right.glb-60225a94f6daf1e057e3c633418046b9.scn"
 
 [deps]
 
-source_file="res://assets/3D/buildings/beach_hotel.glb"
-dest_files=["res://.godot/imported/beach_hotel.glb-631b6452727e3a165cc3ad56233b3bb6.scn"]
+source_file="res://gameplay/race/course/buoys/models/buoy_right.glb"
+dest_files=["res://.godot/imported/buoy_right.glb-60225a94f6daf1e057e3c633418046b9.scn"]
 
 [params]
 
@@ -26,7 +26,7 @@ nodes/use_node_type_suffixes=true
 meshes/ensure_tangents=true
 meshes/generate_lods=true
 meshes/create_shadow_meshes=true
-meshes/light_baking=1
+meshes/light_baking=2
 meshes/lightmap_texel_size=0.2
 meshes/force_disable_compression=false
 skins/use_named_skins=true
@@ -36,9 +36,9 @@ animation/trimming=false
 animation/remove_immutable_tracks=true
 animation/import_rest_as_RESET=false
 import_script/path=""
-materials/extract=0
+materials/extract=1
 materials/extract_format=0
-materials/extract_path=""
+materials/extract_path="res://gameplay/race/course/buoys/materials"
 _subresources={}
 gltf/naming_version=2
 gltf/embedded_image_handling=2

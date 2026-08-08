@@ -56,14 +56,14 @@
 [ext_resource type="PackedScene" uid="uid://dewy0j55fasc8" path="res://systems/camera/chase_camera.tscn" id="54_50ksj"]
 [ext_resource type="Shader" uid="uid://udpsvcumn1mh" path="res://systems/camera/underwater/shaders/underwater_split_view_post_process.gdshader" id="55_33cck"]
 [ext_resource type="PackedScene" uid="uid://byqrxgrtjkcgm" path="res://assets/3D/buildings/beach_hotel.glb" id="56_ksrt0"]
-[ext_resource type="PackedScene" uid="uid://cf3mdmbksb1m7" path="res://gameplay/race/course/ramps/ramp_1.tscn" id="57_8fseg"]
-[ext_resource type="PackedScene" uid="uid://c8qf6cnfoysg8" path="res://gameplay/race/course/ramps/ramp_2.tscn" id="58_1gyqb"]
+[ext_resource type="PackedScene" uid="uid://cf3mdmbksb1m7" path="res://gameplay/race/course/ramps/ramp_01.tscn" id="57_8fseg"]
+[ext_resource type="PackedScene" uid="uid://c8qf6cnfoysg8" path="res://gameplay/race/course/ramps/ramp_02.tscn" id="58_1gyqb"]
 [ext_resource type="PackedScene" uid="uid://665ve8ouncoh" path="res://world/vegetation/palms/palm_tree.tscn" id="59_e6dyr"]
-[ext_resource type="PackedScene" uid="uid://dphl8jrmqmgci" path="res://assets/3D/Boat_1.glb" id="60_ji16l"]
-[ext_resource type="PackedScene" uid="uid://df1oaix0ta45m" path="res://assets/3D/Boat_2.glb" id="61_8vinr"]
-[ext_resource type="PackedScene" uid="uid://bgpsiyc4tr47u" path="res://assets/3D/Rock1.glb" id="62_fl35x"]
-[ext_resource type="PackedScene" uid="uid://cfw7pu0e3ws7n" path="res://assets/3D/Rock2.glb" id="63_m67h8"]
-[ext_resource type="PackedScene" uid="uid://vls5xu5jnvyf" path="res://assets/3D/Rock3.glb" id="64_3s10b"]
+[ext_resource type="PackedScene" uid="uid://dphl8jrmqmgci" path="res://world/props/boats/boat_01.glb" id="60_ji16l"]
+[ext_resource type="PackedScene" uid="uid://df1oaix0ta45m" path="res://world/props/boats/boat_02.glb" id="61_8vinr"]
+[ext_resource type="PackedScene" uid="uid://bgpsiyc4tr47u" path="res://world/props/rocks/rock_01.glb" id="62_fl35x"]
+[ext_resource type="PackedScene" uid="uid://cfw7pu0e3ws7n" path="res://world/props/rocks/rock_02.glb" id="63_m67h8"]
+[ext_resource type="PackedScene" uid="uid://vls5xu5jnvyf" path="res://world/props/rocks/rock_03.glb" id="64_3s10b"]
 [ext_resource type="PackedScene" uid="uid://cilidnwjw2dt" path="res://world/vegetation/palms/palms_multimesh.scn" id="65_fgcfm"]
 [ext_resource type="Material" uid="uid://dk2h67ph6buix" path="res://shared/materials/metal/materials/rusty_metal_03.res" id="66_1qyt2"]
 [ext_resource type="PackedScene" uid="uid://dmqjonl673mxd" path="res://gameplay/race/course/buoys/buoy.tscn" id="67_4cwbb"]
@@ -399,7 +399,7 @@ shader_parameter/foam_scroll_speed = 0.13
 shader_parameter/foam_roughness = 0.70999998413008
 shader_parameter/ocean_foam_detail_quality = 1
 shader_parameter/ocean_foam_evaluation_distance = 520.0
-shader_parameter/ocean_surface_enabled = false
+shader_parameter/ocean_surface_enabled = true
 shader_parameter/ocean_logical_origin_offset_xz = Vector2(0, 0)
 shader_parameter/ocean_detail_center_xz = Vector2(0, 0)
 shader_parameter/ocean_detailed_wave_fade_start = 170.0
@@ -1006,7 +1006,7 @@ material_override = SubResource("ShaderMaterial_6pfav")
 [node name="beach_hotel" parent="Atrezzo" unique_id=240417991 instance=ExtResource("56_ksrt0")]
 transform = Transform3D(0.07044011, 0, 0.4495144, 0, 0.455, 0, -0.4495144, 0, 0.07044011, -123.22586, 30.086075, -150.12727)
 
-[node name="beach_hotel_VIS" parent="Atrezzo/beach_hotel" index="0" unique_id=1289781085]
+[node name="beach_hotel_VIS" parent="Atrezzo/beach_hotel" index="0" unique_id=2018774500]
 surface_material_override/1 = SubResource("StandardMaterial3D_4sljt")
 surface_material_override/4 = SubResource("StandardMaterial3D_dbb74")
 
@@ -1046,50 +1046,50 @@ transform = Transform3D(0.5118447, 0, 1.0853641, 0, 1.2, 0, -1.0853641, 0, 0.511
 [node name="Rock1" parent="Atrezzo" unique_id=897258125 instance=ExtResource("62_fl35x")]
 transform = Transform3D(2.5107322, 0, -1.5284144, 0, 2.3749995, 0, 1.3486009, 0, 2.8454967, 298.25534, -21.29904, 36.365036)
 
-[node name="Rock1_VIS" parent="Atrezzo/Rock1" index="0" unique_id=773284548]
+[node name="Rock1_VIS" parent="Atrezzo/Rock1" index="0" unique_id=1668464500]
 surface_material_override/0 = ExtResource("33_g88yb")
 
 [node name="Rock2" parent="Atrezzo" unique_id=2094025158 instance=ExtResource("63_m67h8")]
 transform = Transform3D(3.1803858, 0.6325982, -6.2092667, 0.09665962, 6.963099, 0.75890744, 6.2406597, -0.4302361, 3.152633, -551.9645, -16.910297, -180.97124)
 
-[node name="Rock2_VIS" parent="Atrezzo/Rock2" index="0" unique_id=1078197120]
+[node name="Rock2_VIS" parent="Atrezzo/Rock2" index="0" unique_id=362180073]
 surface_material_override/0 = ExtResource("33_g88yb")
 
 [node name="Rock3" parent="Atrezzo" unique_id=32409294 instance=ExtResource("63_m67h8")]
 transform = Transform3D(2.1527746, -0.58318883, 5.0766606, 0.07651358, 5.5118313, 0.60073394, -5.1094747, -0.16317603, 2.1479445, -636.2675, -9.634373, -123.952194)
 
-[node name="Rock2_VIS" parent="Atrezzo/Rock3" index="0" unique_id=1078197120]
+[node name="Rock2_VIS" parent="Atrezzo/Rock3" index="0" unique_id=362180073]
 surface_material_override/0 = ExtResource("33_g88yb")
 
 [node name="Rock4" parent="Atrezzo" unique_id=732379558 instance=ExtResource("63_m67h8")]
 transform = Transform3D(-0.9700894, 3.5165074, -7.616502, 0.44429702, 7.678032, 3.488327, 8.377321, -3.245338e-08, -1.0669926, -567.65735, -46.195744, -141.59525)
 
-[node name="Rock2_VIS" parent="Atrezzo/Rock4" index="0" unique_id=1078197120]
+[node name="Rock2_VIS" parent="Atrezzo/Rock4" index="0" unique_id=362180073]
 surface_material_override/0 = ExtResource("33_g88yb")
 
 [node name="Rock5" parent="Atrezzo" unique_id=765989064 instance=ExtResource("63_m67h8")]
 transform = Transform3D(-1.1396358, 2.6904924, -5.6494913, 0.5078428, 6.037661, 2.5175169, 9.795862, -2.4660984e-08, -0.7877678, -235.79329, -52.84747, -148.51874)
 
-[node name="Rock2_VIS" parent="Atrezzo/Rock5" index="0" unique_id=1078197120]
+[node name="Rock2_VIS" parent="Atrezzo/Rock5" index="0" unique_id=362180073]
 surface_material_override/0 = ExtResource("33_g88yb")
 
 [node name="Rock6" parent="Atrezzo" unique_id=712207501 instance=ExtResource("64_3s10b")]
 transform = Transform3D(18.05736, -10.612488, 0, 10.612488, 18.05736, 0, 0, 0, 20.945002, -217.55464, -24.05898, -25.681166)
 
-[node name="Rock3_VIS" parent="Atrezzo/Rock6" index="0" unique_id=219684860]
+[node name="Rock3_VIS" parent="Atrezzo/Rock6" index="0" unique_id=520423883]
 transform = Transform3D(1.2727225, 0.58904827, -1.7913191, 0.5890485, 1.9288102, 1.0527757, 1.791319, -1.0527761, 0.926533, -0.5910263, -1.0056431, 0)
 surface_material_override/0 = ExtResource("33_g88yb")
 
 [node name="Rock7" parent="Atrezzo" unique_id=1710166104 instance=ExtResource("64_3s10b")]
 transform = Transform3D(-12.991967, -3.3479185e-07, -43.01585, 9.234303, 43.887394, -2.7890134, 42.012985, -9.646292, -12.6890745, -269.192, -62.774254, -70.82382)
 
-[node name="Rock3_VIS" parent="Atrezzo/Rock7" index="0" unique_id=219684860]
+[node name="Rock3_VIS" parent="Atrezzo/Rock7" index="0" unique_id=520423883]
 surface_material_override/0 = ExtResource("33_g88yb")
 
 [node name="Rock8" parent="Atrezzo" unique_id=571328736 instance=ExtResource("64_3s10b")]
 transform = Transform3D(33.475, 0, 0, 0, 33.475, 0, 0, 0, 33.475, 39.93125, -40.529305, 376.03717)
 
-[node name="Rock3_VIS" parent="Atrezzo/Rock8" index="0" unique_id=219684860]
+[node name="Rock3_VIS" parent="Atrezzo/Rock8" index="0" unique_id=520423883]
 surface_material_override/0 = ExtResource("33_g88yb")
 
 [node name="PalmsMultiMesh" parent="Atrezzo" unique_id=302165511 instance=ExtResource("65_fgcfm")]
