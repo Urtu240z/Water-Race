@@ -458,16 +458,18 @@ func _apply_lateral_grip(
 	centered_blend: float,
 	handling_authority: float
 ) -> void:
-	var lateral_speed := tangential_velocity.dot(right_tangent)
+	var current_lateral_speed := tangential_velocity.dot(right_tangent)
 
-	if absf(lateral_speed) <= 0.001:
+	if absf(current_lateral_speed) <= 0.001:
 		return
 
 	var steering_grip := lerpf(lateral_grip_while_steering, 1.0, centered_blend)
 	var effective_grip_rate := lateral_grip_rate * steering_grip * handling_authority
 	var safe_delta := maxf(delta, 0.0001)
 	var removal_fraction := 1.0 - exp(-effective_grip_rate * safe_delta)
-	var correction_velocity := -right_tangent * lateral_speed * removal_fraction
+	var correction_velocity := (
+		-right_tangent * current_lateral_speed * removal_fraction
+	)
 	var correction_acceleration := correction_velocity / safe_delta
 
 	if correction_acceleration.length() > maximum_lateral_acceleration:

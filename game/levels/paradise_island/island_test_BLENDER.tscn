@@ -708,62 +708,62 @@ surface_material_override/0 = ExtResource("15_wtvuo")
 [node name="test_island" parent="TerrainRoot" unique_id=1352578102 instance=ExtResource("16_xwvxt")]
 transform = Transform3D(0.86, 0, 0, 0, 0.86, 0, 0, 0, 0.86, 149, 1.8, 120.1001)
 
-[node name="Terrain_Master_VIS" parent="TerrainRoot/test_island" index="0" unique_id=1159521263]
+[node name="Terrain_Master_VIS" parent="TerrainRoot/test_island" index="0" unique_id=298348997]
 material_override = SubResource("ShaderMaterial_tpwhi")
 
-[node name="Cave_01_VIS" parent="TerrainRoot/test_island" index="1" unique_id=1044537081]
+[node name="Cave_01_VIS" parent="TerrainRoot/test_island" index="1" unique_id=1502607317]
 surface_material_override/0 = ExtResource("33_g88yb")
 
-[node name="Cave_Entrance_Rock_A_VIS" parent="TerrainRoot/test_island" index="2" unique_id=181690084]
+[node name="Cave_Entrance_Rock_A_VIS" parent="TerrainRoot/test_island" index="2" unique_id=531846211]
 surface_material_override/0 = ExtResource("33_g88yb")
 
-[node name="Rock2_VIS" parent="TerrainRoot/test_island" index="3" unique_id=197552293]
+[node name="Rock2_VIS" parent="TerrainRoot/test_island" index="3" unique_id=669672655]
 surface_material_override/0 = ExtResource("33_g88yb")
 
-[node name="Rock3_VIS" parent="TerrainRoot/test_island" index="4" unique_id=1345939949]
+[node name="Rock3_VIS" parent="TerrainRoot/test_island" index="4" unique_id=1642907202]
 surface_material_override/0 = ExtResource("33_g88yb")
 
-[node name="Cave_Entrance_Rock_B_VIS" parent="TerrainRoot/test_island" index="5" unique_id=2106143218]
+[node name="Cave_Entrance_Rock_B_VIS" parent="TerrainRoot/test_island" index="5" unique_id=600543757]
 surface_material_override/0 = ExtResource("33_g88yb")
 
-[node name="Cabana_4_VIS" parent="TerrainRoot/test_island" index="9" unique_id=32828794]
+[node name="Cabana_4_VIS" parent="TerrainRoot/test_island" index="9" unique_id=1261193040]
 transform = Transform3D(1.3555894, 0, 0.07078268, 0, 1.3574358, 0, -0.07078268, 0, 1.3555894, 208.27293, -8.906912, 331.88815)
 
-[node name="Rock4_VIS" parent="TerrainRoot/test_island" index="14" unique_id=1139448221]
+[node name="Rock4_VIS" parent="TerrainRoot/test_island" index="14" unique_id=648036675]
 surface_material_override/0 = ExtResource("33_g88yb")
 
-[node name="SM_Palm_Impostor_Zone_001_VIS" parent="TerrainRoot/test_island" index="15" unique_id=622550987]
+[node name="SM_Palm_Impostor_Zone_001_VIS" parent="TerrainRoot/test_island" index="15" unique_id=944411319]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.3975904, 0)
 material_override = SubResource("StandardMaterial3D_7fon7")
 cast_shadow = 0
 
-[node name="SM_Palm_Impostor_Zone_002_VIS" parent="TerrainRoot/test_island" index="16" unique_id=1796971716]
+[node name="SM_Palm_Impostor_Zone_002_VIS" parent="TerrainRoot/test_island" index="16" unique_id=1259880330]
 material_override = SubResource("StandardMaterial3D_7fon7")
 cast_shadow = 0
 
-[node name="Cave_01_COL" parent="TerrainRoot/test_island" index="17" unique_id=1248273720]
+[node name="Cave_01_COL" parent="TerrainRoot/test_island" index="17" unique_id=1057546025]
 visible = false
 
-[node name="Rock2_COL" parent="TerrainRoot/test_island" index="18" unique_id=1833541179]
+[node name="Rock2_COL" parent="TerrainRoot/test_island" index="18" unique_id=1978013593]
 visible = false
 
-[node name="Cabana_4_COL" parent="TerrainRoot/test_island" index="19" unique_id=1459475476]
+[node name="Cabana_4_COL" parent="TerrainRoot/test_island" index="19" unique_id=188734759]
 visible = false
 
-[node name="Cave_Entrance_Rock_A_COL" parent="TerrainRoot/test_island" index="20" unique_id=1698010337]
+[node name="Cave_Entrance_Rock_A_COL" parent="TerrainRoot/test_island" index="20" unique_id=1653941497]
 visible = false
 
-[node name="Cave_Entrance_Rock_B_COL" parent="TerrainRoot/test_island" index="21" unique_id=1465938636]
+[node name="Cave_Entrance_Rock_B_COL" parent="TerrainRoot/test_island" index="21" unique_id=1024186233]
 visible = false
 
-[node name="Rock3_COL" parent="TerrainRoot/test_island" index="22" unique_id=326792480]
+[node name="Rock3_COL" parent="TerrainRoot/test_island" index="22" unique_id=2046054456]
 visible = false
 
-[node name="Terrain_Master_COL" parent="TerrainRoot/test_island" index="23" unique_id=553415098]
+[node name="Terrain_Master_COL" parent="TerrainRoot/test_island" index="23" unique_id=998817783]
 visible = false
 physics_material_override = SubResource("PhysicsMaterial_cfiqe")
 
-[node name="Rock4_COL" parent="TerrainRoot/test_island" index="24" unique_id=1692312148]
+[node name="Rock4_COL" parent="TerrainRoot/test_island" index="24" unique_id=1593598850]
 visible = false
 
 [node name="PalmImpostorGroundShadows" parent="TerrainRoot/test_island" unique_id=671848398 instance=ExtResource("38_7bksg")]
@@ -823,6 +823,7 @@ forward_engine_force = 15000.0
 reverse_engine_force = 4500.0
 forward_thrust_falloff_end_speed = 150.0
 reverse_thrust_falloff_end_speed = 14.2
+use_arcade_turn_continuity = true
 
 [node name="LeftGripTarget" parent="Gameplay/JetSki/VisualRoot/JetSkiVisual/HandlePivot/GripTargets" parent_id_path=PackedInt32Array(328650943, 1552986585) index="0" unique_id=133906918]
 transform = Transform3D(0.80945057, -0.3843369, -0.4439311, -0.56238306, -0.724853, -0.39788496, -0.1688622, 0.57172793, -0.8028763, 0.20600891, 0.697399, -1.4838791)
@@ -833,7 +834,7 @@ transform = Transform3D(1, 0, 1.4210855e-14, 0, 1, 0, -1.4210855e-14, 0, 1, -0.2
 [node name="RiderRig" parent="Gameplay/JetSki/VisualRoot/RiderMount/RiderAssetRoot" parent_id_path=PackedInt32Array(328650943, 1312466662) index="0" unique_id=2001770911]
 breathing_influence = 1.0
 
-[node name="Skeleton3D" parent="Gameplay/JetSki/VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/Rider_Bot/SKEL_Rider" parent_id_path=PackedInt32Array(328650943, 2001770911, 1075285769, 1123472187) index="0" unique_id=1404074567]
+[node name="Skeleton3D" parent="Gameplay/JetSki/VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/Rider_Bot/SKEL_Rider" parent_id_path=PackedInt32Array(328650943, 2001770911, 1075285769, 1960980928) index="0" unique_id=764545418]
 transform = Transform3D(0.9810575, -0.011237088, -0.19338982, 0.011280789, 0.99993587, -0.00087523926, 0.19338726, -0.0013229304, 0.98112124, 0.06955719, 0.0069850683, -0.110954285)
 bones/0/rotation = Quaternion(0.0064583384, 1.6179755e-09, 2.5050662e-07, 0.99997914)
 bones/0/scale = Vector3(1, 0.99999994, 0.99999994)
