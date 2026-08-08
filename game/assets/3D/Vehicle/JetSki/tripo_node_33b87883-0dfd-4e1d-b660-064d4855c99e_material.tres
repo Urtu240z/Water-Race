@@ -1,0 +1,11 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://bslk238fauoa8"]
+
+[ext_resource type="Texture2D" uid="uid://d2xw7macqnyu" path="res://assets/3D/Vehicle/JetSki/NewJetSki_Handle_stand+up+jet+ski+3d+model_basecolor.jpg" id="1_h1rui"]
+
+[resource]
+resource_name = "tripo_node_33b87883-0dfd-4e1d-b660-064d4855c99e_material"
+cull_mode = 2
+albedo_texture = ExtResource("1_h1rui")
+metallic = 0.53333336
+roughness = 0.42857143
+metadata/_gltf_primary_texture_coord = 0

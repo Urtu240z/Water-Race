@@ -48,7 +48,7 @@
 [ext_resource type="PackedScene" uid="uid://cfw7pu0e3ws7n" path="res://assets/3D/Rock2.glb" id="195_ox2y0"]
 [ext_resource type="PackedScene" uid="uid://bgpsiyc4tr47u" path="res://assets/3D/Rock1.glb" id="196_t7md2"]
 [ext_resource type="PackedScene" uid="uid://vls5xu5jnvyf" path="res://assets/3D/Rock3.glb" id="197_3j4p0"]
-[ext_resource type="PackedScene" uid="uid://tl6lotex1356" path="res://scenes/vehicle/jet_ski_with_rider.tscn" id="203_nrhvk"]
+[ext_resource type="PackedScene" uid="uid://tl6lotex1356" path="res://gameplay/vehicles/jet_ski_01/jet_ski_with_rider.tscn" id="203_nrhvk"]
 [ext_resource type="AudioStream" uid="uid://doxjcciq5t4q3" path="res://assets/audio/Ocean_Waves.ogg" id="204_4tj3w"]
 [ext_resource type="AudioStream" uid="uid://cioy3ls4ryjq2" path="res://assets/audio/Ocean_Wind.ogg" id="205_wm0j8"]
 [ext_resource type="PackedScene" uid="uid://dewy0j55fasc8" path="res://systems/camera/chase_camera.tscn" id="206_ckn4c"]
@@ -824,26 +824,6 @@ reverse_engine_force = 4500.0
 forward_thrust_falloff_end_speed = 150.0
 reverse_thrust_falloff_end_speed = 14.2
 
-[node name="EngineAudio" parent="Gameplay/JetSki" index="1" unique_id=1603778743]
-visible = true
-stream = ExtResource("38_kotkt")
-volume_db = -6.0
-pitch_scale = 0.6
-full_throttle_pitch = 1.6
-free_rev_pitch = 2.2
-idle_volume_db = 6.0
-speed_for_full_load = 50.0
-wave_load_activation_throttle = 0.91
-wave_load_response_speed = 17.8
-
-[node name="WaterAudio" parent="Gameplay/JetSki" index="3" unique_id=1620158886]
-running_water_start_speed = 0.0
-running_water_full_speed = 8.6
-maximum_distance = 197.0
-
-[node name="RunningWaterPlayer" parent="Gameplay/JetSki/WaterAudio" index="2" unique_id=140702410]
-volume_db = -60.0
-
 [node name="LeftGripTarget" parent="Gameplay/JetSki/VisualRoot/JetSkiVisual/HandlePivot/GripTargets" parent_id_path=PackedInt32Array(328650943, 1552986585) index="0" unique_id=133906918]
 transform = Transform3D(0.80945057, -0.3843369, -0.4439311, -0.56238306, -0.724853, -0.39788496, -0.1688622, 0.57172793, -0.8028763, 0.20600891, 0.697399, -1.4838791)
 
@@ -873,6 +853,29 @@ left_hand_rotation_correction_degrees = Vector3(-18.44, 32.09, -21.11)
 
 [node name="GripFingers" parent="Gameplay/JetSki/VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D" index="7" unique_id=940560861]
 left_grip_strength = 0.75
+
+[node name="AnimationTree" parent="Gameplay/JetSki/VisualRoot/RiderMount/RiderAssetRoot/RiderRig" index="2" unique_id=187453891]
+parameters/mounted_add/add_amount = 1.0
+
+[node name="EngineAudio" parent="Gameplay/JetSki" index="3" unique_id=1603778743]
+visible = true
+stream = ExtResource("38_kotkt")
+volume_db = -6.0
+pitch_scale = 0.6
+full_throttle_pitch = 1.6
+free_rev_pitch = 2.2
+idle_volume_db = 6.0
+speed_for_full_load = 50.0
+wave_load_activation_throttle = 0.91
+wave_load_response_speed = 17.8
+
+[node name="WaterAudio" parent="Gameplay/JetSki" index="4" unique_id=1620158886]
+running_water_start_speed = 0.0
+running_water_full_speed = 8.6
+maximum_distance = 197.0
+
+[node name="RunningWaterPlayer" parent="Gameplay/JetSki/WaterAudio" index="2" unique_id=140702410]
+volume_db = -60.0
 
 [node name="BuoyancyPoints" parent="Gameplay/JetSki" index="6" unique_id=1093517847]
 visible = true
@@ -1206,7 +1209,6 @@ buoy_clearance = 20.0
 [editable path="TerrainRoot/test_island"]
 [editable path="TerrainRoot/test_island/PalmImpostorGroundShadows"]
 [editable path="Gameplay/JetSki"]
-[editable path="Gameplay/JetSki/VisualRoot/JetSkiVisual"]
 [editable path="Gameplay/JetSki/VisualRoot/JetSkiVisual/HullModel/Hull"]
 [editable path="Gameplay/JetSki/VisualRoot/JetSkiVisual/HullModel/Hull/NewJetSki_Hull"]
 [editable path="Gameplay/JetSki/VisualRoot/JetSkiVisual/HandlePivot/HandleModel/Handle"]

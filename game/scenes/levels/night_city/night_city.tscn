@@ -51,7 +51,7 @@
 [ext_resource type="Texture2D" uid="uid://c0kex04xga83k" path="res://world/water/ocean/waves/macro_wave_a.png" id="46_ciigv"]
 [ext_resource type="Texture2D" uid="uid://bs48vn7ihhfp" path="res://world/water/ocean/waves/macro_wave_b.png" id="47_55hbu"]
 [ext_resource type="PackedScene" uid="uid://cisubjold2oac" path="res://levels/paradise_island/wildlife/ambient_wildlife.tscn" id="48_jg0dm"]
-[ext_resource type="PackedScene" uid="uid://tl6lotex1356" path="res://scenes/vehicle/jet_ski_with_rider.tscn" id="49_7blqs"]
+[ext_resource type="PackedScene" uid="uid://tl6lotex1356" path="res://gameplay/vehicles/jet_ski_01/jet_ski_with_rider.tscn" id="49_7blqs"]
 [ext_resource type="AudioStream" uid="uid://tn1we3rfc1hp" path="res://assets/audio/Motor_Idle.ogg" id="50_71uy5"]
 [ext_resource type="AudioStream" uid="uid://doxjcciq5t4q3" path="res://assets/audio/Ocean_Waves.ogg" id="51_guaay"]
 [ext_resource type="AudioStream" uid="uid://cioy3ls4ryjq2" path="res://assets/audio/Ocean_Wind.ogg" id="52_a41v7"]
@@ -578,11 +578,11 @@ shader_parameter/wave_mean_a = 0.1050000049875
 shader_parameter/wave_mean_b = 0.0650000030875
 shader_parameter/geometry_normal_step = 2.0
 shader_parameter/ocean_geometry_normal_quality = 2
-shader_parameter/calm_zone_count = 1
-shader_parameter/calm_zone_centers_shapes = PackedVector4Array(-606.7354, 16.41954, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
-shader_parameter/calm_zone_axes = PackedVector4Array(1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
-shader_parameter/calm_zone_extents_transitions = PackedVector4Array(535.7999, 1601.943, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
-shader_parameter/calm_zone_strengths = PackedVector4Array(0.64, 0.81, 0.47, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1)
+shader_parameter/calm_zone_count = 0
+shader_parameter/calm_zone_centers_shapes = PackedVector4Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/calm_zone_axes = PackedVector4Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/calm_zone_extents_transitions = PackedVector4Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/calm_zone_strengths = PackedVector4Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1)
 shader_parameter/ripple_active = PackedInt32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 shader_parameter/ripple_positions = PackedVector2Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 shader_parameter/ripple_start_times = PackedFloat32Array(-inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf)
@@ -2267,6 +2267,9 @@ left_hand_rotation_correction_degrees = Vector3(-18.44, 32.09, -21.11)
 
 [node name="GripFingers" parent="Gameplay/JetSki/VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D" index="7" unique_id=940560861]
 left_grip_strength = 0.75
+
+[node name="AnimationTree" parent="Gameplay/JetSki/VisualRoot/RiderMount/RiderAssetRoot/RiderRig" index="2" unique_id=187453891]
+parameters/mounted_add/add_amount = 1.0
 
 [node name="BuoyancyPoints" parent="Gameplay/JetSki" index="6" unique_id=1093517847]
 visible = true
