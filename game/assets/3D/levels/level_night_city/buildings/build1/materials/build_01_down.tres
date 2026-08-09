@@ -1,6 +1,0 @@
-[gd_resource type="StandardMaterial3D" format=3 uid="uid://4i8uw2ideikt"]
-
-[resource]
-resource_name = "down"
-albedo_color = Color(0.46534133, 0.27705196, 0.21620253, 1)
-roughness = 0.16

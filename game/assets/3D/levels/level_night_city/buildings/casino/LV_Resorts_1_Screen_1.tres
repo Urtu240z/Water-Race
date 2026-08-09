@@ -1,7 +1,0 @@
-[gd_resource type="StandardMaterial3D" format=3 uid="uid://bdavd4c6n0e64"]
-
-[resource]
-resource_name = "LV_Resorts_1_Screen_1"
-cull_mode = 2
-albedo_color = Color(0.5142317, 0.5142317, 0.5142317, 1)
-roughness = 0.5

@@ -1,0 +1,93 @@
+[remap]
+
+importer="scene"
+importer_version=1
+type="PackedScene"
+uid="uid://b43swywpnr25f"
+path="res://.godot/imported/ferrys_wheel.glb-684d4aeedb44002e234f910786d1f223.scn"
+
+[deps]
+
+source_file="res://levels/gold_city/props/ferris_wheel/ferrys_wheel.glb"
+dest_files=["res://.godot/imported/ferrys_wheel.glb-684d4aeedb44002e234f910786d1f223.scn"]
+
+[params]
+
+nodes/root_type=""
+nodes/root_name=""
+nodes/root_script=null
+mesh_library/use_node_names_as_mesh_names=false
+array_mesh/deduplicate_surfaces=true
+nodes/apply_root_scale=true
+nodes/root_scale=1.0
+nodes/import_as_skeleton_bones=false
+nodes/use_name_suffixes=true
+nodes/use_node_type_suffixes=true
+meshes/ensure_tangents=true
+meshes/generate_lods=true
+meshes/create_shadow_meshes=true
+meshes/light_baking=2
+meshes/lightmap_texel_size=0.2
+meshes/force_disable_compression=false
+skins/use_named_skins=true
+animation/import=true
+animation/fps=30
+animation/trimming=false
+animation/remove_immutable_tracks=true
+animation/import_rest_as_RESET=false
+import_script/path=""
+materials/extract=0
+materials/extract_format=0
+materials/extract_path="res://levels/gold_city/props/ferris_wheel/materials"
+_subresources={
+"materials": {
+"ferrys_wheel_01_concrete": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/gold_city/props/ferris_wheel/materials/ferrys_wheel_01_concrete.tres",
+"use_external/path": "uid://bs8uilhqsfitm"
+},
+"ferrys_wheel_02_glass_clear": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/gold_city/props/ferris_wheel/materials/ferrys_wheel_02_glass_clear.tres",
+"use_external/path": "uid://dy7egwtfplhjs"
+},
+"ferrys_wheel_03_glass_gold": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/gold_city/props/ferris_wheel/materials/ferrys_wheel_03_glass_gold.tres",
+"use_external/path": "uid://dpmtqyu35i66a"
+},
+"ferrys_wheel_04_interior": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/gold_city/props/ferris_wheel/materials/ferrys_wheel_04_interior.tres",
+"use_external/path": "uid://dil5nmk6tyixu"
+},
+"ferrys_wheel_05_metal_dark": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/gold_city/props/ferris_wheel/materials/ferrys_wheel_05_metal_dark.tres",
+"use_external/path": "uid://bxnmw66nc6gvo"
+},
+"ferrys_wheel_06_metal_light": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/gold_city/props/ferris_wheel/materials/ferrys_wheel_06_metal_light.tres",
+"use_external/path": "uid://cyv2qfktfy2au"
+},
+"ferrys_wheel_07_red": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/gold_city/props/ferris_wheel/materials/ferrys_wheel_07_red.tres",
+"use_external/path": "uid://bn1hi2vdl8di8"
+},
+"ferrys_wheel_08_wood": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/gold_city/props/ferris_wheel/materials/ferrys_wheel_08_wood.tres",
+"use_external/path": "uid://3ht064uybooo"
+},
+"ferrys_wheel_09_yellow": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/gold_city/props/ferris_wheel/materials/ferrys_wheel_09_yellow.tres",
+"use_external/path": "uid://j44so7xw0vdj"
+}
+}
+}
+gltf/naming_version=2
+gltf/embedded_image_handling=2
+gltf/texture_map_mode=1

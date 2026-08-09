@@ -55,7 +55,7 @@
 [ext_resource type="AudioStream" uid="uid://dq0xb5edi3237" path="res://audio/music/Storm Chaser.ogg" id="53_5dbre"]
 [ext_resource type="PackedScene" uid="uid://dewy0j55fasc8" path="res://systems/camera/chase_camera.tscn" id="54_e260u"]
 [ext_resource type="Shader" uid="uid://udpsvcumn1mh" path="res://systems/camera/underwater/shaders/underwater_split_view_post_process.gdshader" id="55_gee3e"]
-[ext_resource type="PackedScene" uid="uid://byqrxgrtjkcgm" path="res://world/props/buildings/beach_hotel.glb" id="56_3d45c"]
+[ext_resource type="PackedScene" uid="uid://byqrxgrtjkcgm" path="res://world/props/buildings/beach_hotel/beach_hotel.glb" id="56_3d45c"]
 [ext_resource type="PackedScene" uid="uid://cf3mdmbksb1m7" path="res://gameplay/race/course/ramps/ramp_01.tscn" id="57_dkdos"]
 [ext_resource type="PackedScene" uid="uid://c8qf6cnfoysg8" path="res://gameplay/race/course/ramps/ramp_02.tscn" id="58_aw67g"]
 [ext_resource type="PackedScene" uid="uid://665ve8ouncoh" path="res://world/vegetation/palms/palm_tree.tscn" id="59_sootc"]
@@ -247,7 +247,7 @@ shader_parameter/breakup = 0.0
 material = ExtResource("15_6i7i5")
 size = Vector2(10000, 10000)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_j3gli"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_w5ddm"]
 resource_local_to_scene = true
 render_priority = 0
 shader = ExtResource("41_48bym")
@@ -399,7 +399,7 @@ shader_parameter/foam_scroll_speed = 0.13
 shader_parameter/foam_roughness = 0.70999998413008
 shader_parameter/ocean_foam_detail_quality = 1
 shader_parameter/ocean_foam_evaluation_distance = 520.0
-shader_parameter/ocean_surface_enabled = true
+shader_parameter/ocean_surface_enabled = false
 shader_parameter/ocean_logical_origin_offset_xz = Vector2(0, 0)
 shader_parameter/ocean_detail_center_xz = Vector2(0, 0)
 shader_parameter/ocean_detailed_wave_fade_start = 170.0
@@ -462,7 +462,7 @@ shader_parameter/custom_reflection_minimum_surface_weight = 0.34
 shader_parameter/custom_reflection_maximum_surface_weight = 0.88
 shader_parameter/custom_reflection_emission_strength = 1.20999997295408
 
-[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_l8lyy"]
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_slliy"]
 resource_local_to_scene = true
 blend_mode = 1
 
@@ -489,7 +489,7 @@ point_count = 3
 [sub_resource type="CurveTexture" id="CurveTexture_bubble_shrink"]
 curve = SubResource("Curve_bubble_shrink")
 
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_6gvfo"]
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_i77vt"]
 resource_local_to_scene = true
 particle_flag_disable_z = true
 emission_shape_offset = Vector3(0, 600, 0)
@@ -512,7 +512,7 @@ turbulence_influence_max = 0.082
 turbulence_initial_displacement_min = -47.5
 turbulence_initial_displacement_max = 94.5
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_d04hn"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_jnsb7"]
 resource_local_to_scene = true
 render_priority = -127
 shader = ExtResource("55_gee3e")
@@ -788,7 +788,7 @@ mesh = SubResource("PlaneMesh_tpwhi")
 [node name="WaterIntegration" type="Node3D" parent="." unique_id=1889730552]
 
 [node name="Ocean" parent="WaterIntegration" unique_id=1340264265 instance=ExtResource("40_5h17r")]
-ocean_material = SubResource("ShaderMaterial_j3gli")
+ocean_material = SubResource("ShaderMaterial_w5ddm")
 wave_world_size_a = 231.5
 wave_world_size_b = 155.5
 wave_travel_speed_a = 9.0000004321348
@@ -1067,7 +1067,7 @@ editor_preview_mode = 0
 
 [node name="EntryBubbles" parent="CameraSystem/ChaseCamera/Camera3D/UnderwaterEffect/WaterCrossingOverlay" index="0"]
 visible = false
-material = SubResource("CanvasItemMaterial_l8lyy")
+material = SubResource("CanvasItemMaterial_slliy")
 position = Vector2(1, 1.76)
 amount = 500
 texture = SubResource("GradientTexture2D_pl0kw")
@@ -1075,10 +1075,10 @@ lifetime = 20.0
 speed_scale = 8.0
 explosiveness = 1.0
 randomness = 1.0
-process_material = SubResource("ParticleProcessMaterial_6gvfo")
+process_material = SubResource("ParticleProcessMaterial_i77vt")
 
 [node name="UnderwaterPostProcess" parent="CameraSystem/ChaseCamera/Camera3D/UnderwaterEffect" index="1" unique_id=1854893749]
-material_override = SubResource("ShaderMaterial_d04hn")
+material_override = SubResource("ShaderMaterial_jnsb7")
 
 [node name="Debug" type="Node" parent="." unique_id=1303880580]
 

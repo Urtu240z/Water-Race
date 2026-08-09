@@ -1,0 +1,9 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://dy7egwtfplhjs"]
+
+[resource]
+resource_name = "ferrys_wheel_02_glass_clear"
+albedo_color = Color(0.73664695, 0.73664695, 0.73664695, 0.5019608)
+roughness = 0.5
+emission_enabled = true
+emission = Color(0.44420668, 0.35516888, 0.27532023, 1)
+emission_energy_multiplier = 16.0

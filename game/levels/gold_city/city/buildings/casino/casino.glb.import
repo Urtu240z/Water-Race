@@ -1,0 +1,127 @@
+[remap]
+
+importer="scene"
+importer_version=1
+type="PackedScene"
+uid="uid://bdou42x601ov0"
+path="res://.godot/imported/casino.glb-c72054f39858961417f66860b9141c8d.scn"
+
+[deps]
+
+source_file="res://levels/gold_city/city/buildings/casino/casino.glb"
+dest_files=["res://.godot/imported/casino.glb-c72054f39858961417f66860b9141c8d.scn"]
+
+[params]
+
+nodes/root_type=""
+nodes/root_name=""
+nodes/root_script=null
+mesh_library/use_node_names_as_mesh_names=false
+array_mesh/deduplicate_surfaces=true
+nodes/apply_root_scale=true
+nodes/root_scale=1.0
+nodes/import_as_skeleton_bones=false
+nodes/use_name_suffixes=true
+nodes/use_node_type_suffixes=true
+meshes/ensure_tangents=true
+meshes/generate_lods=true
+meshes/create_shadow_meshes=true
+meshes/light_baking=2
+meshes/lightmap_texel_size=0.2
+meshes/force_disable_compression=false
+skins/use_named_skins=true
+animation/import=true
+animation/fps=30
+animation/trimming=false
+animation/remove_immutable_tracks=true
+animation/import_rest_as_RESET=false
+import_script/path=""
+materials/extract=0
+materials/extract_format=0
+materials/extract_path="res://levels/gold_city/city/buildings/casino/materials"
+_subresources={
+"materials": {
+"@MATERIAL:2": {
+"use_external/enabled": true,
+"use_external/path": "uid://cftxxlrjcjm4x"
+},
+"Black_Facade_3": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/gold_city/city/buildings/casino/materials/casino_black_facade.tres",
+"use_external/path": "uid://bqmkt0xts3c3j"
+},
+"Blue_Carpark_1": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/gold_city/city/buildings/casino/materials/casino_blue_carpark_01.tres",
+"use_external/path": "uid://b1hky3r27i5h7"
+},
+"Blue_Carpark_1A": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/gold_city/city/buildings/casino/materials/casino_blue_carpark_02.tres",
+"use_external/path": "uid://4i4o55wibxb0"
+},
+"LV_Resorts_1_CarPark_Inside_1": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/gold_city/city/buildings/casino/materials/casino_carpark.tres",
+"use_external/path": "uid://8a6jm5t5qkkl"
+},
+"LV_Resorts_1_Roof_1": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/gold_city/city/buildings/casino/materials/casino_roof.tres",
+"use_external/path": "uid://dk1cjmcaaop8"
+},
+"LV_Resorts_1_Screen_1": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/gold_city/city/buildings/casino/materials/casino_screen.tres",
+"use_external/path": "uid://bv27rn3djxrde"
+},
+"LV_Resorts_1_Wall_1": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/gold_city/city/buildings/casino/materials/casino_wall.tres",
+"use_external/path": "uid://kf0uvcst2nsm"
+},
+"Morongo_1": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/gold_city/city/buildings/casino/materials/casino_morongo_01.tres",
+"use_external/path": "uid://iob8togpvk54"
+},
+"Morongo_2": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/gold_city/city/buildings/casino/materials/casino_morongo_02.tres",
+"use_external/path": "uid://dugoqygqmr1m1"
+},
+"Morongo_Glassl_1": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/gold_city/city/buildings/casino/materials/casino_morongo_glass.tres",
+"use_external/path": "uid://c1crxqy1afar7"
+},
+"Morongo_Wall_1": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/gold_city/city/buildings/casino/materials/casino_morongo_wall.tres",
+"use_external/path": "uid://tusxbsq0uqdh"
+},
+"[Groundcover Wood Mix]": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/gold_city/city/buildings/casino/materials/casino_wood.tres",
+"use_external/path": "uid://cl40n86q2h33i"
+},
+"[Vegetation Blur 01]": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/gold_city/city/buildings/casino/materials/casino_grass_blur.tres",
+"use_external/path": "uid://d2u5ppo3p21iq"
+},
+"[Vegetation Grass]": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/gold_city/city/buildings/casino/materials/casino_grass.tres",
+"use_external/path": "uid://yvngy6up0psf"
+},
+"[Water Pool Light]": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/gold_city/city/buildings/casino/materials/casino_water.tres",
+"use_external/path": "uid://bvlqwejda2m5"
+}
+}
+}
+gltf/naming_version=2
+gltf/embedded_image_handling=2
+gltf/texture_map_mode=1

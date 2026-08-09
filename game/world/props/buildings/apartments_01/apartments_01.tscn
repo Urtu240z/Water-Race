@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://b3y5xp6677icq"]
+
+[ext_resource type="PackedScene" uid="uid://c76eadp45bacd" path="res://world/props/buildings/apartments_01/apartments_01.glb" id="1_n5uga"]
+[ext_resource type="Material" uid="uid://b6yifd2elated" path="res://world/props/buildings/apartments_01/materials/apartments_01_front.tres" id="2_kj0cj"]
+
+[node name="build1" unique_id=1230686511 instance=ExtResource("1_n5uga")]
+
+[node name="build_1_VIS" parent="." index="0" unique_id=912247399]
+surface_material_override/1 = ExtResource("2_kj0cj")
