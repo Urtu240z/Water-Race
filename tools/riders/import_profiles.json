@@ -37,5 +37,45 @@
     "rider_02": {"uid": "uid://cplqhduwv6c2m", "import_cache": "b2f2d34b0a2e9ee57ef881591614a214", "lods": 14, "vertices": 38660, "indices": 208179},
     "rider_03": {"uid": "uid://xgiundwij7p6", "import_cache": "a757df8335643f14f2390c2af55b5bc7", "lods": 16, "vertices": 36689, "indices": 200628},
     "rider_04": {"uid": "uid://bjf21q38puv0c", "import_cache": "e5319ccb6daf78e8a8a600306eff3929", "lods": 16, "vertices": 27488, "indices": 149601}
+  },
+  "texture_import_profiles": {
+    "vram_color": {
+      "params": {
+        "compress/mode": "2", "compress/high_quality": "false", "compress/lossy_quality": "0.7", "compress/uastc_level": "0", "compress/rdo_quality_loss": "0.0", "compress/hdr_compression": "1", "compress/normal_map": "0", "compress/channel_pack": "0", "mipmaps/generate": "true", "mipmaps/limit": "-1", "roughness/mode": "0", "roughness/src_normal": "\"\"", "process/channel_remap/red": "0", "process/channel_remap/green": "1", "process/channel_remap/blue": "2", "process/channel_remap/alpha": "3", "process/fix_alpha_border": "true", "process/premult_alpha": "false", "process/normal_map_invert_y": "false", "process/hdr_as_srgb": "false", "process/hdr_clamp_exposure": "false", "process/size_limit": "0", "detect_3d/compress_to": "0"
+      }
+    },
+    "vram_normal": {
+      "params": {
+        "compress/mode": "2", "compress/high_quality": "false", "compress/lossy_quality": "0.7", "compress/uastc_level": "0", "compress/rdo_quality_loss": "0.0", "compress/hdr_compression": "1", "compress/normal_map": "1", "compress/channel_pack": "0", "mipmaps/generate": "true", "mipmaps/limit": "-1", "roughness/mode": "1", "roughness/src_normal": "$SOURCE_FILE_QUOTED", "process/channel_remap/red": "0", "process/channel_remap/green": "1", "process/channel_remap/blue": "2", "process/channel_remap/alpha": "3", "process/fix_alpha_border": "true", "process/premult_alpha": "false", "process/normal_map_invert_y": "false", "process/hdr_as_srgb": "false", "process/hdr_clamp_exposure": "false", "process/size_limit": "0", "detect_3d/compress_to": "0"
+      }
+    },
+    "uncompressed_specular": {
+      "params": {
+        "compress/mode": "0", "compress/high_quality": "false", "compress/lossy_quality": "0.7", "compress/uastc_level": "0", "compress/rdo_quality_loss": "0.0", "compress/hdr_compression": "1", "compress/normal_map": "0", "compress/channel_pack": "0", "mipmaps/generate": "false", "mipmaps/limit": "-1", "roughness/mode": "0", "roughness/src_normal": "\"\"", "process/channel_remap/red": "0", "process/channel_remap/green": "1", "process/channel_remap/blue": "2", "process/channel_remap/alpha": "3", "process/fix_alpha_border": "true", "process/premult_alpha": "false", "process/normal_map_invert_y": "false", "process/hdr_as_srgb": "false", "process/hdr_clamp_exposure": "false", "process/size_limit": "0", "detect_3d/compress_to": "1"
+      }
+    }
+  },
+  "runtime_textures": {
+    "rider_01": {
+      "rider_01_compatible_diving+suit+character+3d+model_basecolor.jpg": {"profile": "vram_color", "uid": "uid://d8c80qvw6pgf"},
+      "rider_01_compatible_diving+suit+character+3d+model_normal.jpg": {"profile": "vram_normal", "uid": "uid://cqfmxu8ine3qv"},
+      "rider_01_compatible_diving+suit+character+3d+model_rm.png": {"profile": "vram_color", "uid": "uid://cl8t1q5rp7m5l"}
+    },
+    "rider_02": {
+      "rider_02_compatible_athletic+male+3d+model_basecolor.jpg": {"profile": "vram_color", "uid": "uid://0rfykwb2n0b7"},
+      "rider_02_compatible_athletic+male+3d+model_normal.jpg": {"profile": "vram_normal", "uid": "uid://dvi6pjikmt7i4"},
+      "rider_02_compatible_athletic+male+3d+model_rm.jpg": {"profile": "vram_color", "uid": "uid://d1x0f7dyk88in"}
+    },
+    "rider_03": {
+      "rider_03_compatible_athletic+female+3d+model_basecolor.jpg": {"profile": "vram_color", "uid": "uid://c4gx8cncuy32s"},
+      "rider_03_compatible_athletic+female+3d+model_normal.jpg": {"profile": "vram_normal", "uid": "uid://dkvifbbce3l1q"},
+      "rider_03_compatible_athletic+female+3d+model_rm.jpg": {"profile": "vram_color", "uid": "uid://dmbfxmkljf4y5"}
+    },
+    "rider_04": {
+      "rider_04_compatible_Ch20_1001_Diffuse.png": {"profile": "vram_color", "uid": "uid://cl7tn7e358ioj"},
+      "rider_04_compatible_Ch20_1001_Glossiness.png": {"profile": "vram_color", "uid": "uid://p05pm2l6q2uc"},
+      "rider_04_compatible_Ch20_1001_Normal.png": {"profile": "vram_normal", "uid": "uid://dpcgeiir2dx7p"},
+      "rider_04_compatible_Ch20_1001_Specular.png": {"profile": "uncompressed_specular", "uid": "uid://4kwda4uod40m"}
+    }
   }
 }

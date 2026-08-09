@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://6xiujqghm5k5"
-path="res://.godot/imported/rider_04_compatible_Ch20_1001_Specular.png-a1f70b2cd979d3eee81a51c99236c53e.ctex"
+uid="uid://4kwda4uod40m"
+path="res://.godot/imported/rider_04_compatible_Ch20_1001_Specular.png-ef9891f315ea6eec2064fceb21ba9b74.ctex"
 metadata={
 "vram_texture": false
 }
@@ -11,7 +11,7 @@ metadata={
 [deps]
 
 source_file="res://gameplay/riders/rider_04/runtime/textures/rider_04_compatible_Ch20_1001_Specular.png"
-dest_files=["res://.godot/imported/rider_04_compatible_Ch20_1001_Specular.png-a1f70b2cd979d3eee81a51c99236c53e.ctex"]
+dest_files=["res://.godot/imported/rider_04_compatible_Ch20_1001_Specular.png-ef9891f315ea6eec2064fceb21ba9b74.ctex"]
 
 [params]
 

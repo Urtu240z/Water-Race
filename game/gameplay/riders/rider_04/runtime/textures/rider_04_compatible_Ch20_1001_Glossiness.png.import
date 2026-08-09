@@ -2,20 +2,21 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://vuaqh3472r14"
-path="res://.godot/imported/rider_04_compatible_Ch20_1001_Glossiness.png-787c4ac336e072ef4f63063f4c66bbb7.ctex"
+uid="uid://p05pm2l6q2uc"
+path.s3tc="res://.godot/imported/rider_04_compatible_Ch20_1001_Glossiness.png-7dc3c70377ca5db20d7154ed60797594.s3tc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://gameplay/riders/rider_04/runtime/textures/rider_04_compatible_Ch20_1001_Glossiness.png"
-dest_files=["res://.godot/imported/rider_04_compatible_Ch20_1001_Glossiness.png-787c4ac336e072ef4f63063f4c66bbb7.ctex"]
+dest_files=["res://.godot/imported/rider_04_compatible_Ch20_1001_Glossiness.png-7dc3c70377ca5db20d7154ed60797594.s3tc.ctex"]
 
 [params]
 
-compress/mode=0
+compress/mode=2
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0
@@ -23,7 +24,7 @@ compress/rdo_quality_loss=0.0
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0
-mipmaps/generate=false
+mipmaps/generate=true
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""
@@ -37,4 +38,4 @@ process/normal_map_invert_y=false
 process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
-detect_3d/compress_to=1
+detect_3d/compress_to=0

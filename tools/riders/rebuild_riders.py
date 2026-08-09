@@ -7,6 +7,7 @@ Runtime files are backed up and replaced only after every candidate is valid.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 import shutil
@@ -126,6 +127,90 @@ def stage_artifacts(rider: str) -> list[Path]:
     return [path for path in directory.iterdir() if path.is_file() and path.name.startswith(prefix)]
 
 
+def res_path(path: Path) -> str:
+    return "res://" + path.relative_to(GAME).as_posix()
+
+
+def texture_settings(profile: dict, rider: str, filename: str, source_file: str) -> tuple[dict, dict]:
+    try:
+        asset = profile["runtime_textures"][rider][filename]
+        template = profile["texture_import_profiles"][asset["profile"]]
+    except KeyError as error:
+        raise RebuildError(f"{rider}: missing texture import profile for {filename}.") from error
+    params = {
+        key: value.replace("$SOURCE_FILE_QUOTED", json.dumps(source_file))
+        for key, value in template["params"].items()
+    }
+    return asset, params
+
+
+def write_texture_import(texture: Path, rider: str, profile: dict, preserve_uid: bool) -> None:
+    source_file = res_path(texture)
+    asset, params = texture_settings(profile, rider, texture.name, source_file)
+    cache_hash = hashlib.md5(source_file.encode("utf-8")).hexdigest()
+    vram = params["compress/mode"] == "2"
+    destination = "res://.godot/imported/%s-%s%s" % (
+        texture.name,
+        cache_hash,
+        ".s3tc.ctex" if vram else ".ctex",
+    )
+    remap_path = "path.s3tc" if vram else "path"
+    metadata = (
+        '{\n"imported_formats": ["s3tc_bptc"],\n"vram_texture": true\n}'
+        if vram else '{\n"vram_texture": false\n}'
+    )
+    lines = ["[remap]", "", 'importer="texture"', 'type="CompressedTexture2D"']
+    if preserve_uid:
+        lines.append(f'uid="{asset["uid"]}"')
+    lines.extend([
+        f'{remap_path}="{destination}"', f"metadata={metadata}", "", "[deps]", "",
+        f'source_file="{source_file}"', f'dest_files=["{destination}"]', "", "[params]", "",
+    ])
+    lines.extend(f"{key}={value}" for key, value in params.items())
+    texture.with_name(texture.name + ".import").write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
+def parse_import(path: Path) -> dict[str, dict[str, str]]:
+    sections: dict[str, dict[str, str]] = {}
+    section = ""
+    for line in path.read_text(encoding="utf-8").splitlines():
+        if line.startswith("[") and line.endswith("]"):
+            section = line[1:-1]
+            sections.setdefault(section, {})
+        elif section and "=" in line:
+            key, value = line.split("=", 1)
+            sections[section][key] = value
+    return sections
+
+
+def validate_texture_imports(rider: str, texture_directory: Path, profile: dict, require_uid: bool) -> None:
+    expected_assets = profile["runtime_textures"].get(rider, {})
+    found = {path.name for path in texture_directory.iterdir() if path.is_file() and path.suffix.lower() in IMAGE_SUFFIXES}
+    if found != set(expected_assets):
+        raise RebuildError(f"{rider}: texture set differs from the canonical profile.")
+    for filename in sorted(expected_assets):
+        texture = texture_directory / filename
+        sidecar = texture.with_name(texture.name + ".import")
+        if not sidecar.is_file():
+            raise RebuildError(f"{rider}: missing texture .import for {filename}.")
+        parsed = parse_import(sidecar)
+        source_file = res_path(texture)
+        asset, expected_params = texture_settings(profile, rider, filename, source_file)
+        remap = parsed.get("remap", {})
+        deps = parsed.get("deps", {})
+        actual_params = parsed.get("params", {})
+        if remap.get("importer") != '"texture"' or remap.get("type") != '"CompressedTexture2D"':
+            raise RebuildError(f"{rider}: {filename} has an invalid texture importer.")
+        if require_uid and remap.get("uid") != f'"{asset["uid"]}"':
+            raise RebuildError(f"{rider}: {filename} UID differs from its canonical profile.")
+        if deps.get("source_file") != f'"{source_file}"':
+            raise RebuildError(f"{rider}: {filename} .import source path is not deterministic.")
+        for key, expected in expected_params.items():
+            if actual_params.get(key) != expected:
+                raise RebuildError(f"{rider}: {filename} differs at {key}.")
+    print(f"TEXTURE_IMPORT_PROFILE_STATUS=PASS rider={rider} scope={texture_directory.name}")
+
+
 def clear_stage(rider: str) -> None:
     for path in stage_artifacts(rider):
         path.unlink()
@@ -168,7 +253,7 @@ def candidate_texture_dir(rider: str) -> Path:
     return rider_dir(rider) / "runtime" / "rebuild_candidate" / "textures"
 
 
-def copy_candidate_textures(rider: str) -> int:
+def copy_candidate_textures(rider: str, profile: dict) -> int:
     candidate = candidate_dir(rider)
     if candidate.exists():
         shutil.rmtree(candidate)
@@ -180,28 +265,24 @@ def copy_candidate_textures(rider: str) -> int:
     for source in stage_artifacts(rider):
         if source.suffix.lower() not in IMAGE_SUFFIXES:
             continue
-        shutil.copy2(source, textures / source.name)
+        destination = textures / source.name
+        shutil.copy2(source, destination)
+        write_texture_import(destination, rider, profile, preserve_uid=False)
         count += 1
     if count == 0:
         raise RebuildError(f"{rider}: staged importer did not extract any embedded images.")
     return count
 
 
-def check_candidate(godot: Path, rider: str) -> None:
+def check_candidate(godot: Path, rider: str, profile: dict) -> None:
     output = f"res://gameplay/riders/{rider}/runtime/.rebuild_output"
     textures = f"res://gameplay/riders/{rider}/runtime/rebuild_candidate/textures"
+    validate_texture_imports(rider, candidate_texture_dir(rider), profile, require_uid=False)
     run_godot(godot, ["--script", "res://dev/extraction/riders/extract_rider_skin.gd", "--", "--rider", rider, "--output-dir", output, "--texture-root", textures], f"{rider} extraction")
     run_godot(godot, ["--script", "res://dev/tests/riders/validate_rider_rebuild_candidate.gd", "--", "--rider", rider, "--runtime-root", output, "--texture-root", textures], f"{rider} candidate resource validation")
 
 
-def retarget_texture_imports(rider: str, texture_directory: Path) -> None:
-    temporary_root = f"res://gameplay/riders/{rider}/runtime/rebuild_candidate/textures/"
-    runtime_root = f"res://gameplay/riders/{rider}/runtime/textures/"
-    for sidecar in texture_directory.glob("*.import"):
-        sidecar.write_text(sidecar.read_text(encoding="utf-8").replace(temporary_root, runtime_root), encoding="utf-8")
-
-
-def publish_candidates(godot: Path, riders: tuple[str, ...]) -> None:
+def publish_candidates(godot: Path, riders: tuple[str, ...], profile: dict) -> None:
     previous_texture_directories: list[Path] = []
     for rider in riders:
         runtime = rider_dir(rider) / "runtime"
@@ -213,12 +294,16 @@ def publish_candidates(godot: Path, riders: tuple[str, ...]) -> None:
             os.replace(textures, previous_textures)
             previous_texture_directories.append(previous_textures)
         shutil.copytree(candidate_texture_dir(rider), textures)
-        retarget_texture_imports(rider, textures)
+        for texture in textures.iterdir():
+            if texture.is_file() and texture.suffix.lower() in IMAGE_SUFFIXES:
+                write_texture_import(texture, rider, profile, preserve_uid=True)
+    import_project(godot)
     for rider in riders:
         candidate_root = f"res://gameplay/riders/{rider}/runtime/.rebuild_output"
         runtime_textures = f"res://gameplay/riders/{rider}/runtime/textures"
         run_godot(godot, ["--script", "res://dev/extraction/riders/retarget_rider_rebuild_candidate.gd", "--", "--rider", rider, "--runtime-root", candidate_root, "--texture-root", runtime_textures], f"{rider} candidate texture retarget")
         run_godot(godot, ["--script", "res://dev/tests/riders/validate_rider_rebuild_candidate.gd", "--", "--rider", rider, "--runtime-root", candidate_root, "--texture-root", runtime_textures], f"{rider} retargeted candidate validation")
+        validate_texture_imports(rider, rider_dir(rider) / "runtime" / "textures", profile, require_uid=True)
     for rider in riders:
         runtime = rider_dir(rider) / "runtime"
         candidate = candidate_dir(rider)
@@ -262,7 +347,22 @@ def assert_normal_state(riders: tuple[str, ...]) -> None:
 
 def cleanup_only(riders: tuple[str, ...]) -> None:
     for rider in riders:
+        runtime = rider_dir(rider) / "runtime"
+        textures = runtime / "textures"
+        previous = runtime / ".rebuild_previous_textures"
+        if previous.exists() and textures.exists():
+            raise RebuildError(
+                f"{rider}: ambiguous transactional state; both textures and .rebuild_previous_textures exist."
+            )
+        if previous.exists():
+            os.replace(previous, textures)
+    for rider in riders:
+        runtime = rider_dir(rider) / "runtime"
+        for candidate in (runtime / ".rebuild_output", runtime / "rebuild_candidate"):
+            if candidate.exists():
+                shutil.rmtree(candidate)
         clear_stage(rider)
+    assert_normal_state(riders)
     print("STAGING_CLEANUP=PASS")
 
 
@@ -308,12 +408,12 @@ def main() -> int:
                 backup_rider(rider, backup)
             try:
                 for rider in riders:
-                    copied = copy_candidate_textures(rider)
+                    copied = copy_candidate_textures(rider, profile)
                     print(f"CANDIDATE_TEXTURE_COPY=PASS rider={rider} count={copied}")
                 import_project(godot)
                 for rider in riders:
-                    check_candidate(godot, rider)
-                publish_candidates(godot, riders)
+                    check_candidate(godot, rider, profile)
+                publish_candidates(godot, riders, profile)
                 cleanup_only(riders)
                 assert_normal_state(riders)
                 if not args.skip_normal_validation:
@@ -335,12 +435,12 @@ def main() -> int:
             import_project(godot)
             for rider in riders:
                 run_godot(godot, ["--script", "res://dev/tests/riders/validate_staged_rider_import.gd", "--", "--rider", rider], f"{rider} staged LOD validation")
-                copied = copy_candidate_textures(rider)
+                copied = copy_candidate_textures(rider, profile)
                 print(f"CANDIDATE_TEXTURE_COPY=PASS rider={rider} count={copied}")
             import_project(godot)
             for rider in riders:
-                check_candidate(godot, rider)
-            publish_candidates(godot, riders)
+                check_candidate(godot, rider, profile)
+            publish_candidates(godot, riders, profile)
             cleanup_only(riders)
             assert_normal_state(riders)
             if not args.skip_normal_validation:
