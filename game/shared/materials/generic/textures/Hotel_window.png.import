@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://brii3b1y5pyrc"
-path.s3tc="res://.godot/imported/Hotel_window.png-a97ea07a9ccd9b38fdc6fe32e64c5471.s3tc.ctex"
+path.s3tc="res://.godot/imported/Hotel_window.png-ef37dd3557c65221d570d3b59735a222.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://assets/3D/levels/Hotel_window.png"
-dest_files=["res://.godot/imported/Hotel_window.png-a97ea07a9ccd9b38fdc6fe32e64c5471.s3tc.ctex"]
+source_file="res://shared/materials/generic/textures/Hotel_window.png"
+dest_files=["res://.godot/imported/Hotel_window.png-ef37dd3557c65221d570d3b59735a222.s3tc.ctex"]
 
 [params]
 
@@ -22,12 +22,12 @@ compress/lossy_quality=0.7
 compress/uastc_level=0
 compress/rdo_quality_loss=0.0
 compress/hdr_compression=1
-compress/normal_map=0
+compress/normal_map=1
 compress/channel_pack=0
 mipmaps/generate=true
 mipmaps/limit=-1
-roughness/mode=0
-roughness/src_normal=""
+roughness/mode=1
+roughness/src_normal="res://assets/3D/levels/Hotel_window.png"
 process/channel_remap/red=0
 process/channel_remap/green=1
 process/channel_remap/blue=2

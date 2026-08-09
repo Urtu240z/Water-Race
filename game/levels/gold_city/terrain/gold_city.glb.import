@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://b6ny8tx1gom7c"
-path="res://.godot/imported/Gold_City.glb-b67cc2610ba73563ce9ef232937305dd.scn"
+path="res://.godot/imported/gold_city.glb-ce9157c66aa15c24859cdf8c732d5da3.scn"
 
 [deps]
 
-source_file="res://assets/3D/levels/level_night_city/Gold_City.glb"
-dest_files=["res://.godot/imported/Gold_City.glb-b67cc2610ba73563ce9ef232937305dd.scn"]
+source_file="res://levels/gold_city/terrain/gold_city.glb"
+dest_files=["res://.godot/imported/gold_city.glb-ce9157c66aa15c24859cdf8c732d5da3.scn"]
 
 [params]
 
@@ -36,9 +36,9 @@ animation/trimming=false
 animation/remove_immutable_tracks=true
 animation/import_rest_as_RESET=false
 import_script/path=""
-materials/extract=2
+materials/extract=0
 materials/extract_format=0
-materials/extract_path="res://assets/3D/levels/level_night_city/materials"
+materials/extract_path="res://levels/gold_city/terrain/materials"
 _subresources={}
 gltf/naming_version=2
 gltf/embedded_image_handling=2
