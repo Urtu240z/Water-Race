@@ -33,9 +33,9 @@
     "gltf/texture_map_mode": 1
   },
   "riders": {
-    "rider_01": {"uid": "uid://chdxmus0psnvc", "lods": 14, "vertices": 27992, "indices": 146151},
-    "rider_02": {"uid": "uid://cplqhduwv6c2m", "lods": 14, "vertices": 38660, "indices": 208179},
-    "rider_03": {"uid": "uid://xgiundwij7p6", "lods": 16, "vertices": 36689, "indices": 200628},
-    "rider_04": {"uid": "uid://bjf21q38puv0c", "lods": 16, "vertices": 27488, "indices": 149601}
+    "rider_01": {"uid": "uid://chdxmus0psnvc", "import_cache": "cb4721828d6a0922dfc4e9ac0fbb1fc7", "lods": 14, "vertices": 27992, "indices": 146151},
+    "rider_02": {"uid": "uid://cplqhduwv6c2m", "import_cache": "b2f2d34b0a2e9ee57ef881591614a214", "lods": 14, "vertices": 38660, "indices": 208179},
+    "rider_03": {"uid": "uid://xgiundwij7p6", "import_cache": "a757df8335643f14f2390c2af55b5bc7", "lods": 16, "vertices": 36689, "indices": 200628},
+    "rider_04": {"uid": "uid://bjf21q38puv0c", "import_cache": "e5319ccb6daf78e8a8a600306eff3929", "lods": 16, "vertices": 27488, "indices": 149601}
   }
 }

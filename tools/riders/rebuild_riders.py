@@ -19,7 +19,6 @@ ROOT = Path(__file__).resolve().parents[2]
 GAME = ROOT / "game"
 PROFILE = Path(__file__).with_name("import_profiles.json")
 RIDERS = ("rider_01", "rider_02", "rider_03", "rider_04")
-GODOT_DEFAULT = Path(r"C:\Users\ehort\Documents\Godot 4.7\Godot_v4.7.1-stable_win64_console.exe")
 IMAGE_SUFFIXES = {".png", ".jpg", ".jpeg", ".webp", ".tga", ".bmp"}
 
 
@@ -28,10 +27,25 @@ class RebuildError(RuntimeError):
 
 
 def godot_path(cli: str | None) -> Path:
-    candidate = cli or os.environ.get("GODOT_BIN") or str(GODOT_DEFAULT)
-    path = Path(candidate)
-    if not path.is_file():
-        raise RebuildError(f"Godot 4.7.1 executable not found: {path}")
+    explicit = cli or os.environ.get("GODOT_BIN")
+    if explicit:
+        path = Path(explicit)
+        if not path.is_file():
+            raise RebuildError(
+                f"Godot executable not found: {path}. Set GODOT_BIN or use --godot-bin."
+            )
+    else:
+        path = next(
+            (Path(found) for name in (
+                "godot",
+                "godot4",
+                "Godot_v4.7.1-stable_win64_console.exe",
+                "Godot_v4.7.1-stable_win64.exe",
+            ) if (found := shutil.which(name))),
+            None,
+        )
+        if path is None:
+            raise RebuildError("Godot 4.7.1 was not found. Set GODOT_BIN or use --godot-bin.")
     output = subprocess.run([str(path), "--version"], capture_output=True, text=True, check=False)
     version = (output.stdout or output.stderr).strip()
     if output.returncode != 0 or not version.startswith("4.7.1"):
@@ -68,10 +82,12 @@ def variant(value: object) -> str:
 def write_stage_import(rider: str, profile: dict) -> None:
     target = stage_glb(rider).with_suffix(".glb.import")
     source = f"res://gameplay/riders/{rider}/{rider}_compatible.glb"
+    rider_profile = profile["riders"][rider]
+    imported_scene = f"res://.godot/imported/{rider}_compatible.glb-{rider_profile['import_cache']}.scn"
     lines = [
         "[remap]", "", 'importer="scene"', "importer_version=1", 'type="PackedScene"',
-        f'uid="{profile["riders"][rider]["uid"]}"', "", "[deps]", "",
-        f'source_file="{source}"', "", "[params]", "",
+        f'uid="{rider_profile["uid"]}"', f'path="{imported_scene}"', "", "[deps]", "",
+        f'source_file="{source}"', f'dest_files=["{imported_scene}"]', "", "[params]", "",
     ]
     lines.extend(f"{key}={variant(value)}" for key, value in profile["scene_params"].items())
     target.write_text("\n".join(lines) + "\n", encoding="utf-8")
@@ -143,8 +159,22 @@ def import_project(godot: Path) -> None:
     run_godot(godot, ["--import"], "Godot import pass")
 
 
-def copy_runtime_textures(rider: str) -> int:
-    textures = rider_dir(rider) / "runtime" / "textures"
+def candidate_dir(rider: str) -> Path:
+    return rider_dir(rider) / "runtime" / ".rebuild_output"
+
+
+def candidate_texture_dir(rider: str) -> Path:
+    # Godot intentionally skips dot-prefixed directories during filesystem import.
+    return rider_dir(rider) / "runtime" / "rebuild_candidate" / "textures"
+
+
+def copy_candidate_textures(rider: str) -> int:
+    candidate = candidate_dir(rider)
+    if candidate.exists():
+        shutil.rmtree(candidate)
+    textures = candidate_texture_dir(rider)
+    if textures.parent.exists():
+        shutil.rmtree(textures.parent)
     textures.mkdir(parents=True, exist_ok=True)
     count = 0
     for source in stage_artifacts(rider):
@@ -159,21 +189,45 @@ def copy_runtime_textures(rider: str) -> int:
 
 def check_candidate(godot: Path, rider: str) -> None:
     output = f"res://gameplay/riders/{rider}/runtime/.rebuild_output"
-    textures = f"res://gameplay/riders/{rider}/runtime/textures"
+    textures = f"res://gameplay/riders/{rider}/runtime/rebuild_candidate/textures"
     run_godot(godot, ["--script", "res://dev/extraction/riders/extract_rider_skin.gd", "--", "--rider", rider, "--output-dir", output, "--texture-root", textures], f"{rider} extraction")
-    candidate = rider_dir(rider) / "runtime" / ".rebuild_output"
-    for name in (f"{rider}_body_mesh.res", f"{rider}_skin.res"):
-        if not (candidate / name).is_file():
-            raise RebuildError(f"{rider}: extractor did not create candidate {name}.")
+    run_godot(godot, ["--script", "res://dev/tests/riders/validate_rider_rebuild_candidate.gd", "--", "--rider", rider, "--runtime-root", output, "--texture-root", textures], f"{rider} candidate resource validation")
 
 
-def publish_candidates(riders: tuple[str, ...]) -> None:
+def retarget_texture_imports(rider: str, texture_directory: Path) -> None:
+    temporary_root = f"res://gameplay/riders/{rider}/runtime/rebuild_candidate/textures/"
+    runtime_root = f"res://gameplay/riders/{rider}/runtime/textures/"
+    for sidecar in texture_directory.glob("*.import"):
+        sidecar.write_text(sidecar.read_text(encoding="utf-8").replace(temporary_root, runtime_root), encoding="utf-8")
+
+
+def publish_candidates(godot: Path, riders: tuple[str, ...]) -> None:
+    previous_texture_directories: list[Path] = []
     for rider in riders:
         runtime = rider_dir(rider) / "runtime"
-        candidate = runtime / ".rebuild_output"
+        textures = runtime / "textures"
+        previous_textures = runtime / ".rebuild_previous_textures"
+        if previous_textures.exists():
+            raise RebuildError(f"{rider}: previous transactional texture directory is still present.")
+        if textures.exists():
+            os.replace(textures, previous_textures)
+            previous_texture_directories.append(previous_textures)
+        shutil.copytree(candidate_texture_dir(rider), textures)
+        retarget_texture_imports(rider, textures)
+    for rider in riders:
+        candidate_root = f"res://gameplay/riders/{rider}/runtime/.rebuild_output"
+        runtime_textures = f"res://gameplay/riders/{rider}/runtime/textures"
+        run_godot(godot, ["--script", "res://dev/extraction/riders/retarget_rider_rebuild_candidate.gd", "--", "--rider", rider, "--runtime-root", candidate_root, "--texture-root", runtime_textures], f"{rider} candidate texture retarget")
+        run_godot(godot, ["--script", "res://dev/tests/riders/validate_rider_rebuild_candidate.gd", "--", "--rider", rider, "--runtime-root", candidate_root, "--texture-root", runtime_textures], f"{rider} retargeted candidate validation")
+    for rider in riders:
+        runtime = rider_dir(rider) / "runtime"
+        candidate = candidate_dir(rider)
         for name in (f"{rider}_body_mesh.res", f"{rider}_skin.res"):
             os.replace(candidate / name, runtime / name)
         candidate.rmdir()
+        shutil.rmtree(candidate_texture_dir(rider).parent)
+    for previous_textures in previous_texture_directories:
+        shutil.rmtree(previous_textures)
 
 
 def normal_validation(godot: Path) -> None:
@@ -197,6 +251,10 @@ def assert_normal_state(riders: tuple[str, ...]) -> None:
     leftovers: list[str] = []
     for rider in riders:
         leftovers.extend(str(path.relative_to(ROOT)) for path in stage_artifacts(rider))
+        runtime = rider_dir(rider) / "runtime"
+        for temporary in (".rebuild_output", ".rebuild_previous_textures", "rebuild_candidate"):
+            if (runtime / temporary).exists():
+                leftovers.append(str((runtime / temporary).relative_to(ROOT)))
     if leftovers:
         raise RebuildError("Staging artifacts remain: " + ", ".join(leftovers))
     print("NORMAL_STATE=PASS (no compatible GLB, generated stage texture, or stage .import in game/)")
@@ -250,12 +308,12 @@ def main() -> int:
                 backup_rider(rider, backup)
             try:
                 for rider in riders:
-                    copied = copy_runtime_textures(rider)
-                    print(f"RUNTIME_TEXTURE_COPY=PASS rider={rider} count={copied}")
+                    copied = copy_candidate_textures(rider)
+                    print(f"CANDIDATE_TEXTURE_COPY=PASS rider={rider} count={copied}")
                 import_project(godot)
                 for rider in riders:
                     check_candidate(godot, rider)
-                publish_candidates(riders)
+                publish_candidates(godot, riders)
                 cleanup_only(riders)
                 assert_normal_state(riders)
                 if not args.skip_normal_validation:
@@ -277,12 +335,12 @@ def main() -> int:
             import_project(godot)
             for rider in riders:
                 run_godot(godot, ["--script", "res://dev/tests/riders/validate_staged_rider_import.gd", "--", "--rider", rider], f"{rider} staged LOD validation")
-                copied = copy_runtime_textures(rider)
-                print(f"RUNTIME_TEXTURE_COPY=PASS rider={rider} count={copied}")
+                copied = copy_candidate_textures(rider)
+                print(f"CANDIDATE_TEXTURE_COPY=PASS rider={rider} count={copied}")
             import_project(godot)
             for rider in riders:
                 check_candidate(godot, rider)
-            publish_candidates(riders)
+            publish_candidates(godot, riders)
             cleanup_only(riders)
             assert_normal_state(riders)
             if not args.skip_normal_validation:

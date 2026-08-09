@@ -5,6 +5,7 @@
 
 # Transactional candidates created by tools/riders/rebuild_riders.py
 game/gameplay/riders/*/runtime/.rebuild_output/
+game/gameplay/riders/*/runtime/rebuild_candidate/
 tools/riders/__pycache__/
 
 # Godot-specific ignores
