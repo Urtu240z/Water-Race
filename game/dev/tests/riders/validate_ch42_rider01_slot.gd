@@ -25,6 +25,8 @@ func _run() -> void:
 		push_error("RiderRig is missing.")
 		quit(1)
 		return
+	(rig as RiderRig).set_rider_skin(RiderRig.RiderSkin.RIDER01)
+	await process_frame
 	var skeleton := rig.get_node_or_null(SKELETON_PATH) as Skeleton3D
 	if skeleton == null or skeleton.get_bone_count() != 52:
 		push_error("Expected a 52-bone shared skeleton.")

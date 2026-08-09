@@ -43,18 +43,18 @@ const EXPECTED_BLEND_NODES: Array[StringName] = [
 	&"manual_pitch_add",
 ]
 const RIDER01_TEXTURES: Array[String] = [
-	"Rider01_RiderCompatible_Jartur_old_Slavic_Male_with_Genitals_and_beard_lsdif.png",
-	"Rider01_RiderCompatible_brown_eye.png",
-	"Rider01_RiderCompatible_eyebrow004.png",
-	"Rider01_RiderCompatible_eyelashes01.png",
-	"Rider01_RiderCompatible_short02_diffuse.png",
-	"Rider01_RiderCompatible_sport_sunglasses.png",
-	"Rider01_RiderCompatible_teeth.png",
-	"Rider01_RiderCompatible_tongue01_diffuse.png",
-	"Rider01_RiderCompatible_trunktest7.png",
-	"Rider01_RiderCompatible_trunktest7normal.png",
-	"Rider01_RiderCompatible_wb_normals.png",
-	"Rider01_RiderCompatible_wb_tex3.png",
+	"Rider01_Jartur_old_Slavic_Male_with_Genitals_and_beard_lsdif.png",
+	"Rider01_brown_eye.png",
+	"Rider01_eyebrow004.png",
+	"Rider01_eyelashes01.png",
+	"Rider01_short02_diffuse.png",
+	"Rider01_sport_sunglasses.png",
+	"Rider01_teeth.png",
+	"Rider01_tongue01_diffuse.png",
+	"Rider01_trunktest7.png",
+	"Rider01_trunktest7normal.png",
+	"Rider01_wb_normals.png",
+	"Rider01_wb_tex3.png",
 ]
 
 var _report: PackedStringArray = []

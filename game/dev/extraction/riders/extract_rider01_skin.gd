@@ -1,7 +1,7 @@
 extends SceneTree
 
 const RIDER01_SCENE_PATH := \
-	"res://gameplay/riders/rider_01/Rider01_RiderCompatible.glb"
+	"res://gameplay/riders/rider_01/Rider01.glb"
 const RIDER_BOT_SCENE_PATH := "res://gameplay/riders/bot/Rider_Bot.glb"
 const OUTPUT_DIR := \
 	"res://gameplay/riders/rider_01/runtime"
