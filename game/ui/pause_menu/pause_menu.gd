@@ -10,12 +10,12 @@ const MASTER_BUS_NAME := &"Master"
 const MINIMUM_VOLUME_DB := -80.0
 const LEVEL_OPTIONS: Array[Dictionary] = [
 	{
-		"display_name": "Island Test Blender",
-		"scene_path": "res://levels/paradise_island/island_test_BLENDER.tscn",
+		"display_name": "Paradise Island",
+		"scene_path": "res://levels/paradise_island/paradise_island.tscn",
 	},
 	{
-		"display_name": "Night City",
-		"scene_path": "res://levels/gold_city/night_city.tscn",
+		"display_name": "Gold City",
+		"scene_path": "res://levels/gold_city/gold_city.tscn",
 	},
 ]
 

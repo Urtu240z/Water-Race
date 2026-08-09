@@ -74,10 +74,10 @@ rider_skin = 4
 [node name="rider_bot" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot" parent_id_path=PackedInt32Array(2001770911, 226906520) index="0" unique_id=1075285769]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.18724537, 0)
 
-[node name="SKEL_Rider" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/rider_bot" index="0" unique_id=1123472187]
+[node name="SKEL_Rider" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/rider_bot" index="0" unique_id=631392731]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.1578315e-08, 0.11282855, -0.13244057)
 
-[node name="Skeleton3D" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/rider_bot/SKEL_Rider" index="0" unique_id=1404074567]
+[node name="Skeleton3D" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/rider_bot/SKEL_Rider" index="0" unique_id=763064560]
 transform = Transform3D(0.9879613, 0.058283646, -0.1433027, -0.04260468, 0.9930024, 0.1101448, 0.14871976, -0.1027133, 0.98353034, -0.08274425, 0.07259053, -0.025370061)
 bones/0/rotation = Quaternion(0.05192896, -0.0029018968, 0.029417818, 0.9982132)
 bones/0/scale = Vector3(1, 0.9999999, 0.99999976)
@@ -256,11 +256,11 @@ left_grip_strength = 0.87
 right_grip_strength = 0.93
 thumb_opposition_strength = 0.47
 
-[node name="rider_01_body" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/rider_bot/SKEL_Rider/Skeleton3D" index="16" unique_id=1837524736]
-visible = false
-
-[node name="rider_02_body" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/rider_bot/SKEL_Rider/Skeleton3D" index="17" unique_id=417895057]
+[node name="rider_01_body" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/rider_bot/SKEL_Rider/Skeleton3D" index="9" unique_id=1837524736]
 visible = true
+
+[node name="rider_03_body" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/rider_bot/SKEL_Rider/Skeleton3D" index="11" unique_id=9366931]
+visible = false
 
 [node name="AnimationTree" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig" index="2" unique_id=187453891]
 parameters/mounted_add/add_amount = 0.0
@@ -308,9 +308,7 @@ script = ExtResource("8_mounted_lean")
 spray_color = Color(0.78039217, 0.9490196, 1, 0.09803922)
 spray_edge_color = Color(1, 1, 1, 0.1254902)
 
-[editable path="VisualRoot/JetSkiVisual/HullModel/Hull"]
-[editable path="VisualRoot/JetSkiVisual/HullModel/Hull/NewJetSki_Hull"]
-[editable path="VisualRoot/JetSkiVisual/HandlePivot/HandleModel/Handle"]
-[editable path="VisualRoot/JetSkiVisual/HandlePivot/HandleModel/Handle/NewJetSki_Handle"]
+[editable path="VisualRoot/JetSkiVisual/HullModel/NewJetSki_Hull"]
+[editable path="VisualRoot/JetSkiVisual/HandlePivot/HandleModel/NewJetSki_Handle"]
 [editable path="VisualRoot/RiderMount/RiderAssetRoot/RiderRig"]
 [editable path="VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/rider_bot"]

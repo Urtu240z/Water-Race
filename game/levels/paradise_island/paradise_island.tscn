@@ -1,81 +1,81 @@
 [gd_scene format=4 uid="uid://cf71so1prahki"]
 
-[ext_resource type="Script" uid="uid://8h4lqtd66nw0" path="res://gameplay/race/race_level_bootstrap.gd" id="1_xo6gj"]
-[ext_resource type="PackedScene" path="res://ui/pause_menu/pause_menu.tscn" id="2_1vr8d"]
-[ext_resource type="Script" uid="uid://bhgjw8t7kbunx" path="res://world/vegetation/vegetation_quality_controller.gd" id="3_g2m1k"]
-[ext_resource type="Script" uid="uid://b6855v0gxv4ik" path="res://world/environment/sky/sky_environment_controller.gd" id="4_6pfav"]
-[ext_resource type="Sky" uid="uid://bhe1h7h061jon" path="res://world/environment/sky/sky_original.tres" id="5_wiemn"]
-[ext_resource type="Texture2D" uid="uid://cq8kw5o6ssrwc" path="res://world/environment/sky/hdris/aristea_wreck_puresky_4k.hdr" id="6_4yvbq"]
-[ext_resource type="Texture2D" uid="uid://dh4ygdetfbe7t" path="res://world/environment/sky/hdris/kloofendal_48d_partly_cloudy_puresky_4k.hdr" id="7_a61jg"]
-[ext_resource type="Texture2D" uid="uid://b7kfjl0vvcloa" path="res://world/environment/sky/hdris/qwantani_dusk_1_puresky_4k.hdr" id="8_dcqcg"]
-[ext_resource type="Texture2D" uid="uid://cmg3mg3yih3d1" path="res://world/environment/sky/hdris/kloofendal_43d_clear_puresky_4k.hdr" id="9_o1yum"]
-[ext_resource type="Environment" uid="uid://dxw5rtrc0obhl" path="res://world/environment/presets/environment_1.tres" id="10_ucd3t"]
-[ext_resource type="PackedScene" uid="uid://b6twl23g087ar" path="res://levels/paradise_island/props/lights/hanging_light.glb" id="11_bifka"]
-[ext_resource type="Script" uid="uid://cs8r4h4yr3knc" path="res://levels/paradise_island/props/lights/hanging_light_sway_3d.gd" id="12_6ipkk"]
-[ext_resource type="Script" uid="uid://det7bptrkw1dp" path="res://world/terrain/terrain_quality_controller.gd" id="13_b224r"]
-[ext_resource type="PackedScene" uid="uid://1x3n2tx0xgj5" path="res://world/props/terrain/independent_island.glb" id="14_pell1"]
-[ext_resource type="Material" uid="uid://dmj6dyip8ab0w" path="res://shared/materials/terrain/materials/sand_02.res" id="15_wtvuo"]
-[ext_resource type="PackedScene" uid="uid://d05s8vs217tvh" path="res://levels/paradise_island/terrain/paradise_island.glb" id="16_xwvxt"]
-[ext_resource type="Shader" uid="uid://bpcwf528qbo27" path="res://world/terrain/shaders/terrain_master.gdshader" id="17_dwfdr"]
-[ext_resource type="Texture2D" uid="uid://vttu2tsbnprq" path="res://shared/materials/terrain/textures/sand_03/sand_03_albedo.jpg" id="18_fuy2c"]
-[ext_resource type="Texture2D" uid="uid://dsbmyv262kqsl" path="res://shared/materials/terrain/textures/sand_03/sand_03_normal.jpg" id="19_c6fkl"]
-[ext_resource type="Texture2D" uid="uid://dwwasntn4v8ps" path="res://shared/materials/terrain/textures/sand_03/sand_03_orm.jpg" id="20_a8fu3"]
-[ext_resource type="Texture2D" uid="uid://do03pewy7xrqu" path="res://shared/materials/terrain/textures/terrain_master/grass_albedo.png" id="21_j5gyv"]
-[ext_resource type="Texture2D" uid="uid://cpw3o0egt3xhj" path="res://shared/materials/terrain/textures/terrain_master/grass_normal.png" id="22_7o8oy"]
-[ext_resource type="Texture2D" uid="uid://bjbtr4wpa2non" path="res://shared/materials/terrain/textures/terrain_master/grass_orm.png" id="23_b8f5s"]
-[ext_resource type="Texture2D" uid="uid://u0a4uawsdt4x" path="res://shared/materials/terrain/textures/terrain_master/moss_albedo.png" id="24_oms46"]
-[ext_resource type="Texture2D" uid="uid://dgxnwr48qllj6" path="res://shared/materials/terrain/textures/terrain_master/moss_normal.png" id="25_alm54"]
-[ext_resource type="Texture2D" uid="uid://dw445jkd1svoe" path="res://shared/materials/terrain/textures/terrain_master/moss_orm.png" id="26_jyqd0"]
-[ext_resource type="Texture2D" uid="uid://q5yx1piuynov" path="res://shared/materials/terrain/textures/terrain_master/rock_albedo.png" id="27_phk3f"]
-[ext_resource type="Texture2D" uid="uid://dvs2rgjqdk2vl" path="res://shared/materials/terrain/textures/terrain_master/rock_normal.png" id="28_b5lr0"]
-[ext_resource type="Texture2D" uid="uid://ccasg8oxv3yji" path="res://shared/materials/terrain/textures/terrain_master/rock_orm.png" id="29_68qd2"]
-[ext_resource type="Texture2D" uid="uid://cvvyxbgnxwgtw" path="res://shared/materials/terrain/textures/terrain_master/wet_sand_albedo.png" id="30_pti81"]
-[ext_resource type="Texture2D" uid="uid://cm7w5uwuuwkx8" path="res://shared/materials/terrain/textures/terrain_master/wet_sand_normal.png" id="31_pvuus"]
-[ext_resource type="Texture2D" uid="uid://cexe4l4551x8v" path="res://shared/materials/terrain/textures/terrain_master/wet_sand_orm.png" id="32_xo8yn"]
-[ext_resource type="Material" uid="uid://cwtgldc4ahbeu" path="res://shared/materials/terrain/materials/aerial_rocks_02.res" id="33_g88yb"]
-[ext_resource type="Texture2D" uid="uid://co0du6jbk56x6" path="res://world/vegetation/palms/textures/palm_billboard_albedo.png" id="34_1lynj"]
-[ext_resource type="Texture2D" uid="uid://dyqb0w4inbtpk" path="res://world/vegetation/palms/textures/palm_billboard_ao.png" id="35_xfsn7"]
-[ext_resource type="Texture2D" uid="uid://mo8d7pcdm41v" path="res://world/vegetation/palms/textures/palm_billboard_height.png" id="36_g5mgl"]
-[ext_resource type="Texture2D" uid="uid://cnptmjx1cd2rj" path="res://world/vegetation/palms/textures/palm_billboard_normal.png" id="37_qcyq5"]
-[ext_resource type="PackedScene" uid="uid://c08rfa066ud8" path="res://world/vegetation/palms/palm_impostor_ground_shadows.glb" id="38_7bksg"]
-[ext_resource type="Shader" uid="uid://cmnqja2yvxste" path="res://world/vegetation/palms/shaders/palm_impostor_ground_shadow.gdshader" id="39_1ei5q"]
-[ext_resource type="PackedScene" uid="uid://1d3iohmalk05" path="res://world/water/ocean/ocean_3d.tscn" id="40_bioit"]
-[ext_resource type="Shader" uid="uid://dh7o8h2pae1kd" path="res://world/water/ocean/shaders/ocean_water_custom_ssr.gdshader" id="41_6h42o"]
-[ext_resource type="Texture2D" uid="uid://dpb0qhgywdm05" path="res://world/water/ocean/foam/foam_breakup_noise.tres" id="42_wrxrw"]
-[ext_resource type="Texture2D" uid="uid://cdlm681krlrvi" path="res://world/water/ocean/surface_detail/surface_normal_a.tres" id="43_o1xlc"]
-[ext_resource type="Texture2D" uid="uid://biv8w5n57xhjr" path="res://world/water/ocean/surface_detail/surface_normal_b.tres" id="44_5at5y"]
-[ext_resource type="Texture2D" uid="uid://bblan7rbfrudb" path="res://world/water/ocean/surface_detail/surface_warp_noise.tres" id="45_fh22m"]
-[ext_resource type="Texture2D" uid="uid://c0kex04xga83k" path="res://world/water/ocean/waves/macro_wave_a.png" id="46_wwtf3"]
-[ext_resource type="Texture2D" uid="uid://bs48vn7ihhfp" path="res://world/water/ocean/waves/macro_wave_b.png" id="47_xfsg1"]
-[ext_resource type="PackedScene" uid="uid://cisubjold2oac" path="res://levels/paradise_island/wildlife/ambient_wildlife.tscn" id="48_ylscp"]
-[ext_resource type="PackedScene" uid="uid://tl6lotex1356" path="res://gameplay/vehicles/jet_ski_01/jet_ski_with_rider.tscn" id="49_0mwtc"]
-[ext_resource type="AudioStream" uid="uid://tn1we3rfc1hp" path="res://audio/sfx/vehicles/jet_ski/engine/Motor_Idle.ogg" id="50_nt6d7"]
-[ext_resource type="AudioStream" uid="uid://doxjcciq5t4q3" path="res://audio/ambience/ocean/Ocean_Waves.ogg" id="51_0ypj8"]
-[ext_resource type="AudioStream" uid="uid://cioy3ls4ryjq2" path="res://audio/ambience/ocean/Ocean_Wind.ogg" id="52_h0p6r"]
-[ext_resource type="AudioStream" uid="uid://dq0xb5edi3237" path="res://audio/music/Storm Chaser.ogg" id="53_0vktn"]
-[ext_resource type="PackedScene" uid="uid://dewy0j55fasc8" path="res://systems/camera/chase_camera.tscn" id="54_50ksj"]
-[ext_resource type="Shader" uid="uid://udpsvcumn1mh" path="res://systems/camera/underwater/shaders/underwater_split_view_post_process.gdshader" id="55_33cck"]
-[ext_resource type="PackedScene" uid="uid://byqrxgrtjkcgm" path="res://world/props/buildings/beach_hotel.glb" id="56_ksrt0"]
-[ext_resource type="PackedScene" uid="uid://cf3mdmbksb1m7" path="res://gameplay/race/course/ramps/ramp_01.tscn" id="57_8fseg"]
-[ext_resource type="PackedScene" uid="uid://c8qf6cnfoysg8" path="res://gameplay/race/course/ramps/ramp_02.tscn" id="58_1gyqb"]
-[ext_resource type="PackedScene" uid="uid://665ve8ouncoh" path="res://world/vegetation/palms/palm_tree.tscn" id="59_e6dyr"]
-[ext_resource type="PackedScene" uid="uid://dphl8jrmqmgci" path="res://world/props/boats/boat_01.glb" id="60_ji16l"]
-[ext_resource type="PackedScene" uid="uid://df1oaix0ta45m" path="res://world/props/boats/boat_02.glb" id="61_8vinr"]
-[ext_resource type="PackedScene" uid="uid://bgpsiyc4tr47u" path="res://world/props/rocks/rock_01.glb" id="62_fl35x"]
-[ext_resource type="PackedScene" uid="uid://cfw7pu0e3ws7n" path="res://world/props/rocks/rock_02.glb" id="63_m67h8"]
-[ext_resource type="PackedScene" uid="uid://vls5xu5jnvyf" path="res://world/props/rocks/rock_03.glb" id="64_3s10b"]
-[ext_resource type="PackedScene" uid="uid://cilidnwjw2dt" path="res://world/vegetation/palms/palms_multimesh.scn" id="65_fgcfm"]
-[ext_resource type="Material" uid="uid://dk2h67ph6buix" path="res://shared/materials/metal/materials/rusty_metal_03.res" id="66_1qyt2"]
-[ext_resource type="PackedScene" uid="uid://dmqjonl673mxd" path="res://gameplay/race/course/buoys/buoy.tscn" id="67_4cwbb"]
+[ext_resource type="Script" uid="uid://8h4lqtd66nw0" path="res://gameplay/race/race_level_bootstrap.gd" id="1_w5ddm"]
+[ext_resource type="PackedScene" path="res://ui/pause_menu/pause_menu.tscn" id="2_slliy"]
+[ext_resource type="Script" uid="uid://bhgjw8t7kbunx" path="res://world/vegetation/vegetation_quality_controller.gd" id="3_i77vt"]
+[ext_resource type="Script" uid="uid://b6855v0gxv4ik" path="res://world/environment/sky/sky_environment_controller.gd" id="4_jnsb7"]
+[ext_resource type="Sky" uid="uid://bhe1h7h061jon" path="res://world/environment/sky/sky_original.tres" id="5_ert0j"]
+[ext_resource type="Texture2D" uid="uid://cq8kw5o6ssrwc" path="res://world/environment/sky/hdris/aristea_wreck_puresky_4k.hdr" id="6_ord5u"]
+[ext_resource type="Texture2D" uid="uid://dh4ygdetfbe7t" path="res://world/environment/sky/hdris/kloofendal_48d_partly_cloudy_puresky_4k.hdr" id="7_hb254"]
+[ext_resource type="Texture2D" uid="uid://b7kfjl0vvcloa" path="res://world/environment/sky/hdris/qwantani_dusk_1_puresky_4k.hdr" id="8_4s1c0"]
+[ext_resource type="Texture2D" uid="uid://cmg3mg3yih3d1" path="res://world/environment/sky/hdris/kloofendal_43d_clear_puresky_4k.hdr" id="9_qsxv0"]
+[ext_resource type="Environment" uid="uid://dxw5rtrc0obhl" path="res://world/environment/presets/environment_1.tres" id="10_lh2je"]
+[ext_resource type="PackedScene" uid="uid://b6twl23g087ar" path="res://levels/paradise_island/props/lights/hanging_light.glb" id="11_qj7v8"]
+[ext_resource type="Script" uid="uid://cs8r4h4yr3knc" path="res://levels/paradise_island/props/lights/hanging_light_sway_3d.gd" id="12_8enb2"]
+[ext_resource type="Script" uid="uid://det7bptrkw1dp" path="res://world/terrain/terrain_quality_controller.gd" id="13_xn4fe"]
+[ext_resource type="PackedScene" uid="uid://1x3n2tx0xgj5" path="res://world/props/terrain/independent_island.glb" id="14_6ayrq"]
+[ext_resource type="Material" uid="uid://dmj6dyip8ab0w" path="res://shared/materials/terrain/materials/sand_02.res" id="15_6i7i5"]
+[ext_resource type="PackedScene" uid="uid://d05s8vs217tvh" path="res://levels/paradise_island/terrain/paradise_island.glb" id="16_f03ma"]
+[ext_resource type="Shader" uid="uid://bpcwf528qbo27" path="res://world/terrain/shaders/terrain_master.gdshader" id="17_fnlue"]
+[ext_resource type="Texture2D" uid="uid://vttu2tsbnprq" path="res://shared/materials/terrain/textures/sand_03/sand_03_albedo.jpg" id="18_ikh8v"]
+[ext_resource type="Texture2D" uid="uid://dsbmyv262kqsl" path="res://shared/materials/terrain/textures/sand_03/sand_03_normal.jpg" id="19_cjg0n"]
+[ext_resource type="Texture2D" uid="uid://dwwasntn4v8ps" path="res://shared/materials/terrain/textures/sand_03/sand_03_orm.jpg" id="20_8v1g3"]
+[ext_resource type="Texture2D" uid="uid://do03pewy7xrqu" path="res://shared/materials/terrain/textures/terrain_master/grass_albedo.png" id="21_5pg1t"]
+[ext_resource type="Texture2D" uid="uid://cpw3o0egt3xhj" path="res://shared/materials/terrain/textures/terrain_master/grass_normal.png" id="22_2sw4f"]
+[ext_resource type="Texture2D" uid="uid://bjbtr4wpa2non" path="res://shared/materials/terrain/textures/terrain_master/grass_orm.png" id="23_dehlt"]
+[ext_resource type="Texture2D" uid="uid://u0a4uawsdt4x" path="res://shared/materials/terrain/textures/terrain_master/moss_albedo.png" id="24_u0oh0"]
+[ext_resource type="Texture2D" uid="uid://dgxnwr48qllj6" path="res://shared/materials/terrain/textures/terrain_master/moss_normal.png" id="25_ywwvg"]
+[ext_resource type="Texture2D" uid="uid://dw445jkd1svoe" path="res://shared/materials/terrain/textures/terrain_master/moss_orm.png" id="26_lcrxj"]
+[ext_resource type="Texture2D" uid="uid://q5yx1piuynov" path="res://shared/materials/terrain/textures/terrain_master/rock_albedo.png" id="27_jb3b0"]
+[ext_resource type="Texture2D" uid="uid://dvs2rgjqdk2vl" path="res://shared/materials/terrain/textures/terrain_master/rock_normal.png" id="28_27iqf"]
+[ext_resource type="Texture2D" uid="uid://ccasg8oxv3yji" path="res://shared/materials/terrain/textures/terrain_master/rock_orm.png" id="29_toamk"]
+[ext_resource type="Texture2D" uid="uid://cvvyxbgnxwgtw" path="res://shared/materials/terrain/textures/terrain_master/wet_sand_albedo.png" id="30_8aq2h"]
+[ext_resource type="Texture2D" uid="uid://cm7w5uwuuwkx8" path="res://shared/materials/terrain/textures/terrain_master/wet_sand_normal.png" id="31_4l3kd"]
+[ext_resource type="Texture2D" uid="uid://cexe4l4551x8v" path="res://shared/materials/terrain/textures/terrain_master/wet_sand_orm.png" id="32_xspgj"]
+[ext_resource type="Material" uid="uid://cwtgldc4ahbeu" path="res://shared/materials/terrain/materials/aerial_rocks_02.res" id="33_iekhu"]
+[ext_resource type="Texture2D" uid="uid://co0du6jbk56x6" path="res://world/vegetation/palms/textures/palm_billboard_albedo.png" id="34_4c5yl"]
+[ext_resource type="Texture2D" uid="uid://dyqb0w4inbtpk" path="res://world/vegetation/palms/textures/palm_billboard_ao.png" id="35_8k8kq"]
+[ext_resource type="Texture2D" uid="uid://mo8d7pcdm41v" path="res://world/vegetation/palms/textures/palm_billboard_height.png" id="36_13mwe"]
+[ext_resource type="Texture2D" uid="uid://cnptmjx1cd2rj" path="res://world/vegetation/palms/textures/palm_billboard_normal.png" id="37_3d1uy"]
+[ext_resource type="PackedScene" uid="uid://c08rfa066ud8" path="res://world/vegetation/palms/palm_impostor_ground_shadows.glb" id="38_nsda3"]
+[ext_resource type="Shader" uid="uid://cmnqja2yvxste" path="res://world/vegetation/palms/shaders/palm_impostor_ground_shadow.gdshader" id="39_axrq7"]
+[ext_resource type="PackedScene" uid="uid://1d3iohmalk05" path="res://world/water/ocean/ocean_3d.tscn" id="40_5h17r"]
+[ext_resource type="Shader" uid="uid://dh7o8h2pae1kd" path="res://world/water/ocean/shaders/ocean_water_custom_ssr.gdshader" id="41_48bym"]
+[ext_resource type="Texture2D" uid="uid://dpb0qhgywdm05" path="res://world/water/ocean/foam/foam_breakup_noise.tres" id="42_uytnh"]
+[ext_resource type="Texture2D" uid="uid://cdlm681krlrvi" path="res://world/water/ocean/surface_detail/surface_normal_a.tres" id="43_1v62v"]
+[ext_resource type="Texture2D" uid="uid://biv8w5n57xhjr" path="res://world/water/ocean/surface_detail/surface_normal_b.tres" id="44_resor"]
+[ext_resource type="Texture2D" uid="uid://bblan7rbfrudb" path="res://world/water/ocean/surface_detail/surface_warp_noise.tres" id="45_6msh1"]
+[ext_resource type="Texture2D" uid="uid://c0kex04xga83k" path="res://world/water/ocean/waves/macro_wave_a.png" id="46_fyxnn"]
+[ext_resource type="Texture2D" uid="uid://bs48vn7ihhfp" path="res://world/water/ocean/waves/macro_wave_b.png" id="47_o8v62"]
+[ext_resource type="PackedScene" uid="uid://cisubjold2oac" path="res://levels/paradise_island/wildlife/ambient_wildlife.tscn" id="48_ggnme"]
+[ext_resource type="PackedScene" uid="uid://tl6lotex1356" path="res://gameplay/vehicles/jet_ski_01/jet_ski_with_rider.tscn" id="49_dpqm7"]
+[ext_resource type="AudioStream" uid="uid://tn1we3rfc1hp" path="res://audio/sfx/vehicles/jet_ski/engine/Motor_Idle.ogg" id="50_43d1y"]
+[ext_resource type="AudioStream" uid="uid://doxjcciq5t4q3" path="res://audio/ambience/ocean/Ocean_Waves.ogg" id="51_guo2t"]
+[ext_resource type="AudioStream" uid="uid://cioy3ls4ryjq2" path="res://audio/ambience/ocean/Ocean_Wind.ogg" id="52_lbmsl"]
+[ext_resource type="AudioStream" uid="uid://dq0xb5edi3237" path="res://audio/music/Storm Chaser.ogg" id="53_5dbre"]
+[ext_resource type="PackedScene" uid="uid://dewy0j55fasc8" path="res://systems/camera/chase_camera.tscn" id="54_e260u"]
+[ext_resource type="Shader" uid="uid://udpsvcumn1mh" path="res://systems/camera/underwater/shaders/underwater_split_view_post_process.gdshader" id="55_gee3e"]
+[ext_resource type="PackedScene" uid="uid://byqrxgrtjkcgm" path="res://world/props/buildings/beach_hotel.glb" id="56_3d45c"]
+[ext_resource type="PackedScene" uid="uid://cf3mdmbksb1m7" path="res://gameplay/race/course/ramps/ramp_01.tscn" id="57_dkdos"]
+[ext_resource type="PackedScene" uid="uid://c8qf6cnfoysg8" path="res://gameplay/race/course/ramps/ramp_02.tscn" id="58_aw67g"]
+[ext_resource type="PackedScene" uid="uid://665ve8ouncoh" path="res://world/vegetation/palms/palm_tree.tscn" id="59_sootc"]
+[ext_resource type="PackedScene" uid="uid://dphl8jrmqmgci" path="res://world/props/boats/boat_01.glb" id="60_6uadj"]
+[ext_resource type="PackedScene" uid="uid://df1oaix0ta45m" path="res://world/props/boats/boat_02.glb" id="61_l1nq5"]
+[ext_resource type="PackedScene" uid="uid://bgpsiyc4tr47u" path="res://world/props/rocks/rock_01.glb" id="62_2bfr8"]
+[ext_resource type="PackedScene" uid="uid://cfw7pu0e3ws7n" path="res://world/props/rocks/rock_02.glb" id="63_a1asi"]
+[ext_resource type="PackedScene" uid="uid://vls5xu5jnvyf" path="res://world/props/rocks/rock_03.glb" id="64_y8eu1"]
+[ext_resource type="PackedScene" uid="uid://cilidnwjw2dt" path="res://world/vegetation/palms/palms_multimesh.scn" id="65_20vi3"]
+[ext_resource type="Material" uid="uid://dk2h67ph6buix" path="res://shared/materials/metal/materials/rusty_metal_03.res" id="66_1mjlu"]
+[ext_resource type="PackedScene" uid="uid://dmqjonl673mxd" path="res://gameplay/race/course/buoys/buoy.tscn" id="67_diovn"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_f0815"]
-panorama = ExtResource("6_4yvbq")
+panorama = ExtResource("6_ord5u")
 
 [sub_resource type="Sky" id="Sky_k0dft"]
 sky_material = SubResource("PanoramaSkyMaterial_f0815")
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_qid03"]
-panorama = ExtResource("7_a61jg")
+panorama = ExtResource("7_hb254")
 
 [sub_resource type="Sky" id="Sky_s3uqp"]
 sky_material = SubResource("PanoramaSkyMaterial_qid03")
@@ -83,13 +83,13 @@ process_mode = 1
 radiance_size = 5
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_r1j62"]
-panorama = ExtResource("8_dcqcg")
+panorama = ExtResource("8_4s1c0")
 
 [sub_resource type="Sky" id="Sky_e7rpt"]
 sky_material = SubResource("PanoramaSkyMaterial_r1j62")
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_kroct"]
-panorama = ExtResource("9_o1yum")
+panorama = ExtResource("9_qsxv0")
 
 [sub_resource type="Sky" id="Sky_lusr1"]
 sky_material = SubResource("PanoramaSkyMaterial_kroct")
@@ -143,38 +143,38 @@ shadow_mesh = SubResource("ArrayMesh_u40r8")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_tpwhi"]
 render_priority = 0
-shader = ExtResource("17_dwfdr")
-shader_parameter/dry_sand_albedo = ExtResource("18_fuy2c")
-shader_parameter/dry_sand_orm = ExtResource("20_a8fu3")
-shader_parameter/dry_sand_normal = ExtResource("19_c6fkl")
+shader = ExtResource("17_fnlue")
+shader_parameter/dry_sand_albedo = ExtResource("18_ikh8v")
+shader_parameter/dry_sand_orm = ExtResource("20_8v1g3")
+shader_parameter/dry_sand_normal = ExtResource("19_cjg0n")
 shader_parameter/dry_sand_tint = Color(1, 1, 1, 1)
 shader_parameter/dry_sand_brightness = 1.45999996736608
 shader_parameter/dry_sand_contrast = 0.5499999877064
 shader_parameter/dry_sand_saturation = 1.0
-shader_parameter/wet_sand_albedo = ExtResource("30_pti81")
-shader_parameter/wet_sand_orm = ExtResource("32_xo8yn")
-shader_parameter/wet_sand_normal = ExtResource("31_pvuus")
+shader_parameter/wet_sand_albedo = ExtResource("30_8aq2h")
+shader_parameter/wet_sand_orm = ExtResource("32_xspgj")
+shader_parameter/wet_sand_normal = ExtResource("31_4l3kd")
 shader_parameter/wet_sand_tint = Color(1, 1, 1, 1)
 shader_parameter/wet_sand_brightness = 0.3999999910592
 shader_parameter/wet_sand_contrast = 1.0
 shader_parameter/wet_sand_saturation = 1.0
-shader_parameter/grass_albedo = ExtResource("21_j5gyv")
-shader_parameter/grass_orm = ExtResource("23_b8f5s")
-shader_parameter/grass_normal = ExtResource("22_7o8oy")
+shader_parameter/grass_albedo = ExtResource("21_5pg1t")
+shader_parameter/grass_orm = ExtResource("23_dehlt")
+shader_parameter/grass_normal = ExtResource("22_2sw4f")
 shader_parameter/grass_tint = Color(0.75, 1, 0.65, 1)
 shader_parameter/grass_brightness = 0.61999998614176
 shader_parameter/grass_contrast = 0.9499999787656
 shader_parameter/grass_saturation = 1.8999999575312
-shader_parameter/rock_albedo = ExtResource("27_phk3f")
-shader_parameter/rock_orm = ExtResource("29_68qd2")
-shader_parameter/rock_normal = ExtResource("28_b5lr0")
+shader_parameter/rock_albedo = ExtResource("27_jb3b0")
+shader_parameter/rock_orm = ExtResource("29_toamk")
+shader_parameter/rock_normal = ExtResource("28_27iqf")
 shader_parameter/rock_tint = Color(1, 1, 1, 1)
 shader_parameter/rock_brightness = 0.98999997787152
 shader_parameter/rock_contrast = 1.16999997384816
 shader_parameter/rock_saturation = 0.63999998569472
-shader_parameter/moss_albedo = ExtResource("24_oms46")
-shader_parameter/moss_orm = ExtResource("26_jyqd0")
-shader_parameter/moss_normal = ExtResource("25_alm54")
+shader_parameter/moss_albedo = ExtResource("24_u0oh0")
+shader_parameter/moss_orm = ExtResource("26_lcrxj")
+shader_parameter/moss_normal = ExtResource("25_ywwvg")
 shader_parameter/moss_tint = Color(1, 1, 1, 1)
 shader_parameter/moss_brightness = 0.73999998345952
 shader_parameter/moss_contrast = 1.07999997585984
@@ -205,24 +205,24 @@ transparency = 2
 alpha_scissor_threshold = 0.665
 alpha_antialiasing_mode = 0
 cull_mode = 2
-albedo_texture = ExtResource("34_1lynj")
+albedo_texture = ExtResource("34_4c5yl")
 metallic_specular = 0.3
 roughness = 0.72
 normal_enabled = true
 normal_scale = 2.52
-normal_texture = ExtResource("37_qcyq5")
+normal_texture = ExtResource("37_3d1uy")
 rim = 0.48
 rim_tint = 1.0
 anisotropy = -0.2
 ao_enabled = true
 ao_light_affect = 0.59
-ao_texture = ExtResource("35_xfsn7")
+ao_texture = ExtResource("35_8k8kq")
 heightmap_enabled = true
 heightmap_scale = -5.871
 heightmap_deep_parallax = true
 heightmap_min_layers = 15
 heightmap_max_layers = 45
-heightmap_texture = ExtResource("36_g5mgl")
+heightmap_texture = ExtResource("36_13mwe")
 backlight_enabled = true
 backlight = Color(0.7121294, 0.7121294, 0.71212935, 1)
 texture_repeat = false
@@ -236,7 +236,7 @@ friction = 0.49
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_palm_ground_shadow"]
 render_priority = 1
-shader = ExtResource("39_1ei5q")
+shader = ExtResource("39_axrq7")
 shader_parameter/shadow_color = Color(0.03529412, 0.02745098, 0.015686275, 0.69803923)
 shader_parameter/edge_softness = 0.11999999918042
 shader_parameter/breakup = 0.0
@@ -244,17 +244,17 @@ shader_parameter/breakup = 0.0
 [sub_resource type="ArrayMesh" id="ArrayMesh_tpwhi"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_tpwhi"]
-material = ExtResource("15_wtvuo")
+material = ExtResource("15_6i7i5")
 size = Vector2(10000, 10000)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_xo6gj"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_j3gli"]
 resource_local_to_scene = true
 render_priority = 0
-shader = ExtResource("41_6h42o")
+shader = ExtResource("41_48bym")
 shader_parameter/water_level = 0.0
 shader_parameter/simulation_time = 0.0
-shader_parameter/wave_height_texture_a = ExtResource("46_wwtf3")
-shader_parameter/wave_height_texture_b = ExtResource("47_xfsg1")
+shader_parameter/wave_height_texture_a = ExtResource("46_fyxnn")
+shader_parameter/wave_height_texture_b = ExtResource("47_o8v62")
 shader_parameter/wave_world_size_a = 231.5
 shader_parameter/wave_world_size_b = 155.5
 shader_parameter/wave_amplitude_a = 1.35
@@ -341,9 +341,9 @@ shader_parameter/vehicle_interaction_clipmap_distance = 86.0
 shader_parameter/ocean_interaction_debug_mode = 0
 shader_parameter/vehicle_interaction_exaggerated_debug = false
 shader_parameter/vehicle_interaction_debug_multiplier = 3.5
-shader_parameter/surface_normal_texture_a = ExtResource("43_o1xlc")
-shader_parameter/surface_normal_texture_b = ExtResource("44_5at5y")
-shader_parameter/surface_warp_texture = ExtResource("45_fh22m")
+shader_parameter/surface_normal_texture_a = ExtResource("43_1v62v")
+shader_parameter/surface_normal_texture_b = ExtResource("44_resor")
+shader_parameter/surface_warp_texture = ExtResource("45_6msh1")
 shader_parameter/surface_normal_world_size_a = 7.5
 shader_parameter/surface_normal_world_size_b = 3.25
 shader_parameter/surface_normal_strength = 0.62
@@ -383,7 +383,7 @@ shader_parameter/underwater_visibility_radius = 248.0
 shader_parameter/underwater_visibility_blend = 150.0
 shader_parameter/underwater_surface_alpha = 1.0
 shader_parameter/foam_enabled = true
-shader_parameter/foam_noise_texture = ExtResource("42_wrxrw")
+shader_parameter/foam_noise_texture = ExtResource("42_uytnh")
 shader_parameter/foam_color = Color(0.82, 0.95, 1, 1)
 shader_parameter/shore_foam_width = 6.20000009238744
 shader_parameter/shore_foam_strength = 0.57999998703584
@@ -462,7 +462,7 @@ shader_parameter/custom_reflection_minimum_surface_weight = 0.34
 shader_parameter/custom_reflection_maximum_surface_weight = 0.88
 shader_parameter/custom_reflection_emission_strength = 1.20999997295408
 
-[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_1vr8d"]
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_l8lyy"]
 resource_local_to_scene = true
 blend_mode = 1
 
@@ -489,7 +489,7 @@ point_count = 3
 [sub_resource type="CurveTexture" id="CurveTexture_bubble_shrink"]
 curve = SubResource("Curve_bubble_shrink")
 
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_g2m1k"]
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_6gvfo"]
 resource_local_to_scene = true
 particle_flag_disable_z = true
 emission_shape_offset = Vector3(0, 600, 0)
@@ -512,10 +512,10 @@ turbulence_influence_max = 0.082
 turbulence_initial_displacement_min = -47.5
 turbulence_initial_displacement_max = 94.5
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_6pfav"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_d04hn"]
 resource_local_to_scene = true
 render_priority = -127
-shader = ExtResource("55_33cck")
+shader = ExtResource("55_gee3e")
 shader_parameter/camera_submersion = 0.0
 shader_parameter/underwater_tint = Color(0.16847566, 0.5668597, 0.6986189, 1)
 shader_parameter/tint_strength = 0.2
@@ -552,7 +552,7 @@ clearcoat = 0.0
 clearcoat_roughness = 1.0
 
 [sub_resource type="PrismMesh" id="PrismMesh_tpwhi"]
-material = ExtResource("66_1qyt2")
+material = ExtResource("66_1mjlu")
 left_to_right = 1.0
 size = Vector3(17.155, 5.85, 9.015)
 
@@ -566,22 +566,22 @@ data = PackedVector3Array(8.577499, 2.925, 4.5074997, 8.577499, -2.925, 4.507499
 friction = 0.0
 
 [node name="ParadiseIsland" type="Node3D" unique_id=2091620036]
-script = ExtResource("1_xo6gj")
+script = ExtResource("1_w5ddm")
 ocean_path = NodePath("WaterIntegration/Ocean")
 player_spawn_path = NodePath("Gameplay/PlayerSpawn")
 vehicle_path = NodePath("Gameplay/JetSki")
 chase_camera_path = NodePath("CameraSystem/ChaseCamera")
 
-[node name="PauseMenu" parent="." unique_id=885050825 instance=ExtResource("2_1vr8d")]
+[node name="PauseMenu" parent="." unique_id=885050825 instance=ExtResource("2_slliy")]
 
 [node name="VegetationQualityController" type="Node" parent="." unique_id=1324789763 groups=["graphics_quality_vegetation"]]
-script = ExtResource("3_g2m1k")
+script = ExtResource("3_i77vt")
 
 [node name="Environment" type="Node3D" parent="." unique_id=366055671]
 
 [node name="SkyEnvironmentController" type="Node" parent="Environment" unique_id=1243144762]
-script = ExtResource("4_6pfav")
-original_sky = ExtResource("5_wiemn")
+script = ExtResource("4_jnsb7")
+original_sky = ExtResource("5_ert0j")
 aristea_wreck_sky = SubResource("Sky_k0dft")
 kloofendal_48d_sky = SubResource("Sky_s3uqp")
 overcast_soil_sky = SubResource("Sky_e7rpt")
@@ -591,7 +591,7 @@ sky_energy_multiplier = 0.45
 ambient_sky_contribution = 0.2
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="Environment" unique_id=951090327 groups=["graphics_quality_environment"]]
-environment = ExtResource("10_ucd3t")
+environment = ExtResource("10_lh2je")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="Environment" unique_id=1488093793 groups=["graphics_quality_directional_light"]]
 transform = Transform3D(0.8829475, 0.34888542, -0.3141378, 0, 0.66913056, 0.74314487, 0.46947157, -0.656158, 0.5908072, 0, 0, 0)
@@ -627,9 +627,9 @@ ambient_mode = 2
 ambient_color = Color(0.1385223, 0.26824376, 0.19000927, 1)
 ambient_color_energy = 1.22
 
-[node name="Light" parent="Environment" unique_id=191579415 instance=ExtResource("11_bifka")]
+[node name="Light" parent="Environment" unique_id=191579415 instance=ExtResource("11_qj7v8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.99999994, 415.18573, 10.909697, 149.67955)
-script = ExtResource("12_6ipkk")
+script = ExtResource("12_8enb2")
 pivot_offset_local = Vector3(0, 19.381, 0)
 sway_x_degrees = 5.7
 sway_z_degrees = 4.0
@@ -649,9 +649,9 @@ shadow_blur = 3.773
 omni_range = 29.782
 omni_attenuation = 0.971
 
-[node name="Light2" parent="Environment" unique_id=258847674 instance=ExtResource("11_bifka")]
+[node name="Light2" parent="Environment" unique_id=258847674 instance=ExtResource("11_qj7v8")]
 transform = Transform3D(0.99999994, 0, 0, 0, 1, 0, 0, 0, 0.99999994, 362.8249, 10.84194, 118.325005)
-script = ExtResource("12_6ipkk")
+script = ExtResource("12_8enb2")
 pivot_offset_local = Vector3(0, 19.381, 0)
 sway_z_degrees = 3.9
 sway_frequency_hz = 0.31
@@ -673,64 +673,64 @@ omni_range = 29.782
 omni_attenuation = 0.971
 
 [node name="TerrainRoot" type="Node3D" parent="." unique_id=432130367 groups=["graphics_quality_terrain"]]
-script = ExtResource("13_b224r")
+script = ExtResource("13_xn4fe")
 
-[node name="independent_island" parent="TerrainRoot" unique_id=135701482 instance=ExtResource("14_pell1")]
+[node name="independent_island" parent="TerrainRoot" unique_id=135701482 instance=ExtResource("14_6ayrq")]
 transform = Transform3D(0.71981424, 0, -0.6941668, 0, 1, 0, 0.6941668, 0, 0.71981424, 2427.3716, -15.736182, 136.60822)
 
 [node name="Island_1_VIS" parent="TerrainRoot/independent_island" index="0" unique_id=433189918]
-surface_material_override/0 = ExtResource("15_wtvuo")
+surface_material_override/0 = ExtResource("15_6i7i5")
 
-[node name="independent_island2" parent="TerrainRoot" unique_id=318732152 instance=ExtResource("14_pell1")]
+[node name="independent_island2" parent="TerrainRoot" unique_id=318732152 instance=ExtResource("14_6ayrq")]
 transform = Transform3D(2.5448968, 0, 2.17237, 0, 1.375, 0, -2.0929704, 0, 2.6414409, 1964.7793, -5.60398, -2256.5737)
 
 [node name="Island_1_VIS" parent="TerrainRoot/independent_island2" index="0" unique_id=433189918]
-surface_material_override/0 = ExtResource("15_wtvuo")
+surface_material_override/0 = ExtResource("15_6i7i5")
 
-[node name="independent_island3" parent="TerrainRoot" unique_id=538394509 instance=ExtResource("14_pell1")]
+[node name="independent_island3" parent="TerrainRoot" unique_id=538394509 instance=ExtResource("14_6ayrq")]
 transform = Transform3D(-0.17687668, 0, -6.3775477, 0, 6.38, 0, 6.3775477, 0, -0.17687668, -2022.6855, -45.85874, -2256.5737)
 
 [node name="Island_1_VIS" parent="TerrainRoot/independent_island3" index="0" unique_id=433189918]
-surface_material_override/0 = ExtResource("15_wtvuo")
+surface_material_override/0 = ExtResource("15_6i7i5")
 
-[node name="independent_island4" parent="TerrainRoot" unique_id=522839329 instance=ExtResource("14_pell1")]
+[node name="independent_island4" parent="TerrainRoot" unique_id=522839329 instance=ExtResource("14_6ayrq")]
 transform = Transform3D(7.6843944, 0, 3.4050117, 0, 16.9, 0, -3.4050117, 0, 7.6843944, -4529.758, -45.85874, 4123.0527)
 
 [node name="Island_1_VIS" parent="TerrainRoot/independent_island4" index="0" unique_id=433189918]
 transform = Transform3D(0.5352785, 0.09100684, -0.006567538, -0.07122277, 0.6827822, -0.09906116, -0.0020920038, 0.040325806, 1.6920902, 310.06567, -0.8341303, -127.680214)
-surface_material_override/0 = ExtResource("15_wtvuo")
+surface_material_override/0 = ExtResource("15_6i7i5")
 
 [node name="Island_1_VIS2" type="MeshInstance3D" parent="TerrainRoot/independent_island4" unique_id=4035350]
 transform = Transform3D(0.18765359, 0.033053257, 1.5872887, -0.041313544, 0.6878009, -0.038307335, -0.5046578, -0.044015836, 0.5933587, 407.39783, -8.139987, -24.612381)
 mesh = SubResource("ArrayMesh_5d2sp")
-surface_material_override/0 = ExtResource("15_wtvuo")
+surface_material_override/0 = ExtResource("15_6i7i5")
 
-[node name="test_island" parent="TerrainRoot" unique_id=1352578102 instance=ExtResource("16_xwvxt")]
+[node name="test_island" parent="TerrainRoot" unique_id=1352578102 instance=ExtResource("16_f03ma")]
 transform = Transform3D(0.86, 0, 0, 0, 0.86, 0, 0, 0, 0.86, 149, 1.8, 120.1001)
 
 [node name="Terrain_Master_VIS" parent="TerrainRoot/test_island" index="0" unique_id=298348997]
 material_override = SubResource("ShaderMaterial_tpwhi")
 
 [node name="Cave_01_VIS" parent="TerrainRoot/test_island" index="1" unique_id=1502607317]
-surface_material_override/0 = ExtResource("33_g88yb")
+surface_material_override/0 = ExtResource("33_iekhu")
 
 [node name="Cave_Entrance_Rock_A_VIS" parent="TerrainRoot/test_island" index="2" unique_id=531846211]
-surface_material_override/0 = ExtResource("33_g88yb")
+surface_material_override/0 = ExtResource("33_iekhu")
 
 [node name="Rock2_VIS" parent="TerrainRoot/test_island" index="3" unique_id=669672655]
-surface_material_override/0 = ExtResource("33_g88yb")
+surface_material_override/0 = ExtResource("33_iekhu")
 
 [node name="Rock3_VIS" parent="TerrainRoot/test_island" index="4" unique_id=1642907202]
-surface_material_override/0 = ExtResource("33_g88yb")
+surface_material_override/0 = ExtResource("33_iekhu")
 
 [node name="Cave_Entrance_Rock_B_VIS" parent="TerrainRoot/test_island" index="5" unique_id=600543757]
-surface_material_override/0 = ExtResource("33_g88yb")
+surface_material_override/0 = ExtResource("33_iekhu")
 
 [node name="Cabana_4_VIS" parent="TerrainRoot/test_island" index="9" unique_id=1261193040]
 transform = Transform3D(1.3555894, 0, 0.07078268, 0, 1.3574358, 0, -0.07078268, 0, 1.3555894, 208.27293, -8.906912, 331.88815)
 
 [node name="Rock4_VIS" parent="TerrainRoot/test_island" index="14" unique_id=648036675]
-surface_material_override/0 = ExtResource("33_g88yb")
+surface_material_override/0 = ExtResource("33_iekhu")
 
 [node name="SM_Palm_Impostor_Zone_001_VIS" parent="TerrainRoot/test_island" index="15" unique_id=944411319]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.3975904, 0)
@@ -766,7 +766,7 @@ physics_material_override = SubResource("PhysicsMaterial_cfiqe")
 [node name="Rock4_COL" parent="TerrainRoot/test_island" index="24" unique_id=1593598850]
 visible = false
 
-[node name="PalmImpostorGroundShadows" parent="TerrainRoot/test_island" unique_id=671848398 instance=ExtResource("38_7bksg")]
+[node name="PalmImpostorGroundShadows" parent="TerrainRoot/test_island" unique_id=671848398 instance=ExtResource("38_nsda3")]
 
 [node name="SM_Palm_Impostor_Zone_001_SHADOW" parent="TerrainRoot/test_island/PalmImpostorGroundShadows" index="0" unique_id=617546464]
 material_override = SubResource("ShaderMaterial_palm_ground_shadow")
@@ -787,8 +787,8 @@ mesh = SubResource("PlaneMesh_tpwhi")
 
 [node name="WaterIntegration" type="Node3D" parent="." unique_id=1889730552]
 
-[node name="Ocean" parent="WaterIntegration" unique_id=1340264265 instance=ExtResource("40_bioit")]
-ocean_material = SubResource("ShaderMaterial_xo6gj")
+[node name="Ocean" parent="WaterIntegration" unique_id=1340264265 instance=ExtResource("40_5h17r")]
+ocean_material = SubResource("ShaderMaterial_j3gli")
 wave_world_size_a = 231.5
 wave_world_size_b = 155.5
 wave_travel_speed_a = 9.0000004321348
@@ -802,7 +802,7 @@ landing_wave_minimum_depression = 0.0
 landing_wave_minimum_wavelength = 4.55
 landing_wave_maximum_wavelength = 8.0
 
-[node name="AmbientWildlife" parent="." unique_id=1482046972 instance=ExtResource("48_ylscp")]
+[node name="AmbientWildlife" parent="." unique_id=1482046972 instance=ExtResource("48_ggnme")]
 ocean_path = NodePath("")
 animation_speed_multiplier = 2.25
 bird_size_multiplier = 2.9
@@ -815,7 +815,7 @@ dolphin_breach_duration_max = 0.9
 [node name="PlayerSpawn" type="Marker3D" parent="Gameplay" unique_id=434866168]
 transform = Transform3D(0.9811287, 0, 0.19335571, 0, 1, 0, -0.19335571, 0, 0.9811287, 596.97815, 1.98, 464.24957)
 
-[node name="JetSki" parent="Gameplay" unique_id=328650943 instance=ExtResource("49_0mwtc")]
+[node name="JetSki" parent="Gameplay" unique_id=328650943 instance=ExtResource("49_dpqm7")]
 transform = Transform3D(-1.5, 0, -2.2649371e-07, 0, 1.5, 0, 2.2649371e-07, 0, -1.5, 132.69096, 0.71555996, -133.7861)
 center_of_mass = Vector3(0, -0.22, 0.1)
 ocean_path = NodePath("../../WaterIntegration/Ocean")
@@ -834,7 +834,7 @@ transform = Transform3D(1, 0, 1.4210855e-14, 0, 1, 0, -1.4210855e-14, 0, 1, -0.2
 [node name="RiderRig" parent="Gameplay/JetSki/VisualRoot/RiderMount/RiderAssetRoot" parent_id_path=PackedInt32Array(328650943, 1312466662) index="0" unique_id=2001770911]
 breathing_influence = 1.0
 
-[node name="Skeleton3D" parent="Gameplay/JetSki/VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/rider_bot/SKEL_Rider" parent_id_path=PackedInt32Array(328650943, 2001770911, 1075285769, 1960980928) index="0" unique_id=764545418]
+[node name="Skeleton3D" parent="Gameplay/JetSki/VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/rider_bot/SKEL_Rider" parent_id_path=PackedInt32Array(328650943, 2001770911, 1075285769, 631392731) index="0" unique_id=763064560]
 transform = Transform3D(0.9810575, -0.011237088, -0.19338982, 0.011280789, 0.99993587, -0.00087523926, 0.19338726, -0.0013229304, 0.98112124, 0.06955719, 0.0069850683, -0.110954285)
 bones/0/rotation = Quaternion(0.0064583384, 1.6179755e-09, 2.5050662e-07, 0.99997914)
 bones/0/scale = Vector3(1, 0.99999994, 0.99999994)
@@ -928,12 +928,18 @@ left_hand_rotation_correction_degrees = Vector3(-18.44, 32.09, -21.11)
 [node name="GripFingers" parent="Gameplay/JetSki/VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/rider_bot/SKEL_Rider/Skeleton3D" index="7" unique_id=940560861]
 left_grip_strength = 0.75
 
+[node name="rider_01_body" parent="Gameplay/JetSki/VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/rider_bot/SKEL_Rider/Skeleton3D" index="9" unique_id=1837524736]
+visible = false
+
+[node name="rider_02_body" parent="Gameplay/JetSki/VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/rider_bot/SKEL_Rider/Skeleton3D" index="10" unique_id=417895057]
+visible = true
+
 [node name="AnimationTree" parent="Gameplay/JetSki/VisualRoot/RiderMount/RiderAssetRoot/RiderRig" index="2" unique_id=187453891]
 parameters/mounted_add/add_amount = 1.0
 
 [node name="EngineAudio" parent="Gameplay/JetSki" index="3" unique_id=1603778743]
 visible = true
-stream = ExtResource("50_nt6d7")
+stream = ExtResource("50_43d1y")
 volume_db = -6.0
 pitch_scale = 0.6
 full_throttle_pitch = 1.6
@@ -964,10 +970,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0.35)
 
 [node name="VehicleWaterEffects3D" parent="Gameplay/JetSki/Effects" parent_id_path=PackedInt32Array(328650943, 1733691099) index="0" unique_id=1574631450]
 spray_minimum_scale = 0.001
-spray_maximum_scale = 0.748
-spray_growth_multiplier = 2.95
+spray_maximum_scale = 0.4
+spray_growth_multiplier = 3.0
+spray_quad_size = Vector2(0.3, 0.6)
 spray_birth_scale = 0.1
-spray_color = Color(0.83137256, 0.7294118, 0.6, 0.1764706)
+spray_color = Color(0.9137255, 0.8509804, 0.77254903, 0.48235294)
 spray_edge_color = Color(1, 1, 1, 0.14509805)
 spray_sprite_emission = 0.0
 splash_surface_offset = 0.381
@@ -997,22 +1004,22 @@ jet_radius_multiplier = 0.5
 jet_droplet_quad_size = Vector2(0.01, 0.1)
 
 [node name="OceanWaves" type="AudioStreamPlayer" parent="Gameplay/JetSki" unique_id=1310889787]
-stream = ExtResource("51_0ypj8")
+stream = ExtResource("51_guo2t")
 volume_db = -6.0
 autoplay = true
 
 [node name="OceanWind" type="AudioStreamPlayer" parent="Gameplay/JetSki" unique_id=177552327]
-stream = ExtResource("52_h0p6r")
+stream = ExtResource("52_lbmsl")
 volume_db = -8.0
 autoplay = true
 
 [node name="Music" type="AudioStreamPlayer" parent="Gameplay/JetSki" unique_id=1584183376]
-stream = ExtResource("53_0vktn")
+stream = ExtResource("53_5dbre")
 autoplay = true
 
 [node name="CameraSystem" type="Node3D" parent="." unique_id=1510457463]
 
-[node name="ChaseCamera" parent="CameraSystem" unique_id=931334509 instance=ExtResource("54_50ksj")]
+[node name="ChaseCamera" parent="CameraSystem" unique_id=931334509 instance=ExtResource("54_e260u")]
 vehicle_body_path = NodePath("../../Gameplay/JetSki")
 camera_target_path = NodePath("../../Gameplay/JetSki/CameraTarget")
 first_person_socket_path = NodePath("../../Gameplay/JetSki/VisualRoot/RiderMount/FirstPersonSocket")
@@ -1060,7 +1067,7 @@ editor_preview_mode = 0
 
 [node name="EntryBubbles" parent="CameraSystem/ChaseCamera/Camera3D/UnderwaterEffect/WaterCrossingOverlay" index="0"]
 visible = false
-material = SubResource("CanvasItemMaterial_1vr8d")
+material = SubResource("CanvasItemMaterial_l8lyy")
 position = Vector2(1, 1.76)
 amount = 500
 texture = SubResource("GradientTexture2D_pl0kw")
@@ -1068,105 +1075,105 @@ lifetime = 20.0
 speed_scale = 8.0
 explosiveness = 1.0
 randomness = 1.0
-process_material = SubResource("ParticleProcessMaterial_g2m1k")
+process_material = SubResource("ParticleProcessMaterial_6gvfo")
 
 [node name="UnderwaterPostProcess" parent="CameraSystem/ChaseCamera/Camera3D/UnderwaterEffect" index="1" unique_id=1854893749]
-material_override = SubResource("ShaderMaterial_6pfav")
+material_override = SubResource("ShaderMaterial_d04hn")
 
 [node name="Debug" type="Node" parent="." unique_id=1303880580]
 
 [node name="Atrezzo" type="Node3D" parent="." unique_id=1365592301]
 
-[node name="beach_hotel" parent="Atrezzo" unique_id=240417991 instance=ExtResource("56_ksrt0")]
+[node name="beach_hotel" parent="Atrezzo" unique_id=240417991 instance=ExtResource("56_3d45c")]
 transform = Transform3D(0.07044011, 0, 0.4495144, 0, 0.455, 0, -0.4495144, 0, 0.07044011, -123.22586, 30.086075, -150.12727)
 
 [node name="beach_hotel_VIS" parent="Atrezzo/beach_hotel" index="0" unique_id=1307570647]
 surface_material_override/1 = SubResource("StandardMaterial3D_4sljt")
 surface_material_override/4 = SubResource("StandardMaterial3D_dbb74")
 
-[node name="Ramp1" parent="Atrezzo" unique_id=178349614 instance=ExtResource("57_8fseg")]
+[node name="Ramp1" parent="Atrezzo" unique_id=178349614 instance=ExtResource("57_dkdos")]
 transform = Transform3D(-1.7405282, 0, 0.2854636, 0, 1.3100001, 0, -0.12484563, 0, -3.9797747, -319.45636, -4.256017, 63.17799)
 
-[node name="Ramp3" parent="Atrezzo" unique_id=348116492 instance=ExtResource("57_8fseg")]
+[node name="Ramp3" parent="Atrezzo" unique_id=348116492 instance=ExtResource("57_dkdos")]
 transform = Transform3D(0.124845706, 0, 3.979775, 0, 1.31, 0, -1.7405282, 0, 0.28546384, 0.8299866, -4.256017, 541.0693)
 
-[node name="Ramp4" parent="Atrezzo" unique_id=1765982400 instance=ExtResource("57_8fseg")]
+[node name="Ramp4" parent="Atrezzo" unique_id=1765982400 instance=ExtResource("57_dkdos")]
 transform = Transform3D(-1.6541665, 0, 0.11107087, 0, 1.585, 0, -0.05252065, 0, -3.4982371, 668.0774, -3.43675, 192.87813)
 
-[node name="Ramp5" parent="Atrezzo" unique_id=198907615 instance=ExtResource("57_8fseg")]
+[node name="Ramp5" parent="Atrezzo" unique_id=198907615 instance=ExtResource("57_dkdos")]
 transform = Transform3D(-6.876535, 0, 0.12662078, 0, 1.31, 0, -0.2183336, 0, -3.9879904, 603.64154, -4.256017, -416.57425)
 
-[node name="Ramp2" parent="Atrezzo" unique_id=915163340 instance=ExtResource("58_1gyqb")]
+[node name="Ramp2" parent="Atrezzo" unique_id=915163340 instance=ExtResource("58_aw67g")]
 transform = Transform3D(0.04820619, 0, -0.9988374, 0, 1, 0, 0.9988374, 0, 0.04820619, -154.48683, -2.1651487, -420.8884)
 
-[node name="Palm_Tree" parent="Atrezzo" unique_id=1553361729 instance=ExtResource("59_e6dyr")]
+[node name="Palm_Tree" parent="Atrezzo" unique_id=1553361729 instance=ExtResource("59_sootc")]
 transform = Transform3D(0.20306031, -0.08820367, -0.97518545, 0.3984092, 0.9172078, 0, 0.8944477, -0.38852283, 0.22138965, 117.39951, 1.1313139, 139.02599)
 
-[node name="Palm_Tree2" parent="Atrezzo" unique_id=549976422 instance=ExtResource("59_e6dyr")]
+[node name="Palm_Tree2" parent="Atrezzo" unique_id=549976422 instance=ExtResource("59_sootc")]
 transform = Transform3D(0.1600484, -0.21757936, -0.7210711, 0.03606407, 0.73853946, -0.21484555, 0.7523188, 0.0108843185, 0.16369979, 118.13636, -3.2329726, 139.45639)
 
-[node name="Palm_Tree3" parent="Atrezzo" unique_id=1329173572 instance=ExtResource("59_e6dyr")]
+[node name="Palm_Tree3" parent="Atrezzo" unique_id=1329173572 instance=ExtResource("59_sootc")]
 transform = Transform3D(0.10793682, 0.008906024, -0.47275296, 0.02364454, 0.48420563, 0.014520191, 0.47224528, -0.026278945, 0.10732585, 117.19214, -3.2329726, 140.09625)
 
-[node name="Boat_3" parent="Atrezzo" unique_id=1995262324 instance=ExtResource("60_ji16l")]
+[node name="Boat_3" parent="Atrezzo" unique_id=1995262324 instance=ExtResource("60_6uadj")]
 transform = Transform3D(-0.44203085, 0, -0.23368509, 0, 0.5, 0, 0.23368509, 0, -0.44203085, 646.08276, -4.05779, 149.28766)
 
-[node name="Boat_4" parent="Atrezzo" unique_id=100018014 instance=ExtResource("60_ji16l")]
+[node name="Boat_4" parent="Atrezzo" unique_id=100018014 instance=ExtResource("60_6uadj")]
 transform = Transform3D(0.30513912, 0, -0.3960936, 0, 0.5, 0, 0.3960936, 0, 0.30513912, -509.52637, -4.05779, 149.28766)
 
-[node name="Boat_2" parent="Atrezzo" unique_id=1280069477 instance=ExtResource("61_8vinr")]
+[node name="Boat_2" parent="Atrezzo" unique_id=1280069477 instance=ExtResource("61_l1nq5")]
 transform = Transform3D(0.5118447, 0, 1.0853641, 0, 1.2, 0, -1.0853641, 0, 0.5118447, 775.81805, -10.093709, 799.5493)
 
-[node name="Rock1" parent="Atrezzo" unique_id=897258125 instance=ExtResource("62_fl35x")]
+[node name="Rock1" parent="Atrezzo" unique_id=897258125 instance=ExtResource("62_2bfr8")]
 transform = Transform3D(2.5107322, 0, -1.5284144, 0, 2.3749995, 0, 1.3486009, 0, 2.8454967, 298.25534, -21.29904, 36.365036)
 
 [node name="Rock1_VIS" parent="Atrezzo/Rock1" index="0" unique_id=1553526623]
-surface_material_override/0 = ExtResource("33_g88yb")
+surface_material_override/0 = ExtResource("33_iekhu")
 
-[node name="Rock2" parent="Atrezzo" unique_id=2094025158 instance=ExtResource("63_m67h8")]
+[node name="Rock2" parent="Atrezzo" unique_id=2094025158 instance=ExtResource("63_a1asi")]
 transform = Transform3D(3.1803858, 0.6325982, -6.2092667, 0.09665962, 6.963099, 0.75890744, 6.2406597, -0.4302361, 3.152633, -551.9645, -16.910297, -180.97124)
 
 [node name="Rock2_VIS" parent="Atrezzo/Rock2" index="0" unique_id=110660900]
-surface_material_override/0 = ExtResource("33_g88yb")
+surface_material_override/0 = ExtResource("33_iekhu")
 
-[node name="Rock3" parent="Atrezzo" unique_id=32409294 instance=ExtResource("63_m67h8")]
+[node name="Rock3" parent="Atrezzo" unique_id=32409294 instance=ExtResource("63_a1asi")]
 transform = Transform3D(2.1527746, -0.58318883, 5.0766606, 0.07651358, 5.5118313, 0.60073394, -5.1094747, -0.16317603, 2.1479445, -636.2675, -9.634373, -123.952194)
 
 [node name="Rock2_VIS" parent="Atrezzo/Rock3" index="0" unique_id=110660900]
-surface_material_override/0 = ExtResource("33_g88yb")
+surface_material_override/0 = ExtResource("33_iekhu")
 
-[node name="Rock4" parent="Atrezzo" unique_id=732379558 instance=ExtResource("63_m67h8")]
+[node name="Rock4" parent="Atrezzo" unique_id=732379558 instance=ExtResource("63_a1asi")]
 transform = Transform3D(-0.9700894, 3.5165074, -7.616502, 0.44429702, 7.678032, 3.488327, 8.377321, -3.245338e-08, -1.0669926, -567.65735, -46.195744, -141.59525)
 
 [node name="Rock2_VIS" parent="Atrezzo/Rock4" index="0" unique_id=110660900]
-surface_material_override/0 = ExtResource("33_g88yb")
+surface_material_override/0 = ExtResource("33_iekhu")
 
-[node name="Rock5" parent="Atrezzo" unique_id=765989064 instance=ExtResource("63_m67h8")]
+[node name="Rock5" parent="Atrezzo" unique_id=765989064 instance=ExtResource("63_a1asi")]
 transform = Transform3D(-1.1396358, 2.6904924, -5.6494913, 0.5078428, 6.037661, 2.5175169, 9.795862, -2.4660984e-08, -0.7877678, -235.79329, -52.84747, -148.51874)
 
 [node name="Rock2_VIS" parent="Atrezzo/Rock5" index="0" unique_id=110660900]
-surface_material_override/0 = ExtResource("33_g88yb")
+surface_material_override/0 = ExtResource("33_iekhu")
 
-[node name="Rock6" parent="Atrezzo" unique_id=712207501 instance=ExtResource("64_3s10b")]
+[node name="Rock6" parent="Atrezzo" unique_id=712207501 instance=ExtResource("64_y8eu1")]
 transform = Transform3D(18.05736, -10.612488, 0, 10.612488, 18.05736, 0, 0, 0, 20.945002, -217.55464, -24.05898, -25.681166)
 
 [node name="Rock3_VIS" parent="Atrezzo/Rock6" index="0" unique_id=2025684856]
 transform = Transform3D(1.2727225, 0.58904827, -1.7913191, 0.5890485, 1.9288102, 1.0527757, 1.791319, -1.0527761, 0.926533, -0.5910263, -1.0056431, 0)
-surface_material_override/0 = ExtResource("33_g88yb")
+surface_material_override/0 = ExtResource("33_iekhu")
 
-[node name="Rock7" parent="Atrezzo" unique_id=1710166104 instance=ExtResource("64_3s10b")]
+[node name="Rock7" parent="Atrezzo" unique_id=1710166104 instance=ExtResource("64_y8eu1")]
 transform = Transform3D(-12.991967, -3.3479185e-07, -43.01585, 9.234303, 43.887394, -2.7890134, 42.012985, -9.646292, -12.6890745, -269.192, -62.774254, -70.82382)
 
 [node name="Rock3_VIS" parent="Atrezzo/Rock7" index="0" unique_id=2025684856]
-surface_material_override/0 = ExtResource("33_g88yb")
+surface_material_override/0 = ExtResource("33_iekhu")
 
-[node name="Rock8" parent="Atrezzo" unique_id=571328736 instance=ExtResource("64_3s10b")]
+[node name="Rock8" parent="Atrezzo" unique_id=571328736 instance=ExtResource("64_y8eu1")]
 transform = Transform3D(33.475, 0, 0, 0, 33.475, 0, 0, 0, 33.475, 39.93125, -40.529305, 376.03717)
 
 [node name="Rock3_VIS" parent="Atrezzo/Rock8" index="0" unique_id=2025684856]
-surface_material_override/0 = ExtResource("33_g88yb")
+surface_material_override/0 = ExtResource("33_iekhu")
 
-[node name="PalmsMultiMesh" parent="Atrezzo" unique_id=302165511 instance=ExtResource("65_fgcfm")]
+[node name="PalmsMultiMesh" parent="Atrezzo" unique_id=302165511 instance=ExtResource("65_20vi3")]
 transform = Transform3D(0.86, 0, 0, 0, 0.86, 0, 0, 0, 0.86, 149, 1.8, 120.1001)
 metadata/instance_count = 7717
 metadata/sector_count = 14
@@ -1224,52 +1231,52 @@ shape = SubResource("ConcavePolygonShape3D_djt2o")
 
 [node name="Circuit" type="Node3D" parent="." unique_id=1519848915]
 
-[node name="Buoy" parent="Circuit" unique_id=1972121626 instance=ExtResource("67_4cwbb")]
+[node name="Buoy" parent="Circuit" unique_id=1972121626 instance=ExtResource("67_diovn")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 598.2306, -0.036173344, 309.39752)
 buoy_clearance = 20.0
 
-[node name="Buoy2" parent="Circuit" unique_id=1519804968 instance=ExtResource("67_4cwbb")]
+[node name="Buoy2" parent="Circuit" unique_id=1519804968 instance=ExtResource("67_diovn")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 707.1697, 0.059731007, 119.86493)
 buoy_side = 1
 buoy_clearance = 20.0
 
-[node name="Buoy3" parent="Circuit" unique_id=895119389 instance=ExtResource("67_4cwbb")]
+[node name="Buoy3" parent="Circuit" unique_id=895119389 instance=ExtResource("67_diovn")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 595.2577, 0.059731007, -44.89177)
 buoy_clearance = 20.0
 
-[node name="Buoy4" parent="Circuit" unique_id=1151255403 instance=ExtResource("67_4cwbb")]
+[node name="Buoy4" parent="Circuit" unique_id=1151255403 instance=ExtResource("67_diovn")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 455.20135, 0.059731007, -334.34525)
 buoy_side = 1
 buoy_clearance = 20.0
 
-[node name="Buoy5" parent="Circuit" unique_id=271112352 instance=ExtResource("67_4cwbb")]
+[node name="Buoy5" parent="Circuit" unique_id=271112352 instance=ExtResource("67_diovn")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 149.255, 0.059731007, -334.34525)
 buoy_side = 1
 buoy_clearance = 20.0
 
-[node name="Buoy6" parent="Circuit" unique_id=668526599 instance=ExtResource("67_4cwbb")]
+[node name="Buoy6" parent="Circuit" unique_id=668526599 instance=ExtResource("67_diovn")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 262.90787, 0.059731007, 3.9871635)
 buoy_side = 1
 buoy_clearance = 20.0
 
-[node name="Buoy7" parent="Circuit" unique_id=472657988 instance=ExtResource("67_4cwbb")]
+[node name="Buoy7" parent="Circuit" unique_id=472657988 instance=ExtResource("67_diovn")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 183.40842, 0.059731007, 208.09734)
 buoy_clearance = 20.0
 
-[node name="Buoy8" parent="Circuit" unique_id=1766253435 instance=ExtResource("67_4cwbb")]
+[node name="Buoy8" parent="Circuit" unique_id=1766253435 instance=ExtResource("67_diovn")]
 transform = Transform3D(0.42169753, 0, -0.9067366, 0, 1, 0, 0.9067366, 0, 0.42169753, -2.5322533, 0.059731007, 541.0113)
 buoy_clearance = 20.0
 
-[node name="Buoy9" parent="Circuit" unique_id=2003867276 instance=ExtResource("67_4cwbb")]
+[node name="Buoy9" parent="Circuit" unique_id=2003867276 instance=ExtResource("67_diovn")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -319.31842, 0.059731007, 127.12428)
 buoy_clearance = 20.0
 
-[node name="Buoy10" parent="Circuit" unique_id=368030878 instance=ExtResource("67_4cwbb")]
+[node name="Buoy10" parent="Circuit" unique_id=368030878 instance=ExtResource("67_diovn")]
 transform = Transform3D(0.8111218, 0, -0.58487725, 0, 1, 0, 0.58487725, 0, 0.8111218, -286.12158, 0.059731007, -272.01477)
 buoy_side = 1
 buoy_clearance = 20.0
 
-[node name="Buoy11" parent="Circuit" unique_id=754226332 instance=ExtResource("67_4cwbb")]
+[node name="Buoy11" parent="Circuit" unique_id=754226332 instance=ExtResource("67_diovn")]
 transform = Transform3D(0.71017504, 0, -0.7040251, 0, 1, 0, 0.7040251, 0, 0.71017504, -176.74887, 0.059731007, -411.07477)
 buoy_side = 1
 buoy_clearance = 20.0
