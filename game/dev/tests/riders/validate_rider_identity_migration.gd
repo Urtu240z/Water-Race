@@ -10,7 +10,6 @@ const EXPECTED := {
 	},
 	&"rider_01": {
 		"value": 3,
-		"glb": "res://gameplay/riders/rider_01/rider_01_compatible.glb",
 		"mesh": "res://gameplay/riders/rider_01/runtime/rider_01_body_mesh.res",
 		"skin": "res://gameplay/riders/rider_01/runtime/rider_01_skin.res",
 		"lods": 14,
@@ -19,7 +18,6 @@ const EXPECTED := {
 	},
 	&"rider_02": {
 		"value": 4,
-		"glb": "res://gameplay/riders/rider_02/rider_02_compatible.glb",
 		"mesh": "res://gameplay/riders/rider_02/runtime/rider_02_body_mesh.res",
 		"skin": "res://gameplay/riders/rider_02/runtime/rider_02_skin.res",
 		"lods": 14,
@@ -28,7 +26,6 @@ const EXPECTED := {
 	},
 	&"rider_03": {
 		"value": 5,
-		"glb": "res://gameplay/riders/rider_03/rider_03_compatible.glb",
 		"mesh": "res://gameplay/riders/rider_03/runtime/rider_03_body_mesh.res",
 		"skin": "res://gameplay/riders/rider_03/runtime/rider_03_skin.res",
 		"lods": 16,
@@ -37,7 +34,6 @@ const EXPECTED := {
 	},
 	&"rider_04": {
 		"value": 1,
-		"glb": "res://gameplay/riders/rider_04/rider_04_compatible.glb",
 		"mesh": "res://gameplay/riders/rider_04/runtime/rider_04_body_mesh.res",
 		"skin": "res://gameplay/riders/rider_04/runtime/rider_04_skin.res",
 		"lods": 16,
@@ -93,10 +89,10 @@ func _validate() -> void:
 
 	for rider_id: StringName in EXPECTED:
 		var data: Dictionary = EXPECTED[rider_id]
-		_expect(ResourceLoader.exists(data.glb), "%s GLB exists." % rider_id)
 		if rider_id == &"rider_bot":
+			_expect(ResourceLoader.exists(data.glb), "rider_bot GLB exists.")
 			continue
-		_validate_imported_glb(rider_id, data)
+		_validate_runtime_only_state(rider_id)
 		var mesh := load(data.mesh) as ArrayMesh
 		var skin := load(data.skin) as Skin
 		_expect(mesh != null, "%s runtime mesh loads." % rider_id)
@@ -120,6 +116,32 @@ func _validate() -> void:
 			)
 	rig.queue_free()
 	await process_frame
+
+
+func _validate_runtime_only_state(rider_id: StringName) -> void:
+	var root_path := "res://gameplay/riders/%s" % rider_id
+	var staged_glb := "%s/%s_compatible.glb" % [root_path, rider_id]
+	_expect(
+		not FileAccess.file_exists(staged_glb),
+		"%s normal runtime has no staged compatible GLB." % rider_id,
+	)
+	_expect(
+		not FileAccess.file_exists(staged_glb + ".import"),
+		"%s normal runtime has no staged compatible GLB .import." % rider_id,
+	)
+	var directory := DirAccess.open(root_path)
+	if directory == null:
+		_expect(false, "%s runtime directory is readable." % rider_id)
+		return
+	directory.list_dir_begin()
+	var lingering := false
+	var entry := directory.get_next()
+	while not entry.is_empty():
+		if not directory.current_is_dir() and entry.begins_with("%s_compatible" % rider_id):
+			lingering = true
+		entry = directory.get_next()
+	directory.list_dir_end()
+	_expect(not lingering, "%s has no generated staging artifact at runtime root." % rider_id)
 
 
 func _validate_jet_ski_default() -> void:

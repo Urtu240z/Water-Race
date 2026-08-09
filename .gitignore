@@ -3,6 +3,10 @@
 .nomedia
 .codex
 
+# Transactional candidates created by tools/riders/rebuild_riders.py
+game/gameplay/riders/*/runtime/.rebuild_output/
+tools/riders/__pycache__/
+
 # Godot-specific ignores
 .import/
 export.cfg

@@ -1,14 +1,14 @@
 extends SceneTree
 
+# Shared extractor used exclusively by tools/riders/rebuild_riders.py.
+# It deliberately reads the staged GLB, but writes only a candidate directory.
 const RIDER_BOT_SCENE_PATH := "res://gameplay/riders/rider_bot/rider_bot.glb"
+const RIDER_IDS := [&"rider_01", &"rider_02", &"rider_03", &"rider_04"]
 const TRANSFORM_TOLERANCE := 0.0002
-const RIDER_DIRECTORIES := {
-	"rider_02": "rider_02",
-	"rider_03": "rider_03",
-}
 
-var _skin_id := ""
-var _report: PackedStringArray = []
+var _rider_id := ""
+var _output_dir := ""
+var _texture_root := ""
 
 
 func _initialize() -> void:
@@ -16,197 +16,105 @@ func _initialize() -> void:
 
 
 func _run() -> void:
-	_skin_id = _read_skin_id()
-	if _skin_id.is_empty():
-		push_error("Expected --skin-id rider_02 (or --skin-id=rider_02).")
+	_rider_id = _argument("--rider")
+	if _rider_id.is_empty():
+		_rider_id = _argument("--skin-id")
+	_output_dir = _argument("--output-dir")
+	_texture_root = _argument("--texture-root")
+	if RIDER_IDS.has(StringName(_rider_id)):
+		if _output_dir.is_empty():
+			_output_dir = "res://gameplay/riders/%s/runtime" % _rider_id
+		if _texture_root.is_empty():
+			_texture_root = _output_dir + "/textures"
+	else:
+		push_error("Expected --rider rider_0x --output-dir res://... --texture-root res://...")
 		quit(2)
 		return
-	var exit_code := _extract_and_validate()
-	if not _report.is_empty():
-		print("\n".join(_report))
-	quit(exit_code)
+	quit(_extract())
 
 
-func _read_skin_id() -> String:
+func _argument(name: String) -> String:
 	var arguments := OS.get_cmdline_user_args()
 	for index: int in arguments.size():
 		var argument := arguments[index]
-		if argument.begins_with("--skin-id="):
-			return argument.trim_prefix("--skin-id=")
-		if argument == "--skin-id" and index + 1 < arguments.size():
+		if argument.begins_with(name + "="):
+			return argument.trim_prefix(name + "=")
+		if argument == name and index + 1 < arguments.size():
 			return arguments[index + 1]
 	return ""
 
 
-func _extract_and_validate() -> int:
-	var rider_directory := String(RIDER_DIRECTORIES.get(_skin_id, ""))
-	if rider_directory.is_empty():
-		push_error("Unsupported rider skin id: %s." % _skin_id)
-		return 2
-	var compatible_scene_path := (
-		"res://gameplay/riders/%s/%s_compatible.glb"
-		% [rider_directory, _skin_id]
-	)
-	var output_dir := (
-		"res://gameplay/riders/%s/runtime" % rider_directory
-	)
-	var mesh_output := (
-		"%s/%s_body_mesh.res" % [output_dir, _skin_id]
-	)
-	var skin_output := "%s/%s_skin.res" % [output_dir, _skin_id]
-	var report_output := (
-		"user://%s_extraction_report.txt" % rider_directory
-	)
-	_report.append("=== %s GODOT EXTRACTION ===" % _skin_id.to_upper())
-	_report.append("Godot: %s" % Engine.get_version_info().string)
-
-	var compatible_packed := load(compatible_scene_path) as PackedScene
-	var bot_packed := load(RIDER_BOT_SCENE_PATH) as PackedScene
-	if compatible_packed == null or bot_packed == null:
-		return _fail(
-			"Could not load compatible GLB or canonical rider_bot.",
-			report_output,
-		)
-	var compatible_root := compatible_packed.instantiate()
-	var bot_root := bot_packed.instantiate()
-	if compatible_root == null or bot_root == null:
-		return _fail(
-			"Could not instantiate compatible GLB or rider_bot.",
-			report_output,
-		)
-
-	var compatible_skeletons := _collect_type(
-		compatible_root,
-		&"Skeleton3D",
-	)
-	var compatible_meshes := _collect_skinned_meshes(compatible_root)
-	if compatible_skeletons.size() != 1:
-		return _fail(
-			"Compatible GLB has %d Skeleton3D nodes; expected 1."
-			% compatible_skeletons.size(),
-			report_output,
-		)
-	if compatible_meshes.size() != 1:
-		return _fail(
-			"Compatible GLB has %d skinned meshes; expected 1."
-			% compatible_meshes.size(),
-			report_output,
-		)
-	var compatible_skeleton := compatible_skeletons[0] as Skeleton3D
-	var compatible_mesh := compatible_meshes[0]
-	var bot_skeletons := _collect_type(bot_root, &"Skeleton3D")
-	if bot_skeletons.size() != 1:
-		return _fail(
-			"rider_bot has %d Skeleton3D nodes; expected 1."
-			% bot_skeletons.size(),
-			report_output,
-		)
-	var rig_skeleton := bot_skeletons[0] as Skeleton3D
-	var bot_meshes := _collect_bot_meshes(bot_root)
-	if bot_meshes.size() != 1:
-		return _fail(
-			"RiderRig has %d canonical BOT meshes; expected 1."
-			% bot_meshes.size(),
-			report_output,
-		)
-	var bot_mesh := bot_meshes[0]
-
-	var skeleton_error := _compare_skeletons(
-		compatible_skeleton,
-		rig_skeleton,
-	)
+func _extract() -> int:
+	var scene_path := "res://gameplay/riders/%s/%s_compatible.glb" % [_rider_id, _rider_id]
+	var compatible := load(scene_path) as PackedScene
+	var bot := load(RIDER_BOT_SCENE_PATH) as PackedScene
+	if compatible == null or bot == null:
+		return _fail("Could not load staged compatible GLB or rider_bot.")
+	var compatible_root := compatible.instantiate()
+	var bot_root := bot.instantiate()
+	var source_meshes := _skinned_meshes(compatible_root)
+	var bot_meshes := _skinned_meshes(bot_root)
+	var source_skeletons := _nodes_of_type(compatible_root, &"Skeleton3D")
+	var bot_skeletons := _nodes_of_type(bot_root, &"Skeleton3D")
+	if source_meshes.size() != 1 or bot_meshes.size() != 1 or source_skeletons.size() != 1 or bot_skeletons.size() != 1:
+		return _fail("Expected one skinned mesh and one Skeleton3D in compatible GLB and rider_bot.")
+	var source_mesh := source_meshes[0] as MeshInstance3D
+	var bot_mesh := bot_meshes[0] as MeshInstance3D
+	var skeleton_error := _compare_skeletons(source_skeletons[0] as Skeleton3D, bot_skeletons[0] as Skeleton3D)
 	if not skeleton_error.is_empty():
-		return _fail(skeleton_error, report_output)
-	var skin_error := _compare_skins(compatible_mesh.skin, bot_mesh.skin)
-	if not skin_error.is_empty():
-		return _fail(skin_error, report_output)
-	if not compatible_mesh.mesh is ArrayMesh:
-		return _fail(
-			"Compatible skinned mesh is not an ArrayMesh.",
-			report_output,
-		)
-
-	var absolute_output := ProjectSettings.globalize_path(output_dir)
-	var directory_error := DirAccess.make_dir_recursive_absolute(
-		absolute_output
-	)
-	if directory_error != OK and directory_error != ERR_ALREADY_EXISTS:
-		return _fail(
-			"Could not create runtime directory.",
-			report_output,
-		)
-
-	var mesh_copy := compatible_mesh.mesh.duplicate(true) as ArrayMesh
-	var skin_copy := compatible_mesh.skin.duplicate(true) as Skin
+		return _fail(skeleton_error)
+	if not _skins_match(source_mesh.skin, bot_mesh.skin):
+		return _fail("Compatible skin no longer matches rider_bot binds.")
+	var mesh_copy := source_mesh.mesh.duplicate(true) as ArrayMesh
+	var skin_copy := source_mesh.skin.duplicate(true) as Skin
 	if mesh_copy == null or skin_copy == null:
-		return _fail(
-			"Could not duplicate Mesh or Skin.",
-			report_output,
-		)
+		return _fail("Could not duplicate compatible mesh or skin.")
 	for surface_index: int in mesh_copy.get_surface_count():
-		var material := compatible_mesh.get_active_material(surface_index)
-		if material == null:
-			return _fail(
-				"Surface %d has no material." % surface_index,
-				report_output,
-			)
-		mesh_copy.surface_set_material(
-			surface_index,
-			material.duplicate(true),
-		)
-
-	var mesh_error := ResourceSaver.save(mesh_copy, mesh_output)
-	var skin_save_error := ResourceSaver.save(skin_copy, skin_output)
-	if mesh_error != OK or skin_save_error != OK:
-		return _fail(
-			"ResourceSaver failed: mesh=%s skin=%s."
-			% [error_string(mesh_error), error_string(skin_save_error)],
-			report_output,
-		)
-
-	_report.append("Compatible scene: %s" % compatible_scene_path)
-	_report.append(
-		"Canonical Skeleton3D: %s"
-		% _relative_path(rig_skeleton, bot_root)
-	)
-	_report.append("Skeleton comparison: PASS")
-	_report.append("Skin bind comparison: PASS")
-	_report.append(
-		"Bone count: %d" % compatible_skeleton.get_bone_count()
-	)
-	_report.append("Bind count: %d" % skin_copy.get_bind_count())
-	_report.append("Mesh stats: %s" % _mesh_stats(compatible_mesh))
-	_report.append("Mesh resource: %s" % mesh_output)
-	_report.append("Skin resource: %s" % skin_output)
-	for surface_index: int in mesh_copy.get_surface_count():
-		var material := mesh_copy.surface_get_material(surface_index)
-		_report.append(
-			"Surface %d material: %s (%s)"
-			% [
-				surface_index,
-				material.resource_name,
-				material.get_class(),
-			]
-		)
-	var persistence_error := _validate_persistent_resource(mesh_output)
-	if not persistence_error.is_empty():
-		return _fail(persistence_error, report_output)
-	persistence_error = _validate_persistent_resource(skin_output)
-	if not persistence_error.is_empty():
-		return _fail(persistence_error, report_output)
-	_report.append("Persistent resource dependency check: PASS")
-	_report.append("EXTRACTION_STATUS=PASS")
-	_write_report(report_output)
+		var source_material := source_mesh.get_active_material(surface_index)
+		if source_material == null:
+			return _fail("Surface %d has no material." % surface_index)
+		var material := source_material.duplicate(true) as Material
+		var remap_error := _remap_material_textures(material)
+		if not remap_error.is_empty():
+			return _fail(remap_error)
+		mesh_copy.surface_set_material(surface_index, material)
+	var output_error := DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(_output_dir))
+	if output_error != OK and output_error != ERR_ALREADY_EXISTS:
+		return _fail("Could not create candidate output directory.")
+	var mesh_path := "%s/%s_body_mesh.res" % [_output_dir, _rider_id]
+	var skin_path := "%s/%s_skin.res" % [_output_dir, _rider_id]
+	if ResourceSaver.save(mesh_copy, mesh_path) != OK or ResourceSaver.save(skin_copy, skin_path) != OK:
+		return _fail("ResourceSaver failed for candidate resources.")
+	if load(mesh_path) == null or load(skin_path) == null:
+		return _fail("Candidate resources could not be reloaded.")
+	print("EXTRACTION_STATUS=PASS rider=%s mesh=%s skin=%s" % [_rider_id, mesh_path, skin_path])
 	compatible_root.free()
 	bot_root.free()
 	return 0
 
 
-func _collect_type(root: Node, type_name: StringName) -> Array[Node]:
+func _remap_material_textures(material: Material) -> String:
+	for property: Dictionary in material.get_property_list():
+		var property_name := String(property.name)
+		if not property_name.ends_with("_texture"):
+			continue
+		var texture_value: Variant = material.get(property.name)
+		if not texture_value is Texture2D:
+			continue
+		var texture := texture_value as Texture2D
+		var destination := "%s/%s" % [_texture_root, texture.resource_path.get_file()]
+		var runtime_texture := load(destination) as Texture2D
+		if runtime_texture == null:
+			return "Missing imported runtime texture %s for %s." % [destination, property_name]
+		material.set(property.name, runtime_texture)
+	return ""
+
+
+func _nodes_of_type(root_node: Node, type_name: StringName) -> Array[Node]:
 	var result: Array[Node] = []
-	var pending: Array[Node] = [root]
+	var pending: Array[Node] = [root_node]
 	while not pending.is_empty():
-		var current: Node = pending.pop_back() as Node
+		var current: Node = pending.pop_back()
 		if current.is_class(type_name):
 			result.append(current)
 		for child: Node in current.get_children():
@@ -214,183 +122,57 @@ func _collect_type(root: Node, type_name: StringName) -> Array[Node]:
 	return result
 
 
-func _collect_skinned_meshes(root: Node) -> Array[MeshInstance3D]:
-	var result: Array[MeshInstance3D] = []
-	for node: Node in _collect_type(root, &"MeshInstance3D"):
-		var mesh_instance := node as MeshInstance3D
-		if mesh_instance.mesh != null and mesh_instance.skin != null:
-			result.append(mesh_instance)
+func _skinned_meshes(root_node: Node) -> Array[Node]:
+	var result: Array[Node] = []
+	for node: Node in _nodes_of_type(root_node, &"MeshInstance3D"):
+		var mesh := node as MeshInstance3D
+		if mesh.mesh != null and mesh.skin != null and not _has_skin_group(mesh):
+			result.append(mesh)
 	return result
 
 
-func _collect_bot_meshes(root: Node) -> Array[MeshInstance3D]:
-	var result: Array[MeshInstance3D] = []
-	for mesh_instance: MeshInstance3D in _collect_skinned_meshes(root):
-		var is_optional_skin := false
-		for group: StringName in mesh_instance.get_groups():
-			if String(group).begins_with("rider_skin_"):
-				is_optional_skin = true
-				break
-		if not is_optional_skin:
-			result.append(mesh_instance)
-	return result
+func _has_skin_group(mesh: MeshInstance3D) -> bool:
+	for group: StringName in mesh.get_groups():
+		if String(group).begins_with("rider_skin_"):
+			return true
+	return false
 
 
-func _relative_path(node: Node, root: Node) -> String:
-	var names: PackedStringArray = []
-	var current := node
-	while current != null:
-		names.insert(0, String(current.name))
-		if current == root:
-			break
-		current = current.get_parent()
-	return "/".join(names)
+func _skins_match(left: Skin, right: Skin) -> bool:
+	if left == null or right == null or left.get_bind_count() != right.get_bind_count():
+		return false
+	for index: int in left.get_bind_count():
+		if left.get_bind_name(index) != right.get_bind_name(index) or left.get_bind_bone(index) != right.get_bind_bone(index):
+			return false
+		if _transform_error(left.get_bind_pose(index), right.get_bind_pose(index)) > TRANSFORM_TOLERANCE:
+			return false
+	return true
 
 
 func _compare_skeletons(left: Skeleton3D, right: Skeleton3D) -> String:
 	if left.get_bone_count() != right.get_bone_count():
-		return (
-			"Skeleton bone count mismatch: compatible=%d RiderRig=%d."
-			% [left.get_bone_count(), right.get_bone_count()]
-		)
-	var left_globals := _global_rests(left)
-	var right_globals := _global_rests(right)
-	for bone_index: int in left.get_bone_count():
-		var left_name := left.get_bone_name(bone_index)
-		var right_name := right.get_bone_name(bone_index)
-		if left_name != right_name:
-			return (
-				"Bone name/order mismatch at %d: compatible=%s RiderRig=%s."
-				% [bone_index, left_name, right_name]
-			)
-		if left.get_bone_parent(bone_index) != right.get_bone_parent(
-			bone_index
-		):
-			return "Bone parent mismatch at %s." % left_name
-		var local_error := _transform_error(
-			left.get_bone_rest(bone_index),
-			right.get_bone_rest(bone_index),
-		)
-		var global_error := _transform_error(
-			left_globals[bone_index],
-			right_globals[bone_index],
-		)
-		if (
-			local_error > TRANSFORM_TOLERANCE
-			or global_error > TRANSFORM_TOLERANCE
-		):
-			return (
-				"Rest mismatch at %s: local=%.9f global=%.9f."
-				% [left_name, local_error, global_error]
-			)
+		return "Skeleton bone count differs from rider_bot."
+	for index: int in left.get_bone_count():
+		if left.get_bone_name(index) != right.get_bone_name(index) or left.get_bone_parent(index) != right.get_bone_parent(index):
+			return "Skeleton hierarchy differs at index %d." % index
+		if _transform_error(left.get_bone_rest(index), right.get_bone_rest(index)) > TRANSFORM_TOLERANCE:
+			return "Skeleton rest differs at index %d." % index
 	return ""
-
-
-func _compare_skins(left: Skin, right: Skin) -> String:
-	if left == null or right == null:
-		return "Compatible or BOT Skin is null."
-	if left.get_bind_count() != right.get_bind_count():
-		return (
-			"Skin bind count mismatch: compatible=%d BOT=%d."
-			% [left.get_bind_count(), right.get_bind_count()]
-		)
-	for bind_index: int in left.get_bind_count():
-		if left.get_bind_name(bind_index) != right.get_bind_name(bind_index):
-			return (
-				"Skin bind name mismatch at %d: compatible=%s BOT=%s."
-				% [
-					bind_index,
-					left.get_bind_name(bind_index),
-					right.get_bind_name(bind_index),
-				]
-			)
-		if left.get_bind_bone(bind_index) != right.get_bind_bone(bind_index):
-			return "Skin bind index mismatch at %d." % bind_index
-		if _transform_error(
-			left.get_bind_pose(bind_index),
-			right.get_bind_pose(bind_index),
-		) > TRANSFORM_TOLERANCE:
-			return "Skin bind pose mismatch at %d." % bind_index
-	return ""
-
-
-func _global_rests(skeleton: Skeleton3D) -> Array[Transform3D]:
-	var result: Array[Transform3D] = []
-	result.resize(skeleton.get_bone_count())
-	for bone_index: int in skeleton.get_bone_count():
-		var local := skeleton.get_bone_rest(bone_index)
-		var parent := skeleton.get_bone_parent(bone_index)
-		result[bone_index] = (
-			result[parent] * local if parent >= 0 else local
-		)
-	return result
 
 
 func _transform_error(left: Transform3D, right: Transform3D) -> float:
 	var origin_delta := (left.origin - right.origin).abs()
-	var maximum := maxf(
-		origin_delta.x,
-		maxf(origin_delta.y, origin_delta.z),
-	)
+	var maximum := maxf(origin_delta.x, maxf(origin_delta.y, origin_delta.z))
 	for axis: int in 3:
-		var delta := (left.basis[axis] - right.basis[axis]).abs()
+		var basis_delta := (left.basis[axis] - right.basis[axis]).abs()
 		maximum = maxf(
 			maximum,
-			maxf(delta.x, maxf(delta.y, delta.z)),
+			maxf(basis_delta.x, maxf(basis_delta.y, basis_delta.z)),
 		)
 	return maximum
 
 
-func _mesh_stats(mesh_instance: MeshInstance3D) -> Dictionary:
-	var vertices := 0
-	var triangles := 0
-	var materials := 0
-	for surface_index: int in mesh_instance.mesh.get_surface_count():
-		var arrays := mesh_instance.mesh.surface_get_arrays(surface_index)
-		var positions := arrays[Mesh.ARRAY_VERTEX] as PackedVector3Array
-		var indices := arrays[Mesh.ARRAY_INDEX] as PackedInt32Array
-		vertices += positions.size()
-		triangles += (
-			indices.size() / 3
-			if not indices.is_empty()
-			else positions.size() / 3
-		)
-		if mesh_instance.get_active_material(surface_index) != null:
-			materials += 1
-	return {
-		"surfaces": mesh_instance.mesh.get_surface_count(),
-		"vertices": vertices,
-		"triangles": triangles,
-		"materials": materials,
-		"aabb_size": mesh_instance.get_aabb().size,
-	}
-
-
-func _validate_persistent_resource(path: String) -> String:
-	var resource := load(path)
-	if resource == null:
-		return "Could not reload persistent resource %s." % path
-	var file := FileAccess.open(path, FileAccess.READ)
-	if file == null:
-		return "Could not inspect persistent resource %s." % path
-	var serialized := file.get_as_text()
-	if serialized.contains("res://.godot/imported"):
-		return "%s depends on res://.godot/imported." % path
-	return ""
-
-
-func _fail(message: String, report_output: String) -> int:
-	_report.append("ERROR: %s" % message)
-	_report.append("EXTRACTION_STATUS=FAIL")
+func _fail(message: String) -> int:
 	push_error(message)
-	_write_report(report_output)
+	print("EXTRACTION_STATUS=FAIL rider=%s error=%s" % [_rider_id, message])
 	return 1
-
-
-func _write_report(report_output: String) -> void:
-	DirAccess.make_dir_recursive_absolute(
-		ProjectSettings.globalize_path(report_output.get_base_dir())
-	)
-	var file := FileAccess.open(report_output, FileAccess.WRITE)
-	if file != null:
-		file.store_string("\n".join(_report) + "\n")
