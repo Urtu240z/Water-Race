@@ -1,9 +1,9 @@
 [gd_resource type="StandardMaterial3D" format=3]
 
-[ext_resource type="Texture2D" path="./Plastic002_1K-PNG_Color.png" id="Color"]
-[ext_resource type="Texture2D" path="./Plastic002_1K-PNG_Displacement.png" id="Displacement"]
-[ext_resource type="Texture2D" path="./Plastic002_1K-PNG_Roughness.png" id="Roughness"]
-[ext_resource type="Texture2D" path="./Plastic002_1K-PNG_NormalGL.png" id="NormalGL"]
+[ext_resource type="Texture2D" path="../textures/plastic_02/plastic_02_albedo.png" id="Color"]
+[ext_resource type="Texture2D" path="../textures/plastic_02/plastic_02_height.png" id="Displacement"]
+[ext_resource type="Texture2D" path="../textures/plastic_02/plastic_02_roughness.png" id="Roughness"]
+[ext_resource type="Texture2D" path="../textures/plastic_02/plastic_02_normal.png" id="NormalGL"]
 [resource]
 albedo_texture = ExtResource("Color")
 roughness_texture = ExtResource("Roughness")
