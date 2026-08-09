@@ -54,7 +54,7 @@
 [ext_resource type="AudioStream" uid="uid://b2gl1t6k4yhtk" path="res://audio/music/Gold City After Dark.ogg" id="53_n7v0k"]
 [ext_resource type="PackedScene" uid="uid://dewy0j55fasc8" path="res://systems/camera/chase_camera.tscn" id="54_v86mw"]
 [ext_resource type="Shader" uid="uid://udpsvcumn1mh" path="res://systems/camera/underwater/shaders/underwater_split_view_post_process.gdshader" id="55_5sm3d"]
-[ext_resource type="PackedScene" uid="uid://c3xovkcnf4rak" path="res://assets/3D/levels/level_night_city/atrezzo/stadium_lights.tscn" id="56_mihog"]
+[ext_resource type="PackedScene" uid="uid://c3xovkcnf4rak" path="res://world/props/lights/stadium_lights.tscn" id="56_mihog"]
 [ext_resource type="PackedScene" uid="uid://cf3mdmbksb1m7" path="res://gameplay/race/course/ramps/ramp_01.tscn" id="57_hdcng"]
 [ext_resource type="PackedScene" uid="uid://c8qf6cnfoysg8" path="res://gameplay/race/course/ramps/ramp_02.tscn" id="58_nsw8i"]
 [ext_resource type="PackedScene" uid="uid://dphl8jrmqmgci" path="res://world/props/boats/boat_01.glb" id="59_2cchu"]
@@ -558,7 +558,7 @@ size = Vector3(234.65327, 26.61683, 71.67698)
 [sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_g5j8w"]
 data = PackedVector3Array(-117.3266, 13.308399, 35.8385, 117.3266, 13.308399, 35.8385, -117.3266, -13.308399, 35.8385, 117.3266, 13.308399, 35.8385, 117.3266, -13.308399, 35.8385, -117.3266, -13.308399, 35.8385, 117.3266, 13.308399, -35.8385, -117.3266, 13.308399, -35.8385, 117.3266, -13.308399, -35.8385, -117.3266, 13.308399, -35.8385, -117.3266, -13.308399, -35.8385, 117.3266, -13.308399, -35.8385, 117.3266, 13.308399, 35.8385, 117.3266, 13.308399, -35.8385, 117.3266, -13.308399, 35.8385, 117.3266, 13.308399, -35.8385, 117.3266, -13.308399, -35.8385, 117.3266, -13.308399, 35.8385, -117.3266, 13.308399, -35.8385, -117.3266, 13.308399, 35.8385, -117.3266, -13.308399, -35.8385, -117.3266, 13.308399, 35.8385, -117.3266, -13.308399, 35.8385, -117.3266, -13.308399, -35.8385, 117.3266, 13.308399, 35.8385, -117.3266, 13.308399, 35.8385, 117.3266, 13.308399, -35.8385, -117.3266, 13.308399, 35.8385, -117.3266, 13.308399, -35.8385, 117.3266, 13.308399, -35.8385, -117.3266, -13.308399, 35.8385, 117.3266, -13.308399, 35.8385, -117.3266, -13.308399, -35.8385, 117.3266, -13.308399, 35.8385, 117.3266, -13.308399, -35.8385, -117.3266, -13.308399, -35.8385)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_cfohk"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_q2anr"]
 resource_local_to_scene = true
 render_priority = 0
 shader = ExtResource("41_j7oal")
@@ -578,11 +578,11 @@ shader_parameter/wave_mean_a = 0.1050000049875
 shader_parameter/wave_mean_b = 0.0650000030875
 shader_parameter/geometry_normal_step = 2.0
 shader_parameter/ocean_geometry_normal_quality = 2
-shader_parameter/calm_zone_count = 1
-shader_parameter/calm_zone_centers_shapes = PackedVector4Array(-606.7354, 16.41954, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
-shader_parameter/calm_zone_axes = PackedVector4Array(1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
-shader_parameter/calm_zone_extents_transitions = PackedVector4Array(535.7999, 1601.943, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
-shader_parameter/calm_zone_strengths = PackedVector4Array(0.64, 0.81, 0.47, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1)
+shader_parameter/calm_zone_count = 0
+shader_parameter/calm_zone_centers_shapes = PackedVector4Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/calm_zone_axes = PackedVector4Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/calm_zone_extents_transitions = PackedVector4Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/calm_zone_strengths = PackedVector4Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1)
 shader_parameter/ripple_active = PackedInt32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 shader_parameter/ripple_positions = PackedVector2Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 shader_parameter/ripple_start_times = PackedFloat32Array(-inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf)
@@ -773,7 +773,7 @@ shader_parameter/custom_reflection_minimum_surface_weight = 0.34
 shader_parameter/custom_reflection_maximum_surface_weight = 0.88
 shader_parameter/custom_reflection_emission_strength = 0.2999999932944
 
-[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_iyaox"]
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_cfohk"]
 resource_local_to_scene = true
 blend_mode = 1
 
@@ -800,7 +800,7 @@ point_count = 3
 [sub_resource type="CurveTexture" id="CurveTexture_bubble_shrink"]
 curve = SubResource("Curve_bubble_shrink")
 
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_4k6sa"]
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_iyaox"]
 resource_local_to_scene = true
 particle_flag_disable_z = true
 emission_shape_offset = Vector3(0, 600, 0)
@@ -823,7 +823,7 @@ turbulence_influence_max = 0.082
 turbulence_initial_displacement_min = -47.5
 turbulence_initial_displacement_max = 94.5
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ogabk"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4k6sa"]
 resource_local_to_scene = true
 render_priority = -127
 shader = ExtResource("55_5sm3d")
@@ -1130,792 +1130,792 @@ mesh = SubResource("PlaneMesh_tpwhi")
 [node name="Gold_City" parent="TerrainRoot" unique_id=297389943 instance=ExtResource("15_t65j4")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -131.304, 0, -218.843)
 
-[node name="Bridge_1" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Terrain" parent_id_path=PackedInt32Array(297389943, 1392129360) index="0" unique_id=156632709]
+[node name="Bridge_1" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Terrain" parent_id_path=PackedInt32Array(297389943, 1765378274) index="0" unique_id=79071143]
 surface_material_override/0 = ExtResource("16_w15id")
 
-[node name="Bridge_3" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Terrain" parent_id_path=PackedInt32Array(297389943, 1392129360) index="1" unique_id=131796768]
+[node name="Bridge_3" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Terrain" parent_id_path=PackedInt32Array(297389943, 1765378274) index="1" unique_id=472959076]
 surface_material_override/0 = ExtResource("16_w15id")
 
-[node name="Bridges_1" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Terrain" parent_id_path=PackedInt32Array(297389943, 1392129360) index="2" unique_id=563153359]
+[node name="Bridges_1" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Terrain" parent_id_path=PackedInt32Array(297389943, 1765378274) index="2" unique_id=1829277245]
 surface_material_override/0 = ExtResource("16_w15id")
 
-[node name="Bridge_4" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Terrain" parent_id_path=PackedInt32Array(297389943, 1392129360) index="3" unique_id=1436392081]
+[node name="Bridge_4" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Terrain" parent_id_path=PackedInt32Array(297389943, 1765378274) index="3" unique_id=608028524]
 surface_material_override/0 = ExtResource("16_w15id")
 
-[node name="Bridge_P_1" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Terrain" parent_id_path=PackedInt32Array(297389943, 1392129360) index="4" unique_id=1692226738]
+[node name="Bridge_P_1" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Terrain" parent_id_path=PackedInt32Array(297389943, 1765378274) index="4" unique_id=1465841925]
 surface_material_override/0 = ExtResource("17_vcdmk")
 
-[node name="Terrain_VIS" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Terrain" parent_id_path=PackedInt32Array(297389943, 1392129360) index="5" unique_id=731616740]
+[node name="Terrain_VIS" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Terrain" parent_id_path=PackedInt32Array(297389943, 1765378274) index="5" unique_id=1705682361]
 surface_material_override/0 = SubResource("ShaderMaterial_5h1yh")
 
-[node name="Terrain_COL" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Terrain" parent_id_path=PackedInt32Array(297389943, 1392129360) index="6" unique_id=1343936683]
+[node name="Terrain_COL" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Terrain" parent_id_path=PackedInt32Array(297389943, 1765378274) index="6" unique_id=894985982]
 visible = false
 
-[node name="small_b_15" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Small" parent_id_path=PackedInt32Array(297389943, 552383870) index="0" unique_id=148169549]
+[node name="small_b_15" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Small" parent_id_path=PackedInt32Array(297389943, 181401642) index="0" unique_id=501032086]
 material_override = SubResource("ShaderMaterial_a13qp")
 
-[node name="small_b_4" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Small" parent_id_path=PackedInt32Array(297389943, 552383870) index="1" unique_id=372743892]
+[node name="small_b_4" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Small" parent_id_path=PackedInt32Array(297389943, 181401642) index="1" unique_id=80732963]
 material_override = SubResource("ShaderMaterial_a13qp")
 
-[node name="small_b_11" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Small" parent_id_path=PackedInt32Array(297389943, 552383870) index="2" unique_id=1963099555]
+[node name="small_b_11" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Small" parent_id_path=PackedInt32Array(297389943, 181401642) index="2" unique_id=61734405]
 material_override = SubResource("ShaderMaterial_a13qp")
 
-[node name="small_b_1" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Small" parent_id_path=PackedInt32Array(297389943, 552383870) index="3" unique_id=56097460]
+[node name="small_b_1" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Small" parent_id_path=PackedInt32Array(297389943, 181401642) index="3" unique_id=888064343]
 material_override = SubResource("ShaderMaterial_a13qp")
 
-[node name="small_b_7" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Small" parent_id_path=PackedInt32Array(297389943, 552383870) index="4" unique_id=1592325171]
+[node name="small_b_7" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Small" parent_id_path=PackedInt32Array(297389943, 181401642) index="4" unique_id=2044061203]
 material_override = SubResource("ShaderMaterial_a13qp")
 
-[node name="small_b_10" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Small" parent_id_path=PackedInt32Array(297389943, 552383870) index="5" unique_id=991359855]
+[node name="small_b_10" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Small" parent_id_path=PackedInt32Array(297389943, 181401642) index="5" unique_id=288181843]
 material_override = SubResource("ShaderMaterial_a13qp")
 
-[node name="small_b_9" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Small" parent_id_path=PackedInt32Array(297389943, 552383870) index="6" unique_id=1181913741]
+[node name="small_b_9" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Small" parent_id_path=PackedInt32Array(297389943, 181401642) index="6" unique_id=1499030138]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 148.61627)
 material_override = SubResource("ShaderMaterial_a13qp")
 
-[node name="small_b_17" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Small" parent_id_path=PackedInt32Array(297389943, 552383870) index="7" unique_id=10296319]
+[node name="small_b_17" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Small" parent_id_path=PackedInt32Array(297389943, 181401642) index="7" unique_id=1455692135]
 material_override = SubResource("ShaderMaterial_a13qp")
 
-[node name="small_b_13" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Small" parent_id_path=PackedInt32Array(297389943, 552383870) index="8" unique_id=735635856]
+[node name="small_b_13" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Small" parent_id_path=PackedInt32Array(297389943, 181401642) index="8" unique_id=156202663]
 material_override = SubResource("ShaderMaterial_a13qp")
 
-[node name="small_b_5" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Small" parent_id_path=PackedInt32Array(297389943, 552383870) index="9" unique_id=2023715430]
+[node name="small_b_5" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Small" parent_id_path=PackedInt32Array(297389943, 181401642) index="9" unique_id=1541761507]
 material_override = SubResource("ShaderMaterial_a13qp")
 
-[node name="small_b_16" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Small" parent_id_path=PackedInt32Array(297389943, 552383870) index="10" unique_id=1502991904]
+[node name="small_b_16" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Small" parent_id_path=PackedInt32Array(297389943, 181401642) index="10" unique_id=1297601468]
 material_override = SubResource("ShaderMaterial_a13qp")
 
-[node name="small_b_2" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Small" parent_id_path=PackedInt32Array(297389943, 552383870) index="11" unique_id=918954461]
+[node name="small_b_2" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Small" parent_id_path=PackedInt32Array(297389943, 181401642) index="11" unique_id=172540571]
 material_override = SubResource("ShaderMaterial_a13qp")
 
-[node name="small_b_3" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Small" parent_id_path=PackedInt32Array(297389943, 552383870) index="12" unique_id=932748082]
+[node name="small_b_3" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Small" parent_id_path=PackedInt32Array(297389943, 181401642) index="12" unique_id=1693887880]
 material_override = SubResource("ShaderMaterial_a13qp")
 
-[node name="small_b_12" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Small" parent_id_path=PackedInt32Array(297389943, 552383870) index="13" unique_id=118461101]
+[node name="small_b_12" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Small" parent_id_path=PackedInt32Array(297389943, 181401642) index="13" unique_id=1823712218]
 material_override = SubResource("ShaderMaterial_a13qp")
 
-[node name="small_b_14" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Small" parent_id_path=PackedInt32Array(297389943, 552383870) index="14" unique_id=1181574277]
+[node name="small_b_14" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Small" parent_id_path=PackedInt32Array(297389943, 181401642) index="14" unique_id=365629509]
 material_override = SubResource("ShaderMaterial_a13qp")
 
-[node name="small_b_8" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Small" parent_id_path=PackedInt32Array(297389943, 552383870) index="15" unique_id=2127494479]
+[node name="small_b_8" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Small" parent_id_path=PackedInt32Array(297389943, 181401642) index="15" unique_id=2026243781]
 material_override = SubResource("ShaderMaterial_a13qp")
 
-[node name="small_b_6" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Small" parent_id_path=PackedInt32Array(297389943, 552383870) index="16" unique_id=512570734]
+[node name="small_b_6" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Small" parent_id_path=PackedInt32Array(297389943, 181401642) index="16" unique_id=1637927811]
 material_override = SubResource("ShaderMaterial_a13qp")
 
-[node name="medium_b_45" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1648811703) index="0" unique_id=1262621001]
+[node name="medium_b_45" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1700613680) index="0" unique_id=1190256853]
 material_override = SubResource("ShaderMaterial_hgey6")
 
-[node name="medium_b_48" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1648811703) index="1" unique_id=538293163]
+[node name="medium_b_48" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1700613680) index="1" unique_id=1000783625]
 material_override = SubResource("ShaderMaterial_hgey6")
 
-[node name="medium_b_13" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1648811703) index="2" unique_id=104546043]
+[node name="medium_b_13" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1700613680) index="2" unique_id=1350004326]
 material_override = SubResource("ShaderMaterial_hgey6")
 
-[node name="medium_b_25" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1648811703) index="3" unique_id=816065173]
+[node name="medium_b_25" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1700613680) index="3" unique_id=1837574397]
 material_override = SubResource("ShaderMaterial_hgey6")
 
-[node name="medium_b_16" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1648811703) index="4" unique_id=1638892688]
+[node name="medium_b_16" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1700613680) index="4" unique_id=85679892]
 material_override = SubResource("ShaderMaterial_hgey6")
 
-[node name="medium_b_8" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1648811703) index="5" unique_id=522628804]
+[node name="medium_b_8" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1700613680) index="5" unique_id=2036123499]
 material_override = SubResource("ShaderMaterial_hgey6")
 
-[node name="medium_b_5" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1648811703) index="6" unique_id=1119282080]
+[node name="medium_b_5" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1700613680) index="6" unique_id=16284660]
 material_override = SubResource("ShaderMaterial_hgey6")
 
-[node name="medium_b_1" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1648811703) index="7" unique_id=240213384]
+[node name="medium_b_1" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1700613680) index="7" unique_id=50949573]
 material_override = SubResource("ShaderMaterial_hgey6")
 
-[node name="medium_b_9" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1648811703) index="8" unique_id=1870130193]
+[node name="medium_b_9" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1700613680) index="8" unique_id=1365528998]
 material_override = SubResource("ShaderMaterial_hgey6")
 
-[node name="medium_b_18" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1648811703) index="9" unique_id=1028154339]
+[node name="medium_b_18" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1700613680) index="9" unique_id=1208274007]
 material_override = SubResource("ShaderMaterial_hgey6")
 
-[node name="medium_b_39" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1648811703) index="10" unique_id=1965584804]
+[node name="medium_b_39" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1700613680) index="10" unique_id=294397432]
 material_override = SubResource("ShaderMaterial_hgey6")
 
-[node name="medium_b_38" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1648811703) index="11" unique_id=1476515636]
+[node name="medium_b_38" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1700613680) index="11" unique_id=740480014]
 material_override = SubResource("ShaderMaterial_hgey6")
 
-[node name="medium_b_57" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1648811703) index="12" unique_id=1645963735]
+[node name="medium_b_57" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1700613680) index="12" unique_id=1399567514]
 material_override = SubResource("ShaderMaterial_hgey6")
 
-[node name="medium_b_47" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1648811703) index="13" unique_id=1898556666]
+[node name="medium_b_47" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1700613680) index="13" unique_id=1700627632]
 material_override = SubResource("ShaderMaterial_hgey6")
 
-[node name="medium_b_12" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1648811703) index="14" unique_id=2043199129]
+[node name="medium_b_12" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1700613680) index="14" unique_id=1839074057]
 material_override = SubResource("ShaderMaterial_hgey6")
 
-[node name="medium_b_6" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1648811703) index="15" unique_id=910127855]
+[node name="medium_b_6" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1700613680) index="15" unique_id=1614362804]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -27.657715, -16.909729, 238.20947)
 material_override = SubResource("ShaderMaterial_hgey6")
 
-[node name="medium_b_73" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1648811703) index="16" unique_id=1862500041]
+[node name="medium_b_73" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1700613680) index="16" unique_id=901245896]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -27.657715, -16.909729, 238.20947)
 material_override = SubResource("ShaderMaterial_hgey6")
 
-[node name="medium_b_55" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1648811703) index="17" unique_id=1019743393]
+[node name="medium_b_55" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1700613680) index="17" unique_id=482839389]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 148.61627)
 material_override = SubResource("ShaderMaterial_hgey6")
 
-[node name="medium_b_52" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1648811703) index="18" unique_id=266098876]
+[node name="medium_b_52" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1700613680) index="18" unique_id=2144233558]
 material_override = SubResource("ShaderMaterial_hgey6")
 
-[node name="medium_b_62" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1648811703) index="19" unique_id=1917220593]
+[node name="medium_b_62" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1700613680) index="19" unique_id=116360249]
 material_override = SubResource("ShaderMaterial_hgey6")
 
-[node name="medium_b_60" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1648811703) index="20" unique_id=104590448]
+[node name="medium_b_60" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1700613680) index="20" unique_id=1214282708]
 material_override = SubResource("ShaderMaterial_hgey6")
 
-[node name="medium_b_24" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1648811703) index="21" unique_id=90212050]
+[node name="medium_b_24" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1700613680) index="21" unique_id=1231558091]
 material_override = SubResource("ShaderMaterial_hgey6")
 
-[node name="medium_b_51" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1648811703) index="22" unique_id=1420311686]
+[node name="medium_b_51" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1700613680) index="22" unique_id=1275996147]
 material_override = SubResource("ShaderMaterial_hgey6")
 
-[node name="medium_b_71" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1648811703) index="23" unique_id=1362663216]
+[node name="medium_b_71" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1700613680) index="23" unique_id=1017531196]
 material_override = SubResource("ShaderMaterial_hgey6")
 
-[node name="medium_b_75" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1648811703) index="24" unique_id=452771780]
+[node name="medium_b_75" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1700613680) index="24" unique_id=1450114609]
 material_override = SubResource("ShaderMaterial_hgey6")
 
-[node name="medium_b_43" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1648811703) index="25" unique_id=181269933]
+[node name="medium_b_43" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1700613680) index="25" unique_id=1874743260]
 material_override = SubResource("ShaderMaterial_hgey6")
 
-[node name="medium_b_41" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1648811703) index="26" unique_id=2017785421]
+[node name="medium_b_41" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1700613680) index="26" unique_id=992457589]
 material_override = SubResource("ShaderMaterial_hgey6")
 
-[node name="medium_b_20" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1648811703) index="27" unique_id=642712093]
+[node name="medium_b_20" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1700613680) index="27" unique_id=709493521]
 material_override = SubResource("ShaderMaterial_hgey6")
 
-[node name="medium_b_65" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1648811703) index="28" unique_id=1871547871]
+[node name="medium_b_65" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1700613680) index="28" unique_id=1743390447]
 material_override = SubResource("ShaderMaterial_hgey6")
 
-[node name="medium_b_14" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1648811703) index="29" unique_id=576211034]
+[node name="medium_b_14" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1700613680) index="29" unique_id=987449805]
 material_override = SubResource("ShaderMaterial_hgey6")
 
-[node name="medium_b_69" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1648811703) index="30" unique_id=1686544284]
+[node name="medium_b_69" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1700613680) index="30" unique_id=310842738]
 material_override = SubResource("ShaderMaterial_hgey6")
 
-[node name="medium_b_80" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1648811703) index="31" unique_id=413224587]
+[node name="medium_b_80" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1700613680) index="31" unique_id=1897344519]
 material_override = SubResource("ShaderMaterial_hgey6")
 
-[node name="medium_b_42" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1648811703) index="32" unique_id=411887402]
+[node name="medium_b_42" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1700613680) index="32" unique_id=562291353]
 material_override = SubResource("ShaderMaterial_hgey6")
 
-[node name="medium_b_63" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1648811703) index="33" unique_id=1628435241]
+[node name="medium_b_63" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1700613680) index="33" unique_id=1667205978]
 material_override = SubResource("ShaderMaterial_hgey6")
 
-[node name="medium_b_64" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1648811703) index="34" unique_id=1202109485]
+[node name="medium_b_64" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1700613680) index="34" unique_id=1502739838]
 material_override = SubResource("ShaderMaterial_hgey6")
 
-[node name="medium_b_34" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1648811703) index="35" unique_id=719069830]
+[node name="medium_b_34" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1700613680) index="35" unique_id=1932180988]
 material_override = SubResource("ShaderMaterial_hgey6")
 
-[node name="medium_b_4" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1648811703) index="36" unique_id=899429156]
+[node name="medium_b_4" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1700613680) index="36" unique_id=1685039579]
 material_override = SubResource("ShaderMaterial_hgey6")
 
-[node name="medium_b_54" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1648811703) index="37" unique_id=1745470722]
+[node name="medium_b_54" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1700613680) index="37" unique_id=1364791133]
 material_override = SubResource("ShaderMaterial_hgey6")
 
-[node name="medium_b_40" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1648811703) index="38" unique_id=292730690]
+[node name="medium_b_40" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1700613680) index="38" unique_id=1437234724]
 material_override = SubResource("ShaderMaterial_hgey6")
 
-[node name="medium_b_35" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1648811703) index="39" unique_id=1411645125]
+[node name="medium_b_35" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1700613680) index="39" unique_id=1698638596]
 material_override = SubResource("ShaderMaterial_hgey6")
 
-[node name="medium_b_31" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1648811703) index="40" unique_id=20737011]
+[node name="medium_b_31" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1700613680) index="40" unique_id=1721153287]
 material_override = SubResource("ShaderMaterial_hgey6")
 
-[node name="medium_b_67" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1648811703) index="41" unique_id=1546329253]
+[node name="medium_b_67" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1700613680) index="41" unique_id=1655778110]
 material_override = SubResource("ShaderMaterial_hgey6")
 
-[node name="medium_b_72" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1648811703) index="42" unique_id=1202272802]
+[node name="medium_b_72" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1700613680) index="42" unique_id=1366951799]
 material_override = SubResource("ShaderMaterial_hgey6")
 
-[node name="medium_b_3" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1648811703) index="43" unique_id=283018651]
+[node name="medium_b_3" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1700613680) index="43" unique_id=1878181894]
 material_override = SubResource("ShaderMaterial_hgey6")
 
-[node name="medium_b_30" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1648811703) index="44" unique_id=1634352633]
+[node name="medium_b_30" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1700613680) index="44" unique_id=206765301]
 material_override = SubResource("ShaderMaterial_hgey6")
 
-[node name="medium_b_58" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1648811703) index="45" unique_id=1475300966]
+[node name="medium_b_58" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1700613680) index="45" unique_id=393644269]
 material_override = SubResource("ShaderMaterial_hgey6")
 
-[node name="medium_b_19" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1648811703) index="46" unique_id=1778340188]
+[node name="medium_b_19" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1700613680) index="46" unique_id=1212736260]
 material_override = SubResource("ShaderMaterial_hgey6")
 
-[node name="medium_b_37" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1648811703) index="47" unique_id=1495001058]
+[node name="medium_b_37" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1700613680) index="47" unique_id=1674985852]
 material_override = SubResource("ShaderMaterial_hgey6")
 
-[node name="medium_b_28" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1648811703) index="48" unique_id=226764815]
+[node name="medium_b_28" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1700613680) index="48" unique_id=1044455433]
 material_override = SubResource("ShaderMaterial_hgey6")
 
-[node name="medium_b_44" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1648811703) index="49" unique_id=935097555]
+[node name="medium_b_44" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1700613680) index="49" unique_id=1522960056]
 material_override = SubResource("ShaderMaterial_hgey6")
 
-[node name="medium_b_11" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1648811703) index="50" unique_id=1498147235]
+[node name="medium_b_11" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1700613680) index="50" unique_id=304469725]
 material_override = SubResource("ShaderMaterial_hgey6")
 
-[node name="medium_b_32" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1648811703) index="51" unique_id=1958962007]
+[node name="medium_b_32" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1700613680) index="51" unique_id=2071668662]
 material_override = SubResource("ShaderMaterial_hgey6")
 
-[node name="medium_b_15" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1648811703) index="52" unique_id=2100914655]
+[node name="medium_b_15" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1700613680) index="52" unique_id=169597726]
 material_override = SubResource("ShaderMaterial_hgey6")
 
-[node name="medium_b_22" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1648811703) index="53" unique_id=908765197]
+[node name="medium_b_22" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1700613680) index="53" unique_id=688813191]
 material_override = SubResource("ShaderMaterial_hgey6")
 
-[node name="medium_b_2" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1648811703) index="54" unique_id=195382202]
+[node name="medium_b_2" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1700613680) index="54" unique_id=536905306]
 material_override = SubResource("ShaderMaterial_hgey6")
 
-[node name="medium_b_17" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1648811703) index="55" unique_id=1655933157]
+[node name="medium_b_17" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1700613680) index="55" unique_id=1812060975]
 material_override = SubResource("ShaderMaterial_hgey6")
 
-[node name="medium_b_59" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1648811703) index="56" unique_id=1858990670]
+[node name="medium_b_59" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1700613680) index="56" unique_id=1296027858]
 material_override = SubResource("ShaderMaterial_hgey6")
 
-[node name="medium_b_66" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1648811703) index="57" unique_id=1785316807]
+[node name="medium_b_66" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1700613680) index="57" unique_id=1283254833]
 material_override = SubResource("ShaderMaterial_hgey6")
 
-[node name="medium_b_50" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1648811703) index="58" unique_id=393479059]
+[node name="medium_b_50" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1700613680) index="58" unique_id=2050185686]
 material_override = SubResource("ShaderMaterial_hgey6")
 
-[node name="medium_b_77" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1648811703) index="59" unique_id=1854760119]
+[node name="medium_b_77" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1700613680) index="59" unique_id=1809493574]
 material_override = SubResource("ShaderMaterial_hgey6")
 
-[node name="medium_b_27" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1648811703) index="60" unique_id=1541824610]
+[node name="medium_b_27" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1700613680) index="60" unique_id=1374326044]
 material_override = SubResource("ShaderMaterial_hgey6")
 
-[node name="medium_b_46" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1648811703) index="61" unique_id=789603822]
+[node name="medium_b_46" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1700613680) index="61" unique_id=1769155039]
 material_override = SubResource("ShaderMaterial_hgey6")
 
-[node name="medium_b_78" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1648811703) index="62" unique_id=1186991944]
+[node name="medium_b_78" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1700613680) index="62" unique_id=1599597810]
 material_override = SubResource("ShaderMaterial_hgey6")
 
-[node name="medium_b_49" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1648811703) index="63" unique_id=812387467]
+[node name="medium_b_49" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1700613680) index="63" unique_id=1216413446]
 material_override = SubResource("ShaderMaterial_hgey6")
 
-[node name="medium_b_23" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1648811703) index="64" unique_id=1011505410]
+[node name="medium_b_23" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1700613680) index="64" unique_id=1613567531]
 material_override = SubResource("ShaderMaterial_hgey6")
 
-[node name="medium_b_74" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1648811703) index="65" unique_id=819360152]
+[node name="medium_b_74" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1700613680) index="65" unique_id=705820295]
 material_override = SubResource("ShaderMaterial_hgey6")
 
-[node name="medium_b_53" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1648811703) index="66" unique_id=671244797]
+[node name="medium_b_53" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1700613680) index="66" unique_id=1425061343]
 material_override = SubResource("ShaderMaterial_hgey6")
 
-[node name="medium_b_56" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1648811703) index="67" unique_id=1537401285]
+[node name="medium_b_56" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1700613680) index="67" unique_id=1730692832]
 material_override = SubResource("ShaderMaterial_hgey6")
 
-[node name="medium_b_61" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1648811703) index="68" unique_id=2069157315]
+[node name="medium_b_61" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1700613680) index="68" unique_id=1681044020]
 material_override = SubResource("ShaderMaterial_hgey6")
 
-[node name="medium_b_81" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1648811703) index="69" unique_id=1176149831]
+[node name="medium_b_81" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1700613680) index="69" unique_id=1801177346]
 material_override = SubResource("ShaderMaterial_hgey6")
 
-[node name="medium_b_21" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1648811703) index="70" unique_id=1492716161]
+[node name="medium_b_21" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1700613680) index="70" unique_id=1137286086]
 material_override = SubResource("ShaderMaterial_hgey6")
 
-[node name="medium_b_29" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1648811703) index="71" unique_id=1875597661]
+[node name="medium_b_29" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1700613680) index="71" unique_id=889591527]
 material_override = SubResource("ShaderMaterial_hgey6")
 
-[node name="medium_b_7" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1648811703) index="72" unique_id=1154406140]
+[node name="medium_b_7" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1700613680) index="72" unique_id=966532129]
 material_override = SubResource("ShaderMaterial_hgey6")
 
-[node name="medium_b_36" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1648811703) index="73" unique_id=974098641]
+[node name="medium_b_36" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1700613680) index="73" unique_id=1251768879]
 material_override = SubResource("ShaderMaterial_hgey6")
 
-[node name="medium_b_26" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1648811703) index="74" unique_id=917511929]
+[node name="medium_b_26" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1700613680) index="74" unique_id=791515825]
 material_override = SubResource("ShaderMaterial_hgey6")
 
-[node name="medium_b_33" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1648811703) index="75" unique_id=1042309364]
+[node name="medium_b_33" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1700613680) index="75" unique_id=500888991]
 material_override = SubResource("ShaderMaterial_hgey6")
 
-[node name="medium_b_76" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1648811703) index="76" unique_id=378725318]
+[node name="medium_b_76" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1700613680) index="76" unique_id=996772319]
 material_override = SubResource("ShaderMaterial_hgey6")
 
-[node name="medium_b_79" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1648811703) index="77" unique_id=1177455022]
+[node name="medium_b_79" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1700613680) index="77" unique_id=1211710959]
 material_override = SubResource("ShaderMaterial_hgey6")
 
-[node name="medium_b_68" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1648811703) index="78" unique_id=2145130165]
+[node name="medium_b_68" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1700613680) index="78" unique_id=766567702]
 material_override = SubResource("ShaderMaterial_hgey6")
 
-[node name="medium_b_70" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1648811703) index="79" unique_id=320031487]
+[node name="medium_b_70" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1700613680) index="79" unique_id=1129938190]
 material_override = SubResource("ShaderMaterial_hgey6")
 
-[node name="medium_b_10" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1648811703) index="80" unique_id=1733735808]
+[node name="medium_b_10" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Medium" parent_id_path=PackedInt32Array(297389943, 1700613680) index="80" unique_id=1684430878]
 material_override = SubResource("ShaderMaterial_hgey6")
 
-[node name="big_b_89" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="0" unique_id=1500095630]
+[node name="big_b_89" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="0" unique_id=78690283]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_136" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="1" unique_id=962242029]
+[node name="big_b_136" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="1" unique_id=1242661809]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_146" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="2" unique_id=716074411]
+[node name="big_b_146" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="2" unique_id=911091626]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_27" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="3" unique_id=1578264844]
+[node name="big_b_27" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="3" unique_id=1407953904]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 266.4677)
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_5" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="4" unique_id=1041834234]
+[node name="big_b_5" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="4" unique_id=869481310]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -27.657715, -16.909729, 238.20947)
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_64" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="5" unique_id=350694450]
+[node name="big_b_64" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="5" unique_id=1919385906]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -27.657715, -16.909729, 238.20947)
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_45" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="6" unique_id=1792282761]
+[node name="big_b_45" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="6" unique_id=831852289]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -27.657715, -16.909729, 238.20947)
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_101" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="7" unique_id=21711148]
+[node name="big_b_101" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="7" unique_id=1621768339]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_28" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="8" unique_id=1341384140]
+[node name="big_b_28" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="8" unique_id=1121266473]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -27.657715, -16.909729, 238.20947)
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_6" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="9" unique_id=1068533739]
+[node name="big_b_6" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="9" unique_id=1272907506]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 266.4677)
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_46" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="10" unique_id=1387193711]
+[node name="big_b_46" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="10" unique_id=1711009132]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 266.4677)
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_100" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="11" unique_id=1615183766]
+[node name="big_b_100" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="11" unique_id=1252346647]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_63" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="12" unique_id=54167971]
+[node name="big_b_63" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="12" unique_id=207585284]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_51" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="13" unique_id=511213744]
+[node name="big_b_51" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="13" unique_id=483064924]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_12" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="14" unique_id=1721411792]
+[node name="big_b_12" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="14" unique_id=1088522865]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_32" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="15" unique_id=692781128]
+[node name="big_b_32" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="15" unique_id=66381561]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_117" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="16" unique_id=1047030177]
+[node name="big_b_117" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="16" unique_id=313258126]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_104" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="17" unique_id=65068943]
+[node name="big_b_104" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="17" unique_id=1154308173]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_133" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="18" unique_id=215055023]
+[node name="big_b_133" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="18" unique_id=1943741966]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_108" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="19" unique_id=1658547790]
+[node name="big_b_108" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="19" unique_id=979029068]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_85" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="20" unique_id=900422713]
+[node name="big_b_85" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="20" unique_id=1407141526]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_17" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="21" unique_id=895342979]
+[node name="big_b_17" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="21" unique_id=832884817]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_110" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="22" unique_id=1563636503]
+[node name="big_b_110" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="22" unique_id=1524260000]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -27.657715, -16.909729, 238.20947)
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_8" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="23" unique_id=711143736]
+[node name="big_b_8" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="23" unique_id=1453606409]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -27.657715, -16.909729, 238.20947)
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_20" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="24" unique_id=509288775]
+[node name="big_b_20" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="24" unique_id=1798344411]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_38" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="25" unique_id=1108473733]
+[node name="big_b_38" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="25" unique_id=338911005]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_1" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="26" unique_id=300984772]
+[node name="big_b_1" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="26" unique_id=1617050597]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_54" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="27" unique_id=410310532]
+[node name="big_b_54" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="27" unique_id=1597885524]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -27.657715, -16.909729, 238.20947)
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_23" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="28" unique_id=209329329]
+[node name="big_b_23" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="28" unique_id=1657514897]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -27.657715, -16.909729, 238.20947)
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_98" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="29" unique_id=1492434409]
+[node name="big_b_98" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="29" unique_id=1731937993]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_111" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="30" unique_id=1835262067]
+[node name="big_b_111" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="30" unique_id=1518274200]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_49" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="31" unique_id=40113670]
+[node name="big_b_49" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="31" unique_id=1328619436]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 148.61627)
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_102" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="32" unique_id=1187629599]
+[node name="big_b_102" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="32" unique_id=461032722]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_26" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="33" unique_id=1862463833]
+[node name="big_b_26" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="33" unique_id=1560564572]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 148.61627)
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_39" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="34" unique_id=978697007]
+[node name="big_b_39" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="34" unique_id=425145240]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_24" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="35" unique_id=1818531402]
+[node name="big_b_24" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="35" unique_id=282852326]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_19" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="36" unique_id=598169697]
+[node name="big_b_19" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="36" unique_id=1751109369]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_47" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="37" unique_id=2074658115]
+[node name="big_b_47" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="37" unique_id=507186871]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_75" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="38" unique_id=1262956158]
+[node name="big_b_75" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="38" unique_id=233938480]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_76" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="39" unique_id=809916094]
+[node name="big_b_76" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="39" unique_id=179350511]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_77" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="40" unique_id=1305475914]
+[node name="big_b_77" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="40" unique_id=1142547215]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_103" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="41" unique_id=845262443]
+[node name="big_b_103" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="41" unique_id=120342107]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_105" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="42" unique_id=1757166418]
+[node name="big_b_105" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="42" unique_id=1750276720]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_97" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="43" unique_id=1312220355]
+[node name="big_b_97" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="43" unique_id=187591734]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_10" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="44" unique_id=604732444]
+[node name="big_b_10" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="44" unique_id=1395554075]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_122" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="45" unique_id=2038109223]
+[node name="big_b_122" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="45" unique_id=918022173]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_125" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="46" unique_id=1214158126]
+[node name="big_b_125" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="46" unique_id=1964333958]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_127" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="47" unique_id=1322435948]
+[node name="big_b_127" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="47" unique_id=1926401868]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_43" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="48" unique_id=917293893]
+[node name="big_b_43" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="48" unique_id=1436144043]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_88" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="49" unique_id=968174967]
+[node name="big_b_88" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="49" unique_id=1377440439]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_126" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="50" unique_id=1081314746]
+[node name="big_b_126" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="50" unique_id=405706384]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_36" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="51" unique_id=1966039913]
+[node name="big_b_36" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="51" unique_id=1596089501]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_87" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="52" unique_id=1340417006]
+[node name="big_b_87" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="52" unique_id=992146499]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_30" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="53" unique_id=1210327032]
+[node name="big_b_30" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="53" unique_id=197174708]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_61" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="54" unique_id=1288291409]
+[node name="big_b_61" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="54" unique_id=1432492311]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_62" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="55" unique_id=409508370]
+[node name="big_b_62" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="55" unique_id=1140313384]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_128" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="56" unique_id=1675673765]
+[node name="big_b_128" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="56" unique_id=1103722366]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_21" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="57" unique_id=1085384867]
+[node name="big_b_21" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="57" unique_id=1254097108]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_115" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="58" unique_id=2032471598]
+[node name="big_b_115" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="58" unique_id=264195980]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_112" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="59" unique_id=1175210784]
+[node name="big_b_112" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="59" unique_id=146567825]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_9" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="60" unique_id=973092636]
+[node name="big_b_9" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="60" unique_id=1779536337]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_65" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="61" unique_id=449918044]
+[node name="big_b_65" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="61" unique_id=2111293220]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_143" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="62" unique_id=1576437120]
+[node name="big_b_143" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="62" unique_id=1710361640]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_135" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="63" unique_id=1869753457]
+[node name="big_b_135" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="63" unique_id=657804533]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_69" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="64" unique_id=820314042]
+[node name="big_b_69" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="64" unique_id=825406101]
 material_override = SubResource("ShaderMaterial_swhwu")
 
-[node name="big_b_96" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="65" unique_id=674772571]
+[node name="big_b_96" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="65" unique_id=2101850530]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_139" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="66" unique_id=1987048066]
+[node name="big_b_139" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="66" unique_id=33105738]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_70" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="67" unique_id=1776734746]
+[node name="big_b_70" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="67" unique_id=541074548]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_31" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="68" unique_id=527831116]
+[node name="big_b_31" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="68" unique_id=343939419]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_41" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="69" unique_id=524178919]
+[node name="big_b_41" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="69" unique_id=1148154621]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_86" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="70" unique_id=1244268425]
+[node name="big_b_86" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="70" unique_id=352180073]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_114" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="71" unique_id=763372515]
+[node name="big_b_114" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="71" unique_id=2077895482]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_53" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="72" unique_id=1243386153]
+[node name="big_b_53" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="72" unique_id=1767508030]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_48" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="73" unique_id=795081671]
+[node name="big_b_48" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="73" unique_id=718692169]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_130" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="74" unique_id=1010559211]
+[node name="big_b_130" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="74" unique_id=2118001336]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_84" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="75" unique_id=1462216496]
+[node name="big_b_84" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="75" unique_id=136886272]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_142" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="76" unique_id=1599762766]
+[node name="big_b_142" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="76" unique_id=657950736]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_44" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="77" unique_id=623941160]
+[node name="big_b_44" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="77" unique_id=370990061]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_52" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="78" unique_id=165139496]
+[node name="big_b_52" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="78" unique_id=403928299]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_79" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="79" unique_id=1655836915]
+[node name="big_b_79" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="79" unique_id=722506458]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_107" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="80" unique_id=2064315178]
+[node name="big_b_107" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="80" unique_id=1420672441]
 material_override = SubResource("ShaderMaterial_cty2f")
 
-[node name="big_b_140" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="81" unique_id=1336134471]
+[node name="big_b_140" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="81" unique_id=694252836]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_40" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="82" unique_id=1761261573]
+[node name="big_b_40" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="82" unique_id=27973328]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_132" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="83" unique_id=1110371723]
+[node name="big_b_132" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="83" unique_id=707221896]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_113" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="84" unique_id=1362430687]
+[node name="big_b_113" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="84" unique_id=1282364111]
 material_override = SubResource("ShaderMaterial_nutsd")
 
-[node name="big_b_68" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="85" unique_id=774494574]
+[node name="big_b_68" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="85" unique_id=724911302]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_144" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="86" unique_id=720824818]
+[node name="big_b_144" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="86" unique_id=853949796]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_13" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="87" unique_id=1883543415]
+[node name="big_b_13" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="87" unique_id=347359757]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_22" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="88" unique_id=810604124]
+[node name="big_b_22" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="88" unique_id=1421455382]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_137" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="89" unique_id=237018509]
+[node name="big_b_137" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="89" unique_id=1831302290]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_35" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="90" unique_id=1446559975]
+[node name="big_b_35" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="90" unique_id=436905332]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_80" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="91" unique_id=898536904]
+[node name="big_b_80" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="91" unique_id=645827123]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_141" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="92" unique_id=764954530]
+[node name="big_b_141" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="92" unique_id=1912621322]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_29" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="93" unique_id=567640519]
+[node name="big_b_29" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="93" unique_id=1237209893]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_95" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="94" unique_id=1053969866]
+[node name="big_b_95" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="94" unique_id=1604776510]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_37" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="95" unique_id=1523359307]
+[node name="big_b_37" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="95" unique_id=1033562413]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_16" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="96" unique_id=2118414402]
+[node name="big_b_16" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="96" unique_id=739990564]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_42" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="97" unique_id=1750789804]
+[node name="big_b_42" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="97" unique_id=713308190]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_145" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="98" unique_id=1704904348]
+[node name="big_b_145" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="98" unique_id=1300002922]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_124" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="99" unique_id=1537890220]
+[node name="big_b_124" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="99" unique_id=2052348863]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_15" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="100" unique_id=1580378786]
+[node name="big_b_15" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="100" unique_id=1537815872]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_56" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="101" unique_id=2007596512]
+[node name="big_b_56" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="101" unique_id=1039761933]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_67" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="102" unique_id=2115555117]
+[node name="big_b_67" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="102" unique_id=2140781864]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_58" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="103" unique_id=111808938]
+[node name="big_b_58" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="103" unique_id=786683330]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_25" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="104" unique_id=2097258306]
+[node name="big_b_25" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="104" unique_id=1454593642]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_94" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="105" unique_id=1406218560]
+[node name="big_b_94" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="105" unique_id=1403823188]
 material_override = SubResource("ShaderMaterial_6hchx")
 
-[node name="big_b_14" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="106" unique_id=318950213]
+[node name="big_b_14" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="106" unique_id=554833529]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_60" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="107" unique_id=593373700]
+[node name="big_b_60" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="107" unique_id=920570510]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_116" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="108" unique_id=2064514216]
+[node name="big_b_116" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="108" unique_id=486359697]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_18" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="109" unique_id=1031236889]
+[node name="big_b_18" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="109" unique_id=512059666]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_11" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="110" unique_id=192134560]
+[node name="big_b_11" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="110" unique_id=440516430]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_78" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="111" unique_id=72466226]
+[node name="big_b_78" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="111" unique_id=903444009]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_57" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="112" unique_id=1043641431]
+[node name="big_b_57" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="112" unique_id=80669752]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_72" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="113" unique_id=1890567872]
+[node name="big_b_72" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="113" unique_id=1687855307]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_118" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="114" unique_id=1653844589]
+[node name="big_b_118" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="114" unique_id=1041874720]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_83" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="115" unique_id=533570452]
+[node name="big_b_83" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="115" unique_id=1506722806]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_73" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="116" unique_id=630041308]
+[node name="big_b_73" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="116" unique_id=687263948]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_2" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="117" unique_id=1339629939]
+[node name="big_b_2" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="117" unique_id=992910357]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_129" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="118" unique_id=369534337]
+[node name="big_b_129" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="118" unique_id=641181479]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_119" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="119" unique_id=1843847756]
+[node name="big_b_119" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="119" unique_id=1362829955]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_4" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="120" unique_id=529908532]
+[node name="big_b_4" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="120" unique_id=516920058]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_34" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="121" unique_id=1742504636]
+[node name="big_b_34" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="121" unique_id=287220999]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_50" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="122" unique_id=1009267130]
+[node name="big_b_50" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="122" unique_id=716486363]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_55" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="123" unique_id=192764559]
+[node name="big_b_55" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="123" unique_id=1930433636]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_138" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="124" unique_id=1991575453]
+[node name="big_b_138" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="124" unique_id=1714988115]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_109" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="125" unique_id=40819932]
+[node name="big_b_109" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="125" unique_id=1559815801]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_74" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="126" unique_id=1072090404]
+[node name="big_b_74" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="126" unique_id=1309080292]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_92" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="127" unique_id=186370872]
+[node name="big_b_92" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="127" unique_id=2045806720]
 material_override = SubResource("ShaderMaterial_c2l6c")
 
-[node name="big_b_33" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="128" unique_id=1777741299]
+[node name="big_b_33" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="128" unique_id=1080520504]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_90" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="129" unique_id=1272757628]
+[node name="big_b_90" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="129" unique_id=1778140237]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_121" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="130" unique_id=403156482]
+[node name="big_b_121" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="130" unique_id=1196871887]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_82" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="131" unique_id=1680349887]
+[node name="big_b_82" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="131" unique_id=255534521]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_59" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="132" unique_id=68599574]
+[node name="big_b_59" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="132" unique_id=1741780571]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_7" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="133" unique_id=639517573]
+[node name="big_b_7" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="133" unique_id=109523659]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_99" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="134" unique_id=611266880]
+[node name="big_b_99" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="134" unique_id=599067460]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_149" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="135" unique_id=905243759]
+[node name="big_b_149" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="135" unique_id=595319020]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_148" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="136" unique_id=1303608810]
+[node name="big_b_148" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="136" unique_id=1613865674]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_106" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="137" unique_id=1948972171]
+[node name="big_b_106" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="137" unique_id=33975472]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_123" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="138" unique_id=1122255727]
+[node name="big_b_123" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="138" unique_id=1732033549]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_120" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="139" unique_id=1882588536]
+[node name="big_b_120" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="139" unique_id=738432525]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_91" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="140" unique_id=1002957747]
+[node name="big_b_91" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="140" unique_id=72992206]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_93" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="141" unique_id=1772158120]
+[node name="big_b_93" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="141" unique_id=604439249]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_131" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="142" unique_id=1776173980]
+[node name="big_b_131" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="142" unique_id=644011387]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_71" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="143" unique_id=1949749471]
+[node name="big_b_71" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="143" unique_id=1991189142]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_81" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="144" unique_id=568843322]
+[node name="big_b_81" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="144" unique_id=2132857883]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_66" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="145" unique_id=1061754982]
+[node name="big_b_66" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="145" unique_id=1340758409]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_3" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="146" unique_id=1375722033]
+[node name="big_b_3" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="146" unique_id=1218863790]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_134" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="147" unique_id=192754666]
+[node name="big_b_134" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="147" unique_id=1494768217]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="big_b_147" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 449596402) index="148" unique_id=406310087]
+[node name="big_b_147" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Buildings/Big" parent_id_path=PackedInt32Array(297389943, 1273546527) index="148" unique_id=873071910]
 material_override = SubResource("ShaderMaterial_j4pav")
 
-[node name="SM_Palm_Impostor_Zone_GoldCity_001_VIS" parent="TerrainRoot/Gold_City/Scene Collection/PALM_IMPOSTORS_VIS" parent_id_path=PackedInt32Array(297389943, 552917310) index="0" unique_id=1774013633]
+[node name="SM_Palm_Impostor_Zone_GoldCity_001_VIS" parent="TerrainRoot/Gold_City/Scene Collection/PALM_IMPOSTORS_VIS" parent_id_path=PackedInt32Array(297389943, 1074856315) index="0" unique_id=1318238795]
 material_override = ExtResource("36_403n4")
 
-[node name="SM_Palm_Impostor_Zone_GoldCity_002_VIS" parent="TerrainRoot/Gold_City/Scene Collection/PALM_IMPOSTORS_VIS" parent_id_path=PackedInt32Array(297389943, 552917310) index="1" unique_id=1351465105]
+[node name="SM_Palm_Impostor_Zone_GoldCity_002_VIS" parent="TerrainRoot/Gold_City/Scene Collection/PALM_IMPOSTORS_VIS" parent_id_path=PackedInt32Array(297389943, 1074856315) index="1" unique_id=1945056890]
 material_override = ExtResource("36_403n4")
 
-[node name="SM_Palm_Impostor_Zone_GoldCity_003_VIS" parent="TerrainRoot/Gold_City/Scene Collection/PALM_IMPOSTORS_VIS" parent_id_path=PackedInt32Array(297389943, 552917310) index="2" unique_id=532393813]
+[node name="SM_Palm_Impostor_Zone_GoldCity_003_VIS" parent="TerrainRoot/Gold_City/Scene Collection/PALM_IMPOSTORS_VIS" parent_id_path=PackedInt32Array(297389943, 1074856315) index="2" unique_id=1908413615]
 material_override = ExtResource("36_403n4")
 
 [node name="build1" parent="TerrainRoot" unique_id=1230686511 instance=ExtResource("37_f4q6v")]
@@ -1959,7 +1959,7 @@ shape = SubResource("ConcavePolygonShape3D_g5j8w")
 [node name="WaterIntegration" type="Node3D" parent="." unique_id=1889730552]
 
 [node name="Ocean" parent="WaterIntegration" unique_id=1340264265 instance=ExtResource("40_3mclj")]
-ocean_material = SubResource("ShaderMaterial_cfohk")
+ocean_material = SubResource("ShaderMaterial_q2anr")
 wave_world_size_a = 153.5
 wave_world_size_b = 104.0
 wave_amplitude_a = 0.7999999821184
@@ -2250,7 +2250,7 @@ editor_preview_mode = 0
 
 [node name="EntryBubbles" parent="CameraSystem/ChaseCamera/Camera3D/UnderwaterEffect/WaterCrossingOverlay" index="0"]
 visible = false
-material = SubResource("CanvasItemMaterial_iyaox")
+material = SubResource("CanvasItemMaterial_cfohk")
 position = Vector2(1, 1.76)
 amount = 500
 texture = SubResource("GradientTexture2D_pl0kw")
@@ -2258,10 +2258,10 @@ lifetime = 20.0
 speed_scale = 8.0
 explosiveness = 1.0
 randomness = 1.0
-process_material = SubResource("ParticleProcessMaterial_4k6sa")
+process_material = SubResource("ParticleProcessMaterial_iyaox")
 
 [node name="UnderwaterPostProcess" parent="CameraSystem/ChaseCamera/Camera3D/UnderwaterEffect" index="1" unique_id=1854893749]
-material_override = SubResource("ShaderMaterial_ogabk")
+material_override = SubResource("ShaderMaterial_4k6sa")
 
 [node name="Debug" type="Node" parent="." unique_id=1303880580]
 
@@ -2306,7 +2306,7 @@ transform = Transform3D(-0.98350126, 0, -0.18090084, 0, 1, 0, 0.18090084, 0, -0.
 [node name="stadium_lights5" parent="Atrezzo" unique_id=1254506732 instance=ExtResource("56_mihog")]
 transform = Transform3D(0.8583538, 0, 0.5130581, 0, 1, 0, -0.5130581, 0, 0.8583538, -600.09924, 3.6972828, -53.8114)
 
-[node name="SpotLight3D" parent="Atrezzo/stadium_lights5" index="1" unique_id=252011559]
+[node name="SpotLight3D" parent="Atrezzo/stadium_lights5" index="0" unique_id=252011559]
 shadow_bias = 0.0
 shadow_normal_bias = 1.759
 
@@ -2738,7 +2738,6 @@ speed_scale = 0.2
 [editable path="Gameplay/JetSki/VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/rider_bot"]
 [editable path="CameraSystem/ChaseCamera"]
 [editable path="Atrezzo/stadium_lights5"]
-[editable path="Atrezzo/stadium_lights5/stadium_with_light"]
 [editable path="Atrezzo/Ramp1"]
 [editable path="Atrezzo/Ramp1/RampVisual"]
 [editable path="Atrezzo/Ramp4"]

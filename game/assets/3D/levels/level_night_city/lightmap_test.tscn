@@ -2,7 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://b3y5xp6677icq" path="res://world/props/buildings/apartments_01/apartments_01.tscn" id="1_wjwvf"]
 [ext_resource type="LightmapGIData" uid="uid://bfo7vbeyoojcy" path="res://assets/3D/levels/level_night_city/lightmap_test.lmbake" id="2_ydxqw"]
-[ext_resource type="PackedScene" uid="uid://c3xovkcnf4rak" path="res://assets/3D/levels/level_night_city/atrezzo/stadium_lights.tscn" id="3_ydxqw"]
+[ext_resource type="PackedScene" uid="uid://c3xovkcnf4rak" path="res://world/props/lights/stadium_lights.tscn" id="3_ydxqw"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wwatn"]
 albedo_color = Color(0.59717613, 0.59717613, 0.5971761, 1)
@@ -101,3 +101,4 @@ spot_attenuation = 0.4
 spot_angle = 40.0
 
 [editable path="stadium_lights"]
+[editable path="stadium_lights/stadium_with_light"]

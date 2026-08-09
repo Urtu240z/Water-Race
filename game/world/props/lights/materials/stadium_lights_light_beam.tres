@@ -1,0 +1,32 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://28t15gnpq6w7"]
+
+[ext_resource type="Shader" uid="uid://clymns4nlremd" path="res://levels/gold_city/lighting/shaders/stadium_light_beam.gdshader" id="1_hlj70"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_hlj70")
+shader_parameter/light_color = Color(0.8128, 0.8308, 0.6756, 1)
+shader_parameter/beam_opacity = 0.14
+shader_parameter/emission_energy = 4.0000000596048
+shader_parameter/base_density = 0.249999994412
+shader_parameter/edge_fade_start = 0.0
+shader_parameter/edge_fade_end = 0.66999998502416
+shader_parameter/edge_fade_power = 4.0
+shader_parameter/near_fade_end = 0.1009999978123
+shader_parameter/far_fade_start = 0.50000000372526
+shader_parameter/length_falloff = 0.7500000111759
+shader_parameter/intersection_fade_strength = 1.0
+shader_parameter/intersection_fade_distance = 9.0000001341108
+shader_parameter/intersection_fade_power = 1.0
+shader_parameter/water_intersection_enabled = true
+shader_parameter/water_surface_y = 0.0
+shader_parameter/water_surface_margin = 0.0
+shader_parameter/water_intersection_fade_strength = 1.0
+shader_parameter/water_intersection_fade_distance = 4.80000007152576
+shader_parameter/water_intersection_fade_power = 1.0
+shader_parameter/dust_strength = 0.40000000596048
+shader_parameter/dust_scale = 0.03999999910592
+shader_parameter/dust_detail = 2.10000003129252
+shader_parameter/dust_threshold = 0.45999998971808
+shader_parameter/dust_softness = 0.499999988824
+shader_parameter/dust_velocity = Vector3(0.1, -0.15, -0.15)

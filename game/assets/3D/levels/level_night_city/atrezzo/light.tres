@@ -1,7 +1,0 @@
-[gd_resource type="StandardMaterial3D" format=3 uid="uid://cmntd7bgdaj0k"]
-
-[resource]
-resource_name = "light"
-cull_mode = 2
-albedo_color = Color(1, 0.97559226, 0, 1)
-roughness = 0.5

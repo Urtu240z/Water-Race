@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://c3xovkcnf4rak"]
+
+[ext_resource type="PackedScene" uid="uid://c4cwdmabh5coe" path="res://world/props/lights/stadium_lights.glb" id="1_fokj7"]
+
+[node name="StadiumLight" type="Node3D" unique_id=1504769906]
+
+[node name="stadium_lights" parent="." unique_id=119223853 instance=ExtResource("1_fokj7")]
+
+[node name="SpotLight3D" type="SpotLight3D" parent="." unique_id=252011559]
+transform = Transform3D(-1, 0, -8.742278e-08, -4.16227e-08, 0.8793867, 0.47610825, 7.687842e-08, 0.47610825, -0.8793867, 1.9513631, 28.15399, 0)
+light_color = Color(0.8127932, 0.8307585, 0.6756087, 1)
+light_energy = 90.0
+light_size = 1.0
+shadow_enabled = true
+shadow_reverse_cull_face = true
+shadow_blur = 3.0
+spot_range = 140.167
+spot_angle = 30.0
+spot_angle_attenuation = 2.3784142

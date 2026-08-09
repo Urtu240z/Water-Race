@@ -1,0 +1,68 @@
+[remap]
+
+importer="scene"
+importer_version=1
+type="PackedScene"
+uid="uid://c4cwdmabh5coe"
+path="res://.godot/imported/stadium_lights.glb-42764db4bdc987f9ebde408b7b5f6be9.scn"
+
+[deps]
+
+source_file="res://world/props/lights/stadium_lights.glb"
+dest_files=["res://.godot/imported/stadium_lights.glb-42764db4bdc987f9ebde408b7b5f6be9.scn"]
+
+[params]
+
+nodes/root_type=""
+nodes/root_name=""
+nodes/root_script=null
+mesh_library/use_node_names_as_mesh_names=false
+array_mesh/deduplicate_surfaces=true
+nodes/apply_root_scale=true
+nodes/root_scale=1.0
+nodes/import_as_skeleton_bones=false
+nodes/use_name_suffixes=true
+nodes/use_node_type_suffixes=true
+meshes/ensure_tangents=true
+meshes/generate_lods=true
+meshes/create_shadow_meshes=true
+meshes/light_baking=2
+meshes/lightmap_texel_size=0.2
+meshes/force_disable_compression=false
+skins/use_named_skins=true
+animation/import=true
+animation/fps=30
+animation/trimming=false
+animation/remove_immutable_tracks=true
+animation/import_rest_as_RESET=false
+import_script/path=""
+materials/extract=0
+materials/extract_format=0
+materials/extract_path="res://world/props/lights/materials"
+_subresources={
+"materials": {
+"M_Stadium_Light_Beam": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://world/props/lights/materials/stadium_lights_light_beam.tres",
+"use_external/path": "uid://28t15gnpq6w7"
+},
+"chasis": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://world/props/lights/materials/stadium_lights_chasis.tres",
+"use_external/path": "uid://dt53uvkm13jb5"
+},
+"light": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://world/props/lights/materials/stadium_lights_light.tres",
+"use_external/path": "uid://dn3k8ka0dso4q"
+},
+"platform": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://world/props/lights/materials/stadium_lights_platform.tres",
+"use_external/path": "uid://bqqmkfcl73wv4"
+}
+}
+}
+gltf/naming_version=2
+gltf/embedded_image_handling=2
+gltf/texture_map_mode=1
