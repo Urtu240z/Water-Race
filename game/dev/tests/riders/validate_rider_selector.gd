@@ -156,7 +156,7 @@ func _expect_selected_skin_visibility(
 ) -> void:
 	for option: Dictionary in options:
 		var skin_value := int(option["value"])
-		if skin_value == RiderRig.RiderSkin.BOT:
+		if skin_value == RiderRig.RiderSkin.RIDER_BOT:
 			continue
 		var skin_group := StringName(
 			"rider_skin_%s" % String(option["id"]).to_lower()

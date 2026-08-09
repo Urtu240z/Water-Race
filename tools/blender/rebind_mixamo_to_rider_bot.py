@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Map a normalized Mixamo skin onto Rider_Bot's exact rest armature."""
+"""Map a normalized Mixamo skin onto rider_bot's exact rest armature."""
 
 from __future__ import annotations
 
@@ -12,7 +12,7 @@ import bpy
 from mathutils import Matrix, Vector
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-import build_rider01_riderbot_restpose as shared
+import rider_bot_skinning_utils as shared
 
 
 def arguments():

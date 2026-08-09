@@ -1,0 +1,15 @@
+
+=== RIDER_04 GODOT EXTRACTION ===
+Godot: 4.7.1-stable (official)
+rider_04 Skeleton3D: rider_04_compatible/SKEL_Rider/Skeleton3D
+rider_04 MeshInstance3D: rider_04_compatible/SKEL_Rider/Skeleton3D/rider_04SkinMesh
+Rider Skeleton3D: RiderModelRoot/rider_bot/SKEL_Rider/Skeleton3D
+Bot MeshInstance3D: RiderRig/RiderModelRoot/rider_bot/SKEL_Rider/Skeleton3D/SK_Rider
+Skeleton comparison: PASS
+Skin bind comparison: PASS
+Bone count: 52
+Bind count: 52
+Mesh resource: res://gameplay/riders/rider_04/runtime/rider_04_body_mesh.res
+Skin resource: res://gameplay/riders/rider_04/runtime/rider_04_skin.res
+EXTRACTION_STATUS=PASS
+

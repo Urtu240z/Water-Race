@@ -1,0 +1,51 @@
+
+=== RIDER_04 RIDER INTEGRATION VALIDATION ===
+Godot: 4.7.1-stable (official)
+PASS: Isolated RiderRig has one Bot mesh.
+PASS: Isolated RiderRig has one rider_04 mesh.
+PASS: RiderRig default BOT visibility is exclusive.
+PASS: RiderRig RIDER_04 visibility is exclusive.
+PASS: RiderRig switches back to BOT immediately.
+PASS: island_test_BLENDER loads.
+PASS: island_test_BLENDER inherits the RIDER_04 override.
+PASS: island_test_BLENDER contains one inherited rider_04SkinMesh.
+PASS: Exactly one Skeleton3D in runtime RiderRig.
+PASS: Exactly one AnimationPlayer in runtime RiderRig.
+PASS: Exactly one AnimationTree in runtime RiderRig.
+PASS: Exactly eight IK/modifier nodes remain in runtime RiderRig.
+PASS: Detected one original Bot MeshInstance3D.
+PASS: Detected one rider_04SkinMesh.
+PASS: JetSkiWithRider override selects RIDER_04.
+PASS: JetSkiWithRider shows rider_04 only.
+PASS: Runtime skeleton has 52 bones.
+PASS: AnimationTree is active after RiderRig ready.
+PASS: Mounted_Base remains available.
+PASS: AnimationTree still uses a BlendTree.
+PASS: BlendTree node mounted_base remains available.
+PASS: BlendTree node mounted_add remains available.
+PASS: BlendTree node turn_left_delta remains available.
+PASS: BlendTree node turn_right_delta remains available.
+PASS: BlendTree node automatic_turn_add remains available.
+PASS: BlendTree node lean_left_delta remains available.
+PASS: BlendTree node lean_right_delta remains available.
+PASS: BlendTree node manual_roll_add remains available.
+PASS: BlendTree node lean_forward_delta remains available.
+PASS: BlendTree node lean_back_delta remains available.
+PASS: BlendTree node manual_pitch_add remains available.
+BlendTree resource: res://gameplay/riders/common/animations/rider_mounted_blend_tree.tres
+PASS: All eight IK/modifiers are active.
+PASS: All four TwoBoneIK target/pole pairs resolve.
+PASS: Turn Left parameter reaches the shared BlendTree.
+PASS: Lean Left parameter reaches the shared BlendTree.
+PASS: Forward/back lean parameter reaches the shared BlendTree.
+PASS: Combined skeleton pose is finite.
+Bot MeshInstance3D: RiderRig/RiderModelRoot/rider_bot/SKEL_Rider/Skeleton3D/SK_Rider
+rider_04 MeshInstance3D: RiderRig/RiderModelRoot/rider_bot/SKEL_Rider/Skeleton3D/rider_04SkinMesh
+Bot stats: { "draw_calls": 2, "surfaces": 2, "triangles": 49112, "vertices": 28374, "materials": 2, "origin_vertices": 0, "non_finite_vertices": 0, "aabb_size": (1.805132, 1.809234, 0.320699) }
+rider_04 stats: { "draw_calls": 1, "surfaces": 1, "triangles": 49867, "vertices": 27488, "materials": 1, "origin_vertices": 0, "non_finite_vertices": 0, "aabb_size": (1.832202, 1.814054, 0.335142) }
+PASS: rider_04 has zero rest vertices at local origin.
+PASS: rider_04 has zero non-finite vertices.
+rider_04 texture VRAM estimate (RGBA8+mips): 341.33 MiB
+Visible skinned meshes with RIDER_04 selected: 1
+Visual proportion AABB Bot/rider_04: (1.805132, 1.809234, 0.320699) / (1.832202, 1.814054, 0.335142)
+INTEGRATION_STATUS=PASS

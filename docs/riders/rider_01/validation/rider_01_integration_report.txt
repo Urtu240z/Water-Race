@@ -1,0 +1,17 @@
+=== RIDER_01 IDENTITY MIGRATION BASELINE ===
+
+Physical character: Diving Suit (formerly the active rider_04 identity).
+Canonical GLB: res://gameplay/riders/rider_01/rider_01_compatible.glb
+Runtime mesh: res://gameplay/riders/rider_01/runtime/rider_01_body_mesh.res
+Runtime skin: res://gameplay/riders/rider_01/runtime/rider_01_skin.res
+Expected surfaces/vertices/indices: 1 / 27992 / 146151
+Expected LOD entries: 14
+Expected skin binds: 52
+Canonical group: rider_skin_rider_01
+Preserved serialized enum value: 3
+
+The retired CH42 multimesh identity is not part of this active report.
+Run res://dev/tests/riders/validate_rider_01_integration.gd and
+res://dev/tests/riders/validate_rider_identity_migration.gd for current results.
+
+Final Godot 4.7.1 headless validation: PASS (2026-08-09).

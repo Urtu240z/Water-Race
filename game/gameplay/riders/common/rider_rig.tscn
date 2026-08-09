@@ -1,24 +1,17 @@
 [gd_scene format=3 uid="uid://3htphu61qseo"]
 
 [ext_resource type="Script" uid="uid://dhk3hadcflm6w" path="res://gameplay/riders/common/rider_rig.gd" id="1_4yq34"]
-[ext_resource type="PackedScene" uid="uid://bq2rcwy03sxmv" path="res://gameplay/riders/bot/Rider_Bot.glb" id="2_wrxx4"]
+[ext_resource type="PackedScene" uid="uid://bq2rcwy03sxmv" path="res://gameplay/riders/rider_bot/rider_bot.glb" id="2_wrxx4"]
 [ext_resource type="AnimationLibrary" uid="uid://ccfkjaie8528m" path="res://gameplay/riders/common/animations/rider_animation_library.res" id="3_ggf4l"]
 [ext_resource type="AnimationNodeBlendTree" uid="uid://ddgxhrodm4n2q" path="res://gameplay/riders/common/animations/rider_mounted_blend_tree.tres" id="4_mounted_blend_tree"]
-[ext_resource type="ArrayMesh" path="res://gameplay/riders/racer/runtime/Racer_Mesh.res" id="5_racer_mesh"]
-[ext_resource type="Skin" path="res://gameplay/riders/racer/runtime/Racer_Skin.res" id="6_racer_skin"]
-[ext_resource type="Skin" path="res://gameplay/riders/rider_01/runtime/Rider01_Skin.res" id="7_rider01_skin"]
-[ext_resource type="ArrayMesh" path="res://gameplay/riders/rider_01/runtime/Rider01_Mesh_01_Mesh.res" id="8_rider01_mesh_01"]
-[ext_resource type="ArrayMesh" path="res://gameplay/riders/rider_01/runtime/Rider01_Mesh_02_Mesh.res" id="9_rider01_mesh_02"]
-[ext_resource type="ArrayMesh" path="res://gameplay/riders/rider_01/runtime/Rider01_Mesh_03_Mesh.res" id="10_rider01_mesh_03"]
-[ext_resource type="ArrayMesh" path="res://gameplay/riders/rider_01/runtime/Rider01_Mesh_04_Mesh.res" id="11_rider01_mesh_04"]
-[ext_resource type="ArrayMesh" path="res://gameplay/riders/rider_01/runtime/Rider01_Mesh_05_Mesh.res" id="12_rider01_mesh_05"]
-[ext_resource type="ArrayMesh" path="res://gameplay/riders/rider_01/runtime/Rider01_Mesh_06_Mesh.res" id="13_rider01_mesh_06"]
-[ext_resource type="ArrayMesh" path="res://gameplay/riders/rider_04/runtime/Rider04_Body_Mesh.res" id="14_rider04_body_mesh"]
-[ext_resource type="Skin" path="res://gameplay/riders/rider_04/runtime/Rider04_Skin.res" id="15_rider04_skin"]
-[ext_resource type="ArrayMesh" path="res://gameplay/riders/rider_05/runtime/Rider05_Body_Mesh.res" id="16_rider05_body_mesh"]
-[ext_resource type="Skin" path="res://gameplay/riders/rider_05/runtime/Rider05_Skin.res" id="17_rider05_skin"]
-[ext_resource type="ArrayMesh" path="res://gameplay/riders/rider_06/runtime/Rider06_Body_Mesh.res" id="18_rider06_body_mesh"]
-[ext_resource type="Skin" path="res://gameplay/riders/rider_06/runtime/Rider06_Skin.res" id="19_rider06_skin"]
+[ext_resource type="ArrayMesh" path="res://gameplay/riders/rider_04/runtime/rider_04_body_mesh.res" id="5_rider_04_mesh"]
+[ext_resource type="Skin" path="res://gameplay/riders/rider_04/runtime/rider_04_skin.res" id="6_rider_04_skin"]
+[ext_resource type="ArrayMesh" path="res://gameplay/riders/rider_01/runtime/rider_01_body_mesh.res" id="14_rider_01_body_mesh"]
+[ext_resource type="Skin" path="res://gameplay/riders/rider_01/runtime/rider_01_skin.res" id="15_rider_01_skin"]
+[ext_resource type="ArrayMesh" path="res://gameplay/riders/rider_02/runtime/rider_02_body_mesh.res" id="16_rider02_body_mesh"]
+[ext_resource type="Skin" path="res://gameplay/riders/rider_02/runtime/rider_02_skin.res" id="17_rider02_skin"]
+[ext_resource type="ArrayMesh" path="res://gameplay/riders/rider_03/runtime/rider_03_body_mesh.res" id="18_rider03_body_mesh"]
+[ext_resource type="Skin" path="res://gameplay/riders/rider_03/runtime/rider_03_skin.res" id="19_rider03_skin"]
 
 [node name="RiderRig" type="Node3D" unique_id=553895823 groups=["rider_selectable"]]
 script = ExtResource("1_4yq34")
@@ -26,9 +19,9 @@ rider_skin = 5
 
 [node name="RiderModelRoot" type="Node3D" parent="." unique_id=226906520]
 
-[node name="Rider_Bot" parent="RiderModelRoot" unique_id=1075285769 instance=ExtResource("2_wrxx4")]
+[node name="rider_bot" parent="RiderModelRoot" unique_id=1075285769 instance=ExtResource("2_wrxx4")]
 
-[node name="Skeleton3D" parent="RiderModelRoot/Rider_Bot/SKEL_Rider" parent_id_path=PackedInt32Array(1075285769, 1348584656) index="0" unique_id=426480764]
+[node name="Skeleton3D" parent="RiderModelRoot/rider_bot/SKEL_Rider" parent_id_path=PackedInt32Array(1075285769, 1348584656) index="0" unique_id=426480764]
 bones/0/position = Vector3(0.04845924, 0.66667527, -0.22242343)
 bones/0/rotation = Quaternion(0.18325989, 0.10306759, 0.014143271, 0.9775443)
 bones/1/position = Vector3(-4.8316906e-12, 0.101824485, 1.9628956e-09)
@@ -121,75 +114,39 @@ bones/50/rotation = Quaternion(0.59821767, -0.006833869, -0.011269013, 0.8012252
 bones/51/position = Vector3(-6.2773324e-09, 0.1499741, 9.546056e-09)
 bones/51/rotation = Quaternion(0.35248858, -0.00014723818, 4.045581e-06, 0.9358161)
 
-[node name="SK_Rider" parent="RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D" index="0" unique_id=1167999723]
+[node name="SK_Rider" parent="RiderModelRoot/rider_bot/SKEL_Rider/Skeleton3D" index="0" unique_id=1167999723]
 visible = false
 
-[node name="RacerSkinMesh" type="MeshInstance3D" parent="RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D" index="1" unique_id=1144636120 groups=["rider_skin_racer"]]
+[node name="rider_01_body" type="MeshInstance3D" parent="RiderModelRoot/rider_bot/SKEL_Rider/Skeleton3D" index="1" unique_id=1837524736 groups=["rider_skin_rider_01"]]
 visible = false
-mesh = ExtResource("5_racer_mesh")
-skin = ExtResource("6_racer_skin")
+mesh = ExtResource("14_rider_01_body_mesh")
+skin = ExtResource("15_rider_01_skin")
 skeleton = NodePath("..")
 
-[node name="Rider01_Mesh_01" type="MeshInstance3D" parent="RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D" index="2" unique_id=1774638866 groups=["rider_skin_rider01"]]
+[node name="rider_02_body" type="MeshInstance3D" parent="RiderModelRoot/rider_bot/SKEL_Rider/Skeleton3D" index="2" unique_id=417895057 groups=["rider_skin_rider_02"]]
 visible = false
-mesh = ExtResource("8_rider01_mesh_01")
-skin = ExtResource("7_rider01_skin")
+mesh = ExtResource("16_rider02_body_mesh")
+skin = ExtResource("17_rider02_skin")
 skeleton = NodePath("..")
 
-[node name="Rider01_Mesh_02" type="MeshInstance3D" parent="RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D" index="3" unique_id=2122553941 groups=["rider_skin_rider01"]]
-visible = false
-mesh = ExtResource("9_rider01_mesh_02")
-skin = ExtResource("7_rider01_skin")
+[node name="rider_03_body" type="MeshInstance3D" parent="RiderModelRoot/rider_bot/SKEL_Rider/Skeleton3D" index="3" unique_id=9366931 groups=["rider_skin_rider_03"]]
+mesh = ExtResource("18_rider03_body_mesh")
+skin = ExtResource("19_rider03_skin")
 skeleton = NodePath("..")
 
-[node name="Rider01_Mesh_03" type="MeshInstance3D" parent="RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D" index="4" unique_id=750232266 groups=["rider_skin_rider01"]]
+[node name="rider_04_body" type="MeshInstance3D" parent="RiderModelRoot/rider_bot/SKEL_Rider/Skeleton3D" index="4" unique_id=1144636120 groups=["rider_skin_rider_04"]]
 visible = false
-mesh = ExtResource("10_rider01_mesh_03")
-skin = ExtResource("7_rider01_skin")
-skeleton = NodePath("..")
-
-[node name="Rider01_Mesh_04" type="MeshInstance3D" parent="RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D" index="5" unique_id=1391495539 groups=["rider_skin_rider01"]]
-visible = false
-mesh = ExtResource("11_rider01_mesh_04")
-skin = ExtResource("7_rider01_skin")
-skeleton = NodePath("..")
-
-[node name="Rider01_Mesh_05" type="MeshInstance3D" parent="RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D" index="6" unique_id=2015072498 groups=["rider_skin_rider01"]]
-visible = false
-mesh = ExtResource("12_rider01_mesh_05")
-skin = ExtResource("7_rider01_skin")
-skeleton = NodePath("..")
-
-[node name="Rider01_Mesh_06" type="MeshInstance3D" parent="RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D" index="7" unique_id=816370644 groups=["rider_skin_rider01"]]
-visible = false
-mesh = ExtResource("13_rider01_mesh_06")
-skin = ExtResource("7_rider01_skin")
-skeleton = NodePath("..")
-
-[node name="Rider04_Body" type="MeshInstance3D" parent="RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D" index="8" unique_id=1837524736 groups=["rider_skin_rider04"]]
-mesh = ExtResource("14_rider04_body_mesh")
-skin = ExtResource("15_rider04_skin")
-skeleton = NodePath("..")
-
-[node name="Rider05_Body" type="MeshInstance3D" parent="RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D" index="9" unique_id=417895057 groups=["rider_skin_rider05"]]
-visible = false
-mesh = ExtResource("16_rider05_body_mesh")
-skin = ExtResource("17_rider05_skin")
-skeleton = NodePath("..")
-
-[node name="Rider06_Body" type="MeshInstance3D" parent="RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D" index="10" unique_id=9366931 groups=["rider_skin_rider06"]]
-visible = false
-mesh = ExtResource("18_rider06_body_mesh")
-skin = ExtResource("19_rider06_skin")
+mesh = ExtResource("5_rider_04_mesh")
+skin = ExtResource("6_rider_04_skin")
 skeleton = NodePath("..")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=785147574]
-root_node = NodePath("../RiderModelRoot/Rider_Bot")
+root_node = NodePath("../RiderModelRoot/rider_bot")
 libraries/ = ExtResource("3_ggf4l")
 
 [node name="AnimationTree" type="AnimationTree" parent="." unique_id=187453891]
 active = false
-root_node = NodePath("../RiderModelRoot/Rider_Bot")
+root_node = NodePath("../RiderModelRoot/rider_bot")
 tree_root = ExtResource("4_mounted_blend_tree")
 anim_player = NodePath("../AnimationPlayer")
 parameters/mounted_add/add_amount = 0.22
@@ -203,4 +160,4 @@ parameters/lean_forward_delta/sub_amount = 1.0
 parameters/lean_back_delta/sub_amount = 1.0
 parameters/manual_pitch_add/add_amount = 0.0
 
-[editable path="RiderModelRoot/Rider_Bot"]
+[editable path="RiderModelRoot/rider_bot"]

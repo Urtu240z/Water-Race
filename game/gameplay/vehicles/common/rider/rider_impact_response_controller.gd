@@ -1,3 +1,4 @@
+
 @tool
 class_name RiderImpactResponseController
 extends Node
@@ -22,16 +23,16 @@ enum ResponseMode {
 			_apply_manual_preview()
 
 @export_group("Automatic Response - Acceleration")
-@export_range(0.0, 20.0, 0.1, "suffix:m/s²") var acceleration_dead_zone: float = 1.8
-@export_range(1.0, 60.0, 0.5, "suffix:m/s²") var compression_acceleration_for_full: float = 20.0
-@export_range(1.0, 60.0, 0.5, "suffix:m/s²") var extension_acceleration_for_full: float = 13.0
+@export_range(0.0, 20.0, 0.1, "suffix:m/sÂ²") var acceleration_dead_zone: float = 1.8
+@export_range(1.0, 60.0, 0.5, "suffix:m/sÂ²") var compression_acceleration_for_full: float = 20.0
+@export_range(1.0, 60.0, 0.5, "suffix:m/sÂ²") var extension_acceleration_for_full: float = 13.0
 @export_range(0.0, 1.0, 0.01) var extension_strength: float = 0.50
 @export_range(0.1, 40.0, 0.1, "suffix:1/s") var acceleration_filter_speed: float = 16.0
 
 @export_group("Automatic Response - Solid Surfaces")
-@export_range(0.0, 20.0, 0.1, "suffix:m/s²") var solid_impact_dead_zone: float = 1.5
-@export_range(1.0, 60.0, 0.5, "suffix:m/s²") var solid_vertical_acceleration_for_full: float = 9.0
-@export_range(1.0, 60.0, 0.5, "suffix:m/s²") var solid_longitudinal_acceleration_for_full: float = 14.0
+@export_range(0.0, 20.0, 0.1, "suffix:m/sÂ²") var solid_impact_dead_zone: float = 1.5
+@export_range(1.0, 60.0, 0.5, "suffix:m/sÂ²") var solid_vertical_acceleration_for_full: float = 9.0
+@export_range(1.0, 60.0, 0.5, "suffix:m/sÂ²") var solid_longitudinal_acceleration_for_full: float = 14.0
 @export_range(0.0, 1.5, 0.01) var solid_impact_strength: float = 1.0
 @export_range(0.1, 40.0, 0.1, "suffix:1/s") var solid_impact_filter_speed: float = 9.0
 @export_range(0.1, 30.0, 0.1, "suffix:1/s") var solid_impact_decay_speed: float = 4.0
@@ -74,7 +75,7 @@ enum ResponseMode {
 @export_group("Node Paths")
 @export_node_path("SkeletonModifier3D") var rider_impact_pose_path := NodePath(
 	"../VisualRoot/RiderMount/RiderAssetRoot/RiderRig/"
-	+ "RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D/RiderImpactPose"
+	+ "RiderModelRoot/rider_bot/SKEL_Rider/Skeleton3D/RiderImpactPose"
 )
 @export_node_path("Node3D") var jet_ski_visual_controller_path := NodePath(
 	"../VisualRoot/JetSkiVisual"

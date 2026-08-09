@@ -1,0 +1,16 @@
+
+=== RIDER_02 GODOT EXTRACTION ===
+Godot: 4.7.1-stable (official)
+Compatible scene: res://gameplay/riders/rider_02/rider_02_compatible.glb
+Canonical Skeleton3D: RiderModelRoot/rider_bot/SKEL_Rider/Skeleton3D
+Skeleton comparison: PASS
+Skin bind comparison: PASS
+Bone count: 52
+Bind count: 52
+Mesh stats: { "surfaces": 1, "vertices": 38660, "triangles": 69393, "materials": 1, "aabb_size": (1.808306, 1.894419, 0.315432) }
+Mesh resource: res://gameplay/riders/rider_02/runtime/rider_02_body_mesh.res
+Skin resource: res://gameplay/riders/rider_02/runtime/rider_02_skin.res
+Surface 0 material: tripo_material_d7b1c857-fc78-4e04-8388-961d6e314e33 (StandardMaterial3D)
+Persistent resource dependency check: PASS
+EXTRACTION_STATUS=PASS
+

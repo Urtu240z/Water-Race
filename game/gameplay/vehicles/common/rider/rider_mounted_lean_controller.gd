@@ -1,3 +1,4 @@
+
 class_name RiderMountedLeanController
 extends Node
 
@@ -31,7 +32,7 @@ extends Node
 )
 @export_node_path("Skeleton3D") var skeleton_path := NodePath(
 	"../VisualRoot/RiderMount/RiderAssetRoot/RiderRig/"
-	+ "RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D"
+	+ "RiderModelRoot/rider_bot/SKEL_Rider/Skeleton3D"
 )
 @export_node_path("Marker3D") var left_grip_target_path := NodePath(
 	"../VisualRoot/JetSkiVisual/HandlePivot/GripTargets/LeftGripTarget"

@@ -71,13 +71,13 @@ transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 
 [node name="RiderRig" parent="VisualRoot/RiderMount/RiderAssetRoot" index="0" unique_id=2001770911 instance=ExtResource("2_rider")]
 rider_skin = 4
 
-[node name="Rider_Bot" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot" parent_id_path=PackedInt32Array(2001770911, 226906520) index="0" unique_id=1075285769]
+[node name="rider_bot" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot" parent_id_path=PackedInt32Array(2001770911, 226906520) index="0" unique_id=1075285769]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.18724537, 0)
 
-[node name="SKEL_Rider" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/Rider_Bot" index="0" unique_id=1123472187]
+[node name="SKEL_Rider" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/rider_bot" index="0" unique_id=1123472187]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.1578315e-08, 0.11282855, -0.13244057)
 
-[node name="Skeleton3D" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/Rider_Bot/SKEL_Rider" index="0" unique_id=1404074567]
+[node name="Skeleton3D" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/rider_bot/SKEL_Rider" index="0" unique_id=1404074567]
 transform = Transform3D(0.9879613, 0.058283646, -0.1433027, -0.04260468, 0.9930024, 0.1101448, 0.14871976, -0.1027133, 0.98353034, -0.08274425, 0.07259053, -0.025370061)
 bones/0/rotation = Quaternion(0.05192896, -0.0029018968, 0.029417818, 0.9982132)
 bones/0/scale = Vector3(1, 0.9999999, 0.99999976)
@@ -94,7 +94,7 @@ bones/7/scale = Vector3(0.99999994, 1, 1)
 bones/25/scale = Vector3(1, 1, 0.9999999)
 bones/26/scale = Vector3(1.0000001, 1.0000004, 1)
 
-[node name="RiderImpactPose" type="SkeletonModifier3D" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D" index="0" unique_id=1959462542]
+[node name="RiderImpactPose" type="SkeletonModifier3D" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/rider_bot/SKEL_Rider/Skeleton3D" index="0" unique_id=1959462542]
 unique_name_in_owner = false
 process_mode = 0
 process_priority = 0
@@ -126,7 +126,7 @@ extension_spine1_rotation_degrees = Vector3(-6, 0, 0)
 extension_spine2_rotation_degrees = Vector3(5, 0, 0)
 extension_neck_rotation_degrees = Vector3(1.5, 0, 0)
 
-[node name="LeftLegIK" type="TwoBoneIK3D" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D" index="1" unique_id=1661474148]
+[node name="LeftLegIK" type="TwoBoneIK3D" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/rider_bot/SKEL_Rider/Skeleton3D" index="1" unique_id=1661474148]
 setting_count = 1
 settings/0/target_node = NodePath("../../../../../../../../RiderTargets/LeftFootTarget")
 settings/0/pole_node = NodePath("../../../../../../../../RiderTargets/LeftKneePole")
@@ -141,7 +141,7 @@ settings/0/end_bone = 50
 settings/0/use_virtual_end = false
 settings/0/extend_end_bone = false
 
-[node name="RightLegIK" type="TwoBoneIK3D" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D" index="2" unique_id=852699806]
+[node name="RightLegIK" type="TwoBoneIK3D" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/rider_bot/SKEL_Rider/Skeleton3D" index="2" unique_id=852699806]
 setting_count = 1
 settings/0/target_node = NodePath("../../../../../../../../RiderTargets/RightFootTarget")
 settings/0/pole_node = NodePath("../../../../../../../../RiderTargets/RightKneePole")
@@ -156,7 +156,7 @@ settings/0/end_bone = 46
 settings/0/use_virtual_end = false
 settings/0/extend_end_bone = false
 
-[node name="FootOrientation" type="SkeletonModifier3D" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D" index="3" unique_id=1357917683]
+[node name="FootOrientation" type="SkeletonModifier3D" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/rider_bot/SKEL_Rider/Skeleton3D" index="3" unique_id=1357917683]
 unique_name_in_owner = false
 process_mode = 0
 process_priority = 0
@@ -181,7 +181,7 @@ right_sole_target = NodePath("../../../../../../../../RiderTargets/RightSoleTarg
 left_foot_rotation_correction_degrees = Vector3(237.79, 0, 0)
 right_foot_rotation_correction_degrees = Vector3(245.78, 0, 0)
 
-[node name="LeftArmIK" type="TwoBoneIK3D" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D" index="4" unique_id=621313630]
+[node name="LeftArmIK" type="TwoBoneIK3D" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/rider_bot/SKEL_Rider/Skeleton3D" index="4" unique_id=621313630]
 setting_count = 1
 settings/0/target_node = NodePath("../../../../../../../../JetSkiVisual/HandlePivot/GripTargets/LeftGripTarget")
 settings/0/pole_node = NodePath("../../../../../../../../JetSkiVisual/HandlePivot/GripTargets/LeftElbowPole")
@@ -196,7 +196,7 @@ settings/0/end_bone = 28
 settings/0/use_virtual_end = false
 settings/0/extend_end_bone = false
 
-[node name="RightArmIK" type="TwoBoneIK3D" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D" index="5" unique_id=1497179900]
+[node name="RightArmIK" type="TwoBoneIK3D" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/rider_bot/SKEL_Rider/Skeleton3D" index="5" unique_id=1497179900]
 setting_count = 1
 settings/0/target_node = NodePath("../../../../../../../../JetSkiVisual/HandlePivot/GripTargets/RightGripTarget")
 settings/0/pole_node = NodePath("../../../../../../../../JetSkiVisual/HandlePivot/GripTargets/RightElbowPole")
@@ -211,7 +211,7 @@ settings/0/end_bone = 9
 settings/0/use_virtual_end = false
 settings/0/extend_end_bone = false
 
-[node name="GripOrientation" type="SkeletonModifier3D" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D" index="6" unique_id=1612949557]
+[node name="GripOrientation" type="SkeletonModifier3D" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/rider_bot/SKEL_Rider/Skeleton3D" index="6" unique_id=1612949557]
 unique_name_in_owner = false
 process_mode = 0
 process_priority = 0
@@ -234,7 +234,7 @@ right_hand_target = NodePath("../../../../../../../../JetSkiVisual/HandlePivot/G
 left_hand_rotation_correction_degrees = Vector3(-40.665, 44.98, -26.29)
 right_hand_rotation_correction_degrees = Vector3(-40.665, -44, 26)
 
-[node name="GripFingers" type="SkeletonModifier3D" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D" index="7" unique_id=940560861]
+[node name="GripFingers" type="SkeletonModifier3D" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/rider_bot/SKEL_Rider/Skeleton3D" index="7" unique_id=940560861]
 unique_name_in_owner = false
 process_mode = 0
 process_priority = 0
@@ -256,10 +256,10 @@ left_grip_strength = 0.87
 right_grip_strength = 0.93
 thumb_opposition_strength = 0.47
 
-[node name="Rider04_Body" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D" index="16" unique_id=1837524736]
+[node name="rider_01_body" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/rider_bot/SKEL_Rider/Skeleton3D" index="16" unique_id=1837524736]
 visible = false
 
-[node name="Rider05_Body" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D" index="17" unique_id=417895057]
+[node name="rider_02_body" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/rider_bot/SKEL_Rider/Skeleton3D" index="17" unique_id=417895057]
 visible = true
 
 [node name="AnimationTree" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig" index="2" unique_id=187453891]
@@ -313,4 +313,4 @@ spray_edge_color = Color(1, 1, 1, 0.1254902)
 [editable path="VisualRoot/JetSkiVisual/HandlePivot/HandleModel/Handle"]
 [editable path="VisualRoot/JetSkiVisual/HandlePivot/HandleModel/Handle/NewJetSki_Handle"]
 [editable path="VisualRoot/RiderMount/RiderAssetRoot/RiderRig"]
-[editable path="VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/Rider_Bot"]
+[editable path="VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/rider_bot"]

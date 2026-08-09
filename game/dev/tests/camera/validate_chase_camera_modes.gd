@@ -1,3 +1,4 @@
+
 extends SceneTree
 
 const VEHICLE_SCENE := preload("res://gameplay/vehicles/jet_ski_01/jet_ski_with_rider.tscn")
@@ -99,7 +100,7 @@ func _validate_scene_configuration(
 		_fail("UnderwaterEffect is no longer attached to Camera3D.")
 	var active_rider_mesh := vehicle.get_node_or_null(
 		"VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/"
-		+ "Rider_Bot/SKEL_Rider/Skeleton3D/Rider05_Body"
+		+ "rider_bot/SKEL_Rider/Skeleton3D/rider_02_body"
 	) as MeshInstance3D
 	if active_rider_mesh == null or not active_rider_mesh.visible:
 		_fail("Active rider body is unavailable before entering first person.")
@@ -327,7 +328,7 @@ func _validate_first_person_orientation(
 		_fail("First person near plane was not applied.")
 	var active_rider_mesh := vehicle.get_node_or_null(
 		"VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/"
-		+ "Rider_Bot/SKEL_Rider/Skeleton3D/Rider05_Body"
+		+ "rider_bot/SKEL_Rider/Skeleton3D/rider_02_body"
 	) as MeshInstance3D
 	if active_rider_mesh == null or not active_rider_mesh.visible:
 		_fail("First person unexpectedly hid the rider arms/body mesh.")

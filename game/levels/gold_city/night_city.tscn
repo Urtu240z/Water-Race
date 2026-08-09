@@ -2154,7 +2154,7 @@ transform = Transform3D(1, 0, 1.4210855e-14, 0, 1, 0, -1.4210855e-14, 0, 1, -0.2
 [node name="RiderRig" parent="Gameplay/JetSki/VisualRoot/RiderMount/RiderAssetRoot" parent_id_path=PackedInt32Array(328650943, 1312466662) index="0" unique_id=2001770911]
 breathing_influence = 1.0
 
-[node name="Skeleton3D" parent="Gameplay/JetSki/VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/Rider_Bot/SKEL_Rider" parent_id_path=PackedInt32Array(328650943, 2001770911, 1075285769, 1123472187) index="0" unique_id=1404074567]
+[node name="Skeleton3D" parent="Gameplay/JetSki/VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/rider_bot/SKEL_Rider" parent_id_path=PackedInt32Array(328650943, 2001770911, 1075285769, 1123472187) index="0" unique_id=1404074567]
 transform = Transform3D(0.9810575, -0.011237088, -0.19338982, 0.011280789, 0.99993587, -0.00087523926, 0.19338726, -0.0013229304, 0.98112124, 0.06955719, 0.0069850683, -0.110954285)
 bones/0/rotation = Quaternion(0.0064583384, 1.6179755e-09, 2.5050662e-07, 0.99997914)
 bones/0/scale = Vector3(1, 0.99999994, 0.99999994)
@@ -2239,13 +2239,13 @@ bones/50/position = Vector3(-1.0939593e-09, 0.44527858, 3.188938e-09)
 bones/51/position = Vector3(-6.275741e-09, 0.1499741, 1.0166332e-08)
 bones/51/rotation = Quaternion(0.32421583, -0.00014736943, -1.4682928e-07, 0.9459832)
 
-[node name="FootOrientation" parent="Gameplay/JetSki/VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D" index="3" unique_id=1357917683]
+[node name="FootOrientation" parent="Gameplay/JetSki/VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/rider_bot/SKEL_Rider/Skeleton3D" index="3" unique_id=1357917683]
 left_foot_rotation_correction_degrees = Vector3(240, 0, 0)
 
-[node name="GripOrientation" parent="Gameplay/JetSki/VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D" index="6" unique_id=1612949557]
+[node name="GripOrientation" parent="Gameplay/JetSki/VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/rider_bot/SKEL_Rider/Skeleton3D" index="6" unique_id=1612949557]
 left_hand_rotation_correction_degrees = Vector3(-18.44, 32.09, -21.11)
 
-[node name="GripFingers" parent="Gameplay/JetSki/VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D" index="7" unique_id=940560861]
+[node name="GripFingers" parent="Gameplay/JetSki/VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/rider_bot/SKEL_Rider/Skeleton3D" index="7" unique_id=940560861]
 left_grip_strength = 0.75
 
 [node name="AnimationTree" parent="Gameplay/JetSki/VisualRoot/RiderMount/RiderAssetRoot/RiderRig" index="2" unique_id=187453891]
@@ -2874,7 +2874,7 @@ speed_scale = 0.2
 [editable path="Gameplay/JetSki/VisualRoot/JetSkiVisual/HullModel/NewJetSki_Hull"]
 [editable path="Gameplay/JetSki/VisualRoot/JetSkiVisual/HandlePivot/HandleModel/NewJetSki_Handle"]
 [editable path="Gameplay/JetSki/VisualRoot/RiderMount/RiderAssetRoot/RiderRig"]
-[editable path="Gameplay/JetSki/VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/Rider_Bot"]
+[editable path="Gameplay/JetSki/VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/rider_bot"]
 [editable path="CameraSystem/ChaseCamera"]
 [editable path="Atrezzo/stadium_lights5"]
 [editable path="Atrezzo/stadium_lights5/stadium_with_light"]

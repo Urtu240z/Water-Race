@@ -10,16 +10,24 @@ const MOUNTED_LEAN_ADD_NODES: Array[StringName] = [
 ]
 
 enum RiderSkin {
-	# Fixed serialized values. Do not reorder or renumber existing skins.
-	BOT = 0,
-	RACER = 1,
-	RIDER01 = 2,
-	RIDER04 = 3,
-	RIDER05 = 4,
-	RIDER06 = 5,
+	# Preserve physical serialized values. Value 2 belonged to retired CH42.
+	RIDER_BOT = 0,
+	RIDER_01 = 3,
+	RIDER_02 = 4,
+	RIDER_03 = 5,
+	RIDER_04 = 1,
 }
 
-@export var rider_skin: RiderSkin = RiderSkin.BOT:
+# Read-only migration aliases for pre-identity-migration save files.
+const LEGACY_SKIN_IDS := {
+	&"BOT": RiderSkin.RIDER_BOT,
+	&"RACER": RiderSkin.RIDER_04,
+	&"RIDER04": RiderSkin.RIDER_01,
+	&"RIDER05": RiderSkin.RIDER_02,
+	&"RIDER06": RiderSkin.RIDER_03,
+}
+
+@export var rider_skin: RiderSkin = RiderSkin.RIDER_BOT:
 	set(value):
 		rider_skin = value
 		_apply_rider_skin()
@@ -41,7 +49,7 @@ enum RiderSkin {
 
 @onready var _animation_tree: AnimationTree = $AnimationTree
 @onready var _skeleton: Skeleton3D = (
-	$RiderModelRoot/Rider_Bot/SKEL_Rider/Skeleton3D as Skeleton3D
+	$RiderModelRoot/rider_bot/SKEL_Rider/Skeleton3D as Skeleton3D
 )
 
 var _mounted_lean_blends_valid: bool = false
@@ -100,10 +108,12 @@ static func get_rider_skin_id(value: int) -> StringName:
 
 static func find_rider_skin_by_id(
 	skin_id: StringName,
-	fallback: int = RiderSkin.BOT
+	fallback: int = RiderSkin.RIDER_BOT
 ) -> int:
 	if RiderSkin.has(skin_id):
 		return int(RiderSkin[skin_id])
+	if LEGACY_SKIN_IDS.has(skin_id):
+		return int(LEGACY_SKIN_IDS[skin_id])
 	return fallback
 
 
@@ -159,9 +169,9 @@ func _resolve_rider_skin_meshes() -> void:
 	_skin_meshes_by_value.clear()
 	for skin_value_variant: Variant in RiderSkin.values():
 		_skin_meshes_by_value[int(skin_value_variant)] = []
-	var rider_bot := get_node_or_null("RiderModelRoot/Rider_Bot")
+	var rider_bot := get_node_or_null("RiderModelRoot/rider_bot")
 	if rider_bot == null:
-		push_warning("RiderRig cannot resolve RiderModelRoot/Rider_Bot.")
+		push_warning("RiderRig cannot resolve RiderModelRoot/rider_bot.")
 		return
 	var pending: Array[Node] = [rider_bot]
 	while not pending.is_empty():
@@ -184,13 +194,13 @@ func _apply_rider_skin() -> void:
 	var selected_value := int(rider_skin)
 	var displayed_value := selected_value
 	if not is_rider_skin_available(selected_value):
-		displayed_value = RiderSkin.BOT
+		displayed_value = RiderSkin.RIDER_BOT
 	if displayed_value == selected_value:
 		_last_missing_skin_warning = -1
 	elif _last_missing_skin_warning != selected_value:
 		_last_missing_skin_warning = selected_value
 		push_warning(
-			"%s skin resources are missing; RiderRig is showing BOT."
+			"%s skin resources are missing; RiderRig is showing rider_bot."
 			% _format_rider_skin_name(get_rider_skin_id(selected_value))
 		)
 	for skin_value_variant: Variant in _skin_meshes_by_value:
@@ -219,7 +229,7 @@ func _skin_meshes_valid(
 func _get_mesh_rider_skin(mesh_instance: MeshInstance3D) -> int:
 	for skin_name_variant: Variant in RiderSkin.keys():
 		var skin_name := StringName(skin_name_variant)
-		if skin_name == &"BOT":
+		if skin_name == &"RIDER_BOT":
 			continue
 		var skin_group := StringName(
 			"rider_skin_%s" % String(skin_name).to_lower()
@@ -227,7 +237,7 @@ func _get_mesh_rider_skin(mesh_instance: MeshInstance3D) -> int:
 		if mesh_instance.is_in_group(skin_group):
 			return int(RiderSkin[skin_name])
 	if mesh_instance.mesh != null:
-		return RiderSkin.BOT
+		return RiderSkin.RIDER_BOT
 	return -1
 
 
