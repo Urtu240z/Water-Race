@@ -1,0 +1,7 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://bj7culbytqgqd"]
+
+[resource]
+resource_name = "gold_city_ship_color_m09"
+cull_mode = 2
+albedo_color = Color(0, 0, 0, 1)
+roughness = 0.5

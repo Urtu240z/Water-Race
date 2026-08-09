@@ -39,7 +39,120 @@ import_script/path=""
 materials/extract=0
 materials/extract_format=0
 materials/extract_path="res://levels/gold_city/terrain/materials"
-_subresources={}
+_subresources={
+"materials": {
+"gold_city_hull": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/gold_city/terrain/materials/gold_city_hull.tres",
+"use_external/path": "uid://clyhxfsxcdbyu"
+},
+"gold_city_palm_billboard_continuous": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/gold_city/terrain/materials/gold_city_palm_billboard_continuous.tres",
+"use_external/path": "uid://bdnexi3f82dvx"
+},
+"gold_city_pier_brown": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/gold_city/terrain/materials/gold_city_pier_brown.tres",
+"use_external/path": "uid://cwk4okrpjl005"
+},
+"gold_city_pier_cladding_siding_tan": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/gold_city/terrain/materials/gold_city_pier_cladding_siding_tan.tres",
+"use_external/path": "uid://bt7h6u0bebldb"
+},
+"gold_city_pier_cladding_stucco_white": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/gold_city/terrain/materials/gold_city_pier_cladding_stucco_white.tres",
+"use_external/path": "uid://c8jxuclsywsnr"
+},
+"gold_city_pier_color_e04": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/gold_city/terrain/materials/gold_city_pier_color_e04.tres",
+"use_external/path": "uid://db7b56thvbsnh"
+},
+"gold_city_pier_detail": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/gold_city/terrain/materials/gold_city_pier_detail.tres",
+"use_external/path": "uid://ccdfccmxihp0b"
+},
+"gold_city_pier_gray_06": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/gold_city/terrain/materials/gold_city_pier_gray_06.tres",
+"use_external/path": "uid://d1h23owqmnmfk"
+},
+"gold_city_pier_metal_seamed": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/gold_city/terrain/materials/gold_city_pier_metal_seamed.tres",
+"use_external/path": "uid://bwenj4dohohme"
+},
+"gold_city_pier_wood_floor": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/gold_city/terrain/materials/gold_city_pier_wood_floor.tres",
+"use_external/path": "uid://ijrctedcrk2w"
+},
+"gold_city_ship_color_000": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/gold_city/terrain/materials/gold_city_ship_color_000.tres",
+"use_external/path": "uid://pmxbknj1c6co"
+},
+"gold_city_ship_color_m02": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/gold_city/terrain/materials/gold_city_ship_color_m02.tres",
+"use_external/path": "uid://dv1aqeytcc7je"
+},
+"gold_city_ship_color_m09": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/gold_city/terrain/materials/gold_city_ship_color_m09.tres",
+"use_external/path": "uid://bj7culbytqgqd"
+},
+"gold_city_ship_cool_gray_03": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/gold_city/terrain/materials/gold_city_ship_cool_gray_03.tres",
+"use_external/path": "uid://ba362ug0nbvho"
+},
+"gold_city_ship_cool_gray_04": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/gold_city/terrain/materials/gold_city_ship_cool_gray_04.tres",
+"use_external/path": "uid://bxyhecu1xy7nv"
+},
+"gold_city_ship_dark_gray": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/gold_city/terrain/materials/gold_city_ship_dark_gray.tres",
+"use_external/path": "uid://ve8f0gdfd1fs"
+},
+"gold_city_ship_ghost_white": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/gold_city/terrain/materials/gold_city_ship_ghost_white.tres",
+"use_external/path": "uid://cpdo41k7b0m03"
+},
+"gold_city_ship_gray": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/gold_city/terrain/materials/gold_city_ship_gray.tres",
+"use_external/path": "uid://s4r1ky1eip14"
+},
+"gold_city_ship_sand": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/gold_city/terrain/materials/gold_city_ship_sand.tres",
+"use_external/path": "uid://p2fv2bosghms"
+},
+"gold_city_ship_water_pool": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/gold_city/terrain/materials/gold_city_ship_water_pool.tres",
+"use_external/path": "uid://c5cyathn26p4c"
+},
+"gold_city_ship_white": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/gold_city/terrain/materials/gold_city_ship_white.tres",
+"use_external/path": "uid://c2fv3t1nvw7xt"
+},
+"gold_city_terrain": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://levels/gold_city/terrain/materials/gold_city_terrain.tres",
+"use_external/path": "uid://v5gdk2shw5wd"
+}
+}
+}
 gltf/naming_version=2
 gltf/embedded_image_handling=2
 gltf/texture_map_mode=1

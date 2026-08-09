@@ -1,0 +1,7 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://d1h23owqmnmfk"]
+
+[resource]
+resource_name = "gold_city_pier_gray_06"
+cull_mode = 2
+albedo_color = Color(0.6472209, 0.6472209, 0.6472209, 1)
+roughness = 0.5

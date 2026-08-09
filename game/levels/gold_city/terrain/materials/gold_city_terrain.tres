@@ -1,0 +1,6 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://v5gdk2shw5wd"]
+
+[resource]
+resource_name = "gold_city_terrain"
+cull_mode = 2
+roughness = 0.5
