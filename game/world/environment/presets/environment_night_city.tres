@@ -10,7 +10,7 @@ sky_material = SubResource("PanoramaSkyMaterial_54t36")
 
 [resource]
 background_mode = 2
-background_energy_multiplier = 0.1
+background_energy_multiplier = 0.2
 sky = SubResource("Sky_pfddk")
 sky_rotation = Vector3(0.07531096, 2.8094566, 0)
 ambient_light_source = 3

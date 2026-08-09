@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://dhk3hadcflm6w" path="res://gameplay/riders/common/rider_rig.gd" id="1_4yq34"]
 [ext_resource type="PackedScene" uid="uid://bq2rcwy03sxmv" path="res://gameplay/riders/rider_bot/rider_bot.glb" id="2_wrxx4"]
-[ext_resource type="AnimationLibrary" uid="uid://ccfkjaie8528m" path="res://gameplay/riders/common/animations/rider_animation_library.res" id="3_ggf4l"]
+[ext_resource type="AnimationLibrary" path="res://gameplay/riders/common/animations/rider_animation_library.res" id="3_ggf4l"]
 [ext_resource type="AnimationNodeBlendTree" uid="uid://ddgxhrodm4n2q" path="res://gameplay/riders/common/animations/rider_mounted_blend_tree.tres" id="4_mounted_blend_tree"]
 [ext_resource type="ArrayMesh" path="res://gameplay/riders/rider_04/runtime/rider_04_body_mesh.res" id="5_rider_04_mesh"]
 [ext_resource type="Skin" path="res://gameplay/riders/rider_04/runtime/rider_04_skin.res" id="6_rider_04_skin"]
