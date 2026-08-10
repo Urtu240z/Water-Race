@@ -9,6 +9,9 @@ const TEST_UP_IMPULSE := 3.0
 
 
 func _ready() -> void:
+	var test_wipeout_system := vehicle.get_node_or_null("Systems/WipeoutSystem") as JetSkiWipeoutSystem
+	if test_wipeout_system != null:
+		test_wipeout_system.minimum_fallen_duration = 5.0
 	print("SPACE: wipeout, zero impulse | I: wipeout, forward/up impulse | R: reload test fallback")
 	print("Each wipeout recovers automatically; repeat SPACE or I without reloading.")
 	var wipeout_system := vehicle.wipeout_system as JetSkiWipeoutSystem

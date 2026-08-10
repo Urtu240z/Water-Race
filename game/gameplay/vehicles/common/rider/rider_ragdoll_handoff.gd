@@ -33,10 +33,14 @@ func _ready() -> void:
 	if _vehicle == null or _mounted_rider == null or _fallen_rider == null or _mounted_skeleton == null:
 		push_error("RiderRagdollHandoff requires valid vehicle, mounted rider, fallen rider, and skeleton paths.")
 
-func request_handoff(incident_impulse: Vector3 = Vector3.ZERO) -> bool:
+func request_handoff(
+	incident_impulse: Vector3 = Vector3.ZERO,
+	water_provider: WaterSurfaceProvider3D = null
+) -> bool:
 	if _handoff_pending or _handoff_active or _vehicle == null or _mounted_skeleton == null or _fallen_rider == null:
 		return false
 	_incident_impulse = incident_impulse if incident_impulse.is_finite() else Vector3.ZERO
+	_fallen_rider.set_water_provider(water_provider)
 	_handoff_pending = true
 	return true
 
@@ -97,6 +101,7 @@ func _perform_handoff() -> void:
 func _fail_handoff(reason: StringName) -> void:
 	_handoff_pending = false
 	_handoff_active = false
+	_fallen_rider.set_water_provider(null)
 	handoff_failed.emit(reason)
 
 

@@ -1,11 +1,15 @@
 class_name FallenRider3D
 extends Node3D
 
+const WaterPhysicsScript = preload(
+	"res://gameplay/riders/common/fallen_rider_water_physics_3d.gd"
+)
 
 @onready var rider_rig: RiderRig = $RiderRig
 @onready var simulator: PhysicalBoneSimulator3D = (
 	$RiderRig/RiderModelRoot/rider_bot/SKEL_Rider/Skeleton3D/PhysicalBoneSimulator3D
 )
+@onready var water_physics = $WaterPhysics as WaterPhysicsScript
 
 
 func _ready() -> void:
@@ -25,6 +29,10 @@ func get_physical_bone_simulator() -> PhysicalBoneSimulator3D:
 	return simulator
 
 
+func set_water_provider(provider: WaterSurfaceProvider3D) -> void:
+	water_physics.set_water_provider(provider)
+
+
 func start_simulation() -> void:
 	if not is_instance_valid(simulator):
 		return
@@ -36,6 +44,7 @@ func start_simulation() -> void:
 
 	simulator.active = true
 	simulator.physical_bones_start_simulation()
+	water_physics.set_active(true)
 
 
 func stop_simulation() -> void:
@@ -44,6 +53,7 @@ func stop_simulation() -> void:
 
 	simulator.physical_bones_stop_simulation()
 	simulator.active = false
+	water_physics.clear_water_provider()
 
 	_clear_physical_velocities()
 	_prime_physics_interpolation()
@@ -60,6 +70,7 @@ func prepare_dormant() -> void:
 	# become inert/static with collision layer and mask disabled by Godot.
 	simulator.active = false
 	simulator.physical_bones_stop_simulation()
+	water_physics.clear_water_provider()
 
 	_clear_physical_velocities()
 	_prime_physics_interpolation()

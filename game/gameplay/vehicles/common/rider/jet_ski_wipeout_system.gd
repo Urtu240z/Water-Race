@@ -48,7 +48,10 @@ func request_wipeout(context: WipeoutContext) -> bool:
 		or _handoff == null
 	):
 		return false
-	if not _handoff.request_handoff(context.incident_impulse):
+	if not _handoff.request_handoff(
+		context.incident_impulse,
+		_vehicle.get_water_provider()
+	):
 		return false
 	_context = context
 	_state = State.HANDOFF_PENDING
