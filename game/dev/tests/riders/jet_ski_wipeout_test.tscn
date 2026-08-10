@@ -1,12 +1,194 @@
-[gd_scene load_steps=6 format=3]
+[gd_scene format=4 uid="uid://bj1qwvwtpoowb"]
 
 [ext_resource type="PackedScene" uid="uid://tl6lotex1356" path="res://gameplay/vehicles/jet_ski_01/jet_ski_with_rider.tscn" id="1_vehicle"]
 [ext_resource type="PackedScene" uid="uid://1d3iohmalk05" path="res://world/water/ocean/ocean_3d.tscn" id="2_ocean"]
-[ext_resource type="Script" path="res://dev/tests/riders/jet_ski_wipeout_test.gd" id="3_test"]
+[ext_resource type="Shader" uid="uid://cu3bm250n7pis" path="res://world/water/ocean/shaders/ocean_water.gdshader" id="3_5mmec"]
+[ext_resource type="Script" uid="uid://d1lgvc4b3wj6s" path="res://dev/tests/riders/jet_ski_wipeout_test.gd" id="3_test"]
+[ext_resource type="Texture2D" uid="uid://dpb0qhgywdm05" path="res://world/water/ocean/foam/foam_breakup_noise.tres" id="4_3fuy1"]
+[ext_resource type="Texture2D" uid="uid://cdlm681krlrvi" path="res://world/water/ocean/surface_detail/surface_normal_a.tres" id="5_bbvts"]
+[ext_resource type="Texture2D" uid="uid://biv8w5n57xhjr" path="res://world/water/ocean/surface_detail/surface_normal_b.tres" id="6_r5tq1"]
+[ext_resource type="Texture2D" uid="uid://bblan7rbfrudb" path="res://world/water/ocean/surface_detail/surface_warp_noise.tres" id="7_fn2aq"]
+[ext_resource type="Texture2D" uid="uid://c0kex04xga83k" path="res://world/water/ocean/waves/macro_wave_a.png" id="8_1jbwc"]
+[ext_resource type="Texture2D" uid="uid://bs48vn7ihhfp" path="res://world/water/ocean/waves/macro_wave_b.png" id="9_2ffbt"]
 
 [sub_resource type="Environment" id="Environment_test"]
 background_mode = 1
 background_color = Color(0.08, 0.1, 0.15, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_eea0c"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("3_5mmec")
+shader_parameter/water_level = 0.0
+shader_parameter/simulation_time = 0.0
+shader_parameter/event_wave_active = PackedInt32Array(0, 0, 0, 0)
+shader_parameter/event_wave_origins = PackedVector2Array(0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/event_wave_directions = PackedVector2Array(0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/event_wave_start_times = PackedFloat32Array(0, 0, 0, 0)
+shader_parameter/event_wave_amplitudes = PackedFloat32Array(0, 0, 0, 0)
+shader_parameter/event_wave_widths = PackedFloat32Array(1, 1, 1, 1)
+shader_parameter/event_wave_speeds = PackedFloat32Array(0, 0, 0, 0)
+shader_parameter/event_wave_trough_amplitudes = PackedFloat32Array(0, 0, 0, 0)
+shader_parameter/event_wave_trough_widths = PackedFloat32Array(1, 1, 1, 1)
+shader_parameter/event_wave_trough_offsets = PackedFloat32Array(0, 0, 0, 0)
+shader_parameter/event_wave_fade_ins = PackedFloat32Array(0, 0, 0, 0)
+shader_parameter/event_wave_lifetimes = PackedFloat32Array(0, 0, 0, 0)
+shader_parameter/event_wave_fade_outs = PackedFloat32Array(0, 0, 0, 0)
+shader_parameter/wave_height_texture_a = ExtResource("8_1jbwc")
+shader_parameter/wave_height_texture_b = ExtResource("9_2ffbt")
+shader_parameter/wave_world_size_a = 180.0
+shader_parameter/wave_world_size_b = 72.0
+shader_parameter/wave_amplitude_a = 1.35
+shader_parameter/wave_amplitude_b = 0.42
+shader_parameter/wave_direction_a = Vector2(0.86012906, 0.5100765)
+shader_parameter/wave_direction_b = Vector2(-0.38176018, 0.92426145)
+shader_parameter/wave_travel_speed_a = 4.6
+shader_parameter/wave_travel_speed_b = 2.3
+shader_parameter/wave_mean_a = 0.5
+shader_parameter/wave_mean_b = 0.47
+shader_parameter/geometry_normal_step = 0.4
+shader_parameter/ocean_geometry_normal_quality = 2
+shader_parameter/calm_zone_count = 0
+shader_parameter/calm_zone_centers_shapes = PackedVector4Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/calm_zone_axes = PackedVector4Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/calm_zone_extents_transitions = PackedVector4Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/calm_zone_strengths = PackedVector4Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1)
+shader_parameter/ripple_active = PackedInt32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/ripple_positions = PackedVector2Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/ripple_start_times = PackedFloat32Array(-inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf)
+shader_parameter/ripple_amplitudes = PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/ripple_speeds = PackedFloat32Array(3.4, 3.4, 3.4, 3.4, 3.4, 3.4, 3.4, 3.4, 3.4, 3.4, 3.4, 3.4)
+shader_parameter/ripple_wavelengths = PackedFloat32Array(2.6, 2.6, 2.6, 2.6, 2.6, 2.6, 2.6, 2.6, 2.6, 2.6, 2.6, 2.6)
+shader_parameter/ripple_decays = PackedFloat32Array(0.72, 0.72, 0.72, 0.72, 0.72, 0.72, 0.72, 0.72, 0.72, 0.72, 0.72, 0.72)
+shader_parameter/ripple_lifetimes = PackedFloat32Array(4.6, 4.6, 4.6, 4.6, 4.6, 4.6, 4.6, 4.6, 4.6, 4.6, 4.6, 4.6)
+shader_parameter/ripple_effective_count = 12
+shader_parameter/landing_impacts_enabled = true
+shader_parameter/landing_impact_effective_count = 4
+shader_parameter/landing_impact_active = PackedInt32Array(0, 0, 0, 0)
+shader_parameter/landing_impact_positions = PackedVector2Array(0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/landing_impact_start_times = PackedFloat32Array(-inf, -inf, -inf, -inf)
+shader_parameter/landing_impact_strengths = PackedFloat32Array(0, 0, 0, 0)
+shader_parameter/landing_impact_directions = PackedVector2Array(0, -1, 0, -1, 0, -1, 0, -1)
+shader_parameter/landing_impact_half_extents = PackedVector2Array(0.55, 1.35, 0.55, 1.35, 0.55, 1.35, 0.55, 1.35)
+shader_parameter/landing_impact_secondary_a_offsets = PackedVector2Array(0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/landing_impact_secondary_b_offsets = PackedVector2Array(0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/landing_impact_secondary_weights = PackedVector2Array(0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/landing_impact_entry_types = PackedInt32Array(0, 0, 0, 0)
+shader_parameter/landing_impact_contact_masks = PackedInt32Array(0, 0, 0, 0)
+shader_parameter/landing_impact_amplitudes = PackedFloat32Array(0, 0, 0, 0)
+shader_parameter/landing_impact_depressions = PackedFloat32Array(0, 0, 0, 0)
+shader_parameter/landing_impact_initial_radii = PackedFloat32Array(0, 0, 0, 0)
+shader_parameter/landing_impact_speeds = PackedFloat32Array(0, 0, 0, 0)
+shader_parameter/landing_impact_wavelengths = PackedFloat32Array(0, 0, 0, 0)
+shader_parameter/landing_impact_durations = PackedFloat32Array(0, 0, 0, 0)
+shader_parameter/landing_impact_exaggerated_debug = false
+shader_parameter/landing_impact_debug_multiplier = 2.5
+shader_parameter/directional_wake_enabled = true
+shader_parameter/directional_wake_active_count = 0
+shader_parameter/directional_wake_effective_count = 16
+shader_parameter/directional_wake_start_positions = PackedVector2Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/directional_wake_end_positions = PackedVector2Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/directional_wake_start_times = PackedFloat32Array(-inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf)
+shader_parameter/directional_wake_end_times = PackedFloat32Array(-inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf, -inf)
+shader_parameter/directional_wake_intensities = PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/directional_wake_widths = PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/directional_wake_biases = PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/directional_wake_speeds = PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/directional_wake_amplitude = 0.16
+shader_parameter/directional_wake_wavelength = 2.4
+shader_parameter/directional_wake_propagation_speed = 2.8
+shader_parameter/directional_wake_opening_slope = 0.085
+shader_parameter/directional_wake_arm_width = 0.62
+shader_parameter/directional_wake_center_depression = 0.065
+shader_parameter/directional_wake_duration = 5.2
+shader_parameter/directional_wake_attenuation = 0.16
+shader_parameter/directional_wake_turn_strength = 0.65
+shader_parameter/hull_pressure_enabled = true
+shader_parameter/hull_pressure_center = Vector2(0, 0)
+shader_parameter/hull_pressure_forward = Vector2(0, -1)
+shader_parameter/hull_pressure_half_extents = Vector2(0.6, 1.45)
+shader_parameter/hull_pressure_contact = 0.0
+shader_parameter/hull_pressure_intensity = 0.0
+shader_parameter/hull_pressure_left_strength = 0.0
+shader_parameter/hull_pressure_right_strength = 0.0
+shader_parameter/hull_pressure_turn_bias = 0.0
+shader_parameter/hull_pressure_pitch = 0.0
+shader_parameter/hull_pressure_amplitude = 0.14
+shader_parameter/hull_pressure_depression_strength = 0.72
+shader_parameter/hull_pressure_maximum_distance = 9.0
+shader_parameter/vehicle_interaction_maximum_displacement = 0.55
+shader_parameter/vehicle_interaction_maximum_derivative = 1.35
+shader_parameter/vehicle_interaction_clipmap_distance = 86.0
+shader_parameter/ocean_interaction_debug_mode = 0
+shader_parameter/vehicle_interaction_exaggerated_debug = false
+shader_parameter/vehicle_interaction_debug_multiplier = 3.5
+shader_parameter/surface_normal_texture_a = ExtResource("5_bbvts")
+shader_parameter/surface_normal_texture_b = ExtResource("6_r5tq1")
+shader_parameter/surface_warp_texture = ExtResource("7_fn2aq")
+shader_parameter/surface_normal_world_size_a = 7.5
+shader_parameter/surface_normal_world_size_b = 3.25
+shader_parameter/surface_normal_strength = 0.62
+shader_parameter/surface_flow_direction_a = Vector2(0.82, 0.57)
+shader_parameter/surface_flow_direction_b = Vector2(-0.46, 0.89)
+shader_parameter/surface_flow_speed_a = 0.24
+shader_parameter/surface_flow_speed_b = -0.17
+shader_parameter/surface_warp_world_size = 46.0
+shader_parameter/surface_warp_strength = 2.4
+shader_parameter/surface_detail_fade_start = 130.0
+shader_parameter/surface_detail_fade_end = 520.0
+shader_parameter/ocean_surface_detail_quality = 2
+shader_parameter/shallow_water_color = Color(0.035, 0.43, 0.55, 1)
+shader_parameter/deep_water_color = Color(0.004, 0.055, 0.115, 1)
+shader_parameter/horizon_water_color = Color(0.025, 0.22, 0.34, 1)
+shader_parameter/reflection_tint = Color(0.36, 0.7, 0.86, 1)
+shader_parameter/trough_tint = Color(0.002, 0.025, 0.075, 1)
+shader_parameter/crest_tint = Color(0.11, 0.62, 0.68, 1)
+shader_parameter/absorption_density = 0.13
+shader_parameter/maximum_optical_depth = 38.0
+shader_parameter/shallow_depth_range = 5.5
+shader_parameter/near_water_alpha = 0.77
+shader_parameter/deep_water_alpha = 0.92
+shader_parameter/horizon_water_alpha = 0.98
+shader_parameter/opacity_distance_start = 80.0
+shader_parameter/opacity_distance_end = 220.0
+shader_parameter/fresnel_power = 4.8
+shader_parameter/reflection_strength = 0.82
+shader_parameter/refraction_strength = 0.009
+shader_parameter/near_roughness = 0.055
+shader_parameter/horizon_roughness = 0.23
+shader_parameter/water_specular = 0.88
+shader_parameter/underwater_surface_fog_color = Color(0.1, 0.4, 0.5, 1)
+shader_parameter/underwater_surface_fog_density = 0.009
+shader_parameter/underwater_surface_fog_start_distance = 5.0
+shader_parameter/underwater_visibility_radius = 80.0
+shader_parameter/underwater_visibility_blend = 20.0
+shader_parameter/underwater_surface_alpha = 0.82
+shader_parameter/foam_enabled = true
+shader_parameter/foam_noise_texture = ExtResource("4_3fuy1")
+shader_parameter/foam_color = Color(0.82, 0.95, 1, 1)
+shader_parameter/shore_foam_width = 2.15
+shader_parameter/shore_foam_strength = 1.05
+shader_parameter/vehicle_material_tag_roughness = 0.019608
+shader_parameter/vehicle_material_tag_tolerance = 0.006
+shader_parameter/crest_foam_start = 0.46
+shader_parameter/crest_foam_end = 0.94
+shader_parameter/crest_foam_strength = 0.82
+shader_parameter/ripple_foam_strength = 0.18
+shader_parameter/foam_macro_scale = 0.055
+shader_parameter/foam_detail_scale = 0.19
+shader_parameter/foam_scroll_speed = 0.13
+shader_parameter/foam_roughness = 0.88
+shader_parameter/ocean_foam_detail_quality = 1
+shader_parameter/ocean_foam_evaluation_distance = 520.0
+shader_parameter/ocean_surface_enabled = true
+shader_parameter/ocean_logical_origin_offset_xz = Vector2(0, 0)
+shader_parameter/ocean_detail_center_xz = Vector2(0, 6.94)
+shader_parameter/ocean_detailed_wave_fade_start = 170.0
+shader_parameter/ocean_detailed_wave_fade_end = 280.0
+shader_parameter/ocean_medium_wave_fade_end = 700.0
+shader_parameter/ocean_middle_wave_amplitude_ratio = 0.55
+shader_parameter/ocean_far_wave_amplitude_ratio = 0.08
+shader_parameter/ocean_debug_show_rings = false
 
 [sub_resource type="BoxMesh" id="FloorMesh"]
 size = Vector3(200, 0.2, 200)
@@ -14,33 +196,34 @@ size = Vector3(200, 0.2, 200)
 [sub_resource type="BoxShape3D" id="FloorShape"]
 size = Vector3(200, 0.2, 200)
 
-[node name="JetSkiWipeoutTest" type="Node3D"]
+[node name="JetSkiWipeoutTest" type="Node3D" unique_id=589166789]
 script = ExtResource("3_test")
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1732404588]
 environment = SubResource("Environment_test")
 
-[node name="Sun" type="DirectionalLight3D" parent="."]
-rotation_degrees = Vector3(-50, -25, 0)
+[node name="Sun" type="DirectionalLight3D" parent="." unique_id=1240620438]
+transform = Transform3D(0.90630776, 0.3237444, -0.2716538, 0, 0.64278764, 0.76604444, 0.42261827, -0.69427204, 0.5825634, 0, 0, 0)
 
-[node name="Ocean" parent="." instance=ExtResource("2_ocean")]
+[node name="Ocean" parent="." unique_id=903260770 instance=ExtResource("2_ocean")]
+ocean_material = SubResource("ShaderMaterial_eea0c")
 
-[node name="JetSki" parent="." instance=ExtResource("1_vehicle")]
+[node name="JetSki" parent="." unique_id=1466065365 instance=ExtResource("1_vehicle")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
 linear_velocity = Vector3(8, 0, 0)
 ocean_path = NodePath("../Ocean")
 
-[node name="Camera3D" type="Camera3D" parent="JetSki"]
-transform = Transform3D(1, 0, 0, 0, 0.98162717, 0.190809, 0, -0.190809, 0.98162717, 0, 2.38, 6.94)
-current = true
-fov = 37.0
-
-[node name="FloorMesh" type="MeshInstance3D" parent="."]
-position = Vector3(0, -2, 0)
+[node name="FloorMesh" type="MeshInstance3D" parent="." unique_id=1747928494]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, 0)
 mesh = SubResource("FloorMesh")
 
-[node name="Floor" type="StaticBody3D" parent="."]
-position = Vector3(0, -2, 0)
+[node name="Floor" type="StaticBody3D" parent="." unique_id=788796308]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, 0)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor" unique_id=422553835]
 shape = SubResource("FloorShape")
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=1814350944]
+transform = Transform3D(1, 0, 0, 0, 0.9816272, 0.19080901, 0, -0.19080901, 0.9816272, 0, 4.38, 6.94)
+current = true
+fov = 37.0
