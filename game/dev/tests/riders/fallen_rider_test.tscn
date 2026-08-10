@@ -1,0 +1,29 @@
+[gd_scene format=3 uid="uid://bnukk3611vdai"]
+
+[ext_resource type="Script" uid="uid://ck5b4fslbf866" path="res://dev/tests/riders/fallen_rider_test.gd" id="1_tgmop"]
+[ext_resource type="PackedScene" path="res://gameplay/riders/common/fallen_rider_3d.tscn" id="2_gdjp1"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_wwatn"]
+size = Vector3(20, 0.2, 20)
+
+[sub_resource type="BoxMesh" id="BoxMesh_tpwhi"]
+size = Vector3(20, 0.2, 20)
+
+[node name="FallenRiderTest" type="Node3D" unique_id=2110923862]
+script = ExtResource("1_tgmop")
+
+[node name="FallenRider3D" parent="." unique_id=1107498843 instance=ExtResource("2_gdjp1")]
+transform = Transform3D(0.99999994, 0, 0, 0, 0.99999994, 0, 0, 0, 0.99999994, 0, 10, 0)
+
+[node name="Floor" type="StaticBody3D" parent="." unique_id=314083261]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor" unique_id=278631428]
+shape = SubResource("BoxShape3D_wwatn")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Floor" unique_id=1519757793]
+mesh = SubResource("BoxMesh_tpwhi")
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=2013399877]
+transform = Transform3D(1, 0, 0, 0, 0.91481614, 0.4038706, 0, -0.4038706, 0.91481614, -0.37, 1.77, 2.723)
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1652814675]

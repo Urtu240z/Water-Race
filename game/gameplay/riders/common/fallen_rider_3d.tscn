@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3]
 
 [ext_resource type="Script" path="res://gameplay/riders/common/fallen_rider_3d.gd" id="1"]
-[ext_resource type="PackedScene" path="res://gameplay/riders/common/fallen_rider_seed.tscn" id="2"]
+[ext_resource type="PackedScene" path="res://gameplay/riders/common/fallen_rider_reduced_seed.tscn" id="2"]
 
 [node name="FallenRider3D" type="Node3D"]
 script = ExtResource("1")
