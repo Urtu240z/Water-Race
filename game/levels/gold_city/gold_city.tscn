@@ -46,6 +46,7 @@
 [ext_resource type="Texture2D" uid="uid://bblan7rbfrudb" path="res://world/water/ocean/surface_detail/surface_warp_noise.tres" id="45_1p4wu"]
 [ext_resource type="Texture2D" uid="uid://c0kex04xga83k" path="res://world/water/ocean/waves/macro_wave_a.png" id="46_xorn0"]
 [ext_resource type="Texture2D" uid="uid://bs48vn7ihhfp" path="res://world/water/ocean/waves/macro_wave_b.png" id="47_68fr5"]
+[ext_resource type="Script" uid="uid://cvayffg86y5d3" path="res://world/water/ocean/events/event_wave_3d.gd" id="47_cfohk"]
 [ext_resource type="PackedScene" uid="uid://cisubjold2oac" path="res://levels/paradise_island/wildlife/ambient_wildlife.tscn" id="48_ycukq"]
 [ext_resource type="PackedScene" uid="uid://tl6lotex1356" path="res://gameplay/vehicles/jet_ski_01/jet_ski_with_rider.tscn" id="49_1e3ik"]
 [ext_resource type="AudioStream" uid="uid://tn1we3rfc1hp" path="res://audio/sfx/vehicles/jet_ski/engine/Motor_Idle.ogg" id="50_0rcjh"]
@@ -1985,6 +1986,15 @@ landing_wave_maximum_amplitude = 1.0
 landing_wave_minimum_depression = 0.0
 landing_wave_minimum_wavelength = 4.55
 landing_wave_maximum_wavelength = 8.0
+
+[node name="EventWave3D" type="Node3D" parent="WaterIntegration" unique_id=2144384760]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 248.49646, -283.8418, 0)
+script = ExtResource("47_cfohk")
+auto_activate = true
+amplitude_multiplier = 10.0
+speed_multiplier = 1.54
+flow_multiplier = 6.54
+metadata/_custom_type_script = "uid://cvayffg86y5d3"
 
 [node name="AmbientWildlife" parent="." unique_id=1482046972 instance=ExtResource("48_ycukq")]
 visible = false
