@@ -654,6 +654,7 @@ var trick_system: JetSkiTrickSystem:
 			) as JetSkiTrickSystem
 		return _trick_system
 var _water_warning_emitted: bool = false
+var _invalid_water_provider_warning_emitted: bool = false
 
 
 func _ready() -> void:
@@ -872,11 +873,11 @@ func recover_vehicle() -> void:
 		reset_vehicle(&"water_recovery_fallback")
 		return
 	var recovery_transform: Transform3D = checkpoint.get("transform")
-	if is_instance_valid(_water_provider):
-		var water_sample := _water_provider.sample_water(recovery_transform.origin)
-		if water_sample.valid and water_sample.surface_position.is_finite():
+	if is_instance_valid(_ocean):
+		var water_height := _ocean.sample_height(recovery_transform.origin)
+		if is_finite(water_height):
 			recovery_transform.origin.y = (
-				water_sample.surface_position.y + float(checkpoint.get("surface_offset", 0.0))
+				water_height + float(checkpoint.get("surface_offset", 0.0))
 			)
 	_teleport_and_reset(recovery_transform, &"water_recovery")
 	_water_recovery_history.clear()
@@ -933,7 +934,7 @@ func _update_water_recovery_history() -> void:
 
 func _is_safe_water_recovery_state() -> bool:
 	if (
-		not is_instance_valid(_water_provider)
+		not is_instance_valid(_ocean)
 		or not _has_finite_state()
 		or water_physics_system.state.raw_contact_mask != 15
 		or navigation_system.state.physical_contact_count > 0
@@ -960,10 +961,10 @@ func _build_upright_recovery_transform(source: Transform3D) -> Transform3D:
 
 func _store_water_recovery_checkpoint(safe_transform: Transform3D) -> void:
 	var surface_offset := 0.0
-	if is_instance_valid(_water_provider):
-		var water_sample := _water_provider.sample_water(safe_transform.origin)
-		if water_sample.valid and water_sample.surface_position.is_finite():
-			surface_offset = safe_transform.origin.y - water_sample.surface_position.y
+	if is_instance_valid(_ocean):
+		var water_height := _ocean.sample_height(safe_transform.origin)
+		if is_finite(water_height):
+			surface_offset = safe_transform.origin.y - water_height
 	_water_recovery_history.append(
 		{
 			"transform": safe_transform,
@@ -1003,10 +1004,10 @@ func _is_recovery_checkpoint_clear(checkpoint_position: Vector3) -> bool:
 	if world == null:
 		return true
 	var water_height := checkpoint_position.y
-	if is_instance_valid(_water_provider):
-		var water_sample := _water_provider.sample_water(checkpoint_position)
-		if water_sample.valid and water_sample.surface_position.is_finite():
-			water_height = water_sample.surface_position.y
+	if is_instance_valid(_ocean):
+		var sampled_height := _ocean.sample_height(checkpoint_position)
+		if is_finite(sampled_height):
+			water_height = sampled_height
 	var clearance_shape := CylinderShape3D.new()
 	clearance_shape.radius = recovery_shore_clearance
 	clearance_shape.height = 1.5
@@ -1055,9 +1056,14 @@ func _resolve_water_reference() -> void:
 	if not ocean_path.is_empty():
 		_ocean = get_node_or_null(ocean_path) as Ocean3D
 	if not water_provider_path.is_empty():
-		_water_provider = get_node_or_null(
+		var configured_provider := get_node_or_null(
 			water_provider_path
 		) as WaterSurfaceProvider3D
+		if configured_provider != null:
+			_water_provider = configured_provider
+		else:
+			_warn_about_invalid_water_provider_once()
+			_water_provider = _ocean as WaterSurfaceProvider3D
 	else:
 		_water_provider = _ocean as WaterSurfaceProvider3D
 	if _water_provider == null:
@@ -1807,3 +1813,12 @@ func _warn_about_missing_water_once() -> void:
 		return
 	_water_warning_emitted = true
 	push_warning("JetSki buoyancy is disabled because its water provider reference is invalid.")
+
+
+func _warn_about_invalid_water_provider_once() -> void:
+	if _invalid_water_provider_warning_emitted:
+		return
+	_invalid_water_provider_warning_emitted = true
+	push_warning(
+		"JetSki water_provider_path is invalid; falling back to ocean_path."
+	)

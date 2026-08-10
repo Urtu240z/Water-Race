@@ -2,6 +2,7 @@ class_name JetSkiDriveSystem
 extends Node
 
 const WaterSurfaceProvider3D = preload("res://world/water/query/water_surface_provider_3d.gd")
+const WaterSample3D = preload("res://world/water/query/water_sample_3d.gd")
 
 const DIRECTION_EPSILON_SQUARED: float = 0.000001
 const MINIMUM_COASTING_STEERING_INPUT: float = 0.001
@@ -32,6 +33,7 @@ var _invalid_sample_warning_emitted: bool = false
 var _degenerate_direction_warning_emitted: bool = false
 var _invalid_force_warning_emitted: bool = false
 var _warning_emission_count: int = 0
+var _water_sample_scratch: WaterSample3D = WaterSample3D.new()
 
 
 func configure(propulsion_marker: Marker3D) -> void:
@@ -68,7 +70,10 @@ func step(
 	var propulsion_world_offset := (
 		propulsion_world_position - body_state.transform.origin
 	)
-	var water_sample := water_provider.sample_water(propulsion_world_position)
+	var water_sample := water_provider.sample_water(
+		propulsion_world_position,
+		_water_sample_scratch
+	)
 	if not water_sample.valid:
 		_warn_about_invalid_sample_once()
 		return state

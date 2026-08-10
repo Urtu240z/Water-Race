@@ -784,10 +784,12 @@ func sample_water_velocity(world_position: Vector3) -> Vector3:
 	return Vector3(0.0, (next_height - previous_height) / (2.0 * TIME_STEP), 0.0)
 
 
-func sample_water(world_position: Vector3) -> WaterSample3D:
+func sample_water(
+	world_position: Vector3,
+	out_sample: WaterSample3D = null
+) -> WaterSample3D:
 	var surface_height := sample_height(world_position)
-	var sample := WaterSample3D.new()
-	sample.valid = is_finite(surface_height)
+	var sample := out_sample.reset() if out_sample != null else WaterSample3D.new()
 	sample.surface_position = Vector3(
 		world_position.x,
 		surface_height,
@@ -797,6 +799,13 @@ func sample_water(world_position: Vector3) -> WaterSample3D:
 	sample.velocity = sample_water_velocity(world_position)
 	sample.signed_depth = surface_height - world_position.y
 	sample.provider = self
+	sample.valid = (
+		sample.surface_position.is_finite()
+		and sample.normal.is_finite()
+		and sample.normal.length_squared() > 0.000001
+		and sample.velocity.is_finite()
+		and is_finite(sample.signed_depth)
+	)
 	return sample
 
 

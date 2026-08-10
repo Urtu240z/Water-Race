@@ -2,6 +2,7 @@ class_name JetSkiWaterPhysicsSystem
 extends Node
 
 const WaterSurfaceProvider3D = preload("res://world/water/query/water_surface_provider_3d.gd")
+const WaterSample3D = preload("res://world/water/query/water_sample_3d.gd")
 
 const BUOYANCY_POINT_COUNT: int = 4
 const FRONT_POINT_COUNT: int = 2
@@ -84,6 +85,7 @@ var _point_relative_normal_speeds: PackedFloat32Array = PackedFloat32Array()
 var _point_sample_valid: Array[bool] = []
 var _point_forward_drag_forces: PackedVector3Array = PackedVector3Array()
 var _point_lateral_drag_forces: PackedVector3Array = PackedVector3Array()
+var _water_sample_scratch: WaterSample3D = WaterSample3D.new()
 
 var _point_warning_emitted: bool = false
 var _invalid_sample_warning_emitted: bool = false
@@ -141,7 +143,10 @@ func step(
 		var world_point := body_state.transform * local_point
 		var world_offset := world_point - body_state.transform.origin
 		_point_world_positions[index] = world_point
-		var water_sample := water_provider.sample_water(world_point)
+		var water_sample := water_provider.sample_water(
+			world_point,
+			_water_sample_scratch
+		)
 		if not water_sample.valid:
 			_warn_about_invalid_sample_once()
 			continue

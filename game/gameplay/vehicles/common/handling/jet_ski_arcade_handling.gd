@@ -2,6 +2,7 @@ class_name JetSkiArcadeHandling
 extends Node
 
 const WaterSurfaceProvider3D = preload("res://world/water/query/water_surface_provider_3d.gd")
+const WaterSample3D = preload("res://world/water/query/water_sample_3d.gd")
 
 ## Adds selective arcade grip to the JetSki without replacing its water physics.
 ## The legacy path remains unchanged while the controller's
@@ -57,6 +58,7 @@ var _frame_water_normal: Vector3 = Vector3.UP
 var _frame_forward_tangent: Vector3 = Vector3.FORWARD
 var _frame_right_tangent: Vector3 = Vector3.RIGHT
 var _frame_tangential_velocity: Vector3 = Vector3.ZERO
+var _water_sample_scratch: WaterSample3D = WaterSample3D.new()
 
 
 func _ready() -> void:
@@ -84,7 +86,10 @@ func _physics_process(delta: float) -> void:
 	if not is_instance_valid(water_provider):
 		return
 
-	var water_sample := water_provider.sample_water(_vehicle.global_position)
+	var water_sample := water_provider.sample_water(
+		_vehicle.global_position,
+		_water_sample_scratch
+	)
 	if not water_sample.valid:
 		return
 	var water_normal := water_sample.normal
@@ -400,7 +405,10 @@ func _sample_handling_frame(
 ) -> bool:
 	if not is_instance_valid(water_provider):
 		return false
-	var water_sample := water_provider.sample_water(body_transform.origin)
+	var water_sample := water_provider.sample_water(
+		body_transform.origin,
+		_water_sample_scratch
+	)
 	if not water_sample.valid:
 		return false
 	var water_normal := water_sample.normal
