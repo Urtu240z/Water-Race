@@ -564,6 +564,19 @@ render_priority = 0
 shader = ExtResource("41_j7oal")
 shader_parameter/water_level = 0.0
 shader_parameter/simulation_time = 0.0
+shader_parameter/event_wave_active = PackedInt32Array(0, 0, 0, 0)
+shader_parameter/event_wave_origins = PackedVector2Array(0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/event_wave_directions = PackedVector2Array(0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/event_wave_start_times = PackedFloat32Array(0, 0, 0, 0)
+shader_parameter/event_wave_amplitudes = PackedFloat32Array(0, 0, 0, 0)
+shader_parameter/event_wave_widths = PackedFloat32Array(1, 1, 1, 1)
+shader_parameter/event_wave_speeds = PackedFloat32Array(0, 0, 0, 0)
+shader_parameter/event_wave_trough_amplitudes = PackedFloat32Array(0, 0, 0, 0)
+shader_parameter/event_wave_trough_widths = PackedFloat32Array(1, 1, 1, 1)
+shader_parameter/event_wave_trough_offsets = PackedFloat32Array(0, 0, 0, 0)
+shader_parameter/event_wave_fade_ins = PackedFloat32Array(0, 0, 0, 0)
+shader_parameter/event_wave_lifetimes = PackedFloat32Array(0, 0, 0, 0)
+shader_parameter/event_wave_fade_outs = PackedFloat32Array(0, 0, 0, 0)
 shader_parameter/wave_height_texture_a = ExtResource("46_xorn0")
 shader_parameter/wave_height_texture_b = ExtResource("47_68fr5")
 shader_parameter/wave_world_size_a = 153.5
@@ -1093,28 +1106,28 @@ script = ExtResource("12_hh2mw")
 transform = Transform3D(0.71981424, 0, -0.6941668, 0, 1, 0, 0.6941668, 0, 0.71981424, 2427.3716, -15.736182, 136.60822)
 visible = false
 
-[node name="Island_1_VIS" parent="TerrainRoot/independent_island" index="0" unique_id=433189918]
+[node name="Island_1_VIS" parent="TerrainRoot/independent_island" index="0" unique_id=890013448]
 surface_material_override/0 = ExtResource("14_oau3k")
 
 [node name="independent_island2" parent="TerrainRoot" unique_id=318732152 instance=ExtResource("13_x750q")]
 transform = Transform3D(2.5448968, 0, 2.17237, 0, 1.375, 0, -2.0929704, 0, 2.6414409, 1964.7793, -5.60398, -2256.5737)
 visible = false
 
-[node name="Island_1_VIS" parent="TerrainRoot/independent_island2" index="0" unique_id=433189918]
+[node name="Island_1_VIS" parent="TerrainRoot/independent_island2" index="0" unique_id=890013448]
 surface_material_override/0 = ExtResource("14_oau3k")
 
 [node name="independent_island3" parent="TerrainRoot" unique_id=538394509 instance=ExtResource("13_x750q")]
 transform = Transform3D(-0.17687668, 0, -6.3775477, 0, 6.38, 0, 6.3775477, 0, -0.17687668, -2022.6855, -45.85874, -2256.5737)
 visible = false
 
-[node name="Island_1_VIS" parent="TerrainRoot/independent_island3" index="0" unique_id=433189918]
+[node name="Island_1_VIS" parent="TerrainRoot/independent_island3" index="0" unique_id=890013448]
 surface_material_override/0 = ExtResource("14_oau3k")
 
 [node name="independent_island4" parent="TerrainRoot" unique_id=522839329 instance=ExtResource("13_x750q")]
 transform = Transform3D(7.6843944, 0, 3.4050117, 0, 16.9, 0, -3.4050117, 0, 7.6843944, -4529.758, -45.85874, 4123.0527)
 visible = false
 
-[node name="Island_1_VIS" parent="TerrainRoot/independent_island4" index="0" unique_id=433189918]
+[node name="Island_1_VIS" parent="TerrainRoot/independent_island4" index="0" unique_id=890013448]
 transform = Transform3D(0.5352785, 0.09100684, -0.006567538, -0.07122277, 0.6827822, -0.09906116, -0.0020920038, 0.040325806, 1.6920902, 310.06567, -0.8341303, -127.680214)
 surface_material_override/0 = ExtResource("14_oau3k")
 
@@ -1995,6 +2008,9 @@ forward_engine_force = 10000.0
 reverse_engine_force = 4500.0
 forward_thrust_falloff_end_speed = 130.0
 reverse_thrust_falloff_end_speed = 14.2
+use_arcade_turn_continuity = true
+manual_ejection_forward_impulse = 674.0
+manual_ejection_up_impulse = 500.0
 
 [node name="LeftGripTarget" parent="Gameplay/JetSki/VisualRoot/JetSkiVisual/HandlePivot/GripTargets" parent_id_path=PackedInt32Array(328650943, 1552986585) index="0" unique_id=133906918]
 transform = Transform3D(0.80945057, -0.3843369, -0.4439311, -0.56238306, -0.724853, -0.39788496, -0.1688622, 0.57172793, -0.8028763, 0.20600891, 0.697399, -1.4838791)
@@ -2010,18 +2026,14 @@ transform = Transform3D(0.9810575, -0.011237088, -0.19338982, 0.011280789, 0.999
 bones/0/rotation = Quaternion(0.0064583384, 1.6179755e-09, 2.5050662e-07, 0.99997914)
 bones/0/scale = Vector3(1, 0.99999994, 0.99999994)
 bones/1/position = Vector3(-4.8325298e-12, 0.10182449, 3.2595353e-09)
-bones/1/rotation = Quaternion(0.19404872, -0.01194755, 0.016523127, 0.98077995)
 bones/1/scale = Vector3(1, 0.9999998, 0.99999994)
 bones/2/position = Vector3(-2.4344415e-13, 0.10002686, 8.3823934e-09)
 bones/2/scale = Vector3(1, 1, 0.9999999)
 bones/3/position = Vector3(1.364242e-12, 0.10010647, -1.8094065e-08)
-bones/3/rotation = Quaternion(0.3607207, -0.0023574908, -0.002598554, 0.9326673)
 bones/3/scale = Vector3(1, 0.99999994, 0.9999999)
 bones/4/position = Vector3(-3.710018e-06, 0.16292441, -0.0025706573)
-bones/4/rotation = Quaternion(-0.271915, 0.013153285, -0.016808193, 0.9620846)
 bones/4/scale = Vector3(1, 1, 1)
 bones/5/position = Vector3(-1.0776875e-09, 0.09341913, 0.028410386)
-bones/5/rotation = Quaternion(-0.24607772, 0.008751963, -0.009766882, 0.9691614)
 bones/5/scale = Vector3(1, 0.99999994, 0.99999994)
 bones/6/position = Vector3(-0.045697533, 0.10575647, -0.00599908)
 bones/6/scale = Vector3(0.99999994, 1.0000001, 1)
@@ -2102,12 +2114,6 @@ left_hand_rotation_correction_degrees = Vector3(-18.44, 32.09, -21.11)
 
 [node name="GripFingers" parent="Gameplay/JetSki/VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/rider_bot/SKEL_Rider/Skeleton3D" index="7" unique_id=940560861]
 left_grip_strength = 0.75
-
-[node name="rider_01_body" parent="Gameplay/JetSki/VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/rider_bot/SKEL_Rider/Skeleton3D" index="9" unique_id=1837524736]
-visible = false
-
-[node name="rider_02_body" parent="Gameplay/JetSki/VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/rider_bot/SKEL_Rider/Skeleton3D" index="10" unique_id=417895057]
-visible = true
 
 [node name="AnimationTree" parent="Gameplay/JetSki/VisualRoot/RiderMount/RiderAssetRoot/RiderRig" index="2" unique_id=187453891]
 parameters/mounted_add/add_amount = 1.0
@@ -2391,7 +2397,7 @@ omni_attenuation = 0.826
 [node name="Rock8" parent="Atrezzo" unique_id=571328736 instance=ExtResource("61_874od")]
 transform = Transform3D(33.475, 0, 0, 0, 33.475, 0, 0, 0, 33.475, 157.0853, -40.529305, 376.03717)
 
-[node name="Rock3_VIS" parent="Atrezzo/Rock8" index="0" unique_id=2025684856]
+[node name="Rock3_VIS" parent="Atrezzo/Rock8" index="0" unique_id=83632452]
 transform = Transform3D(0.9999998, 0, 0, 0, 0.9999998, 0, 0, 0, 0.9999998, -3.267583, 0.22736257, 0)
 surface_material_override/0 = ExtResource("62_gecxy")
 
@@ -2648,28 +2654,28 @@ mesh = SubResource("BoxMesh_c2l6c")
 [node name="Rock2" parent="." unique_id=1467108677 instance=ExtResource("72_hbj0a")]
 transform = Transform3D(1.3358884, 0, -2.11315, 0, 2.5, 0, 2.11315, 0, 1.3358884, -125.10258, -10.050808, -531.91595)
 
-[node name="Rock2_VIS" parent="Rock2" index="0" unique_id=110660900]
+[node name="Rock2_VIS" parent="Rock2" index="0" unique_id=122492071]
 surface_material_override/0 = ExtResource("62_gecxy")
 
-[node name="Rock2_COL" parent="Rock2" index="1" unique_id=194461357]
+[node name="Rock2_COL" parent="Rock2" index="1" unique_id=253817160]
 visible = false
 
 [node name="Rock3" parent="." unique_id=381828738 instance=ExtResource("72_hbj0a")]
 transform = Transform3D(3.2300122, 0, -0.43976325, 0, 3.225, 0, 0.2542075, 0, 5.5877213, -143.86502, -10.050808, -553.5112)
 
-[node name="Rock2_VIS" parent="Rock3" index="0" unique_id=110660900]
+[node name="Rock2_VIS" parent="Rock3" index="0" unique_id=122492071]
 surface_material_override/0 = ExtResource("62_gecxy")
 
-[node name="Rock2_COL" parent="Rock3" index="1" unique_id=194461357]
+[node name="Rock2_COL" parent="Rock3" index="1" unique_id=253817160]
 visible = false
 
 [node name="Rock4" parent="." unique_id=1764313507 instance=ExtResource("72_hbj0a")]
 transform = Transform3D(1.4559095, 0, -5.0072455, 0, 3.2250004, 0, 2.894465, 0, 2.5186334, -161.80075, -10.050808, -582.4298)
 
-[node name="Rock2_VIS" parent="Rock4" index="0" unique_id=110660900]
+[node name="Rock2_VIS" parent="Rock4" index="0" unique_id=122492071]
 surface_material_override/0 = ExtResource("62_gecxy")
 
-[node name="Rock2_COL" parent="Rock4" index="1" unique_id=194461357]
+[node name="Rock2_COL" parent="Rock4" index="1" unique_id=253817160]
 visible = false
 
 [node name="Sketchfab_Scene" parent="." unique_id=308938919 instance=ExtResource("73_e6itw")]

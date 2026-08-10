@@ -705,13 +705,13 @@ transform = Transform3D(0.9811287, 0, 0.19335571, 0, 1, 0, -0.19335571, 0, 0.981
 transform = Transform3D(-1, 0, -1.509958e-07, 0, 1, 0, 1.509958e-07, 0, -1, 132.69096, 0.71555996, -133.7861)
 center_of_mass = Vector3(0, -0.22, 0.1)
 ocean_path = NodePath("../../WaterIntegration/Ocean")
-forward_engine_force = 15000.0
+forward_engine_force = 10000.0
 reverse_engine_force = 4500.0
-forward_thrust_falloff_end_speed = 150.0
+forward_thrust_falloff_end_speed = 130.0
 reverse_thrust_falloff_end_speed = 14.2
 use_arcade_turn_continuity = true
-manual_ejection_forward_impulse = 680.0
-manual_ejection_up_impulse = 400.0
+manual_ejection_forward_impulse = 614.0
+manual_ejection_up_impulse = 432.0
 
 [node name="LeftGripTarget" parent="Gameplay/JetSki/VisualRoot/JetSkiVisual/HandlePivot/GripTargets" parent_id_path=PackedInt32Array(328650943, 1552986585) index="0" unique_id=133906918]
 transform = Transform3D(0.80945057, -0.3843369, -0.4439311, -0.56238306, -0.724853, -0.39788496, -0.1688622, 0.57172793, -0.8028763, 0.20600891, 0.697399, -1.4838791)
