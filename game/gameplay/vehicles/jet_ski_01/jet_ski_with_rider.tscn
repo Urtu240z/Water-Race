@@ -23,6 +23,7 @@
 script = ExtResource("9_ragdoll_handoff")
 mounted_rider_path = NodePath("../../VisualRoot/RiderMount/RiderAssetRoot/RiderRig")
 fallen_rider_path = NodePath("../../FallenRider")
+vehicle_path = NodePath("../..")
 
 [node name="JetSkiVisual" parent="VisualRoot" parent_id_path=PackedInt32Array(1832404346) index="0" unique_id=556077452]
 handle_low_angle_degrees = -3.0

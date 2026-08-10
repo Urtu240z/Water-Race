@@ -3,6 +3,7 @@ extends Node
 
 @export_node_path("RiderRig") var mounted_rider_path: NodePath
 @export_node_path("FallenRider3D") var fallen_rider_path: NodePath
+@export_node_path("RigidBody3D") var vehicle_path: NodePath
 
 var _vehicle: RigidBody3D
 var _mounted_rider: RiderRig
@@ -13,16 +14,18 @@ var _handoff_active := false
 var _incident_impulse := Vector3.ZERO
 
 func _ready() -> void:
-	_vehicle = get_parent() as RigidBody3D
+	_vehicle = get_node_or_null(vehicle_path) as RigidBody3D
 	_mounted_rider = get_node_or_null(mounted_rider_path) as RiderRig
 	_fallen_rider = get_node_or_null(fallen_rider_path) as FallenRider3D
 	if _mounted_rider != null:
 		_mounted_skeleton = _mounted_rider.get_skeleton()
 	if _mounted_skeleton != null:
 		_mounted_skeleton.skeleton_updated.connect(_on_mounted_skeleton_updated)
+	if _vehicle == null or _mounted_rider == null or _fallen_rider == null or _mounted_skeleton == null:
+		push_error("RiderRagdollHandoff requires valid vehicle, mounted rider, fallen rider, and skeleton paths.")
 
 func request_handoff(incident_impulse: Vector3 = Vector3.ZERO) -> void:
-	if _handoff_pending or _handoff_active or _mounted_skeleton == null or _fallen_rider == null:
+	if _handoff_pending or _handoff_active or _vehicle == null or _mounted_skeleton == null or _fallen_rider == null:
 		return
 	_incident_impulse = incident_impulse if incident_impulse.is_finite() else Vector3.ZERO
 	_handoff_pending = true
@@ -38,8 +41,12 @@ func _perform_handoff() -> void:
 	if fallen_skeleton == null or not _mounted_skeleton.global_transform.is_finite():
 		return
 	_fallen_rider.set_rider_skin(_mounted_rider.rider_skin)
+	var fallen_root_to_skeleton := _fallen_rider.global_transform.affine_inverse() * fallen_skeleton.global_transform
 	_fallen_rider.top_level = true
-	_fallen_rider.global_transform = _mounted_skeleton.global_transform * fallen_skeleton.transform.affine_inverse()
+	_fallen_rider.global_transform = _mounted_skeleton.global_transform * fallen_root_to_skeleton.affine_inverse()
+	if not fallen_skeleton.global_transform.is_equal_approx(_mounted_skeleton.global_transform):
+		push_error("RiderRagdollHandoff could not align fallen and mounted skeleton transforms.")
+		return
 	for source_index in _mounted_skeleton.get_bone_count():
 		var bone_name := _mounted_skeleton.get_bone_name(source_index)
 		var target_index := fallen_skeleton.find_bone(bone_name)

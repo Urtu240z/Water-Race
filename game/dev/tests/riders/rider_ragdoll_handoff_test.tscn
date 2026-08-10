@@ -1,0 +1,23 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="PackedScene" path="res://gameplay/vehicles/jet_ski_01/jet_ski_with_rider.tscn" id="1"]
+[ext_resource type="Script" path="res://dev/tests/riders/rider_ragdoll_handoff_test.gd" id="2"]
+
+[sub_resource type="Environment" id="1"]
+background_mode = 1
+background_color = Color(0.08, 0.1, 0.15, 1)
+
+[node name="RiderRagdollHandoffTest" type="Node3D"]
+script = ExtResource("2")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("1")
+
+[node name="Light" type="DirectionalLight3D" parent="."]
+rotation_degrees = Vector3(-50, -25, 0)
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.94, 0.342, 0, -0.342, 0.94, 0, 3, 9)
+current = true
+
+[node name="JetSki" parent="." instance=ExtResource("1")]
