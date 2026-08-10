@@ -8,6 +8,7 @@ const WipeoutContext = preload(
 signal wipeout_started(context: WipeoutContext)
 signal rider_fallen(context: WipeoutContext)
 signal recovery_ready(context: WipeoutContext)
+signal wipeout_failed(context: WipeoutContext, reason: StringName)
 
 enum State {
 	MOUNTED,
@@ -34,6 +35,7 @@ func _ready() -> void:
 		push_error("JetSkiWipeoutSystem requires valid vehicle and handoff paths.")
 		return
 	_handoff.handoff_completed.connect(_on_handoff_completed)
+	_handoff.handoff_failed.connect(_on_handoff_failed)
 
 
 func request_wipeout(context: WipeoutContext) -> bool:
@@ -44,11 +46,12 @@ func request_wipeout(context: WipeoutContext) -> bool:
 		or _handoff == null
 	):
 		return false
+	if not _handoff.request_handoff(context.incident_impulse):
+		return false
 	_context = context
 	_state = State.HANDOFF_PENDING
 	_vehicle.clear_wipeout_control_state()
 	wipeout_started.emit(_context)
-	_handoff.request_handoff(_context.incident_impulse)
 	return true
 
 
@@ -80,3 +83,13 @@ func _on_handoff_completed() -> void:
 	_state = State.FALLEN
 	_fallen_elapsed = 0.0
 	rider_fallen.emit(_context)
+
+
+func _on_handoff_failed(reason: StringName) -> void:
+	if _state != State.HANDOFF_PENDING:
+		return
+	var failed_context := _context
+	_state = State.MOUNTED
+	_context = null
+	_fallen_elapsed = 0.0
+	wipeout_failed.emit(failed_context, reason)

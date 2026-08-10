@@ -2,6 +2,7 @@ class_name RiderRagdollHandoff
 extends Node
 
 signal handoff_completed
+signal handoff_failed(reason: StringName)
 
 @export_node_path("RiderRig") var mounted_rider_path: NodePath
 @export_node_path("FallenRider3D") var fallen_rider_path: NodePath
@@ -27,11 +28,12 @@ func _ready() -> void:
 	if _vehicle == null or _mounted_rider == null or _fallen_rider == null or _mounted_skeleton == null:
 		push_error("RiderRagdollHandoff requires valid vehicle, mounted rider, fallen rider, and skeleton paths.")
 
-func request_handoff(incident_impulse: Vector3 = Vector3.ZERO) -> void:
+func request_handoff(incident_impulse: Vector3 = Vector3.ZERO) -> bool:
 	if _handoff_pending or _handoff_active or _vehicle == null or _mounted_skeleton == null or _fallen_rider == null:
-		return
+		return false
 	_incident_impulse = incident_impulse if incident_impulse.is_finite() else Vector3.ZERO
 	_handoff_pending = true
+	return true
 
 func _on_mounted_skeleton_updated() -> void:
 	if not _handoff_pending:
@@ -41,15 +43,24 @@ func _on_mounted_skeleton_updated() -> void:
 
 func _perform_handoff() -> void:
 	var fallen_skeleton := _fallen_rider.get_skeleton()
-	if fallen_skeleton == null or not _mounted_skeleton.global_transform.is_finite():
+	if fallen_skeleton == null:
+		_fail_handoff(&"missing_fallen_skeleton")
 		return
-	_fallen_rider.set_rider_skin(_mounted_rider.rider_skin)
+	if not _mounted_skeleton.global_transform.is_finite():
+		_fail_handoff(&"non_finite_mounted_skeleton_transform")
+		return
+	var previous_fallen_transform := _fallen_rider.global_transform
+	var previous_top_level := _fallen_rider.top_level
 	var fallen_root_to_skeleton := _fallen_rider.global_transform.affine_inverse() * fallen_skeleton.global_transform
 	_fallen_rider.top_level = true
 	_fallen_rider.global_transform = _mounted_skeleton.global_transform * fallen_root_to_skeleton.affine_inverse()
 	if not fallen_skeleton.global_transform.is_equal_approx(_mounted_skeleton.global_transform):
+		_fallen_rider.top_level = previous_top_level
+		_fallen_rider.global_transform = previous_fallen_transform
 		push_error("RiderRagdollHandoff could not align fallen and mounted skeleton transforms.")
+		_fail_handoff(&"failed_skeleton_world_alignment")
 		return
+	_fallen_rider.set_rider_skin(_mounted_rider.rider_skin)
 	for source_index in _mounted_skeleton.get_bone_count():
 		var bone_name := _mounted_skeleton.get_bone_name(source_index)
 		var target_index := fallen_skeleton.find_bone(bone_name)
@@ -77,6 +88,11 @@ func _perform_handoff() -> void:
 	_mounted_rider.visible = false
 	_handoff_active = true
 	handoff_completed.emit()
+
+func _fail_handoff(reason: StringName) -> void:
+	_handoff_pending = false
+	_handoff_active = false
+	handoff_failed.emit(reason)
 
 func _physics_process(_delta: float) -> void:
 	if _vehicle_collision_exception_bodies.is_empty():
