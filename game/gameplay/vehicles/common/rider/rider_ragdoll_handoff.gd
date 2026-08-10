@@ -1,6 +1,8 @@
 class_name RiderRagdollHandoff
 extends Node
 
+signal handoff_completed
+
 @export_node_path("RiderRig") var mounted_rider_path: NodePath
 @export_node_path("FallenRider3D") var fallen_rider_path: NodePath
 @export_node_path("RigidBody3D") var vehicle_path: NodePath
@@ -74,6 +76,7 @@ func _perform_handoff() -> void:
 		hips.apply_central_impulse(_incident_impulse)
 	_mounted_rider.visible = false
 	_handoff_active = true
+	handoff_completed.emit()
 
 func _physics_process(_delta: float) -> void:
 	if _vehicle_collision_exception_bodies.is_empty():

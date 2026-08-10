@@ -1,6 +1,10 @@
 class_name JetSkiController
 extends RigidBody3D
 
+const WipeoutContext = preload(
+	"res://gameplay/vehicles/common/rider/wipeout_context.gd"
+)
+
 signal reset_completed(reason: StringName)
 signal world_rebased(shift: Vector3)
 signal water_entered(intensity: float, position: Vector3)
@@ -651,6 +655,12 @@ var trick_system: JetSkiTrickSystem:
 				"Systems/TrickSystem"
 			) as JetSkiTrickSystem
 		return _trick_system
+var _wipeout_system: Node
+var wipeout_system: Node:
+	get:
+		if _wipeout_system == null:
+			_wipeout_system = get_node_or_null("Systems/WipeoutSystem")
+		return _wipeout_system
 var _water_warning_emitted: bool = false
 var _invalid_water_provider_warning_emitted: bool = false
 
@@ -689,10 +699,15 @@ func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 	input_system.rider_weight_shift_enabled = rider_weight_shift_enabled
 	input_system.rider_shift_input_half_life = rider_shift_input_half_life
 	input_system.rider_shift_release_half_life = rider_shift_release_half_life
+	var controls_locked := (
+		wipeout_system != null
+		and bool(wipeout_system.call("is_vehicle_control_locked"))
+	)
 	input_system.rider_input_allowed = (
 		not freeze
 		and process_mode != Node.PROCESS_MODE_DISABLED
 		and not get_tree().paused
+		and not controls_locked
 	)
 	input_system.sample_input(state.step)
 	if not is_instance_valid(_water_provider):
@@ -702,22 +717,23 @@ func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 	if not water_physics_system.has_valid_buoyancy_points():
 		water_physics_system.reset_runtime_state()
 		return
-	var current_attitude := (
-		rider_dynamics_system.calculate_world_attitude(state.transform)
-	)
-	submarine_system.update_before_forces(
-		state,
-		input_system.state,
-		current_attitude,
-		state.step
-	)
+	if not controls_locked:
+		var current_attitude := (
+			rider_dynamics_system.calculate_world_attitude(state.transform)
+		)
+		submarine_system.update_before_forces(
+			state,
+			input_system.state,
+			current_attitude,
+			state.step
+		)
 	var water_state := water_physics_system.step(
 		state,
 		_water_provider,
-		submarine_system.state.buoyancy_factor_current
+		1.0 if controls_locked else submarine_system.state.buoyancy_factor_current
 	)
 	navigation_system.prepare_support_state(state, water_state)
-	if water_state.raw_contact_mask == 0:
+	if not controls_locked and water_state.raw_contact_mask == 0:
 		var pre_contact_attitude := (
 			rider_dynamics_system.calculate_world_attitude(state.transform)
 		)
@@ -735,6 +751,8 @@ func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 		== NavigationState.AIRBORNE
 	):
 		_airborne_state_confirmed_for_landing = true
+	if controls_locked:
+		return
 	submarine_system.update_after_contacts(
 		input_system.state,
 		water_state,
@@ -804,6 +822,21 @@ func get_ocean() -> Ocean3D:
 
 func get_water_provider() -> WaterSurfaceProvider3D:
 	return _water_provider
+
+
+func request_wipeout(context: WipeoutContext) -> bool:
+	if wipeout_system == null:
+		return false
+	return bool(wipeout_system.call("request_wipeout", context))
+
+
+func clear_wipeout_control_state() -> void:
+	drive_system.reset_runtime_state()
+	rider_dynamics_system.reset_runtime_state()
+	input_system.reset()
+	submarine_system.reset_runtime_state(true)
+	trick_system.reset_runtime_state()
+	arcade_handling_system.reset_turn_continuity_state()
 
 
 func get_turn_continuity_debug_status() -> Dictionary:

@@ -1,0 +1,29 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" uid="uid://tl6lotex1356" path="res://gameplay/vehicles/jet_ski_01/jet_ski_with_rider.tscn" id="1_vehicle"]
+[ext_resource type="PackedScene" uid="uid://1d3iohmalk05" path="res://world/water/ocean/ocean_3d.tscn" id="2_ocean"]
+[ext_resource type="Script" path="res://dev/tests/riders/jet_ski_wipeout_test.gd" id="3_test"]
+
+[sub_resource type="Environment" id="Environment_test"]
+background_mode = 1
+background_color = Color(0.08, 0.1, 0.15, 1)
+
+[node name="JetSkiWipeoutTest" type="Node3D"]
+script = ExtResource("3_test")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_test")
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+rotation_degrees = Vector3(-50, -25, 0)
+
+[node name="Ocean" parent="." instance=ExtResource("2_ocean")]
+
+[node name="JetSki" parent="." instance=ExtResource("1_vehicle")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+ocean_path = NodePath("../Ocean")
+linear_velocity = Vector3(8, 0, 0)
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.94, 0.342, 0, -0.342, 0.94, 0, 5, 12)
+current = true

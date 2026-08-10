@@ -14,6 +14,7 @@
 [ext_resource type="Script" uid="uid://44vr286e106h" path="res://gameplay/vehicles/common/rider/rider_mounted_lean_controller.gd" id="8_mounted_lean"]
 [ext_resource type="Script" path="res://gameplay/vehicles/common/rider/rider_ragdoll_handoff.gd" id="9_ragdoll_handoff"]
 [ext_resource type="PackedScene" path="res://gameplay/riders/common/fallen_rider_3d.tscn" id="10_fallen_rider"]
+[ext_resource type="Script" path="res://gameplay/vehicles/common/rider/jet_ski_wipeout_system.gd" id="11_wipeout_system"]
 
 [node name="JetSki" unique_id=117969959 instance=ExtResource("1_base")]
 
@@ -24,6 +25,11 @@ script = ExtResource("9_ragdoll_handoff")
 mounted_rider_path = NodePath("../../VisualRoot/RiderMount/RiderAssetRoot/RiderRig")
 fallen_rider_path = NodePath("../../FallenRider")
 vehicle_path = NodePath("../..")
+
+[node name="WipeoutSystem" type="Node" parent="Systems"]
+script = ExtResource("11_wipeout_system")
+vehicle_path = NodePath("../..")
+handoff_path = NodePath("../RiderRagdollHandoff")
 
 [node name="JetSkiVisual" parent="VisualRoot" parent_id_path=PackedInt32Array(1832404346) index="0" unique_id=556077452]
 handle_low_angle_degrees = -3.0
