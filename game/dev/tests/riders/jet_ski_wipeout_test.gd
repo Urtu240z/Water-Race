@@ -2,8 +2,14 @@ extends Node3D
 
 const RELOAD_START_META := &"water_race_wipeout_test_reload_start_usec"
 const RELOAD_COUNT_META := &"water_race_wipeout_test_reload_count"
-const TEST_FORWARD_IMPULSE := 4.0
-const TEST_UP_IMPULSE := 3.0
+
+@export_group("Ragdoll Launch Test")
+
+@export_range(0.0, 500.0, 1.0)
+var test_forward_impulse := 4.0
+
+@export_range(0.0, 500.0, 1.0)
+var test_up_impulse := 3.0
 
 @onready var vehicle: JetSkiController = $JetSki
 
@@ -33,7 +39,7 @@ func _unhandled_input(event: InputEvent) -> void:
 	elif event is InputEventKey and event.pressed and not event.echo:
 		if event.keycode == KEY_I:
 			var forward := -vehicle.global_transform.basis.z.normalized()
-			var impulse := forward * TEST_FORWARD_IMPULSE + Vector3.UP * TEST_UP_IMPULSE
+			var impulse := forward * test_forward_impulse + Vector3.UP * test_up_impulse
 			print("Wipeout request accepted: %s" % vehicle.request_wipeout(
 				WipeoutContext.new(&"test_impulse", impulse)
 			))
