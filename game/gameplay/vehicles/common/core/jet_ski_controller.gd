@@ -157,12 +157,13 @@ const LEFT_CONTACT_MASK: int = (
 @export_range(0.05, 0.60, 0.01) var trick_reversal_takeoff_window: float = 0.35
 @export_range(0.0, 0.25, 0.01) var trick_takeoff_coyote_time: float = 0.18
 @export_range(0.1, 5.0, 0.05) var trick_preload_decay_rate: float = 1.5
+@export_range(1.0, 30.0, 0.25) var trick_minimum_launch_speed: float = 5.0
+@export_range(2.0, 35.0, 0.25) var trick_full_launch_speed: float = 15.0
+
 @export_group("Rider Ejection")
 @export var manual_ejection_enabled := true
 @export_range(0.0, 500.0, 1.0) var manual_ejection_forward_impulse := 4.0
 @export_range(0.0, 500.0, 1.0) var manual_ejection_up_impulse := 3.0
-@export_range(1.0, 30.0, 0.25) var trick_minimum_launch_speed: float = 5.0
-@export_range(2.0, 35.0, 0.25) var trick_full_launch_speed: float = 15.0
 
 @export_group("Rider Tricks - Release")
 @export_range(1000.0, 20000.0, 100.0) var trick_roll_release_torque: float = 7000.0

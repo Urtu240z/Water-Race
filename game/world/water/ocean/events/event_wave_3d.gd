@@ -18,6 +18,7 @@ var active := false
 var activation_logical_origin := Vector2.ZERO
 var activation_direction := Vector2.ZERO
 var activation_simulation_time := 0.0
+var activation_effective_speed := 0.0
 var _ocean: Ocean3D
 
 func _ready() -> void:
@@ -42,6 +43,7 @@ func activate() -> bool:
 	activation_logical_origin = _ocean.world_to_logical_xz(global_position)
 	activation_direction = direction.normalized()
 	activation_simulation_time = _ocean.get_simulation_time()
+	activation_effective_speed = profile.speed * speed_multiplier
 	if not _ocean.activate_event_wave(self, _event_parameters()):
 		activation_rejected.emit()
 		return false
@@ -55,9 +57,22 @@ func deactivate(was_completed := false) -> void:
 	if is_instance_valid(_ocean):
 		_ocean.deactivate_event_wave(self)
 	active = false
+	activation_effective_speed = 0.0
 	deactivated.emit()
 	if was_completed:
 		completed.emit()
+
+func get_crest_logical_position() -> Vector2:
+	if not active or not is_instance_valid(_ocean):
+		return Vector2.ZERO
+	var age := maxf(_ocean.get_simulation_time() - activation_simulation_time, 0.0)
+	return activation_logical_origin + activation_direction * activation_effective_speed * age
+
+func get_signed_distance_to_crest(logical_position: Vector2) -> float:
+	if not active or not is_instance_valid(_ocean):
+		return INF
+	var crest := get_crest_logical_position()
+	return (logical_position - crest).dot(activation_direction)
 
 func notify_event_wave_completed() -> void:
 	deactivate(true)
@@ -66,7 +81,7 @@ func get_debug_status() -> Dictionary:
 	return {"active": active, "origin": activation_logical_origin, "direction": activation_direction, "start_time": activation_simulation_time}
 
 func _event_parameters() -> Dictionary:
-	return {"origin": activation_logical_origin, "direction": activation_direction, "start": activation_simulation_time, "amplitude": profile.amplitude * amplitude_multiplier, "width": profile.width, "speed": profile.speed * speed_multiplier, "trough_amplitude": profile.trough_amplitude * amplitude_multiplier, "trough_width": profile.trough_width, "trough_offset": profile.trough_offset, "flow": profile.horizontal_flow * flow_multiplier, "fade_in": profile.fade_in_time, "lifetime": profile.lifetime, "fade_out": profile.fade_out_time}
+	return {"origin": activation_logical_origin, "direction": activation_direction, "start": activation_simulation_time, "amplitude": profile.amplitude * amplitude_multiplier, "width": profile.width, "speed": activation_effective_speed, "trough_amplitude": profile.trough_amplitude * amplitude_multiplier, "trough_width": profile.trough_width, "trough_offset": profile.trough_offset, "flow": profile.horizontal_flow * flow_multiplier, "fade_in": profile.fade_in_time, "lifetime": profile.lifetime, "fade_out": profile.fade_out_time}
 
 func _resolve_ocean() -> void:
 	if not ocean_path.is_empty():
