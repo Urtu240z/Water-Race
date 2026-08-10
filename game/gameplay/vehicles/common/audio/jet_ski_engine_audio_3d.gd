@@ -63,8 +63,17 @@ func _physics_process(delta: float) -> void:
 		play()
 
 	var safe_delta := maxf(delta, 0.0)
-	var throttle := clampf(_vehicle.throttle_input, 0.0, 1.0)
-	var reverse := clampf(_vehicle.brake_input, 0.0, 1.0)
+	var player_engine_control_enabled := not _vehicle.is_wipeout_control_locked()
+	var throttle := (
+		clampf(_vehicle.throttle_input, 0.0, 1.0)
+		if player_engine_control_enabled
+		else 0.0
+	)
+	var reverse := (
+		clampf(_vehicle.brake_input, 0.0, 1.0)
+		if player_engine_control_enabled
+		else 0.0
+	)
 
 	var horizontal_speed := Vector2(
 		_vehicle.linear_velocity.x,

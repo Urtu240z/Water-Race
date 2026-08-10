@@ -1,8 +1,9 @@
-[gd_scene format=4 uid="uid://bj1qwvwtpoowb"]
+[gd_scene load_steps=7 format=3]
 
 [ext_resource type="PackedScene" uid="uid://tl6lotex1356" path="res://gameplay/vehicles/jet_ski_01/jet_ski_with_rider.tscn" id="1_vehicle"]
 [ext_resource type="PackedScene" uid="uid://1d3iohmalk05" path="res://world/water/ocean/ocean_3d.tscn" id="2_ocean"]
 [ext_resource type="Script" path="res://dev/tests/riders/jet_ski_wipeout_test.gd" id="3_test"]
+[ext_resource type="PackedScene" uid="uid://dewy0j55fasc8" path="res://systems/camera/chase_camera.tscn" id="4_camera"]
 
 [sub_resource type="Environment" id="Environment_test"]
 background_mode = 1
@@ -14,33 +15,35 @@ size = Vector3(200, 0.2, 200)
 [sub_resource type="BoxShape3D" id="FloorShape"]
 size = Vector3(200, 0.2, 200)
 
-[node name="JetSkiWipeoutTest" type="Node3D" unique_id=589166789]
+[node name="JetSkiWipeoutTest" type="Node3D"]
 script = ExtResource("3_test")
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1732404588]
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_test")
 
-[node name="Sun" type="DirectionalLight3D" parent="." unique_id=1240620438]
-transform = Transform3D(0.90630776, 0.3237444, -0.2716538, 0, 0.64278764, 0.76604444, 0.42261827, -0.69427204, 0.5825634, 0, 0, 0)
+[node name="Sun" type="DirectionalLight3D" parent="."]
+rotation_degrees = Vector3(-50, -25, 0)
 
-[node name="Ocean" parent="." unique_id=903260770 instance=ExtResource("2_ocean")]
+[node name="Ocean" parent="." instance=ExtResource("2_ocean")]
 
-[node name="JetSki" parent="." unique_id=1466065365 instance=ExtResource("1_vehicle")]
+[node name="JetSki" parent="." instance=ExtResource("1_vehicle")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
 linear_velocity = Vector3(8, 0, 0)
 ocean_path = NodePath("../Ocean")
 
-[node name="FloorMesh" type="MeshInstance3D" parent="." unique_id=1747928494]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, 0)
+[node name="ChaseCamera" parent="." instance=ExtResource("4_camera")]
+vehicle_body_path = NodePath("../JetSki")
+camera_target_path = NodePath("../JetSki/CameraTarget")
+first_person_socket_path = NodePath("../JetSki/VisualRoot/RiderMount/FirstPersonSocket")
+base_distance = 4.5
+base_height = 1.5
+
+[node name="FloorMesh" type="MeshInstance3D" parent="."]
+position = Vector3(0, -2, 0)
 mesh = SubResource("FloorMesh")
 
-[node name="Floor" type="StaticBody3D" parent="." unique_id=788796308]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, 0)
+[node name="Floor" type="StaticBody3D" parent="."]
+position = Vector3(0, -2, 0)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor" unique_id=422553835]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor"]
 shape = SubResource("FloorShape")
-
-[node name="Camera3D" type="Camera3D" parent="." unique_id=1814350944]
-transform = Transform3D(1, 0, 0, 0, 0.9816272, 0.19080901, 0, -0.19080901, 0.9816272, 0, 4.38, 6.94)
-current = true
-fov = 37.0
