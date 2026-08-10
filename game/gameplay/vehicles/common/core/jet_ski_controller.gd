@@ -790,15 +790,19 @@ func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 
 
 func _physics_process(_delta: float) -> void:
-	if Input.is_action_just_pressed("recover_vehicle"):
-		recover_vehicle()
-		return
-	if Input.is_action_just_pressed("reset_vehicle"):
-		reset_vehicle(&"manual_input")
-		return
+	var wipeout_active := is_wipeout_active()
+	if not wipeout_active:
+		if Input.is_action_just_pressed("recover_vehicle"):
+			recover_vehicle()
+			return
+		if Input.is_action_just_pressed("reset_vehicle"):
+			reset_vehicle(&"manual_input")
+			return
 	var safety_reason := _get_safety_reset_reason()
 	if not safety_reason.is_empty():
 		reset_vehicle(safety_reason)
+		return
+	if wipeout_active:
 		return
 	_update_water_recovery_history()
 
