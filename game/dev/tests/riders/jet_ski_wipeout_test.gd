@@ -9,7 +9,11 @@ const TEST_UP_IMPULSE := 3.0
 
 
 func _ready() -> void:
-	print("SPACE: wipeout, zero impulse | I: wipeout, forward/up impulse | R: reload test")
+	print("SPACE: wipeout, zero impulse | I: wipeout, forward/up impulse | R: reload test fallback")
+	print("Each wipeout recovers automatically; repeat SPACE or I without reloading.")
+	var wipeout_system := vehicle.wipeout_system as JetSkiWipeoutSystem
+	if wipeout_system != null:
+		wipeout_system.recovery_completed.connect(_on_recovery_completed)
 	if Engine.has_meta(RELOAD_START_META):
 		var start_usec := int(Engine.get_meta(RELOAD_START_META))
 		var elapsed_msec := (Time.get_ticks_usec() - start_usec) / 1000.0
@@ -34,3 +38,7 @@ func _unhandled_input(event: InputEvent) -> void:
 			Engine.set_meta(RELOAD_START_META, Time.get_ticks_usec())
 			Engine.set_meta(RELOAD_COUNT_META, int(Engine.get_meta(RELOAD_COUNT_META, 0)) + 1)
 			get_tree().reload_current_scene()
+
+
+func _on_recovery_completed(context: WipeoutContext, reason: StringName) -> void:
+	print("Wipeout recovery completed: %s (%s)" % [context.reason, reason])

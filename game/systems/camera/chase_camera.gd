@@ -188,6 +188,7 @@ var _mode_transition_start_near: float = 0.05
 var _mode_transition_anchor_position: Vector3 = Vector3.ZERO
 var _first_person_hidden_visuals: Array[Node3D] = []
 var _first_person_original_visibility: Dictionary = {}
+var _wipeout_camera_active := false
 
 
 func _ready() -> void:
@@ -217,7 +218,9 @@ func _process(delta: float) -> void:
 		return
 	if get_tree() != null and get_tree().paused:
 		return
-	_update_camera_mode_input()
+	_update_wipeout_camera_policy()
+	if not _wipeout_camera_active:
+		_update_camera_mode_input()
 	if current_camera_mode == CameraMode.FIRST_PERSON and not _has_first_person_socket():
 		_fallback_to_arcade_for_missing_socket()
 	if _snap_requested:
@@ -386,6 +389,19 @@ func _update_camera_mode_input() -> void:
 		else CameraMode.ARCADE
 	)
 	_enter_camera_mode(next_mode)
+
+
+func _update_wipeout_camera_policy() -> void:
+	var wipeout_active := _vehicle_body.is_wipeout_active()
+	if wipeout_active == _wipeout_camera_active:
+		return
+	_wipeout_camera_active = wipeout_active
+	if not wipeout_active:
+		return
+	_cancel_arcade_stunt()
+	_cancel_mode_transition()
+	current_camera_mode = CameraMode.ARCADE
+	_set_first_person_visibility(false)
 
 
 func _enter_camera_mode(next_mode: CameraMode) -> void:

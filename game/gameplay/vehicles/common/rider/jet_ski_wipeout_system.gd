@@ -4,6 +4,8 @@ extends Node
 signal wipeout_started(context: WipeoutContext)
 signal rider_fallen(context: WipeoutContext)
 signal recovery_ready(context: WipeoutContext)
+signal recovery_started(context: WipeoutContext)
+signal recovery_completed(context: WipeoutContext, reason: StringName)
 signal wipeout_failed(context: WipeoutContext, reason: StringName)
 
 enum State {
@@ -11,11 +13,13 @@ enum State {
 	HANDOFF_PENDING,
 	FALLEN,
 	RECOVERY_READY,
+	RECOVERING,
 }
 
 @export_node_path("JetSkiController") var vehicle_path: NodePath
 @export_node_path("RiderRagdollHandoff") var handoff_path: NodePath
 @export_range(0.0, 30.0, 0.1, "suffix:s") var minimum_fallen_duration := 2.0
+@export var auto_recover_when_ready := true
 
 var _vehicle: JetSkiController
 var _handoff: RiderRagdollHandoff
@@ -32,6 +36,8 @@ func _ready() -> void:
 		return
 	_handoff.handoff_completed.connect(_on_handoff_completed)
 	_handoff.handoff_failed.connect(_on_handoff_failed)
+	if not _vehicle.reset_completed.is_connected(_on_vehicle_reset_completed):
+		_vehicle.reset_completed.connect(_on_vehicle_reset_completed)
 
 
 func request_wipeout(context: WipeoutContext) -> bool:
@@ -59,6 +65,18 @@ func is_vehicle_control_locked() -> bool:
 	return is_wipeout_active()
 
 
+func request_recovery() -> bool:
+	if _state != State.RECOVERY_READY or _vehicle == null:
+		return false
+	_state = State.RECOVERING
+	recovery_started.emit(_context)
+	if _vehicle.water_recovery_enabled:
+		_vehicle.recover_vehicle()
+	else:
+		_vehicle.reset_vehicle(&"wipeout_recovery")
+	return true
+
+
 func get_state() -> State:
 	return _state
 
@@ -71,6 +89,8 @@ func _physics_process(delta: float) -> void:
 		return
 	_state = State.RECOVERY_READY
 	recovery_ready.emit(_context)
+	if auto_recover_when_ready:
+		request_recovery()
 
 
 func _on_handoff_completed() -> void:
@@ -85,7 +105,19 @@ func _on_handoff_failed(reason: StringName) -> void:
 	if _state != State.HANDOFF_PENDING:
 		return
 	var failed_context := _context
+	_handoff.restore_mounted_state()
 	_state = State.MOUNTED
 	_context = null
 	_fallen_elapsed = 0.0
 	wipeout_failed.emit(failed_context, reason)
+
+
+func _on_vehicle_reset_completed(reason: StringName) -> void:
+	if _state == State.MOUNTED:
+		return
+	var completed_context := _context
+	_handoff.restore_mounted_state()
+	_context = null
+	_fallen_elapsed = 0.0
+	_state = State.MOUNTED
+	recovery_completed.emit(completed_context, reason)

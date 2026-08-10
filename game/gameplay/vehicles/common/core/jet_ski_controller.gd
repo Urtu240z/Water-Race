@@ -826,6 +826,20 @@ func request_wipeout(context: WipeoutContext) -> bool:
 	return bool(wipeout_system.call("request_wipeout", context))
 
 
+func is_wipeout_active() -> bool:
+	return (
+		wipeout_system != null
+		and bool(wipeout_system.call("is_wipeout_active"))
+	)
+
+
+func is_wipeout_control_locked() -> bool:
+	return (
+		wipeout_system != null
+		and bool(wipeout_system.call("is_vehicle_control_locked"))
+	)
+
+
 func clear_wipeout_control_state() -> void:
 	drive_system.reset_runtime_state()
 	rider_dynamics_system.reset_runtime_state()

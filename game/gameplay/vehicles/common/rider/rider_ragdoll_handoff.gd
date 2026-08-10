@@ -16,11 +16,16 @@ var _handoff_pending := false
 var _handoff_active := false
 var _incident_impulse := Vector3.ZERO
 var _vehicle_collision_exception_bodies: Array[PhysicalBone3D] = []
+var _fallen_rider_initial_top_level := false
+var _fallen_rider_initial_transform := Transform3D.IDENTITY
 
 func _ready() -> void:
 	_vehicle = get_node_or_null(vehicle_path) as RigidBody3D
 	_mounted_rider = get_node_or_null(mounted_rider_path) as RiderRig
 	_fallen_rider = get_node_or_null(fallen_rider_path) as FallenRider3D
+	if _fallen_rider != null:
+		_fallen_rider_initial_top_level = _fallen_rider.top_level
+		_fallen_rider_initial_transform = _fallen_rider.transform
 	if _mounted_rider != null:
 		_mounted_skeleton = _mounted_rider.get_skeleton()
 	if _mounted_skeleton != null:
@@ -94,6 +99,20 @@ func _fail_handoff(reason: StringName) -> void:
 	_handoff_active = false
 	handoff_failed.emit(reason)
 
+
+func restore_mounted_state() -> void:
+	_handoff_pending = false
+	_handoff_active = false
+	_incident_impulse = Vector3.ZERO
+	_clear_vehicle_collision_exceptions()
+	if _fallen_rider != null:
+		_fallen_rider.stop_simulation()
+		_fallen_rider.top_level = _fallen_rider_initial_top_level
+		_fallen_rider.transform = _fallen_rider_initial_transform
+		_reset_fallen_rider_physics_interpolation()
+	if _mounted_rider != null:
+		_mounted_rider.visible = true
+
 func _physics_process(_delta: float) -> void:
 	if _vehicle_collision_exception_bodies.is_empty():
 		return
@@ -103,6 +122,13 @@ func _physics_process(_delta: float) -> void:
 			if is_instance_valid(body):
 				body.remove_collision_exception_with(_vehicle)
 			_vehicle_collision_exception_bodies.remove_at(index)
+
+
+func _clear_vehicle_collision_exceptions() -> void:
+	for body: PhysicalBone3D in _vehicle_collision_exception_bodies:
+		if is_instance_valid(body) and is_instance_valid(_vehicle):
+			body.remove_collision_exception_with(_vehicle)
+	_vehicle_collision_exception_bodies.clear()
 
 func _reset_fallen_rider_physics_interpolation() -> void:
 	_fallen_rider.reset_physics_interpolation()
