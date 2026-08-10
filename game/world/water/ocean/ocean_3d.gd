@@ -1,6 +1,6 @@
 @tool
 class_name Ocean3D
-extends Node3D
+extends "res://world/water/query/water_surface_provider_3d.gd"
 
 ## Single authority for the visible and physical ocean.
 ##
@@ -782,6 +782,22 @@ func sample_water_velocity(world_position: Vector3) -> Vector3:
 	var previous_height := _sample_surface_offset(logical_xz, _simulation_time - TIME_STEP)
 	var next_height := _sample_surface_offset(logical_xz, _simulation_time + TIME_STEP)
 	return Vector3(0.0, (next_height - previous_height) / (2.0 * TIME_STEP), 0.0)
+
+
+func sample_water(world_position: Vector3) -> WaterSample3D:
+	var surface_height := sample_height(world_position)
+	var sample := WaterSample3D.new()
+	sample.valid = is_finite(surface_height)
+	sample.surface_position = Vector3(
+		world_position.x,
+		surface_height,
+		world_position.z
+	)
+	sample.normal = sample_normal(world_position)
+	sample.velocity = sample_water_velocity(world_position)
+	sample.signed_depth = surface_height - world_position.y
+	sample.provider = self
+	return sample
 
 
 func sample_vertical_velocity(world_position: Vector3) -> float:

@@ -1,6 +1,8 @@
 class_name JetSkiController
 extends RigidBody3D
 
+const WaterSurfaceProvider3D = preload("res://world/water/query/water_surface_provider_3d.gd")
+
 signal reset_completed(reason: StringName)
 signal world_rebased(shift: Vector3)
 signal water_entered(intensity: float, position: Vector3)
@@ -31,6 +33,7 @@ const LEFT_CONTACT_MASK: int = (
 
 @export_group("Water")
 @export_node_path("Ocean3D") var ocean_path: NodePath
+@export_node_path("Node3D") var water_provider_path: NodePath
 
 @export_group("Buoyancy")
 @export_range(0.0, 50000.0, 10.0, "or_greater", "suffix:N/m") var buoyancy_strength_per_point: float = 5500.0
@@ -604,6 +607,7 @@ var _water_recovery_history: Array[Dictionary] = []
 var _landing_impact_event_id: int = 0
 var _airborne_state_confirmed_for_landing: bool = false
 var _ocean: Ocean3D
+var _water_provider: WaterSurfaceProvider3D
 @onready var input_system: JetSkiInputSystem = $Systems/InputSystem
 @onready var water_physics_system: JetSkiWaterPhysicsSystem = (
 	$Systems/WaterPhysicsSystem
@@ -692,7 +696,7 @@ func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 		and not get_tree().paused
 	)
 	input_system.sample_input(state.step)
-	if not is_instance_valid(_ocean):
+	if not is_instance_valid(_water_provider):
 		water_physics_system.reset_runtime_state()
 		_warn_about_missing_water_once()
 		return
@@ -710,7 +714,7 @@ func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 	)
 	var water_state := water_physics_system.step(
 		state,
-		_ocean,
+		_water_provider,
 		submarine_system.state.buoyancy_factor_current
 	)
 	navigation_system.prepare_support_state(state, water_state)
@@ -753,19 +757,19 @@ func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 			state,
 			input_system.state,
 			water_state,
-			_ocean,
+			_water_provider,
 			state.step
 		)
 		drive_system.step(
 			state,
-			_ocean,
+			_water_provider,
 			arcade_handling_system.get_drive_input(input_system.state),
 			submarine_system.state.propulsion_factor_current
 		)
 	else:
 		drive_system.step(
 			state,
-			_ocean,
+			_water_provider,
 			input_system.state,
 			submarine_system.state.propulsion_factor_current
 		)
@@ -797,6 +801,10 @@ func get_respawn_transform() -> Transform3D:
 
 func get_ocean() -> Ocean3D:
 	return _ocean
+
+
+func get_water_provider() -> WaterSurfaceProvider3D:
+	return _water_provider
 
 
 func get_turn_continuity_debug_status() -> Dictionary:
@@ -864,11 +872,11 @@ func recover_vehicle() -> void:
 		reset_vehicle(&"water_recovery_fallback")
 		return
 	var recovery_transform: Transform3D = checkpoint.get("transform")
-	if is_instance_valid(_ocean):
-		var water_height := _ocean.sample_height(recovery_transform.origin)
-		if is_finite(water_height):
+	if is_instance_valid(_water_provider):
+		var water_sample := _water_provider.sample_water(recovery_transform.origin)
+		if water_sample.valid and water_sample.surface_position.is_finite():
 			recovery_transform.origin.y = (
-				water_height + float(checkpoint.get("surface_offset", 0.0))
+				water_sample.surface_position.y + float(checkpoint.get("surface_offset", 0.0))
 			)
 	_teleport_and_reset(recovery_transform, &"water_recovery")
 	_water_recovery_history.clear()
@@ -925,7 +933,7 @@ func _update_water_recovery_history() -> void:
 
 func _is_safe_water_recovery_state() -> bool:
 	if (
-		not is_instance_valid(_ocean)
+		not is_instance_valid(_water_provider)
 		or not _has_finite_state()
 		or water_physics_system.state.raw_contact_mask != 15
 		or navigation_system.state.physical_contact_count > 0
@@ -952,10 +960,10 @@ func _build_upright_recovery_transform(source: Transform3D) -> Transform3D:
 
 func _store_water_recovery_checkpoint(safe_transform: Transform3D) -> void:
 	var surface_offset := 0.0
-	if is_instance_valid(_ocean):
-		var water_height := _ocean.sample_height(safe_transform.origin)
-		if is_finite(water_height):
-			surface_offset = safe_transform.origin.y - water_height
+	if is_instance_valid(_water_provider):
+		var water_sample := _water_provider.sample_water(safe_transform.origin)
+		if water_sample.valid and water_sample.surface_position.is_finite():
+			surface_offset = safe_transform.origin.y - water_sample.surface_position.y
 	_water_recovery_history.append(
 		{
 			"transform": safe_transform,
@@ -995,10 +1003,10 @@ func _is_recovery_checkpoint_clear(checkpoint_position: Vector3) -> bool:
 	if world == null:
 		return true
 	var water_height := checkpoint_position.y
-	if is_instance_valid(_ocean):
-		var sampled_height := _ocean.sample_height(checkpoint_position)
-		if is_finite(sampled_height):
-			water_height = sampled_height
+	if is_instance_valid(_water_provider):
+		var water_sample := _water_provider.sample_water(checkpoint_position)
+		if water_sample.valid and water_sample.surface_position.is_finite():
+			water_height = water_sample.surface_position.y
 	var clearance_shape := CylinderShape3D.new()
 	clearance_shape.radius = recovery_shore_clearance
 	clearance_shape.height = 1.5
@@ -1044,11 +1052,15 @@ func _has_finite_state() -> bool:
 
 
 func _resolve_water_reference() -> void:
-	if ocean_path.is_empty():
-		_warn_about_missing_water_once()
-		return
-	_ocean = get_node_or_null(ocean_path) as Ocean3D
-	if _ocean == null:
+	if not ocean_path.is_empty():
+		_ocean = get_node_or_null(ocean_path) as Ocean3D
+	if not water_provider_path.is_empty():
+		_water_provider = get_node_or_null(
+			water_provider_path
+		) as WaterSurfaceProvider3D
+	else:
+		_water_provider = _ocean as WaterSurfaceProvider3D
+	if _water_provider == null:
 		_warn_about_missing_water_once()
 
 
@@ -1794,4 +1806,4 @@ func _warn_about_missing_water_once() -> void:
 	if _water_warning_emitted:
 		return
 	_water_warning_emitted = true
-	push_warning("JetSki buoyancy is disabled because its Ocean3D reference is invalid.")
+	push_warning("JetSki buoyancy is disabled because its water provider reference is invalid.")

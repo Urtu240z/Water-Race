@@ -1,6 +1,8 @@
 class_name JetSkiArcadeHandling
 extends Node
 
+const WaterSurfaceProvider3D = preload("res://world/water/query/water_surface_provider_3d.gd")
+
 ## Adds selective arcade grip to the JetSki without replacing its water physics.
 ## The legacy path remains unchanged while the controller's
 ## use_arcade_turn_continuity toggle is disabled.
@@ -78,12 +80,15 @@ func _physics_process(delta: float) -> void:
 	if _vehicle.navigation_state == JetSkiController.NavigationState.DEEP_SUBMERGED:
 		return
 
-	var ocean := _vehicle.get_ocean()
-	if not is_instance_valid(ocean):
+	var water_provider := _vehicle.get_water_provider()
+	if not is_instance_valid(water_provider):
 		return
 
-	var water_normal := ocean.sample_normal(_vehicle.global_position)
-	var water_velocity := ocean.sample_water_velocity(_vehicle.global_position)
+	var water_sample := water_provider.sample_water(_vehicle.global_position)
+	if not water_sample.valid:
+		return
+	var water_normal := water_sample.normal
+	var water_velocity := water_sample.velocity
 
 	if not water_normal.is_finite() or water_normal.length_squared() <= 0.000001:
 		water_normal = Vector3.UP
@@ -146,7 +151,7 @@ func step_turn_continuity(
 	body_state: PhysicsDirectBodyState3D,
 	input_state: JetSkiInputState,
 	water_state: JetSkiWaterState,
-	ocean: Ocean3D,
+	water_provider: WaterSurfaceProvider3D,
 	delta: float
 ) -> void:
 	steering_input = clampf(input_state.steering, -1.0, 1.0)
@@ -157,7 +162,7 @@ func step_turn_continuity(
 	if not _sample_handling_frame(
 		body_state.transform,
 		body_state.linear_velocity,
-		ocean
+		water_provider
 	):
 		_clear_dynamic_telemetry()
 		return
@@ -391,12 +396,15 @@ func _apply_yaw_rate_controller(
 func _sample_handling_frame(
 	body_transform: Transform3D,
 	body_linear_velocity: Vector3,
-	ocean: Ocean3D
+	water_provider: WaterSurfaceProvider3D
 ) -> bool:
-	if not is_instance_valid(ocean):
+	if not is_instance_valid(water_provider):
 		return false
-	var water_normal := ocean.sample_normal(body_transform.origin)
-	var water_velocity := ocean.sample_water_velocity(body_transform.origin)
+	var water_sample := water_provider.sample_water(body_transform.origin)
+	if not water_sample.valid:
+		return false
+	var water_normal := water_sample.normal
+	var water_velocity := water_sample.velocity
 	if not water_normal.is_finite() or water_normal.length_squared() <= DIRECTION_EPSILON_SQUARED:
 		water_normal = Vector3.UP
 	else:

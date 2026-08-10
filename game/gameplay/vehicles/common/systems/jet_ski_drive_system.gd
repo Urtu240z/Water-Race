@@ -1,6 +1,8 @@
 class_name JetSkiDriveSystem
 extends Node
 
+const WaterSurfaceProvider3D = preload("res://world/water/query/water_surface_provider_3d.gd")
+
 const DIRECTION_EPSILON_SQUARED: float = 0.000001
 const MINIMUM_COASTING_STEERING_INPUT: float = 0.001
 const MINIMUM_COASTING_FORWARD_SPEED: float = 0.01
@@ -48,15 +50,15 @@ func begin_physics_tick() -> void:
 
 func step(
 	body_state: PhysicsDirectBodyState3D,
-	ocean: Ocean3D,
+	water_provider: WaterSurfaceProvider3D,
 	input_state: JetSkiInputState,
 	submarine_propulsion_factor: float
 ) -> JetSkiDriveState:
 	if not _has_propulsion_point:
 		_warn_about_missing_propulsion_point_once()
 		return state
-	if ocean == null or not is_instance_valid(ocean):
-		_warn_about_invalid_ocean_once()
+	if water_provider == null or not is_instance_valid(water_provider):
+		_warn_about_invalid_water_provider_once()
 		return state
 	var body_forward := -body_state.transform.basis.z.normalized()
 	var propulsion_world_position := (
@@ -66,11 +68,12 @@ func step(
 	var propulsion_world_offset := (
 		propulsion_world_position - body_state.transform.origin
 	)
-	var water_height := ocean.sample_height(propulsion_world_position)
-	var water_normal := ocean.sample_normal(propulsion_world_position)
-	var water_velocity := ocean.sample_water_velocity(
-		propulsion_world_position
-	)
+	var water_sample := water_provider.sample_water(propulsion_world_position)
+	if not water_sample.valid:
+		_warn_about_invalid_sample_once()
+		return state
+	var water_normal := water_sample.normal
+	var water_velocity := water_sample.velocity
 	if (
 		not water_normal.is_finite()
 		or not water_velocity.is_finite()
@@ -83,9 +86,7 @@ func step(
 	water_normal = water_normal.normalized()
 	if water_normal.y < 0.0:
 		water_normal = -water_normal
-	state.propulsion_depth = (
-		water_height - propulsion_world_position.y
-	)
+	state.propulsion_depth = water_sample.signed_depth
 	state.propulsion_contact_factor = clampf(
 		state.propulsion_depth / propulsion_full_contact_depth,
 		0.0,
@@ -253,13 +254,13 @@ func _warn_about_missing_propulsion_point_once() -> void:
 	)
 
 
-func _warn_about_invalid_ocean_once() -> void:
+func _warn_about_invalid_water_provider_once() -> void:
 	if _invalid_ocean_warning_emitted:
 		return
 	_invalid_ocean_warning_emitted = true
 	_warning_emission_count += 1
 	push_warning(
-		"JetSki propulsion is disabled because its Ocean3D reference is invalid."
+		"JetSki propulsion is disabled because its water provider reference is invalid."
 	)
 
 

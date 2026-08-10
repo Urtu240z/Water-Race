@@ -1,6 +1,8 @@
 class_name JetSkiWaterPhysicsSystem
 extends Node
 
+const WaterSurfaceProvider3D = preload("res://world/water/query/water_surface_provider_3d.gd")
+
 const BUOYANCY_POINT_COUNT: int = 4
 const FRONT_POINT_COUNT: int = 2
 const POINT_NAMES: Array[StringName] = [
@@ -118,11 +120,11 @@ func has_valid_buoyancy_points() -> bool:
 
 func step(
 	body_state: PhysicsDirectBodyState3D,
-	ocean: Ocean3D,
+	water_provider: WaterSurfaceProvider3D,
 	submarine_buoyancy_factor: float
 ) -> JetSkiWaterState:
 	reset_runtime_state()
-	if ocean == null or not is_instance_valid(ocean):
+	if water_provider == null or not is_instance_valid(water_provider):
 		return state
 	if not has_valid_buoyancy_points():
 		_warn_about_missing_points_once()
@@ -139,20 +141,19 @@ func step(
 		var world_point := body_state.transform * local_point
 		var world_offset := world_point - body_state.transform.origin
 		_point_world_positions[index] = world_point
-		var water_height := ocean.sample_height(world_point)
-		_point_water_surface_positions[index] = Vector3(
-			world_point.x,
-			water_height,
-			world_point.z
-		)
-		var depth := water_height - world_point.y
+		var water_sample := water_provider.sample_water(world_point)
+		if not water_sample.valid:
+			_warn_about_invalid_sample_once()
+			continue
+		_point_water_surface_positions[index] = water_sample.surface_position
+		var depth := water_sample.signed_depth
 		_point_depths[index] = depth
 		maximum_signed_depth = maxf(maximum_signed_depth, depth)
 		if depth <= 0.0:
 			continue
 		state.raw_contact_mask |= 1 << index
-		var water_normal := ocean.sample_normal(world_point)
-		var water_velocity := ocean.sample_water_velocity(world_point)
+		var water_normal := water_sample.normal
+		var water_velocity := water_sample.velocity
 		if not water_normal.is_finite() or not water_velocity.is_finite():
 			_warn_about_invalid_sample_once()
 			continue
