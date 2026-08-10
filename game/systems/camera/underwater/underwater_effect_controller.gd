@@ -924,9 +924,14 @@ func _resolve_ocean() -> void:
 
 
 func _find_matching_ocean() -> Ocean3D:
-	var scene_root := get_tree().current_scene
+	var tree := get_tree()
+	if tree == null:
+		return null
+	var scene_root := tree.current_scene
 	if scene_root == null:
-		scene_root = get_tree().root
+		scene_root = tree.root
+	if scene_root == null:
+		return null
 	var fallback: Ocean3D = null
 	var pending: Array[Node] = [scene_root]
 	while not pending.is_empty():
