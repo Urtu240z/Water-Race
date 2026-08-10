@@ -157,6 +157,10 @@ const LEFT_CONTACT_MASK: int = (
 @export_range(0.05, 0.60, 0.01) var trick_reversal_takeoff_window: float = 0.35
 @export_range(0.0, 0.25, 0.01) var trick_takeoff_coyote_time: float = 0.18
 @export_range(0.1, 5.0, 0.05) var trick_preload_decay_rate: float = 1.5
+@export_group("Rider Ejection")
+@export var manual_ejection_enabled := true
+@export_range(0.0, 500.0, 1.0) var manual_ejection_forward_impulse := 4.0
+@export_range(0.0, 500.0, 1.0) var manual_ejection_up_impulse := 3.0
 @export_range(1.0, 30.0, 0.25) var trick_minimum_launch_speed: float = 5.0
 @export_range(2.0, 35.0, 0.25) var trick_full_launch_speed: float = 15.0
 
@@ -792,6 +796,8 @@ func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 func _physics_process(_delta: float) -> void:
 	var wipeout_active := is_wipeout_active()
 	if not wipeout_active:
+		if Input.is_action_just_pressed("eject_rider") and request_manual_ejection():
+			return
 		if Input.is_action_just_pressed("recover_vehicle"):
 			recover_vehicle()
 			return
@@ -828,6 +834,16 @@ func request_wipeout(context: WipeoutContext) -> bool:
 	if wipeout_system == null:
 		return false
 	return bool(wipeout_system.call("request_wipeout", context))
+
+
+func request_manual_ejection() -> bool:
+	if manual_ejection_enabled == false or is_wipeout_active():
+		return false
+	var forward := -global_transform.basis.z.normalized()
+	return request_wipeout(WipeoutContext.new(
+		&"manual_ejection",
+		forward * manual_ejection_forward_impulse + Vector3.UP * manual_ejection_up_impulse
+	))
 
 
 func is_wipeout_active() -> bool:
