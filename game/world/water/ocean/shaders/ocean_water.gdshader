@@ -49,6 +49,7 @@ uniform int ripple_effective_count : hint_range(1, 12, 1) = 12;
 #define OCEAN_INTERACTION_FULL_OCEAN
 
 #include "res://world/water/ocean/shaders/includes/ocean_vehicle_interaction_uniforms.gdshaderinc"
+#include "res://world/water/ocean/shaders/includes/ocean_event_wave_uniforms.gdshaderinc"
 
 group_uniforms SurfaceDetail;
 uniform sampler2D surface_normal_texture_a : hint_normal, repeat_enable, filter_linear_mipmap_anisotropic;
@@ -212,6 +213,7 @@ vec4 sample_ripple_state(vec2 logical_xz) {
 
 
 #include "res://world/water/ocean/shaders/includes/ocean_vehicle_interaction_functions.gdshaderinc"
+#include "res://world/water/ocean/shaders/includes/ocean_event_wave_functions.gdshaderinc"
 
 
 float clipmap_wave_scale(vec2 world_xz) {
@@ -335,14 +337,17 @@ vec4 sample_wave_state(vec2 world_xz) {
 	vec4 interaction = interaction_scale > 0.0001
 		? sample_vehicle_interaction_state(logical_xz)
 		: vec4(0.0);
+	vec3 event_wave = sample_event_wave_state(logical_xz);
 	float ripple_weight = interaction_ripple_weight();
 	return vec4(
 		macro_height * macro_scale
 			+ ripple.x * ripple_scale * ripple_weight
-			+ interaction.x * interaction_scale,
+			+ interaction.x * interaction_scale
+			+ event_wave.x,
 		macro_derivatives * macro_scale
 			+ ripple.yz * ripple_scale * ripple_weight
-			+ interaction.yz * interaction_scale,
+			+ interaction.yz * interaction_scale
+			+ event_wave.yz,
 		max(
 			ripple.w * ripple_scale * ripple_weight,
 			interaction.w * interaction_scale

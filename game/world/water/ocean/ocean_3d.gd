@@ -12,6 +12,8 @@ const MAX_RIPPLES: int = 12
 const MAX_LANDING_IMPACTS: int = 4
 const MAX_DIRECTIONAL_WAKE_SEGMENTS: int = 16
 const MAX_CALM_WATER_AREAS: int = 4
+const MAX_EVENT_WAVES: int = 4
+const MAX_EVENT_WAVE_HORIZONTAL_FLOW: float = 10.0
 const MIN_SAMPLE_STEP: float = 0.05
 const MACRO_MATERIAL_SYNC_INTERVAL: float = 0.25
 
@@ -158,6 +160,23 @@ var _calm_zone_axes := PackedVector4Array()
 var _calm_zone_extents_transitions := PackedVector4Array()
 var _calm_zone_strengths := PackedVector4Array()
 var _calm_water_areas_dirty: bool = true
+var _event_wave_refs: Array[WeakRef] = []
+var _event_wave_active := PackedInt32Array()
+var _event_wave_origins := PackedVector2Array()
+var _event_wave_directions := PackedVector2Array()
+var _event_wave_start_times := PackedFloat32Array()
+var _event_wave_amplitudes := PackedFloat32Array()
+var _event_wave_widths := PackedFloat32Array()
+var _event_wave_speeds := PackedFloat32Array()
+var _event_wave_trough_amplitudes := PackedFloat32Array()
+var _event_wave_trough_widths := PackedFloat32Array()
+var _event_wave_trough_offsets := PackedFloat32Array()
+var _event_wave_flows := PackedFloat32Array()
+var _event_wave_fade_ins := PackedFloat32Array()
+var _event_wave_lifetimes := PackedFloat32Array()
+var _event_wave_fade_outs := PackedFloat32Array()
+var _event_wave_parameters_dirty := true
+var _event_wave_rejected_activation_count := 0
 
 var _ripple_active := PackedInt32Array()
 var _ripple_positions := PackedVector2Array()
@@ -262,6 +281,7 @@ func _ready() -> void:
 	_initialize_ripples()
 	_initialize_landing_impacts()
 	_initialize_vehicle_interactions()
+	_initialize_event_waves()
 	_resolve_targets()
 	_refresh_material_cache()
 	_configure_surface()
@@ -311,6 +331,7 @@ func _physics_process(delta: float) -> void:
 			):
 				_build_runtime_height_maps()
 	_simulation_time += safe_delta
+	_expire_event_waves()
 	if _expire_ripples():
 		_ripple_parameters_dirty = true
 	if _expire_landing_impacts():
@@ -337,6 +358,8 @@ func _physics_process(delta: float) -> void:
 		_push_ripple_parameters_to_all_materials()
 	if _landing_impact_parameters_dirty:
 		_push_landing_impact_parameters_to_all_materials()
+	if _event_wave_parameters_dirty:
+		_push_event_wave_parameters_to_all_materials()
 
 
 func _exit_tree() -> void:
@@ -421,6 +444,50 @@ func queue_calm_water_area_update() -> void:
 
 func get_active_calm_water_area_count() -> int:
 	return _calm_water_zones.size()
+
+func get_active_event_wave_count() -> int:
+	var count := 0
+	for active in _event_wave_active:
+		count += active
+	return count
+
+func activate_event_wave(event_wave: Node, parameters: Dictionary) -> bool:
+	if not is_instance_valid(event_wave): return false
+	for ref in _event_wave_refs:
+		if ref.get_ref() == event_wave: return false
+	var slot := _event_wave_active.find(0)
+	if slot < 0:
+		_event_wave_rejected_activation_count += 1
+		push_warning("Ocean3D rejected EventWave3D activation: all four slots are occupied.")
+		return false
+	var direction: Vector2 = parameters.get("direction", Vector2.ZERO)
+	if not direction.is_finite() or direction.length_squared() <= 0.000001: return false
+	_event_wave_active[slot] = 1
+	while _event_wave_refs.size() < MAX_EVENT_WAVES:
+		_event_wave_refs.append(null)
+	_event_wave_refs[slot] = weakref(event_wave)
+	_event_wave_origins[slot] = parameters.get("origin", Vector2.ZERO)
+	_event_wave_directions[slot] = direction.normalized()
+	_event_wave_start_times[slot] = float(parameters.get("start", _simulation_time))
+	_event_wave_amplitudes[slot] = maxf(float(parameters.get("amplitude", 0.0)), 0.0)
+	_event_wave_widths[slot] = maxf(float(parameters.get("width", 1.0)), 0.001)
+	_event_wave_speeds[slot] = float(parameters.get("speed", 0.0))
+	_event_wave_trough_amplitudes[slot] = maxf(float(parameters.get("trough_amplitude", 0.0)), 0.0)
+	_event_wave_trough_widths[slot] = maxf(float(parameters.get("trough_width", 1.0)), 0.001)
+	_event_wave_trough_offsets[slot] = maxf(float(parameters.get("trough_offset", 0.0)), 0.0)
+	_event_wave_flows[slot] = clampf(float(parameters.get("flow", 0.0)), 0.0, 10.0)
+	_event_wave_fade_ins[slot] = maxf(float(parameters.get("fade_in", 0.0)), 0.0)
+	_event_wave_lifetimes[slot] = float(parameters.get("lifetime", 0.0))
+	_event_wave_fade_outs[slot] = maxf(float(parameters.get("fade_out", 0.0)), 0.0)
+	_event_wave_parameters_dirty = true
+	return true
+
+func deactivate_event_wave(event_wave: Node) -> void:
+	for index in MAX_EVENT_WAVES:
+		if _event_wave_active[index] == 1 and _event_wave_refs[index].get_ref() == event_wave:
+			_event_wave_active[index] = 0
+			_event_wave_refs[index] = null
+	_event_wave_parameters_dirty = true
 
 
 func _finish_deferred_calm_water_update() -> void:
@@ -781,7 +848,8 @@ func sample_water_velocity(world_position: Vector3) -> Vector3:
 	const TIME_STEP: float = 0.02
 	var previous_height := _sample_surface_offset(logical_xz, _simulation_time - TIME_STEP)
 	var next_height := _sample_surface_offset(logical_xz, _simulation_time + TIME_STEP)
-	return Vector3(0.0, (next_height - previous_height) / (2.0 * TIME_STEP), 0.0)
+	var horizontal_flow := _sample_event_wave_horizontal_flow(logical_xz, _simulation_time)
+	return Vector3(horizontal_flow.x, (next_height - previous_height) / (2.0 * TIME_STEP), horizontal_flow.y)
 
 
 func sample_water(
@@ -931,7 +999,52 @@ func _sample_surface_offset(logical_xz: Vector2, sample_time: float) -> float:
 		_sample_macro_height(logical_xz, sample_time)
 		* _sample_calm_wave_scale(world_xz)
 		+ _sample_ripple_height(logical_xz, sample_time)
+		+ _sample_event_wave_height(logical_xz, sample_time)
 	)
+
+func _sample_event_wave_height(logical_xz: Vector2, sample_time: float) -> float:
+	var height := 0.0
+	for index in MAX_EVENT_WAVES:
+		if _event_wave_active[index] == 0: continue
+		var envelope := _sample_event_wave_envelope(index, sample_time)
+		if envelope <= 0.0: continue
+		var crest := _event_wave_origins[index] + _event_wave_directions[index] * _event_wave_speeds[index] * (sample_time - _event_wave_start_times[index])
+		var s := (logical_xz - crest).dot(_event_wave_directions[index])
+		var crest_shape := _event_wave_sech_squared(s / _event_wave_widths[index])
+		var trough_shape := _event_wave_sech_squared((s + _event_wave_trough_offsets[index]) / _event_wave_trough_widths[index])
+		height += (_event_wave_amplitudes[index] * crest_shape - _event_wave_trough_amplitudes[index] * trough_shape) * envelope
+	return height
+
+func _sample_event_wave_horizontal_flow(logical_xz: Vector2, sample_time: float) -> Vector2:
+	var flow := Vector2.ZERO
+	for index in MAX_EVENT_WAVES:
+		if _event_wave_active[index] == 0: continue
+		var envelope := _sample_event_wave_envelope(index, sample_time)
+		if envelope <= 0.0: continue
+		var crest := _event_wave_origins[index] + _event_wave_directions[index] * _event_wave_speeds[index] * (sample_time - _event_wave_start_times[index])
+		var s := (logical_xz - crest).dot(_event_wave_directions[index])
+		flow += _event_wave_directions[index] * _event_wave_flows[index] * _event_wave_sech_squared(s / _event_wave_widths[index]) * envelope
+	return flow.limit_length(MAX_EVENT_WAVE_HORIZONTAL_FLOW)
+
+func _event_wave_sech_squared(value: float) -> float:
+	var tangent := tanh(value)
+	return maxf(1.0 - tangent * tangent, 0.0)
+
+func _sample_event_wave_envelope(index: int, sample_time: float) -> float:
+	var age := sample_time - _event_wave_start_times[index]
+	if age < 0.0: return 0.0
+	var lifetime := _event_wave_lifetimes[index]
+	if lifetime > 0.0 and age >= lifetime: return 0.0
+	var fade_in := _event_wave_fade_ins[index]
+	var fade_out := _event_wave_fade_outs[index]
+	var result := _smooth_event_wave_step(age / fade_in) if fade_in > 0.0 else 1.0
+	if lifetime > 0.0 and fade_out > 0.0:
+		result *= 1.0 - _smooth_event_wave_step((age - (lifetime - fade_out)) / fade_out)
+	return clampf(result, 0.0, 1.0)
+
+func _smooth_event_wave_step(value: float) -> float:
+	var t := clampf(value, 0.0, 1.0)
+	return t * t * (3.0 - 2.0 * t)
 
 
 func _sample_calm_wave_scale(world_xz: Vector2) -> float:
@@ -1046,6 +1159,25 @@ func _initialize_ripples() -> void:
 	_ripple_decays.fill(ripple_decay)
 	_ripple_lifetimes.fill(ripple_lifetime)
 	_ripple_parameters_dirty = true
+
+func _initialize_event_waves() -> void:
+	for values in [_event_wave_active, _event_wave_origins, _event_wave_directions, _event_wave_start_times, _event_wave_amplitudes, _event_wave_widths, _event_wave_speeds, _event_wave_trough_amplitudes, _event_wave_trough_widths, _event_wave_trough_offsets, _event_wave_flows, _event_wave_fade_ins, _event_wave_lifetimes, _event_wave_fade_outs]:
+		values.resize(MAX_EVENT_WAVES)
+	_event_wave_active.fill(0)
+	_event_wave_widths.fill(1.0)
+	_event_wave_trough_widths.fill(1.0)
+	_event_wave_parameters_dirty = true
+
+func _expire_event_waves() -> void:
+	for index in MAX_EVENT_WAVES:
+		if _event_wave_active[index] == 0: continue
+		if _event_wave_lifetimes[index] > 0.0 and _simulation_time >= _event_wave_start_times[index] + _event_wave_lifetimes[index]:
+			var owner: Node = _event_wave_refs[index].get_ref() if _event_wave_refs[index] != null else null
+			_event_wave_active[index] = 0
+			_event_wave_refs[index] = null
+			_event_wave_parameters_dirty = true
+			if owner != null and owner.has_method("notify_event_wave_completed"):
+				owner.notify_event_wave_completed()
 
 
 func _initialize_landing_impacts() -> void:
@@ -2147,6 +2279,29 @@ func _push_all_parameters_to_material(material: ShaderMaterial) -> void:
 	_push_landing_impact_parameters(material)
 	_push_vehicle_interaction_parameters(material)
 	_push_calm_water_parameters(material)
+	_push_event_wave_parameters(material)
+
+func _push_event_wave_parameters_to_all_materials() -> void:
+	for material in _all_ocean_materials():
+		_push_event_wave_parameters(material)
+	_event_wave_parameters_dirty = false
+
+func _push_event_wave_parameters(material: ShaderMaterial) -> void:
+	if material == null or material.shader == null: return
+	if material.shader.code.find("event_wave_active") < 0: return
+	material.set_shader_parameter(&"event_wave_active", _event_wave_active)
+	material.set_shader_parameter(&"event_wave_origins", _event_wave_origins)
+	material.set_shader_parameter(&"event_wave_directions", _event_wave_directions)
+	material.set_shader_parameter(&"event_wave_start_times", _event_wave_start_times)
+	material.set_shader_parameter(&"event_wave_amplitudes", _event_wave_amplitudes)
+	material.set_shader_parameter(&"event_wave_widths", _event_wave_widths)
+	material.set_shader_parameter(&"event_wave_speeds", _event_wave_speeds)
+	material.set_shader_parameter(&"event_wave_trough_amplitudes", _event_wave_trough_amplitudes)
+	material.set_shader_parameter(&"event_wave_trough_widths", _event_wave_trough_widths)
+	material.set_shader_parameter(&"event_wave_trough_offsets", _event_wave_trough_offsets)
+	material.set_shader_parameter(&"event_wave_fade_ins", _event_wave_fade_ins)
+	material.set_shader_parameter(&"event_wave_lifetimes", _event_wave_lifetimes)
+	material.set_shader_parameter(&"event_wave_fade_outs", _event_wave_fade_outs)
 
 
 func _push_static_parameters_to_all_materials() -> void:

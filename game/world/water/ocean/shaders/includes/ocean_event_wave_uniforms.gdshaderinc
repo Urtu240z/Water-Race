@@ -1,0 +1,14 @@
+const int MAX_EVENT_WAVES = 4;
+uniform int event_wave_active[4];
+uniform vec2 event_wave_origins[4];
+uniform vec2 event_wave_directions[4];
+uniform float event_wave_start_times[4];
+uniform float event_wave_amplitudes[4];
+uniform float event_wave_widths[4];
+uniform float event_wave_speeds[4];
+uniform float event_wave_trough_amplitudes[4];
+uniform float event_wave_trough_widths[4];
+uniform float event_wave_trough_offsets[4];
+uniform float event_wave_fade_ins[4];
+uniform float event_wave_lifetimes[4];
+uniform float event_wave_fade_outs[4];
