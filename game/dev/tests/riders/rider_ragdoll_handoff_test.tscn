@@ -33,9 +33,14 @@ environment = SubResource("1")
 transform = Transform3D(0.90630776, 0.3237444, -0.2716538, 0, 0.64278764, 0.76604444, 0.42261827, -0.69427204, 0.5825634, 0, 0, 0)
 
 [node name="JetSki" parent="." unique_id=1990838475 instance=ExtResource("1")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 20, 0)
 linear_velocity = Vector3(4, 0, 0)
 angular_velocity = Vector3(0, 0.4, 0)
+
+[node name="Camera3D" type="Camera3D" parent="JetSki" unique_id=521378374]
+transform = Transform3D(0.79968464, 0, -0.60042024, 0, 1, 0, 0.60042024, 0, 0.79968464, -4.705, 0.8512783, 8.52)
+current = true
+fov = 43.6
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1261222505]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -46.783432)
@@ -55,8 +60,3 @@ mesh = SubResource("BoxMesh_wwatn")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MeshInstance3D2/StaticBody3D" unique_id=1920008184]
 shape = SubResource("ConcavePolygonShape3D_rhhum")
-
-[node name="Camera3D" type="Camera3D" parent="." unique_id=521378374]
-transform = Transform3D(1, 0, 0, 0, 0.99744076, -0.07149744, 0, 0.07149744, 0.99744076, -2.076, 0, 15.407)
-current = true
-fov = 44.9
