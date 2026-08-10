@@ -102,7 +102,7 @@ func _apply_water_forces(body: PhysicalBone3D, sample: WaterSample3D, is_hips: b
 		0.0,
 		maximum_buoyancy_force_per_point
 	)
-	body.apply_central_force(normal * buoyancy)
+	_apply_central_force(body, normal * buoyancy)
 	if is_hips:
 		hips_buoyancy_force_magnitude = buoyancy
 	else:
@@ -115,8 +115,14 @@ func _apply_water_forces(body: PhysicalBone3D, sample: WaterSample3D, is_hips: b
 		(tangential_drag_linear_per_point * speed + tangential_drag_quadratic_per_point * speed * speed) * depth_ratio,
 		maximum_tangential_drag_force_per_point
 	)
-	body.apply_central_force(-tangential_velocity / speed * drag)
+	_apply_central_force(body, -tangential_velocity / speed * drag)
 	total_tangential_drag_magnitude += drag
+
+
+func _apply_central_force(body: PhysicalBone3D, force: Vector3) -> void:
+	if not is_instance_valid(body) or not body.is_simulating_physics() or not force.is_finite():
+		return
+	PhysicsServer3D.body_apply_central_force(body.get_rid(), force)
 
 
 func _reset_debug_state() -> void:
