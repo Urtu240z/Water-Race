@@ -1,10 +1,6 @@
 class_name JetSkiController
 extends RigidBody3D
 
-const WipeoutContext = preload(
-	"res://gameplay/vehicles/common/rider/wipeout_context.gd"
-)
-
 signal reset_completed(reason: StringName)
 signal world_rebased(shift: Vector3)
 signal water_entered(intensity: float, position: Vector3)

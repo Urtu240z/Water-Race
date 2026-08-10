@@ -1,10 +1,6 @@
 class_name JetSkiWipeoutSystem
 extends Node
 
-const WipeoutContext = preload(
-	"res://gameplay/vehicles/common/rider/wipeout_context.gd"
-)
-
 signal wipeout_started(context: WipeoutContext)
 signal rider_fallen(context: WipeoutContext)
 signal recovery_ready(context: WipeoutContext)
