@@ -4,7 +4,6 @@ extends Node
 @export_node_path("RiderRig") var mounted_rider_path: NodePath
 @export_node_path("FallenRider3D") var fallen_rider_path: NodePath
 @export_node_path("RigidBody3D") var vehicle_path: NodePath
-@export_range(0.0, 0.25, 0.01, "suffix:s") var own_vehicle_collision_grace_duration := 0.07
 
 var _vehicle: RigidBody3D
 var _mounted_rider: RiderRig
@@ -13,8 +12,7 @@ var _fallen_rider: FallenRider3D
 var _handoff_pending := false
 var _handoff_active := false
 var _incident_impulse := Vector3.ZERO
-var _collision_grace_remaining := 0.0
-var _collision_exceptions_active := false
+var _vehicle_collision_exception_bodies: Array[PhysicalBone3D] = []
 
 func _ready() -> void:
 	_vehicle = get_node_or_null(vehicle_path) as RigidBody3D
@@ -62,9 +60,9 @@ func _perform_handoff() -> void:
 		if child is PhysicalBone3D:
 			var body := child as PhysicalBone3D
 			body.add_collision_exception_with(_vehicle)
+			_vehicle_collision_exception_bodies.append(body)
 	_fallen_rider.start_simulation()
-	_collision_grace_remaining = own_vehicle_collision_grace_duration
-	_collision_exceptions_active = true
+	_reset_fallen_rider_physics_interpolation()
 	for child in _fallen_rider.get_physical_bone_simulator().get_children():
 		if child is PhysicalBone3D:
 			var body := child as PhysicalBone3D
@@ -77,13 +75,36 @@ func _perform_handoff() -> void:
 	_mounted_rider.visible = false
 	_handoff_active = true
 
-func _physics_process(delta: float) -> void:
-	if not _collision_exceptions_active:
+func _physics_process(_delta: float) -> void:
+	if _vehicle_collision_exception_bodies.is_empty():
 		return
-	_collision_grace_remaining -= maxf(delta, 0.0)
-	if _collision_grace_remaining > 0.0:
-		return
+	for index in range(_vehicle_collision_exception_bodies.size() - 1, -1, -1):
+		var body := _vehicle_collision_exception_bodies[index]
+		if not is_instance_valid(body) or not _is_body_overlapping_vehicle(body):
+			if is_instance_valid(body):
+				body.remove_collision_exception_with(_vehicle)
+			_vehicle_collision_exception_bodies.remove_at(index)
+
+func _reset_fallen_rider_physics_interpolation() -> void:
+	_fallen_rider.reset_physics_interpolation()
 	for child in _fallen_rider.get_physical_bone_simulator().get_children():
 		if child is PhysicalBone3D:
-			(child as PhysicalBone3D).remove_collision_exception_with(_vehicle)
-	_collision_exceptions_active = false
+			(child as PhysicalBone3D).reset_physics_interpolation()
+
+func _is_body_overlapping_vehicle(body: PhysicalBone3D) -> bool:
+	var collision_shape := body.get_node_or_null("CollisionShape3D") as CollisionShape3D
+	if collision_shape == null or collision_shape.shape == null:
+		return false
+	var query := PhysicsShapeQueryParameters3D.new()
+	query.shape = collision_shape.shape
+	query.transform = collision_shape.global_transform
+	query.collision_mask = _vehicle.collision_layer
+	query.collide_with_bodies = true
+	query.collide_with_areas = false
+	query.exclude = [body.get_rid()]
+	var space_state := _vehicle.get_world_3d().direct_space_state
+	var overlaps: Array[Dictionary] = space_state.intersect_shape(query)
+	for overlap: Dictionary in overlaps:
+		if overlap.get("collider") == _vehicle:
+			return true
+	return false

@@ -2,7 +2,6 @@
 
 [ext_resource type="PackedScene" uid="uid://tl6lotex1356" path="res://gameplay/vehicles/jet_ski_01/jet_ski_with_rider.tscn" id="1"]
 [ext_resource type="Script" uid="uid://dgfse8sf5r8q4" path="res://dev/tests/riders/rider_ragdoll_handoff_test.gd" id="2"]
-[ext_resource type="PackedScene" uid="uid://1d3iohmalk05" path="res://world/water/ocean/ocean_3d.tscn" id="3"]
 
 [sub_resource type="Environment" id="1"]
 background_mode = 1
@@ -33,15 +32,13 @@ environment = SubResource("1")
 [node name="Light" type="DirectionalLight3D" parent="." unique_id=1769461604]
 transform = Transform3D(0.90630776, 0.3237444, -0.2716538, 0, 0.64278764, 0.76604444, 0.42261827, -0.69427204, 0.5825634, 0, 0, 0)
 
-[node name="Ocean" parent="." unique_id=2095509407 instance=ExtResource("3")]
-
 [node name="JetSki" parent="." unique_id=1990838475 instance=ExtResource("1")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
-ocean_path = NodePath("../Ocean")
 linear_velocity = Vector3(4, 0, 0)
 angular_velocity = Vector3(0, 0.4, 0)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1261222505]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -46.783432)
 mesh = SubResource("PrismMesh_bhtao")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="MeshInstance3D" unique_id=35576277]
@@ -60,6 +57,6 @@ mesh = SubResource("BoxMesh_wwatn")
 shape = SubResource("ConcavePolygonShape3D_rhhum")
 
 [node name="Camera3D" type="Camera3D" parent="." unique_id=521378374]
-transform = Transform3D(1, 0, 0, 0, 0.91366166, 0.40647548, 0, -0.40647548, 0.91366166, -2.075624, 11.118826, 15.407275)
+transform = Transform3D(1, 0, 0, 0, 0.99744076, -0.07149744, 0, 0.07149744, 0.99744076, -2.076, 0, 15.407)
 current = true
 fov = 44.9

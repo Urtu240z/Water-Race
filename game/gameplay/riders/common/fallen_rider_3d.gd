@@ -46,6 +46,7 @@ func stop_simulation() -> void:
 	simulator.active = false
 
 	_clear_physical_velocities()
+	_prime_physics_interpolation()
 
 	visible = false
 
@@ -61,6 +62,7 @@ func prepare_dormant() -> void:
 	simulator.physical_bones_stop_simulation()
 
 	_clear_physical_velocities()
+	_prime_physics_interpolation()
 
 	visible = false
 
@@ -86,3 +88,12 @@ func _clear_physical_velocities() -> void:
 
 		physical_bone.linear_velocity = Vector3.ZERO
 		physical_bone.angular_velocity = Vector3.ZERO
+
+
+func _prime_physics_interpolation() -> void:
+	if not is_instance_valid(simulator):
+		return
+
+	for child: Node in simulator.get_children():
+		if child is PhysicalBone3D:
+			(child as PhysicalBone3D).get_global_transform_interpolated()
