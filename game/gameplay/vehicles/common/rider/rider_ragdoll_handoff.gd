@@ -4,6 +4,7 @@ extends Node
 @export_node_path("RiderRig") var mounted_rider_path: NodePath
 @export_node_path("FallenRider3D") var fallen_rider_path: NodePath
 @export_node_path("RigidBody3D") var vehicle_path: NodePath
+@export_range(0.0, 0.25, 0.01, "suffix:s") var own_vehicle_collision_grace_duration := 0.07
 
 var _vehicle: RigidBody3D
 var _mounted_rider: RiderRig
@@ -12,6 +13,8 @@ var _fallen_rider: FallenRider3D
 var _handoff_pending := false
 var _handoff_active := false
 var _incident_impulse := Vector3.ZERO
+var _collision_grace_remaining := 0.0
+var _collision_exceptions_active := false
 
 func _ready() -> void:
 	_vehicle = get_node_or_null(vehicle_path) as RigidBody3D
@@ -60,6 +63,8 @@ func _perform_handoff() -> void:
 			var body := child as PhysicalBone3D
 			body.add_collision_exception_with(_vehicle)
 	_fallen_rider.start_simulation()
+	_collision_grace_remaining = own_vehicle_collision_grace_duration
+	_collision_exceptions_active = true
 	for child in _fallen_rider.get_physical_bone_simulator().get_children():
 		if child is PhysicalBone3D:
 			var body := child as PhysicalBone3D
@@ -71,3 +76,14 @@ func _perform_handoff() -> void:
 		hips.apply_central_impulse(_incident_impulse)
 	_mounted_rider.visible = false
 	_handoff_active = true
+
+func _physics_process(delta: float) -> void:
+	if not _collision_exceptions_active:
+		return
+	_collision_grace_remaining -= maxf(delta, 0.0)
+	if _collision_grace_remaining > 0.0:
+		return
+	for child in _fallen_rider.get_physical_bone_simulator().get_children():
+		if child is PhysicalBone3D:
+			(child as PhysicalBone3D).remove_collision_exception_with(_vehicle)
+	_collision_exceptions_active = false

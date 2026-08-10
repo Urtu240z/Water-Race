@@ -1,23 +1,65 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene format=3 uid="uid://52v7v8sy7ye0"]
 
-[ext_resource type="PackedScene" path="res://gameplay/vehicles/jet_ski_01/jet_ski_with_rider.tscn" id="1"]
-[ext_resource type="Script" path="res://dev/tests/riders/rider_ragdoll_handoff_test.gd" id="2"]
+[ext_resource type="PackedScene" uid="uid://tl6lotex1356" path="res://gameplay/vehicles/jet_ski_01/jet_ski_with_rider.tscn" id="1"]
+[ext_resource type="Script" uid="uid://dgfse8sf5r8q4" path="res://dev/tests/riders/rider_ragdoll_handoff_test.gd" id="2"]
+[ext_resource type="PackedScene" uid="uid://1d3iohmalk05" path="res://world/water/ocean/ocean_3d.tscn" id="3"]
 
 [sub_resource type="Environment" id="1"]
 background_mode = 1
 background_color = Color(0.08, 0.1, 0.15, 1)
 
-[node name="RiderRagdollHandoffTest" type="Node3D"]
+[sub_resource type="PrismMesh" id="PrismMesh_bhtao"]
+size = Vector3(20, 5, 20)
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_bhtao"]
+friction = 0.18
+bounce = 0.28
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_bhtao"]
+data = PackedVector3Array(0, 2.5, 10, 10, -2.5, 10, -10, -2.5, 10, 0, 2.5, -10, -10, -2.5, -10, 10, -2.5, -10, 0, 2.5, 10, 0, 2.5, -10, 10, -2.5, 10, 0, 2.5, -10, 10, -2.5, -10, 10, -2.5, 10, 0, 2.5, -10, 0, 2.5, 10, -10, -2.5, -10, 0, 2.5, 10, -10, -2.5, 10, -10, -2.5, -10, -10, -2.5, 10, 10, -2.5, 10, -10, -2.5, -10, 10, -2.5, 10, 10, -2.5, -10, -10, -2.5, -10)
+
+[sub_resource type="BoxMesh" id="BoxMesh_wwatn"]
+size = Vector3(200, 1, 200)
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_rhhum"]
+data = PackedVector3Array(-100, 0.5, 100, 100, 0.5, 100, -100, -0.5, 100, 100, 0.5, 100, 100, -0.5, 100, -100, -0.5, 100, 100, 0.5, -100, -100, 0.5, -100, 100, -0.5, -100, -100, 0.5, -100, -100, -0.5, -100, 100, -0.5, -100, 100, 0.5, 100, 100, 0.5, -100, 100, -0.5, 100, 100, 0.5, -100, 100, -0.5, -100, 100, -0.5, 100, -100, 0.5, -100, -100, 0.5, 100, -100, -0.5, -100, -100, 0.5, 100, -100, -0.5, 100, -100, -0.5, -100, 100, 0.5, 100, -100, 0.5, 100, 100, 0.5, -100, -100, 0.5, 100, -100, 0.5, -100, 100, 0.5, -100, -100, -0.5, 100, 100, -0.5, 100, -100, -0.5, -100, 100, -0.5, 100, 100, -0.5, -100, -100, -0.5, -100)
+
+[node name="RiderRagdollHandoffTest" type="Node3D" unique_id=1126025825]
 script = ExtResource("2")
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=2027060446]
 environment = SubResource("1")
 
-[node name="Light" type="DirectionalLight3D" parent="."]
-rotation_degrees = Vector3(-50, -25, 0)
+[node name="Light" type="DirectionalLight3D" parent="." unique_id=1769461604]
+transform = Transform3D(0.90630776, 0.3237444, -0.2716538, 0, 0.64278764, 0.76604444, 0.42261827, -0.69427204, 0.5825634, 0, 0, 0)
 
-[node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.94, 0.342, 0, -0.342, 0.94, 0, 3, 9)
+[node name="Ocean" parent="." unique_id=2095509407 instance=ExtResource("3")]
+
+[node name="JetSki" parent="." unique_id=1990838475 instance=ExtResource("1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
+ocean_path = NodePath("../Ocean")
+linear_velocity = Vector3(4, 0, 0)
+angular_velocity = Vector3(0, 0.4, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1261222505]
+mesh = SubResource("PrismMesh_bhtao")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="MeshInstance3D" unique_id=35576277]
+physics_material_override = SubResource("PhysicsMaterial_bhtao")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MeshInstance3D/StaticBody3D" unique_id=2117692134]
+shape = SubResource("ConcavePolygonShape3D_bhtao")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="." unique_id=204002450]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.7098875, 0)
+mesh = SubResource("BoxMesh_wwatn")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="MeshInstance3D2" unique_id=1169533515]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MeshInstance3D2/StaticBody3D" unique_id=1920008184]
+shape = SubResource("ConcavePolygonShape3D_rhhum")
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=521378374]
+transform = Transform3D(1, 0, 0, 0, 0.91366166, 0.40647548, 0, -0.40647548, 0.91366166, -2.075624, 11.118826, 15.407275)
 current = true
-
-[node name="JetSki" parent="." instance=ExtResource("1")]
+fov = 44.9
