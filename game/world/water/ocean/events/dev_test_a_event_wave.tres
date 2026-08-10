@@ -1,13 +1,7 @@
-[gd_resource type="Resource" script_class="EventWaveProfile" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="EventWaveProfile" format=3 uid="uid://dx8037axav0ga"]
 
-[ext_resource type="Script" path="res://world/water/ocean/events/event_wave_profile.gd" id="1"]
+[ext_resource type="Script" uid="uid://d28g2y2o80558" path="res://world/water/ocean/events/event_wave_profile.gd" id="1"]
 
 [resource]
 script = ExtResource("1")
-amplitude = 2.5
-width = 36.0
-speed = 10.0
-horizontal_flow = 1.5
-fade_in_time = 1.0
-lifetime = 30.0
-fade_out_time = 1.5
+amplitude = 5.0

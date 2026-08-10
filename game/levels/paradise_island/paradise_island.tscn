@@ -44,7 +44,7 @@
 [ext_resource type="Texture2D" uid="uid://dpb0qhgywdm05" path="res://world/water/ocean/foam/foam_breakup_noise.tres" id="42_uytnh"]
 [ext_resource type="Texture2D" uid="uid://cdlm681krlrvi" path="res://world/water/ocean/surface_detail/surface_normal_a.tres" id="43_1v62v"]
 [ext_resource type="Script" uid="uid://cvayffg86y5d3" path="res://world/water/ocean/events/event_wave_3d.gd" id="43_i77vt"]
-[ext_resource type="Resource" path="res://world/water/ocean/events/dev_test_a_event_wave.tres" id="44_jnsb7"]
+[ext_resource type="Resource" uid="uid://dx8037axav0ga" path="res://world/water/ocean/events/dev_test_a_event_wave.tres" id="44_jnsb7"]
 [ext_resource type="Texture2D" uid="uid://biv8w5n57xhjr" path="res://world/water/ocean/surface_detail/surface_normal_b.tres" id="44_resor"]
 [ext_resource type="Texture2D" uid="uid://bblan7rbfrudb" path="res://world/water/ocean/surface_detail/surface_warp_noise.tres" id="45_6msh1"]
 [ext_resource type="Texture2D" uid="uid://c0kex04xga83k" path="res://world/water/ocean/waves/macro_wave_a.png" id="46_fyxnn"]
@@ -679,11 +679,14 @@ landing_wave_minimum_wavelength = 4.55
 landing_wave_maximum_wavelength = 8.0
 
 [node name="TestEventWave" type="Node3D" parent="WaterIntegration" unique_id=199686909]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 597, 0, 564)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 597, 0, 764)
 script = ExtResource("43_i77vt")
 ocean_path = NodePath("../Ocean")
 profile = ExtResource("44_jnsb7")
 auto_activate = true
+amplitude_multiplier = 8.0
+speed_multiplier = 3.0
+flow_multiplier = 10.0
 metadata/_custom_type_script = "uid://cvayffg86y5d3"
 
 [node name="AmbientWildlife" parent="." unique_id=1482046972 instance=ExtResource("48_ggnme")]
