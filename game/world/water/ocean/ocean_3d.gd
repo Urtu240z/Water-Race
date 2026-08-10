@@ -465,6 +465,7 @@ func activate_event_wave(event_wave: Node, parameters: Dictionary) -> bool:
 		if _event_wave_active[index] == 1 and (_event_wave_refs[index] == null or _event_wave_refs[index].get_ref() == null):
 			_event_wave_active[index] = 0
 			_event_wave_refs[index] = null
+			_event_wave_parameters_dirty = true
 	for ref in _event_wave_refs:
 		if ref != null and ref.get_ref() == event_wave: return false
 	var slot := _event_wave_active.find(0)
@@ -1197,12 +1198,17 @@ func _initialize_event_waves() -> void:
 func _expire_event_waves() -> void:
 	for index in MAX_EVENT_WAVES:
 		if _event_wave_active[index] == 0: continue
-		if _event_wave_lifetimes[index] > 0.0 and _simulation_time >= _event_wave_start_times[index] + _event_wave_lifetimes[index]:
-			var owner: Node = _event_wave_refs[index].get_ref() if _event_wave_refs[index] != null else null
+		var owner: Node = _event_wave_refs[index].get_ref() if _event_wave_refs[index] != null else null
+		if owner == null:
 			_event_wave_active[index] = 0
 			_event_wave_refs[index] = null
 			_event_wave_parameters_dirty = true
-			if owner != null and owner.has_method("notify_event_wave_completed"):
+			continue
+		if _event_wave_lifetimes[index] > 0.0 and _simulation_time >= _event_wave_start_times[index] + _event_wave_lifetimes[index]:
+			_event_wave_active[index] = 0
+			_event_wave_refs[index] = null
+			_event_wave_parameters_dirty = true
+			if owner.has_method("notify_event_wave_completed"):
 				owner.notify_event_wave_completed()
 
 
