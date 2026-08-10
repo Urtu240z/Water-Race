@@ -451,40 +451,66 @@ func get_active_event_wave_count() -> int:
 		count += active
 	return count
 
+func get_event_wave_debug_status() -> Dictionary:
+	var slots: Array[Dictionary] = []
+	for index in MAX_EVENT_WAVES:
+		if _event_wave_active[index] == 0: continue
+		var age := _simulation_time - _event_wave_start_times[index]
+		slots.append({"slot": index, "owner": _event_wave_refs[index].get_ref() if _event_wave_refs[index] != null else null, "age": age, "origin": _event_wave_origins[index], "crest": _event_wave_origins[index] + _event_wave_directions[index] * _event_wave_speeds[index] * age, "direction": _event_wave_directions[index], "amplitude": _event_wave_amplitudes[index], "width": _event_wave_widths[index], "speed": _event_wave_speeds[index], "horizontal_flow": _event_wave_flows[index], "lifetime": _event_wave_lifetimes[index]})
+	return {"active_count": get_active_event_wave_count(), "maximum_count": MAX_EVENT_WAVES, "rejected_activation_count": _event_wave_rejected_activation_count, "slots": slots}
+
 func activate_event_wave(event_wave: Node, parameters: Dictionary) -> bool:
 	if not is_instance_valid(event_wave): return false
+	for index in MAX_EVENT_WAVES:
+		if _event_wave_active[index] == 1 and (_event_wave_refs[index] == null or _event_wave_refs[index].get_ref() == null):
+			_event_wave_active[index] = 0
+			_event_wave_refs[index] = null
 	for ref in _event_wave_refs:
-		if ref.get_ref() == event_wave: return false
+		if ref != null and ref.get_ref() == event_wave: return false
 	var slot := _event_wave_active.find(0)
 	if slot < 0:
 		_event_wave_rejected_activation_count += 1
 		push_warning("Ocean3D rejected EventWave3D activation: all four slots are occupied.")
 		return false
+	var origin: Vector2 = parameters.get("origin", Vector2.ZERO)
 	var direction: Vector2 = parameters.get("direction", Vector2.ZERO)
-	if not direction.is_finite() or direction.length_squared() <= 0.000001: return false
-	_event_wave_active[slot] = 1
+	var start: float = float(parameters.get("start", _simulation_time))
+	var amplitude: float = float(parameters.get("amplitude", 0.0))
+	var width: float = float(parameters.get("width", 1.0))
+	var speed: float = float(parameters.get("speed", 0.0))
+	var trough_amplitude: float = float(parameters.get("trough_amplitude", 0.0))
+	var trough_width: float = float(parameters.get("trough_width", 1.0))
+	var trough_offset: float = float(parameters.get("trough_offset", 0.0))
+	var flow: float = float(parameters.get("flow", 0.0))
+	var fade_in: float = float(parameters.get("fade_in", 0.0))
+	var lifetime: float = float(parameters.get("lifetime", 0.0))
+	var fade_out: float = float(parameters.get("fade_out", 0.0))
+	if not origin.is_finite() or not direction.is_finite() or direction.length_squared() <= 0.000001 or not is_finite(start) or not is_finite(amplitude) or not is_finite(width) or not is_finite(speed) or not is_finite(trough_amplitude) or not is_finite(trough_width) or not is_finite(trough_offset) or not is_finite(flow) or not is_finite(fade_in) or not is_finite(lifetime) or not is_finite(fade_out):
+		_event_wave_rejected_activation_count += 1
+		return false
 	while _event_wave_refs.size() < MAX_EVENT_WAVES:
 		_event_wave_refs.append(null)
 	_event_wave_refs[slot] = weakref(event_wave)
-	_event_wave_origins[slot] = parameters.get("origin", Vector2.ZERO)
+	_event_wave_origins[slot] = origin
 	_event_wave_directions[slot] = direction.normalized()
-	_event_wave_start_times[slot] = float(parameters.get("start", _simulation_time))
-	_event_wave_amplitudes[slot] = maxf(float(parameters.get("amplitude", 0.0)), 0.0)
-	_event_wave_widths[slot] = maxf(float(parameters.get("width", 1.0)), 0.001)
-	_event_wave_speeds[slot] = float(parameters.get("speed", 0.0))
-	_event_wave_trough_amplitudes[slot] = maxf(float(parameters.get("trough_amplitude", 0.0)), 0.0)
-	_event_wave_trough_widths[slot] = maxf(float(parameters.get("trough_width", 1.0)), 0.001)
-	_event_wave_trough_offsets[slot] = maxf(float(parameters.get("trough_offset", 0.0)), 0.0)
-	_event_wave_flows[slot] = clampf(float(parameters.get("flow", 0.0)), 0.0, 10.0)
-	_event_wave_fade_ins[slot] = maxf(float(parameters.get("fade_in", 0.0)), 0.0)
-	_event_wave_lifetimes[slot] = float(parameters.get("lifetime", 0.0))
-	_event_wave_fade_outs[slot] = maxf(float(parameters.get("fade_out", 0.0)), 0.0)
+	_event_wave_start_times[slot] = start
+	_event_wave_amplitudes[slot] = maxf(amplitude, 0.0)
+	_event_wave_widths[slot] = maxf(width, 0.001)
+	_event_wave_speeds[slot] = speed
+	_event_wave_trough_amplitudes[slot] = maxf(trough_amplitude, 0.0)
+	_event_wave_trough_widths[slot] = maxf(trough_width, 0.001)
+	_event_wave_trough_offsets[slot] = maxf(trough_offset, 0.0)
+	_event_wave_flows[slot] = clampf(flow, 0.0, 10.0)
+	_event_wave_fade_ins[slot] = maxf(fade_in, 0.0)
+	_event_wave_lifetimes[slot] = lifetime
+	_event_wave_fade_outs[slot] = maxf(fade_out, 0.0)
+	_event_wave_active[slot] = 1
 	_event_wave_parameters_dirty = true
 	return true
 
 func deactivate_event_wave(event_wave: Node) -> void:
 	for index in MAX_EVENT_WAVES:
-		if _event_wave_active[index] == 1 and _event_wave_refs[index].get_ref() == event_wave:
+		if _event_wave_active[index] == 1 and _event_wave_refs[index] != null and _event_wave_refs[index].get_ref() == event_wave:
 			_event_wave_active[index] = 0
 			_event_wave_refs[index] = null
 	_event_wave_parameters_dirty = true
@@ -2288,7 +2314,7 @@ func _push_event_wave_parameters_to_all_materials() -> void:
 
 func _push_event_wave_parameters(material: ShaderMaterial) -> void:
 	if material == null or material.shader == null: return
-	if material.shader.code.find("event_wave_active") < 0: return
+	if not _shader_supports_event_waves(material.shader): return
 	material.set_shader_parameter(&"event_wave_active", _event_wave_active)
 	material.set_shader_parameter(&"event_wave_origins", _event_wave_origins)
 	material.set_shader_parameter(&"event_wave_directions", _event_wave_directions)
@@ -2302,6 +2328,11 @@ func _push_event_wave_parameters(material: ShaderMaterial) -> void:
 	material.set_shader_parameter(&"event_wave_fade_ins", _event_wave_fade_ins)
 	material.set_shader_parameter(&"event_wave_lifetimes", _event_wave_lifetimes)
 	material.set_shader_parameter(&"event_wave_fade_outs", _event_wave_fade_outs)
+
+func _shader_supports_event_waves(shader: Shader) -> bool:
+	for uniform_data: Dictionary in shader.get_shader_uniform_list():
+		if uniform_data.get("name", "") == "event_wave_active": return true
+	return false
 
 
 func _push_static_parameters_to_all_materials() -> void:
