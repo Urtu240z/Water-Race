@@ -24,10 +24,17 @@ var total_tangential_drag_magnitude := 0.0
 
 
 func _ready() -> void:
-	var simulator: PhysicalBoneSimulator3D = get_parent().get_physical_bone_simulator()
+	set_physics_process(false)
+
+
+func configure(simulator: PhysicalBoneSimulator3D) -> void:
+	_hips = null
+	_spine2 = null
+	set_physics_process(false)
+	if simulator == null:
+		return
 	_hips = simulator.get_node_or_null("Physical Bone mixamorig_Hips") as PhysicalBone3D
 	_spine2 = simulator.get_node_or_null("Physical Bone mixamorig_Spine2") as PhysicalBone3D
-	set_physics_process(false)
 
 
 func set_water_provider(provider: WaterSurfaceProvider3D) -> void:
@@ -36,7 +43,12 @@ func set_water_provider(provider: WaterSurfaceProvider3D) -> void:
 
 func set_active(value: bool) -> void:
 	_reset_debug_state()
-	set_physics_process(value and is_instance_valid(_provider))
+	set_physics_process(
+		value
+		and is_instance_valid(_provider)
+		and is_instance_valid(_hips)
+		and is_instance_valid(_spine2)
+	)
 
 
 func clear_water_provider() -> void:

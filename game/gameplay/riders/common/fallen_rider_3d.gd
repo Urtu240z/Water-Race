@@ -13,6 +13,7 @@ const WaterPhysicsScript = preload(
 
 
 func _ready() -> void:
+	water_physics.configure(simulator)
 	_prepare_animation_ownership()
 	prepare_dormant()
 
