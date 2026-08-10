@@ -1,8 +1,6 @@
 class_name WaterSurfaceProvider3D
 extends Node3D
 
-const WaterSample3D = preload("res://world/water/query/water_sample_3d.gd")
-
 ## Minimal authoritative water-query contract.
 ##
 ## A provider returns one coherent surface position, normal, velocity, and

@@ -1,9 +1,6 @@
 class_name JetSkiWaterPhysicsSystem
 extends Node
 
-const WaterSurfaceProvider3D = preload("res://world/water/query/water_surface_provider_3d.gd")
-const WaterSample3D = preload("res://world/water/query/water_sample_3d.gd")
-
 const BUOYANCY_POINT_COUNT: int = 4
 const FRONT_POINT_COUNT: int = 2
 const POINT_NAMES: Array[StringName] = [

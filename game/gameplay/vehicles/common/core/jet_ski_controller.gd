@@ -1,8 +1,6 @@
 class_name JetSkiController
 extends RigidBody3D
 
-const WaterSurfaceProvider3D = preload("res://world/water/query/water_surface_provider_3d.gd")
-
 signal reset_completed(reason: StringName)
 signal world_rebased(shift: Vector3)
 signal water_entered(intensity: float, position: Vector3)

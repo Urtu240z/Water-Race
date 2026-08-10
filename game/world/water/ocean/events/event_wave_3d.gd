@@ -2,8 +2,6 @@
 class_name EventWave3D
 extends Node3D
 
-const EventWaveProfile = preload("res://world/water/ocean/events/event_wave_profile.gd")
-
 signal activated
 signal deactivated
 signal completed

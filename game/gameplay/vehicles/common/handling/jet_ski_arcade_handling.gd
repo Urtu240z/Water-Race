@@ -1,9 +1,6 @@
 class_name JetSkiArcadeHandling
 extends Node
 
-const WaterSurfaceProvider3D = preload("res://world/water/query/water_surface_provider_3d.gd")
-const WaterSample3D = preload("res://world/water/query/water_sample_3d.gd")
-
 ## Adds selective arcade grip to the JetSki without replacing its water physics.
 ## The legacy path remains unchanged while the controller's
 ## use_arcade_turn_continuity toggle is disabled.

@@ -1198,8 +1198,8 @@ func _initialize_event_waves() -> void:
 func _expire_event_waves() -> void:
 	for index in MAX_EVENT_WAVES:
 		if _event_wave_active[index] == 0: continue
-		var owner: Node = _event_wave_refs[index].get_ref() if _event_wave_refs[index] != null else null
-		if owner == null:
+		var event_owner: Node = _event_wave_refs[index].get_ref() if _event_wave_refs[index] != null else null
+		if event_owner == null:
 			_event_wave_active[index] = 0
 			_event_wave_refs[index] = null
 			_event_wave_parameters_dirty = true
@@ -1208,8 +1208,8 @@ func _expire_event_waves() -> void:
 			_event_wave_active[index] = 0
 			_event_wave_refs[index] = null
 			_event_wave_parameters_dirty = true
-			if owner.has_method("notify_event_wave_completed"):
-				owner.notify_event_wave_completed()
+			if event_owner.has_method("notify_event_wave_completed"):
+				event_owner.notify_event_wave_completed()
 
 
 func _initialize_landing_impacts() -> void:

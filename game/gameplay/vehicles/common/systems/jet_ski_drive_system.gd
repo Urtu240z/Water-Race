@@ -1,9 +1,6 @@
 class_name JetSkiDriveSystem
 extends Node
 
-const WaterSurfaceProvider3D = preload("res://world/water/query/water_surface_provider_3d.gd")
-const WaterSample3D = preload("res://world/water/query/water_sample_3d.gd")
-
 const DIRECTION_EPSILON_SQUARED: float = 0.000001
 const MINIMUM_COASTING_STEERING_INPUT: float = 0.001
 const MINIMUM_COASTING_FORWARD_SPEED: float = 0.01
