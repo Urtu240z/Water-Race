@@ -69,7 +69,10 @@ func is_vehicle_control_locked() -> bool:
 
 
 func request_recovery() -> bool:
-	if _state != State.RECOVERY_READY or _vehicle == null:
+	if (
+		(_state != State.FALLEN and _state != State.RECOVERY_READY)
+		or _vehicle == null
+	):
 		return false
 	_state = State.RECOVERING
 	recovery_started.emit(_context)

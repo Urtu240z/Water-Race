@@ -12,24 +12,11 @@
 [ext_resource type="Script" uid="uid://b3kfrm0a2yu83" path="res://gameplay/vehicles/common/rider/rider_impact_response_controller.gd" id="6_impact_response"]
 [ext_resource type="Script" uid="uid://clycxmofcu2k5" path="res://gameplay/riders/common/modifiers/rider_grip_finger_modifier_3d.gd" id="7_grip_fingers"]
 [ext_resource type="Script" uid="uid://44vr286e106h" path="res://gameplay/vehicles/common/rider/rider_mounted_lean_controller.gd" id="8_mounted_lean"]
-[ext_resource type="Script" path="res://gameplay/vehicles/common/rider/rider_ragdoll_handoff.gd" id="9_ragdoll_handoff"]
+[ext_resource type="Script" uid="uid://matb1l5xjnvv" path="res://gameplay/vehicles/common/rider/rider_ragdoll_handoff.gd" id="9_ragdoll_handoff"]
 [ext_resource type="PackedScene" path="res://gameplay/riders/common/fallen_rider_3d.tscn" id="10_fallen_rider"]
-[ext_resource type="Script" path="res://gameplay/vehicles/common/rider/jet_ski_wipeout_system.gd" id="11_wipeout_system"]
+[ext_resource type="Script" uid="uid://8gmx30no6yit" path="res://gameplay/vehicles/common/rider/jet_ski_wipeout_system.gd" id="11_wipeout_system"]
 
 [node name="JetSki" unique_id=117969959 instance=ExtResource("1_base")]
-
-[node name="FallenRider" parent="." instance=ExtResource("10_fallen_rider")]
-
-[node name="RiderRagdollHandoff" type="Node" parent="Systems" parent_id_path=PackedInt32Array(1832404346)]
-script = ExtResource("9_ragdoll_handoff")
-mounted_rider_path = NodePath("../../VisualRoot/RiderMount/RiderAssetRoot/RiderRig")
-fallen_rider_path = NodePath("../../FallenRider")
-vehicle_path = NodePath("../..")
-
-[node name="WipeoutSystem" type="Node" parent="Systems"]
-script = ExtResource("11_wipeout_system")
-vehicle_path = NodePath("../..")
-handoff_path = NodePath("../RiderRagdollHandoff")
 
 [node name="JetSkiVisual" parent="VisualRoot" parent_id_path=PackedInt32Array(1832404346) index="0" unique_id=556077452]
 handle_low_angle_degrees = -3.0
@@ -273,10 +260,10 @@ right_grip_strength = 0.93
 thumb_opposition_strength = 0.47
 
 [node name="rider_01_body" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/rider_bot/SKEL_Rider/Skeleton3D" index="9" unique_id=1837524736]
-visible = true
-
-[node name="rider_03_body" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/rider_bot/SKEL_Rider/Skeleton3D" index="11" unique_id=9366931]
 visible = false
+
+[node name="rider_02_body" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/rider_bot/SKEL_Rider/Skeleton3D" index="10" unique_id=417895057]
+visible = true
 
 [node name="AnimationTree" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig" index="2" unique_id=187453891]
 parameters/mounted_add/add_amount = 0.0
@@ -284,6 +271,18 @@ parameters/mounted_add/add_amount = 0.0
 [node name="FirstPersonSocket" type="Marker3D" parent="VisualRoot/RiderMount" index="1" unique_id=697184570]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4172, -0.899)
 gizmo_extents = 0.08
+
+[node name="RiderRagdollHandoff" type="Node" parent="Systems" parent_id_path=PackedInt32Array(388330452) index="7" unique_id=942867439]
+script = ExtResource("9_ragdoll_handoff")
+mounted_rider_path = NodePath("../../VisualRoot/RiderMount/RiderAssetRoot/RiderRig")
+fallen_rider_path = NodePath("../../FallenRider")
+vehicle_path = NodePath("../..")
+
+[node name="WipeoutSystem" type="Node" parent="Systems" parent_id_path=PackedInt32Array(388330452) index="8" unique_id=2063001960]
+script = ExtResource("11_wipeout_system")
+vehicle_path = NodePath("../..")
+handoff_path = NodePath("../RiderRagdollHandoff")
+minimum_fallen_duration = 15.0
 
 [node name="EngineAudio" parent="." index="3" unique_id=1603778743]
 full_throttle_pitch = 3.5
@@ -323,6 +322,8 @@ script = ExtResource("8_mounted_lean")
 [node name="VehicleWaterEffects3D" parent="Effects" parent_id_path=PackedInt32Array(1733691099) index="0" unique_id=1574631450]
 spray_color = Color(0.78039217, 0.9490196, 1, 0.09803922)
 spray_edge_color = Color(1, 1, 1, 0.1254902)
+
+[node name="FallenRider" parent="." index="12" unique_id=190508244 instance=ExtResource("10_fallen_rider")]
 
 [editable path="VisualRoot/JetSkiVisual/HullModel/NewJetSki_Hull"]
 [editable path="VisualRoot/JetSkiVisual/HandlePivot/HandleModel/NewJetSki_Handle"]

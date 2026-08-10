@@ -162,8 +162,8 @@ const LEFT_CONTACT_MASK: int = (
 
 @export_group("Rider Ejection")
 @export var manual_ejection_enabled := true
-@export_range(0.0, 500.0, 1.0) var manual_ejection_forward_impulse := 4.0
-@export_range(0.0, 500.0, 1.0) var manual_ejection_up_impulse := 3.0
+@export_range(0.0, 1000.0, 1.0) var manual_ejection_forward_impulse := 4.0
+@export_range(0.0, 1000.0, 1.0) var manual_ejection_up_impulse := 3.0
 
 @export_group("Rider Tricks - Release")
 @export_range(1000.0, 20000.0, 100.0) var trick_roll_release_torque: float = 7000.0
@@ -805,6 +805,13 @@ func _physics_process(_delta: float) -> void:
 		if Input.is_action_just_pressed("reset_vehicle"):
 			reset_vehicle(&"manual_input")
 			return
+	else:
+		if Input.is_action_just_pressed("recover_vehicle"):
+			request_wipeout_recovery()
+			return
+		if Input.is_action_just_pressed("reset_vehicle"):
+			request_wipeout_recovery()
+			return
 	var safety_reason := _get_safety_reset_reason()
 	if not safety_reason.is_empty():
 		reset_vehicle(safety_reason)
@@ -835,6 +842,12 @@ func request_wipeout(context: WipeoutContext) -> bool:
 	if wipeout_system == null:
 		return false
 	return bool(wipeout_system.call("request_wipeout", context))
+
+
+func request_wipeout_recovery() -> bool:
+	if wipeout_system == null:
+		return false
+	return bool(wipeout_system.call("request_recovery"))
 
 
 func request_manual_ejection() -> bool:

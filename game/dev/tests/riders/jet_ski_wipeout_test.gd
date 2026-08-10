@@ -5,10 +5,10 @@ const RELOAD_COUNT_META := &"water_race_wipeout_test_reload_count"
 
 @export_group("Ragdoll Launch Test")
 
-@export_range(0.0, 500.0, 1.0)
+@export_range(0.0, 1000.0, 1.0)
 var test_forward_impulse := 4.0
 
-@export_range(0.0, 500.0, 1.0)
+@export_range(0.0, 1000.0, 1.0)
 var test_up_impulse := 3.0
 
 @onready var vehicle: JetSkiController = $JetSki
