@@ -21,19 +21,19 @@ rider_skin = 5
 
 [node name="rider_bot" parent="RiderModelRoot" unique_id=1075285769 instance=ExtResource("2_wrxx4")]
 
-[node name="Skeleton3D" parent="RiderModelRoot/rider_bot/SKEL_Rider" parent_id_path=PackedInt32Array(1075285769, 1348584656) index="0" unique_id=426480764]
+[node name="Skeleton3D" parent="RiderModelRoot/rider_bot/SKEL_Rider" parent_id_path=PackedInt32Array(1075285769, 631392731) index="0" unique_id=763064560]
 bones/0/position = Vector3(0.04845924, 0.66667527, -0.22242343)
 bones/0/rotation = Quaternion(0.18325989, 0.10306759, 0.014143271, 0.9775443)
 bones/1/position = Vector3(-4.8316906e-12, 0.101824485, 1.9628956e-09)
-bones/1/rotation = Quaternion(0, 0, 0, 1)
+bones/1/rotation = Quaternion(0.19404872, -0.01194755, 0.016523127, 0.98077995)
 bones/2/position = Vector3(0, 0.10002686, 8.381903e-09)
 bones/2/rotation = Quaternion(-0.016251868, -0.0021406363, -0.002404168, 0.99986273)
 bones/3/position = Vector3(3.637979e-12, 0.10010648, -2.0489097e-08)
-bones/3/rotation = Quaternion(0, 0, 0, 1)
+bones/3/rotation = Quaternion(0.3607207, -0.0023574908, -0.002598554, 0.9326673)
 bones/4/position = Vector3(-3.710018e-06, 0.16292441, -0.002570657)
-bones/4/rotation = Quaternion(0, 0, 0, 1)
+bones/4/rotation = Quaternion(-0.271915, 0.013153285, -0.016808193, 0.9620846)
 bones/5/position = Vector3(-0.0009604156, 0.029974632, 0.024632536)
-bones/5/rotation = Quaternion(0, 0, 0, 1)
+bones/5/rotation = Quaternion(-0.24607772, 0.008751963, -0.009766882, 0.9691614)
 bones/6/position = Vector3(-0.058524292, 0.10738471, -0.0041615376)
 bones/6/rotation = Quaternion(-0.4742514, 0.57118, -0.52213013, -0.41978464)
 bones/7/position = Vector3(0.006084124, 0.12903093, -0.0029388438)
@@ -114,11 +114,10 @@ bones/50/rotation = Quaternion(0.59821767, -0.006833869, -0.011269013, 0.8012252
 bones/51/position = Vector3(-6.2773324e-09, 0.1499741, 9.546056e-09)
 bones/51/rotation = Quaternion(0.35248858, -0.00014723818, 4.045581e-06, 0.9358161)
 
-[node name="SK_Rider" parent="RiderModelRoot/rider_bot/SKEL_Rider/Skeleton3D" index="0" unique_id=1167999723]
+[node name="SK_Rider" parent="RiderModelRoot/rider_bot/SKEL_Rider/Skeleton3D" index="0" unique_id=195835057]
 visible = false
 
 [node name="rider_01_body" type="MeshInstance3D" parent="RiderModelRoot/rider_bot/SKEL_Rider/Skeleton3D" index="1" unique_id=1837524736 groups=["rider_skin_rider_01"]]
-visible = false
 mesh = ExtResource("14_rider_01_body_mesh")
 skin = ExtResource("15_rider_01_skin")
 skeleton = NodePath("..")
@@ -130,6 +129,7 @@ skin = ExtResource("17_rider02_skin")
 skeleton = NodePath("..")
 
 [node name="rider_03_body" type="MeshInstance3D" parent="RiderModelRoot/rider_bot/SKEL_Rider/Skeleton3D" index="3" unique_id=9366931 groups=["rider_skin_rider_03"]]
+visible = false
 mesh = ExtResource("18_rider03_body_mesh")
 skin = ExtResource("19_rider03_skin")
 skeleton = NodePath("..")

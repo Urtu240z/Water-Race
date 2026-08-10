@@ -43,8 +43,8 @@ _subresources={
 "materials": {
 "Material~1": {
 "use_external/enabled": true,
-"use_external/fallback_path": "res://world/props/rocks/materials/rock_03.tres",
-"use_external/path": "uid://ds6e4fqb1au7f"
+"use_external/fallback_path": "res://shared/materials/terrain/materials/aerial_rocks_02.res",
+"use_external/path": "uid://cwtgldc4ahbeu"
 }
 }
 }

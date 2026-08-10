@@ -43,8 +43,8 @@ _subresources={
 "materials": {
 "Sand": {
 "use_external/enabled": true,
-"use_external/fallback_path": "res://world/props/terrain/materials/independent_island_sand.tres",
-"use_external/path": "uid://7prjcapmwl1e"
+"use_external/fallback_path": "res://shared/materials/terrain/materials/sand_02.res",
+"use_external/path": "uid://dmj6dyip8ab0w"
 }
 }
 }
