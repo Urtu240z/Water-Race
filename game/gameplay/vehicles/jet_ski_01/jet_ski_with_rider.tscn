@@ -12,8 +12,17 @@
 [ext_resource type="Script" uid="uid://b3kfrm0a2yu83" path="res://gameplay/vehicles/common/rider/rider_impact_response_controller.gd" id="6_impact_response"]
 [ext_resource type="Script" uid="uid://clycxmofcu2k5" path="res://gameplay/riders/common/modifiers/rider_grip_finger_modifier_3d.gd" id="7_grip_fingers"]
 [ext_resource type="Script" uid="uid://44vr286e106h" path="res://gameplay/vehicles/common/rider/rider_mounted_lean_controller.gd" id="8_mounted_lean"]
+[ext_resource type="Script" path="res://gameplay/vehicles/common/rider/rider_ragdoll_handoff.gd" id="9_ragdoll_handoff"]
+[ext_resource type="PackedScene" path="res://gameplay/riders/common/fallen_rider_3d.tscn" id="10_fallen_rider"]
 
 [node name="JetSki" unique_id=117969959 instance=ExtResource("1_base")]
+
+[node name="FallenRider" parent="." instance=ExtResource("10_fallen_rider")]
+
+[node name="RiderRagdollHandoff" type="Node" parent="Systems" parent_id_path=PackedInt32Array(1832404346)]
+script = ExtResource("9_ragdoll_handoff")
+mounted_rider_path = NodePath("../../VisualRoot/RiderMount/RiderAssetRoot/RiderRig")
+fallen_rider_path = NodePath("../../FallenRider")
 
 [node name="JetSkiVisual" parent="VisualRoot" parent_id_path=PackedInt32Array(1832404346) index="0" unique_id=556077452]
 handle_low_angle_degrees = -3.0
