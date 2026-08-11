@@ -1283,8 +1283,6 @@ if (use_baked_tree_shadows) {
 		(world_position.xz - tree_shadow_world_min)
 		/ max(tree_shadow_world_size, vec2(0.001));
 
-	shadow_uv.y = 1.0 - shadow_uv.y;
-
 	if (
 		shadow_uv.x >= 0.0 && shadow_uv.x <= 1.0 &&
 		shadow_uv.y >= 0.0 && shadow_uv.y <= 1.0
@@ -1296,8 +1294,34 @@ if (use_baked_tree_shadows) {
 	}
 }
 
-final_albedo *= (
-	1.0 - baked_tree_shadow * tree_shadow_strength
+
+// ============================================================
+// TREE SHADOW REMAP
+// ============================================================
+
+// Amplificamos una máscara bakeada que viene muy tenue.
+float shadow_amount = clamp(
+	baked_tree_shadow * tree_shadow_strength,
+	0.0,
+	1.0
+);
+
+// Hace que valores medios/bajos ganen bastante fuerza,
+// pero mantiene los huecos reales entre hojas.
+shadow_amount = pow(
+	shadow_amount,
+	0.40
+);
+
+// Nivel máximo de oscuridad.
+// 0.28 significa que una sombra al 100 % deja
+// aproximadamente el 28 % del albedo original.
+vec3 shadowed_albedo = final_albedo * 0.10;
+
+final_albedo = mix(
+	final_albedo,
+	shadowed_albedo,
+	shadow_amount
 );
 
 	// --------------------------------------------------------
