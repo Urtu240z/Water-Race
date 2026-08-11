@@ -209,7 +209,7 @@ shader_parameter/breakup = 0.0
 material = ExtResource("15_6i7i5")
 size = Vector2(10000, 10000)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_qsxv0"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4s1c0"]
 resource_local_to_scene = true
 render_priority = 0
 shader = ExtResource("41_48bym")
@@ -437,7 +437,7 @@ shader_parameter/custom_reflection_minimum_surface_weight = 0.34
 shader_parameter/custom_reflection_maximum_surface_weight = 0.88
 shader_parameter/custom_reflection_emission_strength = 1.20999997295408
 
-[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_lh2je"]
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_qsxv0"]
 resource_local_to_scene = true
 blend_mode = 1
 
@@ -464,7 +464,7 @@ point_count = 3
 [sub_resource type="CurveTexture" id="CurveTexture_bubble_shrink"]
 curve = SubResource("Curve_bubble_shrink")
 
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_qj7v8"]
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_lh2je"]
 resource_local_to_scene = true
 particle_flag_disable_z = true
 emission_shape_offset = Vector3(0, 600, 0)
@@ -487,7 +487,7 @@ turbulence_influence_max = 0.082
 turbulence_initial_displacement_min = -47.5
 turbulence_initial_displacement_max = 94.5
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_8enb2"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qj7v8"]
 resource_local_to_scene = true
 render_priority = -127
 shader = ExtResource("55_gee3e")
@@ -681,7 +681,7 @@ mesh = SubResource("PlaneMesh_tpwhi")
 [node name="WaterIntegration" type="Node3D" parent="." unique_id=1889730552]
 
 [node name="Ocean" parent="WaterIntegration" unique_id=1340264265 instance=ExtResource("40_5h17r")]
-ocean_material = SubResource("ShaderMaterial_qsxv0")
+ocean_material = SubResource("ShaderMaterial_4s1c0")
 wave_world_size_a = 231.5
 wave_world_size_b = 155.5
 wave_travel_speed_a = 9.0000004321348
@@ -992,7 +992,7 @@ editor_preview_mode = 0
 
 [node name="EntryBubbles" parent="CameraSystem/ChaseCamera/Camera3D/UnderwaterEffect/WaterCrossingOverlay" index="0"]
 visible = false
-material = SubResource("CanvasItemMaterial_lh2je")
+material = SubResource("CanvasItemMaterial_qsxv0")
 position = Vector2(1, 1.76)
 amount = 500
 texture = SubResource("GradientTexture2D_pl0kw")
@@ -1000,10 +1000,10 @@ lifetime = 20.0
 speed_scale = 8.0
 explosiveness = 1.0
 randomness = 1.0
-process_material = SubResource("ParticleProcessMaterial_qj7v8")
+process_material = SubResource("ParticleProcessMaterial_lh2je")
 
 [node name="UnderwaterPostProcess" parent="CameraSystem/ChaseCamera/Camera3D/UnderwaterEffect" index="1" unique_id=1854893749]
-material_override = SubResource("ShaderMaterial_8enb2")
+material_override = SubResource("ShaderMaterial_qj7v8")
 
 [node name="Atrezzo" type="Node3D" parent="." unique_id=1365592301]
 
@@ -1190,16 +1190,15 @@ omni_attenuation = 0.971
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 62.39052, 203.09952)
 
 [node name="Trees" parent="Atrezzo/TreeImpostorMultimesh" index="0" unique_id=184116622]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -90.22597, 0, -81.44191)
-min_spacing = 1.8
-max_spacing = 10.25
-poisson_attempts = null
-candidate_pool_multiplier = null
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -90.22597, 0, -110.150345)
+area_radius_x = 1000.0
+area_radius_z = 145.0
+min_spacing = 6.3
+max_spacing = 13.0
 center_scale_bias_percent = 37.0
 valid_ground_name_contains = PackedStringArray("Terrain_Master_COL")
 visual_exclusion_roots = Array[NodePath]([NodePath("../../Buildings"), NodePath("../../Rocks"), NodePath("../../PalmsMultiMesh"), NodePath("../../../TerrainRoot/test_island/Lighthouse_VIS")])
-visual_radius_factor = 0.55
-visual_extra_clearance = 3.9
+visual_radius_factor = 0.1
 
 [node name="Circuit" type="Node3D" parent="." unique_id=1519848915]
 

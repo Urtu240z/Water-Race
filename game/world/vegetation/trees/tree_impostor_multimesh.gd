@@ -1108,3 +1108,20 @@ func _get_ellipse_radius_ratio(
 		0.0,
 		1.0
 	)
+func _notification(what: int) -> void:
+	if not Engine.is_editor_hint():
+		return
+
+	if what == NOTIFICATION_EDITOR_PRE_SAVE:
+		_clear_generated_multimesh()
+
+	elif what == NOTIFICATION_EDITOR_POST_SAVE:
+		call_deferred("_generate")
+
+
+func _clear_generated_multimesh() -> void:
+	if multimesh == null:
+		return
+
+	multimesh.instance_count = 0
+	multimesh.visible_instance_count = -1
