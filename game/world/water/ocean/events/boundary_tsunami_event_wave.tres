@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="EventWaveProfile" format=3 uid="uid://e5jcb4ue4bh7"]
+
+[ext_resource type="Script" uid="uid://d28g2y2o80558" path="res://world/water/ocean/events/event_wave_profile.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+amplitude = 10.0
+width = 40.0
+speed = 38.0
+trough_amplitude = 0.0
+trough_width = 40.0
+trough_offset = 0.0
+horizontal_flow = 8.0
+fade_in_time = 0.35
+lifetime = 30.0
+fade_out_time = 1.5

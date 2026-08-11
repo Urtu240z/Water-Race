@@ -69,6 +69,8 @@
 [ext_resource type="PackedScene" uid="uid://cilidnwjw2dt" path="res://world/vegetation/palms/palms_multimesh.scn" id="65_20vi3"]
 [ext_resource type="Material" uid="uid://dk2h67ph6buix" path="res://shared/materials/metal/materials/rusty_metal_03.res" id="66_1mjlu"]
 [ext_resource type="PackedScene" uid="uid://dmqjonl673mxd" path="res://gameplay/race/course/buoys/buoy.tscn" id="67_diovn"]
+[ext_resource type="Script" uid="uid://bi5r7j71qd8fp" path="res://gameplay/race/boundary/boundary_wipeout_controller_3d.gd" id="68_bwc3d"]
+[ext_resource type="Resource" uid="uid://e5jcb4ue4bh7" path="res://world/water/ocean/events/boundary_tsunami_event_wave.tres" id="69_btsun"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_f0815"]
 panorama = ExtResource("6_ord5u")
@@ -683,7 +685,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 597, 0, 764)
 script = ExtResource("43_i77vt")
 ocean_path = NodePath("../Ocean")
 profile = ExtResource("44_jnsb7")
-auto_activate = true
+auto_activate = false
 amplitude_multiplier = 10.0
 speed_multiplier = 1.5
 flow_multiplier = 5.0
@@ -905,6 +907,23 @@ autoplay = true
 [node name="Music" type="AudioStreamPlayer" parent="Gameplay/JetSki" unique_id=1584183376]
 stream = ExtResource("53_5dbre")
 autoplay = true
+
+[node name="BoundaryCenter" type="Marker3D" parent="Gameplay"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 200, 0, 0)
+
+[node name="BoundaryWipeoutController" type="Node3D" parent="Gameplay"]
+script = ExtResource("68_bwc3d")
+vehicle_path = NodePath("../JetSki")
+ocean_path = NodePath("../../WaterIntegration/Ocean")
+event_wave_path = NodePath("BoundaryEventWave")
+boundary_center_path = NodePath("../BoundaryCenter")
+boundary_radius = 800.0
+
+[node name="BoundaryEventWave" type="Node3D" parent="Gameplay/BoundaryWipeoutController"]
+script = ExtResource("43_i77vt")
+ocean_path = NodePath("../../../WaterIntegration/Ocean")
+profile = ExtResource("69_btsun")
+metadata/_custom_type_script = "uid://cvayffg86y5d3"
 
 [node name="CameraSystem" type="Node3D" parent="." unique_id=1510457463]
 

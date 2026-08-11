@@ -81,6 +81,9 @@ func request_boundary_violation(
 	var outward := _resolve_outward_direction(outward_direction)
 	if outward == Vector2.ZERO:
 		return false
+	if _event_wave.active:
+		_retry_remaining = activation_retry_cooldown
+		return false
 	if not _place_and_orient_wave(outward):
 		_retry_remaining = activation_retry_cooldown
 		return false
