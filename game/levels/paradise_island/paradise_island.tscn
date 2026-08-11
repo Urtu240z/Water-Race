@@ -214,7 +214,7 @@ shader_parameter/breakup = 0.0
 material = ExtResource("15_6i7i5")
 size = Vector2(10000, 10000)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_lh2je"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4s1c0"]
 resource_local_to_scene = true
 render_priority = 0
 shader = ExtResource("41_48bym")
@@ -442,7 +442,7 @@ shader_parameter/custom_reflection_minimum_surface_weight = 0.34
 shader_parameter/custom_reflection_maximum_surface_weight = 0.88
 shader_parameter/custom_reflection_emission_strength = 1.20999997295408
 
-[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_qj7v8"]
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_qsxv0"]
 resource_local_to_scene = true
 blend_mode = 1
 
@@ -469,7 +469,7 @@ point_count = 3
 [sub_resource type="CurveTexture" id="CurveTexture_bubble_shrink"]
 curve = SubResource("Curve_bubble_shrink")
 
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_8enb2"]
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_lh2je"]
 resource_local_to_scene = true
 particle_flag_disable_z = true
 emission_shape_offset = Vector3(0, 600, 0)
@@ -492,7 +492,7 @@ turbulence_influence_max = 0.082
 turbulence_initial_displacement_min = -47.5
 turbulence_initial_displacement_max = 94.5
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_xn4fe"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qj7v8"]
 resource_local_to_scene = true
 render_priority = -127
 shader = ExtResource("55_gee3e")
@@ -680,7 +680,7 @@ mesh = SubResource("PlaneMesh_tpwhi")
 [node name="WaterIntegration" type="Node3D" parent="." unique_id=1889730552]
 
 [node name="Ocean" parent="WaterIntegration" unique_id=1340264265 instance=ExtResource("40_5h17r")]
-ocean_material = SubResource("ShaderMaterial_lh2je")
+ocean_material = SubResource("ShaderMaterial_4s1c0")
 wave_world_size_a = 231.5
 wave_world_size_b = 155.5
 wave_travel_speed_a = 9.0000004321348
@@ -990,7 +990,7 @@ wet_lens_texture_edge_feather = 0.1
 editor_preview_mode = 0
 
 [node name="EntryBubbles" parent="CameraSystem/ChaseCamera/Camera3D/UnderwaterEffect/WaterCrossingOverlay" index="0"]
-material = SubResource("CanvasItemMaterial_qj7v8")
+material = SubResource("CanvasItemMaterial_qsxv0")
 position = Vector2(1, 1.76)
 amount = 500
 texture = SubResource("GradientTexture2D_pl0kw")
@@ -998,10 +998,10 @@ lifetime = 20.0
 speed_scale = 8.0
 explosiveness = 1.0
 randomness = 1.0
-process_material = SubResource("ParticleProcessMaterial_8enb2")
+process_material = SubResource("ParticleProcessMaterial_lh2je")
 
 [node name="UnderwaterPostProcess" parent="CameraSystem/ChaseCamera/Camera3D/UnderwaterEffect" index="1" unique_id=1854893749]
-material_override = SubResource("ShaderMaterial_xn4fe")
+material_override = SubResource("ShaderMaterial_qj7v8")
 
 [node name="Atrezzo" type="Node3D" parent="." unique_id=1365592301]
 
@@ -1258,7 +1258,6 @@ min_scale = 6.0
 max_scale = 15.0
 ray_above_height = 500.0
 ray_below_depth = 600.0
-valid_ground_name_contains = PackedStringArray("Terrain_Master_COL")
 minimum_height_above_water = 3.5
 canopy_shadow_strength = 1.0
 canopy_per_tree_density = 1.0
@@ -1280,7 +1279,6 @@ min_scale = 6.0
 max_scale = 15.0
 ray_above_height = 500.0
 ray_below_depth = 600.0
-valid_ground_name_contains = PackedStringArray("Terrain_Master_COL")
 minimum_height_above_water = 3.5
 canopy_shadow_strength = 1.0
 canopy_per_tree_density = 1.0
@@ -1303,7 +1301,6 @@ min_scale = 6.0
 max_scale = 15.0
 ray_above_height = 500.0
 ray_below_depth = 600.0
-valid_ground_name_contains = PackedStringArray("Terrain_Master_COL")
 minimum_height_above_water = 3.5
 canopy_shadow_strength = 1.0
 canopy_per_tree_density = 1.0
@@ -1326,7 +1323,6 @@ min_scale = 6.0
 max_scale = 15.0
 ray_above_height = 500.0
 ray_below_depth = 600.0
-valid_ground_name_contains = PackedStringArray("Terrain_Master_COL")
 max_ground_slope_degrees = 30.0
 minimum_height_above_water = 3.5
 canopy_shadow_strength = 1.0
@@ -1350,7 +1346,6 @@ min_scale = 6.0
 max_scale = 15.0
 ray_above_height = 500.0
 ray_below_depth = 600.0
-valid_ground_name_contains = PackedStringArray("Terrain_Master_COL")
 max_ground_slope_degrees = 30.0
 minimum_height_above_water = 3.5
 canopy_shadow_strength = 1.0
@@ -1373,7 +1368,6 @@ min_scale = 6.0
 max_scale = 15.0
 ray_above_height = 500.0
 ray_below_depth = 600.0
-valid_ground_name_contains = PackedStringArray("Terrain_Master_COL")
 max_ground_slope_degrees = 30.0
 minimum_height_above_water = 3.5
 canopy_shadow_strength = 1.0
@@ -1400,7 +1394,6 @@ min_scale = 6.0
 max_scale = 15.0
 ray_above_height = 500.0
 ray_below_depth = 600.0
-valid_ground_name_contains = PackedStringArray("Terrain_Master_COL")
 minimum_height_above_water = 3.5
 canopy_shadow_strength = 1.0
 canopy_per_tree_density = 1.0
@@ -1422,7 +1415,6 @@ min_scale = 6.0
 max_scale = 15.0
 ray_above_height = 500.0
 ray_below_depth = 600.0
-valid_ground_name_contains = PackedStringArray("Terrain_Master_COL")
 minimum_height_above_water = 3.5
 canopy_shadow_strength = 1.0
 canopy_per_tree_density = 1.0
@@ -1445,7 +1437,6 @@ min_scale = 6.0
 max_scale = 15.0
 ray_above_height = 500.0
 ray_below_depth = 600.0
-valid_ground_name_contains = PackedStringArray("Terrain_Master_COL")
 minimum_height_above_water = 3.5
 canopy_shadow_strength = 1.0
 canopy_per_tree_density = 1.0
@@ -1468,7 +1459,6 @@ min_scale = 6.0
 max_scale = 15.0
 ray_above_height = 500.0
 ray_below_depth = 600.0
-valid_ground_name_contains = PackedStringArray("Terrain_Master_COL")
 max_ground_slope_degrees = 30.0
 minimum_height_above_water = 3.5
 canopy_shadow_strength = 1.0
@@ -1492,7 +1482,6 @@ min_scale = 6.0
 max_scale = 15.0
 ray_above_height = 500.0
 ray_below_depth = 600.0
-valid_ground_name_contains = PackedStringArray("Terrain_Master_COL")
 max_ground_slope_degrees = 30.0
 minimum_height_above_water = 3.5
 canopy_shadow_strength = 1.0
@@ -1516,7 +1505,6 @@ min_scale = 6.0
 max_scale = 15.0
 ray_above_height = 500.0
 ray_below_depth = 600.0
-valid_ground_name_contains = PackedStringArray("Terrain_Master_COL")
 max_ground_slope_degrees = 30.0
 minimum_height_above_water = 3.5
 canopy_shadow_strength = 1.0
@@ -1534,6 +1522,8 @@ script = ExtResource("74_qsxv0")
 terrain_mesh_path = NodePath("../TerrainRoot/test_island/Terrain_Master_VIS")
 sun_light_path = NodePath("../Environment/DirectionalLight3D2")
 output_png_path = "uid://ip2r2uwxmiib"
+texture_resolution = 1024
+tiles_per_axis = null
 world_padding = 10.0
 
 [editable path="TerrainRoot/test_island"]
