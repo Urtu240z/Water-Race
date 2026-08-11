@@ -5,11 +5,7 @@ extends MultiMeshInstance3D
 @export_range(1, 50, 1) var rows: int = 10
 @export_range(1.0, 30.0, 0.5) var spacing: float = 5.0
 
-@export var regenerate: bool = false:
-	set(value):
-		if value:
-			_generate()
-		regenerate = false
+@export_tool_button("Regenerate") var regenerate: Callable = _generate
 
 
 func _ready() -> void:

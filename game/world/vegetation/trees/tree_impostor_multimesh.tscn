@@ -17,4 +17,3 @@ mesh = SubResource("QuadMesh_wwatn")
 [node name="Trees" type="MultiMeshInstance3D" parent="." unique_id=184116622]
 multimesh = SubResource("MultiMesh_tpwhi")
 script = ExtResource("2_l7a6e")
-regenerate = true
