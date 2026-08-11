@@ -30,7 +30,7 @@ shader_type spatial;
 const float PI_F = 3.14159265358979323846;
 
 uniform bool use_baked_tree_shadows = false;
-uniform sampler2D tree_shadow_map : repeat_disable, filter_linear_mipmap;
+uniform sampler2D tree_shadow_map : repeat_disable, filter_linear;
 uniform vec2 tree_shadow_world_min = vec2(0.0, 0.0);
 uniform vec2 tree_shadow_world_size = vec2(1.0, 1.0);
 uniform float tree_shadow_strength : hint_range(0.0, 20.0, 0.01) = 1.0;
@@ -1294,33 +1294,15 @@ if (use_baked_tree_shadows) {
 	}
 }
 
-
-// ============================================================
-// TREE SHADOW REMAP
-// ============================================================
-
-// Amplificamos una máscara bakeada que viene muy tenue.
 float shadow_amount = clamp(
 	baked_tree_shadow * tree_shadow_strength,
 	0.0,
 	1.0
 );
 
-// Hace que valores medios/bajos ganen bastante fuerza,
-// pero mantiene los huecos reales entre hojas.
-shadow_amount = pow(
-	shadow_amount,
-	0.40
-);
-
-// Nivel máximo de oscuridad.
-// 0.28 significa que una sombra al 100 % deja
-// aproximadamente el 28 % del albedo original.
-vec3 shadowed_albedo = final_albedo * 0.10;
-
-final_albedo = mix(
-	final_albedo,
-	shadowed_albedo,
+final_albedo *= mix(
+	1.0,
+	0.15,
 	shadow_amount
 );
 
