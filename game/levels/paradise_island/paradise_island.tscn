@@ -71,8 +71,8 @@
 [ext_resource type="PackedScene" uid="uid://dmqjonl673mxd" path="res://gameplay/race/course/buoys/buoy.tscn" id="67_diovn"]
 [ext_resource type="Script" uid="uid://bi5r7j71qd8fp" path="res://gameplay/race/boundary/boundary_wipeout_controller_3d.gd" id="68_bwc3d"]
 [ext_resource type="Resource" uid="uid://e5jcb4ue4bh7" path="res://world/water/ocean/events/boundary_tsunami_event_wave.tres" id="69_btsun"]
-[ext_resource type="Texture2D" uid="uid://dtuqpmj3wc185" path="res://dev/tests/fake_forest/textures/tree_beech_a_tex.png" id="72_hb254"]
-[ext_resource type="Texture2D" uid="uid://dhyhw7b7y4oke" path="res://dev/tests/fake_forest/textures/tree_beech_a_nor.png" id="73_4s1c0"]
+[ext_resource type="Texture2D" uid="uid://dtuqpmj3wc185" path="res://world/vegetation/trees/textures/tree_beech_a_tex.png" id="72_hb254"]
+[ext_resource type="Texture2D" uid="uid://dhyhw7b7y4oke" path="res://world/vegetation/trees/textures/tree_beech_a_nor.png" id="73_4s1c0"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_f0815"]
 panorama = ExtResource("6_ord5u")
@@ -208,7 +208,7 @@ shader_parameter/breakup = 0.0
 material = ExtResource("15_6i7i5")
 size = Vector2(10000, 10000)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_qsxv0"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hb254"]
 resource_local_to_scene = true
 render_priority = 0
 shader = ExtResource("41_48bym")
@@ -339,8 +339,8 @@ shader_parameter/crest_tint = Color(0.044608742, 0.33985612, 0.3741427, 1)
 shader_parameter/absorption_density = 0.13
 shader_parameter/maximum_optical_depth = 38.0
 shader_parameter/shallow_depth_range = 5.5
-shader_parameter/near_water_alpha = 0.55999999865888
-shader_parameter/deep_water_alpha = 0.93999999016512
+shader_parameter/near_water_alpha = 0.77
+shader_parameter/deep_water_alpha = 0.999999988824
 shader_parameter/horizon_water_alpha = 1.0
 shader_parameter/opacity_distance_start = 80.0
 shader_parameter/opacity_distance_end = 220.0
@@ -436,7 +436,7 @@ shader_parameter/custom_reflection_minimum_surface_weight = 0.34
 shader_parameter/custom_reflection_maximum_surface_weight = 0.88
 shader_parameter/custom_reflection_emission_strength = 1.20999997295408
 
-[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_lh2je"]
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_4s1c0"]
 resource_local_to_scene = true
 blend_mode = 1
 
@@ -463,7 +463,7 @@ point_count = 3
 [sub_resource type="CurveTexture" id="CurveTexture_bubble_shrink"]
 curve = SubResource("Curve_bubble_shrink")
 
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_qj7v8"]
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_qsxv0"]
 resource_local_to_scene = true
 particle_flag_disable_z = true
 emission_shape_offset = Vector3(0, 600, 0)
@@ -486,7 +486,7 @@ turbulence_influence_max = 0.082
 turbulence_initial_displacement_min = -47.5
 turbulence_initial_displacement_max = 94.5
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_8enb2"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_lh2je"]
 resource_local_to_scene = true
 render_priority = -127
 shader = ExtResource("55_gee3e")
@@ -678,7 +678,7 @@ mesh = SubResource("PlaneMesh_tpwhi")
 [node name="WaterIntegration" type="Node3D" parent="." unique_id=1889730552]
 
 [node name="Ocean" parent="WaterIntegration" unique_id=1340264265 instance=ExtResource("40_5h17r")]
-ocean_material = SubResource("ShaderMaterial_qsxv0")
+ocean_material = SubResource("ShaderMaterial_hb254")
 wave_world_size_a = 231.5
 wave_world_size_b = 155.5
 wave_travel_speed_a = 9.0000004321348
@@ -929,15 +929,13 @@ ocean_path = NodePath("../../WaterIntegration/Ocean")
 event_wave_path = NodePath("BoundaryEventWave")
 boundary_center_path = NodePath("../BoundaryCenter")
 boundary_radius = 800.0
-wave_spawn_distance = 1120.0
+wave_spawn_distance = 1200.0
 
 [node name="BoundaryEventWave" type="Node3D" parent="Gameplay/BoundaryWipeoutController" unique_id=1844325374]
 script = ExtResource("43_i77vt")
 ocean_path = NodePath("../../../WaterIntegration/Ocean")
 profile = ExtResource("69_btsun")
-amplitude_multiplier = 10.0
-speed_multiplier = 1.5
-flow_multiplier = 3.0
+amplitude_multiplier = 9.0
 metadata/_custom_type_script = "uid://cvayffg86y5d3"
 
 [node name="CameraSystem" type="Node3D" parent="." unique_id=1510457463]
@@ -991,7 +989,7 @@ editor_preview_mode = 0
 
 [node name="EntryBubbles" parent="CameraSystem/ChaseCamera/Camera3D/UnderwaterEffect/WaterCrossingOverlay" index="0"]
 visible = false
-material = SubResource("CanvasItemMaterial_lh2je")
+material = SubResource("CanvasItemMaterial_4s1c0")
 position = Vector2(1, 1.76)
 amount = 500
 texture = SubResource("GradientTexture2D_pl0kw")
@@ -999,10 +997,10 @@ lifetime = 20.0
 speed_scale = 8.0
 explosiveness = 1.0
 randomness = 1.0
-process_material = SubResource("ParticleProcessMaterial_qj7v8")
+process_material = SubResource("ParticleProcessMaterial_qsxv0")
 
 [node name="UnderwaterPostProcess" parent="CameraSystem/ChaseCamera/Camera3D/UnderwaterEffect" index="1" unique_id=1854893749]
-material_override = SubResource("ShaderMaterial_8enb2")
+material_override = SubResource("ShaderMaterial_lh2je")
 
 [node name="Atrezzo" type="Node3D" parent="." unique_id=1365592301]
 

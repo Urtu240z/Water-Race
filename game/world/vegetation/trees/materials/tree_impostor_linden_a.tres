@@ -1,0 +1,23 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://cblg21bayh8pb"]
+
+[ext_resource type="Shader" uid="uid://cas1owxnfhkqw" path="res://world/vegetation/trees/shaders/tree_impostor.gdshader" id="1_baslc"]
+[ext_resource type="Texture2D" uid="uid://clonpglkgx7hd" path="res://world/vegetation/trees/textures/tree_beech_a_mask.png" id="2_nuytr"]
+[ext_resource type="Texture2D" uid="uid://dhyhw7b7y4oke" path="res://world/vegetation/trees/textures/tree_beech_a_nor.png" id="3_dnfi7"]
+[ext_resource type="Texture2D" uid="uid://dtuqpmj3wc185" path="res://world/vegetation/trees/textures/tree_beech_a_tex.png" id="4_s04f3"]
+[ext_resource type="Texture2D" uid="uid://dol5sam12jba1" path="res://world/vegetation/trees/textures/tree_volume_nor.png" id="5_e4ai0"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_baslc")
+shader_parameter/tree_tex = ExtResource("4_s04f3")
+shader_parameter/tree_mask = ExtResource("2_nuytr")
+shader_parameter/tree_normal = ExtResource("3_dnfi7")
+shader_parameter/volume_normal = ExtResource("5_e4ai0")
+shader_parameter/alpha_cutoff = 0.45
+shader_parameter/normal_strength = 4.0
+shader_parameter/color_variation = 0.999999977648
+shader_parameter/variation_strength = 0.999999977648
+shader_parameter/variation_a = Color(1.0799966, 0.58334583, 0.46396375, 1)
+shader_parameter/variation_b = Color(0.69452006, 0.63342583, 0.48187983, 1)
+shader_parameter/roughness = 0.85
+shader_parameter/specular = 0.15

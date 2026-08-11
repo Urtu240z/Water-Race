@@ -6,3 +6,6 @@
 script = ExtResource("1_profile")
 ssao = false
 ssil = false
+ocean_middle_radius = 2000.0
+ocean_middle_cell_size = 5.0
+ocean_far_cell_size = 40.0

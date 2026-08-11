@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://cycnb1huy5ihp"]
+
+[ext_resource type="Material" uid="uid://cblg21bayh8pb" path="res://world/vegetation/trees/materials/tree_impostor_linden_a.tres" id="1_lumfu"]
+
+[sub_resource type="QuadMesh" id="QuadMesh_tpwhi"]
+material = ExtResource("1_lumfu")
+size = Vector2(2, 2)
+
+[node name="TreeImpostor" type="Node3D" unique_id=781328758]
+
+[node name="Visual" type="MeshInstance3D" parent="." unique_id=1428232215]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+mesh = SubResource("QuadMesh_tpwhi")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1257663171]
+transform = Transform3D(-0.5158247, 0.73104215, -0.44665682, 0.31480122, 0.64664125, 0.6948059, 0.7967591, 0.21778993, -0.5636865, 0, 0, 0)
