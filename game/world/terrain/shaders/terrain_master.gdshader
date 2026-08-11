@@ -29,12 +29,6 @@ shader_type spatial;
 
 const float PI_F = 3.14159265358979323846;
 
-uniform bool use_baked_tree_shadows = false;
-uniform sampler2D tree_shadow_map : repeat_disable, filter_linear;
-uniform vec2 tree_shadow_world_min = vec2(0.0, 0.0);
-uniform vec2 tree_shadow_world_size = vec2(1.0, 1.0);
-uniform float tree_shadow_strength : hint_range(0.0, 20.0, 0.01) = 1.0;
-
 
 // ============================================================
 // ARENA SECA
@@ -1275,36 +1269,6 @@ void fragment() {
 		moss_normal_sample * material_weights.w
 	);
 
-
-float baked_tree_shadow = 0.0;
-
-if (use_baked_tree_shadows) {
-	vec2 shadow_uv =
-		(world_position.xz - tree_shadow_world_min)
-		/ max(tree_shadow_world_size, vec2(0.001));
-
-	if (
-		shadow_uv.x >= 0.0 && shadow_uv.x <= 1.0 &&
-		shadow_uv.y >= 0.0 && shadow_uv.y <= 1.0
-	) {
-		baked_tree_shadow = texture(
-			tree_shadow_map,
-			shadow_uv
-		).r;
-	}
-}
-
-float shadow_amount = clamp(
-	baked_tree_shadow * tree_shadow_strength,
-	0.0,
-	1.0
-);
-
-final_albedo *= mix(
-	1.0,
-	0.15,
-	shadow_amount
-);
 
 	// --------------------------------------------------------
 	// SALIDA / DEBUG

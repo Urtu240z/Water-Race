@@ -23,7 +23,6 @@
 [ext_resource type="Texture2D" uid="uid://do03pewy7xrqu" path="res://shared/materials/terrain/textures/terrain_master/grass_albedo.png" id="21_5pg1t"]
 [ext_resource type="Texture2D" uid="uid://cpw3o0egt3xhj" path="res://shared/materials/terrain/textures/terrain_master/grass_normal.png" id="22_2sw4f"]
 [ext_resource type="Texture2D" uid="uid://bjbtr4wpa2non" path="res://shared/materials/terrain/textures/terrain_master/grass_orm.png" id="23_dehlt"]
-[ext_resource type="Texture2D" uid="uid://ip2r2uwxmiib" path="res://world/terrain/baked_tree_projected_shadows.png" id="24_4s1c0"]
 [ext_resource type="Texture2D" uid="uid://u0a4uawsdt4x" path="res://shared/materials/terrain/textures/terrain_master/moss_albedo.png" id="24_u0oh0"]
 [ext_resource type="Texture2D" uid="uid://dgxnwr48qllj6" path="res://shared/materials/terrain/textures/terrain_master/moss_normal.png" id="25_ywwvg"]
 [ext_resource type="Texture2D" uid="uid://dw445jkd1svoe" path="res://shared/materials/terrain/textures/terrain_master/moss_orm.png" id="26_lcrxj"]
@@ -75,6 +74,7 @@
 [ext_resource type="Resource" uid="uid://e5jcb4ue4bh7" path="res://world/water/ocean/events/boundary_tsunami_event_wave.tres" id="69_btsun"]
 [ext_resource type="Material" uid="uid://cblg21bayh8pb" path="res://world/vegetation/trees/materials/tree_impostor_linden_a.tres" id="74_lh2je"]
 [ext_resource type="Script" uid="uid://bcftfjsjn8hc4" path="res://world/vegetation/trees/tree_projected_shadow_baker.gd" id="74_qsxv0"]
+[ext_resource type="Texture2D" uid="uid://dtuqpmj3wc185" path="res://world/vegetation/trees/textures/tree_beech_a_tex.png" id="75_qsxv0"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_f0815"]
 panorama = ExtResource("6_ord5u")
@@ -107,11 +107,6 @@ radiance_size = 5
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_tpwhi"]
 render_priority = 0
 shader = ExtResource("17_fnlue")
-shader_parameter/use_baked_tree_shadows = true
-shader_parameter/tree_shadow_map = ExtResource("24_4s1c0")
-shader_parameter/tree_shadow_world_min = Vector2(-425.64886, -446.08478)
-shader_parameter/tree_shadow_world_size = Vector2(1121.21, 1121.21)
-shader_parameter/tree_shadow_strength = 1.0
 shader_parameter/dry_sand_albedo = ExtResource("18_ikh8v")
 shader_parameter/dry_sand_orm = ExtResource("20_8v1g3")
 shader_parameter/dry_sand_normal = ExtResource("19_cjg0n")
@@ -215,7 +210,7 @@ shader_parameter/breakup = 0.0
 material = ExtResource("15_6i7i5")
 size = Vector2(10000, 10000)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_qj7v8"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4s1c0"]
 resource_local_to_scene = true
 render_priority = 0
 shader = ExtResource("41_48bym")
@@ -443,7 +438,7 @@ shader_parameter/custom_reflection_minimum_surface_weight = 0.34
 shader_parameter/custom_reflection_maximum_surface_weight = 0.88
 shader_parameter/custom_reflection_emission_strength = 1.20999997295408
 
-[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_8enb2"]
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_qsxv0"]
 resource_local_to_scene = true
 blend_mode = 1
 
@@ -470,7 +465,7 @@ point_count = 3
 [sub_resource type="CurveTexture" id="CurveTexture_bubble_shrink"]
 curve = SubResource("Curve_bubble_shrink")
 
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_xn4fe"]
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_lh2je"]
 resource_local_to_scene = true
 particle_flag_disable_z = true
 emission_shape_offset = Vector3(0, 600, 0)
@@ -493,7 +488,7 @@ turbulence_influence_max = 0.082
 turbulence_initial_displacement_min = -47.5
 turbulence_initial_displacement_max = 94.5
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_6ayrq"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qj7v8"]
 resource_local_to_scene = true
 render_priority = -127
 shader = ExtResource("55_gee3e")
@@ -536,11 +531,137 @@ friction = 0.0
 material = ExtResource("74_lh2je")
 size = Vector2(2, 2)
 
-[sub_resource type="MultiMesh" id="MultiMesh_6i7i5"]
+[sub_resource type="MultiMesh" id="MultiMesh_8enb2"]
 resource_local_to_scene = true
 transform_format = 1
 use_custom_data = true
 mesh = SubResource("QuadMesh_wwatn")
+
+[sub_resource type="Shader" id="Shader_qsxv0"]
+code = "
+shader_type spatial;
+
+render_mode skip_vertex_transform, cull_disabled;
+
+uniform sampler2D tree_tex : source_color;
+
+uniform float alpha_cutoff
+	: hint_range(0.0, 1.0, 0.01) = 0.80;
+
+uniform vec3 fixed_to_light_ws = vec3(
+	0.0,
+	0.0,
+	1.0
+);
+
+
+void vertex() {
+
+	vec3 origin_ws = (
+		MODEL_MATRIX
+		* vec4(
+			0.0,
+			0.0,
+			0.0,
+			1.0
+		)
+	).xyz;
+
+
+	float instance_scale_x = length(
+		MODEL_MATRIX[0].xyz
+	);
+
+	float instance_scale_y = length(
+		MODEL_MATRIX[1].xyz
+	);
+
+
+	vec3 to_light_ws = fixed_to_light_ws;
+
+	to_light_ws.y = 0.0;
+
+
+	float flat_length = length(
+		to_light_ws
+	);
+
+
+	if (flat_length < 0.0001) {
+
+		to_light_ws = vec3(
+			0.0,
+			0.0,
+			1.0
+		);
+
+	} else {
+
+		to_light_ws /= flat_length;
+	}
+
+
+	vec3 world_up = vec3(
+		0.0,
+		1.0,
+		0.0
+	);
+
+
+	vec3 right_ws = normalize(
+		cross(
+			world_up,
+			to_light_ws
+		)
+	);
+
+
+	vec3 world_vertex_position = (
+		origin_ws
+
+		+ right_ws
+			* VERTEX.x
+			* instance_scale_x
+
+		+ world_up
+			* VERTEX.y
+			* instance_scale_y
+	);
+
+
+	vec4 view_position = (
+		VIEW_MATRIX
+		* vec4(
+			world_vertex_position,
+			1.0
+		)
+	);
+
+
+	VERTEX = view_position.xyz;
+}
+
+
+void fragment() {
+
+	vec4 tex = texture(
+		tree_tex,
+		UV
+	);
+
+
+	if (tex.a < alpha_cutoff) {
+		discard;
+	}
+}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_lh2je"]
+render_priority = 0
+shader = SubResource("Shader_qsxv0")
+shader_parameter/tree_tex = ExtResource("75_qsxv0")
+shader_parameter/alpha_cutoff = 0.8
+shader_parameter/fixed_to_light_ws = Vector3(-0.38038722, 0.73181343, 0.56546855)
 
 [node name="ParadiseIsland" type="Node3D" unique_id=2091620036]
 script = ExtResource("1_w5ddm")
@@ -607,64 +728,64 @@ script = ExtResource("13_xn4fe")
 [node name="test_island" parent="TerrainRoot" unique_id=1352578102 instance=ExtResource("16_f03ma")]
 transform = Transform3D(0.86, 0, 0, 0, 0.86, 0, 0, 0, 0.86, 149, 1.8, 120.1001)
 
-[node name="Terrain_Master_VIS" parent="TerrainRoot/test_island" index="0" unique_id=298348997]
+[node name="Terrain_Master_VIS" parent="TerrainRoot/test_island" index="0" unique_id=535562946]
 material_override = SubResource("ShaderMaterial_tpwhi")
 
-[node name="Cave_01_VIS" parent="TerrainRoot/test_island" index="1" unique_id=1502607317]
+[node name="Cave_01_VIS" parent="TerrainRoot/test_island" index="1" unique_id=1703342238]
 surface_material_override/0 = ExtResource("33_iekhu")
 
-[node name="Cave_Entrance_Rock_A_VIS" parent="TerrainRoot/test_island" index="2" unique_id=531846211]
+[node name="Cave_Entrance_Rock_A_VIS" parent="TerrainRoot/test_island" index="2" unique_id=283857793]
 surface_material_override/0 = ExtResource("33_iekhu")
 
-[node name="Rock2_VIS" parent="TerrainRoot/test_island" index="3" unique_id=669672655]
+[node name="Rock2_VIS" parent="TerrainRoot/test_island" index="3" unique_id=133010865]
 surface_material_override/0 = ExtResource("33_iekhu")
 
-[node name="Rock3_VIS" parent="TerrainRoot/test_island" index="4" unique_id=1642907202]
+[node name="Rock3_VIS" parent="TerrainRoot/test_island" index="4" unique_id=787983472]
 surface_material_override/0 = ExtResource("33_iekhu")
 
-[node name="Cave_Entrance_Rock_B_VIS" parent="TerrainRoot/test_island" index="5" unique_id=600543757]
+[node name="Cave_Entrance_Rock_B_VIS" parent="TerrainRoot/test_island" index="5" unique_id=1545184383]
 surface_material_override/0 = ExtResource("33_iekhu")
 
-[node name="Cabana_4_VIS" parent="TerrainRoot/test_island" index="9" unique_id=1261193040]
+[node name="Cabana_4_VIS" parent="TerrainRoot/test_island" index="9" unique_id=1808890549]
 transform = Transform3D(1.3555894, 0, 0.07078268, 0, 1.3574358, 0, -0.07078268, 0, 1.3555894, 208.27293, -8.906912, 331.88815)
 
-[node name="Rock4_VIS" parent="TerrainRoot/test_island" index="14" unique_id=648036675]
+[node name="Rock4_VIS" parent="TerrainRoot/test_island" index="14" unique_id=2103050449]
 surface_material_override/0 = ExtResource("33_iekhu")
 
-[node name="SM_Palm_Impostor_Zone_001_VIS" parent="TerrainRoot/test_island" index="15" unique_id=944411319]
+[node name="SM_Palm_Impostor_Zone_001_VIS" parent="TerrainRoot/test_island" index="15" unique_id=78127849]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.3975904, 0)
 visible = false
 material_override = SubResource("StandardMaterial3D_7fon7")
 cast_shadow = 0
 
-[node name="SM_Palm_Impostor_Zone_002_VIS" parent="TerrainRoot/test_island" index="16" unique_id=1259880330]
+[node name="SM_Palm_Impostor_Zone_002_VIS" parent="TerrainRoot/test_island" index="16" unique_id=1631382402]
 visible = false
 material_override = SubResource("StandardMaterial3D_7fon7")
 cast_shadow = 0
 
-[node name="Cave_01_COL" parent="TerrainRoot/test_island" index="17" unique_id=1057546025]
+[node name="Cave_01_COL" parent="TerrainRoot/test_island" index="17" unique_id=1886078585]
 visible = false
 
-[node name="Rock2_COL" parent="TerrainRoot/test_island" index="18" unique_id=1978013593]
+[node name="Rock2_COL" parent="TerrainRoot/test_island" index="18" unique_id=1586242621]
 visible = false
 
-[node name="Cabana_4_COL" parent="TerrainRoot/test_island" index="19" unique_id=188734759]
+[node name="Cabana_4_COL" parent="TerrainRoot/test_island" index="19" unique_id=1566901404]
 visible = false
 
-[node name="Cave_Entrance_Rock_A_COL" parent="TerrainRoot/test_island" index="20" unique_id=1653941497]
+[node name="Cave_Entrance_Rock_A_COL" parent="TerrainRoot/test_island" index="20" unique_id=300492293]
 visible = false
 
-[node name="Cave_Entrance_Rock_B_COL" parent="TerrainRoot/test_island" index="21" unique_id=1024186233]
+[node name="Cave_Entrance_Rock_B_COL" parent="TerrainRoot/test_island" index="21" unique_id=139779508]
 visible = false
 
-[node name="Rock3_COL" parent="TerrainRoot/test_island" index="22" unique_id=2046054456]
+[node name="Rock3_COL" parent="TerrainRoot/test_island" index="22" unique_id=1330272369]
 visible = false
 
-[node name="Terrain_Master_COL" parent="TerrainRoot/test_island" index="23" unique_id=998817783]
+[node name="Terrain_Master_COL" parent="TerrainRoot/test_island" index="23" unique_id=996944818]
 visible = false
 physics_material_override = SubResource("PhysicsMaterial_cfiqe")
 
-[node name="Rock4_COL" parent="TerrainRoot/test_island" index="24" unique_id=1593598850]
+[node name="Rock4_COL" parent="TerrainRoot/test_island" index="24" unique_id=268800532]
 visible = false
 
 [node name="PalmImpostorGroundShadows" parent="TerrainRoot/test_island" unique_id=671848398 instance=ExtResource("38_nsda3")]
@@ -691,7 +812,7 @@ mesh = SubResource("PlaneMesh_tpwhi")
 [node name="WaterIntegration" type="Node3D" parent="." unique_id=1889730552]
 
 [node name="Ocean" parent="WaterIntegration" unique_id=1340264265 instance=ExtResource("40_5h17r")]
-ocean_material = SubResource("ShaderMaterial_qj7v8")
+ocean_material = SubResource("ShaderMaterial_4s1c0")
 wave_world_size_a = 231.5
 wave_world_size_b = 155.5
 wave_travel_speed_a = 9.0000004321348
@@ -1001,7 +1122,8 @@ wet_lens_texture_edge_feather = 0.1
 editor_preview_mode = 0
 
 [node name="EntryBubbles" parent="CameraSystem/ChaseCamera/Camera3D/UnderwaterEffect/WaterCrossingOverlay" index="0"]
-material = SubResource("CanvasItemMaterial_8enb2")
+visible = false
+material = SubResource("CanvasItemMaterial_qsxv0")
 position = Vector2(1, 1.76)
 amount = 500
 texture = SubResource("GradientTexture2D_pl0kw")
@@ -1009,10 +1131,10 @@ lifetime = 20.0
 speed_scale = 8.0
 explosiveness = 1.0
 randomness = 1.0
-process_material = SubResource("ParticleProcessMaterial_xn4fe")
+process_material = SubResource("ParticleProcessMaterial_lh2je")
 
 [node name="UnderwaterPostProcess" parent="CameraSystem/ChaseCamera/Camera3D/UnderwaterEffect" index="1" unique_id=1854893749]
-material_override = SubResource("ShaderMaterial_6ayrq")
+material_override = SubResource("ShaderMaterial_qj7v8")
 
 [node name="Atrezzo" type="Node3D" parent="." unique_id=1365592301]
 
@@ -1270,6 +1392,7 @@ max_scale = 15.0
 ray_above_height = 500.0
 ray_below_depth = 600.0
 minimum_height_above_water = 3.5
+canopy_enabled = false
 canopy_shadow_strength = 1.0
 canopy_per_tree_density = 1.0
 canopy_radius_factor = 0.1
@@ -1291,6 +1414,7 @@ max_scale = 15.0
 ray_above_height = 500.0
 ray_below_depth = 600.0
 minimum_height_above_water = 3.5
+canopy_enabled = false
 canopy_shadow_strength = 1.0
 canopy_per_tree_density = 1.0
 canopy_radius_factor = 0.1
@@ -1302,7 +1426,7 @@ canopy_vertical_margin = 0.1
 canopy_surface_normal_fade = 0.45
 
 [node name="Trees" parent="Vegetation/TreesImpostorA/TreeImpostorMultimesh2" index="0" unique_id=184116622]
-multimesh = SubResource("MultiMesh_6i7i5")
+multimesh = SubResource("MultiMesh_8enb2")
 target_count = 250
 area_radius_z = 167.0
 min_spacing = 5.35
@@ -1314,17 +1438,17 @@ ray_below_depth = 600.0
 minimum_height_above_water = 3.5
 
 [node name="TreeShadows" parent="Vegetation/TreesImpostorA/TreeImpostorMultimesh2" index="1" unique_id=1425367268]
-visible = false
+material_override = SubResource("ShaderMaterial_lh2je")
 cast_shadow = 3
-multimesh = SubResource("MultiMesh_6i7i5")
+multimesh = SubResource("MultiMesh_8enb2")
 
 [node name="CanopyAmbientShadow" parent="Vegetation/TreesImpostorA/TreeImpostorMultimesh2" index="2" unique_id=1054602443]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.810432, 51.02527, 99.19899)
-visible = true
 size = Vector3(177.01628, 24.671919, 138.47403)
 normal_fade = 0.45
 upper_fade = 0.0
 lower_fade = 0.0
+ambient_shadow_enabled = false
 shadow_strength = 1.0
 per_tree_density = 1.0
 canopy_radius_factor = 0.1
@@ -1347,6 +1471,7 @@ max_scale = 15.0
 ray_above_height = 500.0
 ray_below_depth = 600.0
 minimum_height_above_water = 3.5
+canopy_enabled = false
 canopy_shadow_strength = 1.0
 canopy_per_tree_density = 1.0
 canopy_radius_factor = 0.1
@@ -1370,6 +1495,7 @@ ray_above_height = 500.0
 ray_below_depth = 600.0
 max_ground_slope_degrees = 30.0
 minimum_height_above_water = 3.5
+canopy_enabled = false
 canopy_shadow_strength = 1.0
 canopy_per_tree_density = 1.0
 canopy_radius_factor = 0.1
@@ -1393,6 +1519,7 @@ ray_above_height = 500.0
 ray_below_depth = 600.0
 max_ground_slope_degrees = 30.0
 minimum_height_above_water = 3.5
+canopy_enabled = false
 canopy_shadow_strength = 1.0
 canopy_per_tree_density = 1.0
 canopy_radius_factor = 0.1
@@ -1415,6 +1542,7 @@ ray_above_height = 500.0
 ray_below_depth = 600.0
 max_ground_slope_degrees = 30.0
 minimum_height_above_water = 3.5
+canopy_enabled = false
 canopy_shadow_strength = 1.0
 canopy_per_tree_density = 1.0
 canopy_radius_factor = 0.1
@@ -1440,6 +1568,7 @@ max_scale = 15.0
 ray_above_height = 500.0
 ray_below_depth = 600.0
 minimum_height_above_water = 3.5
+canopy_enabled = false
 canopy_shadow_strength = 1.0
 canopy_per_tree_density = 1.0
 canopy_radius_factor = 0.1
@@ -1461,6 +1590,7 @@ max_scale = 15.0
 ray_above_height = 500.0
 ray_below_depth = 600.0
 minimum_height_above_water = 3.5
+canopy_enabled = false
 canopy_shadow_strength = 1.0
 canopy_per_tree_density = 1.0
 canopy_radius_factor = 0.1
@@ -1483,6 +1613,7 @@ max_scale = 15.0
 ray_above_height = 500.0
 ray_below_depth = 600.0
 minimum_height_above_water = 3.5
+canopy_enabled = false
 canopy_shadow_strength = 1.0
 canopy_per_tree_density = 1.0
 canopy_radius_factor = 0.1
@@ -1506,6 +1637,7 @@ ray_above_height = 500.0
 ray_below_depth = 600.0
 max_ground_slope_degrees = 30.0
 minimum_height_above_water = 3.5
+canopy_enabled = false
 canopy_shadow_strength = 1.0
 canopy_per_tree_density = 1.0
 canopy_radius_factor = 0.1
@@ -1529,6 +1661,7 @@ ray_above_height = 500.0
 ray_below_depth = 600.0
 max_ground_slope_degrees = 30.0
 minimum_height_above_water = 3.5
+canopy_enabled = false
 canopy_shadow_strength = 1.0
 canopy_per_tree_density = 1.0
 canopy_radius_factor = 0.1
@@ -1552,6 +1685,7 @@ ray_above_height = 500.0
 ray_below_depth = 600.0
 max_ground_slope_degrees = 30.0
 minimum_height_above_water = 3.5
+canopy_enabled = false
 canopy_shadow_strength = 1.0
 canopy_per_tree_density = 1.0
 canopy_radius_factor = 0.1
@@ -1567,9 +1701,6 @@ script = ExtResource("74_qsxv0")
 terrain_mesh_path = NodePath("../TerrainRoot/test_island/Terrain_Master_VIS")
 sun_light_path = NodePath("../Environment/DirectionalLight3D2")
 output_png_path = "uid://ip2r2uwxmiib"
-tiles_per_axis = 6
-world_padding = 10.0
-mask_gain = 5.0
 
 [editable path="TerrainRoot/test_island"]
 [editable path="TerrainRoot/test_island/PalmImpostorGroundShadows"]
