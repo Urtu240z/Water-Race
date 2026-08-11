@@ -26,7 +26,7 @@ const ORIENTATION_ALIGNMENT_THRESHOLD := 0.999
 @export_range(0.0, 1000.0, 1.0, "suffix:m") var rearm_margin := 50.0
 
 @export_group("Tsunami Placement")
-@export_range(5.0, 500.0, 1.0, "suffix:m") var wave_spawn_distance := 60.0
+@export_range(5.0, 3000.0, 1.0, "suffix:m") var wave_spawn_distance := 60.0
 @export_range(0.0, 10.0, 0.05, "suffix:s") var activation_retry_cooldown := 1.0
 
 @export_group("Tsunami Wipeout")
