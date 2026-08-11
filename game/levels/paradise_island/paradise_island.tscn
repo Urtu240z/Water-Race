@@ -72,6 +72,7 @@
 [ext_resource type="Script" uid="uid://bi5r7j71qd8fp" path="res://gameplay/race/boundary/boundary_wipeout_controller_3d.gd" id="68_bwc3d"]
 [ext_resource type="PackedScene" uid="uid://dqbhmwx6tvlx0" path="res://world/vegetation/trees/tree_impostor_multimesh.tscn" id="69_4s1c0"]
 [ext_resource type="Resource" uid="uid://e5jcb4ue4bh7" path="res://world/water/ocean/events/boundary_tsunami_event_wave.tres" id="69_btsun"]
+[ext_resource type="Material" uid="uid://cblg21bayh8pb" path="res://world/vegetation/trees/materials/tree_impostor_linden_a.tres" id="70_qsxv0"]
 [ext_resource type="Texture2D" uid="uid://dtuqpmj3wc185" path="res://world/vegetation/trees/textures/tree_beech_a_tex.png" id="72_hb254"]
 [ext_resource type="Texture2D" uid="uid://dhyhw7b7y4oke" path="res://world/vegetation/trees/textures/tree_beech_a_nor.png" id="73_4s1c0"]
 
@@ -209,7 +210,7 @@ shader_parameter/breakup = 0.0
 material = ExtResource("15_6i7i5")
 size = Vector2(10000, 10000)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_4s1c0"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qsxv0"]
 resource_local_to_scene = true
 render_priority = 0
 shader = ExtResource("41_48bym")
@@ -374,7 +375,7 @@ shader_parameter/foam_scroll_speed = 0.13
 shader_parameter/foam_roughness = 0.70999998413008
 shader_parameter/ocean_foam_detail_quality = 1
 shader_parameter/ocean_foam_evaluation_distance = 520.0
-shader_parameter/ocean_surface_enabled = true
+shader_parameter/ocean_surface_enabled = false
 shader_parameter/ocean_logical_origin_offset_xz = Vector2(0, 0)
 shader_parameter/ocean_detail_center_xz = Vector2(0, 0)
 shader_parameter/ocean_detailed_wave_fade_start = 170.0
@@ -437,7 +438,7 @@ shader_parameter/custom_reflection_minimum_surface_weight = 0.34
 shader_parameter/custom_reflection_maximum_surface_weight = 0.88
 shader_parameter/custom_reflection_emission_strength = 1.20999997295408
 
-[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_qsxv0"]
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_lh2je"]
 resource_local_to_scene = true
 blend_mode = 1
 
@@ -464,7 +465,7 @@ point_count = 3
 [sub_resource type="CurveTexture" id="CurveTexture_bubble_shrink"]
 curve = SubResource("Curve_bubble_shrink")
 
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_lh2je"]
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_qj7v8"]
 resource_local_to_scene = true
 particle_flag_disable_z = true
 emission_shape_offset = Vector3(0, 600, 0)
@@ -487,7 +488,7 @@ turbulence_influence_max = 0.082
 turbulence_initial_displacement_min = -47.5
 turbulence_initial_displacement_max = 94.5
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_qj7v8"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_8enb2"]
 resource_local_to_scene = true
 render_priority = -127
 shader = ExtResource("55_gee3e")
@@ -525,6 +526,58 @@ data = PackedVector3Array(8.577499, 2.925, 4.5074997, 8.577499, -2.925, 4.507499
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_rtwgq"]
 friction = 0.0
+
+[sub_resource type="QuadMesh" id="QuadMesh_wwatn"]
+material = ExtResource("70_qsxv0")
+size = Vector2(2, 2)
+
+[sub_resource type="MultiMesh" id="MultiMesh_xn4fe"]
+resource_local_to_scene = true
+transform_format = 1
+use_custom_data = true
+mesh = SubResource("QuadMesh_wwatn")
+
+[sub_resource type="MultiMesh" id="MultiMesh_6ayrq"]
+resource_local_to_scene = true
+transform_format = 1
+use_custom_data = true
+mesh = SubResource("QuadMesh_wwatn")
+
+[sub_resource type="MultiMesh" id="MultiMesh_6i7i5"]
+resource_local_to_scene = true
+transform_format = 1
+use_custom_data = true
+mesh = SubResource("QuadMesh_wwatn")
+
+[sub_resource type="MultiMesh" id="MultiMesh_f03ma"]
+resource_local_to_scene = true
+transform_format = 1
+use_custom_data = true
+mesh = SubResource("QuadMesh_wwatn")
+
+[sub_resource type="MultiMesh" id="MultiMesh_fnlue"]
+resource_local_to_scene = true
+transform_format = 1
+use_custom_data = true
+mesh = SubResource("QuadMesh_wwatn")
+
+[sub_resource type="MultiMesh" id="MultiMesh_ikh8v"]
+resource_local_to_scene = true
+transform_format = 1
+use_custom_data = true
+mesh = SubResource("QuadMesh_wwatn")
+
+[sub_resource type="MultiMesh" id="MultiMesh_cjg0n"]
+resource_local_to_scene = true
+transform_format = 1
+use_custom_data = true
+mesh = SubResource("QuadMesh_wwatn")
+
+[sub_resource type="MultiMesh" id="MultiMesh_8v1g3"]
+resource_local_to_scene = true
+transform_format = 1
+use_custom_data = true
+mesh = SubResource("QuadMesh_wwatn")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wwatn"]
 albedo_texture = ExtResource("72_hb254")
@@ -681,7 +734,7 @@ mesh = SubResource("PlaneMesh_tpwhi")
 [node name="WaterIntegration" type="Node3D" parent="." unique_id=1889730552]
 
 [node name="Ocean" parent="WaterIntegration" unique_id=1340264265 instance=ExtResource("40_5h17r")]
-ocean_material = SubResource("ShaderMaterial_4s1c0")
+ocean_material = SubResource("ShaderMaterial_qsxv0")
 wave_world_size_a = 231.5
 wave_world_size_b = 155.5
 wave_travel_speed_a = 9.0000004321348
@@ -992,7 +1045,7 @@ editor_preview_mode = 0
 
 [node name="EntryBubbles" parent="CameraSystem/ChaseCamera/Camera3D/UnderwaterEffect/WaterCrossingOverlay" index="0"]
 visible = false
-material = SubResource("CanvasItemMaterial_qsxv0")
+material = SubResource("CanvasItemMaterial_lh2je")
 position = Vector2(1, 1.76)
 amount = 500
 texture = SubResource("GradientTexture2D_pl0kw")
@@ -1000,10 +1053,10 @@ lifetime = 20.0
 speed_scale = 8.0
 explosiveness = 1.0
 randomness = 1.0
-process_material = SubResource("ParticleProcessMaterial_lh2je")
+process_material = SubResource("ParticleProcessMaterial_qj7v8")
 
 [node name="UnderwaterPostProcess" parent="CameraSystem/ChaseCamera/Camera3D/UnderwaterEffect" index="1" unique_id=1854893749]
-material_override = SubResource("ShaderMaterial_qj7v8")
+material_override = SubResource("ShaderMaterial_8enb2")
 
 [node name="Atrezzo" type="Node3D" parent="." unique_id=1365592301]
 
@@ -1191,12 +1244,124 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 62.39052, 203.09952)
 
 [node name="Trees" parent="Atrezzo/TreeImpostorMultimesh" index="0" unique_id=184116622]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -90.22597, 0, -110.150345)
+multimesh = SubResource("MultiMesh_xn4fe")
 area_radius_x = 1000.0
 area_radius_z = 145.0
 min_spacing = 6.3
 max_spacing = 13.0
 center_scale_bias_percent = 37.0
-valid_ground_name_contains = PackedStringArray("Terrain_Master_COL")
+visual_exclusion_roots = Array[NodePath]([NodePath("../../Buildings"), NodePath("../../Rocks"), NodePath("../../PalmsMultiMesh"), NodePath("../../../TerrainRoot/test_island/Lighthouse_VIS")])
+visual_radius_factor = 0.1
+
+[node name="TreeImpostorMultimesh5" parent="Atrezzo" unique_id=330109363 instance=ExtResource("69_4s1c0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 479.10742, 62.39052, 278.28214)
+
+[node name="Trees" parent="Atrezzo/TreeImpostorMultimesh5" index="0" unique_id=184116622]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -90.22597, 0, -110.150345)
+multimesh = SubResource("MultiMesh_6ayrq")
+area_radius_x = 204.0
+min_spacing = 6.3
+max_spacing = 13.0
+center_scale_bias_percent = 37.0
+ray_above_height = 475.0
+ray_below_depth = 754.0
+avoid_visual_geometry = false
+visual_exclusion_roots = Array[NodePath]([NodePath("../../Buildings"), NodePath("../../Rocks"), NodePath("../../PalmsMultiMesh"), NodePath("../../../TerrainRoot/test_island/Lighthouse_VIS"), NodePath("../../../TerrainRoot/test_island/Rock3_VIS"), NodePath("../../../TerrainRoot/test_island/Rock4_VIS")])
+visual_radius_factor = 0.1
+visual_extra_clearance = 0.0
+
+[node name="TreeImpostorMultimesh6" parent="Atrezzo" unique_id=140600112 instance=ExtResource("69_4s1c0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 479.10742, 62.39052, 118.992645)
+
+[node name="Trees" parent="Atrezzo/TreeImpostorMultimesh6" index="0" unique_id=184116622]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -90.22597, 0, -110.150345)
+multimesh = SubResource("MultiMesh_6i7i5")
+area_radius_x = 204.0
+min_spacing = 6.3
+max_spacing = 13.0
+center_scale_bias_percent = 37.0
+ray_above_height = 475.0
+ray_below_depth = 754.0
+max_ground_slope_degrees = 37.0
+avoid_visual_geometry = false
+visual_exclusion_roots = Array[NodePath]([NodePath("../../Buildings"), NodePath("../../Rocks"), NodePath("../../PalmsMultiMesh"), NodePath("../../../TerrainRoot/test_island/Lighthouse_VIS"), NodePath("../../../TerrainRoot/test_island/Rock3_VIS"), NodePath("../../../TerrainRoot/test_island/Rock4_VIS")])
+visual_radius_factor = 0.1
+visual_extra_clearance = 0.0
+
+[node name="TreeImpostorMultimesh7" parent="Atrezzo" unique_id=512981442 instance=ExtResource("69_4s1c0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 442.30817, 62.39052, -45.45706)
+
+[node name="Trees" parent="Atrezzo/TreeImpostorMultimesh7" index="0" unique_id=184116622]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -90.22597, 0, -110.150345)
+multimesh = SubResource("MultiMesh_f03ma")
+area_radius_x = 204.0
+min_spacing = 6.3
+max_spacing = 13.0
+center_scale_bias_percent = 37.0
+ray_above_height = 475.0
+ray_below_depth = 754.0
+avoid_visual_geometry = false
+visual_exclusion_roots = Array[NodePath]([NodePath("../../Buildings"), NodePath("../../Rocks"), NodePath("../../PalmsMultiMesh"), NodePath("../../../TerrainRoot/test_island/Lighthouse_VIS"), NodePath("../../../TerrainRoot/test_island/Rock3_VIS"), NodePath("../../../TerrainRoot/test_island/Rock4_VIS")])
+visual_radius_factor = 0.1
+visual_extra_clearance = 0.0
+
+[node name="TreeImpostorMultimesh8" parent="Atrezzo" unique_id=328841427 instance=ExtResource("69_4s1c0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 442.30817, 62.39052, 366.82397)
+
+[node name="Trees" parent="Atrezzo/TreeImpostorMultimesh8" index="0" unique_id=184116622]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -90.22597, 0, -110.150345)
+multimesh = SubResource("MultiMesh_fnlue")
+area_radius_x = 113.0
+min_spacing = 5.2
+max_spacing = 8.2
+center_scale_bias_percent = 37.0
+ray_above_height = 475.0
+ray_below_depth = 754.0
+avoid_visual_geometry = false
+visual_exclusion_roots = Array[NodePath]([NodePath("../../Buildings"), NodePath("../../Rocks"), NodePath("../../PalmsMultiMesh"), NodePath("../../../TerrainRoot/test_island/Lighthouse_VIS"), NodePath("../../../TerrainRoot/test_island/Rock3_VIS"), NodePath("../../../TerrainRoot/test_island/Rock4_VIS")])
+visual_radius_factor = 0.1
+visual_extra_clearance = 0.0
+minimum_height_above_water = 4.6
+
+[node name="TreeImpostorMultimesh3" parent="Atrezzo" unique_id=1395600856 instance=ExtResource("69_4s1c0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 62.39052, 46.761734)
+
+[node name="Trees" parent="Atrezzo/TreeImpostorMultimesh3" index="0" unique_id=184116622]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -90.22597, 0, -110.150345)
+multimesh = SubResource("MultiMesh_ikh8v")
+area_radius_x = 1000.0
+area_radius_z = 145.0
+min_spacing = 6.3
+max_spacing = 13.0
+center_scale_bias_percent = 37.0
+visual_exclusion_roots = Array[NodePath]([NodePath("../../Buildings"), NodePath("../../Rocks"), NodePath("../../PalmsMultiMesh"), NodePath("../../../TerrainRoot/test_island/Lighthouse_VIS")])
+visual_radius_factor = 0.1
+
+[node name="TreeImpostorMultimesh4" parent="Atrezzo" unique_id=818077302 instance=ExtResource("69_4s1c0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 62.39052, 295.04816)
+
+[node name="Trees" parent="Atrezzo/TreeImpostorMultimesh4" index="0" unique_id=184116622]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -90.22597, 0, -110.150345)
+multimesh = SubResource("MultiMesh_cjg0n")
+area_radius_x = 145.0
+area_radius_z = 134.0
+min_spacing = 6.3
+max_spacing = 13.0
+center_scale_bias_percent = 37.0
+visual_exclusion_roots = Array[NodePath]([NodePath("../../Buildings"), NodePath("../../Rocks"), NodePath("../../PalmsMultiMesh"), NodePath("../../../TerrainRoot/test_island/Lighthouse_VIS")])
+visual_radius_factor = 0.1
+
+[node name="TreeImpostorMultimesh2" parent="Atrezzo" unique_id=518834787 instance=ExtResource("69_4s1c0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 62.39052, -50.634964)
+
+[node name="Trees" parent="Atrezzo/TreeImpostorMultimesh2" index="0" unique_id=184116622]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -90.22597, 0, -110.150345)
+multimesh = SubResource("MultiMesh_8v1g3")
+area_radius_x = 1000.0
+area_radius_z = 145.0
+min_spacing = 6.3
+max_spacing = 13.0
+center_scale_bias_percent = 37.0
 visual_exclusion_roots = Array[NodePath]([NodePath("../../Buildings"), NodePath("../../Rocks"), NodePath("../../PalmsMultiMesh"), NodePath("../../../TerrainRoot/test_island/Lighthouse_VIS")])
 visual_radius_factor = 0.1
 
@@ -1272,3 +1437,10 @@ mesh = SubResource("QuadMesh_tpwhi")
 [editable path="Gameplay/JetSki/VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/rider_bot"]
 [editable path="CameraSystem/ChaseCamera"]
 [editable path="Atrezzo/TreeImpostorMultimesh"]
+[editable path="Atrezzo/TreeImpostorMultimesh5"]
+[editable path="Atrezzo/TreeImpostorMultimesh6"]
+[editable path="Atrezzo/TreeImpostorMultimesh7"]
+[editable path="Atrezzo/TreeImpostorMultimesh8"]
+[editable path="Atrezzo/TreeImpostorMultimesh3"]
+[editable path="Atrezzo/TreeImpostorMultimesh4"]
+[editable path="Atrezzo/TreeImpostorMultimesh2"]

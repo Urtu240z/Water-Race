@@ -1,0 +1,10 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://xu7m70my2qof"]
+
+[ext_resource type="Shader" uid="uid://e1upxr4i7gcn" path="res://world/vegetation/trees/shaders/tree_impostor_shadow.gdshader" id="1_1hqkk"]
+[ext_resource type="Texture2D" uid="uid://dtuqpmj3wc185" path="res://world/vegetation/trees/textures/tree_beech_a_tex.png" id="2_n1b57"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_1hqkk")
+shader_parameter/tree_tex = ExtResource("2_n1b57")
+shader_parameter/alpha_cutoff = 0.8

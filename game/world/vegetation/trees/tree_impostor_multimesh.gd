@@ -10,22 +10,21 @@ extends MultiMeshInstance3D
 
 @export_range(1, 5000, 1) var target_count: int = 625
 
-# Tamaño de la zona de generación.
-# X = Z -> círculo.
-# X != Z -> elipse.
+# X = Z -> círculo
+# X != Z -> elipse
 @export_range(5.0, 1000.0, 1.0) var area_radius_x: float = 100.0
 @export_range(5.0, 1000.0, 1.0) var area_radius_z: float = 80.0
 
-# Distancias Poisson.
 @export_range(0.5, 50.0, 0.1) var min_spacing: float = 4.0
 @export_range(0.5, 50.0, 0.1) var max_spacing: float = 8.0
 
 @export_range(4, 64, 1) var poisson_attempts_per_point: int = 24
 
-# Generamos más candidatos que árboles finales,
-# porque después algunos se eliminan por agua,
-# edificios, falta de terreno, etc.
+# Generamos más candidatos que árboles finales porque algunos
+# pueden ser descartados por terreno, pendiente, agua o geometría.
 @export_range(1.0, 5.0, 0.1) var candidate_pool_multiplier: float = 2.0
+
+@export var random_seed: int = 12345
 
 
 # ============================================================
@@ -37,11 +36,9 @@ extends MultiMeshInstance3D
 @export_range(0.10, 15.0, 0.05) var min_scale: float = 2.0
 @export_range(0.10, 15.0, 0.05) var max_scale: float = 7.5
 
-# 0%   = completamente aleatorio.
-# 100% = grandes en centro, pequeños en borde.
+# 0%   = escala completamente aleatoria
+# 100% = grandes en el centro, pequeños en el borde
 @export_range(0.0, 100.0, 1.0) var center_scale_bias_percent: float = 65.0
-
-@export var random_seed: int = 12345
 
 
 # ============================================================
@@ -57,13 +54,29 @@ extends MultiMeshInstance3D
 
 @export_flags_3d_physics var ground_collision_mask: int = 0xFFFFFFFF
 
-# Si está vacío, cualquier collider encontrado se acepta.
-#
-# Paradise Island:
+# En Paradise Island:
 # Terrain_Master_COL
+#
+# Si el array queda vacío se acepta cualquier collider.
 @export var valid_ground_name_contains: PackedStringArray = PackedStringArray([
 	"Terrain_Master_COL"
 ])
+
+
+# ============================================================
+# SLOPE FILTER
+# ============================================================
+
+@export_group("Slope Filter")
+
+@export var reject_steep_slopes: bool = true
+
+# 0  = solamente superficies perfectamente planas
+# 35 = bastante restrictivo
+# 40 = buen punto inicial
+# 50 = permite laderas fuertes
+# 89 = prácticamente cualquier superficie
+@export_range(0.0, 89.0, 1.0) var max_ground_slope_degrees: float = 40.0
 
 
 # ============================================================
@@ -74,19 +87,16 @@ extends MultiMeshInstance3D
 
 @export var avoid_visual_geometry: bool = true
 
-# Añadir desde el Inspector nodos como:
+# Aquí puedes añadir desde la escena:
+# edificios
+# rocas
+# estructuras
+# etc.
 #
-# Buildings
-# Rocks
-# Ramps
-#
-# No necesitan collider.
+# NO necesitan collider.
 @export var visual_exclusion_roots: Array[NodePath] = []
 
-# Tamaño aproximado de la copa usado para evitar geometría.
 @export_range(0.10, 1.50, 0.05) var visual_radius_factor: float = 0.80
-
-# Margen extra alrededor de edificios/rocas.
 @export_range(0.0, 10.0, 0.1) var visual_extra_clearance: float = 1.0
 
 
@@ -99,13 +109,10 @@ extends MultiMeshInstance3D
 @export var avoid_water: bool = true
 
 # Puede quedar vacío.
-# Buscará Ocean3D automáticamente.
+# Buscará automáticamente el Ocean3D.
 @export var water_provider_path: NodePath
 
-# Distancia vertical mínima entre el terreno y el agua.
-#
-# 0 = solo descarta terreno sumergido.
-# 1 = deja un metro sobre el nivel del agua.
+# Separación vertical mínima respecto a la superficie del agua.
 @export_range(0.0, 20.0, 0.1) var minimum_height_above_water: float = 1.0
 
 
@@ -121,7 +128,9 @@ extends MultiMeshInstance3D
 # ============================================================
 
 func _ready() -> void:
-	if not Engine.is_editor_hint():
+	if Engine.is_editor_hint():
+		call_deferred("_generate")
+	else:
 		_generate()
 
 
@@ -141,7 +150,7 @@ func _generate() -> void:
 
 
 	# --------------------------------------------------------
-	# PHYSICS WORLD
+	# PHYSICS
 	# --------------------------------------------------------
 
 	var space_state: PhysicsDirectSpaceState3D = null
@@ -151,7 +160,7 @@ func _generate() -> void:
 
 
 	# --------------------------------------------------------
-	# WATER
+	# WATER PROVIDER
 	# --------------------------------------------------------
 
 	var water_provider: WaterSurfaceProvider3D = null
@@ -212,7 +221,7 @@ func _generate() -> void:
 
 
 	# --------------------------------------------------------
-	# RANDOM
+	# RNG
 	# --------------------------------------------------------
 
 	var rng: RandomNumberGenerator = RandomNumberGenerator.new()
@@ -220,7 +229,7 @@ func _generate() -> void:
 
 
 	# --------------------------------------------------------
-	# POISSON CANDIDATES
+	# CANDIDATE POOL
 	# --------------------------------------------------------
 
 	var candidate_pool_target: int = maxi(
@@ -232,6 +241,7 @@ func _generate() -> void:
 			)
 		)
 	)
+
 
 	var poisson_positions: Array[Vector2] = _generate_poisson_positions(
 		candidate_pool_target,
@@ -262,6 +272,7 @@ func _generate() -> void:
 
 	var rejected_no_ground: int = 0
 	var rejected_invalid_ground: int = 0
+	var rejected_steep_slope: int = 0
 	var rejected_visual_geometry: int = 0
 	var rejected_water: int = 0
 
@@ -308,7 +319,7 @@ func _generate() -> void:
 
 
 		# ====================================================
-		# X / Z
+		# BASE POSITION
 		# ====================================================
 
 		var local_x: float = point.x
@@ -358,10 +369,18 @@ func _generate() -> void:
 			)
 
 
+			# ------------------------------------------------
+			# NO GROUND
+			# ------------------------------------------------
+
 			if hit.is_empty():
 				rejected_no_ground += 1
 				continue
 
+
+			# ------------------------------------------------
+			# VALID GROUND COLLIDER
+			# ------------------------------------------------
 
 			var ground_collider: Object = hit["collider"]
 
@@ -373,8 +392,44 @@ func _generate() -> void:
 				continue
 
 
-			ground_position_global = hit["position"]
+			# ------------------------------------------------
+			# SLOPE
+			# ------------------------------------------------
 
+			if reject_steep_slopes:
+
+				var ground_normal: Vector3 = hit["normal"]
+
+				if ground_normal.length_squared() <= 0.000001:
+					rejected_steep_slope += 1
+					continue
+
+				ground_normal = ground_normal.normalized()
+
+				var up_dot: float = clampf(
+					ground_normal.dot(Vector3.UP),
+					-1.0,
+					1.0
+				)
+
+				var slope_radians: float = acos(
+					up_dot
+				)
+
+				var slope_degrees: float = rad_to_deg(
+					slope_radians
+				)
+
+				if slope_degrees > max_ground_slope_degrees:
+					rejected_steep_slope += 1
+					continue
+
+
+			# ------------------------------------------------
+			# FINAL GROUND POSITION
+			# ------------------------------------------------
+
+			ground_position_global = hit["position"]
 
 			var ground_position_local: Vector3 = to_local(
 				ground_position_global
@@ -384,7 +439,7 @@ func _generate() -> void:
 
 
 		# ====================================================
-		# WATER EXCLUSION
+		# WATER
 		# ====================================================
 
 		if (
@@ -398,14 +453,12 @@ func _generate() -> void:
 				)
 			)
 
-
 			if water_sample.valid:
 
 				var height_above_water: float = (
 					ground_position_global.y
 					- water_sample.surface_position.y
 				)
-
 
 				if (
 					height_above_water
@@ -416,7 +469,7 @@ func _generate() -> void:
 
 
 		# ====================================================
-		# VISUAL GEOMETRY EXCLUSION
+		# VISUAL GEOMETRY
 		# ====================================================
 
 		if (
@@ -472,11 +525,10 @@ func _generate() -> void:
 
 
 		# ====================================================
-		# COLOR VARIATION
+		# LEAF COLOR VARIATION
 		# ====================================================
 
 		var leaf_variation: float = rng.randf()
-
 
 		multimesh.set_instance_custom_data(
 			index,
@@ -493,7 +545,7 @@ func _generate() -> void:
 
 
 	# ========================================================
-	# ONLY DRAW VALID TREES
+	# SHOW VALID INSTANCES
 	# ========================================================
 
 	multimesh.visible_instance_count = index
@@ -510,6 +562,8 @@ func _generate() -> void:
 		rejected_no_ground,
 		" | invalid ground: ",
 		rejected_invalid_ground,
+		" | steep slope: ",
+		rejected_steep_slope,
 		" | visual geometry: ",
 		rejected_visual_geometry,
 		" | water: ",
@@ -536,6 +590,7 @@ func _is_valid_ground_collider(
 
 
 	var collider_node: Node = collider as Node
+
 	var collider_name: String = String(
 		collider_node.name
 	)
@@ -576,10 +631,12 @@ func _build_visual_blocker_aabbs() -> Array[AABB]:
 
 
 		if root_node == null:
+
 			push_warning(
 				"Visual exclusion root not found: "
 					+ String(root_path)
 			)
+
 			continue
 
 
@@ -616,6 +673,7 @@ func _collect_visual_blockers(
 				or world_aabb.size.y > 0.0001
 				or world_aabb.size.z > 0.0001
 			):
+
 				blocker_aabbs.append(
 					world_aabb
 				)
@@ -670,7 +728,7 @@ func _get_world_aabb(
 	var world_max: Vector3 = first_world_corner
 
 
-	for i in range(
+	for i: int in range(
 		1,
 		corners.size()
 	):
@@ -733,12 +791,7 @@ func _intersects_visual_geometry(
 		return false
 
 
-	# El Quad original mide 2 x 2.
-	#
-	# Escala 5:
-	# alto  = 10 m
-	# ancho = 10 m
-
+	# Quad original = 2 x 2.
 	var tree_height: float = maxf(
 		2.0 * scale_variation,
 		0.1
@@ -790,7 +843,7 @@ func _intersects_visual_geometry(
 func _resolve_water_provider() -> WaterSurfaceProvider3D:
 
 	# --------------------------------------------------------
-	# EXPLICIT PATH
+	# EXPLICIT
 	# --------------------------------------------------------
 
 	if water_provider_path != NodePath(""):
@@ -801,6 +854,7 @@ func _resolve_water_provider() -> WaterSurfaceProvider3D:
 
 
 		if explicit_node is WaterSurfaceProvider3D:
+
 			return (
 				explicit_node
 				as WaterSurfaceProvider3D
@@ -808,7 +862,7 @@ func _resolve_water_provider() -> WaterSurfaceProvider3D:
 
 
 	# --------------------------------------------------------
-	# AUTOMATIC OCEAN
+	# AUTO
 	# --------------------------------------------------------
 
 	if is_inside_tree():
@@ -821,6 +875,7 @@ func _resolve_water_provider() -> WaterSurfaceProvider3D:
 
 
 		if grouped_node is WaterSurfaceProvider3D:
+
 			return (
 				grouped_node
 				as WaterSurfaceProvider3D
@@ -997,8 +1052,6 @@ func _random_point_in_ellipse(
 	)
 
 
-	# sqrt hace uniforme la densidad
-	# dentro del área.
 	var radial: float = sqrt(
 		rng.randf()
 	)
@@ -1050,7 +1103,7 @@ func _point_inside_ellipse(
 
 
 # ============================================================
-# POISSON DISTANCE TEST
+# POISSON DISTANCE
 # ============================================================
 
 func _is_poisson_candidate_valid(
@@ -1074,7 +1127,7 @@ func _is_poisson_candidate_valid(
 
 
 # ============================================================
-# NORMALIZED DISTANCE CENTER -> EDGE
+# NORMALIZED CENTER -> EDGE DISTANCE
 # ============================================================
 
 func _get_ellipse_radius_ratio(
@@ -1108,20 +1161,35 @@ func _get_ellipse_radius_ratio(
 		0.0,
 		1.0
 	)
+
+
+# ============================================================
+# EDITOR SAVE
+# ============================================================
+
 func _notification(what: int) -> void:
+
 	if not Engine.is_editor_hint():
 		return
 
+
 	if what == NOTIFICATION_EDITOR_PRE_SAVE:
+
 		_clear_generated_multimesh()
 
+
 	elif what == NOTIFICATION_EDITOR_POST_SAVE:
-		call_deferred("_generate")
+
+		call_deferred(
+			"_generate"
+		)
 
 
 func _clear_generated_multimesh() -> void:
+
 	if multimesh == null:
 		return
+
 
 	multimesh.instance_count = 0
 	multimesh.visible_instance_count = -1

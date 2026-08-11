@@ -2,12 +2,14 @@
 
 [ext_resource type="Material" uid="uid://cblg21bayh8pb" path="res://world/vegetation/trees/materials/tree_impostor_linden_a.tres" id="1_4nntc"]
 [ext_resource type="Script" uid="uid://cvomld30ce7r0" path="res://world/vegetation/trees/tree_impostor_multimesh.gd" id="2_l7a6e"]
+[ext_resource type="Material" uid="uid://xu7m70my2qof" path="res://world/vegetation/trees/materials/tree_impostor_shadow_beech_a.tres" id="3_l7a6e"]
 
 [sub_resource type="QuadMesh" id="QuadMesh_wwatn"]
 material = ExtResource("1_4nntc")
 size = Vector2(2, 2)
 
 [sub_resource type="MultiMesh" id="MultiMesh_tpwhi"]
+resource_local_to_scene = true
 transform_format = 1
 use_custom_data = true
 mesh = SubResource("QuadMesh_wwatn")
@@ -15,6 +17,7 @@ mesh = SubResource("QuadMesh_wwatn")
 [node name="TreeImpostorMultimesh" type="Node3D" unique_id=1529450960]
 
 [node name="Trees" type="MultiMeshInstance3D" parent="." unique_id=184116622]
+cast_shadow = 0
 multimesh = SubResource("MultiMesh_tpwhi")
 script = ExtResource("2_l7a6e")
 min_spacing = 0.25
@@ -23,3 +26,8 @@ min_scale = 4.0
 max_scale = 10.0
 center_scale_bias_percent = 66.0
 valid_ground_name_contains = PackedStringArray("Terrain_Master_COL")
+
+[node name="TreeShadows" type="MultiMeshInstance3D" parent="." unique_id=1425367268]
+material_override = ExtResource("3_l7a6e")
+cast_shadow = 3
+multimesh = SubResource("MultiMesh_tpwhi")
