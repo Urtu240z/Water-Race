@@ -375,7 +375,7 @@ shader_parameter/foam_scroll_speed = 0.13
 shader_parameter/foam_roughness = 0.70999998413008
 shader_parameter/ocean_foam_detail_quality = 1
 shader_parameter/ocean_foam_evaluation_distance = 520.0
-shader_parameter/ocean_surface_enabled = false
+shader_parameter/ocean_surface_enabled = true
 shader_parameter/ocean_logical_origin_offset_xz = Vector2(0, 0)
 shader_parameter/ocean_detail_center_xz = Vector2(0, 0)
 shader_parameter/ocean_detailed_wave_fade_start = 170.0
@@ -1044,7 +1044,6 @@ wet_lens_texture_edge_feather = 0.1
 editor_preview_mode = 0
 
 [node name="EntryBubbles" parent="CameraSystem/ChaseCamera/Camera3D/UnderwaterEffect/WaterCrossingOverlay" index="0"]
-visible = false
 material = SubResource("CanvasItemMaterial_lh2je")
 position = Vector2(1, 1.76)
 amount = 500
@@ -1240,6 +1239,7 @@ omni_range = 29.782
 omni_attenuation = 0.971
 
 [node name="TreeImpostorMultimesh" parent="Atrezzo" unique_id=1529450960 instance=ExtResource("69_4s1c0")]
+physics_interpolation_mode = 2
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 62.39052, 203.09952)
 
 [node name="Trees" parent="Atrezzo/TreeImpostorMultimesh" index="0" unique_id=184116622]
@@ -1253,7 +1253,11 @@ center_scale_bias_percent = 37.0
 visual_exclusion_roots = Array[NodePath]([NodePath("../../Buildings"), NodePath("../../Rocks"), NodePath("../../PalmsMultiMesh"), NodePath("../../../TerrainRoot/test_island/Lighthouse_VIS")])
 visual_radius_factor = 0.1
 
+[node name="TreeShadows" parent="Atrezzo/TreeImpostorMultimesh" index="1" unique_id=1425367268]
+multimesh = SubResource("MultiMesh_xn4fe")
+
 [node name="TreeImpostorMultimesh5" parent="Atrezzo" unique_id=330109363 instance=ExtResource("69_4s1c0")]
+physics_interpolation_mode = 2
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 479.10742, 62.39052, 278.28214)
 
 [node name="Trees" parent="Atrezzo/TreeImpostorMultimesh5" index="0" unique_id=184116622]
@@ -1270,7 +1274,11 @@ visual_exclusion_roots = Array[NodePath]([NodePath("../../Buildings"), NodePath(
 visual_radius_factor = 0.1
 visual_extra_clearance = 0.0
 
+[node name="TreeShadows" parent="Atrezzo/TreeImpostorMultimesh5" index="1" unique_id=1425367268]
+multimesh = SubResource("MultiMesh_6ayrq")
+
 [node name="TreeImpostorMultimesh6" parent="Atrezzo" unique_id=140600112 instance=ExtResource("69_4s1c0")]
+physics_interpolation_mode = 2
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 479.10742, 62.39052, 118.992645)
 
 [node name="Trees" parent="Atrezzo/TreeImpostorMultimesh6" index="0" unique_id=184116622]
@@ -1288,7 +1296,11 @@ visual_exclusion_roots = Array[NodePath]([NodePath("../../Buildings"), NodePath(
 visual_radius_factor = 0.1
 visual_extra_clearance = 0.0
 
+[node name="TreeShadows" parent="Atrezzo/TreeImpostorMultimesh6" index="1" unique_id=1425367268]
+multimesh = SubResource("MultiMesh_6i7i5")
+
 [node name="TreeImpostorMultimesh7" parent="Atrezzo" unique_id=512981442 instance=ExtResource("69_4s1c0")]
+physics_interpolation_mode = 2
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 442.30817, 62.39052, -45.45706)
 
 [node name="Trees" parent="Atrezzo/TreeImpostorMultimesh7" index="0" unique_id=184116622]
@@ -1305,7 +1317,11 @@ visual_exclusion_roots = Array[NodePath]([NodePath("../../Buildings"), NodePath(
 visual_radius_factor = 0.1
 visual_extra_clearance = 0.0
 
+[node name="TreeShadows" parent="Atrezzo/TreeImpostorMultimesh7" index="1" unique_id=1425367268]
+multimesh = SubResource("MultiMesh_f03ma")
+
 [node name="TreeImpostorMultimesh8" parent="Atrezzo" unique_id=328841427 instance=ExtResource("69_4s1c0")]
+physics_interpolation_mode = 2
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 442.30817, 62.39052, 366.82397)
 
 [node name="Trees" parent="Atrezzo/TreeImpostorMultimesh8" index="0" unique_id=184116622]
@@ -1323,7 +1339,11 @@ visual_radius_factor = 0.1
 visual_extra_clearance = 0.0
 minimum_height_above_water = 4.6
 
+[node name="TreeShadows" parent="Atrezzo/TreeImpostorMultimesh8" index="1" unique_id=1425367268]
+multimesh = SubResource("MultiMesh_fnlue")
+
 [node name="TreeImpostorMultimesh3" parent="Atrezzo" unique_id=1395600856 instance=ExtResource("69_4s1c0")]
+physics_interpolation_mode = 2
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 62.39052, 46.761734)
 
 [node name="Trees" parent="Atrezzo/TreeImpostorMultimesh3" index="0" unique_id=184116622]
@@ -1337,7 +1357,11 @@ center_scale_bias_percent = 37.0
 visual_exclusion_roots = Array[NodePath]([NodePath("../../Buildings"), NodePath("../../Rocks"), NodePath("../../PalmsMultiMesh"), NodePath("../../../TerrainRoot/test_island/Lighthouse_VIS")])
 visual_radius_factor = 0.1
 
+[node name="TreeShadows" parent="Atrezzo/TreeImpostorMultimesh3" index="1" unique_id=1425367268]
+multimesh = SubResource("MultiMesh_ikh8v")
+
 [node name="TreeImpostorMultimesh4" parent="Atrezzo" unique_id=818077302 instance=ExtResource("69_4s1c0")]
+physics_interpolation_mode = 2
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 62.39052, 295.04816)
 
 [node name="Trees" parent="Atrezzo/TreeImpostorMultimesh4" index="0" unique_id=184116622]
@@ -1351,7 +1375,11 @@ center_scale_bias_percent = 37.0
 visual_exclusion_roots = Array[NodePath]([NodePath("../../Buildings"), NodePath("../../Rocks"), NodePath("../../PalmsMultiMesh"), NodePath("../../../TerrainRoot/test_island/Lighthouse_VIS")])
 visual_radius_factor = 0.1
 
+[node name="TreeShadows" parent="Atrezzo/TreeImpostorMultimesh4" index="1" unique_id=1425367268]
+multimesh = SubResource("MultiMesh_cjg0n")
+
 [node name="TreeImpostorMultimesh2" parent="Atrezzo" unique_id=518834787 instance=ExtResource("69_4s1c0")]
+physics_interpolation_mode = 2
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 62.39052, -50.634964)
 
 [node name="Trees" parent="Atrezzo/TreeImpostorMultimesh2" index="0" unique_id=184116622]
@@ -1364,6 +1392,9 @@ max_spacing = 13.0
 center_scale_bias_percent = 37.0
 visual_exclusion_roots = Array[NodePath]([NodePath("../../Buildings"), NodePath("../../Rocks"), NodePath("../../PalmsMultiMesh"), NodePath("../../../TerrainRoot/test_island/Lighthouse_VIS")])
 visual_radius_factor = 0.1
+
+[node name="TreeShadows" parent="Atrezzo/TreeImpostorMultimesh2" index="1" unique_id=1425367268]
+multimesh = SubResource("MultiMesh_8v1g3")
 
 [node name="Circuit" type="Node3D" parent="." unique_id=1519848915]
 
