@@ -18,6 +18,7 @@ mesh = SubResource("QuadMesh_wwatn")
 
 [node name="TreeImpostorMultimesh" type="Node3D" unique_id=1529450960]
 script = ExtResource("1_v6wlq")
+valid_ground_name_contains = PackedStringArray("Terrain_Master_COL")
 
 [node name="Trees" type="MultiMeshInstance3D" parent="." unique_id=184116622]
 physics_interpolation_mode = 2
@@ -34,11 +35,13 @@ valid_ground_name_contains = PackedStringArray("Terrain_Master_COL")
 
 [node name="TreeShadows" type="MultiMeshInstance3D" parent="." unique_id=1425367268]
 material_override = ExtResource("3_l7a6e")
-cast_shadow = 3
+cast_shadow = 0
 multimesh = SubResource("MultiMesh_tpwhi")
 
 [node name="CanopyAmbientShadow" type="Decal" parent="." unique_id=1054602443]
+visible = false
 upper_fade = 0.083217785
 lower_fade = 0.15000011
 cull_mask = 1
 script = ExtResource("4_lty7h")
+auto_sync_in_editor = false

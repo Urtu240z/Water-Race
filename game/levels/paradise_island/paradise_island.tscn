@@ -23,6 +23,7 @@
 [ext_resource type="Texture2D" uid="uid://do03pewy7xrqu" path="res://shared/materials/terrain/textures/terrain_master/grass_albedo.png" id="21_5pg1t"]
 [ext_resource type="Texture2D" uid="uid://cpw3o0egt3xhj" path="res://shared/materials/terrain/textures/terrain_master/grass_normal.png" id="22_2sw4f"]
 [ext_resource type="Texture2D" uid="uid://bjbtr4wpa2non" path="res://shared/materials/terrain/textures/terrain_master/grass_orm.png" id="23_dehlt"]
+[ext_resource type="Texture2D" uid="uid://ip2r2uwxmiib" path="res://world/terrain/baked_tree_projected_shadows.png" id="24_4s1c0"]
 [ext_resource type="Texture2D" uid="uid://u0a4uawsdt4x" path="res://shared/materials/terrain/textures/terrain_master/moss_albedo.png" id="24_u0oh0"]
 [ext_resource type="Texture2D" uid="uid://dgxnwr48qllj6" path="res://shared/materials/terrain/textures/terrain_master/moss_normal.png" id="25_ywwvg"]
 [ext_resource type="Texture2D" uid="uid://dw445jkd1svoe" path="res://shared/materials/terrain/textures/terrain_master/moss_orm.png" id="26_lcrxj"]
@@ -72,8 +73,7 @@
 [ext_resource type="Script" uid="uid://bi5r7j71qd8fp" path="res://gameplay/race/boundary/boundary_wipeout_controller_3d.gd" id="68_bwc3d"]
 [ext_resource type="PackedScene" uid="uid://dqbhmwx6tvlx0" path="res://world/vegetation/trees/tree_impostor_multimesh.tscn" id="69_4s1c0"]
 [ext_resource type="Resource" uid="uid://e5jcb4ue4bh7" path="res://world/water/ocean/events/boundary_tsunami_event_wave.tres" id="69_btsun"]
-[ext_resource type="Texture2D" uid="uid://dtuqpmj3wc185" path="res://world/vegetation/trees/textures/tree_beech_a_tex.png" id="72_hb254"]
-[ext_resource type="Texture2D" uid="uid://dhyhw7b7y4oke" path="res://world/vegetation/trees/textures/tree_beech_a_nor.png" id="73_4s1c0"]
+[ext_resource type="Script" uid="uid://bcftfjsjn8hc4" path="res://world/vegetation/trees/tree_projected_shadow_baker.gd" id="74_qsxv0"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_f0815"]
 panorama = ExtResource("6_ord5u")
@@ -106,6 +106,11 @@ radiance_size = 5
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_tpwhi"]
 render_priority = 0
 shader = ExtResource("17_fnlue")
+shader_parameter/use_baked_tree_shadows = true
+shader_parameter/tree_shadow_map = ExtResource("24_4s1c0")
+shader_parameter/tree_shadow_world_min = Vector2(-425.64886, -446.08478)
+shader_parameter/tree_shadow_world_size = Vector2(1121.21, 1121.21)
+shader_parameter/tree_shadow_strength = 1.0
 shader_parameter/dry_sand_albedo = ExtResource("18_ikh8v")
 shader_parameter/dry_sand_orm = ExtResource("20_8v1g3")
 shader_parameter/dry_sand_normal = ExtResource("19_cjg0n")
@@ -209,7 +214,7 @@ shader_parameter/breakup = 0.0
 material = ExtResource("15_6i7i5")
 size = Vector2(10000, 10000)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_4s1c0"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_lh2je"]
 resource_local_to_scene = true
 render_priority = 0
 shader = ExtResource("41_48bym")
@@ -437,7 +442,7 @@ shader_parameter/custom_reflection_minimum_surface_weight = 0.34
 shader_parameter/custom_reflection_maximum_surface_weight = 0.88
 shader_parameter/custom_reflection_emission_strength = 1.20999997295408
 
-[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_qsxv0"]
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_qj7v8"]
 resource_local_to_scene = true
 blend_mode = 1
 
@@ -464,7 +469,7 @@ point_count = 3
 [sub_resource type="CurveTexture" id="CurveTexture_bubble_shrink"]
 curve = SubResource("Curve_bubble_shrink")
 
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_lh2je"]
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_8enb2"]
 resource_local_to_scene = true
 particle_flag_disable_z = true
 emission_shape_offset = Vector3(0, 600, 0)
@@ -487,7 +492,7 @@ turbulence_influence_max = 0.082
 turbulence_initial_displacement_min = -47.5
 turbulence_initial_displacement_max = 94.5
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_qj7v8"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_xn4fe"]
 resource_local_to_scene = true
 render_priority = -127
 shader = ExtResource("55_gee3e")
@@ -525,16 +530,6 @@ data = PackedVector3Array(8.577499, 2.925, 4.5074997, 8.577499, -2.925, 4.507499
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_rtwgq"]
 friction = 0.0
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wwatn"]
-albedo_texture = ExtResource("72_hb254")
-normal_enabled = true
-normal_scale = 2.4
-normal_texture = ExtResource("73_4s1c0")
-
-[sub_resource type="QuadMesh" id="QuadMesh_tpwhi"]
-material = SubResource("StandardMaterial3D_wwatn")
-size = Vector2(5, 8)
 
 [node name="ParadiseIsland" type="Node3D" unique_id=2091620036]
 script = ExtResource("1_w5ddm")
@@ -664,11 +659,13 @@ visible = false
 [node name="PalmImpostorGroundShadows" parent="TerrainRoot/test_island" unique_id=671848398 instance=ExtResource("38_nsda3")]
 
 [node name="SM_Palm_Impostor_Zone_001_SHADOW" parent="TerrainRoot/test_island/PalmImpostorGroundShadows" index="0" unique_id=617546464]
+visible = false
 material_override = SubResource("ShaderMaterial_palm_ground_shadow")
 cast_shadow = 0
 visibility_range_end = 4000.0
 
 [node name="SM_Palm_Impostor_Zone_002_SHADOW" parent="TerrainRoot/test_island/PalmImpostorGroundShadows" index="1" unique_id=307511129]
+visible = false
 material_override = SubResource("ShaderMaterial_palm_ground_shadow")
 cast_shadow = 0
 visibility_range_end = 4000.0
@@ -683,7 +680,7 @@ mesh = SubResource("PlaneMesh_tpwhi")
 [node name="WaterIntegration" type="Node3D" parent="." unique_id=1889730552]
 
 [node name="Ocean" parent="WaterIntegration" unique_id=1340264265 instance=ExtResource("40_5h17r")]
-ocean_material = SubResource("ShaderMaterial_4s1c0")
+ocean_material = SubResource("ShaderMaterial_lh2je")
 wave_world_size_a = 231.5
 wave_world_size_b = 155.5
 wave_travel_speed_a = 9.0000004321348
@@ -993,8 +990,7 @@ wet_lens_texture_edge_feather = 0.1
 editor_preview_mode = 0
 
 [node name="EntryBubbles" parent="CameraSystem/ChaseCamera/Camera3D/UnderwaterEffect/WaterCrossingOverlay" index="0"]
-visible = false
-material = SubResource("CanvasItemMaterial_qsxv0")
+material = SubResource("CanvasItemMaterial_qj7v8")
 position = Vector2(1, 1.76)
 amount = 500
 texture = SubResource("GradientTexture2D_pl0kw")
@@ -1002,10 +998,10 @@ lifetime = 20.0
 speed_scale = 8.0
 explosiveness = 1.0
 randomness = 1.0
-process_material = SubResource("ParticleProcessMaterial_lh2je")
+process_material = SubResource("ParticleProcessMaterial_8enb2")
 
 [node name="UnderwaterPostProcess" parent="CameraSystem/ChaseCamera/Camera3D/UnderwaterEffect" index="1" unique_id=1854893749]
-material_override = SubResource("ShaderMaterial_qj7v8")
+material_override = SubResource("ShaderMaterial_xn4fe")
 
 [node name="Atrezzo" type="Node3D" parent="." unique_id=1365592301]
 
@@ -1037,7 +1033,7 @@ metadata/multimesh_count = 98
 [node name="Ramps" type="Node3D" parent="Atrezzo" unique_id=1500221707]
 
 [node name="Jump1" type="MeshInstance3D" parent="Atrezzo/Ramps" unique_id=1190177101]
-transform = Transform3D(0.047000684, 0, -0.9988949, 0, 1, 0, 0.9988949, 0, 0.047000684, 189.9109, 1.2042637, 2.8569958)
+transform = Transform3D(0.023030335, 0, -0.4894585, 0, 0.49, 0, 0.4894585, 0, 0.023030335, 189.9109, 0.9129782, 2.8569958)
 mesh = SubResource("PrismMesh_tpwhi")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Atrezzo/Ramps/Jump1" unique_id=1563769446]
@@ -1047,7 +1043,7 @@ physics_material_override = SubResource("PhysicsMaterial_xveky")
 shape = SubResource("ConcavePolygonShape3D_djt2o")
 
 [node name="Jump4" type="MeshInstance3D" parent="Atrezzo/Ramps" unique_id=1929662083]
-transform = Transform3D(0.047000684, 0, -0.9988949, 0, 1, 0, 0.9988949, 0, 0.047000684, 223.61113, 1.2042637, -94.87814)
+transform = Transform3D(0.023030335, 0, -0.4894585, 0, 0.49, 0, 0.4894585, 0, 0.023030335, 223.61113, 0.9129782, -94.87814)
 mesh = SubResource("PrismMesh_tpwhi")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Atrezzo/Ramps/Jump4" unique_id=1041393990]
@@ -1057,7 +1053,7 @@ physics_material_override = SubResource("PhysicsMaterial_rtwgq")
 shape = SubResource("ConcavePolygonShape3D_djt2o")
 
 [node name="Jump5" type="MeshInstance3D" parent="Atrezzo/Ramps" unique_id=601217171]
-transform = Transform3D(0.047000684, 0, -0.9988949, 0, 1, 0, 0.9988949, 0, 0.047000684, 184.03395, 1.2042637, -209.91396)
+transform = Transform3D(0.023030335, 0, -0.4894585, 0, 0.49, 0, 0.4894585, 0, 0.023030335, 184.03395, 0.9129782, -209.91396)
 mesh = SubResource("PrismMesh_tpwhi")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Atrezzo/Ramps/Jump5" unique_id=1185602380]
@@ -1067,7 +1063,7 @@ physics_material_override = SubResource("PhysicsMaterial_rtwgq")
 shape = SubResource("ConcavePolygonShape3D_djt2o")
 
 [node name="Jump2" type="MeshInstance3D" parent="Atrezzo/Ramps" unique_id=982363763]
-transform = Transform3D(0.047000684, 0, -0.9988949, 0, 1, 0, 0.9988949, 0, 0.047000684, 214.77977, 1.2042637, 101.30986)
+transform = Transform3D(0.023030335, 0, -0.4894585, 0, 0.49, 0, 0.4894585, 0, 0.023030335, 214.77977, 0.9129782, 101.30986)
 mesh = SubResource("PrismMesh_tpwhi")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Atrezzo/Ramps/Jump2" unique_id=363621744]
@@ -1077,7 +1073,7 @@ physics_material_override = SubResource("PhysicsMaterial_rtwgq")
 shape = SubResource("ConcavePolygonShape3D_djt2o")
 
 [node name="Jump3" type="MeshInstance3D" parent="Atrezzo/Ramps" unique_id=1836126976]
-transform = Transform3D(0.047000684, 0, -0.9988949, 0, 1, 0, 0.9988949, 0, 0.047000684, 177.71559, 1.2042637, 266.83514)
+transform = Transform3D(0.023030335, 0, -0.4894585, 0, 0.49, 0, 0.4894585, 0, 0.023030335, 177.71559, 0.9129782, 266.83514)
 mesh = SubResource("PrismMesh_tpwhi")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Atrezzo/Ramps/Jump3" unique_id=2017955259]
@@ -1247,10 +1243,6 @@ buoy_clearance = 20.0
 [node name="VegetationQualityController" type="Node" parent="." unique_id=1324789763 groups=["graphics_quality_vegetation"]]
 script = ExtResource("3_i77vt")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1997229033]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 77.71753, 22.0194, 200.80768)
-mesh = SubResource("QuadMesh_tpwhi")
-
 [node name="Vegetation" type="Node3D" parent="." unique_id=572434429]
 
 [node name="TreesImpostorA" type="Node3D" parent="Vegetation" unique_id=2095383904]
@@ -1368,8 +1360,7 @@ canopy_extra_radius = 0.0
 canopy_falloff_power = 0.25
 canopy_density_gamma = 0.25
 canopy_texture_resolution = 64
-canopy_vertical_margin = 0.1
-canopy_surface_normal_fade = 0.45
+canopy_world_padding = 30.0
 
 [node name="TreeImpostorMultimesh6" parent="Vegetation/TreesImpostorA" unique_id=76881492 instance=ExtResource("69_4s1c0")]
 transform = Transform3D(0.13085763, 0, 0.9914012, 0, 1, 0, -0.9914012, 0, 0.13085763, -36.722843, 0, 214.55373)
@@ -1468,7 +1459,7 @@ canopy_surface_normal_fade = 0.45
 
 [node name="TreeImpostorMultimesh4" parent="Vegetation/TreesImpostorA2" unique_id=1742539657 instance=ExtResource("69_4s1c0")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -43.8524, 0, -260.0144)
-target_count = 300
+target_count = 120
 area_radius_x = 130.0
 area_radius_z = 100.0
 min_spacing = 5.35
@@ -1537,6 +1528,13 @@ canopy_density_gamma = 0.25
 canopy_texture_resolution = 64
 canopy_vertical_margin = 0.1
 canopy_surface_normal_fade = 0.45
+
+[node name="ProjectedTreeShadowBaker" type="Node3D" parent="." unique_id=2105173533]
+script = ExtResource("74_qsxv0")
+terrain_mesh_path = NodePath("../TerrainRoot/test_island/Terrain_Master_VIS")
+sun_light_path = NodePath("../Environment/DirectionalLight3D2")
+output_png_path = "uid://ip2r2uwxmiib"
+world_padding = 10.0
 
 [editable path="TerrainRoot/test_island"]
 [editable path="TerrainRoot/test_island/PalmImpostorGroundShadows"]
