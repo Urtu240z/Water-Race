@@ -3,5 +3,5 @@
 [resource]
 resource_name = "Marble_03_1K.001"
 cull_mode = 2
-albedo_color = Color(0.7518933, 0.621557, 0.47644717, 1)
+albedo_color = Color(0.19544399, 0.14421839, 0.0872039, 1)
 metallic = 0.6

@@ -10,16 +10,25 @@ const DEFAULT_OUTPUT_PATH: String = (
 	"res://world/terrain/baked_tree_projected_shadows.png"
 )
 
-const OVERLAY_SHADER_PATH: String = (
-	"res://world/vegetation/trees/shaders/"
-	+ "tree_projected_shadow_overlay.gdshader"
+
+# ============================================================
+# TEMPORARY RENDER LAYERS
+#
+# Layer 19 = receiver terrain.
+# Layer 20 = tree shadow casters.
+#
+# Both are restored after the bake.
+# ============================================================
+
+const BAKE_RECEIVER_LAYER_MASK: int = (
+	1 << 18
 )
 
-# Temporary camera-only layer used so the bake sees
-# Terrain_Master_VIS and nothing else.
-const BAKE_VISUAL_LAYER_MASK: int = (
+const BAKE_CASTER_LAYER_MASK: int = (
 	1 << 19
 )
+
+const MASK_32: int = 0xFFFFFFFF
 
 
 # ============================================================
@@ -55,53 +64,13 @@ var world_padding: float = 20.0
 
 
 # ============================================================
-# BAKE FILTER
-# ============================================================
-
-@export_group("Bake Filter")
-
-# Ignore tiny differences between the two captures.
-@export_range(0.0, 0.10, 0.001)
-var noise_threshold: float = 0.005
-
-# Avoid divisions/noise in pixels that are already almost black.
-@export_range(0.001, 0.20, 0.001)
-var minimum_reference_luminance: float = 0.025
-
-
-# ============================================================
-# OVERLAY
-# ============================================================
-
-@export_group("Overlay")
-
-@export_range(0.0, 3.0, 0.01)
-var overlay_shadow_strength: float = 1.35
-
-@export_range(0.10, 3.0, 0.01)
-var overlay_shadow_gamma: float = 0.75
-
-@export_range(0.0, 0.20, 0.001)
-var overlay_shadow_threshold: float = 0.005
-
-@export_range(0.0, 1.0, 0.01)
-var overlay_minimum_multiplier: float = 0.05
-
-@export_range(0.0, 0.20, 0.001)
-var overlay_surface_offset: float = 0.025
-
-
-# ============================================================
 # EDITOR
 # ============================================================
 
 @export_group("Editor")
 
-@export_tool_button("BAKE SHADOW MULTIPLIER")
+@export_tool_button("BAKE PURE TREE SHADOW MASK")
 var bake_button = bake_tree_shadows
-
-@export_tool_button("APPLY OVERLAY SETTINGS")
-var apply_settings_button = apply_overlay_settings
 
 
 # ============================================================
@@ -112,11 +81,10 @@ var _baking: bool = false
 
 
 # ============================================================
-# FIXED TREE SHADOW SHADER
+# TEMP TREE CASTER SHADER
 #
-# Same principle as the working TreeShadows shader, but
-# orientation is fixed to the actual sun instead of depending
-# on the temporary bake camera.
+# Rebuilds every tree quad as a fixed Y-billboard facing
+# the sun, independent of the top-down bake camera.
 # ============================================================
 
 const FIXED_SHADOW_SHADER_CODE: String = """
@@ -239,7 +207,59 @@ void fragment() {
 
 
 # ============================================================
-# BAKE BUTTON
+# PURE SHADOW RECEIVER
+#
+# IMPORTANT:
+#
+# We do NOT render the real terrain color.
+# We do NOT divide two captures.
+#
+# The directional light's ATTENUATION is rendered directly:
+#
+# 1.0 = receives full sun
+# 0.0 = fully shadowed
+#
+# This gives us the multiplier map directly.
+# ============================================================
+
+const SHADOW_RECEIVER_SHADER_CODE: String = """
+shader_type spatial;
+
+render_mode
+	ambient_light_disabled,
+	specular_disabled,
+	cull_disabled,
+	fog_disabled;
+
+
+void fragment() {
+
+	ALBEDO = vec3(1.0);
+
+	METALLIC = 0.0;
+
+	ROUGHNESS = 1.0;
+
+	SPECULAR = 0.0;
+
+	AO = 1.0;
+}
+
+
+void light() {
+
+	if (LIGHT_IS_DIRECTIONAL) {
+
+		DIFFUSE_LIGHT += vec3(
+			ATTENUATION
+		);
+	}
+}
+"""
+
+
+# ============================================================
+# BUTTON
 # ============================================================
 
 func bake_tree_shadows() -> void:
@@ -251,7 +271,7 @@ func bake_tree_shadows() -> void:
 	if not Engine.is_editor_hint():
 
 		push_error(
-			"Tree projected shadow bake is editor-only."
+			"Tree shadow bake is editor-only."
 		)
 
 		return
@@ -265,99 +285,21 @@ func bake_tree_shadows() -> void:
 
 
 # ============================================================
-# APPLY SETTINGS WITHOUT REBAKING
-# ============================================================
-
-func apply_overlay_settings() -> void:
-
-	if not Engine.is_editor_hint():
-		return
-
-
-	var scene_root: Node = _get_scene_root()
-
-	if scene_root == null:
-
-		push_error(
-			"OVERLAY: Scene root not found."
-		)
-
-		return
-
-
-	var terrain: MeshInstance3D = _find_terrain(
-		scene_root
-	)
-
-	if terrain == null:
-
-		push_error(
-			"OVERLAY: Terrain_Master_VIS not found."
-		)
-
-		return
-
-
-	var base_material: Material = (
-		_get_terrain_material(
-			terrain
-		)
-	)
-
-	if base_material == null:
-
-		push_error(
-			"OVERLAY: Terrain material not found."
-		)
-
-		return
-
-
-	var overlay_material: ShaderMaterial = (
-		_find_overlay_material(
-			base_material
-		)
-	)
-
-	if overlay_material == null:
-
-		push_error(
-			"OVERLAY: No baked shadow overlay exists. "
-			+ "Bake first."
-		)
-
-		return
-
-
-	_apply_overlay_visual_settings(
-		overlay_material
-	)
-
-
-	print("")
-	print("Shadow overlay settings updated.")
-	print("Strength: ", overlay_shadow_strength)
-	print("Gamma: ", overlay_shadow_gamma)
-	print(
-		"Minimum multiplier: ",
-		overlay_minimum_multiplier
-	)
-	print("")
-
-
-# ============================================================
-# MAIN BAKE
+# MAIN
 # ============================================================
 
 func _run_bake() -> void:
 
 	print("")
 	print("==========================================")
-	print("TREE SHADOW MULTIPLIER BAKE")
+	print("PURE TREE SHADOW MASK BAKE")
 	print("==========================================")
 
 
-	var scene_root: Node = _get_scene_root()
+	var scene_root: Node = (
+		_get_scene_root()
+	)
+
 
 	if scene_root == null:
 
@@ -370,9 +312,12 @@ func _run_bake() -> void:
 		return
 
 
-	var terrain: MeshInstance3D = _find_terrain(
-		scene_root
+	var terrain: MeshInstance3D = (
+		_find_terrain(
+			scene_root
+		)
 	)
+
 
 	if terrain == null:
 
@@ -385,9 +330,12 @@ func _run_bake() -> void:
 		return
 
 
-	var sun: DirectionalLight3D = _find_sun(
-		scene_root
+	var sun: DirectionalLight3D = (
+		_find_sun(
+			scene_root
+		)
 	)
+
 
 	if sun == null:
 
@@ -400,73 +348,19 @@ func _run_bake() -> void:
 		return
 
 
-	var base_material: Material = (
-		_get_terrain_material(
-			terrain
-		)
-	)
-
-	if base_material == null:
-
-		push_error(
-			"BAKE: Terrain_Master_VIS has no "
-			+ "material_override."
-		)
-
-		_baking = false
-
-		return
-
-
-	# --------------------------------------------------------
-	# Defensive cleanup of the OLD experiment.
-	#
-	# If the old terrain shader still has
-	# use_baked_tree_shadows, disable it so it does not
-	# contaminate the capture.
-	# --------------------------------------------------------
-
-	_disable_legacy_terrain_shadow(
-		base_material
-	)
-
-
-	# --------------------------------------------------------
-	# Temporarily remove our previous multiply next pass,
-	# otherwise an old bake would contaminate the new bake.
-	# --------------------------------------------------------
-
-	var detached_overlay: Dictionary = (
-		_detach_existing_overlay(
-			base_material
-		)
-	)
-
-
-	# --------------------------------------------------------
-	# Tree shadow sources.
-	# --------------------------------------------------------
+	# ========================================================
+	# TREE SHADOW SOURCES
+	# ========================================================
 
 	var shadow_nodes: Array[MultiMeshInstance3D] = []
 
-	var canopy_nodes: Array[Decal] = []
-
-	var old_caster_nodes: Array[GeometryInstance3D] = []
-
-
-	_collect_nodes(
+	_collect_tree_shadows(
 		scene_root,
-		shadow_nodes,
-		canopy_nodes,
-		old_caster_nodes
+		shadow_nodes
 	)
 
 
 	if shadow_nodes.is_empty():
-
-		_restore_detached_overlay(
-			detached_overlay
-		)
 
 		push_error(
 			"BAKE: No TreeShadows found."
@@ -505,6 +399,7 @@ func _run_bake() -> void:
 		terrain_bounds.size.z
 	)
 
+
 	capture_world_size += (
 		world_padding * 2.0
 	)
@@ -526,7 +421,7 @@ func _run_bake() -> void:
 
 
 	# ========================================================
-	# TILE SETUP
+	# TILES
 	# ========================================================
 
 	var tile_count: int = maxi(
@@ -575,35 +470,22 @@ func _run_bake() -> void:
 		" m"
 	)
 
-
-	# ========================================================
-	# MULTIPLIER IMAGE
-	#
-	# WHITE = no change.
-	# DARK = multiply final terrain.
-	# ========================================================
-
-	var final_image: Image = Image.create(
-		final_resolution,
-		final_resolution,
-		false,
-		Image.FORMAT_L8
-	)
-
-	final_image.fill(
-		Color.WHITE
+	print(
+		"Tile world size: ",
+		tile_world_size,
+		" m"
 	)
 
 
 	# ========================================================
-	# TREE SHADOW MATERIAL STATES
+	# BUILD TEMP CASTER MATERIALS BEFORE CHANGING SCENE
 	# ========================================================
 
-	var shadow_states: Array[Dictionary] = []
+	var fixed_shadow_shader: Shader = (
+		Shader.new()
+	)
 
-	var fixed_shader: Shader = Shader.new()
-
-	fixed_shader.code = (
+	fixed_shadow_shader.code = (
 		FIXED_SHADOW_SHADER_CODE
 	)
 
@@ -616,81 +498,265 @@ func _run_bake() -> void:
 	)
 
 
+	var shadow_states: Array[Dictionary] = []
+
+
 	for shadow_node: MultiMeshInstance3D in shadow_nodes:
+
+		var source_material: Material = (
+			_get_canonical_shadow_material(
+				shadow_node
+			)
+		)
+
+
+		if source_material == null:
+
+			push_error(
+				"BAKE: Missing shadow material on "
+				+ String(shadow_node.get_path())
+			)
+
+			_baking = false
+
+			return
+
+
+		var bake_material: ShaderMaterial = (
+			_create_bake_tree_material(
+				source_material,
+				fixed_shadow_shader,
+				fixed_to_light_ws
+			)
+		)
+
+
+		if bake_material == null:
+
+			push_error(
+				"BAKE: Could not create caster material for "
+				+ String(shadow_node.get_path())
+			)
+
+			_baking = false
+
+			return
+
 
 		shadow_states.append({
 			"node": shadow_node,
 			"visible": shadow_node.visible,
+			"layers": shadow_node.layers,
 			"cast_shadow": shadow_node.cast_shadow,
-			"material": shadow_node.material_override
+
+			# Canonical controller material, not necessarily the
+			# currently corrupted material left by an old bake.
+			"restore_material": source_material,
+
+			"bake_material": bake_material
 		})
 
 
-		var original_material: Material = (
-			shadow_node.material_override
+	# ========================================================
+	# RECEIVER MATERIAL
+	# ========================================================
+
+	var receiver_shader: Shader = (
+		Shader.new()
+	)
+
+	receiver_shader.code = (
+		SHADOW_RECEIVER_SHADER_CODE
+	)
+
+
+	var receiver_material: ShaderMaterial = (
+		ShaderMaterial.new()
+	)
+
+	receiver_material.shader = (
+		receiver_shader
+	)
+
+
+	# ========================================================
+	# SAVE TERRAIN STATE
+	# ========================================================
+
+	var old_terrain_material: Material = (
+		terrain.material_override
+	)
+
+	var old_terrain_layers: int = (
+		terrain.layers
+	)
+
+	var old_terrain_gi_mode: GeometryInstance3D.GIMode = (
+		terrain.gi_mode
+	)
+
+
+	# ========================================================
+	# SAVE SUN STATE
+	# ========================================================
+
+	var old_sun_visible: bool = (
+		sun.visible
+	)
+
+	var old_shadow_enabled: bool = (
+		sun.shadow_enabled
+	)
+
+	var old_shadow_opacity: float = (
+		sun.shadow_opacity
+	)
+
+	var old_sun_light_cull_mask: int = (
+		sun.light_cull_mask
+	)
+
+	var old_sun_shadow_caster_mask: int = (
+		sun.shadow_caster_mask
+	)
+
+	var old_sun_bake_mode: Light3D.BakeMode = (
+		sun.light_bake_mode
+	)
+
+	var old_shadow_max_distance: float = (
+		sun.directional_shadow_max_distance
+	)
+
+	var old_shadow_fade_start: float = (
+		sun.directional_shadow_fade_start
+	)
+
+
+	# ========================================================
+	# OTHER LIGHTS
+	#
+	# Remove our temporary receiver layer from every other
+	# light so only the selected sun can affect the mask.
+	# ========================================================
+
+	var other_lights: Array[Light3D] = []
+
+	_collect_lights(
+		scene_root,
+		other_lights
+	)
+
+
+	var other_light_states: Array[Dictionary] = []
+
+
+	for other_light: Light3D in other_lights:
+
+		if other_light == sun:
+			continue
+
+
+		other_light_states.append({
+			"node": other_light,
+			"light_cull_mask": other_light.light_cull_mask
+		})
+
+
+		other_light.light_cull_mask = (
+			other_light.light_cull_mask
+			& (
+				MASK_32
+				^ BAKE_RECEIVER_LAYER_MASK
+			)
 		)
 
 
-		var bake_material: ShaderMaterial = (
-			ShaderMaterial.new()
+	# ========================================================
+	# DECALS
+	#
+	# Disable all decals during the mask capture so no decal
+	# can modify the white receiver surface.
+	# ========================================================
+
+	var decals: Array[Decal] = []
+
+	_collect_decals(
+		scene_root,
+		decals
+	)
+
+
+	var decal_states: Array[Dictionary] = []
+
+
+	for decal: Decal in decals:
+
+		decal_states.append({
+			"node": decal,
+			"visible": decal.visible
+		})
+
+		decal.visible = false
+
+
+	# ========================================================
+	# APPLY TEMP TERRAIN RECEIVER
+	# ========================================================
+
+	terrain.material_override = (
+		receiver_material
+	)
+
+	terrain.layers = (
+		BAKE_RECEIVER_LAYER_MASK
+	)
+
+	terrain.gi_mode = (
+		GeometryInstance3D.GI_MODE_DISABLED
+	)
+
+
+	# ========================================================
+	# APPLY TEMP TREE CASTERS
+	# ========================================================
+
+	for state: Dictionary in shadow_states:
+
+		var shadow_node_value: Variant = (
+			state.get(
+				"node"
+			)
 		)
 
-		bake_material.shader = (
-			fixed_shader
+
+		if not shadow_node_value is MultiMeshInstance3D:
+			continue
+
+
+		var shadow_node: MultiMeshInstance3D = (
+			shadow_node_value
+				as MultiMeshInstance3D
 		)
 
 
-		if original_material is ShaderMaterial:
+		var bake_material_value: Variant = (
+			state.get(
+				"bake_material"
+			)
+		)
 
-			var source_material: ShaderMaterial = (
-				original_material
-				as ShaderMaterial
+
+		if bake_material_value is ShaderMaterial:
+
+			shadow_node.material_override = (
+				bake_material_value
+					as ShaderMaterial
 			)
 
 
-			var texture_value: Variant = (
-				source_material
-					.get_shader_parameter(
-						"tree_tex"
-					)
-			)
-
-
-			if texture_value is Texture2D:
-
-				bake_material.set_shader_parameter(
-					"tree_tex",
-					texture_value
-				)
-
-
-			var cutoff_value: Variant = (
-				source_material
-					.get_shader_parameter(
-						"alpha_cutoff"
-					)
-			)
-
-
-			if (
-				cutoff_value is float
-				or cutoff_value is int
-			):
-
-				bake_material.set_shader_parameter(
-					"alpha_cutoff",
-					float(cutoff_value)
-				)
-
-
-		bake_material.set_shader_parameter(
-			"fixed_to_light_ws",
-			fixed_to_light_ws
-		)
-
-
-		shadow_node.material_override = (
-			bake_material
+		shadow_node.layers = (
+			BAKE_CASTER_LAYER_MASK
 		)
 
 		shadow_node.visible = true
@@ -702,112 +768,37 @@ func _run_bake() -> void:
 
 
 	# ========================================================
-	# HIDE CANOPY
+	# CONFIGURE SUN FOR ISOLATED CAPTURE
 	# ========================================================
 
-	var canopy_states: Array[Dictionary] = []
-
-
-	for canopy: Decal in canopy_nodes:
-
-		canopy_states.append({
-			"node": canopy,
-			"visible": canopy.visible
-		})
-
-		canopy.visible = false
-
-
-	# ========================================================
-	# HIDE OLD LIGHTMAP CASTER MESH
-	# ========================================================
-
-	var old_caster_states: Array[Dictionary] = []
-
-
-	for old_caster: GeometryInstance3D in old_caster_nodes:
-
-		old_caster_states.append({
-			"node": old_caster,
-			"visible": old_caster.visible
-		})
-
-		old_caster.visible = false
-
-
-	# ========================================================
-	# TEMPORARILY DISABLE LIGHTMAPGI DATA
-	#
-	# We want the captures to contain only the current
-	# realtime sun + realtime TreeShadows difference.
-	# ========================================================
-
-	var lightmap_states: Array[Dictionary] = []
-
-	_suspend_lightmaps(
-		scene_root,
-		lightmap_states
-	)
-
-
-	# ========================================================
-	# SUN STATE
-	# ========================================================
-
-	var old_shadow_enabled: bool = (
-		sun.shadow_enabled
-	)
-
-	var old_max_distance: float = (
-		sun.directional_shadow_max_distance
-	)
-
-	var old_fade_start: float = (
-		sun.directional_shadow_fade_start
-	)
-
-	var old_sun_cull_mask: int = (
-		sun.light_cull_mask
-	)
-
-	var old_bake_mode: Light3D.BakeMode = (
-		sun.light_bake_mode
-	)
-
+	sun.visible = true
 
 	sun.shadow_enabled = true
 
-	sun.directional_shadow_fade_start = 1.0
+	sun.shadow_opacity = 1.0
 
+	# The sun illuminates ONLY the temporary terrain receiver.
 	sun.light_cull_mask = (
-		old_sun_cull_mask
-		| BAKE_VISUAL_LAYER_MASK
+		old_sun_light_cull_mask
+		| BAKE_RECEIVER_LAYER_MASK
+		| BAKE_CASTER_LAYER_MASK
 	)
 
-	# Guarantee realtime direct lighting while capturing.
+	# ONLY our temporary TreeShadows can enter the shadow map.
+	sun.shadow_caster_mask = (
+		BAKE_CASTER_LAYER_MASK
+	)
+
+	# Force realtime lighting for this editor capture.
 	sun.light_bake_mode = (
 		Light3D.BAKE_DISABLED
 	)
 
-
-	# ========================================================
-	# TERRAIN TEMPORARY VISUAL LAYER
-	#
-	# This makes the bake camera render only the terrain,
-	# not buildings, water, rocks, etc.
-	# ========================================================
-
-	var old_terrain_layers: int = (
-		terrain.layers
-	)
-
-	terrain.layers = (
-		BAKE_VISUAL_LAYER_MASK
-	)
+	sun.directional_shadow_fade_start = 1.0
 
 
 	# ========================================================
-	# VIEWPORT
+	# BAKE VIEWPORT
 	# ========================================================
 
 	var bake_viewport: SubViewport = (
@@ -815,7 +806,7 @@ func _run_bake() -> void:
 	)
 
 	bake_viewport.name = (
-		"__TreeShadowMultiplierViewport"
+		"__PureTreeShadowBakeViewport"
 	)
 
 	bake_viewport.size = Vector2i(
@@ -838,18 +829,70 @@ func _run_bake() -> void:
 	)
 
 
+	# ========================================================
+	# CLEAN BAKE ENVIRONMENT
+	#
+	# White background means:
+	# outside the terrain = multiplier 1.0.
+	# ========================================================
+
+	var bake_environment: Environment = (
+		Environment.new()
+	)
+
+	bake_environment.background_mode = (
+		Environment.BG_COLOR
+	)
+
+	bake_environment.background_color = (
+		Color.WHITE
+	)
+
+	bake_environment.background_energy_multiplier = 1.0
+
+	bake_environment.ambient_light_source = (
+		Environment.AMBIENT_SOURCE_DISABLED
+	)
+
+	bake_environment.reflected_light_source = (
+		Environment.REFLECTION_SOURCE_DISABLED
+	)
+
+	bake_environment.tonemap_mode = (
+		Environment.TONE_MAPPER_LINEAR
+	)
+
+	bake_environment.tonemap_exposure = 1.0
+
+	bake_environment.fog_enabled = false
+
+	bake_environment.volumetric_fog_enabled = false
+
+	bake_environment.glow_enabled = false
+
+	bake_environment.adjustment_enabled = false
+
+
+	# ========================================================
+	# CAMERA
+	# ========================================================
+
 	var bake_camera: Camera3D = (
 		Camera3D.new()
 	)
 
 	bake_camera.name = (
-		"__TreeShadowMultiplierCamera"
+		"__PureTreeShadowBakeCamera"
 	)
 
 	bake_viewport.add_child(
 		bake_camera
 	)
 
+
+	bake_camera.environment = (
+		bake_environment
+	)
 
 	bake_camera.projection = (
 		Camera3D.PROJECTION_ORTHOGONAL
@@ -863,7 +906,9 @@ func _run_bake() -> void:
 
 
 	var camera_height: float = maxf(
-		terrain_bounds.size.y + 80.0,
+		terrain_bounds.size.y
+			+ 80.0,
+
 		120.0
 	)
 
@@ -871,7 +916,7 @@ func _run_bake() -> void:
 	bake_camera.far = (
 		camera_height
 		+ terrain_bounds.size.y
-		+ 200.0
+		+ 300.0
 	)
 
 	bake_camera.rotation_degrees = Vector3(
@@ -880,27 +925,52 @@ func _run_bake() -> void:
 		0.0
 	)
 
+	# Camera sees ONLY the terrain receiver.
 	bake_camera.cull_mask = (
-		BAKE_VISUAL_LAYER_MASK
+		BAKE_RECEIVER_LAYER_MASK
 	)
 
 	bake_camera.current = true
 
 
+	# Make sure directional shadow coverage is large enough
+	# for every tile.
 	sun.directional_shadow_max_distance = maxf(
-		old_max_distance,
-		tile_world_size * 2.0
+		old_shadow_max_distance,
+
+		maxf(
+			tile_world_size * 3.0,
+			camera_height * 3.0
+		)
 	)
 
 
-	# Let all temporary state reach RenderingServer.
+	# ========================================================
+	# FINAL OUTPUT
+	# ========================================================
+
+	var final_image: Image = (
+		Image.create(
+			final_resolution,
+			final_resolution,
+			false,
+			Image.FORMAT_L8
+		)
+	)
+
+	final_image.fill(
+		Color.WHITE
+	)
+
+
+	# Let RenderingServer receive all temporary state.
 	await get_tree().process_frame
 
 	await RenderingServer.frame_post_draw
 
 
 	# ========================================================
-	# CAPTURE TILE BY TILE
+	# CAPTURE
 	# ========================================================
 
 	var bake_failed: bool = false
@@ -967,60 +1037,20 @@ func _run_bake() -> void:
 			)
 
 
-			# ----------------------------------------------
-			# WITH TREE SHADOWS
-			# ----------------------------------------------
-
-			for shadow_node: MultiMeshInstance3D in shadow_nodes:
-
-				shadow_node.cast_shadow = (
-					GeometryInstance3D
-						.SHADOW_CASTING_SETTING_SHADOWS_ONLY
-				)
-
-
-			var image_with: Image = (
+			var captured_image: Image = (
 				await _capture_viewport(
 					bake_viewport
 				)
 			)
 
 
-			# ----------------------------------------------
-			# WITHOUT TREE SHADOWS
-			# ----------------------------------------------
-
-			for shadow_node: MultiMeshInstance3D in shadow_nodes:
-
-				shadow_node.cast_shadow = (
-					GeometryInstance3D
-						.SHADOW_CASTING_SETTING_OFF
-				)
-
-
-			var image_without: Image = (
-				await _capture_viewport(
-					bake_viewport
-				)
-			)
-
-
-			# ----------------------------------------------
-			# MULTIPLIER
-			# ----------------------------------------------
-
-			var tile_multiplier: Image = (
-				_build_multiplier_map(
-					image_with,
-					image_without
-				)
-			)
-
-
-			if tile_multiplier == null:
+			if (
+				captured_image == null
+				or captured_image.is_empty()
+			):
 
 				push_error(
-					"BAKE: Failed building multiplier tile."
+					"BAKE: Empty capture."
 				)
 
 				bake_failed = true
@@ -1028,8 +1058,13 @@ func _run_bake() -> void:
 				break
 
 
+			captured_image.convert(
+				Image.FORMAT_L8
+			)
+
+
 			final_image.blit_rect(
-				tile_multiplier,
+				captured_image,
 
 				Rect2i(
 					0,
@@ -1049,7 +1084,7 @@ func _run_bake() -> void:
 
 
 	# ========================================================
-	# RESTORE TEMPORARY SCENE STATE
+	# RESTORE EVERYTHING
 	# ========================================================
 
 	bake_camera.current = false
@@ -1057,8 +1092,16 @@ func _run_bake() -> void:
 	bake_viewport.queue_free()
 
 
+	terrain.material_override = (
+		old_terrain_material
+	)
+
 	terrain.layers = (
 		old_terrain_layers
+	)
+
+	terrain.gi_mode = (
+		old_terrain_gi_mode
 	)
 
 
@@ -1066,45 +1109,49 @@ func _run_bake() -> void:
 		shadow_states
 	)
 
-	_restore_canopy_states(
-		canopy_states
+	_restore_other_light_states(
+		other_light_states
 	)
 
-	_restore_geometry_states(
-		old_caster_states
+	_restore_decal_states(
+		decal_states
 	)
 
-	_restore_lightmaps(
-		lightmap_states
-	)
 
+	sun.visible = (
+		old_sun_visible
+	)
 
 	sun.shadow_enabled = (
 		old_shadow_enabled
 	)
 
-	sun.directional_shadow_max_distance = (
-		old_max_distance
-	)
-
-	sun.directional_shadow_fade_start = (
-		old_fade_start
+	sun.shadow_opacity = (
+		old_shadow_opacity
 	)
 
 	sun.light_cull_mask = (
-		old_sun_cull_mask
+		old_sun_light_cull_mask
+	)
+
+	sun.shadow_caster_mask = (
+		old_sun_shadow_caster_mask
 	)
 
 	sun.light_bake_mode = (
-		old_bake_mode
+		old_sun_bake_mode
+	)
+
+	sun.directional_shadow_max_distance = (
+		old_shadow_max_distance
+	)
+
+	sun.directional_shadow_fade_start = (
+		old_shadow_fade_start
 	)
 
 
 	if bake_failed:
-
-		_restore_detached_overlay(
-			detached_overlay
-		)
 
 		_baking = false
 
@@ -1112,7 +1159,16 @@ func _run_bake() -> void:
 
 
 	# ========================================================
-	# SAVE PNG
+	# MASK STATS
+	# ========================================================
+
+	_print_mask_stats(
+		final_image
+	)
+
+
+	# ========================================================
+	# SAVE
 	# ========================================================
 
 	var resolved_output_path: String = (
@@ -1136,12 +1192,8 @@ func _run_bake() -> void:
 
 	if save_error != OK:
 
-		_restore_detached_overlay(
-			detached_overlay
-		)
-
 		push_error(
-			"BAKE: Could not save PNG. Error "
+			"BAKE: Failed saving PNG. Error "
 			+ str(save_error)
 		)
 
@@ -1151,12 +1203,19 @@ func _run_bake() -> void:
 
 
 	print("")
-	print("MULTIPLIER MAP CREATED:")
+	print("PURE SHADOW MASK CREATED:")
 	print(absolute_path)
+	print("")
+	print("WHITE = no tree shadow")
+	print("DARK  = tree shadow")
+	print("")
+	print("World Min: ", world_min)
+	print("World Size: ", world_size)
+	print("")
 
 
 	# ========================================================
-	# REFRESH IMPORT
+	# IMPORT REFRESH
 	# ========================================================
 
 	var filesystem: EditorFileSystem = (
@@ -1175,112 +1234,9 @@ func _run_bake() -> void:
 		await get_tree().process_frame
 
 
-	# ========================================================
-	# LOAD MULTIPLIER TEXTURE
-	# ========================================================
-
-	var loaded_resource: Resource = (
-		load(
-			resolved_output_path
-		)
-	)
-
-
-	if not loaded_resource is Texture2D:
-
-		_restore_detached_overlay(
-			detached_overlay
-		)
-
-		push_error(
-			"BAKE: Multiplier texture could not be loaded."
-		)
-
-		_baking = false
-
-		return
-
-
-	var multiplier_texture: Texture2D = (
-		loaded_resource
-			as Texture2D
-	)
-
-
-	# ========================================================
-	# APPLY AS NEXT PASS
-	# ========================================================
-
-	var detached_material: ShaderMaterial = null
-
-
-	if not detached_overlay.is_empty():
-
-		var detached_value: Variant = (
-			detached_overlay.get(
-				"overlay"
-			)
-		)
-
-		if detached_value is ShaderMaterial:
-
-			detached_material = (
-				detached_value
-					as ShaderMaterial
-			)
-
-
-	var apply_ok: bool = (
-		_install_overlay(
-			base_material,
-			detached_material,
-			multiplier_texture,
-			world_min,
-			world_size
-		)
-	)
-
-
-	if not apply_ok:
-
-		_restore_detached_overlay(
-			detached_overlay
-		)
-
-		_baking = false
-
-		return
-
-
-	print("")
 	print("==========================================")
-	print("TREE SHADOW MULTIPLIER BAKE FINISHED")
+	print("PURE TREE SHADOW MASK BAKE FINISHED")
 	print("==========================================")
-	print(
-		"Texture: ",
-		resolved_output_path
-	)
-	print(
-		"World Min: ",
-		world_min
-	)
-	print(
-		"World Size: ",
-		world_size
-	)
-	print("")
-	print("The PNG should now look mostly WHITE.")
-	print("Dark pixels are projected tree shadows.")
-	print("")
-	print(
-		"Disable realtime TreeShadows to compare."
-	)
-	print(
-		"Then tune Overlay Strength/Gamma and press:"
-	)
-	print(
-		"APPLY OVERLAY SETTINGS"
-	)
 	print("")
 
 
@@ -1299,6 +1255,7 @@ func _capture_viewport(
 		SubViewport.UPDATE_ONCE
 	)
 
+
 	await get_tree().process_frame
 
 	await RenderingServer.frame_post_draw
@@ -1312,629 +1269,164 @@ func _capture_viewport(
 
 
 # ============================================================
-# BUILD MULTIPLIER MAP
-#
-# We store:
-#
-# multiplier = luminance_with_shadow /
-#              luminance_without_shadow
-#
-# Therefore:
-#
-# 1.0 = no shadow.
-# 0.5 = multiply final terrain by 0.5.
-# 0.0 = complete darkness.
+# CREATE TREE CASTER MATERIAL
 # ============================================================
 
-func _build_multiplier_map(
-	image_with: Image,
-	image_without: Image
-) -> Image:
+func _create_bake_tree_material(
+	source_material: Material,
+	fixed_shader: Shader,
+	fixed_to_light_ws: Vector3
+) -> ShaderMaterial:
 
-	if (
-		image_with == null
-		or image_without == null
-	):
-		return null
+	var tree_texture: Texture2D = null
 
-
-	if (
-		image_with.is_empty()
-		or image_without.is_empty()
-	):
-		return null
+	var alpha_cutoff: float = 0.80
 
 
-	if (
-		image_with.get_size()
-		!= image_without.get_size()
-	):
-		return null
+	if source_material is ShaderMaterial:
 
-
-	image_with.convert(
-		Image.FORMAT_RGBA8
-	)
-
-	image_without.convert(
-		Image.FORMAT_RGBA8
-	)
-
-
-	var width: int = (
-		image_with.get_width()
-	)
-
-	var height: int = (
-		image_with.get_height()
-	)
-
-	var pixel_count: int = (
-		width * height
-	)
-
-
-	var with_data: PackedByteArray = (
-		image_with.get_data()
-	)
-
-	var without_data: PackedByteArray = (
-		image_without.get_data()
-	)
-
-
-	var output_data: PackedByteArray = (
-		PackedByteArray()
-	)
-
-	output_data.resize(
-		pixel_count
-	)
-
-
-	for pixel_index: int in range(
-		pixel_count
-	):
-
-		var byte_index: int = (
-			pixel_index * 4
+		var shader_material: ShaderMaterial = (
+			source_material
+				as ShaderMaterial
 		)
 
 
-		var with_r: float = (
-			float(
-				with_data[
-					byte_index
-				]
+		var texture_value: Variant = (
+			shader_material
+				.get_shader_parameter(
+					"tree_tex"
+				)
+		)
+
+
+		if texture_value is Texture2D:
+
+			tree_texture = (
+				texture_value
+					as Texture2D
 			)
-			/ 255.0
+
+
+		var cutoff_value: Variant = (
+			shader_material
+				.get_shader_parameter(
+					"alpha_cutoff"
+				)
 		)
-
-		var with_g: float = (
-			float(
-				with_data[
-					byte_index + 1
-				]
-			)
-			/ 255.0
-		)
-
-		var with_b: float = (
-			float(
-				with_data[
-					byte_index + 2
-				]
-			)
-			/ 255.0
-		)
-
-
-		var without_r: float = (
-			float(
-				without_data[
-					byte_index
-				]
-			)
-			/ 255.0
-		)
-
-		var without_g: float = (
-			float(
-				without_data[
-					byte_index + 1
-				]
-			)
-			/ 255.0
-		)
-
-		var without_b: float = (
-			float(
-				without_data[
-					byte_index + 2
-				]
-			)
-			/ 255.0
-		)
-
-
-		var lum_with: float = (
-			with_r * 0.2126
-			+ with_g * 0.7152
-			+ with_b * 0.0722
-		)
-
-
-		var lum_without: float = (
-			without_r * 0.2126
-			+ without_g * 0.7152
-			+ without_b * 0.0722
-		)
-
-
-		var multiplier: float = 1.0
 
 
 		if (
-			lum_without
-			>= minimum_reference_luminance
+			cutoff_value is float
+			or cutoff_value is int
 		):
 
-			var shadow_amount: float = clampf(
-				(
-					lum_without
-					- lum_with
-				)
-				/ maxf(
-					lum_without,
-					minimum_reference_luminance
-				),
-				0.0,
-				1.0
+			alpha_cutoff = float(
+				cutoff_value
 			)
 
 
-			if (
-				shadow_amount
-				>= noise_threshold
-			):
+	elif source_material is BaseMaterial3D:
 
-				multiplier = clampf(
-					lum_with
-					/ maxf(
-						lum_without,
-						minimum_reference_luminance
-					),
-					0.0,
-					1.0
-				)
+		var base_material: BaseMaterial3D = (
+			source_material
+				as BaseMaterial3D
+		)
 
+		tree_texture = (
+			base_material.albedo_texture
+		)
 
-		var value: int = int(
-			round(
-				multiplier
-				* 255.0
-			)
+		alpha_cutoff = (
+			base_material.alpha_scissor_threshold
 		)
 
 
-		output_data[
-			pixel_index
-		] = value
-
-
-	return Image.create_from_data(
-		width,
-		height,
-		false,
-		Image.FORMAT_L8,
-		output_data
-	)
-
-
-# ============================================================
-# OVERLAY INSTALLATION
-# ============================================================
-
-func _install_overlay(
-	base_material: Material,
-	existing_overlay: ShaderMaterial,
-	multiplier_texture: Texture2D,
-	world_min: Vector2,
-	world_size: Vector2
-) -> bool:
-
-	var overlay_shader_resource: Resource = (
-		load(
-			OVERLAY_SHADER_PATH
-		)
-	)
-
-
-	if not overlay_shader_resource is Shader:
+	if tree_texture == null:
 
 		push_error(
-			"OVERLAY: Shader not found: "
-			+ OVERLAY_SHADER_PATH
+			"BAKE: Shadow source material has no tree texture."
 		)
 
-		return false
+		return null
 
 
-	var overlay_shader: Shader = (
-		overlay_shader_resource
-			as Shader
+	var bake_material: ShaderMaterial = (
+		ShaderMaterial.new()
+	)
+
+	bake_material.shader = (
+		fixed_shader
 	)
 
 
-	var overlay_material: ShaderMaterial = (
-		existing_overlay
+	bake_material.set_shader_parameter(
+		"tree_tex",
+		tree_texture
+	)
+
+	bake_material.set_shader_parameter(
+		"alpha_cutoff",
+		alpha_cutoff
+	)
+
+	bake_material.set_shader_parameter(
+		"fixed_to_light_ws",
+		fixed_to_light_ws
 	)
 
 
-	if overlay_material == null:
-
-		overlay_material = (
-			ShaderMaterial.new()
-		)
-
-
-	overlay_material.resource_name = (
-		"TreeProjectedShadowMultiply"
-	)
-
-	overlay_material.resource_local_to_scene = true
-
-	overlay_material.shader = (
-		overlay_shader
-	)
-
-	overlay_material.render_priority = 1
-
-
-	overlay_material.set_shader_parameter(
-		"shadow_multiplier_map",
-		multiplier_texture
-	)
-
-	overlay_material.set_shader_parameter(
-		"shadow_world_min",
-		world_min
-	)
-
-	overlay_material.set_shader_parameter(
-		"shadow_world_size",
-		world_size
-	)
-
-
-	_apply_overlay_visual_settings(
-		overlay_material
-	)
-
-
-	# Our multiply pass goes immediately after the
-	# terrain material.
-	var previous_next_pass: Material = (
-		base_material.next_pass
-	)
-
-	overlay_material.next_pass = (
-		previous_next_pass
-	)
-
-	base_material.next_pass = (
-		overlay_material
-	)
-
-	base_material.emit_changed()
-
-
-	return true
-
-
-func _apply_overlay_visual_settings(
-	overlay_material: ShaderMaterial
-) -> void:
-
-	overlay_material.set_shader_parameter(
-		"shadow_strength",
-		overlay_shadow_strength
-	)
-
-	overlay_material.set_shader_parameter(
-		"shadow_gamma",
-		overlay_shadow_gamma
-	)
-
-	overlay_material.set_shader_parameter(
-		"shadow_threshold",
-		overlay_shadow_threshold
-	)
-
-	overlay_material.set_shader_parameter(
-		"minimum_multiplier",
-		overlay_minimum_multiplier
-	)
-
-	overlay_material.set_shader_parameter(
-		"surface_offset",
-		overlay_surface_offset
-	)
-
-	overlay_material.emit_changed()
+	return bake_material
 
 
 # ============================================================
-# DETACH OLD OVERLAY DURING BAKE
+# CANONICAL SHADOW MATERIAL
+#
+# Important because the previous failed bake left a temporary
+# ShaderMaterial serialized on one TreeShadows node.
+#
+# The forest controller's shadow_material_override is the
+# authoritative material when available.
 # ============================================================
 
-func _detach_existing_overlay(
-	base_material: Material
-) -> Dictionary:
+func _get_canonical_shadow_material(
+	shadow_node: MultiMeshInstance3D
+) -> Material:
 
-	var previous_material: Material = (
-		base_material
-	)
-
-	var current_material: Material = (
-		base_material.next_pass
-	)
-
-
-	while current_material != null:
-
-		if _is_overlay_material(
-			current_material
-		):
-
-			previous_material.next_pass = (
-				current_material.next_pass
-			)
-
-
-			return {
-				"previous": previous_material,
-				"overlay": current_material
-			}
-
-
-		previous_material = (
-			current_material
-		)
-
-		current_material = (
-			current_material.next_pass
-		)
-
-
-	return {}
-
-
-func _restore_detached_overlay(
-	state: Dictionary
-) -> void:
-
-	if state.is_empty():
-		return
-
-
-	var previous_value: Variant = (
-		state.get(
-			"previous"
-		)
-	)
-
-	var overlay_value: Variant = (
-		state.get(
-			"overlay"
-		)
+	var forest_root: Node = (
+		shadow_node.get_parent()
 	)
 
 
 	if (
-		previous_value is Material
-		and overlay_value is Material
+		forest_root != null
+		and _has_property(
+			forest_root,
+			&"shadow_material_override"
+		)
 	):
 
-		var previous_material: Material = (
-			previous_value
-				as Material
-		)
-
-		var overlay_material: Material = (
-			overlay_value
-				as Material
+		var controller_value: Variant = (
+			forest_root.get(
+				"shadow_material_override"
+			)
 		)
 
 
-		overlay_material.next_pass = (
-			previous_material.next_pass
-		)
-
-		previous_material.next_pass = (
-			overlay_material
-		)
-
-
-func _find_overlay_material(
-	base_material: Material
-) -> ShaderMaterial:
-
-	var current_material: Material = (
-		base_material.next_pass
-	)
-
-
-	while current_material != null:
-
-		if _is_overlay_material(
-			current_material
-		):
+		if controller_value is Material:
 
 			return (
-				current_material
-					as ShaderMaterial
+				controller_value
+					as Material
 			)
-
-
-		current_material = (
-			current_material.next_pass
-		)
-
-
-	return null
-
-
-func _is_overlay_material(
-	material: Material
-) -> bool:
-
-	if not material is ShaderMaterial:
-		return false
-
-
-	var shader_material: ShaderMaterial = (
-		material
-			as ShaderMaterial
-	)
-
-
-	if shader_material.shader == null:
-		return false
-
-
-	if (
-		shader_material.shader.resource_path
-		== OVERLAY_SHADER_PATH
-	):
-		return true
 
 
 	return (
-		shader_material.resource_name
-		== "TreeProjectedShadowMultiply"
+		shadow_node.material_override
 	)
 
 
 # ============================================================
-# OLD TERRAIN EXPERIMENT
-# ============================================================
-
-func _disable_legacy_terrain_shadow(
-	base_material: Material
-) -> void:
-
-	if not base_material is ShaderMaterial:
-		return
-
-
-	var shader_material: ShaderMaterial = (
-		base_material
-			as ShaderMaterial
-	)
-
-
-	if shader_material.shader == null:
-		return
-
-
-	var shader_code: String = (
-		shader_material.shader.code
-	)
-
-
-	if (
-		shader_code.find(
-			"use_baked_tree_shadows"
-		)
-		< 0
-	):
-		return
-
-
-	shader_material.set_shader_parameter(
-		"use_baked_tree_shadows",
-		false
-	)
-
-
-# ============================================================
-# TEMPORARILY DISABLE LIGHTMAPGI
-# ============================================================
-
-func _suspend_lightmaps(
-	node: Node,
-	states: Array[Dictionary]
-) -> void:
-
-	if node is LightmapGI:
-
-		var lightmap: LightmapGI = (
-			node
-				as LightmapGI
-		)
-
-
-		states.append({
-			"node": lightmap,
-			"light_data": lightmap.light_data
-		})
-
-
-		lightmap.light_data = null
-
-
-	for child: Node in node.get_children():
-
-		_suspend_lightmaps(
-			child,
-			states
-		)
-
-
-func _restore_lightmaps(
-	states: Array[Dictionary]
-) -> void:
-
-	for state: Dictionary in states:
-
-		var node_value: Variant = (
-			state.get(
-				"node"
-			)
-		)
-
-		if not node_value is LightmapGI:
-			continue
-
-
-		var lightmap: LightmapGI = (
-			node_value
-				as LightmapGI
-		)
-
-
-		var data_value: Variant = (
-			state.get(
-				"light_data"
-			)
-		)
-
-
-		if data_value is LightmapGIData:
-
-			lightmap.light_data = (
-				data_value
-					as LightmapGIData
-			)
-
-		else:
-
-			lightmap.light_data = null
-
-
-# ============================================================
-# RESTORE TREE / CANOPY / OLD CASTER STATES
+# RESTORE TREES
 # ============================================================
 
 func _restore_tree_states(
@@ -1968,6 +1460,14 @@ func _restore_tree_states(
 		)
 
 
+		shadow_node.layers = int(
+			state.get(
+				"layers",
+				1
+			)
+		)
+
+
 		var stored_cast_shadow: int = int(
 			state.get(
 				"cast_shadow",
@@ -1975,6 +1475,7 @@ func _restore_tree_states(
 					.SHADOW_CASTING_SETTING_OFF
 			)
 		)
+
 
 		shadow_node.cast_shadow = (
 			stored_cast_shadow
@@ -1984,7 +1485,7 @@ func _restore_tree_states(
 
 		var material_value: Variant = (
 			state.get(
-				"material"
+				"restore_material"
 			)
 		)
 
@@ -2001,7 +1502,11 @@ func _restore_tree_states(
 			shadow_node.material_override = null
 
 
-func _restore_canopy_states(
+# ============================================================
+# RESTORE OTHER LIGHTS
+# ============================================================
+
+func _restore_other_light_states(
 	states: Array[Dictionary]
 ) -> void:
 
@@ -2014,22 +1519,29 @@ func _restore_canopy_states(
 		)
 
 
-		if node_value is Decal:
+		if not node_value is Light3D:
+			continue
 
-			var canopy: Decal = (
-				node_value
-					as Decal
+
+		var light: Light3D = (
+			node_value
+				as Light3D
+		)
+
+
+		light.light_cull_mask = int(
+			state.get(
+				"light_cull_mask",
+				MASK_32
 			)
-
-			canopy.visible = bool(
-				state.get(
-					"visible",
-					true
-				)
-			)
+		)
 
 
-func _restore_geometry_states(
+# ============================================================
+# RESTORE DECALS
+# ============================================================
+
+func _restore_decal_states(
 	states: Array[Dictionary]
 ) -> void:
 
@@ -2042,30 +1554,157 @@ func _restore_geometry_states(
 		)
 
 
-		if node_value is GeometryInstance3D:
+		if not node_value is Decal:
+			continue
 
-			var geometry: GeometryInstance3D = (
-				node_value
-					as GeometryInstance3D
-			)
 
-			geometry.visible = bool(
-				state.get(
-					"visible",
-					true
-				)
+		var decal: Decal = (
+			node_value
+				as Decal
+		)
+
+
+		decal.visible = bool(
+			state.get(
+				"visible",
+				true
 			)
+		)
 
 
 # ============================================================
-# COLLECT
+# MASK ANALYSIS
 # ============================================================
 
-func _collect_nodes(
+func _print_mask_stats(
+	image: Image
+) -> void:
+
+	if image == null:
+		return
+
+
+	if image.is_empty():
+		return
+
+
+	if image.get_format() != Image.FORMAT_L8:
+
+		image.convert(
+			Image.FORMAT_L8
+		)
+
+
+	var data: PackedByteArray = (
+		image.get_data()
+	)
+
+
+	if data.is_empty():
+		return
+
+
+	var minimum_value: int = 255
+
+	var maximum_value: int = 0
+
+	var shadow_pixel_count: int = 0
+
+	var strong_shadow_pixel_count: int = 0
+
+
+	for byte_value: int in data:
+
+		minimum_value = mini(
+			minimum_value,
+			byte_value
+		)
+
+		maximum_value = maxi(
+			maximum_value,
+			byte_value
+		)
+
+
+		if byte_value < 250:
+
+			shadow_pixel_count += 1
+
+
+		if byte_value < 128:
+
+			strong_shadow_pixel_count += 1
+
+
+	var pixel_count: int = (
+		data.size()
+	)
+
+
+	var shadow_percent: float = (
+		float(shadow_pixel_count)
+		/ float(
+			maxi(
+				pixel_count,
+				1
+			)
+		)
+		* 100.0
+	)
+
+
+	var strong_percent: float = (
+		float(strong_shadow_pixel_count)
+		/ float(
+			maxi(
+				pixel_count,
+				1
+			)
+		)
+		* 100.0
+	)
+
+
+	print("")
+	print("MASK STATISTICS")
+	print("--------------------------")
+	print("Minimum value: ", minimum_value)
+	print("Maximum value: ", maximum_value)
+	print(
+		"Shadow pixels (<250): ",
+		shadow_pixel_count,
+		" / ",
+		pixel_count,
+		" = ",
+		shadow_percent,
+		" %"
+	)
+	print(
+		"Strong pixels (<128): ",
+		strong_shadow_pixel_count,
+		" = ",
+		strong_percent,
+		" %"
+	)
+	print("--------------------------")
+	print("")
+
+
+	if shadow_pixel_count < 1000:
+
+		push_warning(
+			"BAKE: Shadow mask still contains almost no "
+			+ "shadow pixels. Do not use this PNG."
+		)
+
+
+# ============================================================
+# COLLECT TREE SHADOWS
+# ============================================================
+
+func _collect_tree_shadows(
 	node: Node,
-	shadow_nodes: Array[MultiMeshInstance3D],
-	canopy_nodes: Array[Decal],
-	old_caster_nodes: Array[GeometryInstance3D]
+	results: Array[MultiMeshInstance3D]
 ) -> void:
 
 	if (
@@ -2073,41 +1712,67 @@ func _collect_nodes(
 		and node.name == "TreeShadows"
 	):
 
-		shadow_nodes.append(
+		results.append(
 			node
 				as MultiMeshInstance3D
 		)
 
 
-	if (
-		node is Decal
-		and node.name == "CanopyAmbientShadow"
-	):
+	for child: Node in node.get_children():
 
-		canopy_nodes.append(
-			node
-				as Decal
+		_collect_tree_shadows(
+			child,
+			results
 		)
 
 
-	if (
-		node is GeometryInstance3D
-		and node.name == "TreeLightmapCasters"
-	):
+# ============================================================
+# COLLECT LIGHTS
+# ============================================================
 
-		old_caster_nodes.append(
+func _collect_lights(
+	node: Node,
+	results: Array[Light3D]
+) -> void:
+
+	if node is Light3D:
+
+		results.append(
 			node
-				as GeometryInstance3D
+				as Light3D
 		)
 
 
 	for child: Node in node.get_children():
 
-		_collect_nodes(
+		_collect_lights(
 			child,
-			shadow_nodes,
-			canopy_nodes,
-			old_caster_nodes
+			results
+		)
+
+
+# ============================================================
+# COLLECT DECALS
+# ============================================================
+
+func _collect_decals(
+	node: Node,
+	results: Array[Decal]
+) -> void:
+
+	if node is Decal:
+
+		results.append(
+			node
+				as Decal
+		)
+
+
+	for child: Node in node.get_children():
+
+		_collect_decals(
+			child,
+			results
 		)
 
 
@@ -2127,6 +1792,7 @@ func _find_terrain(
 			)
 		)
 
+
 		if explicit_node is MeshInstance3D:
 
 			return (
@@ -2135,9 +1801,11 @@ func _find_terrain(
 			)
 
 
-	return _find_mesh_by_name(
-		scene_root,
-		&"Terrain_Master_VIS"
+	return (
+		_find_mesh_by_name(
+			scene_root,
+			&"Terrain_Master_VIS"
+		)
 	)
 
 
@@ -2166,22 +1834,9 @@ func _find_mesh_by_name(
 			)
 		)
 
+
 		if result != null:
 			return result
-
-
-	return null
-
-
-func _get_terrain_material(
-	terrain: MeshInstance3D
-) -> Material:
-
-	if terrain.material_override != null:
-
-		return (
-			terrain.material_override
-		)
 
 
 	return null
@@ -2203,6 +1858,7 @@ func _find_sun(
 			)
 		)
 
+
 		if explicit_node is DirectionalLight3D:
 
 			return (
@@ -2211,8 +1867,10 @@ func _find_sun(
 			)
 
 
-	return _find_first_directional_light(
-		scene_root
+	return (
+		_find_first_directional_light(
+			scene_root
+		)
 	)
 
 
@@ -2220,7 +1878,10 @@ func _find_first_directional_light(
 	node: Node
 ) -> DirectionalLight3D:
 
-	if node is DirectionalLight3D:
+	if (
+		node is DirectionalLight3D
+		and node.visible
+	):
 
 		return (
 			node
@@ -2235,6 +1896,7 @@ func _find_first_directional_light(
 				child
 			)
 		)
+
 
 		if result != null:
 			return result
@@ -2349,6 +2011,41 @@ func _get_world_aabb(
 
 
 # ============================================================
+# PROPERTY HELPER
+# ============================================================
+
+func _has_property(
+	object: Object,
+	property_name: StringName
+) -> bool:
+
+	var property_list: Array[Dictionary] = (
+		object.get_property_list()
+	)
+
+
+	for property_info: Dictionary in property_list:
+
+		var current_name: StringName = (
+			StringName(
+				String(
+					property_info.get(
+						"name",
+						""
+					)
+				)
+			)
+		)
+
+
+		if current_name == property_name:
+			return true
+
+
+	return false
+
+
+# ============================================================
 # OUTPUT PATH
 # ============================================================
 
@@ -2377,7 +2074,9 @@ func _resolve_output_path() -> String:
 
 		if (
 			uid != ResourceUID.INVALID_ID
-			and ResourceUID.has_id(uid)
+			and ResourceUID.has_id(
+				uid
+			)
 		):
 
 			var resolved_path: String = (
@@ -2404,10 +2103,7 @@ func _resolve_output_path() -> String:
 
 func _get_scene_root() -> Node:
 
-	if (
-		get_tree()
-		== null
-	):
+	if get_tree() == null:
 		return null
 
 
