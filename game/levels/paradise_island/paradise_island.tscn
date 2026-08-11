@@ -625,10 +625,12 @@ surface_material_override/0 = ExtResource("33_iekhu")
 
 [node name="SM_Palm_Impostor_Zone_001_VIS" parent="TerrainRoot/test_island" index="15" unique_id=944411319]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.3975904, 0)
+visible = false
 material_override = SubResource("StandardMaterial3D_7fon7")
 cast_shadow = 0
 
 [node name="SM_Palm_Impostor_Zone_002_VIS" parent="TerrainRoot/test_island" index="16" unique_id=1259880330]
+visible = false
 material_override = SubResource("StandardMaterial3D_7fon7")
 cast_shadow = 0
 
@@ -1025,6 +1027,7 @@ transform = Transform3D(0.5118447, 0, 1.0853641, 0, 1.2, 0, -1.0853641, 0, 0.511
 
 [node name="PalmsMultiMesh" parent="Atrezzo" unique_id=302165511 instance=ExtResource("65_20vi3")]
 transform = Transform3D(0.86, 0, 0, 0, 0.86, 0, 0, 0, 0.86, 149, 1.8, 120.1001)
+visible = false
 metadata/instance_count = 7717
 metadata/sector_count = 14
 metadata/multimesh_count = 98
@@ -1187,15 +1190,16 @@ omni_attenuation = 0.971
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 62.39052, 203.09952)
 
 [node name="Trees" parent="Atrezzo/TreeImpostorMultimesh" index="0" unique_id=184116622]
-columns = 25
-rows = 25
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -90.22597, 0, -81.44191)
 min_spacing = 1.8
 max_spacing = 10.25
+poisson_attempts = null
+candidate_pool_multiplier = null
 center_scale_bias_percent = 37.0
 valid_ground_name_contains = PackedStringArray("Terrain_Master_COL")
 visual_exclusion_roots = Array[NodePath]([NodePath("../../Buildings"), NodePath("../../Rocks"), NodePath("../../PalmsMultiMesh"), NodePath("../../../TerrainRoot/test_island/Lighthouse_VIS")])
-visual_radius_factor = null
-visual_extra_clearance = null
+visual_radius_factor = 0.55
+visual_extra_clearance = 3.9
 
 [node name="Circuit" type="Node3D" parent="." unique_id=1519848915]
 
