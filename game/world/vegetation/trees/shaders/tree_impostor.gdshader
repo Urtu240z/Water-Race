@@ -356,9 +356,6 @@ void fragment() {
 	ALBEDO =
 		final_color;
 
-	ALPHA =
-		1.0;
-
 
 	// ========================================================
 	// NORMAL FALSA 3D

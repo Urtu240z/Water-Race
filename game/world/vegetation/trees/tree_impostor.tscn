@@ -11,6 +11,3 @@ size = Vector2(2, 2)
 [node name="Visual" type="MeshInstance3D" parent="." unique_id=1428232215]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 mesh = SubResource("QuadMesh_tpwhi")
-
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1257663171]
-transform = Transform3D(0.86173576, 0.022627503, 0.50685275, -0.24789052, -0.85286695, 0.45953062, 0.44267586, -0.5216379, -0.7293367, -1.4102256, 0, 0)
