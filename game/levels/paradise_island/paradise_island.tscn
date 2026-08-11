@@ -110,7 +110,7 @@ shader_parameter/use_baked_tree_shadows = true
 shader_parameter/tree_shadow_map = ExtResource("24_4s1c0")
 shader_parameter/tree_shadow_world_min = Vector2(-425.64886, -446.08478)
 shader_parameter/tree_shadow_world_size = Vector2(1121.21, 1121.21)
-shader_parameter/tree_shadow_strength = 1.0
+shader_parameter/tree_shadow_strength = 4.26999990455696
 shader_parameter/dry_sand_albedo = ExtResource("18_ikh8v")
 shader_parameter/dry_sand_orm = ExtResource("20_8v1g3")
 shader_parameter/dry_sand_normal = ExtResource("19_cjg0n")
@@ -1523,7 +1523,6 @@ terrain_mesh_path = NodePath("../TerrainRoot/test_island/Terrain_Master_VIS")
 sun_light_path = NodePath("../Environment/DirectionalLight3D2")
 output_png_path = "uid://ip2r2uwxmiib"
 texture_resolution = 1024
-tiles_per_axis = null
 world_padding = 10.0
 
 [editable path="TerrainRoot/test_island"]
