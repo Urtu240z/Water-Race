@@ -4,7 +4,6 @@
 [ext_resource type="Script" uid="uid://brhuo2rge6hdn" path="res://world/vegetation/trees/tree_forest_controller.gd" id="1_v6wlq"]
 [ext_resource type="Script" uid="uid://cvomld30ce7r0" path="res://world/vegetation/trees/tree_impostor_multimesh.gd" id="2_l7a6e"]
 [ext_resource type="Material" uid="uid://xu7m70my2qof" path="res://world/vegetation/trees/materials/tree_impostor_shadow_beech_a.tres" id="3_l7a6e"]
-[ext_resource type="Script" uid="uid://cmhcgntydkdjt" path="res://world/vegetation/trees/tree_canopy_ambient_shadow.gd" id="4_lty7h"]
 
 [sub_resource type="QuadMesh" id="QuadMesh_wwatn"]
 material = ExtResource("1_4nntc")
@@ -19,6 +18,8 @@ mesh = SubResource("QuadMesh_wwatn")
 [node name="TreeImpostorMultimesh" type="Node3D" unique_id=1529450960]
 script = ExtResource("1_v6wlq")
 valid_ground_name_contains = PackedStringArray("Terrain_Master_COL")
+tree_shadows_enabled = false
+canopy_enabled = false
 
 [node name="Trees" type="MultiMeshInstance3D" parent="." unique_id=184116622]
 physics_interpolation_mode = 2
@@ -34,14 +35,7 @@ center_scale_bias_percent = 66.0
 valid_ground_name_contains = PackedStringArray("Terrain_Master_COL")
 
 [node name="TreeShadows" type="MultiMeshInstance3D" parent="." unique_id=1425367268]
+visible = false
 material_override = ExtResource("3_l7a6e")
 cast_shadow = 0
 multimesh = SubResource("MultiMesh_tpwhi")
-
-[node name="CanopyAmbientShadow" type="Decal" parent="." unique_id=1054602443]
-visible = false
-upper_fade = 0.083217785
-lower_fade = 0.15000011
-cull_mask = 1
-script = ExtResource("4_lty7h")
-auto_sync_in_editor = false

@@ -3,26 +3,44 @@ extends MultiMeshInstance3D
 
 
 # ============================================================
+# BAKED MULTIMESH
+# ============================================================
+
+const BAKED_DIRECTORY: String = (
+	"res://world/vegetation/trees/baked"
+)
+
+const BAKE_VERSION: int = 1
+
+
+# ============================================================
 # DISTRIBUTION
 # ============================================================
 
 @export_group("Distribution")
 
-@export_range(1, 5000, 1) var target_count: int = 625
+@export_range(1, 5000, 1)
+var target_count: int = 625
 
 # X = Z -> círculo
 # X != Z -> elipse
-@export_range(5.0, 1000.0, 1.0) var area_radius_x: float = 100.0
-@export_range(5.0, 1000.0, 1.0) var area_radius_z: float = 80.0
+@export_range(5.0, 1000.0, 1.0)
+var area_radius_x: float = 100.0
 
-@export_range(0.5, 50.0, 0.1) var min_spacing: float = 4.0
-@export_range(0.5, 50.0, 0.1) var max_spacing: float = 8.0
+@export_range(5.0, 1000.0, 1.0)
+var area_radius_z: float = 80.0
 
-@export_range(4, 64, 1) var poisson_attempts_per_point: int = 24
+@export_range(0.5, 50.0, 0.1)
+var min_spacing: float = 4.0
 
-# Generamos más candidatos que árboles finales porque algunos
-# pueden ser descartados por terreno, pendiente, agua o geometría.
-@export_range(1.0, 5.0, 0.1) var candidate_pool_multiplier: float = 2.0
+@export_range(0.5, 50.0, 0.1)
+var max_spacing: float = 8.0
+
+@export_range(4, 64, 1)
+var poisson_attempts_per_point: int = 24
+
+@export_range(1.0, 5.0, 0.1)
+var candidate_pool_multiplier: float = 2.0
 
 @export var random_seed: int = 12345
 
@@ -33,12 +51,14 @@ extends MultiMeshInstance3D
 
 @export_group("Tree Scale")
 
-@export_range(0.10, 15.0, 0.05) var min_scale: float = 2.0
-@export_range(0.10, 15.0, 0.05) var max_scale: float = 7.5
+@export_range(0.10, 15.0, 0.05)
+var min_scale: float = 2.0
 
-# 0%   = escala completamente aleatoria
-# 100% = grandes en el centro, pequeños en el borde
-@export_range(0.0, 100.0, 1.0) var center_scale_bias_percent: float = 65.0
+@export_range(0.10, 15.0, 0.05)
+var max_scale: float = 7.5
+
+@export_range(0.0, 100.0, 1.0)
+var center_scale_bias_percent: float = 65.0
 
 
 # ============================================================
@@ -49,18 +69,20 @@ extends MultiMeshInstance3D
 
 @export var snap_to_ground: bool = true
 
-@export_range(1.0, 500.0, 1.0) var ray_above_height: float = 100.0
-@export_range(1.0, 1000.0, 1.0) var ray_below_depth: float = 300.0
+@export_range(1.0, 500.0, 1.0)
+var ray_above_height: float = 100.0
 
-@export_flags_3d_physics var ground_collision_mask: int = 0xFFFFFFFF
+@export_range(1.0, 1000.0, 1.0)
+var ray_below_depth: float = 300.0
 
-# En Paradise Island:
-# Terrain_Master_COL
-#
-# Si el array queda vacío se acepta cualquier collider.
-@export var valid_ground_name_contains: PackedStringArray = PackedStringArray([
-	"Terrain_Master_COL"
-])
+@export_flags_3d_physics
+var ground_collision_mask: int = 0xFFFFFFFF
+
+@export var valid_ground_name_contains: PackedStringArray = (
+	PackedStringArray([
+		"Terrain_Master_COL"
+	])
+)
 
 
 # ============================================================
@@ -71,12 +93,8 @@ extends MultiMeshInstance3D
 
 @export var reject_steep_slopes: bool = true
 
-# 0  = solamente superficies perfectamente planas
-# 35 = bastante restrictivo
-# 40 = buen punto inicial
-# 50 = permite laderas fuertes
-# 89 = prácticamente cualquier superficie
-@export_range(0.0, 89.0, 1.0) var max_ground_slope_degrees: float = 40.0
+@export_range(0.0, 89.0, 1.0)
+var max_ground_slope_degrees: float = 40.0
 
 
 # ============================================================
@@ -87,17 +105,13 @@ extends MultiMeshInstance3D
 
 @export var avoid_visual_geometry: bool = true
 
-# Aquí puedes añadir desde la escena:
-# edificios
-# rocas
-# estructuras
-# etc.
-#
-# NO necesitan collider.
 @export var visual_exclusion_roots: Array[NodePath] = []
 
-@export_range(0.10, 1.50, 0.05) var visual_radius_factor: float = 0.80
-@export_range(0.0, 10.0, 0.1) var visual_extra_clearance: float = 1.0
+@export_range(0.10, 1.50, 0.05)
+var visual_radius_factor: float = 0.80
+
+@export_range(0.0, 10.0, 0.1)
+var visual_extra_clearance: float = 1.0
 
 
 # ============================================================
@@ -108,19 +122,33 @@ extends MultiMeshInstance3D
 
 @export var avoid_water: bool = true
 
-# Puede quedar vacío.
-# Buscará automáticamente el Ocean3D.
 @export var water_provider_path: NodePath
 
-# Separación vertical mínima respecto a la superficie del agua.
-@export_range(0.0, 20.0, 0.1) var minimum_height_above_water: float = 1.0
+@export_range(0.0, 20.0, 0.1)
+var minimum_height_above_water: float = 1.0
+
+
+# ============================================================
+# BAKED RUNTIME
+# ============================================================
+
+@export_group("Baked Runtime")
+
+# Si no existe un bake o está desactualizado,
+# el editor lo genera automáticamente.
+#
+# RUNTIME NUNCA genera árboles.
+@export var auto_bake_if_missing_or_stale_in_editor: bool = true
 
 
 # ============================================================
 # EDITOR
 # ============================================================
 
-@export_tool_button("Regenerate") var regenerate = _generate
+@export_group("Editor")
+
+@export_tool_button("Regenerate + Bake")
+var regenerate = _generate
 
 
 # ============================================================
@@ -128,24 +156,94 @@ extends MultiMeshInstance3D
 # ============================================================
 
 func _ready() -> void:
+
+	# --------------------------------------------------------
+	# EDITOR
+	# --------------------------------------------------------
+
 	if Engine.is_editor_hint():
-		call_deferred("_generate")
-	else:
-		_generate()
+
+		var bake_loaded: bool = (
+			_load_baked_multimesh(
+				true
+			)
+		)
+
+
+		if bake_loaded:
+			return
+
+
+		if auto_bake_if_missing_or_stale_in_editor:
+
+			call_deferred(
+				"_generate"
+			)
+
+
+		return
+
+
+	# --------------------------------------------------------
+	# RUNTIME
+	# --------------------------------------------------------
+
+	var runtime_bake_loaded: bool = (
+		_load_baked_multimesh(
+			false
+		)
+	)
+
+
+	if runtime_bake_loaded:
+		return
+
+
+	visible = false
+
+
+	push_error(
+		"Missing baked tree MultiMesh: "
+		+ _get_baked_multimesh_path()
+		+ "\nOpen Paradise Island in the editor "
+		+ "and use Regenerate Forest."
+	)
 
 
 # ============================================================
-# GENERATE
+# GENERATE + BAKE
 # ============================================================
 
 func _generate() -> void:
+
+	# --------------------------------------------------------
+	# GENERATION IS EDITOR-ONLY
+	# --------------------------------------------------------
+
+	if not Engine.is_editor_hint():
+
+		push_error(
+			"Tree generation is editor-only. "
+			+ "Runtime must use the baked MultiMesh."
+		)
+
+		return
+
+
 	if multimesh == null:
 		return
 
-	if snap_to_ground and not is_inside_tree():
+
+	if (
+		snap_to_ground
+		and not is_inside_tree()
+	):
+
 		push_warning(
-			"Tree MultiMesh must be inside the scene tree to query the ground."
+			"Tree MultiMesh must be inside the scene tree "
+			+ "to query the ground."
 		)
+
 		return
 
 
@@ -155,8 +253,13 @@ func _generate() -> void:
 
 	var space_state: PhysicsDirectSpaceState3D = null
 
+
 	if snap_to_ground:
-		space_state = get_world_3d().direct_space_state
+
+		space_state = (
+			get_world_3d()
+				.direct_space_state
+		)
 
 
 	# --------------------------------------------------------
@@ -165,10 +268,16 @@ func _generate() -> void:
 
 	var water_provider: WaterSurfaceProvider3D = null
 
+
 	if avoid_water:
-		water_provider = _resolve_water_provider()
+
+		water_provider = (
+			_resolve_water_provider()
+		)
+
 
 		if water_provider == null:
+
 			push_warning(
 				"Water exclusion enabled but no "
 				+ "WaterSurfaceProvider3D was found."
@@ -181,8 +290,12 @@ func _generate() -> void:
 
 	var visual_blocker_aabbs: Array[AABB] = []
 
+
 	if avoid_visual_geometry:
-		visual_blocker_aabbs = _build_visual_blocker_aabbs()
+
+		visual_blocker_aabbs = (
+			_build_visual_blocker_aabbs()
+		)
 
 
 	# --------------------------------------------------------
@@ -224,7 +337,10 @@ func _generate() -> void:
 	# RNG
 	# --------------------------------------------------------
 
-	var rng: RandomNumberGenerator = RandomNumberGenerator.new()
+	var rng: RandomNumberGenerator = (
+		RandomNumberGenerator.new()
+	)
+
 	rng.seed = random_seed
 
 
@@ -243,14 +359,16 @@ func _generate() -> void:
 	)
 
 
-	var poisson_positions: Array[Vector2] = _generate_poisson_positions(
-		candidate_pool_target,
-		safe_radius_x,
-		safe_radius_z,
-		safe_min_spacing,
-		safe_max_spacing,
-		poisson_attempts_per_point,
-		rng
+	var poisson_positions: Array[Vector2] = (
+		_generate_poisson_positions(
+			candidate_pool_target,
+			safe_radius_x,
+			safe_radius_z,
+			safe_min_spacing,
+			safe_max_spacing,
+			poisson_attempts_per_point,
+			rng
+		)
 	)
 
 
@@ -259,8 +377,13 @@ func _generate() -> void:
 	# --------------------------------------------------------
 
 	multimesh.instance_count = 0
+
 	multimesh.use_custom_data = true
-	multimesh.instance_count = target_count
+
+	multimesh.instance_count = (
+		target_count
+	)
+
 	multimesh.visible_instance_count = 0
 
 
@@ -268,7 +391,7 @@ func _generate() -> void:
 	# COUNTERS
 	# --------------------------------------------------------
 
-	var index: int = 0
+	var instance_index: int = 0
 
 	var rejected_no_ground: int = 0
 	var rejected_invalid_ground: int = 0
@@ -283,7 +406,7 @@ func _generate() -> void:
 
 	for point: Vector2 in poisson_positions:
 
-		if index >= target_count:
+		if instance_index >= target_count:
 			break
 
 
@@ -291,25 +414,34 @@ func _generate() -> void:
 		# SCALE
 		# ====================================================
 
-		var radial_ratio: float = _get_ellipse_radius_ratio(
-			point,
-			safe_radius_x,
-			safe_radius_z
+		var radial_ratio: float = (
+			_get_ellipse_radius_ratio(
+				point,
+				safe_radius_x,
+				safe_radius_z
+			)
 		)
 
-		var bias: float = clampf(
-			center_scale_bias_percent / 100.0,
+
+		var center_bias: float = clampf(
+			center_scale_bias_percent
+				/ 100.0,
 			0.0,
 			1.0
 		)
 
-		var random_t: float = rng.randf()
+
+		var random_t: float = (
+			rng.randf()
+		)
+
 
 		var final_t: float = lerpf(
 			random_t,
 			radial_ratio,
-			bias
+			center_bias
 		)
+
 
 		var scale_variation: float = lerpf(
 			safe_max_scale,
@@ -327,11 +459,14 @@ func _generate() -> void:
 
 		var ground_y: float = 0.0
 
-		var ground_position_global: Vector3 = to_global(
-			Vector3(
-				local_x,
-				0.0,
-				local_z
+
+		var ground_position_global: Vector3 = (
+			to_global(
+				Vector3(
+					local_x,
+					0.0,
+					local_z
+				)
 			)
 		)
 
@@ -344,13 +479,17 @@ func _generate() -> void:
 
 			var ray_from: Vector3 = (
 				ground_position_global
-				+ Vector3.UP * ray_above_height
+				+ Vector3.UP
+				* ray_above_height
 			)
+
 
 			var ray_to: Vector3 = (
 				ground_position_global
-				- Vector3.UP * ray_below_depth
+				- Vector3.UP
+				* ray_below_depth
 			)
+
 
 			var query: PhysicsRayQueryParameters3D = (
 				PhysicsRayQueryParameters3D.create(
@@ -360,12 +499,15 @@ func _generate() -> void:
 				)
 			)
 
+
 			query.collide_with_bodies = true
 			query.collide_with_areas = false
 
 
-			var hit: Dictionary = space_state.intersect_ray(
-				query
+			var hit: Dictionary = (
+				space_state.intersect_ray(
+					query
+				)
 			)
 
 
@@ -374,21 +516,27 @@ func _generate() -> void:
 			# ------------------------------------------------
 
 			if hit.is_empty():
+
 				rejected_no_ground += 1
+
 				continue
 
 
 			# ------------------------------------------------
-			# VALID GROUND COLLIDER
+			# VALID GROUND
 			# ------------------------------------------------
 
-			var ground_collider: Object = hit["collider"]
+			var ground_collider: Object = (
+				hit["collider"]
+			)
 
 
 			if not _is_valid_ground_collider(
 				ground_collider
 			):
+
 				rejected_invalid_ground += 1
+
 				continue
 
 
@@ -398,30 +546,56 @@ func _generate() -> void:
 
 			if reject_steep_slopes:
 
-				var ground_normal: Vector3 = hit["normal"]
+				var ground_normal: Vector3 = (
+					hit["normal"]
+				)
 
-				if ground_normal.length_squared() <= 0.000001:
+
+				if (
+					ground_normal.length_squared()
+					<= 0.000001
+				):
+
 					rejected_steep_slope += 1
+
 					continue
 
-				ground_normal = ground_normal.normalized()
+
+				ground_normal = (
+					ground_normal.normalized()
+				)
+
 
 				var up_dot: float = clampf(
-					ground_normal.dot(Vector3.UP),
+					ground_normal.dot(
+						Vector3.UP
+					),
 					-1.0,
 					1.0
 				)
 
-				var slope_radians: float = acos(
-					up_dot
+
+				var slope_radians: float = (
+					acos(
+						up_dot
+					)
 				)
 
-				var slope_degrees: float = rad_to_deg(
-					slope_radians
+
+				var slope_degrees: float = (
+					rad_to_deg(
+						slope_radians
+					)
 				)
 
-				if slope_degrees > max_ground_slope_degrees:
+
+				if (
+					slope_degrees
+					> max_ground_slope_degrees
+				):
+
 					rejected_steep_slope += 1
+
 					continue
 
 
@@ -429,13 +603,21 @@ func _generate() -> void:
 			# FINAL GROUND POSITION
 			# ------------------------------------------------
 
-			ground_position_global = hit["position"]
-
-			var ground_position_local: Vector3 = to_local(
-				ground_position_global
+			ground_position_global = (
+				hit["position"]
 			)
 
-			ground_y = ground_position_local.y
+
+			var ground_position_local: Vector3 = (
+				to_local(
+					ground_position_global
+				)
+			)
+
+
+			ground_y = (
+				ground_position_local.y
+			)
 
 
 		# ====================================================
@@ -453,18 +635,23 @@ func _generate() -> void:
 				)
 			)
 
+
 			if water_sample.valid:
 
 				var height_above_water: float = (
 					ground_position_global.y
-					- water_sample.surface_position.y
+					- water_sample
+						.surface_position.y
 				)
+
 
 				if (
 					height_above_water
 					<= minimum_height_above_water
 				):
+
 					rejected_water += 1
+
 					continue
 
 
@@ -480,46 +667,45 @@ func _generate() -> void:
 				visual_blocker_aabbs
 			)
 		):
+
 			rejected_visual_geometry += 1
+
 			continue
 
 
 		# ====================================================
-		# INSTANCE POSITION
+		# INSTANCE
 		# ====================================================
 
 		var instance_position: Vector3 = Vector3(
 			local_x,
-			ground_y + scale_variation,
+			ground_y
+				+ scale_variation,
 			local_z
 		)
 
 
-		# ====================================================
-		# INSTANCE SCALE
-		# ====================================================
-
-		var instance_basis: Basis = Basis.IDENTITY.scaled(
-			Vector3(
-				scale_variation,
-				scale_variation,
-				scale_variation
+		var instance_basis: Basis = (
+			Basis.IDENTITY.scaled(
+				Vector3(
+					scale_variation,
+					scale_variation,
+					scale_variation
+				)
 			)
 		)
 
 
-		var instance_transform: Transform3D = Transform3D(
-			instance_basis,
-			instance_position
+		var instance_transform: Transform3D = (
+			Transform3D(
+				instance_basis,
+				instance_position
+			)
 		)
 
 
-		# ====================================================
-		# MULTIMESH
-		# ====================================================
-
 		multimesh.set_instance_transform(
-			index,
+			instance_index,
 			instance_transform
 		)
 
@@ -528,10 +714,13 @@ func _generate() -> void:
 		# LEAF COLOR VARIATION
 		# ====================================================
 
-		var leaf_variation: float = rng.randf()
+		var leaf_variation: float = (
+			rng.randf()
+		)
+
 
 		multimesh.set_instance_custom_data(
-			index,
+			instance_index,
 			Color(
 				leaf_variation,
 				0.0,
@@ -541,19 +730,40 @@ func _generate() -> void:
 		)
 
 
-		index += 1
+		instance_index += 1
 
 
 	# ========================================================
-	# SHOW VALID INSTANCES
+	# FINALIZE
 	# ========================================================
 
-	multimesh.visible_instance_count = index
+	multimesh.visible_instance_count = (
+		instance_index
+	)
+
+
+	multimesh.emit_changed()
+
+
+	_sync_shadow_multimesh()
+
+
+	var bake_saved: bool = (
+		_save_baked_multimesh()
+	)
+
+
+	if not bake_saved:
+
+		push_error(
+			"Tree scatter generated but the "
+			+ "baked MultiMesh could not be saved."
+		)
 
 
 	print(
 		"Tree scatter | placed: ",
-		index,
+		instance_index,
 		" / ",
 		target_count,
 		" | poisson candidates: ",
@@ -574,6 +784,739 @@ func _generate() -> void:
 
 
 # ============================================================
+# BAKED MULTIMESH - SAVE
+# ============================================================
+
+func _save_baked_multimesh() -> bool:
+
+	if not Engine.is_editor_hint():
+		return false
+
+
+	if multimesh == null:
+		return false
+
+
+	var absolute_directory: String = (
+		ProjectSettings.globalize_path(
+			BAKED_DIRECTORY
+		)
+	)
+
+
+	var directory_error: Error = (
+		DirAccess.make_dir_recursive_absolute(
+			absolute_directory
+		)
+	)
+
+
+	if directory_error != OK:
+
+		push_error(
+			"Could not create tree bake directory: "
+			+ absolute_directory
+			+ " | Error: "
+			+ str(
+				directory_error
+			)
+		)
+
+		return false
+
+
+	var duplicated_resource: Resource = (
+		multimesh.duplicate(
+			true
+		)
+	)
+
+
+	if not duplicated_resource is MultiMesh:
+
+		push_error(
+			"Could not duplicate generated MultiMesh."
+		)
+
+		return false
+
+
+	var baked_multimesh: MultiMesh = (
+		duplicated_resource
+			as MultiMesh
+	)
+
+
+	# La geometría viene siempre de la escena base.
+	#
+	# El .res solo guarda:
+	# - transforms
+	# - custom data
+	# - counts
+	# - buffer
+	#
+	# Así evitamos duplicar QuadMesh/materiales
+	# en cada bosque.
+
+	baked_multimesh.resource_local_to_scene = false
+
+
+	baked_multimesh.set_meta(
+		"tree_bake_version",
+		BAKE_VERSION
+	)
+
+
+	baked_multimesh.set_meta(
+		"tree_bake_signature",
+		_build_bake_signature()
+	)
+
+
+	baked_multimesh.set_meta(
+		"tree_bake_source",
+		_get_scene_relative_path_string()
+	)
+
+
+	var baked_path: String = (
+		_get_baked_multimesh_path()
+	)
+
+
+	var save_error: Error = (
+		ResourceSaver.save(
+			baked_multimesh,
+			baked_path
+		)
+	)
+
+
+	if save_error != OK:
+
+		push_error(
+			"Could not save baked tree MultiMesh: "
+			+ baked_path
+			+ " | Error: "
+			+ str(
+				save_error
+			)
+		)
+
+		return false
+
+
+	print(
+		"Tree bake saved: ",
+		baked_path,
+		" | visible instances: ",
+		multimesh.visible_instance_count
+	)
+
+
+	return true
+
+
+# ============================================================
+# BAKED MULTIMESH - LOAD
+# ============================================================
+
+func _load_baked_multimesh(
+	require_matching_signature: bool
+) -> bool:
+
+	if multimesh == null:
+		return false
+
+
+	var baked_path: String = (
+		_get_baked_multimesh_path()
+	)
+
+
+	if not ResourceLoader.exists(
+		baked_path
+	):
+		return false
+
+
+	var loaded_resource: Resource = (
+		ResourceLoader.load(
+			baked_path
+		)
+	)
+
+
+	if not loaded_resource is MultiMesh:
+
+		push_warning(
+			"Invalid tree bake resource: "
+			+ baked_path
+		)
+
+		return false
+
+
+	var loaded_multimesh: MultiMesh = (
+		loaded_resource
+			as MultiMesh
+	)
+
+
+	# --------------------------------------------------------
+	# EDITOR STALE CHECK
+	# --------------------------------------------------------
+
+	if require_matching_signature:
+
+		var saved_signature: String = String(
+			loaded_multimesh.get_meta(
+				"tree_bake_signature",
+				""
+			)
+		)
+
+
+		var current_signature: String = (
+			_build_bake_signature()
+		)
+
+
+		if (
+			saved_signature
+			!= current_signature
+		):
+
+			print(
+				"Tree bake stale, regenerating: ",
+				baked_path
+			)
+
+			return false
+
+
+	# --------------------------------------------------------
+	# KEEP CURRENT TEMPLATE MESH
+	# --------------------------------------------------------
+
+	var template_mesh: Mesh = (
+		multimesh.mesh
+	)
+
+
+	if template_mesh == null:
+
+		push_warning(
+			"Tree MultiMesh template has no mesh: "
+			+ String(
+				get_path()
+			)
+		)
+
+		return false
+
+
+	# Never modify the cached .res directly.
+	var live_resource: Resource = (
+		loaded_multimesh.duplicate(
+			true
+		)
+	)
+
+
+	if not live_resource is MultiMesh:
+		return false
+
+
+	var live_multimesh: MultiMesh = (
+		live_resource
+			as MultiMesh
+	)
+
+
+	live_multimesh.mesh = (
+		template_mesh
+	)
+
+
+	live_multimesh.resource_local_to_scene = (
+		true
+	)
+
+
+	multimesh = (
+		live_multimesh
+	)
+
+
+	_sync_shadow_multimesh()
+
+
+	return true
+
+
+# ============================================================
+# BAKE PATH
+# ============================================================
+
+func _get_baked_multimesh_path() -> String:
+
+	var scene_root: Node = (
+		_get_cache_scene_root()
+	)
+
+
+	var scene_name: String = (
+		"scene"
+	)
+
+
+	if (
+		scene_root != null
+		and not scene_root.scene_file_path.is_empty()
+	):
+
+		scene_name = (
+			scene_root.scene_file_path
+				.get_file()
+				.get_basename()
+		)
+
+
+	elif scene_root != null:
+
+		scene_name = String(
+			scene_root.name
+		)
+
+
+	var relative_path: String = (
+		_get_scene_relative_path_string()
+	)
+
+
+	var safe_scene_name: String = (
+		_sanitize_cache_key(
+			scene_name
+		)
+	)
+
+
+	var safe_relative_path: String = (
+		_sanitize_cache_key(
+			relative_path
+		)
+	)
+
+
+	var file_name: String = (
+		safe_scene_name
+		+ "__"
+		+ safe_relative_path
+		+ ".res"
+	)
+
+
+	return (
+		BAKED_DIRECTORY.path_join(
+			file_name
+		)
+	)
+
+
+func _get_cache_scene_root() -> Node:
+
+	if Engine.is_editor_hint():
+
+		var edited_scene_root: Node = (
+			EditorInterface
+				.get_edited_scene_root()
+		)
+
+
+		if edited_scene_root != null:
+			return edited_scene_root
+
+
+	if get_tree() != null:
+
+		var current_scene: Node = (
+			get_tree().current_scene
+		)
+
+
+		if current_scene != null:
+			return current_scene
+
+
+	var top_node: Node = self
+
+
+	while (
+		top_node.get_parent() != null
+		and get_tree() != null
+		and top_node.get_parent()
+			!= get_tree().root
+	):
+
+		top_node = (
+			top_node.get_parent()
+		)
+
+
+	return top_node
+
+
+func _get_scene_relative_path_string() -> String:
+
+	var scene_root: Node = (
+		_get_cache_scene_root()
+	)
+
+
+	if scene_root == null:
+
+		return String(
+			name
+		)
+
+
+	if scene_root == self:
+
+		return String(
+			name
+		)
+
+
+	return String(
+		scene_root.get_path_to(
+			self
+		)
+	)
+
+
+func _sanitize_cache_key(
+	source_text: String
+) -> String:
+
+	var safe_text: String = (
+		source_text
+	)
+
+
+	safe_text = safe_text.replace(
+		"\\",
+		"__"
+	)
+
+	safe_text = safe_text.replace(
+		"/",
+		"__"
+	)
+
+	safe_text = safe_text.replace(
+		":",
+		"_"
+	)
+
+	safe_text = safe_text.replace(
+		"@",
+		"_"
+	)
+
+	safe_text = safe_text.replace(
+		" ",
+		"_"
+	)
+
+
+	return (
+		safe_text.to_lower()
+	)
+
+
+# ============================================================
+# BAKE SIGNATURE
+# ============================================================
+
+func _build_bake_signature() -> String:
+
+	var signature: String = (
+		"version="
+		+ str(
+			BAKE_VERSION
+		)
+	)
+
+
+	signature += (
+		"|node="
+		+ _get_scene_relative_path_string()
+	)
+
+
+	signature += (
+		"|global_transform="
+		+ str(
+			global_transform
+		)
+	)
+
+
+	signature += (
+		"|target_count="
+		+ str(
+			target_count
+		)
+	)
+
+
+	signature += (
+		"|radius_x="
+		+ str(
+			area_radius_x
+		)
+	)
+
+
+	signature += (
+		"|radius_z="
+		+ str(
+			area_radius_z
+		)
+	)
+
+
+	signature += (
+		"|min_spacing="
+		+ str(
+			min_spacing
+		)
+	)
+
+
+	signature += (
+		"|max_spacing="
+		+ str(
+			max_spacing
+		)
+	)
+
+
+	signature += (
+		"|poisson_attempts="
+		+ str(
+			poisson_attempts_per_point
+		)
+	)
+
+
+	signature += (
+		"|candidate_multiplier="
+		+ str(
+			candidate_pool_multiplier
+		)
+	)
+
+
+	signature += (
+		"|seed="
+		+ str(
+			random_seed
+		)
+	)
+
+
+	signature += (
+		"|min_scale="
+		+ str(
+			min_scale
+		)
+	)
+
+
+	signature += (
+		"|max_scale="
+		+ str(
+			max_scale
+		)
+	)
+
+
+	signature += (
+		"|center_bias="
+		+ str(
+			center_scale_bias_percent
+		)
+	)
+
+
+	signature += (
+		"|snap="
+		+ str(
+			snap_to_ground
+		)
+	)
+
+
+	signature += (
+		"|ray_above="
+		+ str(
+			ray_above_height
+		)
+	)
+
+
+	signature += (
+		"|ray_below="
+		+ str(
+			ray_below_depth
+		)
+	)
+
+
+	signature += (
+		"|collision_mask="
+		+ str(
+			ground_collision_mask
+		)
+	)
+
+
+	signature += (
+		"|valid_ground="
+		+ str(
+			valid_ground_name_contains
+		)
+	)
+
+
+	signature += (
+		"|reject_slope="
+		+ str(
+			reject_steep_slopes
+		)
+	)
+
+
+	signature += (
+		"|max_slope="
+		+ str(
+			max_ground_slope_degrees
+		)
+	)
+
+
+	signature += (
+		"|avoid_visual="
+		+ str(
+			avoid_visual_geometry
+		)
+	)
+
+
+	signature += (
+		"|visual_roots="
+		+ str(
+			visual_exclusion_roots
+		)
+	)
+
+
+	signature += (
+		"|visual_radius="
+		+ str(
+			visual_radius_factor
+		)
+	)
+
+
+	signature += (
+		"|visual_clearance="
+		+ str(
+			visual_extra_clearance
+		)
+	)
+
+
+	signature += (
+		"|avoid_water="
+		+ str(
+			avoid_water
+		)
+	)
+
+
+	signature += (
+		"|water_path="
+		+ str(
+			water_provider_path
+		)
+	)
+
+
+	signature += (
+		"|water_height="
+		+ str(
+			minimum_height_above_water
+		)
+	)
+
+
+	if (
+		multimesh != null
+		and multimesh.mesh != null
+	):
+
+		signature += (
+			"|mesh_aabb="
+			+ str(
+				multimesh.mesh.get_aabb()
+			)
+		)
+
+
+	return signature
+
+
+# ============================================================
+# TREE SHADOW MULTIMESH
+# ============================================================
+
+func _sync_shadow_multimesh() -> void:
+
+	var parent_node: Node = (
+		get_parent()
+	)
+
+
+	if parent_node == null:
+		return
+
+
+	var shadow_node: Node = (
+		parent_node.get_node_or_null(
+			"TreeShadows"
+		)
+	)
+
+
+	if not shadow_node is MultiMeshInstance3D:
+		return
+
+
+	var tree_shadows: MultiMeshInstance3D = (
+		shadow_node
+			as MultiMeshInstance3D
+	)
+
+
+	tree_shadows.multimesh = (
+		multimesh
+	)
+
+
+# ============================================================
 # VALID GROUND
 # ============================================================
 
@@ -589,7 +1532,11 @@ func _is_valid_ground_collider(
 		return false
 
 
-	var collider_node: Node = collider as Node
+	var collider_node: Node = (
+		collider
+			as Node
+	)
+
 
 	var collider_name: String = String(
 		collider_node.name
@@ -600,6 +1547,7 @@ func _is_valid_ground_collider(
 
 		if filter_text.is_empty():
 			continue
+
 
 		if collider_name.contains(
 			filter_text
@@ -625,8 +1573,10 @@ func _build_visual_blocker_aabbs() -> Array[AABB]:
 			continue
 
 
-		var root_node: Node = get_node_or_null(
-			root_path
+		var root_node: Node = (
+			get_node_or_null(
+				root_path
+			)
 		)
 
 
@@ -634,7 +1584,9 @@ func _build_visual_blocker_aabbs() -> Array[AABB]:
 
 			push_warning(
 				"Visual exclusion root not found: "
-					+ String(root_path)
+				+ String(
+					root_path
+				)
 			)
 
 			continue
@@ -657,14 +1609,17 @@ func _collect_visual_blockers(
 	if node is MeshInstance3D:
 
 		var mesh_instance: MeshInstance3D = (
-			node as MeshInstance3D
+			node
+				as MeshInstance3D
 		)
 
 
 		if mesh_instance.mesh != null:
 
-			var world_aabb: AABB = _get_world_aabb(
-				mesh_instance
+			var world_aabb: AABB = (
+				_get_world_aabb(
+					mesh_instance
+				)
 			)
 
 
@@ -695,9 +1650,15 @@ func _get_world_aabb(
 	mesh_instance: MeshInstance3D
 ) -> AABB:
 
-	var local_aabb: AABB = mesh_instance.get_aabb()
+	var local_aabb: AABB = (
+		mesh_instance.get_aabb()
+	)
 
-	var local_min: Vector3 = local_aabb.position
+
+	var local_min: Vector3 = (
+		local_aabb.position
+	)
+
 
 	var local_max: Vector3 = (
 		local_aabb.position
@@ -706,15 +1667,47 @@ func _get_world_aabb(
 
 
 	var corners: PackedVector3Array = PackedVector3Array([
-		Vector3(local_min.x, local_min.y, local_min.z),
-		Vector3(local_max.x, local_min.y, local_min.z),
-		Vector3(local_min.x, local_max.y, local_min.z),
-		Vector3(local_max.x, local_max.y, local_min.z),
+		Vector3(
+			local_min.x,
+			local_min.y,
+			local_min.z
+		),
+		Vector3(
+			local_max.x,
+			local_min.y,
+			local_min.z
+		),
+		Vector3(
+			local_min.x,
+			local_max.y,
+			local_min.z
+		),
+		Vector3(
+			local_max.x,
+			local_max.y,
+			local_min.z
+		),
 
-		Vector3(local_min.x, local_min.y, local_max.z),
-		Vector3(local_max.x, local_min.y, local_max.z),
-		Vector3(local_min.x, local_max.y, local_max.z),
-		Vector3(local_max.x, local_max.y, local_max.z)
+		Vector3(
+			local_min.x,
+			local_min.y,
+			local_max.z
+		),
+		Vector3(
+			local_max.x,
+			local_min.y,
+			local_max.z
+		),
+		Vector3(
+			local_min.x,
+			local_max.y,
+			local_max.z
+		),
+		Vector3(
+			local_max.x,
+			local_max.y,
+			local_max.z
+		)
 	])
 
 
@@ -724,18 +1717,25 @@ func _get_world_aabb(
 	)
 
 
-	var world_min: Vector3 = first_world_corner
-	var world_max: Vector3 = first_world_corner
+	var world_min: Vector3 = (
+		first_world_corner
+	)
+
+	var world_max: Vector3 = (
+		first_world_corner
+	)
 
 
-	for i: int in range(
+	for corner_index: int in range(
 		1,
 		corners.size()
 	):
 
 		var world_corner: Vector3 = (
 			mesh_instance.global_transform
-			* corners[i]
+			* corners[
+				corner_index
+			]
 		)
 
 
@@ -773,7 +1773,8 @@ func _get_world_aabb(
 
 	return AABB(
 		world_min,
-		world_max - world_min
+		world_max
+			- world_min
 	)
 
 
@@ -791,9 +1792,9 @@ func _intersects_visual_geometry(
 		return false
 
 
-	# Quad original = 2 x 2.
 	var tree_height: float = maxf(
-		2.0 * scale_variation,
+		2.0
+			* scale_variation,
 		0.1
 	)
 
@@ -818,9 +1819,13 @@ func _intersects_visual_geometry(
 		),
 
 		Vector3(
-			tree_half_width * 2.0,
+			tree_half_width
+				* 2.0,
+
 			tree_height,
-			tree_half_width * 2.0
+
+			tree_half_width
+				* 2.0
 		)
 	)
 
@@ -848,8 +1853,10 @@ func _resolve_water_provider() -> WaterSurfaceProvider3D:
 
 	if water_provider_path != NodePath(""):
 
-		var explicit_node: Node = get_node_or_null(
-			water_provider_path
+		var explicit_node: Node = (
+			get_node_or_null(
+				water_provider_path
+			)
 		)
 
 
@@ -857,7 +1864,7 @@ func _resolve_water_provider() -> WaterSurfaceProvider3D:
 
 			return (
 				explicit_node
-				as WaterSurfaceProvider3D
+					as WaterSurfaceProvider3D
 			)
 
 
@@ -868,9 +1875,10 @@ func _resolve_water_provider() -> WaterSurfaceProvider3D:
 	if is_inside_tree():
 
 		var grouped_node: Node = (
-			get_tree().get_first_node_in_group(
-				"graphics_quality_ocean"
-			)
+			get_tree()
+				.get_first_node_in_group(
+					"graphics_quality_ocean"
+				)
 		)
 
 
@@ -878,7 +1886,7 @@ func _resolve_water_provider() -> WaterSurfaceProvider3D:
 
 			return (
 				grouped_node
-				as WaterSurfaceProvider3D
+					as WaterSurfaceProvider3D
 			)
 
 
@@ -938,10 +1946,12 @@ func _generate_poisson_positions(
 	# FIRST POINT
 	# --------------------------------------------------------
 
-	var first_point: Vector2 = _random_point_in_ellipse(
-		safe_radius_x,
-		safe_radius_z,
-		rng
+	var first_point: Vector2 = (
+		_random_point_in_ellipse(
+			safe_radius_x,
+			safe_radius_z,
+			rng
+		)
 	)
 
 
@@ -960,41 +1970,60 @@ func _generate_poisson_positions(
 
 	while (
 		not active_points.is_empty()
-		and points.size() < wanted_count
+		and points.size()
+			< wanted_count
 	):
 
-		var active_index: int = rng.randi_range(
-			0,
-			active_points.size() - 1
+		var active_index: int = (
+			rng.randi_range(
+				0,
+				active_points.size()
+					- 1
+			)
 		)
 
-		var origin: Vector2 = active_points[
-			active_index
-		]
+
+		var origin: Vector2 = (
+			active_points[
+				active_index
+			]
+		)
+
 
 		var found_candidate: bool = false
 
 
-		for attempt: int in range(
+		for _attempt: int in range(
 			attempts_per_point
 		):
 
-			var angle: float = rng.randf_range(
-				0.0,
-				TAU
+			var angle: float = (
+				rng.randf_range(
+					0.0,
+					TAU
+				)
 			)
 
-			var distance: float = rng.randf_range(
-				safe_min_distance,
-				safe_max_distance
+
+			var candidate_distance: float = (
+				rng.randf_range(
+					safe_min_distance,
+					safe_max_distance
+				)
 			)
+
 
 			var candidate: Vector2 = (
 				origin
 				+ Vector2(
-					cos(angle),
-					sin(angle)
-				) * distance
+					cos(
+						angle
+					),
+					sin(
+						angle
+					)
+				)
+				* candidate_distance
 			)
 
 
@@ -1018,11 +2047,14 @@ func _generate_poisson_positions(
 				candidate
 			)
 
+
 			active_points.append(
 				candidate
 			)
 
+
 			found_candidate = true
+
 			break
 
 
@@ -1046,23 +2078,31 @@ func _random_point_in_ellipse(
 	rng: RandomNumberGenerator
 ) -> Vector2:
 
-	var angle: float = rng.randf_range(
-		0.0,
-		TAU
+	var angle: float = (
+		rng.randf_range(
+			0.0,
+			TAU
+		)
 	)
 
 
-	var radial: float = sqrt(
-		rng.randf()
+	var radial: float = (
+		sqrt(
+			rng.randf()
+		)
 	)
 
 
 	return Vector2(
-		cos(angle)
+		cos(
+			angle
+		)
 			* radial
 			* radius_x,
 
-		sin(angle)
+		sin(
+			angle
+		)
 			* radial
 			* radius_z
 	)
@@ -1086,6 +2126,7 @@ func _point_inside_ellipse(
 		)
 	)
 
+
 	var normalized_z: float = (
 		point.y
 		/ maxf(
@@ -1096,8 +2137,12 @@ func _point_inside_ellipse(
 
 
 	return (
-		normalized_x * normalized_x
-		+ normalized_z * normalized_z
+		normalized_x
+			* normalized_x
+
+		+ normalized_z
+			* normalized_z
+
 		<= 1.0
 	)
 
@@ -1127,7 +2172,7 @@ func _is_poisson_candidate_valid(
 
 
 # ============================================================
-# NORMALIZED CENTER -> EDGE DISTANCE
+# CENTER -> EDGE RATIO
 # ============================================================
 
 func _get_ellipse_radius_ratio(
@@ -1144,6 +2189,7 @@ func _get_ellipse_radius_ratio(
 		)
 	)
 
+
 	var normalized_z: float = (
 		point.y
 		/ maxf(
@@ -1155,8 +2201,10 @@ func _get_ellipse_radius_ratio(
 
 	return clampf(
 		sqrt(
-			normalized_x * normalized_x
-			+ normalized_z * normalized_z
+			normalized_x
+				* normalized_x
+			+ normalized_z
+				* normalized_z
 		),
 		0.0,
 		1.0
@@ -1167,18 +2215,50 @@ func _get_ellipse_radius_ratio(
 # EDITOR SAVE
 # ============================================================
 
-func _notification(what: int) -> void:
+func _notification(
+	what: int
+) -> void:
 
 	if not Engine.is_editor_hint():
 		return
 
 
+	# Seguimos guardando la escena SIN miles de transforms.
+	#
+	# La diferencia respecto al sistema anterior:
+	#
+	# ANTES:
+	#   PRE SAVE  -> borrar
+	#   POST SAVE -> regenerar TODO
+	#
+	# AHORA:
+	#   PRE SAVE  -> borrar
+	#   POST SAVE -> cargar .res ya bakeado
 	if what == NOTIFICATION_EDITOR_PRE_SAVE:
 
 		_clear_generated_multimesh()
 
 
 	elif what == NOTIFICATION_EDITOR_POST_SAVE:
+
+		call_deferred(
+			"_restore_baked_after_editor_save"
+		)
+
+
+func _restore_baked_after_editor_save() -> void:
+
+	var restored: bool = (
+		_load_baked_multimesh(
+			false
+		)
+	)
+
+
+	if (
+		not restored
+		and auto_bake_if_missing_or_stale_in_editor
+	):
 
 		call_deferred(
 			"_generate"
@@ -1192,4 +2272,5 @@ func _clear_generated_multimesh() -> void:
 
 
 	multimesh.instance_count = 0
+
 	multimesh.visible_instance_count = -1

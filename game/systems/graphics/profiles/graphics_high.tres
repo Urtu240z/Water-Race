@@ -9,3 +9,6 @@ ssil = false
 ocean_middle_radius = 2000.0
 ocean_middle_cell_size = 5.0
 ocean_far_cell_size = 40.0
+ocean_custom_ssr_refinement_steps = 5
+ocean_custom_ssr_blur_lod = 2.2
+ocean_mirrored_reflection_enabled = false

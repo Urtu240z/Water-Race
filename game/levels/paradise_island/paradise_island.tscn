@@ -68,13 +68,11 @@
 [ext_resource type="PackedScene" uid="uid://bgpsiyc4tr47u" path="res://world/props/rocks/rock_01.glb" id="62_2bfr8"]
 [ext_resource type="PackedScene" uid="uid://cfw7pu0e3ws7n" path="res://world/props/rocks/rock_02.glb" id="63_a1asi"]
 [ext_resource type="PackedScene" uid="uid://vls5xu5jnvyf" path="res://world/props/rocks/rock_03.glb" id="64_y8eu1"]
-[ext_resource type="PackedScene" uid="uid://cilidnwjw2dt" path="res://world/vegetation/palms/palms_multimesh.scn" id="65_20vi3"]
 [ext_resource type="Material" uid="uid://dk2h67ph6buix" path="res://shared/materials/metal/materials/rusty_metal_03.res" id="66_1mjlu"]
 [ext_resource type="PackedScene" uid="uid://dmqjonl673mxd" path="res://gameplay/race/course/buoys/buoy.tscn" id="67_diovn"]
 [ext_resource type="Script" uid="uid://bi5r7j71qd8fp" path="res://gameplay/race/boundary/boundary_wipeout_controller_3d.gd" id="68_bwc3d"]
 [ext_resource type="PackedScene" uid="uid://dqbhmwx6tvlx0" path="res://world/vegetation/trees/tree_impostor_multimesh.tscn" id="69_4s1c0"]
 [ext_resource type="Resource" uid="uid://e5jcb4ue4bh7" path="res://world/water/ocean/events/boundary_tsunami_event_wave.tres" id="69_btsun"]
-[ext_resource type="Material" uid="uid://cblg21bayh8pb" path="res://world/vegetation/trees/materials/tree_impostor_linden_a.tres" id="74_lh2je"]
 [ext_resource type="Script" uid="uid://bcftfjsjn8hc4" path="res://world/vegetation/trees/tree_projected_shadow_baker.gd" id="74_qsxv0"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_f0815"]
@@ -231,7 +229,7 @@ shader_parameter/breakup = 0.0
 material = ExtResource("15_6i7i5")
 size = Vector2(10000, 10000)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_lh2je"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4s1c0"]
 resource_local_to_scene = true
 render_priority = 0
 shader = ExtResource("41_48bym")
@@ -260,8 +258,8 @@ shader_parameter/wave_direction_a = Vector2(0.86012906, 0.5100765)
 shader_parameter/wave_direction_b = Vector2(-0.38176018, 0.92426145)
 shader_parameter/wave_travel_speed_a = 9.0000004321348
 shader_parameter/wave_travel_speed_b = 4.0000003576287995
-shader_parameter/wave_mean_a = 0.3510000166725
-shader_parameter/wave_mean_b = 0.2610000123975
+shader_parameter/wave_mean_a = 0.202000009595
+shader_parameter/wave_mean_b = 0.122000005795
 shader_parameter/geometry_normal_step = 2.0
 shader_parameter/ocean_geometry_normal_quality = 2
 shader_parameter/calm_zone_count = 0
@@ -347,7 +345,7 @@ shader_parameter/surface_normal_strength = 0.62
 shader_parameter/surface_flow_direction_a = Vector2(0.82, 0.57)
 shader_parameter/surface_flow_direction_b = Vector2(-0.46, 0.89)
 shader_parameter/surface_flow_speed_a = 0.01999993249695997
-shader_parameter/surface_flow_speed_b = -0.010000066832479781
+shader_parameter/surface_flow_speed_b = -0.01000006683247978
 shader_parameter/surface_warp_world_size = 46.0
 shader_parameter/surface_warp_strength = 2.4
 shader_parameter/surface_detail_fade_start = 130.0
@@ -407,24 +405,24 @@ shader_parameter/ocean_far_wave_amplitude_ratio = 0.08
 shader_parameter/ocean_debug_show_rings = false
 shader_parameter/custom_ssr_enabled = true
 shader_parameter/custom_ssr_steps = 24
-shader_parameter/custom_ssr_refinement_steps = 4
-shader_parameter/custom_ssr_strength = 1.499999966472
+shader_parameter/custom_ssr_refinement_steps = 5
+shader_parameter/custom_ssr_strength = 0.61999998614176
 shader_parameter/custom_ssr_max_distance = 500.0
-shader_parameter/custom_ssr_start_bias = 0.2
+shader_parameter/custom_ssr_start_bias = 0.00999999977648
 shader_parameter/custom_ssr_base_step = 0.35
 shader_parameter/custom_ssr_step_growth = 1.1
 shader_parameter/custom_ssr_thickness = 1.1
 shader_parameter/custom_ssr_min_fresnel = 0.0
-shader_parameter/custom_ssr_edge_fade = 0.020000000950000003
+shader_parameter/custom_ssr_edge_fade = 0.02000000095
 shader_parameter/custom_ssr_distance_fade_start = 190.0
 shader_parameter/custom_ssr_distance_fade_end = 300.0
-shader_parameter/custom_ssr_blur_lod = 2.0000000298024
+shader_parameter/custom_ssr_blur_lod = 0.15
 shader_parameter/custom_ssr_upward_rejection = -0.5
 shader_parameter/custom_ssr_trace_normal_flatten = 0.72
 shader_parameter/custom_ssr_hit_distortion = 0.0035
 shader_parameter/custom_ssr_minimum_hit_visibility = 0.55
-shader_parameter/custom_ssr_hit_contrast = 1.1
-shader_parameter/custom_ssr_hit_brightness = 1.05
+shader_parameter/custom_ssr_hit_contrast = 0.5
+shader_parameter/custom_ssr_hit_brightness = 0.2999999988824
 shader_parameter/custom_ssr_debug_mode = 0
 shader_parameter/mirrored_reflection_enabled = false
 shader_parameter/mirrored_reflection_strength = 0.66999998502416
@@ -444,8 +442,8 @@ shader_parameter/mirrored_reflection_saturation = 0.01999999955296
 shader_parameter/mirrored_reflection_contrast = 1.18999998457712
 shader_parameter/mirrored_reflection_brightness = 0.51999999396496
 shader_parameter/reflection_wave_distortion_enabled = true
-shader_parameter/reflection_macro_distortion_x = 0.1150000054625
-shader_parameter/reflection_macro_distortion_y = 0.10850000515375
+shader_parameter/reflection_macro_distortion_x = 0.13250000629375
+shader_parameter/reflection_macro_distortion_y = 0.13150000624625
 shader_parameter/reflection_macro_slope_influence = 3.999999910592
 shader_parameter/reflection_macro_height_influence = 0.8
 shader_parameter/reflection_micro_distortion = 0.01059999973182
@@ -459,7 +457,7 @@ shader_parameter/custom_reflection_minimum_surface_weight = 0.34
 shader_parameter/custom_reflection_maximum_surface_weight = 0.88
 shader_parameter/custom_reflection_emission_strength = 0.1499999966472
 
-[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_qj7v8"]
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_qsxv0"]
 resource_local_to_scene = true
 blend_mode = 1
 
@@ -486,7 +484,7 @@ point_count = 3
 [sub_resource type="CurveTexture" id="CurveTexture_bubble_shrink"]
 curve = SubResource("Curve_bubble_shrink")
 
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_8enb2"]
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_lh2je"]
 resource_local_to_scene = true
 particle_flag_disable_z = true
 emission_shape_offset = Vector3(0, 600, 0)
@@ -509,7 +507,7 @@ turbulence_influence_max = 0.082
 turbulence_initial_displacement_min = -47.5
 turbulence_initial_displacement_max = 94.5
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_xn4fe"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_8enb2"]
 resource_local_to_scene = true
 render_priority = -127
 shader = ExtResource("55_gee3e")
@@ -539,24 +537,20 @@ material = ExtResource("66_1mjlu")
 left_to_right = 1.0
 size = Vector3(17.155, 5.85, 9.015)
 
-[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_xveky"]
-friction = 0.0
-
-[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_djt2o"]
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_4s1c0"]
 data = PackedVector3Array(8.577499, 2.925, 4.5074997, 8.577499, -2.925, 4.5074997, -8.577499, -2.925, 4.5074997, 8.577499, 2.925, -4.5074997, -8.577499, -2.925, -4.5074997, 8.577499, -2.925, -4.5074997, 8.577499, 2.925, 4.5074997, 8.577499, 2.925, -4.5074997, 8.577499, -2.925, 4.5074997, 8.577499, 2.925, -4.5074997, 8.577499, -2.925, -4.5074997, 8.577499, -2.925, 4.5074997, 8.577499, 2.925, -4.5074997, 8.577499, 2.925, 4.5074997, -8.577499, -2.925, -4.5074997, 8.577499, 2.925, 4.5074997, -8.577499, -2.925, 4.5074997, -8.577499, -2.925, -4.5074997, -8.577499, -2.925, 4.5074997, 8.577499, -2.925, 4.5074997, -8.577499, -2.925, -4.5074997, 8.577499, -2.925, 4.5074997, 8.577499, -2.925, -4.5074997, -8.577499, -2.925, -4.5074997)
 
-[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_rtwgq"]
-friction = 0.0
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_qsxv0"]
+data = PackedVector3Array(8.577499, 2.925, 4.5074997, 8.577499, -2.925, 4.5074997, -8.577499, -2.925, 4.5074997, 8.577499, 2.925, -4.5074997, -8.577499, -2.925, -4.5074997, 8.577499, -2.925, -4.5074997, 8.577499, 2.925, 4.5074997, 8.577499, 2.925, -4.5074997, 8.577499, -2.925, 4.5074997, 8.577499, 2.925, -4.5074997, 8.577499, -2.925, -4.5074997, 8.577499, -2.925, 4.5074997, 8.577499, 2.925, -4.5074997, 8.577499, 2.925, 4.5074997, -8.577499, -2.925, -4.5074997, 8.577499, 2.925, 4.5074997, -8.577499, -2.925, 4.5074997, -8.577499, -2.925, -4.5074997, -8.577499, -2.925, 4.5074997, 8.577499, -2.925, 4.5074997, -8.577499, -2.925, -4.5074997, 8.577499, -2.925, 4.5074997, 8.577499, -2.925, -4.5074997, -8.577499, -2.925, -4.5074997)
 
-[sub_resource type="QuadMesh" id="QuadMesh_wwatn"]
-material = ExtResource("74_lh2je")
-size = Vector2(2, 2)
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_lh2je"]
+data = PackedVector3Array(8.577499, 2.925, 4.5074997, 8.577499, -2.925, 4.5074997, -8.577499, -2.925, 4.5074997, 8.577499, 2.925, -4.5074997, -8.577499, -2.925, -4.5074997, 8.577499, -2.925, -4.5074997, 8.577499, 2.925, 4.5074997, 8.577499, 2.925, -4.5074997, 8.577499, -2.925, 4.5074997, 8.577499, 2.925, -4.5074997, 8.577499, -2.925, -4.5074997, 8.577499, -2.925, 4.5074997, 8.577499, 2.925, -4.5074997, 8.577499, 2.925, 4.5074997, -8.577499, -2.925, -4.5074997, 8.577499, 2.925, 4.5074997, -8.577499, -2.925, 4.5074997, -8.577499, -2.925, -4.5074997, -8.577499, -2.925, 4.5074997, 8.577499, -2.925, 4.5074997, -8.577499, -2.925, -4.5074997, 8.577499, -2.925, 4.5074997, 8.577499, -2.925, -4.5074997, -8.577499, -2.925, -4.5074997)
 
-[sub_resource type="MultiMesh" id="MultiMesh_6ayrq"]
-resource_local_to_scene = true
-transform_format = 1
-use_custom_data = true
-mesh = SubResource("QuadMesh_wwatn")
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_qj7v8"]
+data = PackedVector3Array(8.577499, 2.925, 4.5074997, 8.577499, -2.925, 4.5074997, -8.577499, -2.925, 4.5074997, 8.577499, 2.925, -4.5074997, -8.577499, -2.925, -4.5074997, 8.577499, -2.925, -4.5074997, 8.577499, 2.925, 4.5074997, 8.577499, 2.925, -4.5074997, 8.577499, -2.925, 4.5074997, 8.577499, 2.925, -4.5074997, 8.577499, -2.925, -4.5074997, 8.577499, -2.925, 4.5074997, 8.577499, 2.925, -4.5074997, 8.577499, 2.925, 4.5074997, -8.577499, -2.925, -4.5074997, 8.577499, 2.925, 4.5074997, -8.577499, -2.925, 4.5074997, -8.577499, -2.925, -4.5074997, -8.577499, -2.925, 4.5074997, 8.577499, -2.925, 4.5074997, -8.577499, -2.925, -4.5074997, 8.577499, -2.925, 4.5074997, 8.577499, -2.925, -4.5074997, -8.577499, -2.925, -4.5074997)
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_8enb2"]
+data = PackedVector3Array(8.577499, 2.925, 4.5074997, 8.577499, -2.925, 4.5074997, -8.577499, -2.925, 4.5074997, 8.577499, 2.925, -4.5074997, -8.577499, -2.925, -4.5074997, 8.577499, -2.925, -4.5074997, 8.577499, 2.925, 4.5074997, 8.577499, 2.925, -4.5074997, 8.577499, -2.925, 4.5074997, 8.577499, 2.925, -4.5074997, 8.577499, -2.925, -4.5074997, 8.577499, -2.925, 4.5074997, 8.577499, 2.925, -4.5074997, 8.577499, 2.925, 4.5074997, -8.577499, -2.925, -4.5074997, 8.577499, 2.925, 4.5074997, -8.577499, -2.925, 4.5074997, -8.577499, -2.925, -4.5074997, -8.577499, -2.925, 4.5074997, 8.577499, -2.925, 4.5074997, -8.577499, -2.925, -4.5074997, 8.577499, -2.925, 4.5074997, 8.577499, -2.925, -4.5074997, -8.577499, -2.925, -4.5074997)
 
 [node name="ParadiseIsland" type="Node3D" unique_id=2091620036]
 script = ExtResource("1_w5ddm")
@@ -575,8 +569,8 @@ kloofendal_48d_sky = SubResource("Sky_s3uqp")
 overcast_soil_sky = SubResource("Sky_e7rpt")
 sky_preset = 2
 custom_sky = SubResource("Sky_lusr1")
-sky_energy_multiplier = 0.45
-ambient_sky_contribution = 0.2
+sky_energy_multiplier = 0.8
+ambient_sky_contribution = 1.0
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="Environment" unique_id=951090327 groups=["graphics_quality_environment"]]
 environment = ExtResource("10_lh2je")
@@ -706,15 +700,15 @@ mesh = SubResource("PlaneMesh_tpwhi")
 [node name="WaterIntegration" type="Node3D" parent="." unique_id=1889730552]
 
 [node name="Ocean" parent="WaterIntegration" unique_id=1340264265 instance=ExtResource("40_5h17r")]
-ocean_material = SubResource("ShaderMaterial_lh2je")
+ocean_material = SubResource("ShaderMaterial_4s1c0")
 wave_world_size_a = 311.5
 wave_world_size_b = 200.5
 wave_amplitude_a = 0.98999997787152
 wave_amplitude_b = 0.88999998010672
 wave_travel_speed_a = 9.0000004321348
 wave_travel_speed_b = 4.0000003576287995
-wave_mean_a = 0.3510000166725
-wave_mean_b = 0.2610000123975
+wave_mean_a = 0.202000009595
+wave_mean_b = 0.122000005795
 normal_sample_step = 2.0
 landing_wave_minimum_amplitude = 1.0
 landing_wave_maximum_amplitude = 1.0
@@ -860,11 +854,7 @@ left_hand_rotation_correction_degrees = Vector3(-18.44, 32.09, -21.11)
 [node name="GripFingers" parent="Gameplay/JetSki/VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/rider_bot/SKEL_Rider/Skeleton3D" index="7" unique_id=940560861]
 left_grip_strength = 0.75
 
-[node name="rider_01_body" parent="Gameplay/JetSki/VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/rider_bot/SKEL_Rider/Skeleton3D" index="9" unique_id=1837524736]
-visible = true
-
 [node name="rider_02_body" parent="Gameplay/JetSki/VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/rider_bot/SKEL_Rider/Skeleton3D" index="10" unique_id=417895057]
-visible = false
 gi_mode = 2
 
 [node name="AnimationTree" parent="Gameplay/JetSki/VisualRoot/RiderMount/RiderAssetRoot/RiderRig" index="2" unique_id=187453891]
@@ -904,18 +894,18 @@ grip_hard_extension_ratio = 1.1
 [node name="CameraTarget" parent="Gameplay/JetSki" index="10" unique_id=1770908444]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0.35)
 
-[node name="VehicleWaterEffects3D" parent="Gameplay/JetSki/Effects" parent_id_path=PackedInt32Array(328650943, 1733691099) index="0" unique_id=1574631450]
+[node name="Effects" parent="Gameplay/JetSki" index="11" unique_id=1733691099]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.1051483)
+
+[node name="VehicleWaterEffects3D" parent="Gameplay/JetSki/Effects" index="0" unique_id=1574631450]
 spray_minimum_scale = 0.001
-spray_maximum_scale = 0.497
-spray_growth_multiplier = 1.25
+spray_maximum_scale = 0.553
 spray_rotation_speed = 125.0
-spray_quad_size = Vector2(0.54, 0.6)
-spray_birth_scale = 1.0
-spray_color = Color(0.83137256, 0.7294118, 0.6, 0.101960786)
+spray_emission_box_size = Vector3(0.92, 0.285, 0)
+spray_hull_inset = 0.16
+spray_color = Color(0.80238134, 0.9395515, 0.8544541, 0.1764706)
 spray_edge_color = Color(1, 1, 1, 0.14509805)
-spray_irregularity = 0.72
-spray_core_opacity = 0.1
-spray_sprite_emission = 0.0
+spray_sprite_emission = 0.11
 splash_surface_offset = 0.381
 impact_minimum_amount = 300
 impact_maximum_amount = 900
@@ -934,7 +924,7 @@ impact_irregularity = 1.0
 impact_core_opacity = 0.27
 impact_sprite_emission = 0.0
 
-[node name="TurbineExhaust" parent="Gameplay/JetSki/Effects" parent_id_path=PackedInt32Array(328650943, 1733691099) index="1" unique_id=1478477575]
+[node name="TurbineExhaust" parent="Gameplay/JetSki/Effects" index="1" unique_id=1478477575]
 full_core_length = 2.0
 jet_foam_core_strength = 2.0
 jet_foam_core_opacity = 1.0
@@ -985,7 +975,7 @@ base_distance = 2.0
 base_height = 0.6666667
 base_look_ahead = 2.0
 look_height_offset = 0.0
-position_sharpness = 6.109999999999999
+position_sharpness = 13.31
 rotation_sharpness = 9.01
 distance_sharpness = 2.01
 distance_extension_end_speed = 100.0
@@ -1026,7 +1016,7 @@ editor_preview_mode = 0
 
 [node name="EntryBubbles" parent="CameraSystem/ChaseCamera/Camera3D/UnderwaterEffect/WaterCrossingOverlay" index="0"]
 visible = false
-material = SubResource("CanvasItemMaterial_qj7v8")
+material = SubResource("CanvasItemMaterial_qsxv0")
 position = Vector2(1, 1.76)
 amount = 500
 texture = SubResource("GradientTexture2D_pl0kw")
@@ -1034,10 +1024,10 @@ lifetime = 20.0
 speed_scale = 8.0
 explosiveness = 1.0
 randomness = 1.0
-process_material = SubResource("ParticleProcessMaterial_8enb2")
+process_material = SubResource("ParticleProcessMaterial_lh2je")
 
 [node name="UnderwaterPostProcess" parent="CameraSystem/ChaseCamera/Camera3D/UnderwaterEffect" index="1" unique_id=1854893749]
-material_override = SubResource("ShaderMaterial_xn4fe")
+material_override = SubResource("ShaderMaterial_8enb2")
 
 [node name="Atrezzo" type="Node3D" parent="." unique_id=1365592301]
 
@@ -1059,64 +1049,52 @@ transform = Transform3D(0.30513912, 0, -0.3960936, 0, 0.5, 0, 0.3960936, 0, 0.30
 [node name="Boat_2" parent="Atrezzo" unique_id=1280069477 instance=ExtResource("61_l1nq5")]
 transform = Transform3D(0.5118447, 0, 1.0853641, 0, 1.2, 0, -1.0853641, 0, 0.5118447, 775.81805, -10.093709, 799.5493)
 
-[node name="PalmsMultiMesh" parent="Atrezzo" unique_id=302165511 instance=ExtResource("65_20vi3")]
-transform = Transform3D(0.86, 0, 0, 0, 0.86, 0, 0, 0, 0.86, 149, 1.8, 120.1001)
-visible = false
-metadata/instance_count = 7717
-metadata/sector_count = 14
-metadata/multimesh_count = 98
-
 [node name="Ramps" type="Node3D" parent="Atrezzo" unique_id=1500221707]
 
 [node name="Jump1" type="MeshInstance3D" parent="Atrezzo/Ramps" unique_id=1190177101]
 transform = Transform3D(0.023030335, 0, -0.4894585, 0, 0.49, 0, 0.4894585, 0, 0.023030335, 189.9109, 0.9129782, 2.8569958)
 mesh = SubResource("PrismMesh_tpwhi")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="Atrezzo/Ramps/Jump1" unique_id=1563769446]
-physics_material_override = SubResource("PhysicsMaterial_xveky")
+[node name="StaticBody3D" type="StaticBody3D" parent="Atrezzo/Ramps/Jump1" unique_id=878156552]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Atrezzo/Ramps/Jump1/StaticBody3D" unique_id=30672136]
-shape = SubResource("ConcavePolygonShape3D_djt2o")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Atrezzo/Ramps/Jump1/StaticBody3D" unique_id=464936520]
+shape = SubResource("ConcavePolygonShape3D_4s1c0")
 
 [node name="Jump4" type="MeshInstance3D" parent="Atrezzo/Ramps" unique_id=1929662083]
 transform = Transform3D(0.023030335, 0, -0.4894585, 0, 0.49, 0, 0.4894585, 0, 0.023030335, 223.61113, 0.9129782, -94.87814)
 mesh = SubResource("PrismMesh_tpwhi")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="Atrezzo/Ramps/Jump4" unique_id=1041393990]
-physics_material_override = SubResource("PhysicsMaterial_rtwgq")
+[node name="StaticBody3D" type="StaticBody3D" parent="Atrezzo/Ramps/Jump4" unique_id=2125274910]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Atrezzo/Ramps/Jump4/StaticBody3D" unique_id=780011347]
-shape = SubResource("ConcavePolygonShape3D_djt2o")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Atrezzo/Ramps/Jump4/StaticBody3D" unique_id=947975326]
+shape = SubResource("ConcavePolygonShape3D_qsxv0")
 
 [node name="Jump5" type="MeshInstance3D" parent="Atrezzo/Ramps" unique_id=601217171]
 transform = Transform3D(0.023030335, 0, -0.4894585, 0, 0.49, 0, 0.4894585, 0, 0.023030335, 184.03395, 0.9129782, -209.91396)
 mesh = SubResource("PrismMesh_tpwhi")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="Atrezzo/Ramps/Jump5" unique_id=1185602380]
-physics_material_override = SubResource("PhysicsMaterial_rtwgq")
+[node name="StaticBody3D" type="StaticBody3D" parent="Atrezzo/Ramps/Jump5" unique_id=2123926177]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Atrezzo/Ramps/Jump5/StaticBody3D" unique_id=359322754]
-shape = SubResource("ConcavePolygonShape3D_djt2o")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Atrezzo/Ramps/Jump5/StaticBody3D" unique_id=1546507335]
+shape = SubResource("ConcavePolygonShape3D_lh2je")
 
 [node name="Jump2" type="MeshInstance3D" parent="Atrezzo/Ramps" unique_id=982363763]
 transform = Transform3D(0.023030335, 0, -0.4894585, 0, 0.49, 0, 0.4894585, 0, 0.023030335, 214.77977, 0.9129782, 101.30986)
 mesh = SubResource("PrismMesh_tpwhi")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="Atrezzo/Ramps/Jump2" unique_id=363621744]
-physics_material_override = SubResource("PhysicsMaterial_rtwgq")
+[node name="StaticBody3D" type="StaticBody3D" parent="Atrezzo/Ramps/Jump2" unique_id=613493192]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Atrezzo/Ramps/Jump2/StaticBody3D" unique_id=1888373563]
-shape = SubResource("ConcavePolygonShape3D_djt2o")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Atrezzo/Ramps/Jump2/StaticBody3D" unique_id=202874495]
+shape = SubResource("ConcavePolygonShape3D_qj7v8")
 
 [node name="Jump3" type="MeshInstance3D" parent="Atrezzo/Ramps" unique_id=1836126976]
 transform = Transform3D(0.023030335, 0, -0.4894585, 0, 0.49, 0, 0.4894585, 0, 0.023030335, 177.71559, 0.9129782, 266.83514)
 mesh = SubResource("PrismMesh_tpwhi")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="Atrezzo/Ramps/Jump3" unique_id=2017955259]
-physics_material_override = SubResource("PhysicsMaterial_rtwgq")
+[node name="StaticBody3D" type="StaticBody3D" parent="Atrezzo/Ramps/Jump3" unique_id=1313151649]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Atrezzo/Ramps/Jump3/StaticBody3D" unique_id=1708739139]
-shape = SubResource("ConcavePolygonShape3D_djt2o")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Atrezzo/Ramps/Jump3/StaticBody3D" unique_id=1688066449]
+shape = SubResource("ConcavePolygonShape3D_8enb2")
 
 [node name="Ramp1" parent="Atrezzo/Ramps" unique_id=178349614 instance=ExtResource("57_dkdos")]
 transform = Transform3D(-1.7405282, 0, 0.2854636, 0, 1.3100001, 0, -0.12484563, 0, -3.9797747, -319.45636, -4.256017, 63.17799)
@@ -1278,6 +1256,7 @@ buoy_clearance = 20.0
 
 [node name="VegetationQualityController" type="Node" parent="." unique_id=1324789763 groups=["graphics_quality_vegetation"]]
 script = ExtResource("3_i77vt")
+sector_root_path = NodePath("")
 
 [node name="Vegetation" type="Node3D" parent="." unique_id=572434429]
 
@@ -1296,8 +1275,6 @@ max_scale = 15.0
 ray_above_height = 500.0
 ray_below_depth = 600.0
 minimum_height_above_water = 3.5
-tree_shadows_enabled = false
-canopy_enabled = false
 canopy_shadow_strength = 1.0
 canopy_per_tree_density = 1.0
 canopy_radius_factor = 0.1
@@ -1320,8 +1297,6 @@ max_scale = 15.0
 ray_above_height = 500.0
 ray_below_depth = 600.0
 minimum_height_above_water = 3.5
-tree_shadows_enabled = false
-canopy_enabled = false
 canopy_shadow_strength = 1.0
 canopy_per_tree_density = 1.0
 canopy_radius_factor = 0.1
@@ -1331,39 +1306,6 @@ canopy_density_gamma = 0.25
 canopy_texture_resolution = 64
 canopy_vertical_margin = 0.1
 canopy_surface_normal_fade = 0.45
-
-[node name="Trees" parent="Vegetation/TreesImpostorA/TreeImpostorMultimesh2" index="0" unique_id=184116622]
-multimesh = SubResource("MultiMesh_6ayrq")
-target_count = 250
-area_radius_z = 167.0
-min_spacing = 5.35
-max_spacing = 29.0
-min_scale = 6.0
-max_scale = 15.0
-ray_above_height = 500.0
-ray_below_depth = 600.0
-minimum_height_above_water = 3.5
-
-[node name="TreeShadows" parent="Vegetation/TreesImpostorA/TreeImpostorMultimesh2" index="1" unique_id=1425367268]
-visible = false
-multimesh = SubResource("MultiMesh_6ayrq")
-
-[node name="CanopyAmbientShadow" parent="Vegetation/TreesImpostorA/TreeImpostorMultimesh2" index="2" unique_id=1054602443]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.810432, 51.02527, 99.19899)
-size = Vector3(177.01628, 24.671919, 138.47403)
-normal_fade = 0.45
-upper_fade = 0.0
-lower_fade = 0.0
-ambient_shadow_enabled = false
-shadow_strength = 1.0
-per_tree_density = 1.0
-canopy_radius_factor = 0.1
-canopy_extra_radius = 0.0
-canopy_falloff_power = 0.25
-density_gamma = 0.25
-texture_resolution = 64
-vertical_margin = 0.1
-surface_normal_fade = 0.45
 
 [node name="TreeImpostorMultimesh3" parent="Vegetation/TreesImpostorA" unique_id=518976443 instance=ExtResource("69_4s1c0")]
 physics_interpolation_mode = 2
@@ -1378,8 +1320,6 @@ max_scale = 15.0
 ray_above_height = 500.0
 ray_below_depth = 600.0
 minimum_height_above_water = 3.5
-tree_shadows_enabled = false
-canopy_enabled = false
 canopy_shadow_strength = 1.0
 canopy_per_tree_density = 1.0
 canopy_radius_factor = 0.1
@@ -1404,8 +1344,6 @@ ray_above_height = 500.0
 ray_below_depth = 600.0
 max_ground_slope_degrees = 30.0
 minimum_height_above_water = 3.5
-tree_shadows_enabled = false
-canopy_enabled = false
 canopy_shadow_strength = 1.0
 canopy_per_tree_density = 1.0
 canopy_radius_factor = 0.1
@@ -1430,8 +1368,6 @@ ray_above_height = 500.0
 ray_below_depth = 600.0
 max_ground_slope_degrees = 30.0
 minimum_height_above_water = 3.5
-tree_shadows_enabled = false
-canopy_enabled = false
 canopy_shadow_strength = 1.0
 canopy_per_tree_density = 1.0
 canopy_radius_factor = 0.1
@@ -1455,8 +1391,6 @@ ray_above_height = 500.0
 ray_below_depth = 600.0
 max_ground_slope_degrees = 30.0
 minimum_height_above_water = 3.5
-tree_shadows_enabled = false
-canopy_enabled = false
 canopy_shadow_strength = 1.0
 canopy_per_tree_density = 1.0
 canopy_radius_factor = 0.1
@@ -1483,8 +1417,6 @@ max_scale = 15.0
 ray_above_height = 500.0
 ray_below_depth = 600.0
 minimum_height_above_water = 3.5
-tree_shadows_enabled = false
-canopy_enabled = false
 canopy_shadow_strength = 1.0
 canopy_per_tree_density = 1.0
 canopy_radius_factor = 0.1
@@ -1507,8 +1439,6 @@ max_scale = 15.0
 ray_above_height = 500.0
 ray_below_depth = 600.0
 minimum_height_above_water = 3.5
-tree_shadows_enabled = false
-canopy_enabled = false
 canopy_shadow_strength = 1.0
 canopy_per_tree_density = 1.0
 canopy_radius_factor = 0.1
@@ -1532,8 +1462,6 @@ max_scale = 15.0
 ray_above_height = 500.0
 ray_below_depth = 600.0
 minimum_height_above_water = 3.5
-tree_shadows_enabled = false
-canopy_enabled = false
 canopy_shadow_strength = 1.0
 canopy_per_tree_density = 1.0
 canopy_radius_factor = 0.1
@@ -1558,8 +1486,6 @@ ray_above_height = 500.0
 ray_below_depth = 600.0
 max_ground_slope_degrees = 30.0
 minimum_height_above_water = 3.5
-tree_shadows_enabled = false
-canopy_enabled = false
 canopy_shadow_strength = 1.0
 canopy_per_tree_density = 1.0
 canopy_radius_factor = 0.1
@@ -1584,8 +1510,6 @@ ray_above_height = 500.0
 ray_below_depth = 600.0
 max_ground_slope_degrees = 30.0
 minimum_height_above_water = 3.5
-tree_shadows_enabled = false
-canopy_enabled = false
 canopy_shadow_strength = 1.0
 canopy_per_tree_density = 1.0
 canopy_radius_factor = 0.1
@@ -1610,8 +1534,6 @@ ray_above_height = 500.0
 ray_below_depth = 600.0
 max_ground_slope_degrees = 30.0
 minimum_height_above_water = 3.5
-tree_shadows_enabled = false
-canopy_enabled = false
 canopy_shadow_strength = 1.0
 canopy_per_tree_density = 1.0
 canopy_radius_factor = 0.1
@@ -1629,17 +1551,6 @@ terrain_mesh_path = NodePath("../TerrainRoot/test_island/Terrain_Master_VIS")
 sun_light_path = NodePath("../Environment/DirectionalLight3D2")
 output_png_path = "uid://ip2r2uwxmiib"
 
-[node name="BakedTreeShadowDecal" type="Decal" parent="." unique_id=859169888]
-transform = Transform3D(0.8297349, -0.38038722, -0.40846726, 0, 0.73181343, -0.681505, 0.5581576, 0.56546855, 0.6072112, 134.95612, -55.968857, 114.5202)
-visible = false
-size = Vector3(1577.5691, 1790.4777, 1577.5691)
-texture_albedo = ExtResource("12_qj7v8")
-emission_energy = 0.0
-albedo_mix = 0.8
-upper_fade = 0.0
-lower_fade = 0.0
-cull_mask = 1
-
 [editable path="TerrainRoot/test_island"]
 [editable path="TerrainRoot/test_island/PalmImpostorGroundShadows"]
 [editable path="Gameplay/JetSki"]
@@ -1648,4 +1559,3 @@ cull_mask = 1
 [editable path="Gameplay/JetSki/VisualRoot/RiderMount/RiderAssetRoot/RiderRig"]
 [editable path="Gameplay/JetSki/VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/rider_bot"]
 [editable path="CameraSystem/ChaseCamera"]
-[editable path="Vegetation/TreesImpostorA/TreeImpostorMultimesh2"]
