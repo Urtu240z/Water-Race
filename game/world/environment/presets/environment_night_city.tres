@@ -2,16 +2,16 @@
 
 [ext_resource type="Texture2D" uid="uid://olqtngkjhlxu" path="res://world/environment/sky/hdris/NightSkyHDRI003_4K_HDR.exr" id="1_hgyb2"]
 
-[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_54t36"]
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_yr2pm"]
 panorama = ExtResource("1_hgyb2")
 
-[sub_resource type="Sky" id="Sky_pfddk"]
-sky_material = SubResource("PanoramaSkyMaterial_54t36")
+[sub_resource type="Sky" id="Sky_a8k7l"]
+sky_material = SubResource("PanoramaSkyMaterial_yr2pm")
 
 [resource]
 background_mode = 2
 background_energy_multiplier = 0.2
-sky = SubResource("Sky_pfddk")
+sky = SubResource("Sky_a8k7l")
 sky_rotation = Vector3(0.07531096, 2.8094566, 0)
 ambient_light_source = 3
 reflected_light_source = 2

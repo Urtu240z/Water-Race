@@ -531,7 +531,7 @@ chase_camera_path = NodePath("CameraSystem/ChaseCamera")
 [node name="SkyEnvironmentController" type="Node" parent="Environment" unique_id=1243144762]
 script = ExtResource("4_jnsb7")
 additional_sky_paths = PackedStringArray()
-sky_energy_multiplier = 0.9500000000000001
+sky_energy_multiplier = 0.95
 ambient_sky_contribution = 0.25
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="Environment" unique_id=951090327 groups=["graphics_quality_environment"]]
@@ -937,13 +937,15 @@ base_distance = 2.0
 base_height = 0.6666667
 base_look_ahead = 2.0
 look_height_offset = 0.0
-position_sharpness = 13.31
+position_sharpness = 11.01
 rotation_sharpness = 9.01
 distance_sharpness = 2.01
 distance_extension_end_speed = 100.0
 maximum_speed_distance_extension = 0.0
 base_fov = 45.0
-maximum_speed_fov = 48.0
+maximum_speed_fov = 67.2
+fov_end_speed = 92.9
+fov_sharpness = 1.31
 airborne_extra_height = 0.1333333
 airborne_extra_distance = 0.1333333
 airborne_extra_look_ahead = 0.1333333

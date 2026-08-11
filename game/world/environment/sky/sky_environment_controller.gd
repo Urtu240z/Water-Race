@@ -79,7 +79,7 @@ var world_environment_path: NodePath = NodePath("../WorldEnvironment")
 		_request_sky_update()
 
 
-@export var additional_sky_paths: PackedStringArray = PackedStringArray():
+@export_file var additional_sky_paths: PackedStringArray = PackedStringArray():
 	set(value):
 		additional_sky_paths = value
 
