@@ -2,24 +2,24 @@
 
 [ext_resource type="Texture2D" uid="uid://dh4ygdetfbe7t" path="res://world/environment/sky/hdris/kloofendal_48d_partly_cloudy_puresky_4k.hdr" id="1_22wxh"]
 
-[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_qid03"]
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_22wxh"]
 panorama = ExtResource("1_22wxh")
 
-[sub_resource type="Sky" id="Sky_s3uqp"]
-sky_material = SubResource("PanoramaSkyMaterial_qid03")
+[sub_resource type="Sky" id="Sky_flklb"]
+sky_material = SubResource("PanoramaSkyMaterial_22wxh")
 process_mode = 1
 radiance_size = 5
 
 [resource]
 background_mode = 2
-background_energy_multiplier = 0.8
-sky = SubResource("Sky_s3uqp")
+background_energy_multiplier = 0.95
+sky = SubResource("Sky_flklb")
 ambient_light_source = 3
+ambient_light_sky_contribution = 0.25
 ambient_light_energy = 7.03
 reflected_light_source = 2
 tonemap_mode = 2
-tonemap_exposure = 1.1
-tonemap_white = 6.41
+tonemap_white = 1.74
 tonemap_agx_white = 16.5
 tonemap_agx_contrast = 1.42
 ssao_enabled = true
@@ -58,6 +58,4 @@ volumetric_fog_ambient_inject = 1.0
 volumetric_fog_sky_affect = 0.65
 volumetric_fog_temporal_reprojection_enabled = false
 adjustment_enabled = true
-adjustment_brightness = 0.9
-adjustment_contrast = 1.005
-adjustment_saturation = 0.98
+adjustment_saturation = 0.84

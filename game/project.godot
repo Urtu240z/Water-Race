@@ -21,12 +21,6 @@ config/icon="res://icon.svg"
 
 GraphicsQualityManager="*res://systems/graphics/graphics_quality_manager.gd"
 
-[debug]
-
-settings/stdout/print_fps=true
-settings/stdout/print_gpu_profile=true
-settings/stdout/verbose_stdout=true
-
 [display]
 
 window/stretch/mode="canvas_items"

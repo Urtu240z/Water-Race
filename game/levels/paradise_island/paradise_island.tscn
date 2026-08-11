@@ -4,11 +4,6 @@
 [ext_resource type="PackedScene" path="res://ui/pause_menu/pause_menu.tscn" id="2_slliy"]
 [ext_resource type="Script" uid="uid://bhgjw8t7kbunx" path="res://world/vegetation/vegetation_quality_controller.gd" id="3_i77vt"]
 [ext_resource type="Script" uid="uid://b6855v0gxv4ik" path="res://world/environment/sky/sky_environment_controller.gd" id="4_jnsb7"]
-[ext_resource type="Sky" uid="uid://bhe1h7h061jon" path="res://world/environment/sky/sky_original.tres" id="5_ert0j"]
-[ext_resource type="Texture2D" uid="uid://cq8kw5o6ssrwc" path="res://world/environment/sky/hdris/aristea_wreck_puresky_4k.hdr" id="6_ord5u"]
-[ext_resource type="Texture2D" uid="uid://dh4ygdetfbe7t" path="res://world/environment/sky/hdris/kloofendal_48d_partly_cloudy_puresky_4k.hdr" id="7_hb254"]
-[ext_resource type="Texture2D" uid="uid://b7kfjl0vvcloa" path="res://world/environment/sky/hdris/qwantani_dusk_1_puresky_4k.hdr" id="8_4s1c0"]
-[ext_resource type="Texture2D" uid="uid://cmg3mg3yih3d1" path="res://world/environment/sky/hdris/kloofendal_43d_clear_puresky_4k.hdr" id="9_qsxv0"]
 [ext_resource type="Environment" uid="uid://dxw5rtrc0obhl" path="res://world/environment/presets/environment_1.tres" id="10_lh2je"]
 [ext_resource type="PackedScene" uid="uid://b6twl23g087ar" path="res://levels/paradise_island/props/lights/hanging_light.glb" id="11_qj7v8"]
 [ext_resource type="Script" uid="uid://cs8r4h4yr3knc" path="res://levels/paradise_island/props/lights/hanging_light_sway_3d.gd" id="12_8enb2"]
@@ -74,34 +69,6 @@
 [ext_resource type="PackedScene" uid="uid://dqbhmwx6tvlx0" path="res://world/vegetation/trees/tree_impostor_multimesh.tscn" id="69_4s1c0"]
 [ext_resource type="Resource" uid="uid://e5jcb4ue4bh7" path="res://world/water/ocean/events/boundary_tsunami_event_wave.tres" id="69_btsun"]
 [ext_resource type="Script" uid="uid://bcftfjsjn8hc4" path="res://world/vegetation/trees/tree_projected_shadow_baker.gd" id="74_qsxv0"]
-
-[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_f0815"]
-panorama = ExtResource("6_ord5u")
-
-[sub_resource type="Sky" id="Sky_k0dft"]
-sky_material = SubResource("PanoramaSkyMaterial_f0815")
-
-[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_qid03"]
-panorama = ExtResource("7_hb254")
-
-[sub_resource type="Sky" id="Sky_s3uqp"]
-sky_material = SubResource("PanoramaSkyMaterial_qid03")
-process_mode = 1
-radiance_size = 5
-
-[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_r1j62"]
-panorama = ExtResource("8_4s1c0")
-
-[sub_resource type="Sky" id="Sky_e7rpt"]
-sky_material = SubResource("PanoramaSkyMaterial_r1j62")
-
-[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_kroct"]
-panorama = ExtResource("9_qsxv0")
-
-[sub_resource type="Sky" id="Sky_lusr1"]
-sky_material = SubResource("PanoramaSkyMaterial_kroct")
-process_mode = 1
-radiance_size = 5
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_tpwhi"]
 render_priority = 0
@@ -229,7 +196,7 @@ shader_parameter/breakup = 0.0
 material = ExtResource("15_6i7i5")
 size = Vector2(10000, 10000)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_4s1c0"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_i77vt"]
 resource_local_to_scene = true
 render_priority = 0
 shader = ExtResource("41_48bym")
@@ -457,7 +424,7 @@ shader_parameter/custom_reflection_minimum_surface_weight = 0.34
 shader_parameter/custom_reflection_maximum_surface_weight = 0.88
 shader_parameter/custom_reflection_emission_strength = 0.1499999966472
 
-[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_qsxv0"]
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_jnsb7"]
 resource_local_to_scene = true
 blend_mode = 1
 
@@ -484,7 +451,7 @@ point_count = 3
 [sub_resource type="CurveTexture" id="CurveTexture_bubble_shrink"]
 curve = SubResource("Curve_bubble_shrink")
 
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_lh2je"]
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_ert0j"]
 resource_local_to_scene = true
 particle_flag_disable_z = true
 emission_shape_offset = Vector3(0, 600, 0)
@@ -507,7 +474,7 @@ turbulence_influence_max = 0.082
 turbulence_initial_displacement_min = -47.5
 turbulence_initial_displacement_max = 94.5
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_8enb2"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ord5u"]
 resource_local_to_scene = true
 render_priority = -127
 shader = ExtResource("55_gee3e")
@@ -563,14 +530,9 @@ chase_camera_path = NodePath("CameraSystem/ChaseCamera")
 
 [node name="SkyEnvironmentController" type="Node" parent="Environment" unique_id=1243144762]
 script = ExtResource("4_jnsb7")
-original_sky = ExtResource("5_ert0j")
-aristea_wreck_sky = SubResource("Sky_k0dft")
-kloofendal_48d_sky = SubResource("Sky_s3uqp")
-overcast_soil_sky = SubResource("Sky_e7rpt")
-sky_preset = 2
-custom_sky = SubResource("Sky_lusr1")
-sky_energy_multiplier = 0.8
-ambient_sky_contribution = 1.0
+additional_sky_paths = PackedStringArray()
+sky_energy_multiplier = 0.9500000000000001
+ambient_sky_contribution = 0.25
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="Environment" unique_id=951090327 groups=["graphics_quality_environment"]]
 environment = ExtResource("10_lh2je")
@@ -700,7 +662,7 @@ mesh = SubResource("PlaneMesh_tpwhi")
 [node name="WaterIntegration" type="Node3D" parent="." unique_id=1889730552]
 
 [node name="Ocean" parent="WaterIntegration" unique_id=1340264265 instance=ExtResource("40_5h17r")]
-ocean_material = SubResource("ShaderMaterial_4s1c0")
+ocean_material = SubResource("ShaderMaterial_i77vt")
 wave_world_size_a = 311.5
 wave_world_size_b = 200.5
 wave_amplitude_a = 0.98999997787152
@@ -981,7 +943,7 @@ distance_sharpness = 2.01
 distance_extension_end_speed = 100.0
 maximum_speed_distance_extension = 0.0
 base_fov = 45.0
-maximum_speed_fov = 44.4
+maximum_speed_fov = 48.0
 airborne_extra_height = 0.1333333
 airborne_extra_distance = 0.1333333
 airborne_extra_look_ahead = 0.1333333
@@ -1016,7 +978,7 @@ editor_preview_mode = 0
 
 [node name="EntryBubbles" parent="CameraSystem/ChaseCamera/Camera3D/UnderwaterEffect/WaterCrossingOverlay" index="0"]
 visible = false
-material = SubResource("CanvasItemMaterial_qsxv0")
+material = SubResource("CanvasItemMaterial_jnsb7")
 position = Vector2(1, 1.76)
 amount = 500
 texture = SubResource("GradientTexture2D_pl0kw")
@@ -1024,10 +986,10 @@ lifetime = 20.0
 speed_scale = 8.0
 explosiveness = 1.0
 randomness = 1.0
-process_material = SubResource("ParticleProcessMaterial_lh2je")
+process_material = SubResource("ParticleProcessMaterial_ert0j")
 
 [node name="UnderwaterPostProcess" parent="CameraSystem/ChaseCamera/Camera3D/UnderwaterEffect" index="1" unique_id=1854893749]
-material_override = SubResource("ShaderMaterial_8enb2")
+material_override = SubResource("ShaderMaterial_ord5u")
 
 [node name="Atrezzo" type="Node3D" parent="." unique_id=1365592301]
 
