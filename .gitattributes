@@ -8,3 +8,4 @@
 *.ogg filter=lfs diff=lfs merge=lfs -text
 game/levels/paradise_island/terrain/materials/textures/*.res filter=lfs diff=lfs merge=lfs -text
 game/levels/gold_city/material_textures/*.res filter=lfs diff=lfs merge=lfs -text
+game/shared/material_textures/*.res filter=lfs diff=lfs merge=lfs -text

@@ -2,7 +2,8 @@
 
 ## Storage rule
 
-Level materials remain editable text resources:
+Materials remain editable text resources, whether they belong to a level,
+gameplay, a vehicle, a rider, a prop, UI, or another shared system:
 
 ```text
 material.tres
@@ -33,6 +34,17 @@ Gold City textures and manifest:
 res://levels/gold_city/material_textures/
 ```
 
+Shared gameplay and world resources:
+
+```text
+res://shared/material_textures/
+```
+
+Deduplication is global across these manifests. A migration reuses an existing
+binary texture when its compressed-payload hash already exists. Existing
+resources are not moved merely to centralize them, since that could invalidate
+UIDs or references.
+
 ## Migration and validation
 
 From the Godot project root (`Water Race/game`), run:
@@ -42,13 +54,17 @@ Godot --headless --path . --script res://dev/tools/externalize_material_textures
 Godot --path . --script res://dev/tools/validate_material_textures.gd -- paradise_island
 Godot --headless --path . --script res://dev/tools/externalize_material_textures.gd -- gold_city
 Godot --path . --script res://dev/tools/validate_material_textures.gd -- gold_city
+Godot --headless --path . --script res://dev/tools/externalize_material_textures.gd -- shared_common
+Godot --path . --script res://dev/tools/validate_material_textures.gd -- shared_common
 ```
 
-The generic migration tool scans only the configured material roots for the
-selected target. It preserves material text and UID, externalizes embedded
-portable textures, deduplicates by compressed-payload MD5, validates the
-decoded texture, and writes an `externalized_textures_manifest.json` beside the
-binary textures.
+The generic migration tool scans the configured material roots for a level
+target. The `shared_common` target instead derives its material set from the
+transitive dependency intersection of Paradise Island and Gold City. It
+preserves material text and UID, externalizes embedded portable textures,
+deduplicates by compressed-payload MD5 across all configured manifests,
+validates the decoded texture, and writes an
+`externalized_textures_manifest.json` beside the binary textures.
 
 The tool is idempotent. A second unchanged run must report:
 
@@ -70,7 +86,7 @@ loads and instantiates every configured GLB and the level scene.
 4. Run the migration tool. It will reuse an existing `.res` when the compressed
    payload is identical.
 5. Run the validator and confirm it reports no failures.
-6. Measure Paradise Island loading if the asset is large.
+6. Measure every affected startup or transition if the asset is shared or large.
 
 Do not manually convert the complete material to `.res`, export its texture to
 PNG, recompress it, regenerate mipmaps, or change import settings as part of

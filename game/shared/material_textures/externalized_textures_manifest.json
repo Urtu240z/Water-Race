@@ -1,0 +1,685 @@
+{
+  "format": 1,
+  "materials": [
+    {
+      "path": "res://gameplay/race/course/buoys/materials/buoy.tres",
+      "snapshot_md5": "39d8dc4f470e53abf8d4d6deb3c80d3d",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "1aa58fdf293072f464b9d409b89284fa",
+          "data_bytes": 1398128,
+          "decoded_md5": "c9d430fbbab592d0b17e02ec1dd30fd8",
+          "format": 22,
+          "height": 1024,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://shared/material_textures/shared_common_texture_1aa58fdf293072f464b9d409b89284fa.res",
+          "size_override": "Vector2(1024, 1024)",
+          "slot": "albedo_texture",
+          "width": 1024
+        }
+      ],
+      "uid": "uid://c5kmeskckaa30"
+    },
+    {
+      "path": "res://gameplay/race/course/ramps/materials/ramp_plastic.tres",
+      "snapshot_md5": "afc7fa1cc97c537f7cab88db6dbaac5e",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "8b6716e8285a2dee5bdde2096adb0660",
+          "data_bytes": 1398128,
+          "decoded_md5": "0f7bef30ae6e1aa91d56711336840307",
+          "format": 22,
+          "height": 1024,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://shared/material_textures/shared_common_texture_8b6716e8285a2dee5bdde2096adb0660.res",
+          "size_override": "Vector2(1024, 1024)",
+          "slot": "albedo_texture",
+          "width": 1024
+        },
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "f15712fd85ffccd68432750730a19c3c",
+          "data_bytes": 1398128,
+          "decoded_md5": "82a735dba4119e4745a4b43248bab616",
+          "format": 21,
+          "height": 1024,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://shared/material_textures/shared_common_texture_f15712fd85ffccd68432750730a19c3c.res",
+          "size_override": "Vector2(1024, 1024)",
+          "slot": "normal_texture",
+          "width": 1024
+        }
+      ],
+      "uid": "uid://bgtmqlgvo7tnw"
+    },
+    {
+      "path": "res://gameplay/race/course/ramps/materials/ramp_wood.tres",
+      "snapshot_md5": "ef8d19552d3d8250019d001f2ef28b4d",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "6bc9fe50264db91cf479d91b4640141f",
+          "data_bytes": 1398128,
+          "decoded_md5": "30934aefdb0ce1ac80fa6befbab96f9e",
+          "format": 22,
+          "height": 1024,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://shared/material_textures/shared_common_texture_6bc9fe50264db91cf479d91b4640141f.res",
+          "size_override": "Vector2(1024, 1024)",
+          "slot": "albedo_texture",
+          "width": 1024
+        },
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "7205ea451895d3e31730d207ed9292d2",
+          "data_bytes": 1398128,
+          "decoded_md5": "a7f5f0cd6c07d1629d548f2e2f5b7a0b",
+          "format": 22,
+          "height": 1024,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://shared/material_textures/shared_common_texture_7205ea451895d3e31730d207ed9292d2.res",
+          "size_override": "Vector2(1024, 1024)",
+          "slot": "metallic_texture",
+          "width": 1024
+        },
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "2d92977e521c81b7460043ed64a697d9",
+          "data_bytes": 1398128,
+          "decoded_md5": "da4d1978387da77b16b2480d4afd05e1",
+          "format": 21,
+          "height": 1024,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://shared/material_textures/shared_common_texture_2d92977e521c81b7460043ed64a697d9.res",
+          "size_override": "Vector2(1024, 1024)",
+          "slot": "normal_texture",
+          "width": 1024
+        },
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "7205ea451895d3e31730d207ed9292d2",
+          "data_bytes": 1398128,
+          "decoded_md5": "a7f5f0cd6c07d1629d548f2e2f5b7a0b",
+          "format": 22,
+          "height": 1024,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://shared/material_textures/shared_common_texture_7205ea451895d3e31730d207ed9292d2.res",
+          "size_override": "Vector2(1024, 1024)",
+          "slot": "roughness_texture",
+          "width": 1024
+        }
+      ],
+      "uid": "uid://i16lr5v7yvhg"
+    },
+    {
+      "path": "res://gameplay/vehicles/jet_ski_01/materials/jet_ski_01_handle_metal.tres",
+      "snapshot_md5": "0605c724049fc60436b62dc9bcd33e06",
+      "textures": [],
+      "uid": "uid://ckmrg210c03xk"
+    },
+    {
+      "path": "res://gameplay/vehicles/jet_ski_01/materials/jet_ski_01_hull.tres",
+      "snapshot_md5": "88cc65daf614b6f073c821671f8bdd95",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "e637316c0df228e908dc7adbe919360f",
+          "data_bytes": 22369648,
+          "decoded_md5": "a545470e14ea36b551791b02ebeeaa03",
+          "format": 22,
+          "height": 4096,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://shared/material_textures/shared_common_texture_e637316c0df228e908dc7adbe919360f.res",
+          "size_override": "Vector2(4096, 4096)",
+          "slot": "albedo_texture",
+          "width": 4096
+        }
+      ],
+      "uid": "uid://c1s2ru7ejmg4e"
+    },
+    {
+      "path": "res://world/props/boats/materials/boat_01_hull.tres",
+      "snapshot_md5": "e2e17b0c363a825d2731028e17443ef3",
+      "textures": [],
+      "uid": "uid://ckoqnl4do4b8f"
+    },
+    {
+      "path": "res://world/props/boats/materials/boat_01_railings.tres",
+      "snapshot_md5": "bd4579198f1650d0aec831537397aa06",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "f8bc7e7380799d07a9a60e13542dcdf9",
+          "data_bytes": 5466176,
+          "decoded_md5": "9f91a937f0d22cd79545ef267338cfae",
+          "format": 22,
+          "height": 2024,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://shared/material_textures/shared_common_texture_f8bc7e7380799d07a9a60e13542dcdf9.res",
+          "size_override": "Vector2(2024, 2024)",
+          "slot": "albedo_texture",
+          "width": 2024
+        }
+      ],
+      "uid": "uid://77welyu3jr8o"
+    },
+    {
+      "path": "res://world/props/boats/materials/boat_01_yatch.tres",
+      "snapshot_md5": "5344a3dc119474a7f865cb05fa5b6eea",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "3cbcc16487feee095720cc8c510122b2",
+          "data_bytes": 5466176,
+          "decoded_md5": "1395bb7e5414a4c35d3450f973598eec",
+          "format": 22,
+          "height": 2024,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://shared/material_textures/shared_common_texture_3cbcc16487feee095720cc8c510122b2.res",
+          "size_override": "Vector2(2024, 2024)",
+          "slot": "albedo_texture",
+          "width": 2024
+        }
+      ],
+      "uid": "uid://b2onsn35j5y6r"
+    },
+    {
+      "path": "res://world/props/boats/materials/boat_02_blinds_mini_blue.tres",
+      "snapshot_md5": "d3fa9a9c296b12831fb9a8c897c5ad14",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "3554ef010462ac6424627d463c33ca8c",
+          "data_bytes": 174800,
+          "decoded_md5": "231454e3073a5adf77a8a85c6d44335e",
+          "format": 22,
+          "height": 256,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://shared/material_textures/shared_common_texture_3554ef010462ac6424627d463c33ca8c.res",
+          "size_override": "Vector2(512, 256)",
+          "slot": "albedo_texture",
+          "width": 512
+        }
+      ],
+      "uid": "uid://b40dq8xpc1dyg"
+    },
+    {
+      "path": "res://world/props/boats/materials/boat_02_blinds_vertical_blue.tres",
+      "snapshot_md5": "865fe9c18c94cbdc9be525345cc937da",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "2e9badd51dbfea2ee50cd756a04c312a",
+          "data_bytes": 21872,
+          "decoded_md5": "a8bd92c257391ed4e4dc57007b8ec378",
+          "format": 22,
+          "height": 128,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://shared/material_textures/shared_common_texture_2e9badd51dbfea2ee50cd756a04c312a.res",
+          "size_override": "Vector2(128, 128)",
+          "slot": "albedo_texture",
+          "width": 128
+        }
+      ],
+      "uid": "uid://dc201bo0e747u"
+    },
+    {
+      "path": "res://world/props/boats/materials/boat_02_blue.tres",
+      "snapshot_md5": "722a70b3f5ec5a34d2180729393a1f48",
+      "textures": [],
+      "uid": "uid://b8anqodsmi1po"
+    },
+    {
+      "path": "res://world/props/boats/materials/boat_02_carpet_dots.tres",
+      "snapshot_md5": "f833013f7bf4f9be73a5510ac0fde80c",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "3f0637bb02462266518432c395bd01c2",
+          "data_bytes": 87408,
+          "decoded_md5": "788fcb3cadeb0e27a67b6ec3ff7299d2",
+          "format": 22,
+          "height": 256,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://shared/material_textures/shared_common_texture_3f0637bb02462266518432c395bd01c2.res",
+          "size_override": "Vector2(256, 256)",
+          "slot": "albedo_texture",
+          "width": 256
+        }
+      ],
+      "uid": "uid://s0kdaty6jalh"
+    },
+    {
+      "path": "res://world/props/boats/materials/boat_02_carpet_leaves.tres",
+      "snapshot_md5": "35fb36cc53d5dba86d1b58a7e97da325",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "1f51ca6179f32c158bd97f4c934bc78a",
+          "data_bytes": 87408,
+          "decoded_md5": "6f585adda9a947a2e3c48fd2ccdaa700",
+          "format": 22,
+          "height": 256,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://shared/material_textures/shared_common_texture_1f51ca6179f32c158bd97f4c934bc78a.res",
+          "size_override": "Vector2(256, 256)",
+          "slot": "albedo_texture",
+          "width": 256
+        }
+      ],
+      "uid": "uid://ckfjvgegev4u5"
+    },
+    {
+      "path": "res://world/props/boats/materials/boat_02_carpet_olive.tres",
+      "snapshot_md5": "0703278777493356ed4facb67b699db7",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "a579c18aa78436faa1238e022da9e9cf",
+          "data_bytes": 25264,
+          "decoded_md5": "0e4a6cb9da66c291758a0ba7830b17cb",
+          "format": 22,
+          "height": 156,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://shared/material_textures/shared_common_texture_a579c18aa78436faa1238e022da9e9cf.res",
+          "size_override": "Vector2(120, 156)",
+          "slot": "albedo_texture",
+          "width": 120
+        }
+      ],
+      "uid": "uid://b2t00xbhqmkrg"
+    },
+    {
+      "path": "res://world/props/boats/materials/boat_02_ceiling_drop.tres",
+      "snapshot_md5": "2d5aa3a739fb25582416b06357ca0368",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "e8294d81c08041a1c63c54de06de9f49",
+          "data_bytes": 21872,
+          "decoded_md5": "4527a0c4e6c370328cf403e314e045fa",
+          "format": 22,
+          "height": 128,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://shared/material_textures/shared_common_texture_e8294d81c08041a1c63c54de06de9f49.res",
+          "size_override": "Vector2(128, 128)",
+          "slot": "albedo_texture",
+          "width": 128
+        }
+      ],
+      "uid": "uid://blrfa4s0y3odm"
+    },
+    {
+      "path": "res://world/props/boats/materials/boat_02_coolgray.tres",
+      "snapshot_md5": "311edc8c8138ff5dfa1be2e494a08b66",
+      "textures": [],
+      "uid": "uid://bxt2ws8nne1ke"
+    },
+    {
+      "path": "res://world/props/boats/materials/boat_02_coral.tres",
+      "snapshot_md5": "14d5b67f779f0fdbe84ad4a86905c9ad",
+      "textures": [],
+      "uid": "uid://deyxi7itayxw8"
+    },
+    {
+      "path": "res://world/props/boats/materials/boat_02_cuadro.tres",
+      "snapshot_md5": "16b60de3da2c4168fa48c5347b8ec01b",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "db3c8af168e8f8777f2e7b87d99f0deb",
+          "data_bytes": 1010304,
+          "decoded_md5": "e0cba6e7c066141398c774712adb795c",
+          "format": 22,
+          "height": 635,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://shared/material_textures/shared_common_texture_db3c8af168e8f8777f2e7b87d99f0deb.res",
+          "size_override": "Vector2(1185, 635)",
+          "slot": "albedo_texture",
+          "width": 1185
+        }
+      ],
+      "uid": "uid://d4jsa1f07ovwj"
+    },
+    {
+      "path": "res://world/props/boats/materials/boat_02_glass_blue.tres",
+      "snapshot_md5": "8ed46bac43ad355d0135626fee0e87b3",
+      "textures": [],
+      "uid": "uid://pac6xklh1uai"
+    },
+    {
+      "path": "res://world/props/boats/materials/boat_02_glass_gray.tres",
+      "snapshot_md5": "92a5f34b6475e8bf6a8fa5540c891390",
+      "textures": [],
+      "uid": "uid://68inxlmqe14g"
+    },
+    {
+      "path": "res://world/props/boats/materials/boat_02_gray.tres",
+      "snapshot_md5": "9307164b56ebf1f76c7b6711aa72056a",
+      "textures": [],
+      "uid": "uid://b3b6pu34fnraq"
+    },
+    {
+      "path": "res://world/props/boats/materials/boat_02_lightsteelblue.tres",
+      "snapshot_md5": "da6cd26ab47b23831bd914949e9481b1",
+      "textures": [],
+      "uid": "uid://dfblwgpvdk1qd"
+    },
+    {
+      "path": "res://world/props/boats/materials/boat_02_metal_brushed.tres",
+      "snapshot_md5": "1b4eb7d965d6c3a0193ac5ec0a0fe0d1",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "25880bcb98cef1b071622b8dc4f8b8d3",
+          "data_bytes": 349552,
+          "decoded_md5": "fd637bb06c8079c6d2f3ed6b9f06d473",
+          "format": 22,
+          "height": 512,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://shared/material_textures/shared_common_texture_25880bcb98cef1b071622b8dc4f8b8d3.res",
+          "size_override": "Vector2(512, 512)",
+          "slot": "albedo_texture",
+          "width": 512
+        }
+      ],
+      "uid": "uid://bygidpkmrw5ob"
+    },
+    {
+      "path": "res://world/props/boats/materials/boat_02_metal_rust.tres",
+      "snapshot_md5": "dd00d2ccb4653c3033834f9e99e48b1a",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "2f29c75a30a24be6517b88c645843056",
+          "data_bytes": 44176,
+          "decoded_md5": "5d42b9ab32e7a9d8c0bdb6d920575d89",
+          "format": 22,
+          "height": 246,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://shared/material_textures/shared_common_texture_2f29c75a30a24be6517b88c645843056.res",
+          "size_override": "Vector2(130, 246)",
+          "slot": "albedo_texture",
+          "width": 130
+        }
+      ],
+      "uid": "uid://dat71bxbdgvjd"
+    },
+    {
+      "path": "res://world/props/boats/materials/boat_02_pool.tres",
+      "snapshot_md5": "e88687d5cd4be982a191e46ebfc387e7",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "aba48072838ea54d15f3cd0bb23bc6f0",
+          "data_bytes": 87408,
+          "decoded_md5": "c15325139266bf608eca099e1a6c30db",
+          "format": 22,
+          "height": 256,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/gold_city/material_textures/gold_city_texture_aba48072838ea54d15f3cd0bb23bc6f0.res",
+          "size_override": "Vector2(256, 256)",
+          "slot": "albedo_texture",
+          "width": 256
+        }
+      ],
+      "uid": "uid://b60pus766w87s"
+    },
+    {
+      "path": "res://world/props/boats/materials/boat_02_red.tres",
+      "snapshot_md5": "8716f37be383d95f7232cc1cd1236a8f",
+      "textures": [],
+      "uid": "uid://cyr8vimv0ajlj"
+    },
+    {
+      "path": "res://world/props/boats/materials/boat_02_seagreen.tres",
+      "snapshot_md5": "8830964cf653237d01d2b7ed0aa0faa4",
+      "textures": [],
+      "uid": "uid://cmc4bj02oreo7"
+    },
+    {
+      "path": "res://world/props/boats/materials/boat_02_subby.tres",
+      "snapshot_md5": "3220723f34ead6e4585ef3d8c20bafa4",
+      "textures": [],
+      "uid": "uid://6f8du5b7welq"
+    },
+    {
+      "path": "res://world/props/boats/materials/boat_02_textile_pastels.tres",
+      "snapshot_md5": "c277562cfaae025c179eb075b38adf60",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "08cf7ad55197ac81b6fb2ce7b67b97dd",
+          "data_bytes": 87408,
+          "decoded_md5": "98d990a147bd661f88d40cc5792c7d85",
+          "format": 22,
+          "height": 256,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://shared/material_textures/shared_common_texture_08cf7ad55197ac81b6fb2ce7b67b97dd.res",
+          "size_override": "Vector2(256, 256)",
+          "slot": "albedo_texture",
+          "width": 256
+        }
+      ],
+      "uid": "uid://dij1nmvjhjxe4"
+    },
+    {
+      "path": "res://world/props/boats/materials/boat_02_tile_natural.tres",
+      "snapshot_md5": "3e3140db30007b8257cfa642e8726924",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "11c389e5c1c63a03a3e2f0f2366c8ac4",
+          "data_bytes": 87408,
+          "decoded_md5": "2c6a45b6b9c117820ad38d9f1c2bf778",
+          "format": 22,
+          "height": 256,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://shared/material_textures/shared_common_texture_11c389e5c1c63a03a3e2f0f2366c8ac4.res",
+          "size_override": "Vector2(256, 256)",
+          "slot": "albedo_texture",
+          "width": 256
+        }
+      ],
+      "uid": "uid://3jc0c2ieixfh"
+    },
+    {
+      "path": "res://world/props/boats/materials/boat_02_tile_neutral.tres",
+      "snapshot_md5": "d224e8df59dde9fcb82c2954f4812fa6",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "b1099a5ed6f61af5bd9995d0790e4cc4",
+          "data_bytes": 87408,
+          "decoded_md5": "b70ed94e2db4299309a57b9435ea3ca3",
+          "format": 22,
+          "height": 256,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://shared/material_textures/shared_common_texture_b1099a5ed6f61af5bd9995d0790e4cc4.res",
+          "size_override": "Vector2(256, 256)",
+          "slot": "albedo_texture",
+          "width": 256
+        }
+      ],
+      "uid": "uid://dqp5iwqu45q2d"
+    },
+    {
+      "path": "res://world/props/boats/materials/boat_02_tomato.tres",
+      "snapshot_md5": "a9b22bf248d4e79a5269420432ef88ad",
+      "textures": [],
+      "uid": "uid://c8nhy1a5iglyg"
+    },
+    {
+      "path": "res://world/props/boats/materials/boat_02_warmgray.tres",
+      "snapshot_md5": "c1d7f7251d992b92b88ec35cb04f00f8",
+      "textures": [],
+      "uid": "uid://bibahjsxd6iv"
+    },
+    {
+      "path": "res://world/props/boats/materials/boat_02_wood_cherry.tres",
+      "snapshot_md5": "5532ddb225ec6f7b704325327ea577a8",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "3d992c43522e46d90ec18719347a51fe",
+          "data_bytes": 87408,
+          "decoded_md5": "4c0e4fc7dc35b432c348cd04bea14116",
+          "format": 22,
+          "height": 256,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://shared/material_textures/shared_common_texture_3d992c43522e46d90ec18719347a51fe.res",
+          "size_override": "Vector2(256, 256)",
+          "slot": "albedo_texture",
+          "width": 256
+        }
+      ],
+      "uid": "uid://d3g4epnrxuf2f"
+    },
+    {
+      "path": "res://world/props/boats/materials/boat_02_wood_floor.tres",
+      "snapshot_md5": "6077c69188055aa456671200396ada07",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "96c6bd9db527d15b44c57ef8f2f863e6",
+          "data_bytes": 291424,
+          "decoded_md5": "2a3d82be326d73dc5a2ae7c37eea0c87",
+          "format": 22,
+          "height": 849,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://shared/material_textures/shared_common_texture_96c6bd9db527d15b44c57ef8f2f863e6.res",
+          "size_override": "Vector2(256, 849)",
+          "slot": "albedo_texture",
+          "width": 256
+        }
+      ],
+      "uid": "uid://df3rtq6wddoq1"
+    },
+    {
+      "path": "res://world/props/boats/materials/boat_02_wood_parquet.tres",
+      "snapshot_md5": "8686c76e716573561078925dacba35c1",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "880b4263e6c82a3bf1450364b35181f2",
+          "data_bytes": 87408,
+          "decoded_md5": "4261bfe4efda98c82ffb4991a804fa0e",
+          "format": 22,
+          "height": 256,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://shared/material_textures/shared_common_texture_880b4263e6c82a3bf1450364b35181f2.res",
+          "size_override": "Vector2(256, 256)",
+          "slot": "albedo_texture",
+          "width": 256
+        }
+      ],
+      "uid": "uid://bugnfoiucumtf"
+    },
+    {
+      "path": "res://world/props/boats/materials/boat_02_yellow.tres",
+      "snapshot_md5": "32d30263bcb4420a74d16fd6939f8b99",
+      "textures": [],
+      "uid": "uid://b6y7wgnsv8sl4"
+    },
+    {
+      "path": "res://world/props/buildings/beach_hotel/materials/beach_hotel_glass.tres",
+      "snapshot_md5": "cd0df804759c9af2393d01df9d47adc5",
+      "textures": [],
+      "uid": "uid://csbcre4uqcfm0"
+    },
+    {
+      "path": "res://world/props/buildings/beach_hotel/materials/beach_hotel_marble_01.tres",
+      "snapshot_md5": "ad4aed4eb36b2a39d49b90fd1ad7f54c",
+      "textures": [],
+      "uid": "uid://bjruirenaige5"
+    },
+    {
+      "path": "res://world/props/buildings/beach_hotel/materials/beach_hotel_marble_03.tres",
+      "snapshot_md5": "a9c654ed92cfb2ded92b1c7e2a2a7e39",
+      "textures": [],
+      "uid": "uid://cph5pl5m7e6lv"
+    },
+    {
+      "path": "res://world/props/buildings/beach_hotel/materials/beach_hotel_metal.tres",
+      "snapshot_md5": "9b1eb4e7ce0684479e792227ec614dfe",
+      "textures": [],
+      "uid": "uid://bv45shmwdf5ph"
+    },
+    {
+      "path": "res://world/props/buildings/beach_hotel/materials/beach_hotel_plaster.tres",
+      "snapshot_md5": "04abc72381eb76087428f346d0652bab",
+      "textures": [],
+      "uid": "uid://de8hj4ia626gu"
+    },
+    {
+      "path": "res://world/props/buildings/beach_hotel/materials/beach_hotel_roofing.tres",
+      "snapshot_md5": "7682ccdfb1ef1434627cc1f80eb75ace",
+      "textures": [],
+      "uid": "uid://c4pukh7vfatoj"
+    }
+  ],
+  "resources": [
+    "res://gameplay/vehicles/jet_ski_01/jet_ski_with_rider.tscn",
+    "res://gameplay/race/course/ramps/ramp_01.tscn",
+    "res://gameplay/race/course/ramps/ramp_02.tscn",
+    "res://world/props/boats/boat_01.glb",
+    "res://world/props/boats/boat_02.glb",
+    "res://levels/paradise_island/paradise_island.tscn",
+    "res://levels/gold_city/gold_city.tscn"
+  ],
+  "target": "shared_common"
+}

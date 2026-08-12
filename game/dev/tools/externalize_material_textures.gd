@@ -25,7 +25,27 @@ const TARGETS := {
 			"res://levels/gold_city/gold_city.tscn",
 		],
 	},
+	"shared_common": {
+		"dependency_intersection": [
+			"res://levels/paradise_island/paradise_island.tscn",
+			"res://levels/gold_city/gold_city.tscn",
+		],
+		"textures_dir": "res://shared/material_textures",
+		"resources": [
+			"res://gameplay/vehicles/jet_ski_01/jet_ski_with_rider.tscn",
+			"res://gameplay/race/course/ramps/ramp_01.tscn",
+			"res://gameplay/race/course/ramps/ramp_02.tscn",
+			"res://world/props/boats/boat_01.glb",
+			"res://world/props/boats/boat_02.glb",
+			"res://levels/paradise_island/paradise_island.tscn",
+			"res://levels/gold_city/gold_city.tscn",
+		],
+	},
 }
+const EXISTING_MANIFESTS := [
+	"res://levels/paradise_island/terrain/materials/textures/externalized_textures_manifest.json",
+	"res://levels/gold_city/material_textures/externalized_textures_manifest.json",
+]
 const PILOT_TEXTURE_PATH := "res://levels/paradise_island/terrain/materials/textures/paradise_island_material_01_albedo.res"
 const PILOT_COMPRESSED_MD5 := "930cf68db6adec48d0d5b2a4e3b80b27"
 
@@ -41,13 +61,14 @@ var _materials_modified := 0
 var _textures_created := 0
 var _embedded_textures_found := 0
 var _duplicates_reused := 0
+var _global_duplicates_reused := 0
 var _bytes_before := 0
 
 
 func _initialize() -> void:
 	var arguments := OS.get_cmdline_user_args()
 	if arguments.is_empty() or not TARGETS.has(arguments[0]):
-		printerr("Usage: -- <paradise_island|gold_city> [dry-run]")
+		printerr("Usage: -- <paradise_island|gold_city|shared_common> [dry-run]")
 		quit(2)
 		return
 	_target_name = arguments[0]
@@ -74,6 +95,8 @@ func _initialize() -> void:
 
 
 func _material_paths() -> Array[String]:
+	if _config.has("dependency_intersection"):
+		return _intersection_material_paths(_config.dependency_intersection)
 	var paths: Array[String] = []
 	for material_root in _config.material_roots:
 		var directory := DirAccess.open(material_root)
@@ -85,6 +108,51 @@ func _material_paths() -> Array[String]:
 				paths.append(material_root + "/" + file_name)
 	paths.sort()
 	return paths
+
+
+func _intersection_material_paths(root_paths: Array) -> Array[String]:
+	if root_paths.size() != 2:
+		_fail("A dependency intersection requires exactly two root resources.")
+		return []
+	var first := _transitive_dependencies(String(root_paths[0]))
+	var second := _transitive_dependencies(String(root_paths[1]))
+	var paths: Array[String] = []
+	for resource_path in first:
+		if not resource_path.ends_with(".tres") or not second.has(resource_path):
+			continue
+		var candidate := ResourceLoader.load(
+			resource_path,
+			"",
+			ResourceLoader.CACHE_MODE_IGNORE
+		)
+		if candidate is Material:
+			paths.append(resource_path)
+	paths.sort()
+	return paths
+
+
+func _transitive_dependencies(root_path: String) -> Dictionary:
+	var pending: Array[String] = [root_path]
+	var visited: Dictionary = {}
+	while not pending.is_empty():
+		var resource_path: String = pending.pop_back()
+		if visited.has(resource_path):
+			continue
+		visited[resource_path] = true
+		for raw_dependency in ResourceLoader.get_dependencies(resource_path):
+			var dependency_path := _dependency_path(raw_dependency)
+			if not dependency_path.is_empty() and not visited.has(dependency_path):
+				pending.append(dependency_path)
+	visited.erase(root_path)
+	return visited
+
+
+func _dependency_path(raw_dependency: String) -> String:
+	var parts := raw_dependency.split("::")
+	for index in range(parts.size() - 1, -1, -1):
+		if parts[index].begins_with("res://"):
+			return parts[index]
+	return raw_dependency if raw_dependency.begins_with("res://") else ""
 
 
 func _process_material(material_path: String, dry_run: bool) -> void:
@@ -126,6 +194,8 @@ func _process_material(material_path: String, dry_run: bool) -> void:
 			_textures_created += 1
 		else:
 			_duplicates_reused += 1
+			if not external_path.begins_with(_textures_dir + "/"):
+				_global_duplicates_reused += 1
 		var ext_id := "texture_%s" % compressed_md5.substr(0, 12)
 		replacements[subresource_id] = ext_id
 		ext_headers[ext_id] = '[ext_resource type="Texture2D" path="%s" id="%s"]' % [external_path, ext_id]
@@ -296,7 +366,7 @@ func _write_manifest(material_paths: Array[String]) -> void:
 			if not value is PortableCompressedTexture2D:
 				continue
 			var texture := value as PortableCompressedTexture2D
-			if not texture.resource_path.begins_with(_textures_dir + "/"):
+			if not _path_to_compressed.has(texture.resource_path):
 				continue
 			var texture_data := _texture_snapshot(texture)
 			texture_data["slot"] = String(property.name)
@@ -329,16 +399,27 @@ func _load_existing_manifest_hashes() -> void:
 				var path := _textures_dir + "/" + file_name
 				_compressed_to_path[compressed_md5] = path
 				_path_to_compressed[path] = compressed_md5
-	if not FileAccess.file_exists(_manifest_path):
+	_load_manifest_hashes(_manifest_path)
+	for manifest_path in EXISTING_MANIFESTS:
+		if manifest_path != _manifest_path:
+			_load_manifest_hashes(manifest_path)
+
+
+func _load_manifest_hashes(manifest_path: String) -> void:
+	if not FileAccess.file_exists(manifest_path):
 		return
-	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(_manifest_path))
+	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(manifest_path))
 	if not parsed is Dictionary:
 		return
 	for material_entry in parsed.get("materials", []):
 		for texture_entry in material_entry.get("textures", []):
 			var path := String(texture_entry.get("path", ""))
 			var compressed_md5 := String(texture_entry.get("compressed_md5", ""))
-			if not path.is_empty() and not compressed_md5.is_empty():
+			if (
+				not path.is_empty()
+				and not compressed_md5.is_empty()
+				and not _compressed_to_path.has(compressed_md5)
+			):
 				_compressed_to_path[compressed_md5] = path
 				_path_to_compressed[path] = compressed_md5
 
@@ -378,6 +459,7 @@ func _finish(dry_run: bool) -> void:
 		"embedded_textures_found": _embedded_textures_found,
 		"textures_created": _textures_created,
 		"duplicates_reused": _duplicates_reused,
+		"global_duplicates_reused": _global_duplicates_reused,
 		"material_bytes_before": _bytes_before,
 		"failures": _failures,
 	}))

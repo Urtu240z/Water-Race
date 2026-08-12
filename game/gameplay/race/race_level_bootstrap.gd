@@ -61,11 +61,27 @@ func _ready() -> void:
 
 func _trace_first_playable_frame() -> void:
 	LoadTrace.mark("FIRST_FRAME_TRACE_CALLBACK: %s" % name)
+	RenderingServer.frame_pre_draw.connect(
+		_trace_first_render_pre_draw,
+		CONNECT_ONE_SHOT
+	)
+	RenderingServer.frame_post_draw.connect(
+		_trace_first_render_post_draw,
+		CONNECT_ONE_SHOT
+	)
 	await get_tree().process_frame
 	LoadTrace.mark("FIRST_PROCESS_FRAME: %s" % name)
 	await RenderingServer.frame_post_draw
 	LoadTrace.mark("FIRST_FRAME_DRAWN: %s" % name)
 	LoadTrace.flush()
+
+
+func _trace_first_render_pre_draw() -> void:
+	LoadTrace.mark("FIRST_RENDER_PRE_DRAW: %s" % name)
+
+
+func _trace_first_render_post_draw() -> void:
+	LoadTrace.mark("FIRST_RENDER_POST_DRAW: %s" % name)
 
 
 func _resolve_references() -> void:

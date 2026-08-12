@@ -69,9 +69,10 @@ Do not let global quality silently erase level-specific fog, water or environmen
 
 Cold application startup and level-to-level transitions are not equivalent.
 
-## 11. Keep large material textures external
+## 11. Keep large material textures external everywhere
 
-Level materials remain editable `.tres` resources, but large
+Level, gameplay, vehicle, rider, prop, UI, and shared materials remain editable
+`.tres` resources, but large
 `PortableCompressedTexture2D` payloads must be external binary `.res` files.
 
 Do not re-embed large `PackedByteArray` texture data in those materials. Use the

@@ -18,6 +18,18 @@ const TARGETS := {
 			"res://levels/gold_city/gold_city.tscn",
 		],
 	},
+	"shared_common": {
+		"manifest": "res://shared/material_textures/externalized_textures_manifest.json",
+		"resources": [
+			"res://gameplay/vehicles/jet_ski_01/jet_ski_with_rider.tscn",
+			"res://gameplay/race/course/ramps/ramp_01.tscn",
+			"res://gameplay/race/course/ramps/ramp_02.tscn",
+			"res://world/props/boats/boat_01.glb",
+			"res://world/props/boats/boat_02.glb",
+			"res://levels/paradise_island/paradise_island.tscn",
+			"res://levels/gold_city/gold_city.tscn",
+		],
+	},
 }
 
 var _target_name := ""
@@ -31,7 +43,7 @@ var _unique_texture_paths: Dictionary = {}
 func _initialize() -> void:
 	var arguments := OS.get_cmdline_user_args()
 	if arguments.is_empty() or not TARGETS.has(arguments[0]):
-		printerr("Usage: -- <paradise_island|gold_city>")
+		printerr("Usage: -- <paradise_island|gold_city|shared_common>")
 		quit(2)
 		return
 	_target_name = arguments[0]
