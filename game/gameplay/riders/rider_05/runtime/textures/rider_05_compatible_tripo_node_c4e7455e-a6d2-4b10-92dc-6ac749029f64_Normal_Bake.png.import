@@ -3,30 +3,31 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://by2i6wvopt87s"
-path="res://.godot/imported/rider_05_compatible_tripo_node_c4e7455e-a6d2-4b10-92dc-6ac749029f64_Normal_Bake.png-67e6d5e52b4c8f41b651ecd0665df4af.ctex"
+path.s3tc="res://.godot/imported/rider_05_compatible_tripo_node_c4e7455e-a6d2-4b10-92dc-6ac749029f64_Normal_Bake.png-67e6d5e52b4c8f41b651ecd0665df4af.s3tc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://gameplay/riders/rider_05/runtime/textures/rider_05_compatible_tripo_node_c4e7455e-a6d2-4b10-92dc-6ac749029f64_Normal_Bake.png"
-dest_files=["res://.godot/imported/rider_05_compatible_tripo_node_c4e7455e-a6d2-4b10-92dc-6ac749029f64_Normal_Bake.png-67e6d5e52b4c8f41b651ecd0665df4af.ctex"]
+dest_files=["res://.godot/imported/rider_05_compatible_tripo_node_c4e7455e-a6d2-4b10-92dc-6ac749029f64_Normal_Bake.png-67e6d5e52b4c8f41b651ecd0665df4af.s3tc.ctex"]
 
 [params]
 
-compress/mode=0
+compress/mode=2
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0
 compress/rdo_quality_loss=0.0
 compress/hdr_compression=1
-compress/normal_map=0
+compress/normal_map=1
 compress/channel_pack=0
-mipmaps/generate=false
+mipmaps/generate=true
 mipmaps/limit=-1
-roughness/mode=0
-roughness/src_normal=""
+roughness/mode=1
+roughness/src_normal="res://gameplay/riders/rider_05/runtime/textures/rider_05_compatible_tripo_node_c4e7455e-a6d2-4b10-92dc-6ac749029f64_Normal_Bake.png"
 process/channel_remap/red=0
 process/channel_remap/green=1
 process/channel_remap/blue=2
@@ -37,4 +38,4 @@ process/normal_map_invert_y=false
 process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
-detect_3d/compress_to=1
+detect_3d/compress_to=0

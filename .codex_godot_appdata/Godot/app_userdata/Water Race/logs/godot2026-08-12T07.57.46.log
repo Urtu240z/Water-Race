@@ -4,16 +4,16 @@ ERROR: Failed to read the root certificate store.
    at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)
 
 ========== WATER RACE LOAD TRACE ==========
-[    1.053 ms] GAME START                          +   1.053 ms
-[    1.087 ms] GRAPHICS_AUTOLOAD_READY_BEGIN       +   0.034 ms
-[    1.119 ms] GRAPHICS_PROFILES_LOAD_BEGIN        +   0.032 ms
-[    3.568 ms] GRAPHICS_PROFILES_LOADED            +   2.449 ms
-[    3.612 ms] GRAPHICS_AUTOLOAD_READY_END         +   0.044 ms
-[  127.917 ms] RIDER_READY_BEGIN                   + 124.305 ms
-[  128.058 ms] RIDER_READY                         +   0.141 ms
-[  128.100 ms] GRAPHICS_APPLY_BEGIN                +   0.042 ms
-[  128.116 ms] GRAPHICS_TARGETS_COLLECTED          +   0.016 ms
-[  128.146 ms] GRAPHICS_APPLY_END                  +   0.030 ms
+[    1.588 ms] GAME START                          +   1.588 ms
+[    1.636 ms] GRAPHICS_AUTOLOAD_READY_BEGIN       +   0.048 ms
+[    1.685 ms] GRAPHICS_PROFILES_LOAD_BEGIN        +   0.049 ms
+[    4.442 ms] GRAPHICS_PROFILES_LOADED            +   2.757 ms
+[    4.514 ms] GRAPHICS_AUTOLOAD_READY_END         +   0.072 ms
+[  350.095 ms] RIDER_READY_BEGIN                   + 345.581 ms
+[  350.265 ms] RIDER_READY                         +   0.170 ms
+[  350.308 ms] GRAPHICS_APPLY_BEGIN                +   0.043 ms
+[  350.326 ms] GRAPHICS_TARGETS_COLLECTED          +   0.018 ms
+[  350.372 ms] GRAPHICS_APPLY_END                  +   0.046 ms
 === RIDER IDENTITY MIGRATION VALIDATION ===
 PASS: RiderRig scene loads.
 PASS: RiderRig default remains physical Athletic Female as rider_03.
@@ -81,7 +81,9 @@ PASS: rider_04 selection hides rider_01.
 PASS: rider_04 selection hides rider_02.
 PASS: rider_04 selection hides rider_03.
 PASS: rider_04 selection hides rider_05.
-PASS: rider_05 keeps its compatible source GLB for RiderRig rebuilds.
+FAIL: rider_05 normal runtime has no staged compatible GLB.
+FAIL: rider_05 normal runtime has no staged compatible GLB .import.
+FAIL: rider_05 has no generated staging artifact at runtime root.
 PASS: rider_05 runtime mesh loads.
 PASS: rider_05 runtime skin loads.
 PASS: rider_05 has one runtime surface.
@@ -92,4 +94,4 @@ PASS: rider_05 selection hides rider_01.
 PASS: rider_05 selection hides rider_02.
 PASS: rider_05 selection hides rider_03.
 PASS: rider_05 selection hides rider_04.
-IDENTITY_MIGRATION_STATUS=PASS
+IDENTITY_MIGRATION_STATUS=FAIL
