@@ -130,8 +130,28 @@ Gold City -> Paradise:     1.179-1.196 s
 The comparable Gold City to Paradise transition was `5.243-5.332 s` after the
 single-material pilot and approximately `6.509 s` before externalization.
 
-See `PARADISE_MATERIAL_TEXTURES.md` for the required migration and validation
+See `MATERIAL_TEXTURE_EXTERNALIZATION.md` for the required migration and validation
 workflow.
+
+## Gold City material externalization
+
+The same binary-texture pipeline covers the terrain, animated roller coaster,
+ferris wheel, and casino material roots used by Gold City.
+
+Final process-cold measurements after migration:
+
+```text
+animated_roller_coaster.glb: 0.476-0.496 s
+gold_city.glb:               0.258-0.261 s
+gold_city.tscn:              6.366-6.626 s
+Paradise -> Gold City:       1.478-1.527 s
+Gold City -> Paradise:       1.161-1.280 s
+```
+
+Before migration, the corresponding ranges were `2.484-3.050 s`,
+`1.295-1.598 s`, `8.520-10.012 s`, and `3.893-4.014 s`. The reverse transition
+remains near the Paradise Island post-migration baseline of approximately
+`1.2 s`.
 
 ## Optimization workflow
 

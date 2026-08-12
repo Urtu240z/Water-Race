@@ -1,19 +1,41 @@
 extends SceneTree
 
-const MATERIALS_DIR := "res://levels/paradise_island/terrain/materials"
-const TEXTURES_DIR := MATERIALS_DIR + "/textures"
-const GLB_IMPORT_PATH := "res://levels/paradise_island/terrain/paradise_island.glb.import"
-const MANIFEST_PATH := TEXTURES_DIR + "/externalized_textures_manifest.json"
-const PILOT_TEXTURE_PATH := TEXTURES_DIR + "/paradise_island_material_01_albedo.res"
+const TARGETS := {
+	"paradise_island": {
+		"material_roots": ["res://levels/paradise_island/terrain/materials"],
+		"textures_dir": "res://levels/paradise_island/terrain/materials/textures",
+		"resources": [
+			"res://levels/paradise_island/terrain/paradise_island.glb",
+			"res://levels/paradise_island/paradise_island.tscn",
+		],
+	},
+	"gold_city": {
+		"material_roots": [
+			"res://levels/gold_city/terrain/materials",
+			"res://levels/gold_city/props/roller_coaster/materials",
+			"res://levels/gold_city/props/ferris_wheel/materials",
+			"res://levels/gold_city/city/buildings/casino/materials",
+		],
+		"textures_dir": "res://levels/gold_city/material_textures",
+		"resources": [
+			"res://levels/gold_city/props/roller_coaster/animated_roller_coaster.glb",
+			"res://levels/gold_city/props/ferris_wheel/ferrys_wheel.glb",
+			"res://levels/gold_city/city/buildings/casino/casino.glb",
+			"res://levels/gold_city/terrain/gold_city.glb",
+			"res://levels/gold_city/gold_city.tscn",
+		],
+	},
+}
+const PILOT_TEXTURE_PATH := "res://levels/paradise_island/terrain/materials/textures/paradise_island_material_01_albedo.res"
 const PILOT_COMPRESSED_MD5 := "930cf68db6adec48d0d5b2a4e3b80b27"
 
+var _target_name := ""
+var _config: Dictionary = {}
+var _textures_dir := ""
+var _manifest_path := ""
 var _failures: Array[String] = []
-var _compressed_to_path: Dictionary = {
-	PILOT_COMPRESSED_MD5: PILOT_TEXTURE_PATH,
-}
-var _path_to_compressed: Dictionary = {
-	PILOT_TEXTURE_PATH: PILOT_COMPRESSED_MD5,
-}
+var _compressed_to_path: Dictionary = {}
+var _path_to_compressed: Dictionary = {}
 var _manifest_materials: Array[Dictionary] = []
 var _materials_modified := 0
 var _textures_created := 0
@@ -23,13 +45,25 @@ var _bytes_before := 0
 
 
 func _initialize() -> void:
-	var dry_run := OS.get_cmdline_user_args().has("dry-run")
-	var material_paths := _used_material_paths()
+	var arguments := OS.get_cmdline_user_args()
+	if arguments.is_empty() or not TARGETS.has(arguments[0]):
+		printerr("Usage: -- <paradise_island|gold_city> [dry-run]")
+		quit(2)
+		return
+	_target_name = arguments[0]
+	_config = TARGETS[_target_name]
+	_textures_dir = _config.textures_dir
+	_manifest_path = _textures_dir + "/externalized_textures_manifest.json"
+	if _target_name == "paradise_island":
+		_compressed_to_path[PILOT_COMPRESSED_MD5] = PILOT_TEXTURE_PATH
+		_path_to_compressed[PILOT_TEXTURE_PATH] = PILOT_COMPRESSED_MD5
+	var dry_run := arguments.has("dry-run")
+	var material_paths := _material_paths()
 	if material_paths.is_empty():
-		_fail("No Paradise Island terrain materials were found in the GLB import mappings.")
+		_fail("No materials were found for target %s." % _target_name)
 		_finish(dry_run)
 		return
-	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(TEXTURES_DIR))
+	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(_textures_dir))
 	_load_existing_manifest_hashes()
 	for material_path in material_paths:
 		_bytes_before += FileAccess.get_file_as_bytes(material_path).size()
@@ -39,18 +73,16 @@ func _initialize() -> void:
 	_finish(dry_run)
 
 
-func _used_material_paths() -> Array[String]:
-	var text := FileAccess.get_file_as_string(GLB_IMPORT_PATH)
-	var regex := RegEx.new()
-	regex.compile('"use_external/fallback_path": "([^"]+\\.tres)"')
-	var unique: Dictionary = {}
-	for match_result in regex.search_all(text):
-		var path := match_result.get_string(1)
-		if path.get_base_dir() == MATERIALS_DIR:
-			unique[path] = true
+func _material_paths() -> Array[String]:
 	var paths: Array[String] = []
-	for path in unique.keys():
-		paths.append(path)
+	for material_root in _config.material_roots:
+		var directory := DirAccess.open(material_root)
+		if directory == null:
+			_fail("Could not open material directory: %s" % material_root)
+			continue
+		for file_name in directory.get_files():
+			if file_name.ends_with(".tres"):
+				paths.append(material_root + "/" + file_name)
 	paths.sort()
 	return paths
 
@@ -72,7 +104,6 @@ func _process_material(material_path: String, dry_run: bool) -> void:
 	var before_snapshot := _material_snapshot(material)
 	var replacements: Dictionary = {}
 	var ext_headers: Dictionary = {}
-	var created_for_material: Array[String] = []
 	for block in blocks:
 		var subresource_id: String = block.id
 		var source_texture := _find_texture_by_subresource_id(material, subresource_id)
@@ -86,13 +117,12 @@ func _process_material(material_path: String, dry_run: bool) -> void:
 		var compressed_md5 := _md5(payload)
 		var external_path := String(_compressed_to_path.get(compressed_md5, ""))
 		if external_path.is_empty():
-			external_path = "%s/paradise_texture_%s.res" % [TEXTURES_DIR, compressed_md5]
+			external_path = "%s/%s_texture_%s.res" % [_textures_dir, _target_name, compressed_md5]
 			_compressed_to_path[compressed_md5] = external_path
 			_path_to_compressed[external_path] = compressed_md5
 			if not dry_run:
 				if not _create_external_texture(source_texture, payload, external_path):
 					continue
-				created_for_material.append(external_path)
 			_textures_created += 1
 		else:
 			_duplicates_reused += 1
@@ -266,7 +296,7 @@ func _write_manifest(material_paths: Array[String]) -> void:
 			if not value is PortableCompressedTexture2D:
 				continue
 			var texture := value as PortableCompressedTexture2D
-			if not texture.resource_path.begins_with(TEXTURES_DIR + "/"):
+			if not texture.resource_path.begins_with(_textures_dir + "/"):
 				continue
 			var texture_data := _texture_snapshot(texture)
 			texture_data["slot"] = String(property.name)
@@ -282,24 +312,26 @@ func _write_manifest(material_paths: Array[String]) -> void:
 		})
 	var manifest := {
 		"format": 1,
-		"glb": "res://levels/paradise_island/terrain/paradise_island.glb",
+		"target": _target_name,
+		"resources": _config.resources,
 		"materials": _manifest_materials,
 	}
-	_write_text(MANIFEST_PATH, JSON.stringify(manifest, "  ") + "\n")
+	_write_text(_manifest_path, JSON.stringify(manifest, "  ") + "\n")
 
 
 func _load_existing_manifest_hashes() -> void:
-	var textures_dir := DirAccess.open(TEXTURES_DIR)
+	var textures_dir := DirAccess.open(_textures_dir)
 	if textures_dir != null:
 		for file_name in textures_dir.get_files():
-			if file_name.begins_with("paradise_texture_") and file_name.ends_with(".res"):
-				var compressed_md5 := file_name.trim_prefix("paradise_texture_").trim_suffix(".res")
-				var path := TEXTURES_DIR + "/" + file_name
+			var prefix := _target_name + "_texture_"
+			if file_name.begins_with(prefix) and file_name.ends_with(".res"):
+				var compressed_md5 := file_name.trim_prefix(prefix).trim_suffix(".res")
+				var path := _textures_dir + "/" + file_name
 				_compressed_to_path[compressed_md5] = path
 				_path_to_compressed[path] = compressed_md5
-	if not FileAccess.file_exists(MANIFEST_PATH):
+	if not FileAccess.file_exists(_manifest_path):
 		return
-	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(MANIFEST_PATH))
+	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(_manifest_path))
 	if not parsed is Dictionary:
 		return
 	for material_entry in parsed.get("materials", []):
@@ -339,7 +371,8 @@ func _fail(message: String) -> void:
 
 
 func _finish(dry_run: bool) -> void:
-	print("PARADISE_TEXTURE_MIGRATION_JSON=", JSON.stringify({
+	print("MATERIAL_TEXTURE_MIGRATION_JSON=", JSON.stringify({
+		"target": _target_name,
 		"dry_run": dry_run,
 		"materials_modified": _materials_modified,
 		"embedded_textures_found": _embedded_textures_found,

@@ -71,9 +71,9 @@ Cold application startup and level-to-level transitions are not equivalent.
 
 ## 11. Keep large material textures external
 
-Paradise Island terrain materials remain editable `.tres` resources, but large
+Level materials remain editable `.tres` resources, but large
 `PortableCompressedTexture2D` payloads must be external binary `.res` files.
 
 Do not re-embed large `PackedByteArray` texture data in those materials. Use the
 migration and validation workflow documented in
-`PARADISE_MATERIAL_TEXTURES.md`.
+`MATERIAL_TEXTURE_EXTERNALIZATION.md`.

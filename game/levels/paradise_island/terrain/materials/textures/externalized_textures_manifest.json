@@ -1,6 +1,5 @@
 {
   "format": 1,
-  "glb": "res://levels/paradise_island/terrain/paradise_island.glb",
   "materials": [
     {
       "path": "res://levels/paradise_island/terrain/materials/paradise_island_aerial_rocks_01.tres",
@@ -2258,5 +2257,10 @@
       ],
       "uid": "uid://5abe27lw034l"
     }
-  ]
+  ],
+  "resources": [
+    "res://levels/paradise_island/terrain/paradise_island.glb",
+    "res://levels/paradise_island/paradise_island.tscn"
+  ],
+  "target": "paradise_island"
 }

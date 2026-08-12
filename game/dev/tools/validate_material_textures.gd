@@ -1,11 +1,27 @@
 extends SceneTree
 
-const MATERIALS_DIR := "res://levels/paradise_island/terrain/materials"
-const TEXTURES_DIR := MATERIALS_DIR + "/textures"
-const MANIFEST_PATH := TEXTURES_DIR + "/externalized_textures_manifest.json"
-const GLB_PATH := "res://levels/paradise_island/terrain/paradise_island.glb"
-const LEVEL_PATH := "res://levels/paradise_island/paradise_island.tscn"
+const TARGETS := {
+	"paradise_island": {
+		"manifest": "res://levels/paradise_island/terrain/materials/textures/externalized_textures_manifest.json",
+		"resources": [
+			"res://levels/paradise_island/terrain/paradise_island.glb",
+			"res://levels/paradise_island/paradise_island.tscn",
+		],
+	},
+	"gold_city": {
+		"manifest": "res://levels/gold_city/material_textures/externalized_textures_manifest.json",
+		"resources": [
+			"res://levels/gold_city/props/roller_coaster/animated_roller_coaster.glb",
+			"res://levels/gold_city/props/ferris_wheel/ferrys_wheel.glb",
+			"res://levels/gold_city/city/buildings/casino/casino.glb",
+			"res://levels/gold_city/terrain/gold_city.glb",
+			"res://levels/gold_city/gold_city.tscn",
+		],
+	},
+}
 
+var _target_name := ""
+var _config: Dictionary = {}
 var _failures: Array[String] = []
 var _materials_checked := 0
 var _texture_slots_checked := 0
@@ -13,15 +29,22 @@ var _unique_texture_paths: Dictionary = {}
 
 
 func _initialize() -> void:
-	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(MANIFEST_PATH))
+	var arguments := OS.get_cmdline_user_args()
+	if arguments.is_empty() or not TARGETS.has(arguments[0]):
+		printerr("Usage: -- <paradise_island|gold_city>")
+		quit(2)
+		return
+	_target_name = arguments[0]
+	_config = TARGETS[_target_name]
+	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(_config.manifest))
 	if not parsed is Dictionary:
 		_fail("External texture manifest is missing or invalid.")
 		_finish()
 		return
 	for material_entry in parsed.get("materials", []):
 		_validate_material(material_entry)
-	_validate_scene(GLB_PATH, "GLB")
-	_validate_scene(LEVEL_PATH, "level")
+	for resource_path in _config.resources:
+		_validate_scene(resource_path)
 	_finish()
 
 
@@ -68,14 +91,14 @@ func _validate_texture_slot(material: Material, entry: Dictionary, material_path
 	_unique_texture_paths[expected_path] = true
 
 
-func _validate_scene(path: String, label: String) -> void:
+func _validate_scene(path: String) -> void:
 	var packed := ResourceLoader.load(path, "PackedScene", ResourceLoader.CACHE_MODE_REPLACE) as PackedScene
 	if packed == null:
-		_fail("Paradise Island %s failed to load: %s" % [label, path])
+		_fail("Target resource failed to load: %s" % path)
 		return
 	var instance := packed.instantiate()
 	if instance == null:
-		_fail("Paradise Island %s failed to instantiate: %s" % [label, path])
+		_fail("Target resource failed to instantiate: %s" % path)
 		return
 	instance.free()
 
@@ -140,7 +163,8 @@ func _fail(message: String) -> void:
 
 
 func _finish() -> void:
-	print("PARADISE_TEXTURE_VALIDATION_JSON=", JSON.stringify({
+	print("MATERIAL_TEXTURE_VALIDATION_JSON=", JSON.stringify({
+		"target": _target_name,
 		"ok": _failures.is_empty(),
 		"materials_checked": _materials_checked,
 		"texture_slots_checked": _texture_slots_checked,

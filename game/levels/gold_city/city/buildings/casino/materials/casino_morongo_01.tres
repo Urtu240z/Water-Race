@@ -1,9 +1,6 @@
 [gd_resource type="StandardMaterial3D" format=4 uid="uid://iob8togpvk54"]
 
-[sub_resource type="PortableCompressedTexture2D" id="PortableCompressedTexture2D_56j3d"]
-_data = PackedByteArray("AgAEAAUAAAAGAAAAMgAAADIAAAABAACAq0tUWCAyMLsNChoKAAAAAAEAAAA0AAAANAAAAAAAAAAAAAAAAQAAAAYAAAACAAAA4AAAACwAAAAMAQAAJAAAAAAAAAAAAAAAAAAAAAAAAAASAwAAAAAAAOMAAAAAAAAAkAoAAAAAAABAAgAAAAAAANIAAAAAAAAAEAMAAAAAAACrAQAAAAAAAJUAAAAAAAAAAAEAAAAAAABiAQAAAAAAAEkAAAAAAAAAQAAAAAAAAABJAQAAAAAAABkAAAAAAAAAEAAAAAAAAAAwAQAAAAAAABkAAAAAAAAAEAAAAAAAAAAsAAAAAAAAAAIAKACmAQEAAwMAAAAAAAAAAAAAAAB/AAAAAAAAAAAA/////x8AAABLVFh3cml0ZXIAQmFzaXMgVW5pdmVyc2FsIDEuNjAAACi1L/0gEIEAABenTPf/LKsCAAAAAAAAAAAotS/9IBCBAABBQFtCAll7/G6qvf8CMwIzKLUv/SBAAQIAQUlzinV49Dtflb37vfsCMMFYy0WleLj7fnf/////AACBQBORgmD0aw/wB/AH8AfwNwWM+D8m6wIAAAAAAAAAACi1L/1gAABdBADUBsFBQ0N1eLUrBwC/u4FQo1BUdPDKAQdVX8FDy0WleLj7AAD/QVB7wfnVevwgIiAi/v8gIkEa8BD5yXrdSEBEQP/9REBBUOOQ+uH66wAAAACBQIMFolC4/fD/gUi7iXJg8OsBDwA3BYz4PybrAgALAB2CBDMRwOUBzecwNBOxqgpqJlrceWApyyUBKLUv/WAQAkUGAMQIwRNg5UdqclsFAL+7wUpz5adquPsAAP9BFMCWBnLnYQsAb2ZGi8x3erDtAYFBM8OhQLj/8DcFjPg/JusCAAELyMWgIFj8l0PI8H9pUgNBRNMhQjZySwEA391BRKMiojYNmGICMmzKAUU7LHI2sOuBQLPT//u67ZfQsvh/dtCBQXtR//W677fP0PQ/fJAXoLDihpJhBzACKkjHOGPhSXkA3RWHEitPRT07GNQ9RDehNQW3+eT45aRsRqL8lRkzJpNczYg8Z2EZKLUv/WCQCc0GAPQIQQ2YYgIybMoBAL+7QUSjIqI2uPsAAP8dcPECMimiAQD/qmUb8hI2qEIBAPn/AQvIxaAgWPzw/zcFjPg/JusCAAEJAP8L6JEyYOgT8UFQ+y0CNiy7AQAAQUAZuGECNimzAWDLcRI2aFMNYACIsO3uQEQLiIrg7esNSBOIpM3eAFVFM0WIpE3tCgD///////8cIJACFFiwJQ8ggKag10ECV8pIIk6CHsRaj0EYxwVe2bOMDDAECZdDl/ecWg3DM3aikBiPGbCDDJDPg2rgPoIhru5BAmjfKpI=")
-size_override = Vector2(50, 50)
-keep_compressed_buffer = true
+[ext_resource type="Texture2D" path="res://levels/gold_city/material_textures/gold_city_texture_37131344709b3fe71455026307fe3bcf.res" id="texture_37131344709b"]
 
 [resource]
 resource_name = "Morongo_1"
@@ -11,7 +8,7 @@ transparency = 2
 alpha_scissor_threshold = 0.5
 alpha_antialiasing_mode = 0
 cull_mode = 2
-albedo_texture = SubResource("PortableCompressedTexture2D_56j3d")
+albedo_texture = ExtResource("texture_37131344709b")
 metallic = 1.0
 metallic_specular = 0.72
 roughness = 0.11
@@ -19,8 +16,8 @@ emission_enabled = true
 emission = Color(1, 0, 1, 1)
 emission_energy_multiplier = 3.0
 emission_operator = 1
-emission_texture = SubResource("PortableCompressedTexture2D_56j3d")
+emission_texture = ExtResource("texture_37131344709b")
 normal_enabled = true
 normal_scale = 16.0
-normal_texture = SubResource("PortableCompressedTexture2D_56j3d")
+normal_texture = ExtResource("texture_37131344709b")
 metadata/_gltf_primary_texture_coord = 0

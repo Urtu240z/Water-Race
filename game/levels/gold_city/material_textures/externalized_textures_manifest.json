@@ -1,0 +1,915 @@
+{
+  "format": 1,
+  "materials": [
+    {
+      "path": "res://levels/gold_city/city/buildings/casino/materials/casino_black_facade.tres",
+      "snapshot_md5": "9686fe852eedd2a5c40570e59f96d885",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "a67c371fce9b3d3a010086d9b7adfda6",
+          "data_bytes": 7264,
+          "decoded_md5": "c58e3fd752372ead503be269e0d514d5",
+          "format": 22,
+          "height": 50,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/gold_city/material_textures/gold_city_texture_a67c371fce9b3d3a010086d9b7adfda6.res",
+          "size_override": "Vector2(100, 50)",
+          "slot": "albedo_texture",
+          "width": 100
+        }
+      ],
+      "uid": "uid://bqmkt0xts3c3j"
+    },
+    {
+      "path": "res://levels/gold_city/city/buildings/casino/materials/casino_blue_carpark_01.tres",
+      "snapshot_md5": "69d2a563288362ace86b77a277312286",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "a6b252eef9db4154ab06a320a940e374",
+          "data_bytes": 7264,
+          "decoded_md5": "9134d1bb506f1254e383df37162e979e",
+          "format": 22,
+          "height": 50,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/gold_city/material_textures/gold_city_texture_a6b252eef9db4154ab06a320a940e374.res",
+          "size_override": "Vector2(100, 50)",
+          "slot": "albedo_texture",
+          "width": 100
+        }
+      ],
+      "uid": "uid://b1hky3r27i5h7"
+    },
+    {
+      "path": "res://levels/gold_city/city/buildings/casino/materials/casino_blue_carpark_02.tres",
+      "snapshot_md5": "eafbaa61de393f246d016f7004045ef4",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "a7c1da0a6e1624aeb03c9a0ae82df9d9",
+          "data_bytes": 7264,
+          "decoded_md5": "978381455efc692572acac0cd7858309",
+          "format": 22,
+          "height": 50,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/gold_city/material_textures/gold_city_texture_a7c1da0a6e1624aeb03c9a0ae82df9d9.res",
+          "size_override": "Vector2(100, 50)",
+          "slot": "albedo_texture",
+          "width": 100
+        }
+      ],
+      "uid": "uid://4i4o55wibxb0"
+    },
+    {
+      "path": "res://levels/gold_city/city/buildings/casino/materials/casino_carpark.tres",
+      "snapshot_md5": "ccbca7c1dfbb6549dbfd24ce8f3d2da3",
+      "textures": [],
+      "uid": "uid://8a6jm5t5qkkl"
+    },
+    {
+      "path": "res://levels/gold_city/city/buildings/casino/materials/casino_grass.tres",
+      "snapshot_md5": "bff4eb9eff85dcf8cf7bce059e93c4cc",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "ed368ab8b1fbe111bb6ba7900f337070",
+          "data_bytes": 87408,
+          "decoded_md5": "d4bbdd57efb3b43eed50f0c737cea364",
+          "format": 22,
+          "height": 256,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/gold_city/material_textures/gold_city_texture_ed368ab8b1fbe111bb6ba7900f337070.res",
+          "size_override": "Vector2(256, 256)",
+          "slot": "albedo_texture",
+          "width": 256
+        }
+      ],
+      "uid": "uid://yvngy6up0psf"
+    },
+    {
+      "path": "res://levels/gold_city/city/buildings/casino/materials/casino_grass_blur.tres",
+      "snapshot_md5": "6bfc3b5d7c5fb3ed2fdf3ff2f1778d59",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "2aa5496263f3135194a448ded7274d85",
+          "data_bytes": 87408,
+          "decoded_md5": "f10182f200b0a7e443bde291b1409c76",
+          "format": 22,
+          "height": 256,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/gold_city/material_textures/gold_city_texture_2aa5496263f3135194a448ded7274d85.res",
+          "size_override": "Vector2(256, 256)",
+          "slot": "albedo_texture",
+          "width": 256
+        }
+      ],
+      "uid": "uid://d2u5ppo3p21iq"
+    },
+    {
+      "path": "res://levels/gold_city/city/buildings/casino/materials/casino_morongo_01.tres",
+      "snapshot_md5": "ad6e708d03b83baaadcfdf6148f7a8ea",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "37131344709b3fe71455026307fe3bcf",
+          "data_bytes": 3840,
+          "decoded_md5": "4fe41d3bf59b1727e06a9d87decae3db",
+          "format": 22,
+          "height": 50,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/gold_city/material_textures/gold_city_texture_37131344709b3fe71455026307fe3bcf.res",
+          "size_override": "Vector2(50, 50)",
+          "slot": "albedo_texture",
+          "width": 50
+        },
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "37131344709b3fe71455026307fe3bcf",
+          "data_bytes": 3840,
+          "decoded_md5": "4fe41d3bf59b1727e06a9d87decae3db",
+          "format": 22,
+          "height": 50,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/gold_city/material_textures/gold_city_texture_37131344709b3fe71455026307fe3bcf.res",
+          "size_override": "Vector2(50, 50)",
+          "slot": "emission_texture",
+          "width": 50
+        },
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "37131344709b3fe71455026307fe3bcf",
+          "data_bytes": 3840,
+          "decoded_md5": "4fe41d3bf59b1727e06a9d87decae3db",
+          "format": 22,
+          "height": 50,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/gold_city/material_textures/gold_city_texture_37131344709b3fe71455026307fe3bcf.res",
+          "size_override": "Vector2(50, 50)",
+          "slot": "normal_texture",
+          "width": 50
+        }
+      ],
+      "uid": "uid://iob8togpvk54"
+    },
+    {
+      "path": "res://levels/gold_city/city/buildings/casino/materials/casino_morongo_02.tres",
+      "snapshot_md5": "72d78fb334ac449027e452cb188cbfa1",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "2e21337920d02e01c1b2580a1af3ce81",
+          "data_bytes": 3840,
+          "decoded_md5": "d1eedb2968b5eea0c2d805c7943e51d3",
+          "format": 22,
+          "height": 50,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/gold_city/material_textures/gold_city_texture_2e21337920d02e01c1b2580a1af3ce81.res",
+          "size_override": "Vector2(50, 50)",
+          "slot": "albedo_texture",
+          "width": 50
+        },
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "2e21337920d02e01c1b2580a1af3ce81",
+          "data_bytes": 3840,
+          "decoded_md5": "d1eedb2968b5eea0c2d805c7943e51d3",
+          "format": 22,
+          "height": 50,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/gold_city/material_textures/gold_city_texture_2e21337920d02e01c1b2580a1af3ce81.res",
+          "size_override": "Vector2(50, 50)",
+          "slot": "normal_texture",
+          "width": 50
+        }
+      ],
+      "uid": "uid://dugoqygqmr1m1"
+    },
+    {
+      "path": "res://levels/gold_city/city/buildings/casino/materials/casino_morongo_glass.tres",
+      "snapshot_md5": "2a1a47deb1452ec6e5f884664f89de4e",
+      "textures": [],
+      "uid": "uid://c1crxqy1afar7"
+    },
+    {
+      "path": "res://levels/gold_city/city/buildings/casino/materials/casino_morongo_wall.tres",
+      "snapshot_md5": "9a6071410fbbf5ae83162198ea2dd907",
+      "textures": [],
+      "uid": "uid://tusxbsq0uqdh"
+    },
+    {
+      "path": "res://levels/gold_city/city/buildings/casino/materials/casino_roof.tres",
+      "snapshot_md5": "a29b57263a179eff230d6851906a787b",
+      "textures": [],
+      "uid": "uid://dk1cjmcaaop8"
+    },
+    {
+      "path": "res://levels/gold_city/city/buildings/casino/materials/casino_screen.tres",
+      "snapshot_md5": "40dd2df3144fe0d47e74b9951fab5a78",
+      "textures": [],
+      "uid": "uid://bv27rn3djxrde"
+    },
+    {
+      "path": "res://levels/gold_city/city/buildings/casino/materials/casino_surface_hue.tres",
+      "snapshot_md5": "d950795d77b342f78af3927d3767be7f",
+      "textures": [],
+      "uid": "uid://cftxxlrjcjm4x"
+    },
+    {
+      "path": "res://levels/gold_city/city/buildings/casino/materials/casino_wall.tres",
+      "snapshot_md5": "b5aa703f26c4741c2820352a2c40040a",
+      "textures": [],
+      "uid": "uid://kf0uvcst2nsm"
+    },
+    {
+      "path": "res://levels/gold_city/city/buildings/casino/materials/casino_water.tres",
+      "snapshot_md5": "d2249d55fe8993f8cde5215cc955c367",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "aba48072838ea54d15f3cd0bb23bc6f0",
+          "data_bytes": 87408,
+          "decoded_md5": "c15325139266bf608eca099e1a6c30db",
+          "format": 22,
+          "height": 256,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/gold_city/material_textures/gold_city_texture_aba48072838ea54d15f3cd0bb23bc6f0.res",
+          "size_override": "Vector2(256, 256)",
+          "slot": "albedo_texture",
+          "width": 256
+        }
+      ],
+      "uid": "uid://bvlqwejda2m5"
+    },
+    {
+      "path": "res://levels/gold_city/city/buildings/casino/materials/casino_wood.tres",
+      "snapshot_md5": "e969ccde03dd9aeef384d6daa36c0570",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "be95f86dd287de4dd636ef2b09dac570",
+          "data_bytes": 87408,
+          "decoded_md5": "1d2b849087f0ca63ddce4644b67cdb0e",
+          "format": 22,
+          "height": 256,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/gold_city/material_textures/gold_city_texture_be95f86dd287de4dd636ef2b09dac570.res",
+          "size_override": "Vector2(256, 256)",
+          "slot": "albedo_texture",
+          "width": 256
+        }
+      ],
+      "uid": "uid://cl40n86q2h33i"
+    },
+    {
+      "path": "res://levels/gold_city/props/ferris_wheel/materials/ferrys_wheel_01_concrete.tres",
+      "snapshot_md5": "b04b00a5db9ca3d56fc1760a155af9b7",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "5df2812ba2ac6663903aa4a75da9b957",
+          "data_bytes": 75760,
+          "decoded_md5": "ee590c6267d73e59a00d79247daa98c9",
+          "format": 22,
+          "height": 336,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/gold_city/material_textures/gold_city_texture_5df2812ba2ac6663903aa4a75da9b957.res",
+          "size_override": "Vector2(168, 336)",
+          "slot": "albedo_texture",
+          "width": 168
+        }
+      ],
+      "uid": "uid://bs8uilhqsfitm"
+    },
+    {
+      "path": "res://levels/gold_city/props/ferris_wheel/materials/ferrys_wheel_02_glass_clear.tres",
+      "snapshot_md5": "09dbd352480c13243f0bd58b0e281c5d",
+      "textures": [],
+      "uid": "uid://dy7egwtfplhjs"
+    },
+    {
+      "path": "res://levels/gold_city/props/ferris_wheel/materials/ferrys_wheel_03_glass_gold.tres",
+      "snapshot_md5": "309a0f804725492ecadcc28c0e2d52fc",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "a98fd7f471d58b38fc6257329b42cec2",
+          "data_bytes": 27808,
+          "decoded_md5": "402798e614bb725173acea6203c757b3",
+          "format": 22,
+          "height": 144,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/gold_city/material_textures/gold_city_texture_a98fd7f471d58b38fc6257329b42cec2.res",
+          "size_override": "Vector2(144, 144)",
+          "slot": "albedo_texture",
+          "width": 144
+        }
+      ],
+      "uid": "uid://dpmtqyu35i66a"
+    },
+    {
+      "path": "res://levels/gold_city/props/ferris_wheel/materials/ferrys_wheel_04_interior.tres",
+      "snapshot_md5": "c0a632d95086c075525cd83a57371295",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "20c1deaaa9c223d341313a0b58a9c9dd",
+          "data_bytes": 481072,
+          "decoded_md5": "d98c2775e233f1e43cb5a3e98c7d6901",
+          "format": 22,
+          "height": 600,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/gold_city/material_textures/gold_city_texture_20c1deaaa9c223d341313a0b58a9c9dd.res",
+          "size_override": "Vector2(600, 600)",
+          "slot": "albedo_texture",
+          "width": 600
+        }
+      ],
+      "uid": "uid://dil5nmk6tyixu"
+    },
+    {
+      "path": "res://levels/gold_city/props/ferris_wheel/materials/ferrys_wheel_05_metal_dark.tres",
+      "snapshot_md5": "01e5654fcbf91742712c3e154f2f5480",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "37a1a41a8f457e2a283e666c9ac61966",
+          "data_bytes": 21872,
+          "decoded_md5": "f51559b79b9dc53a28eac5603cf8f7ac",
+          "format": 22,
+          "height": 128,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/gold_city/material_textures/gold_city_texture_37a1a41a8f457e2a283e666c9ac61966.res",
+          "size_override": "Vector2(128, 128)",
+          "slot": "albedo_texture",
+          "width": 128
+        }
+      ],
+      "uid": "uid://bxnmw66nc6gvo"
+    },
+    {
+      "path": "res://levels/gold_city/props/ferris_wheel/materials/ferrys_wheel_06_metal_light.tres",
+      "snapshot_md5": "7db98bc5dafcd3f078e64bce6798e05d",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "65e2a6f37b6e5a1c92e292663e742e53",
+          "data_bytes": 379632,
+          "decoded_md5": "9a6a4db2943fd676ff9a21968cf558eb",
+          "format": 22,
+          "height": 530,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/gold_city/material_textures/gold_city_texture_65e2a6f37b6e5a1c92e292663e742e53.res",
+          "size_override": "Vector2(530, 530)",
+          "slot": "albedo_texture",
+          "width": 530
+        }
+      ],
+      "uid": "uid://cyv2qfktfy2au"
+    },
+    {
+      "path": "res://levels/gold_city/props/ferris_wheel/materials/ferrys_wheel_07_red.tres",
+      "snapshot_md5": "f5f1d35ba66523edf6bfa7fb6a75f3e3",
+      "textures": [],
+      "uid": "uid://bn1hi2vdl8di8"
+    },
+    {
+      "path": "res://levels/gold_city/props/ferris_wheel/materials/ferrys_wheel_08_wood.tres",
+      "snapshot_md5": "271890ccfca3e3b8df45eb5f473dca56",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "74fe2436d3242159d4ae096f76f452fe",
+          "data_bytes": 87408,
+          "decoded_md5": "a51aeb0243528b7d326879a1ebd51f3c",
+          "format": 22,
+          "height": 256,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/gold_city/material_textures/gold_city_texture_74fe2436d3242159d4ae096f76f452fe.res",
+          "size_override": "Vector2(256, 256)",
+          "slot": "albedo_texture",
+          "width": 256
+        }
+      ],
+      "uid": "uid://3ht064uybooo"
+    },
+    {
+      "path": "res://levels/gold_city/props/ferris_wheel/materials/ferrys_wheel_09_yellow.tres",
+      "snapshot_md5": "5b4b34bba126b6914634406d664f506f",
+      "textures": [],
+      "uid": "uid://j44so7xw0vdj"
+    },
+    {
+      "path": "res://levels/gold_city/props/roller_coaster/materials/build_gen_1.tres",
+      "snapshot_md5": "ff32296f41fbad063dc6a77b613c1a3f",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "62e363e8ad07d05248aa64d36a8c0b86",
+          "data_bytes": 5606768,
+          "decoded_md5": "8657c84dfe4a1450e896667b7ebc1491",
+          "format": 22,
+          "height": 2052,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/gold_city/material_textures/gold_city_texture_62e363e8ad07d05248aa64d36a8c0b86.res",
+          "size_override": "Vector2(2048, 2052)",
+          "slot": "albedo_texture",
+          "width": 2048
+        },
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "f6ff9c86ba66dd9638355112080d6b3c",
+          "data_bytes": 5592432,
+          "decoded_md5": "303fe39f745217bcb51328ac6c450b5f",
+          "format": 22,
+          "height": 2048,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/gold_city/material_textures/gold_city_texture_f6ff9c86ba66dd9638355112080d6b3c.res",
+          "size_override": "Vector2(2048, 2048)",
+          "slot": "metallic_texture",
+          "width": 2048
+        },
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "9da830a9d57e658f9c06bb3df3a6f5ce",
+          "data_bytes": 5592432,
+          "decoded_md5": "42d7bcca630322c703acd1691480cf2c",
+          "format": 21,
+          "height": 2048,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/gold_city/material_textures/gold_city_texture_9da830a9d57e658f9c06bb3df3a6f5ce.res",
+          "size_override": "Vector2(2048, 2048)",
+          "slot": "normal_texture",
+          "width": 2048
+        },
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "f6ff9c86ba66dd9638355112080d6b3c",
+          "data_bytes": 5592432,
+          "decoded_md5": "303fe39f745217bcb51328ac6c450b5f",
+          "format": 22,
+          "height": 2048,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/gold_city/material_textures/gold_city_texture_f6ff9c86ba66dd9638355112080d6b3c.res",
+          "size_override": "Vector2(2048, 2048)",
+          "slot": "roughness_texture",
+          "width": 2048
+        }
+      ],
+      "uid": "uid://h8dc41aovv3n"
+    },
+    {
+      "path": "res://levels/gold_city/props/roller_coaster/materials/build_gen_2.tres",
+      "snapshot_md5": "04dff1ff2f1069347bc2e2b9b6141470",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "a793b1103b7e957550b3c7d2c0bd7d8f",
+          "data_bytes": 5592432,
+          "decoded_md5": "af9d4f437028e3776cf2ebaddaa65c1f",
+          "format": 22,
+          "height": 2048,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/gold_city/material_textures/gold_city_texture_a793b1103b7e957550b3c7d2c0bd7d8f.res",
+          "size_override": "Vector2(2048, 2048)",
+          "slot": "albedo_texture",
+          "width": 2048
+        },
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "f6ff9c86ba66dd9638355112080d6b3c",
+          "data_bytes": 5592432,
+          "decoded_md5": "303fe39f745217bcb51328ac6c450b5f",
+          "format": 22,
+          "height": 2048,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/gold_city/material_textures/gold_city_texture_f6ff9c86ba66dd9638355112080d6b3c.res",
+          "size_override": "Vector2(2048, 2048)",
+          "slot": "metallic_texture",
+          "width": 2048
+        },
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "9da830a9d57e658f9c06bb3df3a6f5ce",
+          "data_bytes": 5592432,
+          "decoded_md5": "42d7bcca630322c703acd1691480cf2c",
+          "format": 21,
+          "height": 2048,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/gold_city/material_textures/gold_city_texture_9da830a9d57e658f9c06bb3df3a6f5ce.res",
+          "size_override": "Vector2(2048, 2048)",
+          "slot": "normal_texture",
+          "width": 2048
+        },
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "f6ff9c86ba66dd9638355112080d6b3c",
+          "data_bytes": 5592432,
+          "decoded_md5": "303fe39f745217bcb51328ac6c450b5f",
+          "format": 22,
+          "height": 2048,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/gold_city/material_textures/gold_city_texture_f6ff9c86ba66dd9638355112080d6b3c.res",
+          "size_override": "Vector2(2048, 2048)",
+          "slot": "roughness_texture",
+          "width": 2048
+        }
+      ],
+      "uid": "uid://ct6d71v0f2t5u"
+    },
+    {
+      "path": "res://levels/gold_city/props/roller_coaster/materials/decals_rollercoaster.tres",
+      "snapshot_md5": "5295c9a8cd77e62ca2c1558c4b0571c3",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "bdac06817c2617c84aa086805c3d326a",
+          "data_bytes": 5592432,
+          "decoded_md5": "fb862ec487e64ba98cb1ff7756c7913e",
+          "format": 22,
+          "height": 2048,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/gold_city/material_textures/gold_city_texture_bdac06817c2617c84aa086805c3d326a.res",
+          "size_override": "Vector2(2048, 2048)",
+          "slot": "albedo_texture",
+          "width": 2048
+        }
+      ],
+      "uid": "uid://cg047wt8t355q"
+    },
+    {
+      "path": "res://levels/gold_city/props/roller_coaster/materials/rollercoastercart.tres",
+      "snapshot_md5": "74fcc718d5627eba778e8fbd71bc0412",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "2599365e907b8d098eaa35d1b4aca3e8",
+          "data_bytes": 5592432,
+          "decoded_md5": "27a1c36f9eba3fee7ff67df35a3924ee",
+          "format": 22,
+          "height": 2048,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/gold_city/material_textures/gold_city_texture_2599365e907b8d098eaa35d1b4aca3e8.res",
+          "size_override": "Vector2(2048, 2048)",
+          "slot": "albedo_texture",
+          "width": 2048
+        },
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "e7246fc77395773f74efa4e4515ba2a0",
+          "data_bytes": 5592432,
+          "decoded_md5": "31ef81f86770c8f16375d2789acface6",
+          "format": 22,
+          "height": 2048,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/gold_city/material_textures/gold_city_texture_e7246fc77395773f74efa4e4515ba2a0.res",
+          "size_override": "Vector2(2048, 2048)",
+          "slot": "metallic_texture",
+          "width": 2048
+        },
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "1c494ed71affdfaf1ff4cd065d1b996d",
+          "data_bytes": 5592432,
+          "decoded_md5": "a023f55a4e3f1b4032564ae7d754dac7",
+          "format": 21,
+          "height": 2048,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/gold_city/material_textures/gold_city_texture_1c494ed71affdfaf1ff4cd065d1b996d.res",
+          "size_override": "Vector2(2048, 2048)",
+          "slot": "normal_texture",
+          "width": 2048
+        },
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "e7246fc77395773f74efa4e4515ba2a0",
+          "data_bytes": 5592432,
+          "decoded_md5": "31ef81f86770c8f16375d2789acface6",
+          "format": 22,
+          "height": 2048,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/gold_city/material_textures/gold_city_texture_e7246fc77395773f74efa4e4515ba2a0.res",
+          "size_override": "Vector2(2048, 2048)",
+          "slot": "roughness_texture",
+          "width": 2048
+        }
+      ],
+      "uid": "uid://d04kanspxoceo"
+    },
+    {
+      "path": "res://levels/gold_city/terrain/materials/gold_city_hull.tres",
+      "snapshot_md5": "1c5e01475fe8da6f14e0beaca0cac082",
+      "textures": [],
+      "uid": "uid://clyhxfsxcdbyu"
+    },
+    {
+      "path": "res://levels/gold_city/terrain/materials/gold_city_palm_billboard_continuous.tres",
+      "snapshot_md5": "e9a937aa4257b74fa4500a4b882452e1",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "e7438e24348dd65e1851bf7cead694bd",
+          "data_bytes": 14506160,
+          "decoded_md5": "8c58e94243fa2478417048aaca53fb8c",
+          "format": 22,
+          "height": 2655,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/gold_city/material_textures/gold_city_texture_e7438e24348dd65e1851bf7cead694bd.res",
+          "size_override": "Vector2(4096, 2655)",
+          "slot": "albedo_texture",
+          "width": 4096
+        }
+      ],
+      "uid": "uid://bdnexi3f82dvx"
+    },
+    {
+      "path": "res://levels/gold_city/terrain/materials/gold_city_pier_brown.tres",
+      "snapshot_md5": "1df41135975dbc8dac868a9ad5fbf614",
+      "textures": [],
+      "uid": "uid://cwk4okrpjl005"
+    },
+    {
+      "path": "res://levels/gold_city/terrain/materials/gold_city_pier_cladding_siding_tan.tres",
+      "snapshot_md5": "c65affafb5b8ce5ee9140e8e5e2c3c1c",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "e212a31c7378ea1ee2b3f9c7bf541d1c",
+          "data_bytes": 87408,
+          "decoded_md5": "e933d4787a45292230abf2cf70e1ddfb",
+          "format": 22,
+          "height": 256,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/gold_city/material_textures/gold_city_texture_e212a31c7378ea1ee2b3f9c7bf541d1c.res",
+          "size_override": "Vector2(256, 256)",
+          "slot": "albedo_texture",
+          "width": 256
+        }
+      ],
+      "uid": "uid://bt7h6u0bebldb"
+    },
+    {
+      "path": "res://levels/gold_city/terrain/materials/gold_city_pier_cladding_stucco_white.tres",
+      "snapshot_md5": "98d0fc5efec0c292f345440da2b3d7c0",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "35bea7bdd6bfac1fbc61ba46f249b30b",
+          "data_bytes": 131104,
+          "decoded_md5": "4ff89e8e32c843f85542ae8eb33b6c9f",
+          "format": 22,
+          "height": 384,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/gold_city/material_textures/gold_city_texture_35bea7bdd6bfac1fbc61ba46f249b30b.res",
+          "size_override": "Vector2(256, 384)",
+          "slot": "albedo_texture",
+          "width": 256
+        }
+      ],
+      "uid": "uid://c8jxuclsywsnr"
+    },
+    {
+      "path": "res://levels/gold_city/terrain/materials/gold_city_pier_color_e04.tres",
+      "snapshot_md5": "c535ee17da310f28a8a078569a04651d",
+      "textures": [],
+      "uid": "uid://db7b56thvbsnh"
+    },
+    {
+      "path": "res://levels/gold_city/terrain/materials/gold_city_pier_detail.tres",
+      "snapshot_md5": "5612265e2953f698c7c5d7f42b88d8bd",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "1d97064102b5ef716ff1af537e3c7341",
+          "data_bytes": 6880,
+          "decoded_md5": "e6d7b2c5c71425a02a303c63d9ff7844",
+          "format": 22,
+          "height": 61,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/gold_city/material_textures/gold_city_texture_1d97064102b5ef716ff1af537e3c7341.res",
+          "size_override": "Vector2(79, 61)",
+          "slot": "albedo_texture",
+          "width": 79
+        }
+      ],
+      "uid": "uid://ccdfccmxihp0b"
+    },
+    {
+      "path": "res://levels/gold_city/terrain/materials/gold_city_pier_gray_06.tres",
+      "snapshot_md5": "e55e5b7a3771cac90326aebfb60e9a7e",
+      "textures": [],
+      "uid": "uid://d1h23owqmnmfk"
+    },
+    {
+      "path": "res://levels/gold_city/terrain/materials/gold_city_pier_metal_seamed.tres",
+      "snapshot_md5": "e38b47dd3639ab240340d87bd4d02068",
+      "textures": [],
+      "uid": "uid://bwenj4dohohme"
+    },
+    {
+      "path": "res://levels/gold_city/terrain/materials/gold_city_pier_wood_floor.tres",
+      "snapshot_md5": "17581df0f0d60984d036bf8f5945f980",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "feff6cd622978c7f09ac3e05502ff360",
+          "data_bytes": 98384,
+          "decoded_md5": "677489dac66a224340ba8fb7660f1dd2",
+          "format": 22,
+          "height": 286,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/gold_city/material_textures/gold_city_texture_feff6cd622978c7f09ac3e05502ff360.res",
+          "size_override": "Vector2(256, 286)",
+          "slot": "albedo_texture",
+          "width": 256
+        }
+      ],
+      "uid": "uid://ijrctedcrk2w"
+    },
+    {
+      "path": "res://levels/gold_city/terrain/materials/gold_city_ship_color_000.tres",
+      "snapshot_md5": "9422fd7f5039101453ac526e481c76b4",
+      "textures": [],
+      "uid": "uid://pmxbknj1c6co"
+    },
+    {
+      "path": "res://levels/gold_city/terrain/materials/gold_city_ship_color_m02.tres",
+      "snapshot_md5": "f4d723ed6e320861c7414f104186511f",
+      "textures": [],
+      "uid": "uid://dv1aqeytcc7je"
+    },
+    {
+      "path": "res://levels/gold_city/terrain/materials/gold_city_ship_color_m09.tres",
+      "snapshot_md5": "327dfb427ed98d515769613a28b6ce46",
+      "textures": [],
+      "uid": "uid://bj7culbytqgqd"
+    },
+    {
+      "path": "res://levels/gold_city/terrain/materials/gold_city_ship_cool_gray_03.tres",
+      "snapshot_md5": "5ea61ffaf42045d109fc0dcec88d037c",
+      "textures": [],
+      "uid": "uid://ba362ug0nbvho"
+    },
+    {
+      "path": "res://levels/gold_city/terrain/materials/gold_city_ship_cool_gray_04.tres",
+      "snapshot_md5": "6017ac8c6e5920fcfdd83895ec2983b2",
+      "textures": [],
+      "uid": "uid://bxyhecu1xy7nv"
+    },
+    {
+      "path": "res://levels/gold_city/terrain/materials/gold_city_ship_dark_gray.tres",
+      "snapshot_md5": "3f4a5ff505ad6099317f66a5b76eb7ea",
+      "textures": [],
+      "uid": "uid://ve8f0gdfd1fs"
+    },
+    {
+      "path": "res://levels/gold_city/terrain/materials/gold_city_ship_ghost_white.tres",
+      "snapshot_md5": "65557b7fddcfd02d352f3739a80587f5",
+      "textures": [],
+      "uid": "uid://cpdo41k7b0m03"
+    },
+    {
+      "path": "res://levels/gold_city/terrain/materials/gold_city_ship_gray.tres",
+      "snapshot_md5": "6e7d055e9385fe08fff92f3293233154",
+      "textures": [],
+      "uid": "uid://s4r1ky1eip14"
+    },
+    {
+      "path": "res://levels/gold_city/terrain/materials/gold_city_ship_sand.tres",
+      "snapshot_md5": "9fbc9ec1e2b1e4a3422b160cacb8323e",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "e93c746b9734267033c5e586f2caa705",
+          "data_bytes": 269264,
+          "decoded_md5": "c20f745da31c04a86c7770149962b7e1",
+          "format": 22,
+          "height": 364,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/gold_city/material_textures/gold_city_texture_e93c746b9734267033c5e586f2caa705.res",
+          "size_override": "Vector2(552, 364)",
+          "slot": "albedo_texture",
+          "width": 552
+        }
+      ],
+      "uid": "uid://p2fv2bosghms"
+    },
+    {
+      "path": "res://levels/gold_city/terrain/materials/gold_city_ship_water_pool.tres",
+      "snapshot_md5": "c99cc3aac287398009ff2d292600170e",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "a142e1b8e2aa5472c3564d012e19be70",
+          "data_bytes": 87408,
+          "decoded_md5": "acd8498818e7ac0f04714e785e961801",
+          "format": 22,
+          "height": 256,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/gold_city/material_textures/gold_city_texture_a142e1b8e2aa5472c3564d012e19be70.res",
+          "size_override": "Vector2(256, 256)",
+          "slot": "albedo_texture",
+          "width": 256
+        }
+      ],
+      "uid": "uid://c5cyathn26p4c"
+    },
+    {
+      "path": "res://levels/gold_city/terrain/materials/gold_city_ship_white.tres",
+      "snapshot_md5": "e7594847f84d679361b8b969aa641c8e",
+      "textures": [],
+      "uid": "uid://c2fv3t1nvw7xt"
+    },
+    {
+      "path": "res://levels/gold_city/terrain/materials/gold_city_terrain.tres",
+      "snapshot_md5": "66cc2b332ebcd18ff68fd8eb4f519d6a",
+      "textures": [],
+      "uid": "uid://v5gdk2shw5wd"
+    }
+  ],
+  "resources": [
+    "res://levels/gold_city/props/roller_coaster/animated_roller_coaster.glb",
+    "res://levels/gold_city/props/ferris_wheel/ferrys_wheel.glb",
+    "res://levels/gold_city/city/buildings/casino/casino.glb",
+    "res://levels/gold_city/terrain/gold_city.glb",
+    "res://levels/gold_city/gold_city.tscn"
+  ],
+  "target": "gold_city"
+}
