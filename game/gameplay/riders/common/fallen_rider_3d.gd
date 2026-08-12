@@ -9,6 +9,9 @@ const WaterPhysicsScript = preload(
 @onready var simulator: PhysicalBoneSimulator3D = (
 	$RiderRig/RiderModelRoot/rider_bot/SKEL_Rider/Skeleton3D/PhysicalBoneSimulator3D
 )
+@onready var visual_interpolation: RagdollVisualInterpolationModifier3D = (
+	$RiderRig/RiderModelRoot/rider_bot/SKEL_Rider/Skeleton3D/RagdollVisualInterpolationModifier3D
+)
 @onready var water_physics = $WaterPhysics as WaterPhysicsScript
 
 
@@ -45,6 +48,7 @@ func start_simulation() -> void:
 
 	simulator.active = true
 	simulator.physical_bones_start_simulation()
+	visual_interpolation.begin_interpolation()
 	water_physics.set_active(true)
 
 
@@ -52,6 +56,7 @@ func stop_simulation() -> void:
 	if not is_instance_valid(simulator):
 		return
 
+	visual_interpolation.end_interpolation()
 	simulator.physical_bones_stop_simulation()
 	simulator.active = false
 	water_physics.clear_water_provider()
@@ -69,6 +74,7 @@ func prepare_dormant() -> void:
 
 	# Setting the simulator inactive ensures stopped PhysicalBone3D bodies
 	# become inert/static with collision layer and mask disabled by Godot.
+	visual_interpolation.end_interpolation()
 	simulator.active = false
 	simulator.physical_bones_stop_simulation()
 	water_physics.clear_water_provider()
