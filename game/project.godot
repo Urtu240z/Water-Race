@@ -20,6 +20,7 @@ config/icon="res://icon.svg"
 [autoload]
 
 GraphicsQualityManager="*res://systems/graphics/graphics_quality_manager.gd"
+LoadTrace="*uid://dqvm27wony0r3"
 
 [display]
 
