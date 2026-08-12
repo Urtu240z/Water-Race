@@ -55,10 +55,12 @@ func _ready() -> void:
 	_validate_references()
 	_install_course_sign_light_pool()
 	LoadTrace.mark("LEVEL_ROOT_READY: %s" % name)
+	LoadTrace.mark("FIRST_FRAME_TRACE_QUEUED: %s" % name)
 	call_deferred("_trace_first_playable_frame")
 
 
 func _trace_first_playable_frame() -> void:
+	LoadTrace.mark("FIRST_FRAME_TRACE_CALLBACK: %s" % name)
 	await get_tree().process_frame
 	LoadTrace.mark("FIRST_PROCESS_FRAME: %s" % name)
 	await RenderingServer.frame_post_draw

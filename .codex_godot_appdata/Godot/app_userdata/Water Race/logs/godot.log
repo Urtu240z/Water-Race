@@ -4,16 +4,17 @@ ERROR: Failed to read the root certificate store.
    at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)
 
 ========== WATER RACE LOAD TRACE ==========
-[    1.305 ms] GAME START                          +   1.305 ms
-[    1.347 ms] GRAPHICS_AUTOLOAD_READY_BEGIN       +   0.042 ms
-[    1.488 ms] GRAPHICS_PROFILES_LOAD_BEGIN        +   0.141 ms
-[    4.042 ms] GRAPHICS_PROFILES_LOADED            +   2.554 ms
-[    4.095 ms] GRAPHICS_AUTOLOAD_READY_END         +   0.053 ms
-[  125.830 ms] RIDER_READY_BEGIN                   + 121.735 ms
-[  125.970 ms] RIDER_READY                         +   0.140 ms
-[  126.021 ms] GRAPHICS_APPLY_BEGIN                +   0.051 ms
-[  126.040 ms] GRAPHICS_TARGETS_COLLECTED          +   0.019 ms
-[  126.082 ms] GRAPHICS_APPLY_END                  +   0.042 ms
+[    1.069 ms] GAME START                          +   1.069 ms
+[    1.125 ms] GRAPHICS_AUTOLOAD_READY_BEGIN       +   0.056 ms
+[    1.162 ms] GRAPHICS_PROFILES_LOAD_BEGIN        +   0.037 ms
+[    3.943 ms] GRAPHICS_PROFILES_LOADED            +   2.781 ms
+[    4.002 ms] GRAPHICS_INITIAL_APPLY_QUEUED       +   0.059 ms
+[    4.018 ms] GRAPHICS_AUTOLOAD_READY_END         +   0.016 ms
+[  141.128 ms] RIDER_READY_BEGIN                   + 137.110 ms
+[  141.305 ms] RIDER_READY                         +   0.177 ms
+[  141.380 ms] GRAPHICS_APPLY_BEGIN                +   0.075 ms
+[  141.398 ms] GRAPHICS_TARGETS_COLLECTED          +   0.018 ms
+[  141.460 ms] GRAPHICS_APPLY_END                  +   0.062 ms
 === RIDER IDENTITY MIGRATION VALIDATION ===
 PASS: RiderRig scene loads.
 PASS: RiderRig default remains physical Athletic Female as rider_03.

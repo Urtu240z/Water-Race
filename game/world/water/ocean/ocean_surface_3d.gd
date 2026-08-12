@@ -14,6 +14,12 @@ const RING_COLOR_MIDDLE := Color(0.5, 0.0, 0.0, 1.0)
 const RING_COLOR_FAR := Color(1.0, 0.0, 0.0, 1.0)
 const MAX_SAFE_ESTIMATED_VERTICES: int = 1_500_000
 const DEBUG_CIRCLE_SEGMENTS: int = 128
+const MESH_CACHE_PATHS := {
+	0: "res://world/water/ocean/mesh_cache/ocean_surface_low.res",
+	1: "res://world/water/ocean/mesh_cache/ocean_surface_medium.res",
+	2: "res://world/water/ocean/mesh_cache/ocean_surface_high.res",
+}
+const MESH_CACHE_SCRIPT := preload("res://world/water/ocean/ocean_surface_mesh_cache.gd")
 
 class MeshBuffers:
 	var vertices := PackedVector3Array()
@@ -63,7 +69,7 @@ class MeshBuffers:
 		add_triangle(point_a, point_b, point_c)
 		add_triangle(point_a, point_c, point_d)
 
-	func to_array_mesh(surface_name: StringName) -> ArrayMesh:
+	func to_array_mesh(surface_name: StringName, trace_prefix: String = "") -> ArrayMesh:
 		var mesh_arrays: Array = []
 		mesh_arrays.resize(Mesh.ARRAY_MAX)
 		mesh_arrays[Mesh.ARRAY_VERTEX] = vertices
@@ -71,11 +77,25 @@ class MeshBuffers:
 		mesh_arrays[Mesh.ARRAY_TEX_UV] = uvs
 		mesh_arrays[Mesh.ARRAY_COLOR] = colors
 		mesh_arrays[Mesh.ARRAY_INDEX] = indices
+		if not trace_prefix.is_empty():
+			_trace("%s_ARRAYS_READY" % trace_prefix)
 		var result := ArrayMesh.new()
 		result.resource_name = surface_name
+		if not trace_prefix.is_empty():
+			_trace("%s_ADD_SURFACE_BEGIN" % trace_prefix)
 		result.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, mesh_arrays)
+		if not trace_prefix.is_empty():
+			_trace("%s_ADD_SURFACE_END" % trace_prefix)
 		result.surface_set_name(0, surface_name)
 		return result
+
+	func _trace(label: String) -> void:
+		var tree := Engine.get_main_loop() as SceneTree
+		if tree == null:
+			return
+		var tracer := tree.root.get_node_or_null("LoadTrace")
+		if tracer != null:
+			tracer.mark(label)
 
 
 @export_group("Target")
@@ -206,6 +226,7 @@ var _uniform_update_queued: bool = false
 var _warned_missing_material: bool = false
 var _has_snapped_origin: bool = false
 var _quality_application_active: bool = false
+var _graphics_quality_level: int = -1
 
 
 func _enter_tree() -> void:
@@ -337,12 +358,13 @@ func get_debug_status() -> Dictionary:
 
 
 func set_graphics_quality(
-	_level: int,
+	level: int,
 	profile: GraphicsQualityProfile
 ) -> void:
 	if profile == null:
 		return
 	var geometry_changed := not _geometry_matches_profile(profile)
+	_graphics_quality_level = level
 	_apply_graphics_quality_parameters(profile)
 	_mesh_rebuild_queued = false
 	if not _structural_parameters_are_valid():
@@ -360,6 +382,7 @@ func _apply_initial_graphics_quality() -> void:
 		return
 	var profile := GraphicsQualityManager.current_profile
 	if profile != null:
+		_graphics_quality_level = GraphicsQualityManager.current_quality
 		_apply_graphics_quality_parameters(profile)
 
 
@@ -410,6 +433,18 @@ func get_graphics_quality_debug_status() -> Dictionary:
 
 func rebuild_meshes() -> void:
 	_rebuild_meshes()
+
+
+func build_mesh_cache_for_profile(
+	profile: GraphicsQualityProfile
+) -> Resource:
+	if profile == null:
+		return null
+	_apply_graphics_quality_parameters(profile)
+	if not _structural_parameters_are_valid():
+		return null
+	_update_effective_radii()
+	return _build_procedural_mesh_cache()
 
 
 func _request_mesh_rebuild() -> void:
@@ -503,6 +538,28 @@ func _rebuild_meshes() -> void:
 		)
 		return
 	mesh_rebuild_count += 1
+	_update_effective_radii()
+
+	var mesh_cache := _load_baked_mesh_cache()
+	if mesh_cache == null:
+		_trace_mark("OCEAN_MESH_CACHE_MISS")
+		mesh_cache = _build_procedural_mesh_cache()
+	else:
+		_trace_mark("OCEAN_MESH_CACHE_HIT")
+	_apply_mesh_cache(mesh_cache)
+
+	_apply_rendering_settings()
+	_bind_visual_material()
+	_update_material_uniforms(true)
+	_trace_mark("OCEAN_BUILD_DEBUG_GUIDES_BEGIN")
+	_build_debug_guides()
+	_trace_mark("OCEAN_BUILD_DEBUG_GUIDES_END")
+	if debug_show_rings:
+		_print_mesh_statistics()
+	_trace_mark("OCEAN_MESH_REBUILD_END #%d" % mesh_rebuild_count)
+
+
+func _update_effective_radii() -> void:
 
 	effective_near_radius = _ceil_to_step(near_radius, middle_cell_size)
 	effective_middle_radius = _ceil_to_step(middle_radius, far_cell_size)
@@ -516,18 +573,68 @@ func _rebuild_meshes() -> void:
 		effective_middle_radius + far_cell_size * 2.0
 	)
 
+
+func _load_baked_mesh_cache() -> Resource:
+	var cache_path := String(MESH_CACHE_PATHS.get(_graphics_quality_level, ""))
+	if cache_path.is_empty() or not ResourceLoader.exists(cache_path):
+		return null
+	_trace_mark("OCEAN_MESH_CACHE_LOAD_BEGIN")
+	var cache := ResourceLoader.load(
+		cache_path,
+		"",
+		ResourceLoader.CACHE_MODE_REUSE
+	)
+	_trace_mark("OCEAN_MESH_CACHE_LOAD_END")
+	if cache == null or not cache.matches_geometry(
+		near_radius,
+		near_cell_size,
+		middle_radius,
+		middle_cell_size,
+		far_radius,
+		far_cell_size
+	):
+		push_warning(
+			"OceanSurface3D: baked mesh cache does not match the active profile: %s"
+			% cache_path
+		)
+		return null
+	return cache
+
+
+func _build_procedural_mesh_cache() -> Resource:
+	var cache := MESH_CACHE_SCRIPT.new()
+	cache.near_radius = near_radius
+	cache.near_cell_size = near_cell_size
+	cache.middle_radius = middle_radius
+	cache.middle_cell_size = middle_cell_size
+	cache.far_radius = far_radius
+	cache.far_cell_size = far_cell_size
+	cache.effective_near_radius = effective_near_radius
+	cache.effective_middle_radius = effective_middle_radius
+	cache.effective_far_radius = effective_far_radius
+
+	_trace_mark("OCEAN_BUILD_NEAR_BEGIN")
 	var near_buffers := MeshBuffers.new(RING_COLOR_NEAR)
+	_trace_mark("OCEAN_BUILD_NEAR_GEOMETRY_BEGIN")
 	_append_full_grid(
 		near_buffers,
 		effective_near_radius,
 		near_cell_size
 	)
-	_near_grid.mesh = near_buffers.to_array_mesh(&"NearGrid")
-	near_vertex_count = near_buffers.vertices.size()
-	near_triangle_count = floori(float(near_buffers.indices.size()) / 3.0)
+	_trace_mark("OCEAN_BUILD_NEAR_GEOMETRY_END")
+	var near_mesh := near_buffers.to_array_mesh(
+		&"NearGrid",
+		"OCEAN_BUILD_NEAR" if is_inside_tree() else ""
+	)
+	cache.near_mesh = near_mesh
+	cache.near_vertex_count = near_buffers.vertices.size()
+	cache.near_triangle_count = floori(float(near_buffers.indices.size()) / 3.0)
+	_trace_mark("OCEAN_BUILD_NEAR_END")
 
+	_trace_mark("OCEAN_BUILD_MIDDLE_BEGIN")
 	var middle_buffers := MeshBuffers.new(RING_COLOR_MIDDLE)
 	var middle_transition_outer := effective_near_radius + middle_cell_size
+	_trace_mark("OCEAN_BUILD_MIDDLE_GEOMETRY_BEGIN")
 	_append_coarse_ring(
 		middle_buffers,
 		effective_middle_radius,
@@ -540,12 +647,20 @@ func _rebuild_meshes() -> void:
 		near_cell_size,
 		middle_cell_size
 	)
-	_middle_ring.mesh = middle_buffers.to_array_mesh(&"MiddleRing")
-	middle_vertex_count = middle_buffers.vertices.size()
-	middle_triangle_count = floori(float(middle_buffers.indices.size()) / 3.0)
+	_trace_mark("OCEAN_BUILD_MIDDLE_GEOMETRY_END")
+	var middle_mesh := middle_buffers.to_array_mesh(
+		&"MiddleRing",
+		"OCEAN_BUILD_MIDDLE" if is_inside_tree() else ""
+	)
+	cache.middle_mesh = middle_mesh
+	cache.middle_vertex_count = middle_buffers.vertices.size()
+	cache.middle_triangle_count = floori(float(middle_buffers.indices.size()) / 3.0)
+	_trace_mark("OCEAN_BUILD_MIDDLE_END")
 
+	_trace_mark("OCEAN_BUILD_FAR_BEGIN")
 	var far_buffers := MeshBuffers.new(RING_COLOR_FAR)
 	var far_transition_outer := effective_middle_radius + far_cell_size
+	_trace_mark("OCEAN_BUILD_FAR_GEOMETRY_BEGIN")
 	_append_coarse_ring(
 		far_buffers,
 		effective_far_radius,
@@ -558,22 +673,39 @@ func _rebuild_meshes() -> void:
 		middle_cell_size,
 		far_cell_size
 	)
-	_far_ring.mesh = far_buffers.to_array_mesh(&"FarRing")
-	far_vertex_count = far_buffers.vertices.size()
-	far_triangle_count = floori(float(far_buffers.indices.size()) / 3.0)
+	_trace_mark("OCEAN_BUILD_FAR_GEOMETRY_END")
+	var far_mesh := far_buffers.to_array_mesh(
+		&"FarRing",
+		"OCEAN_BUILD_FAR" if is_inside_tree() else ""
+	)
+	cache.far_mesh = far_mesh
+	cache.far_vertex_count = far_buffers.vertices.size()
+	cache.far_triangle_count = floori(float(far_buffers.indices.size()) / 3.0)
+	_trace_mark("OCEAN_BUILD_FAR_END")
+	return cache
 
-	_apply_rendering_settings()
-	_bind_visual_material()
-	_update_material_uniforms(true)
-	_build_debug_guides()
-	if debug_show_rings:
-		_print_mesh_statistics()
-	_trace_mark("OCEAN_MESH_REBUILD_END #%d" % mesh_rebuild_count)
+
+func _apply_mesh_cache(cache: Resource) -> void:
+	_trace_mark("OCEAN_MESH_CACHE_ASSIGN_BEGIN")
+	_near_grid.mesh = cache.near_mesh
+	_middle_ring.mesh = cache.middle_mesh
+	_far_ring.mesh = cache.far_mesh
+	_trace_mark("OCEAN_MESH_CACHE_ASSIGN_END")
+	effective_near_radius = cache.effective_near_radius
+	effective_middle_radius = cache.effective_middle_radius
+	effective_far_radius = cache.effective_far_radius
+	near_vertex_count = cache.near_vertex_count
+	middle_vertex_count = cache.middle_vertex_count
+	far_vertex_count = cache.far_vertex_count
+	near_triangle_count = cache.near_triangle_count
+	middle_triangle_count = cache.middle_triangle_count
+	far_triangle_count = cache.far_triangle_count
 
 
 func _trace_mark(label: String) -> void:
-	if not Engine.is_editor_hint():
+	if not Engine.is_editor_hint() and is_inside_tree():
 		LoadTrace.mark(label)
+
 
 func _append_full_grid(
 	buffers: MeshBuffers,

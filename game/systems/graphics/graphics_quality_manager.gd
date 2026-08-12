@@ -67,6 +67,7 @@ func _ready() -> void:
 	current_quality = _get_startup_quality()
 	current_profile = _profiles.get(current_quality) as GraphicsQualityProfile
 	get_tree().node_added.connect(_on_tree_node_added)
+	LoadTrace.mark("GRAPHICS_INITIAL_APPLY_QUEUED")
 	call_deferred("_refresh_and_apply")
 	LoadTrace.mark("GRAPHICS_AUTOLOAD_READY_END")
 
@@ -244,6 +245,7 @@ func _queue_scene_refresh() -> void:
 	if _scene_refresh_queued:
 		return
 	_scene_refresh_queued = true
+	LoadTrace.mark("GRAPHICS_SCENE_REFRESH_QUEUED")
 	call_deferred("_refresh_and_apply")
 
 

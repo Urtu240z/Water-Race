@@ -1,0 +1,19 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+ERROR: Failed to read the root certificate store.
+   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)
+
+========== WATER RACE LOAD TRACE ==========
+[    1.029 ms] GAME START                          +   1.029 ms
+[    3.405 ms] GRAPHICS_AUTOLOAD_READY_BEGIN       +   2.376 ms
+[    3.472 ms] GRAPHICS_PROFILES_LOAD_BEGIN        +   0.067 ms
+[    5.726 ms] GRAPHICS_PROFILES_LOADED            +   2.254 ms
+[    5.779 ms] GRAPHICS_INITIAL_APPLY_QUEUED       +   0.053 ms
+[    5.792 ms] GRAPHICS_AUTOLOAD_READY_END         +   0.013 ms
+[    5.920 ms] RIDER_READY_BEGIN                   +   0.128 ms
+[    6.038 ms] RIDER_READY                         +   0.118 ms
+[    7.659 ms] PAUSE_MENU_READY                    +   1.621 ms
+[    8.678 ms] GRAPHICS_APPLY_BEGIN                +   1.019 ms
+[    8.829 ms] GRAPHICS_TARGETS_COLLECTED          +   0.151 ms
+[    9.375 ms] GRAPHICS_APPLY_END                  +   0.546 ms
+RIDER SELECTOR VALIDATION PASS: 6 riders discovered and applied.
