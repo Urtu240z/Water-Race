@@ -65,7 +65,9 @@ PASS: rider_04 selection hides rider_01.
 PASS: rider_04 selection hides rider_02.
 PASS: rider_04 selection hides rider_03.
 PASS: rider_04 selection hides rider_05.
-PASS: rider_05 keeps its compatible source GLB for RiderRig rebuilds.
+PASS: rider_05 normal runtime has no staged compatible GLB.
+PASS: rider_05 normal runtime has no staged compatible GLB .import.
+PASS: rider_05 has no generated staging artifact at runtime root.
 PASS: rider_05 runtime mesh loads.
 PASS: rider_05 runtime skin loads.
 PASS: rider_05 has one runtime surface.

@@ -216,6 +216,7 @@ func _enter_tree() -> void:
 func _ready() -> void:
 	_trace_mark("OCEAN_SURFACE_READY_BEGIN")
 	_configure_processing()
+	_apply_initial_graphics_quality()
 	_ensure_meshes()
 	_trace_mark("OCEAN_SURFACE_MESHES_ENSURED")
 	_bind_visual_material()
@@ -341,6 +342,30 @@ func set_graphics_quality(
 ) -> void:
 	if profile == null:
 		return
+	var geometry_changed := not _geometry_matches_profile(profile)
+	_apply_graphics_quality_parameters(profile)
+	_mesh_rebuild_queued = false
+	if not _structural_parameters_are_valid():
+		push_error("OceanSurface3D: rejected invalid graphics-quality geometry.")
+		return
+	if is_node_ready():
+		if geometry_changed:
+			_rebuild_meshes()
+	else:
+		_request_mesh_rebuild()
+
+
+func _apply_initial_graphics_quality() -> void:
+	if Engine.is_editor_hint():
+		return
+	var profile := GraphicsQualityManager.current_profile
+	if profile != null:
+		_apply_graphics_quality_parameters(profile)
+
+
+func _apply_graphics_quality_parameters(
+	profile: GraphicsQualityProfile
+) -> void:
 	_quality_application_active = true
 	near_radius = profile.ocean_near_radius
 	near_cell_size = profile.ocean_near_cell_size
@@ -354,14 +379,17 @@ func set_graphics_quality(
 	middle_wave_amplitude_ratio = profile.ocean_middle_wave_amplitude_ratio
 	far_wave_amplitude_ratio = profile.ocean_far_wave_amplitude_ratio
 	_quality_application_active = false
-	_mesh_rebuild_queued = false
-	if not _structural_parameters_are_valid():
-		push_error("OceanSurface3D: rejected invalid graphics-quality geometry.")
-		return
-	if is_node_ready():
-		_rebuild_meshes()
-	else:
-		_request_mesh_rebuild()
+
+
+func _geometry_matches_profile(profile: GraphicsQualityProfile) -> bool:
+	return (
+		is_equal_approx(near_radius, profile.ocean_near_radius)
+		and is_equal_approx(near_cell_size, profile.ocean_near_cell_size)
+		and is_equal_approx(middle_radius, profile.ocean_middle_radius)
+		and is_equal_approx(middle_cell_size, profile.ocean_middle_cell_size)
+		and is_equal_approx(far_radius, profile.ocean_far_radius)
+		and is_equal_approx(far_cell_size, profile.ocean_far_cell_size)
+	)
 
 
 func get_graphics_quality_debug_status() -> Dictionary:
