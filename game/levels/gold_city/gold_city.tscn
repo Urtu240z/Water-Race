@@ -68,6 +68,8 @@
 [ext_resource type="PackedScene" uid="uid://byqrxgrtjkcgm" path="res://world/props/buildings/beach_hotel/beach_hotel.glb" id="70_pheaw"]
 [ext_resource type="Material" uid="uid://diw4mvukd0v3f" path="res://shared/materials/generic/materials/emisive.tres" id="71_ambj4"]
 [ext_resource type="PackedScene" uid="uid://cfw7pu0e3ws7n" path="res://world/props/rocks/rock_02.glb" id="72_hbj0a"]
+[ext_resource type="Script" uid="uid://bcftfjsjn8hc4" path="res://world/vegetation/trees/tree_projected_shadow_baker.gd" id="72_ol3en"]
+[ext_resource type="Texture2D" uid="uid://djr4jtluu1lp5" path="res://levels/gold_city/terrain/gold_city_tree_shadows.png" id="73_cfohk"]
 [ext_resource type="PackedScene" uid="uid://dk85eu2oeyca2" path="res://levels/gold_city/props/roller_coaster/animated_roller_coaster.glb" id="73_e6itw"]
 [ext_resource type="PackedScene" uid="uid://b43swywpnr25f" path="res://levels/gold_city/props/ferris_wheel/ferrys_wheel.glb" id="73_q2anr"]
 [ext_resource type="PackedScene" uid="uid://cpr1u70kmlafe" path="res://levels/gold_city/props/ferris_wheel/ferris_wheel_old.glb" id="74_gtyq1"]
@@ -2710,6 +2712,23 @@ surface_material_override/10 = SubResource("StandardMaterial3D_7xt3c")
 libraries/ = SubResource("AnimationLibrary_iyevr")
 autoplay = &"Noria"
 speed_scale = 0.2
+
+[node name="TreeProjectedShadowBaker" type="Node3D" parent="." unique_id=472315960]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.510468, -49.139404, -57.103714)
+script = ExtResource("72_ol3en")
+terrain_mesh_path = NodePath("../TerrainRoot/Gold_City/Scene Collection/Collection/Terrain/Terrain_VIS")
+sun_light_path = NodePath("../Environment/DirectionalLight3D")
+output_png_path = "res://levels/gold_city/terrain/gold_city_tree_shadows.png"
+
+[node name="BakedTreeShadowDecal" type="Decal" parent="." unique_id=1166637003]
+transform = Transform3D(-0.9285564, 0.2912857, 0.23007774, 0, 0.61983573, -0.7847316, -0.3711915, -0.72866756, -0.57555234, -236.06909, 49.172195, 282.7168)
+size = Vector3(3401.5044, 4550.6094, 3401.5044)
+texture_albedo = ExtResource("73_cfohk")
+emission_energy = 0.0
+albedo_mix = 0.8
+upper_fade = 0.0
+lower_fade = 0.0
+cull_mask = 1
 
 [editable path="TerrainRoot/independent_island"]
 [editable path="TerrainRoot/independent_island2"]
