@@ -57,14 +57,18 @@ var _application_revision: int = 0
 
 
 func _ready() -> void:
+	LoadTrace.mark("GRAPHICS_AUTOLOAD_READY_BEGIN")
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	Engine.max_fps = 0
 	is_steam_deck = _detect_steam_deck()
+	LoadTrace.mark("GRAPHICS_PROFILES_LOAD_BEGIN")
 	_load_profiles()
+	LoadTrace.mark("GRAPHICS_PROFILES_LOADED")
 	current_quality = _get_startup_quality()
 	current_profile = _profiles.get(current_quality) as GraphicsQualityProfile
 	get_tree().node_added.connect(_on_tree_node_added)
 	call_deferred("_refresh_and_apply")
+	LoadTrace.mark("GRAPHICS_AUTOLOAD_READY_END")
 
 
 func set_quality(quality: int, persist: bool = true) -> void:
@@ -244,9 +248,12 @@ func _queue_scene_refresh() -> void:
 
 
 func _refresh_and_apply() -> void:
+	LoadTrace.mark("GRAPHICS_APPLY_BEGIN")
 	_scene_refresh_queued = false
 	_refresh_targets()
+	LoadTrace.mark("GRAPHICS_TARGETS_COLLECTED")
 	_apply_current_profile()
+	LoadTrace.mark("GRAPHICS_APPLY_END")
 
 
 func _refresh_targets() -> void:

@@ -40,6 +40,14 @@ const EXPECTED := {
 		"vertices": 27488,
 		"indices": 149601,
 	},
+	&"rider_05": {
+		"value": 6,
+		"mesh": "res://gameplay/riders/rider_05/runtime/rider_05_body_mesh.res",
+		"skin": "res://gameplay/riders/rider_05/runtime/rider_05_skin.res",
+		"lods": 12,
+		"vertices": 29140,
+		"indices": 149997,
+	},
 }
 const REPORT_PATH := "user://rider_identity_migration_report.txt"
 
@@ -76,7 +84,7 @@ func _validate() -> void:
 	)
 	_validate_jet_ski_default()
 	var options: Array[Dictionary] = rig.get_available_rider_skin_options()
-	_expect(options.size() == 5, "Exactly five selectable Rider identities are exposed.")
+	_expect(options.size() == 6, "Exactly six selectable Rider identities are exposed.")
 	var actual_ids: Array[StringName] = []
 	for option: Dictionary in options:
 		actual_ids.append(StringName(String(option["id"]).to_lower()))

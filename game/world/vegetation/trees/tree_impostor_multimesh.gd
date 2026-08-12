@@ -940,11 +940,13 @@ func _load_baked_multimesh(
 		return false
 
 
+	_trace_mark("TREE_BAKE_LOAD_BEGIN: %s" % get_path())
 	var loaded_resource: Resource = (
 		ResourceLoader.load(
 			baked_path
 		)
 	)
+	_trace_mark("TREE_BAKE_LOADED: %s" % get_path())
 
 
 	if not loaded_resource is MultiMesh:
@@ -2274,3 +2276,8 @@ func _clear_generated_multimesh() -> void:
 	multimesh.instance_count = 0
 
 	multimesh.visible_instance_count = -1
+
+
+func _trace_mark(label: String) -> void:
+	if not Engine.is_editor_hint():
+		LoadTrace.mark(label)

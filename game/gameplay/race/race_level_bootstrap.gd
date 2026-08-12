@@ -39,17 +39,31 @@ var _chase_camera: ChaseCamera
 
 
 func _enter_tree() -> void:
+	LoadTrace.mark("LEVEL_ENTER_TREE: %s" % name)
 	_resolve_references()
+	LoadTrace.mark("LEVEL_REFERENCES_RESOLVED: %s" % name)
 	_align_ocean()
 	if place_vehicle_at_spawn:
 		_place_vehicle_at_spawn()
+	LoadTrace.mark("LEVEL_ROOT_ENTER_TREE_DONE: %s" % name)
 
 
 func _ready() -> void:
+	LoadTrace.mark("LEVEL_ROOT_READY_BEGIN: %s" % name)
 	_resolve_references()
 	_align_ocean()
 	_validate_references()
 	_install_course_sign_light_pool()
+	LoadTrace.mark("LEVEL_ROOT_READY: %s" % name)
+	call_deferred("_trace_first_playable_frame")
+
+
+func _trace_first_playable_frame() -> void:
+	await get_tree().process_frame
+	LoadTrace.mark("FIRST_PROCESS_FRAME: %s" % name)
+	await RenderingServer.frame_post_draw
+	LoadTrace.mark("FIRST_FRAME_DRAWN: %s" % name)
+	LoadTrace.flush()
 
 
 func _resolve_references() -> void:

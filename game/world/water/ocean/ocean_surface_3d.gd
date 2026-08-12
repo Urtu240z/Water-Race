@@ -214,11 +214,14 @@ func _enter_tree() -> void:
 
 
 func _ready() -> void:
+	_trace_mark("OCEAN_SURFACE_READY_BEGIN")
 	_configure_processing()
 	_ensure_meshes()
+	_trace_mark("OCEAN_SURFACE_MESHES_ENSURED")
 	_bind_visual_material()
 	_update_following(true)
 	_update_debug_visibility()
+	_trace_mark("OCEAN_SURFACE_READY_END")
 
 
 func _process(_delta: float) -> void:
@@ -456,6 +459,7 @@ func _configure_processing() -> void:
 
 
 func _rebuild_meshes() -> void:
+	_trace_mark("OCEAN_MESH_REBUILD_BEGIN #%d" % (mesh_rebuild_count + 1))
 	_mesh_rebuild_queued = false
 	if (
 		_near_grid == null
@@ -536,6 +540,12 @@ func _rebuild_meshes() -> void:
 	_build_debug_guides()
 	if debug_show_rings:
 		_print_mesh_statistics()
+	_trace_mark("OCEAN_MESH_REBUILD_END #%d" % mesh_rebuild_count)
+
+
+func _trace_mark(label: String) -> void:
+	if not Engine.is_editor_hint():
+		LoadTrace.mark(label)
 
 func _append_full_grid(
 	buffers: MeshBuffers,

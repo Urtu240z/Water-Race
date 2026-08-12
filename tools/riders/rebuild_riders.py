@@ -19,7 +19,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 GAME = ROOT / "game"
 PROFILE = Path(__file__).with_name("import_profiles.json")
-RIDERS = ("rider_01", "rider_02", "rider_03", "rider_04")
+RIDERS = ("rider_01", "rider_02", "rider_03", "rider_04", "rider_05")
 IMAGE_SUFFIXES = {".png", ".jpg", ".jpeg", ".webp", ".tga", ".bmp"}
 
 
@@ -369,7 +369,7 @@ def cleanup_only(riders: tuple[str, ...]) -> None:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     group = parser.add_mutually_exclusive_group()
-    group.add_argument("--all", action="store_true", help="rebuild the four physical Riders")
+    group.add_argument("--all", action="store_true", help="rebuild the five physical Riders")
     group.add_argument("--rider", choices=RIDERS, help="rebuild one Rider")
     parser.add_argument("--godot-bin", help="Godot 4.7.1 executable (or set GODOT_BIN)")
     parser.add_argument("--cleanup", action="store_true", help="remove stale staging artifacts and exit")

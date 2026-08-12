@@ -36,7 +36,8 @@
     "rider_01": {"uid": "uid://chdxmus0psnvc", "import_cache": "cb4721828d6a0922dfc4e9ac0fbb1fc7", "lods": 14, "vertices": 27992, "indices": 146151},
     "rider_02": {"uid": "uid://cplqhduwv6c2m", "import_cache": "b2f2d34b0a2e9ee57ef881591614a214", "lods": 14, "vertices": 38660, "indices": 208179},
     "rider_03": {"uid": "uid://xgiundwij7p6", "import_cache": "a757df8335643f14f2390c2af55b5bc7", "lods": 16, "vertices": 36689, "indices": 200628},
-    "rider_04": {"uid": "uid://bjf21q38puv0c", "import_cache": "e5319ccb6daf78e8a8a600306eff3929", "lods": 16, "vertices": 27488, "indices": 149601}
+    "rider_04": {"uid": "uid://bjf21q38puv0c", "import_cache": "e5319ccb6daf78e8a8a600306eff3929", "lods": 16, "vertices": 27488, "indices": 149601},
+    "rider_05": {"uid": "uid://bk045lcg8cvsv", "import_cache": "1ffb2f1ba5689efd93c78cb69b7259c1", "lods": 12, "vertices": 29140, "indices": 149997}
   },
   "texture_import_profiles": {
     "vram_color": {
@@ -76,6 +77,11 @@
       "rider_04_compatible_Ch20_1001_Glossiness.png": {"profile": "vram_color", "uid": "uid://p05pm2l6q2uc"},
       "rider_04_compatible_Ch20_1001_Normal.png": {"profile": "vram_normal", "uid": "uid://dpcgeiir2dx7p"},
       "rider_04_compatible_Ch20_1001_Specular.png": {"profile": "uncompressed_specular", "uid": "uid://4kwda4uod40m"}
+    },
+    "rider_05": {
+      "rider_05_compatible_racing_wetsuit_3d_model_roughness.png": {"profile": "vram_color", "uid": "uid://c5a1nybx3ioub"},
+      "rider_05_compatible_tripo_node_c4e7455e-a6d2-4b10-92dc-6ac749029f64_BaseColor.png": {"profile": "vram_color", "uid": "uid://c7g6c3djd824j"},
+      "rider_05_compatible_tripo_node_c4e7455e-a6d2-4b10-92dc-6ac749029f64_Normal_Bake.png": {"profile": "vram_normal", "uid": "uid://by2i6wvopt87s"}
     }
   }
 }

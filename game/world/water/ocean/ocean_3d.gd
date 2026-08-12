@@ -274,6 +274,7 @@ func _enter_tree() -> void:
 
 
 func _ready() -> void:
+	_trace_mark("OCEAN_READY_BEGIN")
 	process_priority = -100
 	process_physics_priority = -100
 	_surface = get_node_or_null("Surface") as OceanSurface3D
@@ -289,11 +290,13 @@ func _ready() -> void:
 	set_process(Engine.is_editor_hint())
 	set_physics_process(not Engine.is_editor_hint())
 	_push_all_shader_parameters()
+	_trace_mark("OCEAN_CORE_READY")
 
 	if not Engine.is_editor_hint():
 		_build_runtime_height_maps_when_ready()
 	else:
 		update_configuration_warnings()
+	_trace_mark("OCEAN_READY_END")
 
 
 func _process(delta: float) -> void:
@@ -1988,19 +1991,30 @@ func _disconnect_ripple_emitter_signals() -> void:
 
 
 func _build_runtime_height_maps_when_ready() -> void:
+	_trace_mark("OCEAN_HEIGHT_MAPS_BEGIN")
 	if _build_runtime_height_maps():
 		_static_parameters_dirty = true
 		_push_all_shader_parameters()
+		_trace_mark("OCEAN_HEIGHT_MAPS_READY")
 		return
-	for _attempt in 60:
+	for attempt in 60:
 		await get_tree().process_frame
 		if _build_runtime_height_maps():
 			_static_parameters_dirty = true
 			_push_all_shader_parameters()
+			_trace_mark(
+				"OCEAN_HEIGHT_MAPS_READY_AFTER_FRAME_%d" % (attempt + 1)
+			)
 			return
+	_trace_mark("OCEAN_HEIGHT_MAPS_FAILED")
 	push_warning(
-        "Ocean3D could not build synchronized height maps; physical sampling will remain flat."
+		"Ocean3D could not build synchronized height maps; physical sampling will remain flat."
 	)
+
+
+func _trace_mark(label: String) -> void:
+	if not Engine.is_editor_hint():
+		LoadTrace.mark(label)
 
 
 func _build_runtime_height_maps() -> bool:

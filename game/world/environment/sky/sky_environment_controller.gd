@@ -281,6 +281,7 @@ func _ready() -> void:
 	)
 
 	_apply_active_preset()
+	_trace_mark("SKY_READY")
 
 
 func _request_sky_update() -> void:
@@ -396,9 +397,11 @@ func _load_sky(
 		)
 		return null
 
+	_trace_mark("SKY_RESOURCE_LOAD_BEGIN: %s" % resource_path)
 	var loaded_resource: Resource = ResourceLoader.load(
 		resource_path
 	)
+	_trace_mark("SKY_RESOURCE_LOADED: %s" % resource_path)
 
 	if loaded_resource == null:
 		return null
@@ -659,3 +662,8 @@ func _get_radiance_size_value(
 			return 2048
 
 	return 0
+
+
+func _trace_mark(label: String) -> void:
+	if not Engine.is_editor_hint():
+		LoadTrace.mark(label)

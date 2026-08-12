@@ -594,6 +594,7 @@ func _prewarm_fullscreen_compositor() -> void:
 		return
 	_compositor_prewarm_started = true
 	_compositor_prewarm_in_progress = true
+	_trace_mark("UNDERWATER_PREWARM_BEGIN")
 	var target_camera := _camera
 	if Engine.is_editor_hint():
 		target_camera = _get_editor_viewport_camera()
@@ -601,6 +602,7 @@ func _prewarm_fullscreen_compositor() -> void:
 		target_camera == null
 		or not _ensure_fullscreen_compositor(target_camera)
 	):
+		_trace_mark("UNDERWATER_PREWARM_END")
 		_compositor_prewarm_in_progress = false
 		_compositor_prewarm_complete = true
 		return
@@ -608,6 +610,7 @@ func _prewarm_fullscreen_compositor() -> void:
 	_compositor_effect.enabled = false
 	if _compositor_effect.has_method(&"initialize_compute_resources"):
 		_compositor_effect.call(&"initialize_compute_resources")
+	_trace_mark("UNDERWATER_PREWARM_END")
 	_compositor_prewarm_in_progress = false
 	_compositor_prewarm_complete = true
 
@@ -1022,3 +1025,8 @@ func _push_ocean_underwater_parameters() -> void:
 		&"underwater_surface_alpha",
 		underwater_surface_alpha
 	)
+
+
+func _trace_mark(label: String) -> void:
+	if not Engine.is_editor_hint():
+		LoadTrace.mark(label)

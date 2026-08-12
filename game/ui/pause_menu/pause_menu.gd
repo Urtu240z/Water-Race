@@ -84,6 +84,7 @@ func _ready() -> void:
 	_refresh_level_selector()
 	_update_quality_display()
 	call_deferred("_initialize_rider_selector")
+	LoadTrace.mark("PAUSE_MENU_READY")
 
 
 func _input(event: InputEvent) -> void:
@@ -445,6 +446,8 @@ func _on_load_level_pressed() -> void:
 		_applying_label.visible = true
 		push_warning("PauseMenu could not find level scene: %s." % scene_path)
 		return
+	LoadTrace.section("LEVEL CHANGE: %s" % scene_path)
+	LoadTrace.mark("LEVEL_CHANGE_CLICKED: %s" % scene_path)
 	_changing_level = true
 	_save_volume_if_needed()
 	_set_level_controls_disabled(true)
@@ -458,7 +461,17 @@ func _on_load_level_pressed() -> void:
 	get_tree().paused = false
 	visible = false
 	Input.mouse_mode = _previous_mouse_mode
-	var error := get_tree().change_scene_to_file(scene_path)
+	LoadTrace.mark("LEVEL_RESOURCE_LOAD_BEGIN: %s" % scene_path)
+	var packed_level := ResourceLoader.load(
+		scene_path,
+		"PackedScene"
+	) as PackedScene
+	LoadTrace.mark("LEVEL_RESOURCE_LOADED: %s" % scene_path)
+	var error := ERR_CANT_OPEN
+	if packed_level != null:
+		LoadTrace.mark("CHANGE_SCENE_BEGIN: %s" % scene_path)
+		error = get_tree().change_scene_to_packed(packed_level)
+		LoadTrace.mark("CHANGE_SCENE_QUEUED: %s" % scene_path)
 	if error == OK:
 		return
 	_changing_level = false

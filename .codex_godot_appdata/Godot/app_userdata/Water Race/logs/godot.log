@@ -1,3 +1,8 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+ERROR: Failed to read the root certificate store.
+   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)
+RIDER_05_STATS vertices=29140 indices=149997 lods=12 binds=52 surfaces=1
 
 ========== WATER RACE LOAD TRACE ==========
 [    1.269 ms] GAME START                          +   1.269 ms

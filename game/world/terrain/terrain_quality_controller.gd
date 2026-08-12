@@ -9,7 +9,9 @@ var _hex_tiling_mode: int = 2
 
 
 func _ready() -> void:
+	LoadTrace.mark("TERRAIN_MATERIAL_SCAN_BEGIN")
 	_scan_terrain_materials()
+	LoadTrace.mark("TERRAIN_READY")
 
 
 func set_graphics_quality(

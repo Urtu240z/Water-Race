@@ -16,6 +16,7 @@ enum RiderSkin {
 	RIDER_02 = 4,
 	RIDER_03 = 5,
 	RIDER_04 = 1,
+	RIDER_05 = 6,
 }
 
 # Read-only migration aliases for pre-identity-migration save files.
@@ -61,6 +62,8 @@ var _last_missing_skin_warning: int = -1
 
 
 func _ready() -> void:
+	if not Engine.is_editor_hint():
+		LoadTrace.mark("RIDER_READY_BEGIN")
 	_resolve_rider_skin_meshes()
 	_apply_rider_skin()
 	if Engine.is_editor_hint():
@@ -70,6 +73,7 @@ func _ready() -> void:
 	_apply_animation_parameters()
 	_apply_mounted_lean_blends()
 	_apply_animation_state()
+	LoadTrace.mark("RIDER_READY")
 
 
 func set_breathing_enabled(enabled: bool) -> void:

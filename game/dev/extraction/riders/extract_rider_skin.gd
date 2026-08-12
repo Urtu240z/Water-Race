@@ -3,7 +3,13 @@ extends SceneTree
 # Shared extractor used exclusively by tools/riders/rebuild_riders.py.
 # It deliberately reads the staged GLB, but writes only a candidate directory.
 const RIDER_BOT_SCENE_PATH := "res://gameplay/riders/rider_bot/rider_bot.glb"
-const RIDER_IDS := [&"rider_01", &"rider_02", &"rider_03", &"rider_04"]
+const RIDER_IDS := [
+	&"rider_01",
+	&"rider_02",
+	&"rider_03",
+	&"rider_04",
+	&"rider_05",
+]
 const TRANSFORM_TOLERANCE := 0.0002
 
 var _rider_id := ""

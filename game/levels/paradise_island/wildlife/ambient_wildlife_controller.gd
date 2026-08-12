@@ -138,19 +138,25 @@ var _random := RandomNumberGenerator.new()
 
 
 func _ready() -> void:
+	LoadTrace.mark("WILDLIFE_SPAWN_BEGIN")
 	_ocean = get_node_or_null(ocean_path) as Ocean3D
 	_player = get_node_or_null(player_path) as Node3D
 	if not wildlife_enabled:
 		set_process(false)
+		LoadTrace.mark("WILDLIFE_READY")
 		return
 	if randomize_each_run:
 		_random.randomize()
 	else:
 		_random.seed = movement_seed
 	_spawn_bird_flocks()
+	LoadTrace.mark("WILDLIFE_BIRDS_READY")
 	_spawn_fish_schools()
+	LoadTrace.mark("WILDLIFE_FISH_READY")
 	_spawn_dolphin_pods()
+	LoadTrace.mark("WILDLIFE_DOLPHINS_READY")
 	_update_wildlife(0.0)
+	LoadTrace.mark("WILDLIFE_READY")
 
 
 func _process(delta: float) -> void:

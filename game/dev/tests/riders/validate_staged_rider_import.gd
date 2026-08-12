@@ -5,6 +5,7 @@ const EXPECTED := {
 	"rider_02": {"lods": 14, "vertices": 38660, "indices": 208179},
 	"rider_03": {"lods": 16, "vertices": 36689, "indices": 200628},
 	"rider_04": {"lods": 16, "vertices": 27488, "indices": 149601},
+	"rider_05": {"lods": 12, "vertices": 29140, "indices": 149997},
 }
 
 

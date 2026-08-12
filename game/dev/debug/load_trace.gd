@@ -3,6 +3,7 @@ extends Node
 var _start_usec: int
 var _last_usec: int
 var _file: FileAccess
+var _lines: PackedStringArray = PackedStringArray()
 
 func _enter_tree() -> void:
 	_start_usec = Time.get_ticks_usec()
@@ -38,8 +39,7 @@ func mark(label: String) -> void:
 	print(text)
 
 	if _file:
-		_file.store_line(text)
-		_file.flush()
+		_lines.append(text)
 
 	_last_usec = now
 
@@ -50,6 +50,7 @@ func section(title: String) -> void:
 	print(text)
 
 	if _file:
+		_flush_lines()
 		_file.store_line(text)
 		_file.flush()
 
@@ -62,3 +63,20 @@ func memory(label: String = "MEMORY") -> void:
 	var ram_mb := ram_bytes / (1024.0 * 1024.0)
 
 	mark("%s | RAM %.1f MB" % [label, ram_mb])
+
+
+func flush() -> void:
+	_flush_lines()
+
+
+func _flush_lines() -> void:
+	if _file == null or _lines.is_empty():
+		return
+	for line: String in _lines:
+		_file.store_line(line)
+	_lines.clear()
+	_file.flush()
+
+
+func _exit_tree() -> void:
+	_flush_lines()

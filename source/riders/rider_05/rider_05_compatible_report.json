@@ -1,0 +1,319 @@
+{
+  "title": "rider_05 RiderRig-compatible build",
+  "status": "PASS",
+  "blender": "4.5.3 LTS",
+  "source_glb": "C:\\Users\\ehort\\Documents\\GODOT PROJECTS\\Water Race\\source\\riders\\rider_05\\rider_05.glb",
+  "source_unchanged": true,
+  "reference_glb": "C:\\Users\\ehort\\Documents\\GODOT PROJECTS\\Water Race\\game\\gameplay\\riders\\rider_bot\\rider_bot.glb",
+  "output_blend": "C:\\Users\\ehort\\Documents\\GODOT PROJECTS\\Water Race\\source\\riders\\rider_05\\rider_05_compatible.blend",
+  "output_glb": "C:\\Users\\ehort\\Documents\\GODOT PROJECTS\\Water Race\\source\\riders\\rider_05\\compatible\\rider_05_compatible.glb",
+  "source_armature": "Armature",
+  "source_bones": 52,
+  "canonical_bones": 52,
+  "canonical_bones_missing_in_source": [],
+  "source_actions_removed": [
+    "Armature|mixamo.com|Layer0"
+  ],
+  "source_helper_objects_removed": [
+    "Icosphere"
+  ],
+  "source_bounds": {
+    "min": [
+      -0.4420933723449707,
+      -0.09383710473775864,
+      1.8089101558871334e-06
+    ],
+    "max": [
+      0.44155046343803406,
+      0.08787132799625397,
+      0.9850091338157654
+    ],
+    "size": [
+      0.8836438655853271,
+      0.181708425283432,
+      0.9850073456764221
+    ]
+  },
+  "vertices": 28899,
+  "triangles": 49999,
+  "materials": [
+    "tripo_mat_a02e1e6a"
+  ],
+  "uv_layers": [
+    "UVMap"
+  ],
+  "images": [
+    {
+      "name": "racing_wetsuit_3d_model_roughness",
+      "size": [
+        2048,
+        2048
+      ],
+      "packed": true,
+      "colorspace": "sRGB"
+    },
+    {
+      "name": "tripo_node_c4e7455e-a6d2-4b10-92dc-6ac749029f64_BaseColor",
+      "size": [
+        4096,
+        4096
+      ],
+      "packed": true,
+      "colorspace": "sRGB"
+    },
+    {
+      "name": "tripo_node_c4e7455e-a6d2-4b10-92dc-6ac749029f64_Normal_Bake",
+      "size": [
+        1024,
+        1024
+      ],
+      "packed": true,
+      "colorspace": "Non-Color"
+    }
+  ],
+  "weight_stats": {
+    "unweighted": 0,
+    "over_four": 0,
+    "max_influences": 4,
+    "invalid_groups": []
+  },
+  "weights_preserved_exactly": true,
+  "maximum_influences": 4,
+  "mapped_bounds": {
+    "min": [
+      -0.8861962556838989,
+      -0.09915315359830856,
+      0.007128562778234482
+    ],
+    "max": [
+      0.8868321180343628,
+      0.12233782559633255,
+      1.7335418462753296
+    ],
+    "size": [
+      1.7730283737182617,
+      0.2214909791946411,
+      1.7264132499694824
+    ]
+  },
+  "rest_deformation_error": 1.700626643078525e-07,
+  "pose_tests": [
+    {
+      "bone": "mixamorig:Hips",
+      "degrees": 12.0,
+      "axis": "X",
+      "moved_meshes": [
+        "rider_05"
+      ],
+      "max_displacement_m": 0.21796733565723836
+    },
+    {
+      "bone": "mixamorig:Spine",
+      "degrees": 12.0,
+      "axis": "X",
+      "moved_meshes": [
+        "rider_05"
+      ],
+      "max_displacement_m": 0.12205961365306423
+    },
+    {
+      "bone": "mixamorig:Spine1",
+      "degrees": 12.0,
+      "axis": "X",
+      "moved_meshes": [
+        "rider_05"
+      ],
+      "max_displacement_m": 0.10130467221340785
+    },
+    {
+      "bone": "mixamorig:Spine2",
+      "degrees": 12.0,
+      "axis": "X",
+      "moved_meshes": [
+        "rider_05"
+      ],
+      "max_displacement_m": 0.08112515057885798
+    },
+    {
+      "bone": "mixamorig:Neck",
+      "degrees": 12.0,
+      "axis": "X",
+      "moved_meshes": [
+        "rider_05"
+      ],
+      "max_displacement_m": 0.048067562407807206
+    },
+    {
+      "bone": "mixamorig:Head",
+      "degrees": 12.0,
+      "axis": "X",
+      "moved_meshes": [
+        "rider_05"
+      ],
+      "max_displacement_m": 0.02793957429612587
+    },
+    {
+      "bone": "mixamorig:LeftArm",
+      "degrees": 12.0,
+      "axis": "X",
+      "moved_meshes": [
+        "rider_05"
+      ],
+      "max_displacement_m": 0.15116878526657251
+    },
+    {
+      "bone": "mixamorig:LeftForeArm",
+      "degrees": 12.0,
+      "axis": "X",
+      "moved_meshes": [
+        "rider_05"
+      ],
+      "max_displacement_m": 0.09286785258188547
+    },
+    {
+      "bone": "mixamorig:LeftHand",
+      "degrees": 12.0,
+      "axis": "X",
+      "moved_meshes": [
+        "rider_05"
+      ],
+      "max_displacement_m": 0.03377412004628379
+    },
+    {
+      "bone": "mixamorig:LeftUpLeg",
+      "degrees": 12.0,
+      "axis": "X",
+      "moved_meshes": [
+        "rider_05"
+      ],
+      "max_displacement_m": 0.2033280536400591
+    },
+    {
+      "bone": "mixamorig:LeftLeg",
+      "degrees": 12.0,
+      "axis": "X",
+      "moved_meshes": [
+        "rider_05"
+      ],
+      "max_displacement_m": 0.11280099212711944
+    },
+    {
+      "bone": "mixamorig:LeftFoot",
+      "degrees": 12.0,
+      "axis": "X",
+      "moved_meshes": [
+        "rider_05"
+      ],
+      "max_displacement_m": 0.03514688861790887
+    },
+    {
+      "bone": "mixamorig:RightArm",
+      "degrees": 12.0,
+      "axis": "X",
+      "moved_meshes": [
+        "rider_05"
+      ],
+      "max_displacement_m": 0.1532851448020415
+    },
+    {
+      "bone": "mixamorig:RightForeArm",
+      "degrees": 12.0,
+      "axis": "X",
+      "moved_meshes": [
+        "rider_05"
+      ],
+      "max_displacement_m": 0.09520943646177761
+    },
+    {
+      "bone": "mixamorig:RightHand",
+      "degrees": 12.0,
+      "axis": "X",
+      "moved_meshes": [
+        "rider_05"
+      ],
+      "max_displacement_m": 0.03599512273041888
+    },
+    {
+      "bone": "mixamorig:RightUpLeg",
+      "degrees": 12.0,
+      "axis": "X",
+      "moved_meshes": [
+        "rider_05"
+      ],
+      "max_displacement_m": 0.20417850458923775
+    },
+    {
+      "bone": "mixamorig:RightLeg",
+      "degrees": 12.0,
+      "axis": "X",
+      "moved_meshes": [
+        "rider_05"
+      ],
+      "max_displacement_m": 0.1134272674307901
+    },
+    {
+      "bone": "mixamorig:RightFoot",
+      "degrees": 12.0,
+      "axis": "X",
+      "moved_meshes": [
+        "rider_05"
+      ],
+      "max_displacement_m": 0.03520676514617906
+    }
+  ],
+  "pose_restore_error": 0.0,
+  "actions_removed_during_cleanup": [
+    "Armature|mixamo.com|Layer0"
+  ],
+  "nla_removed_during_cleanup": [
+    "Armature:Armature|mixamo.com|Layer0"
+  ],
+  "custom_bone_shapes_removed": 52,
+  "final_collection": "rider_05_RiderCompatible",
+  "final_objects": [
+    "rider_05_Body",
+    "SKEL_Rider"
+  ],
+  "export_kwargs": {
+    "filepath": "C:\\Users\\ehort\\Documents\\GODOT PROJECTS\\Water Race\\source\\riders\\rider_05\\compatible\\rider_05_compatible.glb",
+    "export_format": "GLB",
+    "use_selection": true,
+    "export_animations": false,
+    "export_skins": true,
+    "export_morph": false,
+    "export_normals": true,
+    "export_tangents": true,
+    "export_texcoords": true,
+    "export_materials": "EXPORT",
+    "export_yup": true,
+    "export_apply": false,
+    "export_all_influences": true,
+    "export_cameras": false,
+    "export_lights": false,
+    "export_extras": false,
+    "export_draco_mesh_compression_enable": false,
+    "export_rest_position_armature": true
+  },
+  "output_glb_bytes": 17592956,
+  "clean_reopen_validation": {
+    "objects": [
+      "SKEL_Rider",
+      "rider_05_Body"
+    ],
+    "blender_import_visualization_helpers": [
+      "Icosphere"
+    ],
+    "skeletons": 1,
+    "skinned_meshes": 1,
+    "bones": 52,
+    "weight_stats": {
+      "unweighted": 0,
+      "over_four": 0,
+      "max_influences": 4,
+      "invalid_groups": []
+    },
+    "rest_deformation_error": 1.0948985478153673e-06,
+    "max_local_rest_error": 3.060282324440777e-05,
+    "max_world_rest_error": 3.041447780560702e-05
+  }
+}

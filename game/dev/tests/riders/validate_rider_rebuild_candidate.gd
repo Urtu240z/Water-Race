@@ -5,6 +5,7 @@ const EXPECTED := {
 	"rider_02": {"vertices": 38660, "indices": 208179, "lods": 14},
 	"rider_03": {"vertices": 36689, "indices": 200628, "lods": 16},
 	"rider_04": {"vertices": 27488, "indices": 149601, "lods": 16},
+	"rider_05": {"vertices": 29140, "indices": 149997, "lods": 12},
 }
 
 var _failures: PackedStringArray = []

@@ -16,6 +16,7 @@ func _ready() -> void:
 	print("3 = RIDER 02")
 	print("4 = RIDER 03")
 	print("5 = RIDER 04")
+	print("6 = RIDER 05")
 	print("")
 
 
@@ -49,6 +50,9 @@ func _unhandled_input(event: InputEvent) -> void:
 
 		KEY_5:
 			_set_skin(RiderRig.RiderSkin.RIDER_04)
+
+		KEY_6:
+			_set_skin(RiderRig.RiderSkin.RIDER_05)
 
 
 func _start_ragdoll() -> void:

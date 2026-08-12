@@ -667,6 +667,7 @@ var _invalid_water_provider_warning_emitted: bool = false
 
 
 func _ready() -> void:
+	LoadTrace.mark("JETSKI_READY_BEGIN")
 	input_system.rider_weight_shift_changed.connect(
 		_on_input_system_rider_weight_shift_changed
 	)
@@ -690,6 +691,7 @@ func _ready() -> void:
 	trick_system.reset_runtime_state()
 	arcade_handling_system.reset_turn_continuity_state()
 	reset_physics_interpolation()
+	LoadTrace.mark("JETSKI_READY")
 
 
 func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:

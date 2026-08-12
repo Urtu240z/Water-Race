@@ -12,6 +12,8 @@
 [ext_resource type="Skin" path="res://gameplay/riders/rider_02/runtime/rider_02_skin.res" id="17_rider02_skin"]
 [ext_resource type="ArrayMesh" path="res://gameplay/riders/rider_03/runtime/rider_03_body_mesh.res" id="18_rider03_body_mesh"]
 [ext_resource type="Skin" path="res://gameplay/riders/rider_03/runtime/rider_03_skin.res" id="19_rider03_skin"]
+[ext_resource type="ArrayMesh" path="res://gameplay/riders/rider_05/runtime/rider_05_body_mesh.res" id="20_rider05_body_mesh"]
+[ext_resource type="Skin" path="res://gameplay/riders/rider_05/runtime/rider_05_skin.res" id="21_rider05_skin"]
 
 [node name="RiderRig" type="Node3D" unique_id=553895823 groups=["rider_selectable"]]
 script = ExtResource("1_4yq34")
@@ -138,6 +140,12 @@ skeleton = NodePath("..")
 visible = false
 mesh = ExtResource("5_rider_04_mesh")
 skin = ExtResource("6_rider_04_skin")
+skeleton = NodePath("..")
+
+[node name="rider_05_body" type="MeshInstance3D" parent="RiderModelRoot/rider_bot/SKEL_Rider/Skeleton3D" index="5" groups=["rider_skin_rider_05"]]
+visible = false
+mesh = ExtResource("20_rider05_body_mesh")
+skin = ExtResource("21_rider05_skin")
 skeleton = NodePath("..")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=785147574]
