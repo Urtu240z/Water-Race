@@ -259,10 +259,10 @@ left_grip_strength = 0.87
 right_grip_strength = 0.93
 thumb_opposition_strength = 0.47
 
-[node name="rider_01_body" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/rider_bot/SKEL_Rider/Skeleton3D" index="9" unique_id=1837524736]
+[node name="rider_02_body" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/rider_bot/SKEL_Rider/Skeleton3D" index="10" unique_id=417895057]
 visible = false
 
-[node name="rider_02_body" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/rider_bot/SKEL_Rider/Skeleton3D" index="10" unique_id=417895057]
+[node name="rider_05_body" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/rider_bot/SKEL_Rider/Skeleton3D" index="13" unique_id=847415184]
 visible = true
 
 [node name="AnimationTree" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig" index="2" unique_id=187453891]
