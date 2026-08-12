@@ -1,4 +1,4 @@
-[gd_resource type="StandardMaterial3D" format=4 uid="uid://cg047wt8t355q"]
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://cg047wt8t355q"]
 
 [ext_resource type="Texture2D" path="res://levels/gold_city/material_textures/gold_city_texture_bdac06817c2617c84aa086805c3d326a.res" id="texture_bdac06817c26"]
 

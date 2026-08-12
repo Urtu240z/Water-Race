@@ -5,11 +5,10 @@
 [resource]
 script = ExtResource("1")
 amplitude = 10.0
-width = 90.0
-speed = 86.31
-trough_amplitude = 7.0
-trough_width = 300.0
-trough_offset = 30.0
+width = 135.82
+speed = 18.0
+trough_amplitude = 5.0
+trough_offset = 15.0
 horizontal_flow = 8.0
 fade_in_time = 15.0
 lifetime = 60.0

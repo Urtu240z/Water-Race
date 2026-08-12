@@ -217,16 +217,16 @@ shader_parameter/event_wave_lifetimes = PackedFloat32Array(0, 0, 0, 0)
 shader_parameter/event_wave_fade_outs = PackedFloat32Array(0, 0, 0, 0)
 shader_parameter/wave_height_texture_a = ExtResource("46_fyxnn")
 shader_parameter/wave_height_texture_b = ExtResource("47_o8v62")
-shader_parameter/wave_world_size_a = 311.5
-shader_parameter/wave_world_size_b = 200.5
-shader_parameter/wave_amplitude_a = 0.98999997787152
-shader_parameter/wave_amplitude_b = 0.88999998010672
+shader_parameter/wave_world_size_a = 283.5
+shader_parameter/wave_world_size_b = 223.0
+shader_parameter/wave_amplitude_a = 1.4699999671425599
+shader_parameter/wave_amplitude_b = 0.58999998681232
 shader_parameter/wave_direction_a = Vector2(0.86012906, 0.5100765)
 shader_parameter/wave_direction_b = Vector2(-0.38176018, 0.92426145)
 shader_parameter/wave_travel_speed_a = 9.0000004321348
 shader_parameter/wave_travel_speed_b = 4.0000003576287995
-shader_parameter/wave_mean_a = 0.202000009595
-shader_parameter/wave_mean_b = 0.122000005795
+shader_parameter/wave_mean_a = 0.3490000165775
+shader_parameter/wave_mean_b = 0.47
 shader_parameter/geometry_normal_step = 2.0
 shader_parameter/ocean_geometry_normal_quality = 2
 shader_parameter/calm_zone_count = 0
@@ -306,8 +306,8 @@ shader_parameter/vehicle_interaction_debug_multiplier = 3.5
 shader_parameter/surface_normal_texture_a = ExtResource("43_1v62v")
 shader_parameter/surface_normal_texture_b = ExtResource("44_resor")
 shader_parameter/surface_warp_texture = ExtResource("45_6msh1")
-shader_parameter/surface_normal_world_size_a = 16.15000023692908
-shader_parameter/surface_normal_world_size_b = 9.85000014305152
+shader_parameter/surface_normal_world_size_a = 7.5
+shader_parameter/surface_normal_world_size_b = 3.25
 shader_parameter/surface_normal_strength = 0.62
 shader_parameter/surface_flow_direction_a = Vector2(0.82, 0.57)
 shader_parameter/surface_flow_direction_b = Vector2(-0.46, 0.89)
@@ -318,26 +318,26 @@ shader_parameter/surface_warp_strength = 2.4
 shader_parameter/surface_detail_fade_start = 130.0
 shader_parameter/surface_detail_fade_end = 520.0
 shader_parameter/ocean_surface_detail_quality = 2
-shader_parameter/shallow_water_color = Color(0.0658715, 0.58266956, 0.73670816, 1)
+shader_parameter/shallow_water_color = Color(0.035, 0.43, 0.55, 1)
 shader_parameter/deep_water_color = Color(0.004, 0.055, 0.115, 1)
-shader_parameter/horizon_water_color = Color(0, 0, 0, 1)
-shader_parameter/reflection_tint = Color(0.345295, 0.68882114, 0.8458598, 1)
+shader_parameter/horizon_water_color = Color(0.025, 0.22, 0.34, 1)
+shader_parameter/reflection_tint = Color(0.07353947, 0.2320579, 0.30086446, 1)
 shader_parameter/trough_tint = Color(0.002, 0.025, 0.075, 1)
-shader_parameter/crest_tint = Color(0.17283392, 0.8043874, 0.87178373, 1)
+shader_parameter/crest_tint = Color(0.060660273, 0.406174, 0.44625056, 1)
 shader_parameter/absorption_density = 0.13
 shader_parameter/maximum_optical_depth = 38.0
 shader_parameter/shallow_depth_range = 5.5
-shader_parameter/near_water_alpha = 0.83999999240032
+shader_parameter/near_water_alpha = 0.9499999899416001
 shader_parameter/deep_water_alpha = 0.999999988824
 shader_parameter/horizon_water_alpha = 1.0
 shader_parameter/opacity_distance_start = 80.0
 shader_parameter/opacity_distance_end = 220.0
 shader_parameter/fresnel_power = 4.8
-shader_parameter/reflection_strength = 0.82
+shader_parameter/reflection_strength = 0.8999999798832
 shader_parameter/refraction_strength = 0.009
-shader_parameter/near_roughness = 0.02999999932944
-shader_parameter/horizon_roughness = 0.4499999899416
-shader_parameter/water_specular = 0.8999999798832
+shader_parameter/near_roughness = 0.07999999821184
+shader_parameter/horizon_roughness = 0.30999999307088
+shader_parameter/water_specular = 0.10999999754128
 shader_parameter/underwater_surface_fog_color = Color(4.324247e-09, 0.006975944, 0.012207908, 1)
 shader_parameter/underwater_surface_fog_density = 0.015
 shader_parameter/underwater_surface_fog_start_distance = 0.0
@@ -663,14 +663,13 @@ mesh = SubResource("PlaneMesh_tpwhi")
 
 [node name="Ocean" parent="WaterIntegration" unique_id=1340264265 instance=ExtResource("40_5h17r")]
 ocean_material = SubResource("ShaderMaterial_i77vt")
-wave_world_size_a = 311.5
-wave_world_size_b = 200.5
-wave_amplitude_a = 0.98999997787152
-wave_amplitude_b = 0.88999998010672
+wave_world_size_a = 283.5
+wave_world_size_b = 223.0
+wave_amplitude_a = 1.4699999671425599
+wave_amplitude_b = 0.58999998681232
 wave_travel_speed_a = 9.0000004321348
 wave_travel_speed_b = 4.0000003576287995
-wave_mean_a = 0.202000009595
-wave_mean_b = 0.122000005795
+wave_mean_a = 0.3490000165775
 normal_sample_step = 2.0
 landing_wave_minimum_amplitude = 1.0
 landing_wave_maximum_amplitude = 1.0
@@ -816,8 +815,15 @@ left_hand_rotation_correction_degrees = Vector3(-18.44, 32.09, -21.11)
 [node name="GripFingers" parent="Gameplay/JetSki/VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/rider_bot/SKEL_Rider/Skeleton3D" index="7" unique_id=940560861]
 left_grip_strength = 0.75
 
+[node name="rider_01_body" parent="Gameplay/JetSki/VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/rider_bot/SKEL_Rider/Skeleton3D" index="9" unique_id=1837524736]
+visible = false
+
 [node name="rider_02_body" parent="Gameplay/JetSki/VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/rider_bot/SKEL_Rider/Skeleton3D" index="10" unique_id=417895057]
+visible = true
 gi_mode = 2
+
+[node name="rider_05_body" parent="Gameplay/JetSki/VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/rider_bot/SKEL_Rider/Skeleton3D" index="13"]
+visible = false
 
 [node name="AnimationTree" parent="Gameplay/JetSki/VisualRoot/RiderMount/RiderAssetRoot/RiderRig" index="2" unique_id=187453891]
 parameters/mounted_add/add_amount = 1.0
@@ -857,7 +863,7 @@ grip_hard_extension_ratio = 1.1
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0.35)
 
 [node name="Effects" parent="Gameplay/JetSki" index="11" unique_id=1733691099]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.1051483)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.0914917)
 
 [node name="VehicleWaterEffects3D" parent="Gameplay/JetSki/Effects" index="0" unique_id=1574631450]
 spray_minimum_scale = 0.001
@@ -924,7 +930,7 @@ wave_spawn_distance = 1200.0
 script = ExtResource("43_i77vt")
 ocean_path = NodePath("../../../WaterIntegration/Ocean")
 profile = ExtResource("69_btsun")
-amplitude_multiplier = 9.0
+amplitude_multiplier = 6.0
 metadata/_custom_type_script = "uid://cvayffg86y5d3"
 
 [node name="CameraSystem" type="Node3D" parent="." unique_id=1510457463]

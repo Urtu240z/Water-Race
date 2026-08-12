@@ -1,4 +1,4 @@
-[gd_resource type="StandardMaterial3D" format=4 uid="uid://df3rtq6wddoq1"]
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://df3rtq6wddoq1"]
 
 [ext_resource type="Texture2D" path="res://shared/material_textures/shared_common_texture_96c6bd9db527d15b44c57ef8f2f863e6.res" id="texture_96c6bd9db527"]
 

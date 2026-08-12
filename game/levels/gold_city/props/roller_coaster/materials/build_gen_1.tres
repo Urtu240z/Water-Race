@@ -1,7 +1,7 @@
-[gd_resource type="StandardMaterial3D" format=4 uid="uid://h8dc41aovv3n"]
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://h8dc41aovv3n"]
 
-[ext_resource type="Texture2D" path="res://levels/gold_city/material_textures/gold_city_texture_62e363e8ad07d05248aa64d36a8c0b86.res" id="texture_62e363e8ad07"]
 [ext_resource type="Texture2D" path="res://levels/gold_city/material_textures/gold_city_texture_9da830a9d57e658f9c06bb3df3a6f5ce.res" id="texture_9da830a9d57e"]
+[ext_resource type="Texture2D" path="res://levels/gold_city/material_textures/gold_city_texture_62e363e8ad07d05248aa64d36a8c0b86.res" id="texture_62e363e8ad07"]
 [ext_resource type="Texture2D" path="res://levels/gold_city/material_textures/gold_city_texture_f6ff9c86ba66dd9638355112080d6b3c.res" id="texture_f6ff9c86ba66"]
 
 [resource]
