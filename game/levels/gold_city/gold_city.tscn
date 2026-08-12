@@ -25,6 +25,8 @@
 [ext_resource type="Texture2D" uid="uid://q5yx1piuynov" path="res://shared/materials/terrain/textures/terrain_master/rock_albedo.png" id="28_yrsta"]
 [ext_resource type="Texture2D" uid="uid://dvs2rgjqdk2vl" path="res://shared/materials/terrain/textures/terrain_master/rock_normal.png" id="29_eepw8"]
 [ext_resource type="Texture2D" uid="uid://ccasg8oxv3yji" path="res://shared/materials/terrain/textures/terrain_master/rock_orm.png" id="30_7jmta"]
+[ext_resource type="Shader" uid="uid://b21on15wovwva" path="res://world/vegetation/trees/shaders/tree_baked_shadow_unshaded_overlay.gdshader" id="30_q2anr"]
+[ext_resource type="Texture2D" uid="uid://djr4jtluu1lp5" path="res://levels/gold_city/terrain/gold_city_tree_shadows.png" id="31_cfohk"]
 [ext_resource type="Texture2D" uid="uid://cvvyxbgnxwgtw" path="res://shared/materials/terrain/textures/terrain_master/wet_sand_albedo.png" id="31_spwfp"]
 [ext_resource type="Texture2D" uid="uid://cm7w5uwuuwkx8" path="res://shared/materials/terrain/textures/terrain_master/wet_sand_normal.png" id="32_8cd84"]
 [ext_resource type="PackedScene" uid="uid://dqbhmwx6tvlx0" path="res://world/vegetation/trees/tree_impostor_multimesh.tscn" id="32_mdq0j"]
@@ -69,7 +71,6 @@
 [ext_resource type="Material" uid="uid://diw4mvukd0v3f" path="res://shared/materials/generic/materials/emisive.tres" id="71_ambj4"]
 [ext_resource type="PackedScene" uid="uid://cfw7pu0e3ws7n" path="res://world/props/rocks/rock_02.glb" id="72_hbj0a"]
 [ext_resource type="Script" uid="uid://bcftfjsjn8hc4" path="res://world/vegetation/trees/tree_projected_shadow_baker.gd" id="72_ol3en"]
-[ext_resource type="Texture2D" uid="uid://djr4jtluu1lp5" path="res://levels/gold_city/terrain/gold_city_tree_shadows.png" id="73_cfohk"]
 [ext_resource type="PackedScene" uid="uid://dk85eu2oeyca2" path="res://levels/gold_city/props/roller_coaster/animated_roller_coaster.glb" id="73_e6itw"]
 [ext_resource type="PackedScene" uid="uid://b43swywpnr25f" path="res://levels/gold_city/props/ferris_wheel/ferrys_wheel.glb" id="73_q2anr"]
 [ext_resource type="PackedScene" uid="uid://cpr1u70kmlafe" path="res://levels/gold_city/props/ferris_wheel/ferris_wheel_old.glb" id="74_gtyq1"]
@@ -509,6 +510,27 @@ shader_parameter/water_level = 2.0
 shader_parameter/wet_sand_height = 4.10000006109492
 shader_parameter/debug_view = 0
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_iyaox"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("30_q2anr")
+shader_parameter/shadow_texture = ExtResource("31_cfohk")
+shader_parameter/mask_center = Vector3(-236.06909, 49.172195, 282.7168)
+shader_parameter/mask_right = Vector3(-0.9285564, 0, -0.3711915)
+shader_parameter/mask_up = Vector3(-0.23007776, 0.78473157, 0.5755524)
+shader_parameter/capture_size = 3401.5044
+shader_parameter/to_sun_direction = Vector3(0.29128563, 0.61983573, -0.72866756)
+shader_parameter/shadow_strength = 0.73999998345952
+shader_parameter/shadow_gamma = 0.6899999864397801
+shader_parameter/shadow_threshold = 0.0
+shader_parameter/solid_shadow = false
+shader_parameter/solid_threshold = 0.0
+shader_parameter/use_stretch_fade = true
+shader_parameter/stretch_fade_start = 0.55
+shader_parameter/stretch_fade_end = 0.2
+shader_parameter/stretch_fade_power = 1.5
+shader_parameter/minimum_stretch_visibility = 0.0
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_sfswf"]
 size = Vector3(1071.5999, 44.769104, 3203.886)
 
@@ -524,7 +546,7 @@ size = Vector3(234.65327, 26.61683, 71.67698)
 [sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_g5j8w"]
 data = PackedVector3Array(-117.3266, 13.308399, 35.8385, 117.3266, 13.308399, 35.8385, -117.3266, -13.308399, 35.8385, 117.3266, 13.308399, 35.8385, 117.3266, -13.308399, 35.8385, -117.3266, -13.308399, 35.8385, 117.3266, 13.308399, -35.8385, -117.3266, 13.308399, -35.8385, 117.3266, -13.308399, -35.8385, -117.3266, 13.308399, -35.8385, -117.3266, -13.308399, -35.8385, 117.3266, -13.308399, -35.8385, 117.3266, 13.308399, 35.8385, 117.3266, 13.308399, -35.8385, 117.3266, -13.308399, 35.8385, 117.3266, 13.308399, -35.8385, 117.3266, -13.308399, -35.8385, 117.3266, -13.308399, 35.8385, -117.3266, 13.308399, -35.8385, -117.3266, 13.308399, 35.8385, -117.3266, -13.308399, -35.8385, -117.3266, 13.308399, 35.8385, -117.3266, -13.308399, 35.8385, -117.3266, -13.308399, -35.8385, 117.3266, 13.308399, 35.8385, -117.3266, 13.308399, 35.8385, 117.3266, 13.308399, -35.8385, -117.3266, 13.308399, 35.8385, -117.3266, 13.308399, -35.8385, 117.3266, 13.308399, -35.8385, -117.3266, -13.308399, 35.8385, 117.3266, -13.308399, 35.8385, -117.3266, -13.308399, -35.8385, 117.3266, -13.308399, 35.8385, 117.3266, -13.308399, -35.8385, -117.3266, -13.308399, -35.8385)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_qxbdv"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4k6sa"]
 resource_local_to_scene = true
 render_priority = 0
 shader = ExtResource("41_j7oal")
@@ -752,7 +774,7 @@ shader_parameter/custom_reflection_minimum_surface_weight = 0.34
 shader_parameter/custom_reflection_maximum_surface_weight = 0.88
 shader_parameter/custom_reflection_emission_strength = 0.2999999932944
 
-[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_ol3en"]
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_ogabk"]
 resource_local_to_scene = true
 blend_mode = 1
 
@@ -779,7 +801,7 @@ point_count = 3
 [sub_resource type="CurveTexture" id="CurveTexture_bubble_shrink"]
 curve = SubResource("Curve_bubble_shrink")
 
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_q2anr"]
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_laf3l"]
 resource_local_to_scene = true
 particle_flag_disable_z = true
 emission_shape_offset = Vector3(0, 600, 0)
@@ -802,7 +824,7 @@ turbulence_influence_max = 0.082
 turbulence_initial_displacement_min = -47.5
 turbulence_initial_displacement_max = 94.5
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_cfohk"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4scdh"]
 resource_local_to_scene = true
 render_priority = -127
 shader = ExtResource("55_5sm3d")
@@ -1884,7 +1906,8 @@ surface_material_override/0 = ExtResource("16_w15id")
 visible = false
 
 [node name="Terrain_VIS" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Terrain" parent_id_path=PackedInt32Array(297389943, 1315796497) index="6" unique_id=1256756484]
-surface_material_override/0 = SubResource("ShaderMaterial_5h1yh")
+material_override = SubResource("ShaderMaterial_5h1yh")
+material_overlay = SubResource("ShaderMaterial_iyaox")
 
 [node name="SM_Palm_Impostor_Zone_GoldCity_001_VIS" parent="TerrainRoot/Gold_City/Scene Collection/PALM_IMPOSTORS_VIS" parent_id_path=PackedInt32Array(297389943, 76625302) index="0" unique_id=464716858]
 material_override = ExtResource("36_403n4")
@@ -1903,7 +1926,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -610.79663, 10.8320465, -185.
 area_radius_x = 132.0
 area_radius_z = 203.0
 min_spacing = 3.85
-max_spacing = 18.150000000000002
+max_spacing = 18.15
 valid_ground_name_contains = PackedStringArray("Terrain_Master_COL", "Terrain_COL")
 max_ground_slope_degrees = 11.0
 
@@ -1945,7 +1968,7 @@ shape = SubResource("ConcavePolygonShape3D_g5j8w")
 [node name="WaterIntegration" type="Node3D" parent="." unique_id=1889730552]
 
 [node name="Ocean" parent="WaterIntegration" unique_id=1340264265 instance=ExtResource("40_3mclj")]
-ocean_material = SubResource("ShaderMaterial_qxbdv")
+ocean_material = SubResource("ShaderMaterial_4k6sa")
 wave_world_size_a = 153.5
 wave_world_size_b = 104.0
 wave_amplitude_a = 0.7999999821184
@@ -2235,7 +2258,7 @@ editor_preview_mode = 0
 
 [node name="EntryBubbles" parent="CameraSystem/ChaseCamera/Camera3D/UnderwaterEffect/WaterCrossingOverlay" index="0"]
 visible = false
-material = SubResource("CanvasItemMaterial_ol3en")
+material = SubResource("CanvasItemMaterial_ogabk")
 position = Vector2(1, 1.76)
 amount = 500
 texture = SubResource("GradientTexture2D_pl0kw")
@@ -2243,10 +2266,10 @@ lifetime = 20.0
 speed_scale = 8.0
 explosiveness = 1.0
 randomness = 1.0
-process_material = SubResource("ParticleProcessMaterial_q2anr")
+process_material = SubResource("ParticleProcessMaterial_laf3l")
 
 [node name="UnderwaterPostProcess" parent="CameraSystem/ChaseCamera/Camera3D/UnderwaterEffect" index="1" unique_id=1854893749]
-material_override = SubResource("ShaderMaterial_cfohk")
+material_override = SubResource("ShaderMaterial_4scdh")
 
 [node name="Debug" type="Node" parent="." unique_id=1303880580]
 
@@ -2713,22 +2736,13 @@ libraries/ = SubResource("AnimationLibrary_iyevr")
 autoplay = &"Noria"
 speed_scale = 0.2
 
-[node name="TreeProjectedShadowBaker" type="Node3D" parent="." unique_id=472315960]
+[node name="TreeProjectedShadowBaker" type="Node3D" parent="." unique_id=472315960 node_paths=PackedStringArray("extra_shadow_sources")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.510468, -49.139404, -57.103714)
 script = ExtResource("72_ol3en")
 terrain_mesh_path = NodePath("../TerrainRoot/Gold_City/Scene Collection/Collection/Terrain/Terrain_VIS")
 sun_light_path = NodePath("../Environment/DirectionalLight3D")
+extra_shadow_sources = [NodePath("../Atrezzo")]
 output_png_path = "res://levels/gold_city/terrain/gold_city_tree_shadows.png"
-
-[node name="BakedTreeShadowDecal" type="Decal" parent="." unique_id=1166637003]
-transform = Transform3D(-0.9285564, 0.2912857, 0.23007774, 0, 0.61983573, -0.7847316, -0.3711915, -0.72866756, -0.57555234, -236.06909, 49.172195, 282.7168)
-size = Vector3(3401.5044, 4550.6094, 3401.5044)
-texture_albedo = ExtResource("73_cfohk")
-emission_energy = 0.0
-albedo_mix = 0.8
-upper_fade = 0.0
-lower_fade = 0.0
-cull_mask = 1
 
 [editable path="TerrainRoot/independent_island"]
 [editable path="TerrainRoot/independent_island2"]
