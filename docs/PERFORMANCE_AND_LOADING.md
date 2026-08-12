@@ -113,6 +113,26 @@ Gold City       ~4.0 s
 
 Pay attention to large GLBs, imported textures, LightmapGI data, duplicated resources and transitive dependencies.
 
+## Paradise Island terrain-material externalization
+
+The terrain GLB previously loaded editable `.tres` materials containing large
+base64 `PackedByteArray` texture payloads. These portable compressed textures
+now live in shared binary `.res` resources while the materials remain `.tres`.
+
+Final process-cold measurements after the complete migration:
+
+```text
+paradise_island.glb:       1.162-1.184 s
+paradise_island.tscn:      6.492-6.574 s
+Gold City -> Paradise:     1.179-1.196 s
+```
+
+The comparable Gold City to Paradise transition was `5.243-5.332 s` after the
+single-material pilot and approximately `6.509 s` before externalization.
+
+See `PARADISE_MATERIAL_TEXTURES.md` for the required migration and validation
+workflow.
+
 ## Optimization workflow
 
 1. Capture baseline.

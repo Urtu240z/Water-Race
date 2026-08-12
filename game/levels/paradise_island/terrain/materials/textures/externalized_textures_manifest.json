@@ -1,0 +1,2262 @@
+{
+  "format": 1,
+  "glb": "res://levels/paradise_island/terrain/paradise_island.glb",
+  "materials": [
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_aerial_rocks_01.tres",
+      "snapshot_md5": "ff2888509e89a6e10c0ef08289d77bc5",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "b1bfac2f2e6b579e9f1ed7fe1205cae9",
+          "data_bytes": 1398128,
+          "decoded_md5": "b1410dd3c9154a44dc96e26f71e0258d",
+          "format": 22,
+          "height": 1024,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/paradise_island/terrain/materials/textures/paradise_texture_b1bfac2f2e6b579e9f1ed7fe1205cae9.res",
+          "size_override": "Vector2(1024, 1024)",
+          "slot": "albedo_texture",
+          "width": 1024
+        },
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "c15a9a69834171f3e19de439b5686026",
+          "data_bytes": 1398128,
+          "decoded_md5": "7865444c08bb3f5c253796432c0dd1d7",
+          "format": 22,
+          "height": 1024,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/paradise_island/terrain/materials/textures/paradise_texture_c15a9a69834171f3e19de439b5686026.res",
+          "size_override": "Vector2(1024, 1024)",
+          "slot": "metallic_texture",
+          "width": 1024
+        },
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "f262e637fcfe556dd7a216a506f1f07d",
+          "data_bytes": 1398128,
+          "decoded_md5": "22bdeced9aa0fce7584260a27cfcfdc5",
+          "format": 21,
+          "height": 1024,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/paradise_island/terrain/materials/textures/paradise_texture_f262e637fcfe556dd7a216a506f1f07d.res",
+          "size_override": "Vector2(1024, 1024)",
+          "slot": "normal_texture",
+          "width": 1024
+        },
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "c15a9a69834171f3e19de439b5686026",
+          "data_bytes": 1398128,
+          "decoded_md5": "7865444c08bb3f5c253796432c0dd1d7",
+          "format": 22,
+          "height": 1024,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/paradise_island/terrain/materials/textures/paradise_texture_c15a9a69834171f3e19de439b5686026.res",
+          "size_override": "Vector2(1024, 1024)",
+          "slot": "roughness_texture",
+          "width": 1024
+        }
+      ],
+      "uid": "uid://bh7kxhqweasxj"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_aerial_rocks_02.tres",
+      "snapshot_md5": "3bd533facbccc6c54e7e856b72e14261",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "b1bfac2f2e6b579e9f1ed7fe1205cae9",
+          "data_bytes": 1398128,
+          "decoded_md5": "b1410dd3c9154a44dc96e26f71e0258d",
+          "format": 22,
+          "height": 1024,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/paradise_island/terrain/materials/textures/paradise_texture_b1bfac2f2e6b579e9f1ed7fe1205cae9.res",
+          "size_override": "Vector2(1024, 1024)",
+          "slot": "albedo_texture",
+          "width": 1024
+        },
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "c15a9a69834171f3e19de439b5686026",
+          "data_bytes": 1398128,
+          "decoded_md5": "7865444c08bb3f5c253796432c0dd1d7",
+          "format": 22,
+          "height": 1024,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/paradise_island/terrain/materials/textures/paradise_texture_c15a9a69834171f3e19de439b5686026.res",
+          "size_override": "Vector2(1024, 1024)",
+          "slot": "metallic_texture",
+          "width": 1024
+        },
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "f262e637fcfe556dd7a216a506f1f07d",
+          "data_bytes": 1398128,
+          "decoded_md5": "22bdeced9aa0fce7584260a27cfcfdc5",
+          "format": 21,
+          "height": 1024,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/paradise_island/terrain/materials/textures/paradise_texture_f262e637fcfe556dd7a216a506f1f07d.res",
+          "size_override": "Vector2(1024, 1024)",
+          "slot": "normal_texture",
+          "width": 1024
+        },
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "c15a9a69834171f3e19de439b5686026",
+          "data_bytes": 1398128,
+          "decoded_md5": "7865444c08bb3f5c253796432c0dd1d7",
+          "format": 22,
+          "height": 1024,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/paradise_island/terrain/materials/textures/paradise_texture_c15a9a69834171f3e19de439b5686026.res",
+          "size_override": "Vector2(1024, 1024)",
+          "slot": "roughness_texture",
+          "width": 1024
+        }
+      ],
+      "uid": "uid://oolwk4qpwdgu"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_aerial_rocks_03.tres",
+      "snapshot_md5": "056c964fb4dcfbff193a4a42e63c9647",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "b1bfac2f2e6b579e9f1ed7fe1205cae9",
+          "data_bytes": 1398128,
+          "decoded_md5": "b1410dd3c9154a44dc96e26f71e0258d",
+          "format": 22,
+          "height": 1024,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/paradise_island/terrain/materials/textures/paradise_texture_b1bfac2f2e6b579e9f1ed7fe1205cae9.res",
+          "size_override": "Vector2(1024, 1024)",
+          "slot": "albedo_texture",
+          "width": 1024
+        },
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "c15a9a69834171f3e19de439b5686026",
+          "data_bytes": 1398128,
+          "decoded_md5": "7865444c08bb3f5c253796432c0dd1d7",
+          "format": 22,
+          "height": 1024,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/paradise_island/terrain/materials/textures/paradise_texture_c15a9a69834171f3e19de439b5686026.res",
+          "size_override": "Vector2(1024, 1024)",
+          "slot": "metallic_texture",
+          "width": 1024
+        },
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "f262e637fcfe556dd7a216a506f1f07d",
+          "data_bytes": 1398128,
+          "decoded_md5": "22bdeced9aa0fce7584260a27cfcfdc5",
+          "format": 21,
+          "height": 1024,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/paradise_island/terrain/materials/textures/paradise_texture_f262e637fcfe556dd7a216a506f1f07d.res",
+          "size_override": "Vector2(1024, 1024)",
+          "slot": "normal_texture",
+          "width": 1024
+        },
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "c15a9a69834171f3e19de439b5686026",
+          "data_bytes": 1398128,
+          "decoded_md5": "7865444c08bb3f5c253796432c0dd1d7",
+          "format": 22,
+          "height": 1024,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/paradise_island/terrain/materials/textures/paradise_texture_c15a9a69834171f3e19de439b5686026.res",
+          "size_override": "Vector2(1024, 1024)",
+          "slot": "roughness_texture",
+          "width": 1024
+        }
+      ],
+      "uid": "uid://dm7b8emb3bdp1"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_aluminum.tres",
+      "snapshot_md5": "d11354cfc55f38b3767edb43b368f003",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "65e2a6f37b6e5a1c92e292663e742e53",
+          "data_bytes": 379632,
+          "decoded_md5": "9a6a4db2943fd676ff9a21968cf558eb",
+          "format": 22,
+          "height": 530,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/paradise_island/terrain/materials/textures/paradise_texture_65e2a6f37b6e5a1c92e292663e742e53.res",
+          "size_override": "Vector2(530, 530)",
+          "slot": "albedo_texture",
+          "width": 530
+        }
+      ],
+      "uid": "uid://cqpodb5jijsdl"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_asphalt_new.tres",
+      "snapshot_md5": "83bb315341e73cdb76c3c4aaca0137d5",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "5aefdaaaed1e490245130edcb35ebb46",
+          "data_bytes": 87408,
+          "decoded_md5": "b3bde2c9b9f96b4068b28e48c6422aac",
+          "format": 22,
+          "height": 256,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/paradise_island/terrain/materials/textures/paradise_texture_5aefdaaaed1e490245130edcb35ebb46.res",
+          "size_override": "Vector2(256, 256)",
+          "slot": "albedo_texture",
+          "width": 256
+        }
+      ],
+      "uid": "uid://vu1buyg1qdxg"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_basculante.tres",
+      "snapshot_md5": "589d9eb33d9f323a4d2192d726926219",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "164c73d95cf5d8d9474e64027979bf33",
+          "data_bytes": 87408,
+          "decoded_md5": "08fd212054d4005616a2b25db377f86c",
+          "format": 22,
+          "height": 254,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/paradise_island/terrain/materials/textures/paradise_texture_164c73d95cf5d8d9474e64027979bf33.res",
+          "size_override": "Vector2(253, 254)",
+          "slot": "albedo_texture",
+          "width": 253
+        }
+      ],
+      "uid": "uid://cbdrc0g7qai8x"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_blacktop_old.tres",
+      "snapshot_md5": "2e8929021b06ff8a3950a64a62180eae",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "0c26ef407dbd705a1f9d10f705ec1bf4",
+          "data_bytes": 335360,
+          "decoded_md5": "36708b78c397e8b06f4ef9a3a815d94b",
+          "format": 22,
+          "height": 500,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/paradise_island/terrain/materials/textures/paradise_texture_0c26ef407dbd705a1f9d10f705ec1bf4.res",
+          "size_override": "Vector2(500, 500)",
+          "slot": "albedo_texture",
+          "width": 500
+        }
+      ],
+      "uid": "uid://bpd5w33ybn63v"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_brick_antique.tres",
+      "snapshot_md5": "1dc4630e717d3cc63f16ce413acac4b6",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "771cb516b0509e4709b1d27d2e6ee6d6",
+          "data_bytes": 131104,
+          "decoded_md5": "986fa1d5e4e821f27b07bdd045f5d881",
+          "format": 22,
+          "height": 256,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/paradise_island/terrain/materials/textures/paradise_texture_771cb516b0509e4709b1d27d2e6ee6d6.res",
+          "size_override": "Vector2(384, 256)",
+          "slot": "albedo_texture",
+          "width": 384
+        }
+      ],
+      "uid": "uid://b1xolwy7jjubf"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_brick_rough_dark.tres",
+      "snapshot_md5": "f7dbb1e7ec7c3266a688d8f75b4d0a5e",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "6498c6ad0dc79d59b0c45b0e93b5ebca",
+          "data_bytes": 35584,
+          "decoded_md5": "d6d08939ad884498dce12d54345945f8",
+          "format": 22,
+          "height": 128,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/paradise_island/terrain/materials/textures/paradise_texture_6498c6ad0dc79d59b0c45b0e93b5ebca.res",
+          "size_override": "Vector2(205, 128)",
+          "slot": "albedo_texture",
+          "width": 205
+        }
+      ],
+      "uid": "uid://6lc4r7i2ha5q"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_carpet_01.tres",
+      "snapshot_md5": "f4bf18fc233b5aefa1cdeccd50985469",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "4daf41b28126901c2042f754463ef327",
+          "data_bytes": 1398128,
+          "decoded_md5": "ee215080a1d3f7a9e475934dad7c4fc6",
+          "format": 22,
+          "height": 1024,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/paradise_island/terrain/materials/textures/paradise_texture_4daf41b28126901c2042f754463ef327.res",
+          "size_override": "Vector2(1024, 1024)",
+          "slot": "albedo_texture",
+          "width": 1024
+        },
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "6fc71aed3bccec92a632bea744589617",
+          "data_bytes": 1398128,
+          "decoded_md5": "efe012c628903a952537cdf2916a00c7",
+          "format": 22,
+          "height": 1024,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/paradise_island/terrain/materials/textures/paradise_texture_6fc71aed3bccec92a632bea744589617.res",
+          "size_override": "Vector2(1024, 1024)",
+          "slot": "ao_texture",
+          "width": 1024
+        },
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "caaa72473cc9638d9443f210ad7f7e46",
+          "data_bytes": 1398128,
+          "decoded_md5": "743a3b20a698d3b6f4f922703cf912dd",
+          "format": 21,
+          "height": 1024,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/paradise_island/terrain/materials/textures/paradise_texture_caaa72473cc9638d9443f210ad7f7e46.res",
+          "size_override": "Vector2(1024, 1024)",
+          "slot": "normal_texture",
+          "width": 1024
+        }
+      ],
+      "uid": "uid://d1qnlef67dytk"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_carpet_02.tres",
+      "snapshot_md5": "cbc2e27f8300d6c658908e98413d31de",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "4daf41b28126901c2042f754463ef327",
+          "data_bytes": 1398128,
+          "decoded_md5": "ee215080a1d3f7a9e475934dad7c4fc6",
+          "format": 22,
+          "height": 1024,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/paradise_island/terrain/materials/textures/paradise_texture_4daf41b28126901c2042f754463ef327.res",
+          "size_override": "Vector2(1024, 1024)",
+          "slot": "albedo_texture",
+          "width": 1024
+        },
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "6fc71aed3bccec92a632bea744589617",
+          "data_bytes": 1398128,
+          "decoded_md5": "efe012c628903a952537cdf2916a00c7",
+          "format": 22,
+          "height": 1024,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/paradise_island/terrain/materials/textures/paradise_texture_6fc71aed3bccec92a632bea744589617.res",
+          "size_override": "Vector2(1024, 1024)",
+          "slot": "ao_texture",
+          "width": 1024
+        },
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "caaa72473cc9638d9443f210ad7f7e46",
+          "data_bytes": 1398128,
+          "decoded_md5": "743a3b20a698d3b6f4f922703cf912dd",
+          "format": 21,
+          "height": 1024,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/paradise_island/terrain/materials/textures/paradise_texture_caaa72473cc9638d9443f210ad7f7e46.res",
+          "size_override": "Vector2(1024, 1024)",
+          "slot": "normal_texture",
+          "width": 1024
+        }
+      ],
+      "uid": "uid://b3v5qgdyajnvd"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_cerca_wood.tres",
+      "snapshot_md5": "eda9fb576a8c9643050f0d836ed73238",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "0d7a24a3427368e0650eedb0b36d4b6b",
+          "data_bytes": 20160,
+          "decoded_md5": "c702d35f9e47bcc14904cdad1228a11e",
+          "format": 22,
+          "height": 95,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/paradise_island/terrain/materials/textures/paradise_texture_0d7a24a3427368e0650eedb0b36d4b6b.res",
+          "size_override": "Vector2(155, 95)",
+          "slot": "albedo_texture",
+          "width": 155
+        }
+      ],
+      "uid": "uid://bq2y1e4gnd5fi"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_charcoal.tres",
+      "snapshot_md5": "a963d3d03ff2b611c2ff8d6790cc1d2c",
+      "textures": [],
+      "uid": "uid://dbygmqbpvobv6"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_cinder_block.tres",
+      "snapshot_md5": "3ac0db4ee086fb803678b06ef5740873",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "f5ae2b3b123360365ea870cfcd2c36dd",
+          "data_bytes": 289088,
+          "decoded_md5": "da95e7fd7cc063ee48e82ca9eaa76b38",
+          "format": 22,
+          "height": 500,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/paradise_island/terrain/materials/textures/paradise_texture_f5ae2b3b123360365ea870cfcd2c36dd.res",
+          "size_override": "Vector2(430, 500)",
+          "slot": "albedo_texture",
+          "width": 430
+        }
+      ],
+      "uid": "uid://dvmfy8nmap3ol"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_cladding_siding_white.tres",
+      "snapshot_md5": "c6c03bb6015638edbfd0519cbeff885b",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "0b9847adf9eb5cd2509bcc80e90cdc76",
+          "data_bytes": 21872,
+          "decoded_md5": "eb4911282477706ac0de730996c28494",
+          "format": 22,
+          "height": 128,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/paradise_island/terrain/materials/textures/paradise_texture_0b9847adf9eb5cd2509bcc80e90cdc76.res",
+          "size_override": "Vector2(128, 128)",
+          "slot": "albedo_texture",
+          "width": 128
+        }
+      ],
+      "uid": "uid://jy0ci43f6gnq"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_color_01.tres",
+      "snapshot_md5": "8961d7d6b560f96724c934da795516d3",
+      "textures": [],
+      "uid": "uid://22ic4fq3tj47"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_color_02.tres",
+      "snapshot_md5": "08c39510af520c14fcc195cded25f9f8",
+      "textures": [],
+      "uid": "uid://df3nckgvgxx10"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_color_03.tres",
+      "snapshot_md5": "1e16b8aeed9ccda944d1ab9080d2b508",
+      "textures": [],
+      "uid": "uid://cv73omilllvl1"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_color_04.tres",
+      "snapshot_md5": "9b9e00b9319657d6c5bb509b7361c68d",
+      "textures": [],
+      "uid": "uid://k6jswxyxvyvk"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_color_05.tres",
+      "snapshot_md5": "f90b4e0f0cba45660f25181d6fc0d506",
+      "textures": [],
+      "uid": "uid://s0neu47ks0lr"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_color_06.tres",
+      "snapshot_md5": "bfeca1854941dd98375a4f86b0246c48",
+      "textures": [],
+      "uid": "uid://cu54t3qormb8i"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_color_07.tres",
+      "snapshot_md5": "f484a0cebc19347292527c5c97f4b5f3",
+      "textures": [],
+      "uid": "uid://bstyfu5cbtypu"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_color_08.tres",
+      "snapshot_md5": "baf265f017f66135be6cbc140bb001ba",
+      "textures": [],
+      "uid": "uid://ci0ee3a81bqd5"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_concrete_gray.tres",
+      "snapshot_md5": "8a5bc81d19864beb7e5d5a13a4c5ee70",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "5d5e9a2b68c632a37b239cedb9aa1f2d",
+          "data_bytes": 87408,
+          "decoded_md5": "933e5de6ccab196a72d91dae05c544e2",
+          "format": 22,
+          "height": 256,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/paradise_island/terrain/materials/textures/paradise_texture_5d5e9a2b68c632a37b239cedb9aa1f2d.res",
+          "size_override": "Vector2(256, 256)",
+          "slot": "albedo_texture",
+          "width": 256
+        }
+      ],
+      "uid": "uid://d1wxdy3aj2ys2"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_concrete_stamped_ashlar.tres",
+      "snapshot_md5": "b596ef818dd8dd6f6c7eee3c72ebda75",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "09112e5069e91053df53685537f3b517",
+          "data_bytes": 109280,
+          "decoded_md5": "3e96bf07a4abfda169139c24dae6fb90",
+          "format": 22,
+          "height": 256,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/paradise_island/terrain/materials/textures/paradise_texture_09112e5069e91053df53685537f3b517.res",
+          "size_override": "Vector2(320, 256)",
+          "slot": "albedo_texture",
+          "width": 320
+        }
+      ],
+      "uid": "uid://cue3i1fo6r2mq"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_corrogate_shiny_01.tres",
+      "snapshot_md5": "b026a15b864959c06f780cad74c94caa",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "edef1f5612b0ebd2445ae2344fd8bd39",
+          "data_bytes": 21872,
+          "decoded_md5": "1ebe8abe5b346e88d24c334f7be3fa35",
+          "format": 22,
+          "height": 128,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/paradise_island/terrain/materials/textures/paradise_texture_edef1f5612b0ebd2445ae2344fd8bd39.res",
+          "size_override": "Vector2(128, 128)",
+          "slot": "albedo_texture",
+          "width": 128
+        }
+      ],
+      "uid": "uid://csq58qgj3ebsy"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_corrogate_shiny_02.tres",
+      "snapshot_md5": "06538d7cb07a66ef097cc446ab188a1d",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "d50125c92f8dab110b2036b2ff47a160",
+          "data_bytes": 21872,
+          "decoded_md5": "51b4cbffdcd5a74a0e8059140ded90e4",
+          "format": 22,
+          "height": 128,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/paradise_island/terrain/materials/textures/paradise_texture_d50125c92f8dab110b2036b2ff47a160.res",
+          "size_override": "Vector2(128, 128)",
+          "slot": "albedo_texture",
+          "width": 128
+        }
+      ],
+      "uid": "uid://bb0nehnh54ref"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_corrogate_shiny_03.tres",
+      "snapshot_md5": "aaf9476df5e85f8a250cd82e95ab85f8",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "1a8d3893d6560e9996f6e4b090636e35",
+          "data_bytes": 165376,
+          "decoded_md5": "cc557b32037910e177ce5193beac4d60",
+          "format": 22,
+          "height": 350,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/paradise_island/terrain/materials/textures/paradise_texture_1a8d3893d6560e9996f6e4b090636e35.res",
+          "size_override": "Vector2(350, 350)",
+          "slot": "albedo_texture",
+          "width": 350
+        }
+      ],
+      "uid": "uid://dhu45kdjyuqh7"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_corrogate_shiny_04.tres",
+      "snapshot_md5": "c9c307836605a2e8c8b27576adc0125b",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "edef1f5612b0ebd2445ae2344fd8bd39",
+          "data_bytes": 21872,
+          "decoded_md5": "1ebe8abe5b346e88d24c334f7be3fa35",
+          "format": 22,
+          "height": 128,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/paradise_island/terrain/materials/textures/paradise_texture_edef1f5612b0ebd2445ae2344fd8bd39.res",
+          "size_override": "Vector2(128, 128)",
+          "slot": "albedo_texture",
+          "width": 128
+        }
+      ],
+      "uid": "uid://nec0rar0u65u"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_corrogate_shiny_05.tres",
+      "snapshot_md5": "dfdbe31aa3160d800dc6391c21a85c47",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "d50125c92f8dab110b2036b2ff47a160",
+          "data_bytes": 21872,
+          "decoded_md5": "51b4cbffdcd5a74a0e8059140ded90e4",
+          "format": 22,
+          "height": 128,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/paradise_island/terrain/materials/textures/paradise_texture_d50125c92f8dab110b2036b2ff47a160.res",
+          "size_override": "Vector2(128, 128)",
+          "slot": "albedo_texture",
+          "width": 128
+        }
+      ],
+      "uid": "uid://ccm3ajtovvgmo"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_dark_gray_01.tres",
+      "snapshot_md5": "82ac70b30a81ea3ef438c7f2c6847162",
+      "textures": [],
+      "uid": "uid://ctr8wem0xgsum"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_dark_gray_02.tres",
+      "snapshot_md5": "76a174191271121fcc8123648769d945",
+      "textures": [],
+      "uid": "uid://cfbfhe74flkwv"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_dim_gray.tres",
+      "snapshot_md5": "0cf51fbb5a8922be998b97d167457da7",
+      "textures": [],
+      "uid": "uid://xe4f4x7yqnfm"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_ep.tres",
+      "snapshot_md5": "cdfefdd5d84acf13f8f4df569dbae074",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "6a30a49290e615a469dab5a8b1955433",
+          "data_bytes": 1284176,
+          "decoded_md5": "c8af40c3840039622d95a56686bd4487",
+          "format": 22,
+          "height": 810,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/paradise_island/terrain/materials/textures/paradise_texture_6a30a49290e615a469dab5a8b1955433.res",
+          "size_override": "Vector2(1181, 810)",
+          "slot": "albedo_texture",
+          "width": 1181
+        }
+      ],
+      "uid": "uid://xaudwj2dsvak"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_glass_blue_tint.tres",
+      "snapshot_md5": "b0326e5ae5532720214d7e487bebf5d9",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "fee3d36d7ac50d48da1678d7db3f3ad2",
+          "data_bytes": 27808,
+          "decoded_md5": "6a19ca66578b65cda44986413e6ac768",
+          "format": 22,
+          "height": 144,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/paradise_island/terrain/materials/textures/paradise_texture_fee3d36d7ac50d48da1678d7db3f3ad2.res",
+          "size_override": "Vector2(144, 144)",
+          "slot": "albedo_texture",
+          "width": 144
+        }
+      ],
+      "uid": "uid://cioqrak52dr26"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_granite_dark_gray.tres",
+      "snapshot_md5": "da14bfeee353aa5a9dfb769e11b56be9",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "f9c6d72eb75265fda138b3bae3067713",
+          "data_bytes": 165376,
+          "decoded_md5": "15f8dc3d28db09d2d11ae5ded6c8b8d0",
+          "format": 22,
+          "height": 350,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/paradise_island/terrain/materials/textures/paradise_texture_f9c6d72eb75265fda138b3bae3067713.res",
+          "size_override": "Vector2(350, 350)",
+          "slot": "albedo_texture",
+          "width": 350
+        }
+      ],
+      "uid": "uid://bgv5fwln2v0ko"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_grass_light_green.tres",
+      "snapshot_md5": "90efc350dadd5e027146698d3cd6eab6",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "038889e9b3857207ab51abf52d8ef749",
+          "data_bytes": 335360,
+          "decoded_md5": "c528ba615cf81b43f6fa4c29eeff8e07",
+          "format": 22,
+          "height": 500,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/paradise_island/terrain/materials/textures/paradise_texture_038889e9b3857207ab51abf52d8ef749.res",
+          "size_override": "Vector2(500, 500)",
+          "slot": "albedo_texture",
+          "width": 500
+        }
+      ],
+      "uid": "uid://dsuxfhch0ds1k"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_janela.tres",
+      "snapshot_md5": "a078a2621d5c5f3b057855a375f06818",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "78377090466282be877f4d59a9802d92",
+          "data_bytes": 168656,
+          "decoded_md5": "f20b80ca6fdbb1086b8ada57837b1591",
+          "format": 22,
+          "height": 308,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/paradise_island/terrain/materials/textures/paradise_texture_78377090466282be877f4d59a9802d92.res",
+          "size_override": "Vector2(408, 308)",
+          "slot": "albedo_texture",
+          "width": 408
+        }
+      ],
+      "uid": "uid://cpfd3yhtj65wq"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_jean_blue.tres",
+      "snapshot_md5": "09000c32aacbb85a0ddbde9a7e1d72fc",
+      "textures": [],
+      "uid": "uid://cogwqhmxgqwt6"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_linen_01.tres",
+      "snapshot_md5": "24938119cdde984372dc3e3c9327f2f4",
+      "textures": [],
+      "uid": "uid://b3ylphgau3tlf"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_material_01.tres",
+      "snapshot_md5": "6b8fffb468eca399290e6c1701dd39a3",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "930cf68db6adec48d0d5b2a4e3b80b27",
+          "data_bytes": 22369648,
+          "decoded_md5": "2786f10be5f7f6d3f1a4a07b843bd443",
+          "format": 22,
+          "height": 4096,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/paradise_island/terrain/materials/textures/paradise_island_material_01_albedo.res",
+          "size_override": "Vector2(4096, 4096)",
+          "slot": "albedo_texture",
+          "width": 4096
+        }
+      ],
+      "uid": "uid://b5wb2d6vr6x50"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_material_02.tres",
+      "snapshot_md5": "aa4c270b7543d29c025fc950a5bd137f",
+      "textures": [],
+      "uid": "uid://dcanlov0cf0yj"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_material_03.tres",
+      "snapshot_md5": "7fde685940c87dbd60311e0a35fb815c",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "8852c1021d09c440d8ca32c4b48893ad",
+          "data_bytes": 335360,
+          "decoded_md5": "75468204be58867bef22b63468655f31",
+          "format": 22,
+          "height": 500,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/paradise_island/terrain/materials/textures/paradise_texture_8852c1021d09c440d8ca32c4b48893ad.res",
+          "size_override": "Vector2(500, 500)",
+          "slot": "albedo_texture",
+          "width": 500
+        }
+      ],
+      "uid": "uid://co0co1dh1l51b"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_material_04.tres",
+      "snapshot_md5": "1ed38e3b025a3c847238cc107298cd5a",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "8852c1021d09c440d8ca32c4b48893ad",
+          "data_bytes": 335360,
+          "decoded_md5": "75468204be58867bef22b63468655f31",
+          "format": 22,
+          "height": 500,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/paradise_island/terrain/materials/textures/paradise_texture_8852c1021d09c440d8ca32c4b48893ad.res",
+          "size_override": "Vector2(500, 500)",
+          "slot": "albedo_texture",
+          "width": 500
+        }
+      ],
+      "uid": "uid://c1elucpy5qwt6"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_medeek_concrete.tres",
+      "snapshot_md5": "f99eca86e577997e219afc943cb459e9",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "a574d2636db7f61a76549c394e36ee68",
+          "data_bytes": 264128,
+          "decoded_md5": "cb59fe6557731a78c4d38b0e0d9a8806",
+          "format": 22,
+          "height": 443,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/paradise_island/terrain/materials/textures/paradise_texture_a574d2636db7f61a76549c394e36ee68.res",
+          "size_override": "Vector2(443, 443)",
+          "slot": "albedo_texture",
+          "width": 443
+        }
+      ],
+      "uid": "uid://e6dyfc24c8yt"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_medeek_lumber.tres",
+      "snapshot_md5": "87a827c8334e42cb253f818f79d38fc9",
+      "textures": [],
+      "uid": "uid://bosgk35rgm7br"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_medeek_lumberpt.tres",
+      "snapshot_md5": "e2f71115dcc23e6fa8940facafa7d2b8",
+      "textures": [],
+      "uid": "uid://bkk8s16mlemu6"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_metal_01.tres",
+      "snapshot_md5": "ff87badd3195c99b2122748813fc23b5",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "9b4abae93935e0e1bbe915f91e4f8647",
+          "data_bytes": 1398128,
+          "decoded_md5": "6643c7248b15fe2f19d5022bfb60ba71",
+          "format": 22,
+          "height": 1024,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/paradise_island/terrain/materials/textures/paradise_texture_9b4abae93935e0e1bbe915f91e4f8647.res",
+          "size_override": "Vector2(1024, 1024)",
+          "slot": "albedo_texture",
+          "width": 1024
+        },
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "f82a69eef3d236fc43cde54d40d801b7",
+          "data_bytes": 1398128,
+          "decoded_md5": "1d1e827ad3cf556badf3961134ead011",
+          "format": 21,
+          "height": 1024,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/paradise_island/terrain/materials/textures/paradise_texture_f82a69eef3d236fc43cde54d40d801b7.res",
+          "size_override": "Vector2(1024, 1024)",
+          "slot": "normal_texture",
+          "width": 1024
+        }
+      ],
+      "uid": "uid://qji6oamm8qm8"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_metal_02.tres",
+      "snapshot_md5": "a8dc78e55ee3b8316054db265e062d70",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "9b4abae93935e0e1bbe915f91e4f8647",
+          "data_bytes": 1398128,
+          "decoded_md5": "6643c7248b15fe2f19d5022bfb60ba71",
+          "format": 22,
+          "height": 1024,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/paradise_island/terrain/materials/textures/paradise_texture_9b4abae93935e0e1bbe915f91e4f8647.res",
+          "size_override": "Vector2(1024, 1024)",
+          "slot": "albedo_texture",
+          "width": 1024
+        },
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "f82a69eef3d236fc43cde54d40d801b7",
+          "data_bytes": 1398128,
+          "decoded_md5": "1d1e827ad3cf556badf3961134ead011",
+          "format": 21,
+          "height": 1024,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/paradise_island/terrain/materials/textures/paradise_texture_f82a69eef3d236fc43cde54d40d801b7.res",
+          "size_override": "Vector2(1024, 1024)",
+          "slot": "normal_texture",
+          "width": 1024
+        }
+      ],
+      "uid": "uid://c3ou0yhxa5yvn"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_metal_03.tres",
+      "snapshot_md5": "ec48224e3f3a8cc6939c26392e28e57d",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "9b4abae93935e0e1bbe915f91e4f8647",
+          "data_bytes": 1398128,
+          "decoded_md5": "6643c7248b15fe2f19d5022bfb60ba71",
+          "format": 22,
+          "height": 1024,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/paradise_island/terrain/materials/textures/paradise_texture_9b4abae93935e0e1bbe915f91e4f8647.res",
+          "size_override": "Vector2(1024, 1024)",
+          "slot": "albedo_texture",
+          "width": 1024
+        },
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "f82a69eef3d236fc43cde54d40d801b7",
+          "data_bytes": 1398128,
+          "decoded_md5": "1d1e827ad3cf556badf3961134ead011",
+          "format": 21,
+          "height": 1024,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/paradise_island/terrain/materials/textures/paradise_texture_f82a69eef3d236fc43cde54d40d801b7.res",
+          "size_override": "Vector2(1024, 1024)",
+          "slot": "normal_texture",
+          "width": 1024
+        }
+      ],
+      "uid": "uid://fakeb8pytn4l"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_metal_aluminum_anodized.tres",
+      "snapshot_md5": "e45d96b164c8f96bf73a638726851433",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "21fe42dd976fe11279f3e727336210b8",
+          "data_bytes": 87408,
+          "decoded_md5": "611c02bc861918df3bb7727939250b51",
+          "format": 22,
+          "height": 256,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/paradise_island/terrain/materials/textures/paradise_texture_21fe42dd976fe11279f3e727336210b8.res",
+          "size_override": "Vector2(256, 256)",
+          "slot": "albedo_texture",
+          "width": 256
+        }
+      ],
+      "uid": "uid://ia1dcqelvp48"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_metal_floor_01.tres",
+      "snapshot_md5": "7072b77fa68739459f422f9238c74a26",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "820c88c57897502d8aeab9b9c2633287",
+          "data_bytes": 87408,
+          "decoded_md5": "2e5a6f20a43d4bf01cd822975d6ea5d9",
+          "format": 22,
+          "height": 256,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/paradise_island/terrain/materials/textures/paradise_texture_820c88c57897502d8aeab9b9c2633287.res",
+          "size_override": "Vector2(256, 256)",
+          "slot": "albedo_texture",
+          "width": 256
+        }
+      ],
+      "uid": "uid://bma0gaisp3bjn"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_metal_floor_02.tres",
+      "snapshot_md5": "17048030b6f8cb44421d44a81708a6e6",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "820c88c57897502d8aeab9b9c2633287",
+          "data_bytes": 87408,
+          "decoded_md5": "2e5a6f20a43d4bf01cd822975d6ea5d9",
+          "format": 22,
+          "height": 256,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/paradise_island/terrain/materials/textures/paradise_texture_820c88c57897502d8aeab9b9c2633287.res",
+          "size_override": "Vector2(256, 256)",
+          "slot": "albedo_texture",
+          "width": 256
+        }
+      ],
+      "uid": "uid://omsdcg6q3mll"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_metal_panel.tres",
+      "snapshot_md5": "507f1ea0cc8629d432f6c100e9087453",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "57cc150049170d607108c474093586ef",
+          "data_bytes": 21872,
+          "decoded_md5": "f65144baebcd45b13f875d7e9df6b303",
+          "format": 22,
+          "height": 128,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/paradise_island/terrain/materials/textures/paradise_texture_57cc150049170d607108c474093586ef.res",
+          "size_override": "Vector2(128, 128)",
+          "slot": "albedo_texture",
+          "width": 128
+        }
+      ],
+      "uid": "uid://wl56ofxmtbv1"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_metal_rough.tres",
+      "snapshot_md5": "173af3a5ff0c7bdfde9a7e192dd612f3",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "37a1a41a8f457e2a283e666c9ac61966",
+          "data_bytes": 21872,
+          "decoded_md5": "f51559b79b9dc53a28eac5603cf8f7ac",
+          "format": 22,
+          "height": 128,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/paradise_island/terrain/materials/textures/paradise_texture_37a1a41a8f457e2a283e666c9ac61966.res",
+          "size_override": "Vector2(128, 128)",
+          "slot": "albedo_texture",
+          "width": 128
+        }
+      ],
+      "uid": "uid://wqvto6vj2ap8"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_metal_seamed_01.tres",
+      "snapshot_md5": "f716b8a8033b4e23537a773ea2486d0d",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "1f34a85663a58be36e4f4d7ba7bfccc9",
+          "data_bytes": 21872,
+          "decoded_md5": "cd7b2ff9ee68f003b5ee873139572df5",
+          "format": 22,
+          "height": 128,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/paradise_island/terrain/materials/textures/paradise_texture_1f34a85663a58be36e4f4d7ba7bfccc9.res",
+          "size_override": "Vector2(128, 128)",
+          "slot": "albedo_texture",
+          "width": 128
+        }
+      ],
+      "uid": "uid://brgy5ybqs7ri"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_metal_seamed_02.tres",
+      "snapshot_md5": "10f710f18c89ffd5142512370ee867fb",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "2c2bcf59326cb4cc5ba921d641d62cc8",
+          "data_bytes": 21872,
+          "decoded_md5": "78f1e454196c694217a3b3b0fe006eda",
+          "format": 22,
+          "height": 128,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/paradise_island/terrain/materials/textures/paradise_texture_2c2bcf59326cb4cc5ba921d641d62cc8.res",
+          "size_override": "Vector2(128, 128)",
+          "slot": "albedo_texture",
+          "width": 128
+        }
+      ],
+      "uid": "uid://bb2mpvylqa5nx"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_mirror.tres",
+      "snapshot_md5": "9279a6d8534a9d4ea2134fa9c27a1028",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "884b67cfa07d2757ec14611c16a14083",
+          "data_bytes": 655376,
+          "decoded_md5": "55bba2bcb45bc848f45b661b40a8e376",
+          "format": 22,
+          "height": 700,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/paradise_island/terrain/materials/textures/paradise_texture_884b67cfa07d2757ec14611c16a14083.res",
+          "size_override": "Vector2(700, 700)",
+          "slot": "albedo_texture",
+          "width": 700
+        }
+      ],
+      "uid": "uid://c7fudgfsglg3k"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_orange.tres",
+      "snapshot_md5": "3a4cc8b9e14a11d57117499419f381a3",
+      "textures": [],
+      "uid": "uid://cp7b2ns2sbmsf"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_palm_billboard_continuous.tres",
+      "snapshot_md5": "e1ee88754ee5fec1413b4e2177daad2f",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "e7438e24348dd65e1851bf7cead694bd",
+          "data_bytes": 14506160,
+          "decoded_md5": "8c58e94243fa2478417048aaca53fb8c",
+          "format": 22,
+          "height": 2655,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/paradise_island/terrain/materials/textures/paradise_texture_e7438e24348dd65e1851bf7cead694bd.res",
+          "size_override": "Vector2(4096, 2655)",
+          "slot": "albedo_texture",
+          "width": 4096
+        }
+      ],
+      "uid": "uid://qxgyqayadwxs"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_pavers_with_grass_herringbone.tres",
+      "snapshot_md5": "e3dbdffb6204fa104be382014e886dbe",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "c95c8d29c8563e97a980c0a04c99e47e",
+          "data_bytes": 264496,
+          "decoded_md5": "9355ddf05ae1d9932354a2347122a5c5",
+          "format": 22,
+          "height": 436,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/paradise_island/terrain/materials/textures/paradise_texture_c95c8d29c8563e97a980c0a04c99e47e.res",
+          "size_override": "Vector2(450, 436)",
+          "slot": "albedo_texture",
+          "width": 450
+        }
+      ],
+      "uid": "uid://dlumdqr0l1bjl"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_photo.tres",
+      "snapshot_md5": "da926d6851e412a6cb1f5bd93633eb86",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "12f1d77b21a1ba9027f29a16cbc0a008",
+          "data_bytes": 1631712,
+          "decoded_md5": "ed9d8235829b486699b6e3d1e2e97035",
+          "format": 22,
+          "height": 901,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/paradise_island/terrain/materials/textures/paradise_texture_12f1d77b21a1ba9027f29a16cbc0a008.res",
+          "size_override": "Vector2(1349, 901)",
+          "slot": "albedo_texture",
+          "width": 1349
+        }
+      ],
+      "uid": "uid://dr6nc8pdx0725"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_porta.tres",
+      "snapshot_md5": "2a0286dbc976bfd115a80433460444ac",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "c4ff4282bee76c50e1e284a9910d4e26",
+          "data_bytes": 25392,
+          "decoded_md5": "75dc8f99ae6fe00cb5cb998355dcd809",
+          "format": 22,
+          "height": 180,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/paradise_island/terrain/materials/textures/paradise_texture_c4ff4282bee76c50e1e284a9910d4e26.res",
+          "size_override": "Vector2(104, 180)",
+          "slot": "albedo_texture",
+          "width": 104
+        }
+      ],
+      "uid": "uid://bi1eihuymawr"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_rock.tres",
+      "snapshot_md5": "aab4772e643b252450ac7c44271c8eec",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "df23bc42aa045f98d585bad718fdc29b",
+          "data_bytes": 5592432,
+          "decoded_md5": "be4a8a57538d7791b51330776150916b",
+          "format": 22,
+          "height": 2048,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/paradise_island/terrain/materials/textures/paradise_texture_df23bc42aa045f98d585bad718fdc29b.res",
+          "size_override": "Vector2(2048, 2048)",
+          "slot": "albedo_texture",
+          "width": 2048
+        }
+      ],
+      "uid": "uid://ce66mmfr4ueai"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_roof.tres",
+      "snapshot_md5": "2bf04897dfda88be538f8f33fa146238",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "84a02043d51567359535c3f23b67073d",
+          "data_bytes": 241360,
+          "decoded_md5": "876b1d183249531a29a07b7ed19aed91",
+          "format": 22,
+          "height": 308,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/paradise_island/terrain/materials/textures/paradise_texture_84a02043d51567359535c3f23b67073d.res",
+          "size_override": "Vector2(584, 308)",
+          "slot": "albedo_texture",
+          "width": 584
+        }
+      ],
+      "uid": "uid://cbnjckd5qblgk"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_rufo_01.tres",
+      "snapshot_md5": "508af6801e17222fc038ccb4d56fc979",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "8c687adf30d2faf25885d8f88d45acc2",
+          "data_bytes": 51120,
+          "decoded_md5": "2f91698637d991468c65b8241218e5bf",
+          "format": 22,
+          "height": 63,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/paradise_island/terrain/materials/textures/paradise_texture_8c687adf30d2faf25885d8f88d45acc2.res",
+          "size_override": "Vector2(595, 63)",
+          "slot": "albedo_texture",
+          "width": 595
+        }
+      ],
+      "uid": "uid://cosgell8c04k4"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_rufo_02.tres",
+      "snapshot_md5": "bc2b5e1a7a0ff8c133b045d3c413c5d3",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "3a03931a2d0a422dfb5d3363ad6b57bf",
+          "data_bytes": 44176,
+          "decoded_md5": "702e3c1f88975f1b034b5cf66828db17",
+          "format": 22,
+          "height": 55,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/paradise_island/terrain/materials/textures/paradise_texture_3a03931a2d0a422dfb5d3363ad6b57bf.res",
+          "size_override": "Vector2(583, 55)",
+          "slot": "albedo_texture",
+          "width": 583
+        }
+      ],
+      "uid": "uid://c21e1regtm4b1"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_rufo_03.tres",
+      "snapshot_md5": "f40bc1d2c1a5aeb1f469b920764acee8",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "0c13a012e41db05752ad87ce859a2898",
+          "data_bytes": 50400,
+          "decoded_md5": "05b3055111a544b5d875d737e3d0dc2b",
+          "format": 22,
+          "height": 63,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/paradise_island/terrain/materials/textures/paradise_texture_0c13a012e41db05752ad87ce859a2898.res",
+          "size_override": "Vector2(588, 63)",
+          "slot": "albedo_texture",
+          "width": 588
+        }
+      ],
+      "uid": "uid://bnmwfr10no2hb"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_rufo_04.tres",
+      "snapshot_md5": "21de007dde92b454cf77c7b042fe5c0e",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "353bb12b7760763ea2fdd3108846235a",
+          "data_bytes": 51120,
+          "decoded_md5": "8a83f1d6333cfa9bc9b3f14d63f7ca79",
+          "format": 22,
+          "height": 63,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/paradise_island/terrain/materials/textures/paradise_texture_353bb12b7760763ea2fdd3108846235a.res",
+          "size_override": "Vector2(595, 63)",
+          "slot": "albedo_texture",
+          "width": 595
+        }
+      ],
+      "uid": "uid://dbm3kd6lxwbke"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_rufo_05.tres",
+      "snapshot_md5": "dade4f54e2e77ae231b218749583a049",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "2894c7527381c31c2946ebcd84857f68",
+          "data_bytes": 45152,
+          "decoded_md5": "f954e6da531437ba551622e4a59c7505",
+          "format": 22,
+          "height": 55,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/paradise_island/terrain/materials/textures/paradise_texture_2894c7527381c31c2946ebcd84857f68.res",
+          "size_override": "Vector2(595, 55)",
+          "slot": "albedo_texture",
+          "width": 595
+        }
+      ],
+      "uid": "uid://d0rvtb4fhpcgk"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_rufo_06.tres",
+      "snapshot_md5": "a20610c0f790865825164bf79da1f54f",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "41c0292fcb1abce0c8d5c949c18a3a57",
+          "data_bytes": 44512,
+          "decoded_md5": "4059d64e522a02b2d3e54f5ccc898fda",
+          "format": 22,
+          "height": 55,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/paradise_island/terrain/materials/textures/paradise_texture_41c0292fcb1abce0c8d5c949c18a3a57.res",
+          "size_override": "Vector2(588, 55)",
+          "slot": "albedo_texture",
+          "width": 588
+        }
+      ],
+      "uid": "uid://cvaiqhvm3sq1o"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_rufo_07.tres",
+      "snapshot_md5": "0bb82f3f15203066528779c2c7a30493",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "4e5a6cb483ff01fb84dccff1c4737c9c",
+          "data_bytes": 45152,
+          "decoded_md5": "492d6accd98fb003d62e22e15d02f0d4",
+          "format": 22,
+          "height": 55,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/paradise_island/terrain/materials/textures/paradise_texture_4e5a6cb483ff01fb84dccff1c4737c9c.res",
+          "size_override": "Vector2(595, 55)",
+          "slot": "albedo_texture",
+          "width": 595
+        }
+      ],
+      "uid": "uid://giuwx5d0d4tx"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_rufo_08.tres",
+      "snapshot_md5": "6c10c7133731032d081bb1b26acbe5a8",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "4e1955527da7f758d261209879fdf08b",
+          "data_bytes": 50400,
+          "decoded_md5": "87ffb6554d609d5ee8e88d732ae67c02",
+          "format": 22,
+          "height": 63,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/paradise_island/terrain/materials/textures/paradise_texture_4e1955527da7f758d261209879fdf08b.res",
+          "size_override": "Vector2(588, 63)",
+          "slot": "albedo_texture",
+          "width": 588
+        }
+      ],
+      "uid": "uid://c14oo28dpkaxs"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_rufo_09.tres",
+      "snapshot_md5": "d44aa90e64621e5fa7924d98fcd658c3",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "e6ad51d48f6c2d0a2730b4c0ded3bb45",
+          "data_bytes": 44176,
+          "decoded_md5": "343a792160673cf77f938d9484721c69",
+          "format": 22,
+          "height": 55,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/paradise_island/terrain/materials/textures/paradise_texture_e6ad51d48f6c2d0a2730b4c0ded3bb45.res",
+          "size_override": "Vector2(581, 55)",
+          "slot": "albedo_texture",
+          "width": 581
+        }
+      ],
+      "uid": "uid://64dhiq3aebhd"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_rufo_10.tres",
+      "snapshot_md5": "fc8ebea2fd0d34e8ec2bda08e67e7b8f",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "ee323669306c72b25ef579d3a98ba75d",
+          "data_bytes": 44176,
+          "decoded_md5": "d3b2e764ceb4d1dc7b3d5ec06bcbf9d7",
+          "format": 22,
+          "height": 54,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/paradise_island/terrain/materials/textures/paradise_texture_ee323669306c72b25ef579d3a98ba75d.res",
+          "size_override": "Vector2(582, 54)",
+          "slot": "albedo_texture",
+          "width": 582
+        }
+      ],
+      "uid": "uid://ca84fwx7rvr32"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_rufo_11.tres",
+      "snapshot_md5": "3c0dc19fa53bd488e1b1ac229c7fdba5",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "34a994fc3fc16c8a9f17e21ee8752ad5",
+          "data_bytes": 44752,
+          "decoded_md5": "5f7a1b7384ee6da1d7644ad357d30921",
+          "format": 22,
+          "height": 55,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/paradise_island/terrain/materials/textures/paradise_texture_34a994fc3fc16c8a9f17e21ee8752ad5.res",
+          "size_override": "Vector2(589, 55)",
+          "slot": "albedo_texture",
+          "width": 589
+        }
+      ],
+      "uid": "uid://66r7iauhoibk"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_rufo_12.tres",
+      "snapshot_md5": "20c6332456681e849babdf16bbd9c0ac",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "86d8aa4a5210c680b2713feb82ef8af6",
+          "data_bytes": 50672,
+          "decoded_md5": "70f3d0b5ce6c80935d0be10d6d142ec4",
+          "format": 22,
+          "height": 63,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/paradise_island/terrain/materials/textures/paradise_texture_86d8aa4a5210c680b2713feb82ef8af6.res",
+          "size_override": "Vector2(590, 63)",
+          "slot": "albedo_texture",
+          "width": 590
+        }
+      ],
+      "uid": "uid://dohugpxodwmt"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_rufo_13.tres",
+      "snapshot_md5": "4d4bc518616acfe97e0dd64386fc7238",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "34c7d939c3d95b78c2c84851277cf4ad",
+          "data_bytes": 50672,
+          "decoded_md5": "ad67c72eb62719b67e6208ef4a8070bb",
+          "format": 22,
+          "height": 63,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/paradise_island/terrain/materials/textures/paradise_texture_34c7d939c3d95b78c2c84851277cf4ad.res",
+          "size_override": "Vector2(590, 63)",
+          "slot": "albedo_texture",
+          "width": 590
+        }
+      ],
+      "uid": "uid://bgyumivb8crln"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_rufo_14.tres",
+      "snapshot_md5": "0513c76dbc5ceec519c07ee4231eecdd",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "2882205aa0a0a0e786b425ef575461f0",
+          "data_bytes": 51120,
+          "decoded_md5": "f2a219d53c032a7039ce0696e8b85609",
+          "format": 22,
+          "height": 63,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/paradise_island/terrain/materials/textures/paradise_texture_2882205aa0a0a0e786b425ef575461f0.res",
+          "size_override": "Vector2(595, 63)",
+          "slot": "albedo_texture",
+          "width": 595
+        }
+      ],
+      "uid": "uid://je8gopwe8f0s"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_rufo_15.tres",
+      "snapshot_md5": "af4de41f00a3b9a8389de127563bddea",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "292547cb22778dd2863f3cbe9ccdc94d",
+          "data_bytes": 44240,
+          "decoded_md5": "ef374ae36bb03fd4e6982f9cc4aeb8c0",
+          "format": 22,
+          "height": 63,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/paradise_island/terrain/materials/textures/paradise_texture_292547cb22778dd2863f3cbe9ccdc94d.res",
+          "size_override": "Vector2(514, 63)",
+          "slot": "albedo_texture",
+          "width": 514
+        }
+      ],
+      "uid": "uid://quxl2k7h2f50"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_rufo_16.tres",
+      "snapshot_md5": "d43659a409d25fbf2cbaba83b2a36640",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "9ff2a83db2fe4eea895266d874e6d2fd",
+          "data_bytes": 44176,
+          "decoded_md5": "5bb8246caa1d2aaa199dc9129ca6235d",
+          "format": 22,
+          "height": 56,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/paradise_island/terrain/materials/textures/paradise_texture_9ff2a83db2fe4eea895266d874e6d2fd.res",
+          "size_override": "Vector2(582, 56)",
+          "slot": "albedo_texture",
+          "width": 582
+        }
+      ],
+      "uid": "uid://bspjui06padnj"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_rufo_17.tres",
+      "snapshot_md5": "64c5d2cf3f8c8040c38aac0fc9c7c18c",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "827590ab0076945d3a0db763d3b23164",
+          "data_bytes": 44176,
+          "decoded_md5": "bc16a269f2e998fbb320683147580f68",
+          "format": 22,
+          "height": 56,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/paradise_island/terrain/materials/textures/paradise_texture_827590ab0076945d3a0db763d3b23164.res",
+          "size_override": "Vector2(582, 56)",
+          "slot": "albedo_texture",
+          "width": 582
+        }
+      ],
+      "uid": "uid://dtlxm8fc0g4da"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_rufo_18.tres",
+      "snapshot_md5": "5c61823eee4a7d9531d1f0cbc5007213",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "5e32a514d3635b70bb5230e7b7fa2332",
+          "data_bytes": 44176,
+          "decoded_md5": "686ea1d65cd389afb4cc705da80d007a",
+          "format": 22,
+          "height": 56,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/paradise_island/terrain/materials/textures/paradise_texture_5e32a514d3635b70bb5230e7b7fa2332.res",
+          "size_override": "Vector2(582, 56)",
+          "slot": "albedo_texture",
+          "width": 582
+        }
+      ],
+      "uid": "uid://dojl8grpsdjk0"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_rufo_19.tres",
+      "snapshot_md5": "ad54c06b9140febad637816953818ddf",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "03f31cc70794acfc84ce811a399a0ea3",
+          "data_bytes": 44176,
+          "decoded_md5": "3a0f889b034727c19d6b6dd8150794a9",
+          "format": 22,
+          "height": 56,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/paradise_island/terrain/materials/textures/paradise_texture_03f31cc70794acfc84ce811a399a0ea3.res",
+          "size_override": "Vector2(581, 56)",
+          "slot": "albedo_texture",
+          "width": 581
+        }
+      ],
+      "uid": "uid://cc004l0stankq"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_rufo_20.tres",
+      "snapshot_md5": "1d1421008df6cf06f04815b0d44f46eb",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "e8dfac584dc4bf3a69fc64a21486930a",
+          "data_bytes": 33584,
+          "decoded_md5": "b35a1c8f20b7f6c1379464fbd68200ba",
+          "format": 22,
+          "height": 63,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/paradise_island/terrain/materials/textures/paradise_texture_e8dfac584dc4bf3a69fc64a21486930a.res",
+          "size_override": "Vector2(389, 63)",
+          "slot": "albedo_texture",
+          "width": 389
+        }
+      ],
+      "uid": "uid://ms3c4kfm2mps"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_rufo_21.tres",
+      "snapshot_md5": "a208fc21eae32fefa9121e8f466b669f",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "2d35c4b25ced1c93a139c528d3255783",
+          "data_bytes": 50400,
+          "decoded_md5": "989bb2d9805a4c8792ed6aa49d54412a",
+          "format": 22,
+          "height": 63,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/paradise_island/terrain/materials/textures/paradise_texture_2d35c4b25ced1c93a139c528d3255783.res",
+          "size_override": "Vector2(588, 63)",
+          "slot": "albedo_texture",
+          "width": 588
+        }
+      ],
+      "uid": "uid://bld6ryiuawl6e"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_rufo_22.tres",
+      "snapshot_md5": "63a1e7b5982f95063d6e467349ab78c1",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "a855d9af681a8b5af01d14b7c16ca59b",
+          "data_bytes": 33584,
+          "decoded_md5": "ac5e0faf704dc6770255562dd5a634a5",
+          "format": 22,
+          "height": 63,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/paradise_island/terrain/materials/textures/paradise_texture_a855d9af681a8b5af01d14b7c16ca59b.res",
+          "size_override": "Vector2(389, 63)",
+          "slot": "albedo_texture",
+          "width": 389
+        }
+      ],
+      "uid": "uid://cs2uojnqqolak"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_saddle_brown.tres",
+      "snapshot_md5": "86d3bf7d121ef967951bc9a82fed4346",
+      "textures": [],
+      "uid": "uid://brxgfayg6vpjj"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_silver.tres",
+      "snapshot_md5": "4a2ec1c2beee96cec8088cd460e1cc9a",
+      "textures": [],
+      "uid": "uid://b4wtvaygiv5y6"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_steel_brushed_stainless.tres",
+      "snapshot_md5": "e1fe12870c44c98caed53dbf30dd5933",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "fb7eb73ee4f1919244c10c984b5a83ae",
+          "data_bytes": 481072,
+          "decoded_md5": "22830d40762e87668537b36f95988713",
+          "format": 22,
+          "height": 600,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/paradise_island/terrain/materials/textures/paradise_texture_fb7eb73ee4f1919244c10c984b5a83ae.res",
+          "size_override": "Vector2(600, 600)",
+          "slot": "albedo_texture",
+          "width": 600
+        }
+      ],
+      "uid": "uid://c2bfd7yop06il"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_stone_coursed_rough.tres",
+      "snapshot_md5": "ce32678613fdfa565845e591759a2ee1",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "e8648f57115b89f40ad6b41e0cf742fe",
+          "data_bytes": 87408,
+          "decoded_md5": "2a750b2bedf34bfc8a1d97df362f2822",
+          "format": 22,
+          "height": 256,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/paradise_island/terrain/materials/textures/paradise_texture_e8648f57115b89f40ad6b41e0cf742fe.res",
+          "size_override": "Vector2(256, 256)",
+          "slot": "albedo_texture",
+          "width": 256
+        }
+      ],
+      "uid": "uid://qij14peslt0q"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_terrain_master.tres",
+      "snapshot_md5": "29cd76f90c1d0e5eae5648d2af3d2f02",
+      "textures": [],
+      "uid": "uid://ccjbsoj8527r7"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_thatched.tres",
+      "snapshot_md5": "171c9d3fcf8ece086d4efa26aee58d36",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "e801572d157749a2829cd6ab152b86ce",
+          "data_bytes": 4740000,
+          "decoded_md5": "4da92f78db12f5190038abf89dd73cad",
+          "format": 22,
+          "height": 1267,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/paradise_island/terrain/materials/textures/paradise_texture_e801572d157749a2829cd6ab152b86ce.res",
+          "size_override": "Vector2(2800, 1267)",
+          "slot": "albedo_texture",
+          "width": 2800
+        }
+      ],
+      "uid": "uid://dvfxs87tgwerm"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_translucent_glass_block_dark.tres",
+      "snapshot_md5": "fa3b79298b43b94e59fc10605d31c8b8",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "2ffb18e9746de8d7848077264392dde2",
+          "data_bytes": 87408,
+          "decoded_md5": "f90c12a1d50bc25b7701b4c3cdca0d42",
+          "format": 22,
+          "height": 256,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/paradise_island/terrain/materials/textures/paradise_texture_2ffb18e9746de8d7848077264392dde2.res",
+          "size_override": "Vector2(256, 256)",
+          "slot": "albedo_texture",
+          "width": 256
+        }
+      ],
+      "uid": "uid://dq1l63gqtrf48"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_translucent_glass_blue.tres",
+      "snapshot_md5": "5cecac06057a6397356d23ec188bf624",
+      "textures": [],
+      "uid": "uid://bbiisnrtsgdqa"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_translucent_glass_gray.tres",
+      "snapshot_md5": "6c76814cc4be57a35086639828452bae",
+      "textures": [],
+      "uid": "uid://jq43rqpqg0sv"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_translucent_glass_sky_reflection.tres",
+      "snapshot_md5": "2e3a4fcf86c8bc915b0834bf0a350020",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "74b12630725d1d09ad0b8151b3fc813e",
+          "data_bytes": 30464,
+          "decoded_md5": "1139b31f362560a540a83a56b95f5dad",
+          "format": 22,
+          "height": 150,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/paradise_island/terrain/materials/textures/paradise_texture_74b12630725d1d09ad0b8151b3fc813e.res",
+          "size_override": "Vector2(146, 150)",
+          "slot": "albedo_texture",
+          "width": 146
+        }
+      ],
+      "uid": "uid://bwvsvh4e42vl5"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_translucent_glass_tinted.tres",
+      "snapshot_md5": "e9a6ec8d8daeb026186bdea7bfdbd86b",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "8da7f05cdca979730ee787561581386a",
+          "data_bytes": 27808,
+          "decoded_md5": "5078e27b4fb366eb43081551400b1ea2",
+          "format": 22,
+          "height": 144,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/paradise_island/terrain/materials/textures/paradise_texture_8da7f05cdca979730ee787561581386a.res",
+          "size_override": "Vector2(144, 144)",
+          "slot": "albedo_texture",
+          "width": 144
+        }
+      ],
+      "uid": "uid://k6n8ycbj6qp3"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_twilight.tres",
+      "snapshot_md5": "ac576e439da7afe0607eb84de9e14b5b",
+      "textures": [],
+      "uid": "uid://ci2x7qyyru1tw"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_white_01.tres",
+      "snapshot_md5": "693090c9b7b3efa604353122a42c0aaa",
+      "textures": [],
+      "uid": "uid://ba2bwugyowenq"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_white_02.tres",
+      "snapshot_md5": "b1cd0534ba7aee09c76050b3656fc056",
+      "textures": [],
+      "uid": "uid://bb8jig2mo3pcf"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_wicker_rattan_01.tres",
+      "snapshot_md5": "a4e241e34a493c405572e364c763d36d",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "4d60b69126ed46fa20b5c9ef40258110",
+          "data_bytes": 123168,
+          "decoded_md5": "49aa4f046bd0f430e9a88f57824d96a8",
+          "format": 22,
+          "height": 256,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/paradise_island/terrain/materials/textures/paradise_texture_4d60b69126ed46fa20b5c9ef40258110.res",
+          "size_override": "Vector2(357, 256)",
+          "slot": "albedo_texture",
+          "width": 357
+        }
+      ],
+      "uid": "uid://bpkabjkgh2pnu"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_wicker_rattan_02.tres",
+      "snapshot_md5": "c8826a0ffd815eb0294669fd92d60e9d",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "4d60b69126ed46fa20b5c9ef40258110",
+          "data_bytes": 123168,
+          "decoded_md5": "49aa4f046bd0f430e9a88f57824d96a8",
+          "format": 22,
+          "height": 256,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/paradise_island/terrain/materials/textures/paradise_texture_4d60b69126ed46fa20b5c9ef40258110.res",
+          "size_override": "Vector2(357, 256)",
+          "slot": "albedo_texture",
+          "width": 357
+        }
+      ],
+      "uid": "uid://cbcqqi3cghlgl"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_wood_01.tres",
+      "snapshot_md5": "b5db39340368d6cf5c23eb6b134ff100",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "1658b73e81294c53652501dded70c592",
+          "data_bytes": 447440,
+          "decoded_md5": "26c7eed64d5010d44fbba463a7df48d5",
+          "format": 22,
+          "height": 500,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/paradise_island/terrain/materials/textures/paradise_texture_1658b73e81294c53652501dded70c592.res",
+          "size_override": "Vector2(666, 500)",
+          "slot": "albedo_texture",
+          "width": 666
+        }
+      ],
+      "uid": "uid://7i3reek02tdl"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_wood_02.tres",
+      "snapshot_md5": "883de7370e92b863f4707d692b27f539",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "f00fe4584e7bf0b5774547a77ffa49fc",
+          "data_bytes": 447440,
+          "decoded_md5": "3757919f125b1c2ae861f139ebc81f36",
+          "format": 22,
+          "height": 500,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/paradise_island/terrain/materials/textures/paradise_texture_f00fe4584e7bf0b5774547a77ffa49fc.res",
+          "size_override": "Vector2(666, 500)",
+          "slot": "albedo_texture",
+          "width": 666
+        }
+      ],
+      "uid": "uid://lyd025el0lwp"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_wood_bamboo_stalks.tres",
+      "snapshot_md5": "a27005550e558cd24fc3aa3617eb2e85",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "e2d096bad292f5632fcb3c2229be276d",
+          "data_bytes": 131104,
+          "decoded_md5": "7324fcf7d80922e058fe384b41b271cd",
+          "format": 22,
+          "height": 384,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/paradise_island/terrain/materials/textures/paradise_texture_e2d096bad292f5632fcb3c2229be276d.res",
+          "size_override": "Vector2(256, 384)",
+          "slot": "albedo_texture",
+          "width": 256
+        }
+      ],
+      "uid": "uid://1tv2fy0c4mr"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_wood_floor.tres",
+      "snapshot_md5": "3eb4e689ac67013680608a6ee0499b70",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "b214d43bcac291df3ef24a7855887f24",
+          "data_bytes": 98384,
+          "decoded_md5": "b16ad80bd39de657ae5182b848c086dc",
+          "format": 22,
+          "height": 286,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/paradise_island/terrain/materials/textures/paradise_texture_b214d43bcac291df3ef24a7855887f24.res",
+          "size_override": "Vector2(256, 286)",
+          "slot": "albedo_texture",
+          "width": 256
+        }
+      ],
+      "uid": "uid://rx3tpw5pyb0j"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_wood_grain_dark.tres",
+      "snapshot_md5": "c7a3433e9a1da0355381ed06ff0c09f4",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "6e657364aca0da1c02249d6654683d78",
+          "data_bytes": 117664,
+          "decoded_md5": "b4df74cb3979b899450f06cdd78ccd14",
+          "format": 22,
+          "height": 256,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/paradise_island/terrain/materials/textures/paradise_texture_6e657364aca0da1c02249d6654683d78.res",
+          "size_override": "Vector2(341, 256)",
+          "slot": "albedo_texture",
+          "width": 341
+        }
+      ],
+      "uid": "uid://733wef4s3bw0"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_wood_house.tres",
+      "snapshot_md5": "5ad4897160c852e5e0a9cf34cd0c4a9a",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "c212ace90c57d9f0b4581d502e6c324d",
+          "data_bytes": 267840,
+          "decoded_md5": "6a7cc73168a458c6eca35615ebe23bc3",
+          "format": 22,
+          "height": 197,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/paradise_island/terrain/materials/textures/paradise_texture_c212ace90c57d9f0b4581d502e6c324d.res",
+          "size_override": "Vector2(1000, 197)",
+          "slot": "albedo_texture",
+          "width": 1000
+        }
+      ],
+      "uid": "uid://dklrd6a3hmfi2"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_yellow_01.tres",
+      "snapshot_md5": "7a588d6aea31508766110baa761215a5",
+      "textures": [],
+      "uid": "uid://co58o2bdu3np4"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_yellow_02.tres",
+      "snapshot_md5": "a14c91716ed803d251ad6345f643f7db",
+      "textures": [],
+      "uid": "uid://bveiqlfrphmkj"
+    },
+    {
+      "path": "res://levels/paradise_island/terrain/materials/paradise_island_zoolingerf.tres",
+      "snapshot_md5": "7e78c074392779f89289b30b37c8e212",
+      "textures": [
+        {
+          "class": "PortableCompressedTexture2D",
+          "compressed_md5": "1e6766ac72b11654ebde9fe992e756fd",
+          "data_bytes": 4216912,
+          "decoded_md5": "0e42c759993bf3988cd3ad277d40730b",
+          "format": 22,
+          "height": 1819,
+          "keep_compressed_buffer": true,
+          "mipmaps": true,
+          "name": "",
+          "path": "res://levels/paradise_island/terrain/materials/textures/paradise_texture_1e6766ac72b11654ebde9fe992e756fd.res",
+          "size_override": "Vector2(1735, 1819)",
+          "slot": "albedo_texture",
+          "width": 1735
+        }
+      ],
+      "uid": "uid://5abe27lw034l"
+    }
+  ]
+}
