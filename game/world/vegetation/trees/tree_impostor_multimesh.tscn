@@ -1,9 +1,9 @@
 [gd_scene format=3 uid="uid://dqbhmwx6tvlx0"]
 
-[ext_resource type="Material" uid="uid://cblg21bayh8pb" path="res://world/vegetation/trees/materials/tree_impostor_linden_a.tres" id="1_4nntc"]
+[ext_resource type="Material" uid="uid://cblg21bayh8pb" path="res://world/vegetation/trees/materials/tree_impostor_material.tres" id="1_4nntc"]
 [ext_resource type="Script" uid="uid://brhuo2rge6hdn" path="res://world/vegetation/trees/tree_forest_controller.gd" id="1_v6wlq"]
 [ext_resource type="Script" uid="uid://cvomld30ce7r0" path="res://world/vegetation/trees/tree_impostor_multimesh.gd" id="2_l7a6e"]
-[ext_resource type="Material" uid="uid://xu7m70my2qof" path="res://world/vegetation/trees/materials/tree_impostor_shadow_beech_a.tres" id="3_l7a6e"]
+[ext_resource type="Material" uid="uid://xu7m70my2qof" path="res://world/vegetation/trees/materials/tree_impostor_shadow_material.tres" id="3_l7a6e"]
 
 [sub_resource type="QuadMesh" id="QuadMesh_wwatn"]
 material = ExtResource("1_4nntc")

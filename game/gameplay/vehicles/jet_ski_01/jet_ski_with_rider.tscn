@@ -82,20 +82,22 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.1578315e-08, 0.11282855, -0
 
 [node name="Skeleton3D" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/rider_bot/SKEL_Rider" index="0" unique_id=763064560]
 transform = Transform3D(0.9879613, 0.058283646, -0.1433027, -0.04260468, 0.9930024, 0.1101448, 0.14871976, -0.1027133, 0.98353034, -0.08274425, 0.07259053, -0.025370061)
-bones/0/rotation = Quaternion(0.05192896, -0.0029018968, 0.029417818, 0.9982132)
-bones/0/scale = Vector3(1, 0.9999999, 0.99999976)
-bones/1/position = Vector3(-2.0918558e-08, 0.10182453, -5.8483344e-08)
-bones/1/scale = Vector3(1.0000002, 1.0000001, 1.0000004)
-bones/2/position = Vector3(-8.806175e-09, 0.10002696, 5.1289707e-08)
-bones/2/scale = Vector3(1.0000001, 1.0000001, 0.9999998)
-bones/3/position = Vector3(-3.633972e-09, 0.10010641, -5.8221215e-09)
-bones/3/scale = Vector3(1.0000001, 0.9999998, 0.99999976)
-bones/4/scale = Vector3(0.99999994, 1.0000001, 1)
-bones/5/scale = Vector3(1.0000018, 1.0000002, 1.0000005)
-bones/6/scale = Vector3(0.99999976, 1.0000001, 1)
-bones/7/scale = Vector3(0.99999994, 1, 1)
-bones/25/scale = Vector3(1, 1, 0.9999999)
-bones/26/scale = Vector3(1.0000001, 1.0000004, 1)
+bones/0/rotation = Quaternion(0.18481709, 0.05867795, 0.017644312, 0.98086095)
+bones/0/scale = Vector3(0.99999964, 0.999999, 0.99999833)
+bones/1/scale = Vector3(1.0000008, 0.99999994, 1.0000004)
+bones/2/scale = Vector3(0.9999997, 0.99999994, 0.9999998)
+bones/3/scale = Vector3(1, 1, 1.0000002)
+bones/4/scale = Vector3(1.0000004, 0.9999999, 0.9999991)
+bones/5/scale = Vector3(1.0000008, 1.0000001, 1.0000011)
+bones/6/position = Vector3(-0.11671006, 0.071236916, 0.002721914)
+bones/6/scale = Vector3(0.99999934, 1.0000004, 0.9999992)
+bones/7/scale = Vector3(0.9999997, 1.0000007, 1.0000008)
+bones/8/position = Vector3(0.01665705, 0.28697485, -0.003668643)
+bones/8/scale = Vector3(1, 1, 0.9999998)
+bones/25/rotation = Quaternion(0.46863148, 0.57284456, -0.47816163, 0.4728586)
+bones/25/scale = Vector3(0.9999997, 0.99999964, 0.9999997)
+bones/26/scale = Vector3(1.0000002, 1.0000002, 0.99999976)
+bones/27/scale = Vector3(0.99999994, 0.99999994, 1)
 
 [node name="RiderImpactPose" type="SkeletonModifier3D" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/rider_bot/SKEL_Rider/Skeleton3D" index="0" unique_id=1959462542]
 unique_name_in_owner = false
@@ -260,10 +262,10 @@ right_grip_strength = 0.93
 thumb_opposition_strength = 0.47
 
 [node name="rider_02_body" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/rider_bot/SKEL_Rider/Skeleton3D" index="10" unique_id=417895057]
-visible = false
-
-[node name="rider_05_body" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/rider_bot/SKEL_Rider/Skeleton3D" index="13" unique_id=847415184]
 visible = true
+
+[node name="rider_03_body" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/rider_bot/SKEL_Rider/Skeleton3D" index="11" unique_id=9366931]
+visible = false
 
 [node name="AnimationTree" parent="VisualRoot/RiderMount/RiderAssetRoot/RiderRig" index="2" unique_id=187453891]
 parameters/mounted_add/add_amount = 0.0

@@ -2,18 +2,18 @@
 
 [ext_resource type="Script" uid="uid://dhk3hadcflm6w" path="res://gameplay/riders/common/rider_rig.gd" id="1_4yq34"]
 [ext_resource type="PackedScene" uid="uid://bq2rcwy03sxmv" path="res://gameplay/riders/rider_bot/rider_bot.glb" id="2_wrxx4"]
-[ext_resource type="AnimationLibrary" path="res://gameplay/riders/common/animations/rider_animation_library.res" id="3_ggf4l"]
+[ext_resource type="AnimationLibrary" uid="uid://647ukx301pik" path="res://gameplay/riders/common/animations/rider_animation_library.res" id="3_ggf4l"]
 [ext_resource type="AnimationNodeBlendTree" uid="uid://ddgxhrodm4n2q" path="res://gameplay/riders/common/animations/rider_mounted_blend_tree.tres" id="4_mounted_blend_tree"]
-[ext_resource type="ArrayMesh" path="res://gameplay/riders/rider_04/runtime/rider_04_body_mesh.res" id="5_rider_04_mesh"]
+[ext_resource type="ArrayMesh" uid="uid://dnx1mvrhe2g3r" path="res://gameplay/riders/rider_04/runtime/rider_04_body_mesh.res" id="5_rider_04_mesh"]
 [ext_resource type="Skin" path="res://gameplay/riders/rider_04/runtime/rider_04_skin.res" id="6_rider_04_skin"]
-[ext_resource type="ArrayMesh" path="res://gameplay/riders/rider_01/runtime/rider_01_body_mesh.res" id="14_rider_01_body_mesh"]
+[ext_resource type="ArrayMesh" uid="uid://b3wb0oece4uto" path="res://gameplay/riders/rider_01/runtime/rider_01_body_mesh.res" id="14_rider_01_body_mesh"]
 [ext_resource type="Skin" path="res://gameplay/riders/rider_01/runtime/rider_01_skin.res" id="15_rider_01_skin"]
-[ext_resource type="ArrayMesh" path="res://gameplay/riders/rider_02/runtime/rider_02_body_mesh.res" id="16_rider02_body_mesh"]
+[ext_resource type="ArrayMesh" uid="uid://ddnaqw482y7j3" path="res://gameplay/riders/rider_02/runtime/rider_02_body_mesh.res" id="16_rider02_body_mesh"]
 [ext_resource type="Skin" path="res://gameplay/riders/rider_02/runtime/rider_02_skin.res" id="17_rider02_skin"]
-[ext_resource type="ArrayMesh" path="res://gameplay/riders/rider_03/runtime/rider_03_body_mesh.res" id="18_rider03_body_mesh"]
+[ext_resource type="ArrayMesh" uid="uid://ghn5ewra4ebk" path="res://gameplay/riders/rider_03/runtime/rider_03_body_mesh.res" id="18_rider03_body_mesh"]
 [ext_resource type="Skin" path="res://gameplay/riders/rider_03/runtime/rider_03_skin.res" id="19_rider03_skin"]
-[ext_resource type="ArrayMesh" path="res://gameplay/riders/rider_05/runtime/rider_05_body_mesh.res" id="20_rider05_body_mesh"]
-[ext_resource type="Skin" path="res://gameplay/riders/rider_05/runtime/rider_05_skin.res" id="21_rider05_skin"]
+[ext_resource type="ArrayMesh" uid="uid://8r41i4bikboh" path="res://gameplay/riders/rider_05/runtime/rider_05_body_mesh.res" id="20_rider05_body_mesh"]
+[ext_resource type="Skin" uid="uid://cnyy3tmtxhk14" path="res://gameplay/riders/rider_05/runtime/rider_05_skin.res" id="21_rider05_skin"]
 
 [node name="RiderRig" type="Node3D" unique_id=553895823 groups=["rider_selectable"]]
 script = ExtResource("1_4yq34")
@@ -25,21 +25,21 @@ rider_skin = 5
 
 [node name="Skeleton3D" parent="RiderModelRoot/rider_bot/SKEL_Rider" parent_id_path=PackedInt32Array(1075285769, 631392731) index="0" unique_id=763064560]
 bones/0/position = Vector3(0.04845924, 0.66667527, -0.22242343)
-bones/0/rotation = Quaternion(0.18325989, 0.10306759, 0.014143271, 0.9775443)
-bones/1/position = Vector3(-4.8316906e-12, 0.101824485, 1.9628956e-09)
-bones/1/rotation = Quaternion(0.19404872, -0.01194755, 0.016523127, 0.98077995)
-bones/2/position = Vector3(0, 0.10002686, 8.381903e-09)
-bones/2/rotation = Quaternion(-0.016251868, -0.0021406363, -0.002404168, 0.99986273)
-bones/3/position = Vector3(3.637979e-12, 0.10010648, -2.0489097e-08)
-bones/3/rotation = Quaternion(0.3607207, -0.0023574908, -0.002598554, 0.9326673)
-bones/4/position = Vector3(-3.710018e-06, 0.16292441, -0.002570657)
-bones/4/rotation = Quaternion(-0.271915, 0.013153285, -0.016808193, 0.9620846)
-bones/5/position = Vector3(-0.0009604156, 0.029974632, 0.024632536)
-bones/5/rotation = Quaternion(-0.24607772, 0.008751963, -0.009766882, 0.9691614)
-bones/6/position = Vector3(-0.058524292, 0.10738471, -0.0041615376)
+bones/0/rotation = Quaternion(0.19919562, 0.13733649, 0.18551956, 0.95238775)
+bones/1/position = Vector3(1.9171072e-08, 0.14009474, -0.00049435237)
+bones/1/rotation = Quaternion(0.09884803, -0.010303452, 0.01759532, 0.9948937)
+bones/2/position = Vector3(0.00034871022, 0.10981267, -0.00082984)
+bones/2/rotation = Quaternion(0.025123084, -0.0035614537, -0.00322022, 0.99967283)
+bones/3/position = Vector3(0.0006204684, 0.12181814, -0.0029502334)
+bones/3/rotation = Quaternion(-0.0729346, 0.012835657, 0.0027299463, 0.9972504)
+bones/4/position = Vector3(-0.00024064406, 0.15684068, -0.016381668)
+bones/4/rotation = Quaternion(0.025125835, 0.0076045627, -0.015458137, 0.9995359)
+bones/5/position = Vector3(-6.65672e-05, 0.05982381, 0.023605801)
+bones/5/rotation = Quaternion(0.012299152, 0.009029501, -0.0037816523, 0.99987644)
 bones/6/rotation = Quaternion(-0.4742514, 0.57118, -0.52213013, -0.41978464)
-bones/7/position = Vector3(0.006084124, 0.12903093, -0.0029388438)
-bones/7/rotation = Quaternion(0.15787482, 0.34887832, -0.553626, 0.7394983)
+bones/7/position = Vector3(0.0023950757, 0.123158924, -0.0006245116)
+bones/7/rotation = Quaternion(0.15787484, 0.34887838, -0.55362606, 0.7394982)
+bones/8/position = Vector3(0.01665705, 0.28697485, -0.003668643)
 bones/8/rotation = Quaternion(0.09792477, -0.01995033, -0.28846452, 0.952261)
 bones/9/rotation = Quaternion(0.24257928, -0.11402829, 0.019074783, 0.96321815)
 bones/10/position = Vector3(0.026818521, 0.024648042, 0.015739925)
@@ -69,8 +69,8 @@ bones/24/position = Vector3(-9.313226e-10, 0.020999873, 6.239861e-08)
 bones/24/rotation = Quaternion(0.33244422, 0.07809518, -0.22287567, 0.91307634)
 bones/25/position = Vector3(0.04570663, 0.10576442, -0.00600845)
 bones/25/rotation = Quaternion(0.46587154, 0.57551175, -0.5358458, 0.40573296)
-bones/26/position = Vector3(-0.004356565, 0.15057576, 0.0042278697)
-bones/26/rotation = Quaternion(0.13793367, -0.22017494, 0.55343336, 0.79133356)
+bones/26/position = Vector3(0.0004482786, 0.109722875, -2.4862402e-05)
+bones/26/rotation = Quaternion(0.1379337, -0.22017494, 0.55343336, 0.7913336)
 bones/27/position = Vector3(0, 0.27841514, 4.8428774e-08)
 bones/27/rotation = Quaternion(0.023832317, -0.009011945, 0.38891384, 0.92092174)
 bones/28/rotation = Quaternion(0.20657215, 0.3054246, 0.06616603, 0.92718166)
@@ -99,7 +99,7 @@ bones/41/rotation = Quaternion(0.028797736, 0.04310266, -0.23566449, 0.97045106)
 bones/42/rotation = Quaternion(0.21113315, -0.024339676, 0.17710394, 0.96097064)
 bones/43/position = Vector3(2.7939677e-09, 0.021000098, 2.9336661e-08)
 bones/43/rotation = Quaternion(0.28190538, -0.09210897, 0.22240655, 0.9287523)
-bones/44/position = Vector3(-0.0820779, -0.06771751, -0.01512219)
+bones/44/position = Vector3(-0.08207787, -0.018963777, -0.015751956)
 bones/44/rotation = Quaternion(-0.08885999, 0.32234517, 0.9325319, 0.13631512)
 bones/45/position = Vector3(-6.982191e-09, 0.43905488, -2.7939677e-09)
 bones/45/rotation = Quaternion(-0.34899542, 0.025143337, 0.0048771836, 0.9367744)
@@ -107,7 +107,7 @@ bones/46/position = Vector3(9.298674e-09, 0.4452782, 4.656613e-09)
 bones/46/rotation = Quaternion(0.526703, 0.0011147931, 0.11098215, 0.8427726)
 bones/47/position = Vector3(-1.2781129e-08, 0.14997412, -9.313226e-09)
 bones/47/rotation = Quaternion(0.3545172, -0.00014738289, 4.7525127e-06, 0.93504953)
-bones/48/position = Vector3(0.08207788, -0.06771799, -0.015122137)
+bones/48/position = Vector3(0.0820779, -0.032629162, -0.015575398)
 bones/48/rotation = Quaternion(0.05499214, 0.32198688, 0.94135964, -0.084513016)
 bones/49/position = Vector3(-1.2922101e-08, 0.43905368, -2.7939677e-09)
 bones/49/rotation = Quaternion(-0.3853179, -0.101622075, -0.03618283, 0.91645724)
@@ -120,6 +120,7 @@ bones/51/rotation = Quaternion(0.35248858, -0.00014723818, 4.045581e-06, 0.93581
 visible = false
 
 [node name="rider_01_body" type="MeshInstance3D" parent="RiderModelRoot/rider_bot/SKEL_Rider/Skeleton3D" index="1" unique_id=1837524736 groups=["rider_skin_rider_01"]]
+visible = false
 mesh = ExtResource("14_rider_01_body_mesh")
 skin = ExtResource("15_rider_01_skin")
 skeleton = NodePath("..")
@@ -131,7 +132,6 @@ skin = ExtResource("17_rider02_skin")
 skeleton = NodePath("..")
 
 [node name="rider_03_body" type="MeshInstance3D" parent="RiderModelRoot/rider_bot/SKEL_Rider/Skeleton3D" index="3" unique_id=9366931 groups=["rider_skin_rider_03"]]
-visible = false
 mesh = ExtResource("18_rider03_body_mesh")
 skin = ExtResource("19_rider03_skin")
 skeleton = NodePath("..")
@@ -142,7 +142,7 @@ mesh = ExtResource("5_rider_04_mesh")
 skin = ExtResource("6_rider_04_skin")
 skeleton = NodePath("..")
 
-[node name="rider_05_body" type="MeshInstance3D" parent="RiderModelRoot/rider_bot/SKEL_Rider/Skeleton3D" index="5" groups=["rider_skin_rider_05"]]
+[node name="rider_05_body" type="MeshInstance3D" parent="RiderModelRoot/rider_bot/SKEL_Rider/Skeleton3D" index="5" unique_id=57429278 groups=["rider_skin_rider_05"]]
 visible = false
 mesh = ExtResource("20_rider05_body_mesh")
 skin = ExtResource("21_rider05_skin")

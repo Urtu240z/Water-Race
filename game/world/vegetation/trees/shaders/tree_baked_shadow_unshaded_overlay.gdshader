@@ -4,8 +4,8 @@ render_mode
 	blend_mix,
 	unshaded,
 	depth_draw_never,
-	cull_disabled,
-	fog_disabled;
+	cull_disabled;
+	//fog_disabled;
 
 
 // ============================================================

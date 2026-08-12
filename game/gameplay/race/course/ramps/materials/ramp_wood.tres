@@ -7,12 +7,13 @@
 [resource]
 resource_name = "MAT_Wood"
 cull_mode = 2
+albedo_color = Color(0.3553136, 0.35531354, 0.35531357, 1)
 albedo_texture = ExtResource("texture_6bc9fe50264d")
+metallic_specular = 0.15
 metallic_texture = ExtResource("texture_7205ea451895")
 metallic_texture_channel = 2
-roughness_texture = ExtResource("texture_7205ea451895")
+roughness = 0.81
 roughness_texture_channel = 1
 normal_enabled = true
-normal_scale = 0.5
 normal_texture = ExtResource("texture_2d92977e521c")
 metadata/_gltf_primary_texture_coord = 0

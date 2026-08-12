@@ -1,82 +1,60 @@
 
 ========== WATER RACE LOAD TRACE ==========
-[    0.954 ms] GAME START                          +   0.954 ms
-[    0.992 ms] LEVEL_ENTER_TREE: ParadiseIsland    +   0.038 ms
-[    1.011 ms] LEVEL_REFERENCES_RESOLVED: ParadiseIsland +   0.019 ms
-[    1.797 ms] LEVEL_ROOT_ENTER_TREE_DONE: ParadiseIsland +   0.786 ms
-[   32.398 ms] GRAPHICS_AUTOLOAD_READY_BEGIN       +  30.601 ms
-[   32.471 ms] GRAPHICS_PROFILES_LOAD_BEGIN        +   0.073 ms
-[   34.490 ms] GRAPHICS_PROFILES_LOADED            +   2.019 ms
-[   34.530 ms] GRAPHICS_INITIAL_APPLY_QUEUED       +   0.040 ms
-[   34.541 ms] GRAPHICS_AUTOLOAD_READY_END         +   0.011 ms
-[   34.577 ms] SKY_RESOURCE_LOAD_BEGIN: res://world/environment/sky/hdris/kloofendal_48d_partly_cloudy_puresky_4k.hdr +   0.036 ms
-[   34.592 ms] SKY_RESOURCE_LOADED: res://world/environment/sky/hdris/kloofendal_48d_partly_cloudy_puresky_4k.hdr +   0.015 ms
-[   34.640 ms] SKY_READY                           +   0.048 ms
-[   34.665 ms] TERRAIN_MATERIAL_SCAN_BEGIN         +   0.025 ms
-[   35.140 ms] TERRAIN_READY                       +   0.475 ms
-[   35.176 ms] OCEAN_SURFACE_READY_BEGIN           +   0.036 ms
-[   35.205 ms] OCEAN_MESH_REBUILD_BEGIN #1         +   0.029 ms
-[   35.337 ms] OCEAN_MESH_CACHE_LOAD_BEGIN         +   0.132 ms
-[  180.589 ms] OCEAN_MESH_CACHE_LOAD_END           + 145.252 ms
-[  180.634 ms] OCEAN_MESH_CACHE_HIT                +   0.045 ms
-[  180.646 ms] OCEAN_MESH_CACHE_ASSIGN_BEGIN       +   0.012 ms
-[  180.682 ms] OCEAN_MESH_CACHE_ASSIGN_END         +   0.036 ms
-[  181.477 ms] OCEAN_BUILD_DEBUG_GUIDES_BEGIN      +   0.795 ms
-[  181.502 ms] OCEAN_BUILD_DEBUG_GUIDES_END        +   0.025 ms
-[  181.513 ms] OCEAN_MESH_REBUILD_END #1           +   0.011 ms
-[  181.526 ms] OCEAN_SURFACE_MESHES_ENSURED        +   0.013 ms
-[  181.565 ms] OCEAN_SURFACE_READY_END             +   0.039 ms
-[  181.579 ms] OCEAN_READY_BEGIN                   +   0.014 ms
-[  182.224 ms] OCEAN_CORE_READY                    +   0.645 ms
-[  182.240 ms] OCEAN_HEIGHT_MAPS_BEGIN             +   0.016 ms
-[  184.956 ms] OCEAN_HEIGHT_MAPS_READY             +   2.716 ms
-[  184.987 ms] OCEAN_READY_END                     +   0.031 ms
-[  185.009 ms] WILDLIFE_SPAWN_BEGIN                +   0.022 ms
-[  191.278 ms] WILDLIFE_BIRDS_READY                +   6.269 ms
-[  192.809 ms] WILDLIFE_FISH_READY                 +   1.531 ms
-[  193.559 ms] WILDLIFE_DOLPHINS_READY             +   0.750 ms
-[  194.229 ms] WILDLIFE_READY                      +   0.670 ms
-[  194.789 ms] RIDER_READY_BEGIN                   +   0.560 ms
-[  194.902 ms] RIDER_READY                         +   0.113 ms
-[  201.651 ms] RIDER_READY_BEGIN                   +   6.749 ms
-[  201.784 ms] RIDER_READY                         +   0.133 ms
-[  201.868 ms] JETSKI_READY_BEGIN                  +   0.084 ms
-[  202.019 ms] JETSKI_READY                        +   0.151 ms
-[  205.081 ms] PAUSE_MENU_READY                    +   3.062 ms
-[  205.330 ms] TREE_BAKE_LOAD_BEGIN: /root/ParadiseIsland/Vegetation/TreesImpostorA/TreeImpostorMultimesh/Trees +   0.249 ms
-[  205.784 ms] TREE_BAKE_LOADED: /root/ParadiseIsland/Vegetation/TreesImpostorA/TreeImpostorMultimesh/Trees +   0.454 ms
-[  207.515 ms] TREE_BAKE_LOAD_BEGIN: /root/ParadiseIsland/Vegetation/TreesImpostorA/TreeImpostorMultimesh2/Trees +   1.731 ms
-[  207.918 ms] TREE_BAKE_LOADED: /root/ParadiseIsland/Vegetation/TreesImpostorA/TreeImpostorMultimesh2/Trees +   0.403 ms
-[  209.389 ms] TREE_BAKE_LOAD_BEGIN: /root/ParadiseIsland/Vegetation/TreesImpostorA/TreeImpostorMultimesh3/Trees +   1.471 ms
-[  209.872 ms] TREE_BAKE_LOADED: /root/ParadiseIsland/Vegetation/TreesImpostorA/TreeImpostorMultimesh3/Trees +   0.483 ms
-[  211.394 ms] TREE_BAKE_LOAD_BEGIN: /root/ParadiseIsland/Vegetation/TreesImpostorA/TreeImpostorMultimesh4/Trees +   1.522 ms
-[  211.889 ms] TREE_BAKE_LOADED: /root/ParadiseIsland/Vegetation/TreesImpostorA/TreeImpostorMultimesh4/Trees +   0.495 ms
-[  213.162 ms] TREE_BAKE_LOAD_BEGIN: /root/ParadiseIsland/Vegetation/TreesImpostorA/TreeImpostorMultimesh5/Trees +   1.273 ms
-[  213.619 ms] TREE_BAKE_LOADED: /root/ParadiseIsland/Vegetation/TreesImpostorA/TreeImpostorMultimesh5/Trees +   0.457 ms
-[  214.458 ms] TREE_BAKE_LOAD_BEGIN: /root/ParadiseIsland/Vegetation/TreesImpostorA/TreeImpostorMultimesh6/Trees +   0.839 ms
-[  214.932 ms] TREE_BAKE_LOADED: /root/ParadiseIsland/Vegetation/TreesImpostorA/TreeImpostorMultimesh6/Trees +   0.474 ms
-[  216.014 ms] TREE_BAKE_LOAD_BEGIN: /root/ParadiseIsland/Vegetation/TreesImpostorA2/TreeImpostorMultimesh/Trees +   1.082 ms
-[  216.434 ms] TREE_BAKE_LOADED: /root/ParadiseIsland/Vegetation/TreesImpostorA2/TreeImpostorMultimesh/Trees +   0.420 ms
-[  218.055 ms] TREE_BAKE_LOAD_BEGIN: /root/ParadiseIsland/Vegetation/TreesImpostorA2/TreeImpostorMultimesh2/Trees +   1.621 ms
-[  218.597 ms] TREE_BAKE_LOADED: /root/ParadiseIsland/Vegetation/TreesImpostorA2/TreeImpostorMultimesh2/Trees +   0.542 ms
-[  220.145 ms] TREE_BAKE_LOAD_BEGIN: /root/ParadiseIsland/Vegetation/TreesImpostorA2/TreeImpostorMultimesh3/Trees +   1.548 ms
-[  220.605 ms] TREE_BAKE_LOADED: /root/ParadiseIsland/Vegetation/TreesImpostorA2/TreeImpostorMultimesh3/Trees +   0.460 ms
-[  222.143 ms] TREE_BAKE_LOAD_BEGIN: /root/ParadiseIsland/Vegetation/TreesImpostorA2/TreeImpostorMultimesh4/Trees +   1.538 ms
-[  222.567 ms] TREE_BAKE_LOADED: /root/ParadiseIsland/Vegetation/TreesImpostorA2/TreeImpostorMultimesh4/Trees +   0.424 ms
-[  223.765 ms] TREE_BAKE_LOAD_BEGIN: /root/ParadiseIsland/Vegetation/TreesImpostorA2/TreeImpostorMultimesh5/Trees +   1.198 ms
-[  224.207 ms] TREE_BAKE_LOADED: /root/ParadiseIsland/Vegetation/TreesImpostorA2/TreeImpostorMultimesh5/Trees +   0.442 ms
-[  225.397 ms] TREE_BAKE_LOAD_BEGIN: /root/ParadiseIsland/Vegetation/TreesImpostorA2/TreeImpostorMultimesh6/Trees +   1.190 ms
-[  225.793 ms] TREE_BAKE_LOADED: /root/ParadiseIsland/Vegetation/TreesImpostorA2/TreeImpostorMultimesh6/Trees +   0.396 ms
-[  226.643 ms] LEVEL_ROOT_READY_BEGIN: ParadiseIsland +   0.850 ms
-[  227.351 ms] LEVEL_ROOT_READY: ParadiseIsland    +   0.708 ms
-[  227.368 ms] FIRST_FRAME_TRACE_QUEUED: ParadiseIsland +   0.017 ms
-[  815.082 ms] GRAPHICS_APPLY_BEGIN                + 587.714 ms
-[  817.714 ms] GRAPHICS_TARGETS_COLLECTED          +   2.632 ms
-[  819.224 ms] GRAPHICS_APPLY_END                  +   1.510 ms
-[  827.777 ms] UNDERWATER_PREWARM_BEGIN            +   8.553 ms
-[  914.441 ms] UNDERWATER_PREWARM_END              +  86.664 ms
-[  915.087 ms] FIRST_FRAME_TRACE_CALLBACK: ParadiseIsland +   0.646 ms
-[  928.097 ms] FIRST_PROCESS_FRAME: ParadiseIsland +  13.010 ms
-[  930.623 ms] FIRST_RENDER_PRE_DRAW: ParadiseIsland +   2.526 ms
-[  999.893 ms] FIRST_RENDER_POST_DRAW: ParadiseIsland +  69.270 ms
-[  999.947 ms] FIRST_FRAME_DRAWN: ParadiseIsland   +   0.054 ms
+[    1.423 ms] GAME START                          +   1.423 ms
+[    1.484 ms] LEVEL_ENTER_TREE: GoldCity          +   0.061 ms
+[    1.511 ms] LEVEL_REFERENCES_RESOLVED: GoldCity +   0.027 ms
+[    2.670 ms] LEVEL_ROOT_ENTER_TREE_DONE: GoldCity +   1.159 ms
+[   44.412 ms] GRAPHICS_AUTOLOAD_READY_BEGIN       +  41.742 ms
+[   44.496 ms] GRAPHICS_PROFILES_LOAD_BEGIN        +   0.084 ms
+[   46.680 ms] GRAPHICS_PROFILES_LOADED            +   2.184 ms
+[   46.730 ms] GRAPHICS_INITIAL_APPLY_QUEUED       +   0.050 ms
+[   46.742 ms] GRAPHICS_AUTOLOAD_READY_END         +   0.012 ms
+[   48.975 ms] PAUSE_MENU_READY                    +   2.233 ms
+[   49.357 ms] SKY_RESOURCE_LOAD_BEGIN: uid://olqtngkjhlxu +   0.382 ms
+[   49.383 ms] SKY_RESOURCE_LOADED: uid://olqtngkjhlxu +   0.026 ms
+[   49.437 ms] SKY_READY                           +   0.054 ms
+[   49.728 ms] TREE_BAKE_LOAD_BEGIN: /root/GoldCity/TerrainRoot/TreeImpostorMultimesh/Trees +   0.291 ms
+[   50.386 ms] TREE_BAKE_LOADED: /root/GoldCity/TerrainRoot/TreeImpostorMultimesh/Trees +   0.658 ms
+[   58.052 ms] TERRAIN_MATERIAL_SCAN_BEGIN         +   7.666 ms
+[   59.132 ms] TERRAIN_READY                       +   1.080 ms
+[   59.173 ms] OCEAN_SURFACE_READY_BEGIN           +   0.041 ms
+[   59.211 ms] OCEAN_MESH_REBUILD_BEGIN #1         +   0.038 ms
+[   59.401 ms] OCEAN_MESH_CACHE_LOAD_BEGIN         +   0.190 ms
+[  209.506 ms] OCEAN_MESH_CACHE_LOAD_END           + 150.105 ms
+[  209.568 ms] OCEAN_MESH_CACHE_HIT                +   0.062 ms
+[  209.583 ms] OCEAN_MESH_CACHE_ASSIGN_BEGIN       +   0.015 ms
+[  209.627 ms] OCEAN_MESH_CACHE_ASSIGN_END         +   0.044 ms
+[  210.521 ms] OCEAN_BUILD_DEBUG_GUIDES_BEGIN      +   0.894 ms
+[  210.555 ms] OCEAN_BUILD_DEBUG_GUIDES_END        +   0.034 ms
+[  210.568 ms] OCEAN_MESH_REBUILD_END #1           +   0.013 ms
+[  210.582 ms] OCEAN_SURFACE_MESHES_ENSURED        +   0.014 ms
+[  210.624 ms] OCEAN_SURFACE_READY_END             +   0.042 ms
+[  210.639 ms] OCEAN_READY_BEGIN                   +   0.015 ms
+[  211.369 ms] OCEAN_CORE_READY                    +   0.730 ms
+[  211.389 ms] OCEAN_HEIGHT_MAPS_BEGIN             +   0.020 ms
+[  212.954 ms] OCEAN_HEIGHT_MAPS_READY             +   1.565 ms
+[  212.989 ms] OCEAN_READY_END                     +   0.035 ms
+[  213.019 ms] WILDLIFE_SPAWN_BEGIN                +   0.030 ms
+[  220.510 ms] WILDLIFE_BIRDS_READY                +   7.491 ms
+[  222.530 ms] WILDLIFE_FISH_READY                 +   2.020 ms
+[  223.317 ms] WILDLIFE_DOLPHINS_READY             +   0.787 ms
+[  224.102 ms] WILDLIFE_READY                      +   0.785 ms
+[  224.666 ms] RIDER_READY_BEGIN                   +   0.564 ms
+[  224.807 ms] RIDER_READY                         +   0.141 ms
+[  232.096 ms] RIDER_READY_BEGIN                   +   7.289 ms
+[  232.265 ms] RIDER_READY                         +   0.169 ms
+[  232.359 ms] JETSKI_READY_BEGIN                  +   0.094 ms
+[  232.532 ms] JETSKI_READY                        +   0.173 ms
+[  235.810 ms] LEVEL_ROOT_READY_BEGIN: GoldCity    +   3.278 ms
+[  242.878 ms] LEVEL_ROOT_READY: GoldCity          +   7.068 ms
+[  242.926 ms] FIRST_FRAME_TRACE_QUEUED: GoldCity  +   0.048 ms
+[  936.841 ms] GRAPHICS_APPLY_BEGIN                + 693.915 ms
+[  940.751 ms] GRAPHICS_TARGETS_COLLECTED          +   3.910 ms
+[  942.234 ms] GRAPHICS_APPLY_END                  +   1.483 ms
+[  952.789 ms] UNDERWATER_PREWARM_BEGIN            +  10.555 ms
+[ 1083.052 ms] UNDERWATER_PREWARM_END              + 130.263 ms
+[ 1083.116 ms] FIRST_FRAME_TRACE_CALLBACK: GoldCity +   0.064 ms
+[ 1098.248 ms] FIRST_PROCESS_FRAME: GoldCity       +  15.132 ms
+[ 1100.740 ms] FIRST_RENDER_PRE_DRAW: GoldCity     +   2.492 ms
+[ 1471.704 ms] FIRST_RENDER_POST_DRAW: GoldCity    + 370.964 ms
+[ 1471.785 ms] FIRST_FRAME_DRAWN: GoldCity         +   0.081 ms

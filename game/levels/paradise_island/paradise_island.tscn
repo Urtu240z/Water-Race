@@ -137,7 +137,7 @@ shader_parameter/mask_right = Vector3(0.829735, 0, 0.558158)
 shader_parameter/mask_up = Vector3(0.408467, 0.681505, -0.607211)
 shader_parameter/capture_size = 1567.5691
 shader_parameter/to_sun_direction = Vector3(-0.380387, 0.731813, 0.565468)
-shader_parameter/shadow_strength = 0.65999998524768
+shader_parameter/shadow_strength = 0.91999997943616
 shader_parameter/shadow_gamma = 0.4
 shader_parameter/shadow_threshold = 0.0
 shader_parameter/solid_shadow = false
@@ -219,7 +219,7 @@ shader_parameter/wave_height_texture_a = ExtResource("46_fyxnn")
 shader_parameter/wave_height_texture_b = ExtResource("47_o8v62")
 shader_parameter/wave_world_size_a = 283.5
 shader_parameter/wave_world_size_b = 223.0
-shader_parameter/wave_amplitude_a = 1.4699999671425599
+shader_parameter/wave_amplitude_a = 1.46999996714256
 shader_parameter/wave_amplitude_b = 0.58999998681232
 shader_parameter/wave_direction_a = Vector2(0.86012906, 0.5100765)
 shader_parameter/wave_direction_b = Vector2(-0.38176018, 0.92426145)
@@ -327,7 +327,7 @@ shader_parameter/crest_tint = Color(0.060660273, 0.406174, 0.44625056, 1)
 shader_parameter/absorption_density = 0.13
 shader_parameter/maximum_optical_depth = 38.0
 shader_parameter/shallow_depth_range = 5.5
-shader_parameter/near_water_alpha = 0.9499999899416001
+shader_parameter/near_water_alpha = 0.9499999899416
 shader_parameter/deep_water_alpha = 0.999999988824
 shader_parameter/horizon_water_alpha = 1.0
 shader_parameter/opacity_distance_start = 80.0
@@ -665,7 +665,7 @@ mesh = SubResource("PlaneMesh_tpwhi")
 ocean_material = SubResource("ShaderMaterial_i77vt")
 wave_world_size_a = 283.5
 wave_world_size_b = 223.0
-wave_amplitude_a = 1.4699999671425599
+wave_amplitude_a = 1.46999996714256
 wave_amplitude_b = 0.58999998681232
 wave_travel_speed_a = 9.0000004321348
 wave_travel_speed_b = 4.0000003576287995
@@ -725,19 +725,13 @@ breathing_influence = 1.0
 transform = Transform3D(0.9810575, -0.011237088, -0.19338982, 0.011280789, 0.99993587, -0.00087523926, 0.19338726, -0.0013229304, 0.98112124, 0.06955719, 0.0069850683, -0.110954285)
 bones/0/rotation = Quaternion(0.0064583384, 1.6179755e-09, 2.5050662e-07, 0.99997914)
 bones/0/scale = Vector3(1, 0.99999994, 0.99999994)
-bones/1/position = Vector3(-4.8325298e-12, 0.10182449, 3.2595353e-09)
 bones/1/scale = Vector3(1, 0.9999998, 0.99999994)
-bones/2/position = Vector3(-2.4344415e-13, 0.10002686, 8.3823934e-09)
 bones/2/scale = Vector3(1, 1, 0.9999999)
-bones/3/position = Vector3(1.364242e-12, 0.10010647, -1.8094065e-08)
 bones/3/scale = Vector3(1, 0.99999994, 0.9999999)
-bones/4/position = Vector3(-3.710018e-06, 0.16292441, -0.0025706573)
 bones/4/scale = Vector3(1, 1, 1)
-bones/5/position = Vector3(-1.0776875e-09, 0.09341913, 0.028410386)
 bones/5/scale = Vector3(1, 0.99999994, 0.99999994)
 bones/6/position = Vector3(-0.045697533, 0.10575647, -0.00599908)
 bones/6/scale = Vector3(0.99999994, 1.0000001, 1)
-bones/7/position = Vector3(-1.1175871e-08, 0.11116077, 2.3283064e-10)
 bones/7/scale = Vector3(0.99999994, 1, 0.99999994)
 bones/9/rotation = Quaternion(2.2111117e-16, -6.0766336e-11, -3.5107657e-08, 1)
 bones/10/position = Vector3(0.026818521, 0.02464804, 0.015739927)
@@ -767,7 +761,6 @@ bones/24/position = Vector3(-6.3593575e-10, 0.020999873, 6.254597e-08)
 bones/24/rotation = Quaternion(0.13183951, 0.13147534, -0.2248103, 0.9564481)
 bones/25/rotation = Quaternion(0.43952805, 0.59007734, -0.55047023, 0.39446965)
 bones/25/scale = Vector3(1.0000001, 1.0000001, 1)
-bones/26/position = Vector3(1.1175871e-08, 0.11112894, 1.9185245e-07)
 bones/26/scale = Vector3(1, 0.99999994, 0.9999999)
 bones/27/position = Vector3(-2.9825742e-10, 0.27841514, 4.8592856e-08)
 bones/29/position = Vector3(-0.026817312, 0.024661459, 0.015761862)
@@ -795,12 +788,10 @@ bones/41/rotation = Quaternion(-0.0545863, 0.054581683, -0.15248315, 0.98528683)
 bones/42/rotation = Quaternion(0.05447704, -0.054683316, 0.15428944, 0.985006)
 bones/43/position = Vector3(2.8401814e-09, 0.021000098, 2.9347216e-08)
 bones/43/rotation = Quaternion(0.13074756, -0.13122135, 0.22274286, 0.9571163)
-bones/44/position = Vector3(-0.0820779, -0.0677175, -0.01512219)
 bones/45/position = Vector3(-6.982418e-09, 0.43905485, -2.2728273e-09)
 bones/46/position = Vector3(9.280655e-09, 0.4452782, -2.0814248e-09)
 bones/47/position = Vector3(-1.2781584e-08, 0.14997412, -1.344597e-08)
 bones/47/rotation = Quaternion(0.3242161, -0.00014739741, -1.0539367e-07, 0.94598305)
-bones/48/position = Vector3(0.08207788, -0.067718, -0.015122137)
 bones/49/position = Vector3(-1.2923408e-08, 0.43905368, -2.2650966e-09)
 bones/50/position = Vector3(-1.0939593e-09, 0.44527858, 3.188938e-09)
 bones/51/position = Vector3(-6.275741e-09, 0.1499741, 1.0166332e-08)
@@ -815,15 +806,8 @@ left_hand_rotation_correction_degrees = Vector3(-18.44, 32.09, -21.11)
 [node name="GripFingers" parent="Gameplay/JetSki/VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/rider_bot/SKEL_Rider/Skeleton3D" index="7" unique_id=940560861]
 left_grip_strength = 0.75
 
-[node name="rider_01_body" parent="Gameplay/JetSki/VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/rider_bot/SKEL_Rider/Skeleton3D" index="9" unique_id=1837524736]
-visible = false
-
 [node name="rider_02_body" parent="Gameplay/JetSki/VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/rider_bot/SKEL_Rider/Skeleton3D" index="10" unique_id=417895057]
-visible = true
 gi_mode = 2
-
-[node name="rider_05_body" parent="Gameplay/JetSki/VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/rider_bot/SKEL_Rider/Skeleton3D" index="13"]
-visible = false
 
 [node name="AnimationTree" parent="Gameplay/JetSki/VisualRoot/RiderMount/RiderAssetRoot/RiderRig" index="2" unique_id=187453891]
 parameters/mounted_add/add_amount = 1.0

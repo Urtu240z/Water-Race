@@ -12,7 +12,7 @@ const DEFAULT_OUTPUT_PATH: String = (
 
 const DEFAULT_SHADOW_MATERIAL: Material = preload(
 	"res://world/vegetation/trees/materials/"
-	+ "tree_impostor_shadow_beech_a.tres"
+	+ "tree_impostor_shadow_material.tres"
 )
 
 const TEMP_VIEWPORT_NAME: StringName = (

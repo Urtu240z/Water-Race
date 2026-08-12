@@ -11,7 +11,7 @@ const SHADOWS_NODE_PATH: NodePath = NodePath("TreeShadows")
 const CANOPY_NODE_PATH: NodePath = NodePath("CanopyAmbientShadow")
 
 const DEFAULT_SHADOW_MATERIAL: Material = preload(
-	"res://world/vegetation/trees/materials/tree_impostor_shadow_beech_a.tres"
+	"res://world/vegetation/trees/materials/tree_impostor_shadow_material.tres"
 )
 
 
