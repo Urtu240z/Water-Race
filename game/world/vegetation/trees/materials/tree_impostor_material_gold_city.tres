@@ -1,0 +1,46 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://b4rxe5bb73l7n"]
+
+[ext_resource type="Shader" uid="uid://cas1owxnfhkqw" path="res://world/vegetation/trees/shaders/tree_impostor.gdshader" id="1_n67oj"]
+[ext_resource type="Texture2D" uid="uid://dk6kfw3e1gxi" path="res://world/vegetation/trees/textures/tree_atlas_mask.png" id="2_2dm0y"]
+[ext_resource type="Texture2D" uid="uid://tpoojthw1oen" path="res://world/vegetation/trees/textures/tree_atlas_nor.png" id="3_m83k5"]
+[ext_resource type="Texture2D" uid="uid://d10ybk4pluq4t" path="res://world/vegetation/trees/textures/tree_atlas_tex.png" id="4_y1wwc"]
+[ext_resource type="Texture2D" uid="uid://dol5sam12jba1" path="res://world/vegetation/trees/textures/tree_volume_nor.png" id="5_oocup"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_n67oj")
+shader_parameter/tree_tex = ExtResource("4_y1wwc")
+shader_parameter/tree_mask = ExtResource("2_2dm0y")
+shader_parameter/tree_normal = ExtResource("3_m83k5")
+shader_parameter/volume_normal = ExtResource("5_oocup")
+shader_parameter/use_instance_species = true
+shader_parameter/manual_species = 0.0
+shader_parameter/weight_beech_a = 15.0
+shader_parameter/weight_beech_b = 10.0
+shader_parameter/weight_fir_a = 10.0
+shader_parameter/weight_fir_b = 5.0
+shader_parameter/weight_linden_a = 20.0
+shader_parameter/weight_linden_b = 10.0
+shader_parameter/weight_linden_c = 10.0
+shader_parameter/weight_oak_a = 15.0
+shader_parameter/weight_oak_b = 5.0
+shader_parameter/use_impostor_depth = true
+shader_parameter/depth_strength = 0.55
+shader_parameter/depth_curve = 0.5
+shader_parameter/trunk_depth_factor = 0.2
+shader_parameter/alpha_cutoff = 0.45
+shader_parameter/normal_strength = 8.0
+shader_parameter/invert_leaf_mask = true
+shader_parameter/use_instance_variation = true
+shader_parameter/color_variation = 0.5
+shader_parameter/variation_strength = 0.999999977648
+shader_parameter/variation_a = Color(0.8954145, 0.73453784, 0.62536126, 1)
+shader_parameter/variation_b = Color(0.9140884, 0.8791158, 0.91030145, 1)
+shader_parameter/translucency_strength = 3.999999910592
+shader_parameter/translucency_color_mix = 0.35999999195328
+shader_parameter/translucency_tint = Color(0.85, 1, 0.72, 1)
+shader_parameter/roughness = 0.85
+shader_parameter/specular = 0.15
+shader_parameter/final_saturation = 0.66999998502416
+shader_parameter/final_brightness = 1.50999996624848
+shader_parameter/final_contrast = 0.96999997831856

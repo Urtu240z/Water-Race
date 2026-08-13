@@ -32,6 +32,8 @@
 [ext_resource type="PackedScene" uid="uid://dqbhmwx6tvlx0" path="res://world/vegetation/trees/tree_impostor_multimesh.tscn" id="32_mdq0j"]
 [ext_resource type="Texture2D" uid="uid://cexe4l4551x8v" path="res://shared/materials/terrain/textures/terrain_master/wet_sand_orm.png" id="33_hi6ck"]
 [ext_resource type="Shader" uid="uid://bfnesn2v47myr" path="res://levels/gold_city/city/buildings/shaders/building_windows_procedural.gdshader" id="34_xltpy"]
+[ext_resource type="Material" uid="uid://b4rxe5bb73l7n" path="res://world/vegetation/trees/materials/tree_impostor_material_gold_city.tres" id="35_iyaox"]
+[ext_resource type="Material" uid="uid://cblg21bayh8pb" path="res://world/vegetation/trees/materials/tree_impostor_material_paradise_island.tres" id="36_4k6sa"]
 [ext_resource type="Material" uid="uid://bjk4djw0d2rd" path="res://world/vegetation/palms/materials/palm_billboard.tres" id="36_403n4"]
 [ext_resource type="PackedScene" uid="uid://b3y5xp6677icq" path="res://world/props/buildings/apartments_01/apartments_01.tscn" id="37_f4q6v"]
 [ext_resource type="PackedScene" path="res://world/water/ocean/calm_water_area_3d.tscn" id="38_8wtvr"]
@@ -74,6 +76,64 @@
 [ext_resource type="PackedScene" uid="uid://dk85eu2oeyca2" path="res://levels/gold_city/props/roller_coaster/animated_roller_coaster.glb" id="73_e6itw"]
 [ext_resource type="PackedScene" uid="uid://b43swywpnr25f" path="res://levels/gold_city/props/ferris_wheel/ferrys_wheel.glb" id="73_q2anr"]
 [ext_resource type="PackedScene" uid="uid://cpr1u70kmlafe" path="res://levels/gold_city/props/ferris_wheel/ferris_wheel_old.glb" id="74_gtyq1"]
+
+[sub_resource type="QuadMesh" id="QuadMesh_wwatn"]
+material = ExtResource("36_4k6sa")
+size = Vector2(2, 2)
+
+[sub_resource type="MultiMesh" id="MultiMesh_iyaox"]
+resource_local_to_scene = true
+transform_format = 1
+use_custom_data = true
+mesh = SubResource("QuadMesh_wwatn")
+metadata/tree_bake_version = 1
+metadata/tree_bake_signature = "version=1|node=TreeImpostors/TreeImpostorMultimesh/Trees|global_transform=[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-610.7966, 10.83205, -185.6404)]|target_count=625|radius_x=132.0|radius_z=203.0|min_spacing=3.85|max_spacing=18.15|poisson_attempts=24|candidate_multiplier=2.0|seed=12345|min_scale=4.0|max_scale=10.0|center_bias=66.0|snap=true|ray_above=100.0|ray_below=300.0|collision_mask=4294967295|valid_ground=[\"Terrain_Master_COL\", \"Terrain_COL\"]|reject_slope=true|max_slope=11.0|avoid_visual=true|visual_roots=[]|visual_radius=0.8|visual_clearance=1.0|avoid_water=true|water_path=|water_height=1.0|mesh_aabb=[P: (-1.0, -1.0, 0.0), S: (2.0, 2.0, 0.0)]"
+metadata/tree_bake_source = "TreeImpostors/TreeImpostorMultimesh/Trees"
+
+[sub_resource type="MultiMesh" id="MultiMesh_4k6sa"]
+resource_local_to_scene = true
+transform_format = 1
+use_custom_data = true
+mesh = SubResource("QuadMesh_wwatn")
+metadata/tree_bake_version = 1
+metadata/tree_bake_signature = "version=1|node=TreeImpostors/TreeImpostorMultimesh6/Trees|global_transform=[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-433.6221, 10.83205, -220.5449)]|target_count=625|radius_x=168.0|radius_z=203.0|min_spacing=3.85|max_spacing=18.15|poisson_attempts=24|candidate_multiplier=2.0|seed=12345|min_scale=4.0|max_scale=10.0|center_bias=66.0|snap=true|ray_above=100.0|ray_below=300.0|collision_mask=4294967295|valid_ground=[\"Terrain_Master_COL\", \"Terrain_COL\"]|reject_slope=true|max_slope=11.0|avoid_visual=true|visual_roots=[]|visual_radius=0.8|visual_clearance=1.0|avoid_water=true|water_path=|water_height=1.0|mesh_aabb=[P: (-1.0, -1.0, 0.0), S: (2.0, 2.0, 0.0)]"
+metadata/tree_bake_source = "TreeImpostors/TreeImpostorMultimesh6/Trees"
+
+[sub_resource type="MultiMesh" id="MultiMesh_ogabk"]
+resource_local_to_scene = true
+transform_format = 1
+use_custom_data = true
+mesh = SubResource("QuadMesh_wwatn")
+metadata/tree_bake_version = 1
+metadata/tree_bake_signature = "version=1|node=TreeImpostors/TreeImpostorMultimesh2/Trees|global_transform=[X: (0.918, 0.0, -0.396581), Y: (0.0, 1.0, 0.0), Z: (0.396581, 0.0, 0.918), O: (-379.4524, 10.83205, 123.0416)]|target_count=625|radius_x=299.0|radius_z=269.0|min_spacing=3.85|max_spacing=15.15|poisson_attempts=24|candidate_multiplier=2.0|seed=12345|min_scale=4.0|max_scale=10.0|center_bias=66.0|snap=true|ray_above=100.0|ray_below=300.0|collision_mask=4294967295|valid_ground=[\"Terrain_Master_COL\", \"Terrain_COL\"]|reject_slope=true|max_slope=40.0|avoid_visual=true|visual_roots=[]|visual_radius=0.8|visual_clearance=1.0|avoid_water=true|water_path=|water_height=7.0|mesh_aabb=[P: (-1.0, -1.0, 0.0), S: (2.0, 2.0, 0.0)]"
+metadata/tree_bake_source = "TreeImpostors/TreeImpostorMultimesh2/Trees"
+
+[sub_resource type="MultiMesh" id="MultiMesh_laf3l"]
+resource_local_to_scene = true
+transform_format = 1
+use_custom_data = true
+mesh = SubResource("QuadMesh_wwatn")
+metadata/tree_bake_version = 1
+metadata/tree_bake_signature = "version=1|node=TreeImpostors/TreeImpostorMultimesh4/Trees|global_transform=[X: (0.918, 0.0, -0.396581), Y: (0.0, 1.0, 0.0), Z: (0.396581, 0.0, 0.918), O: (-391.3713, 10.83205, 274.9254)]|target_count=625|radius_x=168.0|radius_z=269.0|min_spacing=3.85|max_spacing=15.15|poisson_attempts=24|candidate_multiplier=2.0|seed=12345|min_scale=4.0|max_scale=10.0|center_bias=66.0|snap=true|ray_above=100.0|ray_below=300.0|collision_mask=4294967295|valid_ground=[\"Terrain_Master_COL\", \"Terrain_COL\"]|reject_slope=true|max_slope=40.0|avoid_visual=true|visual_roots=[]|visual_radius=0.8|visual_clearance=1.0|avoid_water=true|water_path=|water_height=7.0|mesh_aabb=[P: (-1.0, -1.0, 0.0), S: (2.0, 2.0, 0.0)]"
+metadata/tree_bake_source = "TreeImpostors/TreeImpostorMultimesh4/Trees"
+
+[sub_resource type="MultiMesh" id="MultiMesh_4scdh"]
+resource_local_to_scene = true
+transform_format = 1
+use_custom_data = true
+mesh = SubResource("QuadMesh_wwatn")
+metadata/tree_bake_version = 1
+metadata/tree_bake_signature = "version=1|node=TreeImpostors/TreeImpostorMultimesh5/Trees|global_transform=[X: (0.918, 0.0, -0.396581), Y: (0.0, 1.0, 0.0), Z: (0.396581, 0.0, 0.918), O: (-649.4985, 10.83205, 653.8905)]|target_count=625|radius_x=198.0|radius_z=174.0|min_spacing=6.25|max_spacing=22.6|poisson_attempts=24|candidate_multiplier=2.0|seed=12345|min_scale=4.0|max_scale=10.0|center_bias=66.0|snap=true|ray_above=100.0|ray_below=300.0|collision_mask=4294967295|valid_ground=[\"Terrain_Master_COL\", \"Terrain_COL\"]|reject_slope=true|max_slope=40.0|avoid_visual=true|visual_roots=[]|visual_radius=0.8|visual_clearance=1.0|avoid_water=true|water_path=|water_height=1.0|mesh_aabb=[P: (-1.0, -1.0, 0.0), S: (2.0, 2.0, 0.0)]"
+metadata/tree_bake_source = "TreeImpostors/TreeImpostorMultimesh5/Trees"
+
+[sub_resource type="MultiMesh" id="MultiMesh_df66w"]
+resource_local_to_scene = true
+transform_format = 1
+use_custom_data = true
+mesh = SubResource("QuadMesh_wwatn")
+metadata/tree_bake_version = 1
+metadata/tree_bake_signature = "version=1|node=TreeImpostors/TreeImpostorMultimesh3/Trees|global_transform=[X: (0.918, 0.0, -0.396581), Y: (0.0, 1.0, 0.0), Z: (0.396581, 0.0, 0.918), O: (-445.8667, 10.83205, -20.98509)]|target_count=625|radius_x=299.0|radius_z=269.0|min_spacing=3.85|max_spacing=15.15|poisson_attempts=24|candidate_multiplier=2.0|seed=12345|min_scale=4.0|max_scale=10.0|center_bias=66.0|snap=true|ray_above=100.0|ray_below=300.0|collision_mask=4294967295|valid_ground=[\"Terrain_Master_COL\", \"Terrain_COL\"]|reject_slope=true|max_slope=40.0|avoid_visual=true|visual_roots=[]|visual_radius=0.8|visual_clearance=1.0|avoid_water=true|water_path=|water_height=7.9|mesh_aabb=[P: (-1.0, -1.0, 0.0), S: (2.0, 2.0, 0.0)]"
+metadata/tree_bake_source = "TreeImpostors/TreeImpostorMultimesh3/Trees"
 
 [sub_resource type="Compositor" id="Compositor_ep46c"]
 
@@ -510,23 +570,23 @@ shader_parameter/water_level = 2.0
 shader_parameter/wet_sand_height = 4.10000006109492
 shader_parameter/debug_view = 0
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_iyaox"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0gqsi"]
 resource_local_to_scene = true
 render_priority = 0
 shader = ExtResource("30_q2anr")
 shader_parameter/shadow_texture = ExtResource("31_cfohk")
-shader_parameter/mask_center = Vector3(-236.06909, 49.172195, 282.7168)
-shader_parameter/mask_right = Vector3(-0.9285564, 0, -0.3711915)
-shader_parameter/mask_up = Vector3(-0.23007776, 0.78473157, 0.5755524)
-shader_parameter/capture_size = 3401.5044
-shader_parameter/to_sun_direction = Vector3(0.29128563, 0.61983573, -0.72866756)
-shader_parameter/shadow_strength = 0.73999998345952
-shader_parameter/shadow_gamma = 0.6899999864397801
+shader_parameter/mask_center = Vector3(-236.58228, 49.49901, 283.69812)
+shader_parameter/mask_right = Vector3(0.9239262, 0, -0.3825708)
+shader_parameter/mask_up = Vector3(-0.261995, 0.72870535, -0.63273)
+shader_parameter/capture_size = 3424.6086
+shader_parameter/to_sun_direction = Vector3(0.27878138, 0.6848274, 0.6732699)
+shader_parameter/shadow_strength = 0.57999998703584
+shader_parameter/shadow_gamma = 0.59999998845146
 shader_parameter/shadow_threshold = 0.0
 shader_parameter/solid_shadow = false
-shader_parameter/solid_threshold = 0.0
-shader_parameter/use_stretch_fade = true
-shader_parameter/stretch_fade_start = 0.55
+shader_parameter/solid_threshold = 0.05
+shader_parameter/use_stretch_fade = false
+shader_parameter/stretch_fade_start = 0.80999998189488
 shader_parameter/stretch_fade_end = 0.2
 shader_parameter/stretch_fade_power = 1.5
 shader_parameter/minimum_stretch_visibility = 0.0
@@ -546,7 +606,7 @@ size = Vector3(234.65327, 26.61683, 71.67698)
 [sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_g5j8w"]
 data = PackedVector3Array(-117.3266, 13.308399, 35.8385, 117.3266, 13.308399, 35.8385, -117.3266, -13.308399, 35.8385, 117.3266, 13.308399, 35.8385, 117.3266, -13.308399, 35.8385, -117.3266, -13.308399, 35.8385, 117.3266, 13.308399, -35.8385, -117.3266, 13.308399, -35.8385, 117.3266, -13.308399, -35.8385, -117.3266, 13.308399, -35.8385, -117.3266, -13.308399, -35.8385, 117.3266, -13.308399, -35.8385, 117.3266, 13.308399, 35.8385, 117.3266, 13.308399, -35.8385, 117.3266, -13.308399, 35.8385, 117.3266, 13.308399, -35.8385, 117.3266, -13.308399, -35.8385, 117.3266, -13.308399, 35.8385, -117.3266, 13.308399, -35.8385, -117.3266, 13.308399, 35.8385, -117.3266, -13.308399, -35.8385, -117.3266, 13.308399, 35.8385, -117.3266, -13.308399, 35.8385, -117.3266, -13.308399, -35.8385, 117.3266, 13.308399, 35.8385, -117.3266, 13.308399, 35.8385, 117.3266, 13.308399, -35.8385, -117.3266, 13.308399, 35.8385, -117.3266, 13.308399, -35.8385, 117.3266, 13.308399, -35.8385, -117.3266, -13.308399, 35.8385, 117.3266, -13.308399, 35.8385, -117.3266, -13.308399, -35.8385, 117.3266, -13.308399, 35.8385, 117.3266, -13.308399, -35.8385, -117.3266, -13.308399, -35.8385)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_4k6sa"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_y3rlo"]
 resource_local_to_scene = true
 render_priority = 0
 shader = ExtResource("41_j7oal")
@@ -774,7 +834,7 @@ shader_parameter/custom_reflection_minimum_surface_weight = 0.34
 shader_parameter/custom_reflection_maximum_surface_weight = 0.88
 shader_parameter/custom_reflection_emission_strength = 0.2999999932944
 
-[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_ogabk"]
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_hrvh4"]
 resource_local_to_scene = true
 blend_mode = 1
 
@@ -801,7 +861,7 @@ point_count = 3
 [sub_resource type="CurveTexture" id="CurveTexture_bubble_shrink"]
 curve = SubResource("Curve_bubble_shrink")
 
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_laf3l"]
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_n0k1o"]
 resource_local_to_scene = true
 particle_flag_disable_z = true
 emission_shape_offset = Vector3(0, 600, 0)
@@ -824,7 +884,7 @@ turbulence_influence_max = 0.082
 turbulence_initial_displacement_min = -47.5
 turbulence_initial_displacement_max = 94.5
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_4scdh"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_vbdm5"]
 resource_local_to_scene = true
 render_priority = -127
 shader = ExtResource("55_5sm3d")
@@ -1027,13 +1087,191 @@ ocean_path = NodePath("WaterIntegration/Ocean")
 player_spawn_path = NodePath("Gameplay/PlayerSpawn")
 vehicle_path = NodePath("Gameplay/JetSki")
 chase_camera_path = NodePath("CameraSystem/ChaseCamera")
-sign_light_surface_offset = 2.75
+sign_light_surface_offset = 0.5
+sign_light_pulse_influence = 0.99
 arrow_sign_light_energy_multiplier = 1.0
 wrong_sign_light_energy_multiplier = 1.0
+
+[node name="TreeProjectedShadowBaker" type="Node3D" parent="." unique_id=472315960]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.510468, -49.139404, -57.103714)
+script = ExtResource("72_ol3en")
+terrain_mesh_path = NodePath("../TerrainRoot/Gold_City/Scene Collection/Collection/Terrain/Terrain_VIS")
+sun_light_path = NodePath("../Environment/DirectionalLight3D2")
+output_png_path = "res://levels/gold_city/terrain/gold_city_tree_shadows.png"
+texture_resolution = 4096
+world_padding = 20.0
+forced_alpha_cutoff = 0.46
+shadow_alpha_multiplier = 1.08
+shadow_alpha_power = 0.78
+extra_light_shadow_strength = 0.0
+
+[node name="TreeImpostors" type="Node3D" parent="." unique_id=1559059440]
+
+[node name="TreeImpostorMultimesh" parent="TreeImpostors" unique_id=1529450960 instance=ExtResource("32_mdq0j")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -610.79663, 10.8320465, -185.6404)
+area_radius_x = 132.0
+area_radius_z = 203.0
+min_spacing = 3.85
+max_spacing = 18.15
+valid_ground_name_contains = PackedStringArray("Terrain_Master_COL", "Terrain_COL")
+max_ground_slope_degrees = 11.0
+tree_shadows_enabled = true
+
+[node name="Trees" parent="TreeImpostors/TreeImpostorMultimesh" index="0" unique_id=184116622]
+material_override = ExtResource("35_iyaox")
+gi_mode = 2
+multimesh = SubResource("MultiMesh_iyaox")
+area_radius_x = 132.0
+area_radius_z = 203.0
+min_spacing = 3.85
+max_spacing = 18.15
+valid_ground_name_contains = PackedStringArray("Terrain_Master_COL", "Terrain_COL")
+max_ground_slope_degrees = 11.0
+
+[node name="TreeShadows" parent="TreeImpostors/TreeImpostorMultimesh" index="1" unique_id=1425367268]
+visible = true
+cast_shadow = 3
+gi_mode = 2
+multimesh = SubResource("MultiMesh_iyaox")
+
+[node name="TreeImpostorMultimesh6" parent="TreeImpostors" unique_id=390950833 instance=ExtResource("32_mdq0j")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -433.62213, 10.8320465, -220.54488)
+area_radius_x = 168.0
+area_radius_z = 203.0
+min_spacing = 3.85
+max_spacing = 18.15
+valid_ground_name_contains = PackedStringArray("Terrain_Master_COL", "Terrain_COL")
+max_ground_slope_degrees = 11.0
+tree_shadows_enabled = true
+
+[node name="Trees" parent="TreeImpostors/TreeImpostorMultimesh6" index="0" unique_id=184116622]
+material_override = ExtResource("35_iyaox")
+gi_mode = 2
+multimesh = SubResource("MultiMesh_4k6sa")
+area_radius_x = 168.0
+area_radius_z = 203.0
+min_spacing = 3.85
+max_spacing = 18.15
+valid_ground_name_contains = PackedStringArray("Terrain_Master_COL", "Terrain_COL")
+max_ground_slope_degrees = 11.0
+
+[node name="TreeShadows" parent="TreeImpostors/TreeImpostorMultimesh6" index="1" unique_id=1425367268]
+visible = true
+cast_shadow = 3
+gi_mode = 2
+multimesh = SubResource("MultiMesh_4k6sa")
+
+[node name="TreeImpostorMultimesh2" parent="TreeImpostors" unique_id=836958728 instance=ExtResource("32_mdq0j")]
+transform = Transform3D(0.91799974, 0, 0.396581, 0, 1, 0, -0.396581, 0, 0.91799974, -379.4524, 10.8320465, 123.041565)
+area_radius_x = 299.0
+area_radius_z = 269.0
+min_spacing = 3.85
+max_spacing = 15.15
+valid_ground_name_contains = PackedStringArray("Terrain_Master_COL", "Terrain_COL")
+minimum_height_above_water = 7.0
+tree_shadows_enabled = true
+
+[node name="Trees" parent="TreeImpostors/TreeImpostorMultimesh2" index="0" unique_id=184116622]
+material_override = ExtResource("35_iyaox")
+gi_mode = 2
+multimesh = SubResource("MultiMesh_ogabk")
+area_radius_x = 299.0
+area_radius_z = 269.0
+min_spacing = 3.85
+max_spacing = 15.15
+valid_ground_name_contains = PackedStringArray("Terrain_Master_COL", "Terrain_COL")
+minimum_height_above_water = 7.0
+
+[node name="TreeShadows" parent="TreeImpostors/TreeImpostorMultimesh2" index="1" unique_id=1425367268]
+visible = true
+cast_shadow = 3
+gi_mode = 2
+multimesh = SubResource("MultiMesh_ogabk")
+
+[node name="TreeImpostorMultimesh4" parent="TreeImpostors" unique_id=383595827 instance=ExtResource("32_mdq0j")]
+transform = Transform3D(0.91799974, 0, 0.396581, 0, 1, 0, -0.396581, 0, 0.91799974, -391.37134, 10.8320465, 274.92538)
+area_radius_x = 168.0
+area_radius_z = 269.0
+min_spacing = 3.85
+max_spacing = 15.15
+valid_ground_name_contains = PackedStringArray("Terrain_Master_COL", "Terrain_COL")
+minimum_height_above_water = 7.0
+tree_shadows_enabled = true
+
+[node name="Trees" parent="TreeImpostors/TreeImpostorMultimesh4" index="0" unique_id=184116622]
+material_override = ExtResource("35_iyaox")
+gi_mode = 2
+multimesh = SubResource("MultiMesh_laf3l")
+area_radius_x = 168.0
+area_radius_z = 269.0
+min_spacing = 3.85
+max_spacing = 15.15
+valid_ground_name_contains = PackedStringArray("Terrain_Master_COL", "Terrain_COL")
+minimum_height_above_water = 7.0
+
+[node name="TreeShadows" parent="TreeImpostors/TreeImpostorMultimesh4" index="1" unique_id=1425367268]
+visible = true
+cast_shadow = 3
+gi_mode = 2
+multimesh = SubResource("MultiMesh_laf3l")
+
+[node name="TreeImpostorMultimesh5" parent="TreeImpostors" unique_id=1666605584 instance=ExtResource("32_mdq0j")]
+transform = Transform3D(0.91799974, 0, 0.396581, 0, 1, 0, -0.396581, 0, 0.91799974, -649.49854, 10.8320465, 653.8905)
+area_radius_x = 198.0
+area_radius_z = 174.0
+min_spacing = 6.25
+max_spacing = 22.6
+valid_ground_name_contains = PackedStringArray("Terrain_Master_COL", "Terrain_COL")
+tree_shadows_enabled = true
+
+[node name="Trees" parent="TreeImpostors/TreeImpostorMultimesh5" index="0" unique_id=184116622]
+material_override = ExtResource("35_iyaox")
+gi_mode = 2
+multimesh = SubResource("MultiMesh_4scdh")
+area_radius_x = 198.0
+area_radius_z = 174.0
+min_spacing = 6.25
+max_spacing = 22.6
+valid_ground_name_contains = PackedStringArray("Terrain_Master_COL", "Terrain_COL")
+
+[node name="TreeShadows" parent="TreeImpostors/TreeImpostorMultimesh5" index="1" unique_id=1425367268]
+visible = true
+cast_shadow = 3
+gi_mode = 2
+multimesh = SubResource("MultiMesh_4scdh")
+
+[node name="TreeImpostorMultimesh3" parent="TreeImpostors" unique_id=1495973294 instance=ExtResource("32_mdq0j")]
+transform = Transform3D(0.91799974, 0, 0.396581, 0, 1, 0, -0.396581, 0, 0.91799974, -445.86667, 10.8320465, -20.985092)
+area_radius_x = 299.0
+area_radius_z = 269.0
+min_spacing = 3.85
+max_spacing = 15.15
+valid_ground_name_contains = PackedStringArray("Terrain_Master_COL", "Terrain_COL")
+minimum_height_above_water = 7.9
+tree_shadows_enabled = true
+
+[node name="Trees" parent="TreeImpostors/TreeImpostorMultimesh3" index="0" unique_id=184116622]
+material_override = ExtResource("35_iyaox")
+gi_mode = 2
+multimesh = SubResource("MultiMesh_df66w")
+area_radius_x = 299.0
+area_radius_z = 269.0
+min_spacing = 3.85
+max_spacing = 15.15
+valid_ground_name_contains = PackedStringArray("Terrain_Master_COL", "Terrain_COL")
+minimum_height_above_water = 7.9
+
+[node name="TreeShadows" parent="TreeImpostors/TreeImpostorMultimesh3" index="1" unique_id=1425367268]
+visible = true
+cast_shadow = 3
+gi_mode = 2
+multimesh = SubResource("MultiMesh_df66w")
 
 [node name="LightmapGI" type="LightmapGI" parent="." unique_id=1117524579]
 bounces = 2
 directional = true
+use_texture_for_bounces = false
+texel_scale = 0.5
 light_data = ExtResource("2_1e2c5")
 
 [node name="PauseMenu" parent="." unique_id=885050825 instance=ExtResource("3_7grvo")]
@@ -1053,7 +1291,7 @@ additional_sky_paths = PackedStringArray("uid://olqtngkjhlxu")
 sky_preset = 5
 panorama_rotation_degrees = Vector3(4.315, 160.97, 0)
 sky_rotation_degrees = 160.97
-sky_energy_multiplier = 0.2
+sky_energy_multiplier = 2.0
 ambient_sky_contribution = 1.0
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="Environment" unique_id=951090327 groups=["graphics_quality_environment"]]
@@ -1074,9 +1312,10 @@ directional_shadow_fade_start = 0.876
 directional_shadow_max_distance = 8192.0
 
 [node name="DirectionalLight3D2" type="DirectionalLight3D" parent="Environment" unique_id=1424115820 groups=["graphics_quality_directional_light"]]
-transform = Transform3D(0.9195691, 0.09848075, -0.38038722, 0.2341794, 0.64000714, 0.73181343, 0.31552005, -0.7620319, 0.56546843, 0, 0, 0)
+transform = Transform3D(0.8861791, 0.3700911, 0.27878147, -0.45361236, 0.57030445, 0.68482745, 0.09445829, -0.7333384, 0.67327, -408.25046, 0, 232.65063)
 visible = false
 light_color = Color(0.82647467, 0.6933553, 0.57007265, 1)
+light_energy = 2.253
 light_volumetric_fog_energy = 16.0
 light_specular = 7.382
 shadow_enabled = true
@@ -1906,8 +2145,9 @@ surface_material_override/0 = ExtResource("16_w15id")
 visible = false
 
 [node name="Terrain_VIS" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Terrain" parent_id_path=PackedInt32Array(297389943, 1315796497) index="6" unique_id=1256756484]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.51312256, 0.32681274, 0.9812622)
 material_override = SubResource("ShaderMaterial_5h1yh")
-material_overlay = SubResource("ShaderMaterial_iyaox")
+material_overlay = SubResource("ShaderMaterial_0gqsi")
 
 [node name="SM_Palm_Impostor_Zone_GoldCity_001_VIS" parent="TerrainRoot/Gold_City/Scene Collection/PALM_IMPOSTORS_VIS" parent_id_path=PackedInt32Array(297389943, 76625302) index="0" unique_id=464716858]
 material_override = ExtResource("36_403n4")
@@ -1919,16 +2159,7 @@ material_override = ExtResource("36_403n4")
 material_override = ExtResource("36_403n4")
 
 [node name="build1" parent="TerrainRoot" unique_id=1230686511 instance=ExtResource("37_f4q6v")]
-transform = Transform3D(0.625, 0, 0, 0, 0.625, 0, 0, 0, 0.625, -615.5505, 9.018271, -97.15556)
-
-[node name="TreeImpostorMultimesh" parent="TerrainRoot" unique_id=1529450960 instance=ExtResource("32_mdq0j")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -610.79663, 10.8320465, -185.6404)
-area_radius_x = 132.0
-area_radius_z = 203.0
-min_spacing = 3.85
-max_spacing = 18.15
-valid_ground_name_contains = PackedStringArray("Terrain_Master_COL", "Terrain_COL")
-max_ground_slope_degrees = 11.0
+transform = Transform3D(0.6165657, 0, 0.10233153, 0, 0.625, 0, -0.10233153, 0, 0.6165657, -622.5976, 9.018271, -51.371002)
 
 [node name="CalmWaterArea3D" parent="TerrainRoot" unique_id=1837580228 instance=ExtResource("38_8wtvr")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -453.55353, 3.0099335, -247.60738)
@@ -1968,7 +2199,7 @@ shape = SubResource("ConcavePolygonShape3D_g5j8w")
 [node name="WaterIntegration" type="Node3D" parent="." unique_id=1889730552]
 
 [node name="Ocean" parent="WaterIntegration" unique_id=1340264265 instance=ExtResource("40_3mclj")]
-ocean_material = SubResource("ShaderMaterial_4k6sa")
+ocean_material = SubResource("ShaderMaterial_y3rlo")
 wave_world_size_a = 153.5
 wave_world_size_b = 104.0
 wave_amplitude_a = 0.7999999821184
@@ -2067,7 +2298,6 @@ bones/24/rotation = Quaternion(0.13183951, 0.13147534, -0.2248103, 0.9564481)
 bones/25/rotation = Quaternion(0.43952805, 0.59007734, -0.55047023, 0.39446965)
 bones/25/scale = Vector3(1.0000001, 1.0000001, 1)
 bones/26/scale = Vector3(1, 0.99999994, 0.9999999)
-bones/27/position = Vector3(-2.9825742e-10, 0.27841514, 4.8592856e-08)
 bones/29/position = Vector3(-0.026817312, 0.024661459, 0.015761862)
 bones/29/rotation = Quaternion(0.25309613, -0.0613242, 0.22735296, 0.93834555)
 bones/30/position = Vector3(-3.958121e-09, 0.04187095, 1.1144547e-07)
@@ -2093,12 +2323,8 @@ bones/41/rotation = Quaternion(-0.0545863, 0.054581683, -0.15248315, 0.98528683)
 bones/42/rotation = Quaternion(0.05447704, -0.054683316, 0.15428944, 0.985006)
 bones/43/position = Vector3(2.8401814e-09, 0.021000098, 2.9347216e-08)
 bones/43/rotation = Quaternion(0.13074756, -0.13122135, 0.22274286, 0.9571163)
-bones/45/position = Vector3(-6.982418e-09, 0.43905485, -2.2728273e-09)
-bones/46/position = Vector3(9.280655e-09, 0.4452782, -2.0814248e-09)
 bones/47/position = Vector3(-1.2781584e-08, 0.14997412, -1.344597e-08)
 bones/47/rotation = Quaternion(0.3242161, -0.00014739741, -1.0539367e-07, 0.94598305)
-bones/49/position = Vector3(-1.2923408e-08, 0.43905368, -2.2650966e-09)
-bones/50/position = Vector3(-1.0939593e-09, 0.44527858, 3.188938e-09)
 bones/51/position = Vector3(-6.275741e-09, 0.1499741, 1.0166332e-08)
 bones/51/rotation = Quaternion(0.32421583, -0.00014736943, -1.4682928e-07, 0.9459832)
 
@@ -2258,7 +2484,7 @@ editor_preview_mode = 0
 
 [node name="EntryBubbles" parent="CameraSystem/ChaseCamera/Camera3D/UnderwaterEffect/WaterCrossingOverlay" index="0"]
 visible = false
-material = SubResource("CanvasItemMaterial_ogabk")
+material = SubResource("CanvasItemMaterial_hrvh4")
 position = Vector2(1, 1.76)
 amount = 500
 texture = SubResource("GradientTexture2D_pl0kw")
@@ -2266,10 +2492,10 @@ lifetime = 20.0
 speed_scale = 8.0
 explosiveness = 1.0
 randomness = 1.0
-process_material = SubResource("ParticleProcessMaterial_laf3l")
+process_material = SubResource("ParticleProcessMaterial_n0k1o")
 
 [node name="UnderwaterPostProcess" parent="CameraSystem/ChaseCamera/Camera3D/UnderwaterEffect" index="1" unique_id=1854893749]
-material_override = SubResource("ShaderMaterial_4scdh")
+material_override = SubResource("ShaderMaterial_vbdm5")
 
 [node name="Debug" type="Node" parent="." unique_id=1303880580]
 
@@ -2313,10 +2539,6 @@ transform = Transform3D(-0.98350126, 0, -0.18090084, 0, 1, 0, 0.18090084, 0, -0.
 
 [node name="stadium_lights5" parent="Atrezzo" unique_id=1254506732 instance=ExtResource("56_mihog")]
 transform = Transform3D(0.8583538, 0, 0.5130581, 0, 1, 0, -0.5130581, 0, 0.8583538, -600.09924, 3.6972828, -53.8114)
-
-[node name="SpotLight3D" parent="Atrezzo/stadium_lights5" index="1" unique_id=252011559]
-shadow_bias = 0.0
-shadow_normal_bias = 1.759
 
 [node name="stadium_lights6" parent="Atrezzo" unique_id=1401669665 instance=ExtResource("56_mihog")]
 transform = Transform3D(-0.41627455, 0, -0.90923893, 0, 1, 0, 0.90923893, 0, -0.41627455, -607.1144, 3.3426533, -63.273056)
@@ -2736,14 +2958,12 @@ libraries/ = SubResource("AnimationLibrary_iyevr")
 autoplay = &"Noria"
 speed_scale = 0.2
 
-[node name="TreeProjectedShadowBaker" type="Node3D" parent="." unique_id=472315960 node_paths=PackedStringArray("extra_shadow_sources")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.510468, -49.139404, -57.103714)
-script = ExtResource("72_ol3en")
-terrain_mesh_path = NodePath("../TerrainRoot/Gold_City/Scene Collection/Collection/Terrain/Terrain_VIS")
-sun_light_path = NodePath("../Environment/DirectionalLight3D")
-extra_shadow_sources = [NodePath("../Atrezzo")]
-output_png_path = "res://levels/gold_city/terrain/gold_city_tree_shadows.png"
-
+[editable path="TreeImpostors/TreeImpostorMultimesh"]
+[editable path="TreeImpostors/TreeImpostorMultimesh6"]
+[editable path="TreeImpostors/TreeImpostorMultimesh2"]
+[editable path="TreeImpostors/TreeImpostorMultimesh4"]
+[editable path="TreeImpostors/TreeImpostorMultimesh5"]
+[editable path="TreeImpostors/TreeImpostorMultimesh3"]
 [editable path="TerrainRoot/independent_island"]
 [editable path="TerrainRoot/independent_island2"]
 [editable path="TerrainRoot/independent_island3"]
@@ -2756,7 +2976,6 @@ output_png_path = "res://levels/gold_city/terrain/gold_city_tree_shadows.png"
 [editable path="Gameplay/JetSki/VisualRoot/RiderMount/RiderAssetRoot/RiderRig"]
 [editable path="Gameplay/JetSki/VisualRoot/RiderMount/RiderAssetRoot/RiderRig/RiderModelRoot/rider_bot"]
 [editable path="CameraSystem/ChaseCamera"]
-[editable path="Atrezzo/stadium_lights5"]
 [editable path="Atrezzo/Ramp1"]
 [editable path="Atrezzo/Ramp1/RampVisual"]
 [editable path="Atrezzo/Ramp4"]

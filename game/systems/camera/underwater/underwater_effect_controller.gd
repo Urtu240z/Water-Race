@@ -8,6 +8,9 @@ const UNDERWATER_POST_PROCESS_SHADER: Shader = preload(
 const UNDERWATER_COMPOSITOR_EFFECT_SCRIPT: Script = preload(
     "res://systems/camera/underwater/underwater_fullscreen_compositor_effect.gd"
 )
+const EDITOR_INTERFACE_BRIDGE_PATH: String = (
+	"res://dev/editor/editor_interface_bridge.gd"
+)
 const UNDERWATER_POST_PROCESS_RENDER_PRIORITY: int = -127
 const DEFAULT_WET_LENS_HEIGHT: Texture2D = preload(
     "res://systems/camera/underwater/textures/wet_lens_height.png"
@@ -769,11 +772,15 @@ func _restore_fullscreen_compositor() -> void:
 
 
 func _get_editor_viewport_camera() -> Camera3D:
-	var editor_viewport := EditorInterface.get_editor_viewport_3d(0)
-	if editor_viewport != null:
-		var editor_camera := editor_viewport.get_camera_3d()
-		if editor_camera != null:
-			return editor_camera
+	if Engine.is_editor_hint():
+		var bridge_script := load(EDITOR_INTERFACE_BRIDGE_PATH) as Script
+		if bridge_script != null:
+			var bridge := bridge_script.new() as RefCounted
+			var editor_camera := (
+				bridge.call(&"get_editor_viewport_camera") as Camera3D
+			)
+			if editor_camera != null:
+				return editor_camera
 	return get_viewport().get_camera_3d()
 
 

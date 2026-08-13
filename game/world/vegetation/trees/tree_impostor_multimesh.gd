@@ -1,6 +1,10 @@
 @tool
 extends MultiMeshInstance3D
 
+const EDITOR_INTERFACE_BRIDGE_PATH: String = (
+	"res://dev/editor/editor_interface_bridge.gd"
+)
+
 
 # ============================================================
 # BAKED MULTIMESH
@@ -1130,10 +1134,22 @@ func _get_cache_scene_root() -> Node:
 
 	if Engine.is_editor_hint():
 
-		var edited_scene_root: Node = (
-			EditorInterface
-				.get_edited_scene_root()
+		var bridge_script := (
+			load(EDITOR_INTERFACE_BRIDGE_PATH) as Script
 		)
+
+
+		var edited_scene_root: Node = null
+
+
+		if bridge_script != null:
+
+			var bridge := bridge_script.new() as RefCounted
+
+
+			edited_scene_root = (
+				bridge.call(&"get_edited_scene_root") as Node
+			)
 
 
 		if edited_scene_root != null:

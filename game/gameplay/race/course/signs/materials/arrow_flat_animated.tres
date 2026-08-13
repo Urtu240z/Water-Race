@@ -1,5 +1,7 @@
 [gd_resource type="ShaderMaterial" format=3 uid="uid://by183gvu5i7vp"]
 
+[ext_resource type="Texture2D" uid="uid://cujlihmu3omrd" path="res://gameplay/race/course/signs/textures/Arrow_texture.png" id="1_v48qt"]
+
 [sub_resource type="Shader" id="Shader_q484w"]
 code = "shader_type spatial;
 render_mode cull_disabled;
@@ -39,13 +41,10 @@ void fragment() {
 }
 "
 
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_wwqsh"]
-load_path = "res://.godot/imported/Arrow_texture.png-20784c24da4f5b6c07bc6152ebec13eb.s3tc.ctex"
-
 [resource]
 render_priority = 0
 shader = SubResource("Shader_q484w")
-shader_parameter/albedo_texture = SubResource("CompressedTexture2D_wwqsh")
+shader_parameter/albedo_texture = ExtResource("1_v48qt")
 shader_parameter/albedo_tint = Color(1, 1, 1, 1)
 shader_parameter/roughness = 0.5
 shader_parameter/use_uv2 = true

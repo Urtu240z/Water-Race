@@ -1,0 +1,564 @@
+d6b41e0cf742fe.res remapped: res://levels/paradise_island/terrain/materials/textures/paradise_texture_e8648f57115b89f40ad6b41e0cf742fe.res
+BasisU: Transcoding a 256x256 image with 8 mipmaps into BPTC_RGBA took 2 ms.
+Completed load for: 'res://levels/paradise_island/terrain/materials/textures/paradise_texture_e8648f57115b89f40ad6b41e0cf742fe.res' remapped 'res://levels/paradise_island/terrain/materials/textures/paradise_texture_e8648f57115b89f40ad6b41e0cf742fe.res' at thread -1
+Completed load for: 'res://levels/paradise_island/terrain/materials/paradise_island_stone_coursed_rough.tres' remapped 'res://.godot/exported/2379973711/export-b3fdf44a1c3f46c0fac1ffb271d5d3a5-paradise_island_stone_coursed_rough.res' at thread -1
+Loading resource: res://.godot/exported/2379973711/export-a7f2eabe0a6f3fd532d7ba71c1ac1ed9-paradise_island_wood_house.res remapped: res://.godot/exported/2379973711/export-a7f2eabe0a6f3fd532d7ba71c1ac1ed9-paradise_island_wood_house.res
+Loading resource: res://levels/paradise_island/terrain/materials/textures/paradise_texture_c212ace90c57d9f0b4581d502e6c324d.res remapped: res://levels/paradise_island/terrain/materials/textures/paradise_texture_c212ace90c57d9f0b4581d502e6c324d.res
+BasisU: Transcoding a 1000x200 image with 9 mipmaps into BPTC_RGBA took 5 ms.
+Completed load for: 'res://levels/paradise_island/terrain/materials/textures/paradise_texture_c212ace90c57d9f0b4581d502e6c324d.res' remapped 'res://levels/paradise_island/terrain/materials/textures/paradise_texture_c212ace90c57d9f0b4581d502e6c324d.res' at thread -1
+Completed load for: 'res://levels/paradise_island/terrain/materials/paradise_island_wood_house.tres' remapped 'res://.godot/exported/2379973711/export-a7f2eabe0a6f3fd532d7ba71c1ac1ed9-paradise_island_wood_house.res' at thread -1
+Loading resource: res://.godot/exported/2379973711/export-09bf05c5835d1ac663582fc45db6e99f-paradise_island_rufo_01.res remapped: res://.godot/exported/2379973711/export-09bf05c5835d1ac663582fc45db6e99f-paradise_island_rufo_01.res
+Loading resource: res://levels/paradise_island/terrain/materials/textures/paradise_texture_8c687adf30d2faf25885d8f88d45acc2.res remapped: res://levels/paradise_island/terrain/materials/textures/paradise_texture_8c687adf30d2faf25885d8f88d45acc2.res
+BasisU: Transcoding a 596x64 image with 9 mipmaps into BPTC_RGBA took 1 ms.
+Completed load for: 'res://levels/paradise_island/terrain/materials/textures/paradise_texture_8c687adf30d2faf25885d8f88d45acc2.res' remapped 'res://levels/paradise_island/terrain/materials/textures/paradise_texture_8c687adf30d2faf25885d8f88d45acc2.res' at thread -1
+Completed load for: 'res://levels/paradise_island/terrain/materials/paradise_island_rufo_01.tres' remapped 'res://.godot/exported/2379973711/export-09bf05c5835d1ac663582fc45db6e99f-paradise_island_rufo_01.res' at thread -1
+Loading resource: res://.godot/exported/2379973711/export-c8f0e9a05651aa82140bbee50c34a1d0-paradise_island_rufo_02.res remapped: res://.godot/exported/2379973711/export-c8f0e9a05651aa82140bbee50c34a1d0-paradise_island_rufo_02.res
+Loading resource: res://levels/paradise_island/terrain/materials/textures/paradise_texture_3a03931a2d0a422dfb5d3363ad6b57bf.res remapped: res://levels/paradise_island/terrain/materials/textures/paradise_texture_3a03931a2d0a422dfb5d3363ad6b57bf.res
+BasisU: Transcoding a 584x56 image with 9 mipmaps into BPTC_RGBA took 0 ms.
+Completed load for: 'res://levels/paradise_island/terrain/materials/textures/paradise_texture_3a03931a2d0a422dfb5d3363ad6b57bf.res' remapped 'res://levels/paradise_island/terrain/materials/textures/paradise_texture_3a03931a2d0a422dfb5d3363ad6b57bf.res' at thread -1
+Completed load for: 'res://levels/paradise_island/terrain/materials/paradise_island_rufo_02.tres' remapped 'res://.godot/exported/2379973711/export-c8f0e9a05651aa82140bbee50c34a1d0-paradise_island_rufo_02.res' at thread -1
+Loading resource: res://.godot/exported/2379973711/export-0faaccbbaae4ce8dc72642eafd5635da-paradise_island_rufo_03.res remapped: res://.godot/exported/2379973711/export-0faaccbbaae4ce8dc72642eafd5635da-paradise_island_rufo_03.res
+Loading resource: res://levels/paradise_island/terrain/materials/textures/paradise_texture_0c13a012e41db05752ad87ce859a2898.res remapped: res://levels/paradise_island/terrain/materials/textures/paradise_texture_0c13a012e41db05752ad87ce859a2898.res
+BasisU: Transcoding a 588x64 image with 9 mipmaps into BPTC_RGBA took 1 ms.
+Completed load for: 'res://levels/paradise_island/terrain/materials/textures/paradise_texture_0c13a012e41db05752ad87ce859a2898.res' remapped 'res://levels/paradise_island/terrain/materials/textures/paradise_texture_0c13a012e41db05752ad87ce859a2898.res' at thread -1
+Completed load for: 'res://levels/paradise_island/terrain/materials/paradise_island_rufo_03.tres' remapped 'res://.godot/exported/2379973711/export-0faaccbbaae4ce8dc72642eafd5635da-paradise_island_rufo_03.res' at thread -1
+Loading resource: res://.godot/exported/2379973711/export-f6595bc73d74438fb7770745ef08df3b-paradise_island_roof.res remapped: res://.godot/exported/2379973711/export-f6595bc73d74438fb7770745ef08df3b-paradise_island_roof.res
+Loading resource: res://levels/paradise_island/terrain/materials/textures/paradise_texture_84a02043d51567359535c3f23b67073d.res remapped: res://levels/paradise_island/terrain/materials/textures/paradise_texture_84a02043d51567359535c3f23b67073d.res
+BasisU: Transcoding a 584x308 image with 9 mipmaps into BPTC_RGBA took 3 ms.
+Completed load for: 'res://levels/paradise_island/terrain/materials/textures/paradise_texture_84a02043d51567359535c3f23b67073d.res' remapped 'res://levels/paradise_island/terrain/materials/textures/paradise_texture_84a02043d51567359535c3f23b67073d.res' at thread -1
+Completed load for: 'res://levels/paradise_island/terrain/materials/paradise_island_roof.tres' remapped 'res://.godot/exported/2379973711/export-f6595bc73d74438fb7770745ef08df3b-paradise_island_roof.res' at thread -1
+Loading resource: res://.godot/exported/2379973711/export-e893e570ff99a072db90978af3b44ed1-paradise_island_rufo_04.res remapped: res://.godot/exported/2379973711/export-e893e570ff99a072db90978af3b44ed1-paradise_island_rufo_04.res
+Loading resource: res://levels/paradise_island/terrain/materials/textures/paradise_texture_353bb12b7760763ea2fdd3108846235a.res remapped: res://levels/paradise_island/terrain/materials/textures/paradise_texture_353bb12b7760763ea2fdd3108846235a.res
+BasisU: Transcoding a 596x64 image with 9 mipmaps into BPTC_RGBA took 1 ms.
+Completed load for: 'res://levels/paradise_island/terrain/materials/textures/paradise_texture_353bb12b7760763ea2fdd3108846235a.res' remapped 'res://levels/paradise_island/terrain/materials/textures/paradise_texture_353bb12b7760763ea2fdd3108846235a.res' at thread -1
+Completed load for: 'res://levels/paradise_island/terrain/materials/paradise_island_rufo_04.tres' remapped 'res://.godot/exported/2379973711/export-e893e570ff99a072db90978af3b44ed1-paradise_island_rufo_04.res' at thread -1
+Loading resource: res://.godot/exported/2379973711/export-419015e72b987980db9bd9ddecced0e6-paradise_island_rufo_05.res remapped: res://.godot/exported/2379973711/export-419015e72b987980db9bd9ddecced0e6-paradise_island_rufo_05.res
+Loading resource: res://levels/paradise_island/terrain/materials/textures/paradise_texture_2894c7527381c31c2946ebcd84857f68.res remapped: res://levels/paradise_island/terrain/materials/textures/paradise_texture_2894c7527381c31c2946ebcd84857f68.res
+BasisU: Transcoding a 596x56 image with 9 mipmaps into BPTC_RGBA took 1 ms.
+Completed load for: 'res://levels/paradise_island/terrain/materials/textures/paradise_texture_2894c7527381c31c2946ebcd84857f68.res' remapped 'res://levels/paradise_island/terrain/materials/textures/paradise_texture_2894c7527381c31c2946ebcd84857f68.res' at thread -1
+Completed load for: 'res://levels/paradise_island/terrain/materials/paradise_island_rufo_05.tres' remapped 'res://.godot/exported/2379973711/export-419015e72b987980db9bd9ddecced0e6-paradise_island_rufo_05.res' at thread -1
+Loading resource: res://.godot/exported/2379973711/export-61d858cb2c13e0af5447251ef1353ea5-paradise_island_rufo_06.res remapped: res://.godot/exported/2379973711/export-61d858cb2c13e0af5447251ef1353ea5-paradise_island_rufo_06.res
+Loading resource: res://levels/paradise_island/terrain/materials/textures/paradise_texture_41c0292fcb1abce0c8d5c949c18a3a57.res remapped: res://levels/paradise_island/terrain/materials/textures/paradise_texture_41c0292fcb1abce0c8d5c949c18a3a57.res
+BasisU: Transcoding a 588x56 image with 9 mipmaps into BPTC_RGBA took 0 ms.
+Completed load for: 'res://levels/paradise_island/terrain/materials/textures/paradise_texture_41c0292fcb1abce0c8d5c949c18a3a57.res' remapped 'res://levels/paradise_island/terrain/materials/textures/paradise_texture_41c0292fcb1abce0c8d5c949c18a3a57.res' at thread -1
+Completed load for: 'res://levels/paradise_island/terrain/materials/paradise_island_rufo_06.tres' remapped 'res://.godot/exported/2379973711/export-61d858cb2c13e0af5447251ef1353ea5-paradise_island_rufo_06.res' at thread -1
+Loading resource: res://.godot/exported/2379973711/export-ef24d0b10a4468a96bf56491bc6a4fb5-paradise_island_rufo_07.res remapped: res://.godot/exported/2379973711/export-ef24d0b10a4468a96bf56491bc6a4fb5-paradise_island_rufo_07.res
+Loading resource: res://levels/paradise_island/terrain/materials/textures/paradise_texture_4e5a6cb483ff01fb84dccff1c4737c9c.res remapped: res://levels/paradise_island/terrain/materials/textures/paradise_texture_4e5a6cb483ff01fb84dccff1c4737c9c.res
+BasisU: Transcoding a 596x56 image with 9 mipmaps into BPTC_RGBA took 1 ms.
+Completed load for: 'res://levels/paradise_island/terrain/materials/textures/paradise_texture_4e5a6cb483ff01fb84dccff1c4737c9c.res' remapped 'res://levels/paradise_island/terrain/materials/textures/paradise_texture_4e5a6cb483ff01fb84dccff1c4737c9c.res' at thread -1
+Completed load for: 'res://levels/paradise_island/terrain/materials/paradise_island_rufo_07.tres' remapped 'res://.godot/exported/2379973711/export-ef24d0b10a4468a96bf56491bc6a4fb5-paradise_island_rufo_07.res' at thread -1
+Loading resource: res://.godot/exported/2379973711/export-dadb220d50af590af071d51e89a4a1af-paradise_island_rufo_08.res remapped: res://.godot/exported/2379973711/export-dadb220d50af590af071d51e89a4a1af-paradise_island_rufo_08.res
+Loading resource: res://levels/paradise_island/terrain/materials/textures/paradise_texture_4e1955527da7f758d261209879fdf08b.res remapped: res://levels/paradise_island/terrain/materials/textures/paradise_texture_4e1955527da7f758d261209879fdf08b.res
+BasisU: Transcoding a 588x64 image with 9 mipmaps into BPTC_RGBA took 1 ms.
+Completed load for: 'res://levels/paradise_island/terrain/materials/textures/paradise_texture_4e1955527da7f758d261209879fdf08b.res' remapped 'res://levels/paradise_island/terrain/materials/textures/paradise_texture_4e1955527da7f758d261209879fdf08b.res' at thread -1
+Completed load for: 'res://levels/paradise_island/terrain/materials/paradise_island_rufo_08.tres' remapped 'res://.godot/exported/2379973711/export-dadb220d50af590af071d51e89a4a1af-paradise_island_rufo_08.res' at thread -1
+Loading resource: res://.godot/exported/2379973711/export-eb61043299177420d7b5c2f1af698baf-paradise_island_rufo_09.res remapped: res://.godot/exported/2379973711/export-eb61043299177420d7b5c2f1af698baf-paradise_island_rufo_09.res
+Loading resource: res://levels/paradise_island/terrain/materials/textures/paradise_texture_e6ad51d48f6c2d0a2730b4c0ded3bb45.res remapped: res://levels/paradise_island/terrain/materials/textures/paradise_texture_e6ad51d48f6c2d0a2730b4c0ded3bb45.res
+BasisU: Transcoding a 584x56 image with 9 mipmaps into BPTC_RGBA took 0 ms.
+Completed load for: 'res://levels/paradise_island/terrain/materials/textures/paradise_texture_e6ad51d48f6c2d0a2730b4c0ded3bb45.res' remapped 'res://levels/paradise_island/terrain/materials/textures/paradise_texture_e6ad51d48f6c2d0a2730b4c0ded3bb45.res' at thread -1
+Completed load for: 'res://levels/paradise_island/terrain/materials/paradise_island_rufo_09.tres' remapped 'res://.godot/exported/2379973711/export-eb61043299177420d7b5c2f1af698baf-paradise_island_rufo_09.res' at thread -1
+Loading resource: res://.godot/exported/2379973711/export-d48ac7b2910ba7ad70f40261cd910a1e-paradise_island_rufo_10.res remapped: res://.godot/exported/2379973711/export-d48ac7b2910ba7ad70f40261cd910a1e-paradise_island_rufo_10.res
+Loading resource: res://levels/paradise_island/terrain/materials/textures/paradise_texture_ee323669306c72b25ef579d3a98ba75d.res remapped: res://levels/paradise_island/terrain/materials/textures/paradise_texture_ee323669306c72b25ef579d3a98ba75d.res
+BasisU: Transcoding a 584x56 image with 9 mipmaps into BPTC_RGBA took 0 ms.
+Completed load for: 'res://levels/paradise_island/terrain/materials/textures/paradise_texture_ee323669306c72b25ef579d3a98ba75d.res' remapped 'res://levels/paradise_island/terrain/materials/textures/paradise_texture_ee323669306c72b25ef579d3a98ba75d.res' at thread -1
+Completed load for: 'res://levels/paradise_island/terrain/materials/paradise_island_rufo_10.tres' remapped 'res://.godot/exported/2379973711/export-d48ac7b2910ba7ad70f40261cd910a1e-paradise_island_rufo_10.res' at thread -1
+Loading resource: res://.godot/exported/2379973711/export-d3e3e2588ba328e328d7c70ebe86211a-paradise_island_rufo_11.res remapped: res://.godot/exported/2379973711/export-d3e3e2588ba328e328d7c70ebe86211a-paradise_island_rufo_11.res
+Loading resource: res://levels/paradise_island/terrain/materials/textures/paradise_texture_34a994fc3fc16c8a9f17e21ee8752ad5.res remapped: res://levels/paradise_island/terrain/materials/textures/paradise_texture_34a994fc3fc16c8a9f17e21ee8752ad5.res
+BasisU: Transcoding a 592x56 image with 9 mipmaps into BPTC_RGBA took 1 ms.
+Completed load for: 'res://levels/paradise_island/terrain/materials/textures/paradise_texture_34a994fc3fc16c8a9f17e21ee8752ad5.res' remapped 'res://levels/paradise_island/terrain/materials/textures/paradise_texture_34a994fc3fc16c8a9f17e21ee8752ad5.res' at thread -1
+Completed load for: 'res://levels/paradise_island/terrain/materials/paradise_island_rufo_11.tres' remapped 'res://.godot/exported/2379973711/export-d3e3e2588ba328e328d7c70ebe86211a-paradise_island_rufo_11.res' at thread -1
+Loading resource: res://.godot/exported/2379973711/export-2bd8c600c9461de8d9160cf1da300835-paradise_island_rufo_12.res remapped: res://.godot/exported/2379973711/export-2bd8c600c9461de8d9160cf1da300835-paradise_island_rufo_12.res
+Loading resource: res://levels/paradise_island/terrain/materials/textures/paradise_texture_86d8aa4a5210c680b2713feb82ef8af6.res remapped: res://levels/paradise_island/terrain/materials/textures/paradise_texture_86d8aa4a5210c680b2713feb82ef8af6.res
+BasisU: Transcoding a 592x64 image with 9 mipmaps into BPTC_RGBA took 1 ms.
+Completed load for: 'res://levels/paradise_island/terrain/materials/textures/paradise_texture_86d8aa4a5210c680b2713feb82ef8af6.res' remapped 'res://levels/paradise_island/terrain/materials/textures/paradise_texture_86d8aa4a5210c680b2713feb82ef8af6.res' at thread -1
+Completed load for: 'res://levels/paradise_island/terrain/materials/paradise_island_rufo_12.tres' remapped 'res://.godot/exported/2379973711/export-2bd8c600c9461de8d9160cf1da300835-paradise_island_rufo_12.res' at thread -1
+Loading resource: res://.godot/exported/2379973711/export-4e5f19ae89e624e26248c5f4f98dc4bf-paradise_island_rufo_13.res remapped: res://.godot/exported/2379973711/export-4e5f19ae89e624e26248c5f4f98dc4bf-paradise_island_rufo_13.res
+Loading resource: res://levels/paradise_island/terrain/materials/textures/paradise_texture_34c7d939c3d95b78c2c84851277cf4ad.res remapped: res://levels/paradise_island/terrain/materials/textures/paradise_texture_34c7d939c3d95b78c2c84851277cf4ad.res
+BasisU: Transcoding a 592x64 image with 9 mipmaps into BPTC_RGBA took 0 ms.
+Completed load for: 'res://levels/paradise_island/terrain/materials/textures/paradise_texture_34c7d939c3d95b78c2c84851277cf4ad.res' remapped 'res://levels/paradise_island/terrain/materials/textures/paradise_texture_34c7d939c3d95b78c2c84851277cf4ad.res' at thread -1
+Completed load for: 'res://levels/paradise_island/terrain/materials/paradise_island_rufo_13.tres' remapped 'res://.godot/exported/2379973711/export-4e5f19ae89e624e26248c5f4f98dc4bf-paradise_island_rufo_13.res' at thread -1
+Loading resource: res://.godot/exported/2379973711/export-3146b6429f835ae51b454286c7851cbc-paradise_island_rufo_14.res remapped: res://.godot/exported/2379973711/export-3146b6429f835ae51b454286c7851cbc-paradise_island_rufo_14.res
+Loading resource: res://levels/paradise_island/terrain/materials/textures/paradise_texture_2882205aa0a0a0e786b425ef575461f0.res remapped: res://levels/paradise_island/terrain/materials/textures/paradise_texture_2882205aa0a0a0e786b425ef575461f0.res
+BasisU: Transcoding a 596x64 image with 9 mipmaps into BPTC_RGBA took 1 ms.
+Completed load for: 'res://levels/paradise_island/terrain/materials/textures/paradise_texture_2882205aa0a0a0e786b425ef575461f0.res' remapped 'res://levels/paradise_island/terrain/materials/textures/paradise_texture_2882205aa0a0a0e786b425ef575461f0.res' at thread -1
+Completed load for: 'res://levels/paradise_island/terrain/materials/paradise_island_rufo_14.tres' remapped 'res://.godot/exported/2379973711/export-3146b6429f835ae51b454286c7851cbc-paradise_island_rufo_14.res' at thread -1
+Loading resource: res://.godot/exported/2379973711/export-31597a4bee4b47aa9bdb85502d327ddd-paradise_island_rufo_15.res remapped: res://.godot/exported/2379973711/export-31597a4bee4b47aa9bdb85502d327ddd-paradise_island_rufo_15.res
+Loading resource: res://levels/paradise_island/terrain/materials/textures/paradise_texture_292547cb22778dd2863f3cbe9ccdc94d.res remapped: res://levels/paradise_island/terrain/materials/textures/paradise_texture_292547cb22778dd2863f3cbe9ccdc94d.res
+BasisU: Transcoding a 516x64 image with 9 mipmaps into BPTC_RGBA took 1 ms.
+Completed load for: 'res://levels/paradise_island/terrain/materials/textures/paradise_texture_292547cb22778dd2863f3cbe9ccdc94d.res' remapped 'res://levels/paradise_island/terrain/materials/textures/paradise_texture_292547cb22778dd2863f3cbe9ccdc94d.res' at thread -1
+Completed load for: 'res://levels/paradise_island/terrain/materials/paradise_island_rufo_15.tres' remapped 'res://.godot/exported/2379973711/export-31597a4bee4b47aa9bdb85502d327ddd-paradise_island_rufo_15.res' at thread -1
+Loading resource: res://.godot/exported/2379973711/export-21b408ef2fab3feaefac3087df628797-paradise_island_brick_antique.res remapped: res://.godot/exported/2379973711/export-21b408ef2fab3feaefac3087df628797-paradise_island_brick_antique.res
+Loading resource: res://levels/paradise_island/terrain/materials/textures/paradise_texture_771cb516b0509e4709b1d27d2e6ee6d6.res remapped: res://levels/paradise_island/terrain/materials/textures/paradise_texture_771cb516b0509e4709b1d27d2e6ee6d6.res
+BasisU: Transcoding a 384x256 image with 8 mipmaps into BPTC_RGBA took 2 ms.
+Completed load for: 'res://levels/paradise_island/terrain/materials/textures/paradise_texture_771cb516b0509e4709b1d27d2e6ee6d6.res' remapped 'res://levels/paradise_island/terrain/materials/textures/paradise_texture_771cb516b0509e4709b1d27d2e6ee6d6.res' at thread -1
+Completed load for: 'res://levels/paradise_island/terrain/materials/paradise_island_brick_antique.tres' remapped 'res://.godot/exported/2379973711/export-21b408ef2fab3feaefac3087df628797-paradise_island_brick_antique.res' at thread -1
+Loading resource: res://.godot/exported/2379973711/export-a76d9bcaaa66cb4ffc4a9ca2cf501cd3-paradise_island_rufo_16.res remapped: res://.godot/exported/2379973711/export-a76d9bcaaa66cb4ffc4a9ca2cf501cd3-paradise_island_rufo_16.res
+Loading resource: res://levels/paradise_island/terrain/materials/textures/paradise_texture_9ff2a83db2fe4eea895266d874e6d2fd.res remapped: res://levels/paradise_island/terrain/materials/textures/paradise_texture_9ff2a83db2fe4eea895266d874e6d2fd.res
+BasisU: Transcoding a 584x56 image with 9 mipmaps into BPTC_RGBA took 1 ms.
+Completed load for: 'res://levels/paradise_island/terrain/materials/textures/paradise_texture_9ff2a83db2fe4eea895266d874e6d2fd.res' remapped 'res://levels/paradise_island/terrain/materials/textures/paradise_texture_9ff2a83db2fe4eea895266d874e6d2fd.res' at thread -1
+Completed load for: 'res://levels/paradise_island/terrain/materials/paradise_island_rufo_16.tres' remapped 'res://.godot/exported/2379973711/export-a76d9bcaaa66cb4ffc4a9ca2cf501cd3-paradise_island_rufo_16.res' at thread -1
+Loading resource: res://.godot/exported/2379973711/export-103823b361b1538a7ef52c5948e6b2f3-paradise_island_rufo_17.res remapped: res://.godot/exported/2379973711/export-103823b361b1538a7ef52c5948e6b2f3-paradise_island_rufo_17.res
+Loading resource: res://levels/paradise_island/terrain/materials/textures/paradise_texture_827590ab0076945d3a0db763d3b23164.res remapped: res://levels/paradise_island/terrain/materials/textures/paradise_texture_827590ab0076945d3a0db763d3b23164.res
+BasisU: Transcoding a 584x56 image with 9 mipmaps into BPTC_RGBA took 0 ms.
+Completed load for: 'res://levels/paradise_island/terrain/materials/textures/paradise_texture_827590ab0076945d3a0db763d3b23164.res' remapped 'res://levels/paradise_island/terrain/materials/textures/paradise_texture_827590ab0076945d3a0db763d3b23164.res' at thread -1
+Completed load for: 'res://levels/paradise_island/terrain/materials/paradise_island_rufo_17.tres' remapped 'res://.godot/exported/2379973711/export-103823b361b1538a7ef52c5948e6b2f3-paradise_island_rufo_17.res' at thread -1
+Loading resource: res://.godot/exported/2379973711/export-83055cae4f7f4f221e2ec65cbd65a1fd-paradise_island_rufo_18.res remapped: res://.godot/exported/2379973711/export-83055cae4f7f4f221e2ec65cbd65a1fd-paradise_island_rufo_18.res
+Loading resource: res://levels/paradise_island/terrain/materials/textures/paradise_texture_5e32a514d3635b70bb5230e7b7fa2332.res remapped: res://levels/paradise_island/terrain/materials/textures/paradise_texture_5e32a514d3635b70bb5230e7b7fa2332.res
+BasisU: Transcoding a 584x56 image with 9 mipmaps into BPTC_RGBA took 0 ms.
+Completed load for: 'res://levels/paradise_island/terrain/materials/textures/paradise_texture_5e32a514d3635b70bb5230e7b7fa2332.res' remapped 'res://levels/paradise_island/terrain/materials/textures/paradise_texture_5e32a514d3635b70bb5230e7b7fa2332.res' at thread -1
+Completed load for: 'res://levels/paradise_island/terrain/materials/paradise_island_rufo_18.tres' remapped 'res://.godot/exported/2379973711/export-83055cae4f7f4f221e2ec65cbd65a1fd-paradise_island_rufo_18.res' at thread -1
+Loading resource: res://.godot/exported/2379973711/export-d98b58a5961348ad96d992b3762ac21a-paradise_island_rufo_19.res remapped: res://.godot/exported/2379973711/export-d98b58a5961348ad96d992b3762ac21a-paradise_island_rufo_19.res
+Loading resource: res://levels/paradise_island/terrain/materials/textures/paradise_texture_03f31cc70794acfc84ce811a399a0ea3.res remapped: res://levels/paradise_island/terrain/materials/textures/paradise_texture_03f31cc70794acfc84ce811a399a0ea3.res
+BasisU: Transcoding a 584x56 image with 9 mipmaps into BPTC_RGBA took 1 ms.
+Completed load for: 'res://levels/paradise_island/terrain/materials/textures/paradise_texture_03f31cc70794acfc84ce811a399a0ea3.res' remapped 'res://levels/paradise_island/terrain/materials/textures/paradise_texture_03f31cc70794acfc84ce811a399a0ea3.res' at thread -1
+Completed load for: 'res://levels/paradise_island/terrain/materials/paradise_island_rufo_19.tres' remapped 'res://.godot/exported/2379973711/export-d98b58a5961348ad96d992b3762ac21a-paradise_island_rufo_19.res' at thread -1
+Loading resource: res://.godot/exported/2379973711/export-ec859fa7cd317f340779304ea104a567-paradise_island_basculante.res remapped: res://.godot/exported/2379973711/export-ec859fa7cd317f340779304ea104a567-paradise_island_basculante.res
+Loading resource: res://levels/paradise_island/terrain/materials/textures/paradise_texture_164c73d95cf5d8d9474e64027979bf33.res remapped: res://levels/paradise_island/terrain/materials/textures/paradise_texture_164c73d95cf5d8d9474e64027979bf33.res
+BasisU: Transcoding a 256x256 image with 8 mipmaps into BPTC_RGBA took 2 ms.
+Completed load for: 'res://levels/paradise_island/terrain/materials/textures/paradise_texture_164c73d95cf5d8d9474e64027979bf33.res' remapped 'res://levels/paradise_island/terrain/materials/textures/paradise_texture_164c73d95cf5d8d9474e64027979bf33.res' at thread -1
+Completed load for: 'res://levels/paradise_island/terrain/materials/paradise_island_basculante.tres' remapped 'res://.godot/exported/2379973711/export-ec859fa7cd317f340779304ea104a567-paradise_island_basculante.res' at thread -1
+Loading resource: res://.godot/exported/2379973711/export-efe2bf7e8f12829384b4e4498d2863e8-paradise_island_janela.res remapped: res://.godot/exported/2379973711/export-efe2bf7e8f12829384b4e4498d2863e8-paradise_island_janela.res
+Loading resource: res://levels/paradise_island/terrain/materials/textures/paradise_texture_78377090466282be877f4d59a9802d92.res remapped: res://levels/paradise_island/terrain/materials/textures/paradise_texture_78377090466282be877f4d59a9802d92.res
+BasisU: Transcoding a 408x308 image with 8 mipmaps into BPTC_RGBA took 3 ms.
+Completed load for: 'res://levels/paradise_island/terrain/materials/textures/paradise_texture_78377090466282be877f4d59a9802d92.res' remapped 'res://levels/paradise_island/terrain/materials/textures/paradise_texture_78377090466282be877f4d59a9802d92.res' at thread -1
+Completed load for: 'res://levels/paradise_island/terrain/materials/paradise_island_janela.tres' remapped 'res://.godot/exported/2379973711/export-efe2bf7e8f12829384b4e4498d2863e8-paradise_island_janela.res' at thread -1
+Loading resource: res://.godot/exported/2379973711/export-ed76ce42aff31d791993d86242b99efd-paradise_island_porta.res remapped: res://.godot/exported/2379973711/export-ed76ce42aff31d791993d86242b99efd-paradise_island_porta.res
+Loading resource: res://levels/paradise_island/terrain/materials/textures/paradise_texture_c4ff4282bee76c50e1e284a9910d4e26.res remapped: res://levels/paradise_island/terrain/materials/textures/paradise_texture_c4ff4282bee76c50e1e284a9910d4e26.res
+BasisU: Transcoding a 104x180 image with 7 mipmaps into BPTC_RGBA took 1 ms.
+Completed load for: 'res://levels/paradise_island/terrain/materials/textures/paradise_texture_c4ff4282bee76c50e1e284a9910d4e26.res' remapped 'res://levels/paradise_island/terrain/materials/textures/paradise_texture_c4ff4282bee76c50e1e284a9910d4e26.res' at thread -1
+Completed load for: 'res://levels/paradise_island/terrain/materials/paradise_island_porta.tres' remapped 'res://.godot/exported/2379973711/export-ed76ce42aff31d791993d86242b99efd-paradise_island_porta.res' at thread -1
+Loading resource: res://.godot/exported/2379973711/export-f569f15a20ba443e645a10a619ca9171-paradise_island_cerca_wood.res remapped: res://.godot/exported/2379973711/export-f569f15a20ba443e645a10a619ca9171-paradise_island_cerca_wood.res
+Loading resource: res://levels/paradise_island/terrain/materials/textures/paradise_texture_0d7a24a3427368e0650eedb0b36d4b6b.res remapped: res://levels/paradise_island/terrain/materials/textures/paradise_texture_0d7a24a3427368e0650eedb0b36d4b6b.res
+BasisU: Transcoding a 156x96 image with 7 mipmaps into BPTC_RGBA took 0 ms.
+Completed load for: 'res://levels/paradise_island/terrain/materials/textures/paradise_texture_0d7a24a3427368e0650eedb0b36d4b6b.res' remapped 'res://levels/paradise_island/terrain/materials/textures/paradise_texture_0d7a24a3427368e0650eedb0b36d4b6b.res' at thread -1
+Completed load for: 'res://levels/paradise_island/terrain/materials/paradise_island_cerca_wood.tres' remapped 'res://.godot/exported/2379973711/export-f569f15a20ba443e645a10a619ca9171-paradise_island_cerca_wood.res' at thread -1
+Loading resource: res://.godot/exported/2379973711/export-1ebe6cdd5ae67e87ce6f7ff70d35399e-paradise_island_rufo_20.res remapped: res://.godot/exported/2379973711/export-1ebe6cdd5ae67e87ce6f7ff70d35399e-paradise_island_rufo_20.res
+Loading resource: res://levels/paradise_island/terrain/materials/textures/paradise_texture_e8dfac584dc4bf3a69fc64a21486930a.res remapped: res://levels/paradise_island/terrain/materials/textures/paradise_texture_e8dfac584dc4bf3a69fc64a21486930a.res
+BasisU: Transcoding a 392x64 image with 8 mipmaps into BPTC_RGBA took 1 ms.
+Completed load for: 'res://levels/paradise_island/terrain/materials/textures/paradise_texture_e8dfac584dc4bf3a69fc64a21486930a.res' remapped 'res://levels/paradise_island/terrain/materials/textures/paradise_texture_e8dfac584dc4bf3a69fc64a21486930a.res' at thread -1
+Completed load for: 'res://levels/paradise_island/terrain/materials/paradise_island_rufo_20.tres' remapped 'res://.godot/exported/2379973711/export-1ebe6cdd5ae67e87ce6f7ff70d35399e-paradise_island_rufo_20.res' at thread -1
+Loading resource: res://.godot/exported/2379973711/export-75d8788878a4bb1f1b3f271062d0f45b-paradise_island_rufo_21.res remapped: res://.godot/exported/2379973711/export-75d8788878a4bb1f1b3f271062d0f45b-paradise_island_rufo_21.res
+Loading resource: res://levels/paradise_island/terrain/materials/textures/paradise_texture_2d35c4b25ced1c93a139c528d3255783.res remapped: res://levels/paradise_island/terrain/materials/textures/paradise_texture_2d35c4b25ced1c93a139c528d3255783.res
+BasisU: Transcoding a 588x64 image with 9 mipmaps into BPTC_RGBA took 1 ms.
+Completed load for: 'res://levels/paradise_island/terrain/materials/textures/paradise_texture_2d35c4b25ced1c93a139c528d3255783.res' remapped 'res://levels/paradise_island/terrain/materials/textures/paradise_texture_2d35c4b25ced1c93a139c528d3255783.res' at thread -1
+Completed load for: 'res://levels/paradise_island/terrain/materials/paradise_island_rufo_21.tres' remapped 'res://.godot/exported/2379973711/export-75d8788878a4bb1f1b3f271062d0f45b-paradise_island_rufo_21.res' at thread -1
+Loading resource: res://.godot/exported/2379973711/export-f1ef900b1f1cb6c4ee3631e8b5efca34-paradise_island_rufo_22.res remapped: res://.godot/exported/2379973711/export-f1ef900b1f1cb6c4ee3631e8b5efca34-paradise_island_rufo_22.res
+Loading resource: res://levels/paradise_island/terrain/materials/textures/paradise_texture_a855d9af681a8b5af01d14b7c16ca59b.res remapped: res://levels/paradise_island/terrain/materials/textures/paradise_texture_a855d9af681a8b5af01d14b7c16ca59b.res
+BasisU: Transcoding a 392x64 image with 8 mipmaps into BPTC_RGBA took 0 ms.
+Completed load for: 'res://levels/paradise_island/terrain/materials/textures/paradise_texture_a855d9af681a8b5af01d14b7c16ca59b.res' remapped 'res://levels/paradise_island/terrain/materials/textures/paradise_texture_a855d9af681a8b5af01d14b7c16ca59b.res' at thread -1
+Completed load for: 'res://levels/paradise_island/terrain/materials/paradise_island_rufo_22.tres' remapped 'res://.godot/exported/2379973711/export-f1ef900b1f1cb6c4ee3631e8b5efca34-paradise_island_rufo_22.res' at thread -1
+Loading resource: res://.godot/exported/2379973711/export-85e3d0e4dc9340710b0ef1f57ce71aee-paradise_island_twilight.res remapped: res://.godot/exported/2379973711/export-85e3d0e4dc9340710b0ef1f57ce71aee-paradise_island_twilight.res
+Completed load for: 'res://levels/paradise_island/terrain/materials/paradise_island_twilight.tres' remapped 'res://.godot/exported/2379973711/export-85e3d0e4dc9340710b0ef1f57ce71aee-paradise_island_twilight.res' at thread -1
+Loading resource: res://.godot/exported/2379973711/export-909390f7091633f27d206212302d9303-paradise_island_zoolingerf.res remapped: res://.godot/exported/2379973711/export-909390f7091633f27d206212302d9303-paradise_island_zoolingerf.res
+Loading resource: res://levels/paradise_island/terrain/materials/textures/paradise_texture_1e6766ac72b11654ebde9fe992e756fd.res remapped: res://levels/paradise_island/terrain/materials/textures/paradise_texture_1e6766ac72b11654ebde9fe992e756fd.res
+BasisU: Transcoding a 1736x1820 image with 10 mipmaps into BPTC_RGBA took 53 ms.
+Completed load for: 'res://levels/paradise_island/terrain/materials/textures/paradise_texture_1e6766ac72b11654ebde9fe992e756fd.res' remapped 'res://levels/paradise_island/terrain/materials/textures/paradise_texture_1e6766ac72b11654ebde9fe992e756fd.res' at thread -1
+Completed load for: 'res://levels/paradise_island/terrain/materials/paradise_island_zoolingerf.tres' remapped 'res://.godot/exported/2379973711/export-909390f7091633f27d206212302d9303-paradise_island_zoolingerf.res' at thread -1
+Loading resource: res://.godot/exported/2379973711/export-3465e1efee8b44c3e5190eb9348edcd5-paradise_island_thatched.res remapped: res://.godot/exported/2379973711/export-3465e1efee8b44c3e5190eb9348edcd5-paradise_island_thatched.res
+Loading resource: res://levels/paradise_island/terrain/materials/textures/paradise_texture_e801572d157749a2829cd6ab152b86ce.res remapped: res://levels/paradise_island/terrain/materials/textures/paradise_texture_e801572d157749a2829cd6ab152b86ce.res
+BasisU: Transcoding a 2800x1268 image with 11 mipmaps into BPTC_RGBA took 71 ms.
+Completed load for: 'res://levels/paradise_island/terrain/materials/textures/paradise_texture_e801572d157749a2829cd6ab152b86ce.res' remapped 'res://levels/paradise_island/terrain/materials/textures/paradise_texture_e801572d157749a2829cd6ab152b86ce.res' at thread -1
+Completed load for: 'res://levels/paradise_island/terrain/materials/paradise_island_thatched.tres' remapped 'res://.godot/exported/2379973711/export-3465e1efee8b44c3e5190eb9348edcd5-paradise_island_thatched.res' at thread -1
+Loading resource: res://.godot/exported/2379973711/export-328c5593ad8dd5ae733cdb7d358f22f6-paradise_island_wood_grain_dark.res remapped: res://.godot/exported/2379973711/export-328c5593ad8dd5ae733cdb7d358f22f6-paradise_island_wood_grain_dark.res
+Loading resource: res://levels/paradise_island/terrain/materials/textures/paradise_texture_6e657364aca0da1c02249d6654683d78.res remapped: res://levels/paradise_island/terrain/materials/textures/paradise_texture_6e657364aca0da1c02249d6654683d78.res
+BasisU: Transcoding a 344x256 image with 8 mipmaps into BPTC_RGBA took 2 ms.
+Completed load for: 'res://levels/paradise_island/terrain/materials/textures/paradise_texture_6e657364aca0da1c02249d6654683d78.res' remapped 'res://levels/paradise_island/terrain/materials/textures/paradise_texture_6e657364aca0da1c02249d6654683d78.res' at thread -1
+Completed load for: 'res://levels/paradise_island/terrain/materials/paradise_island_wood_grain_dark.tres' remapped 'res://.godot/exported/2379973711/export-328c5593ad8dd5ae733cdb7d358f22f6-paradise_island_wood_grain_dark.res' at thread -1
+Loading resource: res://.godot/exported/2379973711/export-8c3c95c3920a963806ed0356c436932d-paradise_island_wood_bamboo_stalks.res remapped: res://.godot/exported/2379973711/export-8c3c95c3920a963806ed0356c436932d-paradise_island_wood_bamboo_stalks.res
+Loading resource: res://levels/paradise_island/terrain/materials/textures/paradise_texture_e2d096bad292f5632fcb3c2229be276d.res remapped: res://levels/paradise_island/terrain/materials/textures/paradise_texture_e2d096bad292f5632fcb3c2229be276d.res
+BasisU: Transcoding a 256x384 image with 8 mipmaps into BPTC_RGBA took 2 ms.
+Completed load for: 'res://levels/paradise_island/terrain/materials/textures/paradise_texture_e2d096bad292f5632fcb3c2229be276d.res' remapped 'res://levels/paradise_island/terrain/materials/textures/paradise_texture_e2d096bad292f5632fcb3c2229be276d.res' at thread -1
+Completed load for: 'res://levels/paradise_island/terrain/materials/paradise_island_wood_bamboo_stalks.tres' remapped 'res://.godot/exported/2379973711/export-8c3c95c3920a963806ed0356c436932d-paradise_island_wood_bamboo_stalks.res' at thread -1
+Loading resource: res://.godot/exported/2379973711/export-7a616ec3da32e87f9998da5e809c0e42-paradise_island_wood_floor.res remapped: res://.godot/exported/2379973711/export-7a616ec3da32e87f9998da5e809c0e42-paradise_island_wood_floor.res
+Loading resource: res://levels/paradise_island/terrain/materials/textures/paradise_texture_b214d43bcac291df3ef24a7855887f24.res remapped: res://levels/paradise_island/terrain/materials/textures/paradise_texture_b214d43bcac291df3ef24a7855887f24.res
+BasisU: Transcoding a 256x288 image with 8 mipmaps into BPTC_RGBA took 2 ms.
+Completed load for: 'res://levels/paradise_island/terrain/materials/textures/paradise_texture_b214d43bcac291df3ef24a7855887f24.res' remapped 'res://levels/paradise_island/terrain/materials/textures/paradise_texture_b214d43bcac291df3ef24a7855887f24.res' at thread -1
+Completed load for: 'res://levels/paradise_island/terrain/materials/paradise_island_wood_floor.tres' remapped 'res://.godot/exported/2379973711/export-7a616ec3da32e87f9998da5e809c0e42-paradise_island_wood_floor.res' at thread -1
+Loading resource: res://.godot/exported/2379973711/export-7f4c36ec267ded3a5fa94a0382bdf75d-paradise_island_ep.res remapped: res://.godot/exported/2379973711/export-7f4c36ec267ded3a5fa94a0382bdf75d-paradise_island_ep.res
+Loading resource: res://levels/paradise_island/terrain/materials/textures/paradise_texture_6a30a49290e615a469dab5a8b1955433.res remapped: res://levels/paradise_island/terrain/materials/textures/paradise_texture_6a30a49290e615a469dab5a8b1955433.res
+BasisU: Transcoding a 1184x812 image with 10 mipmaps into BPTC_RGBA took 18 ms.
+Completed load for: 'res://levels/paradise_island/terrain/materials/textures/paradise_texture_6a30a49290e615a469dab5a8b1955433.res' remapped 'res://levels/paradise_island/terrain/materials/textures/paradise_texture_6a30a49290e615a469dab5a8b1955433.res' at thread -1
+Completed load for: 'res://levels/paradise_island/terrain/materials/paradise_island_ep.tres' remapped 'res://.godot/exported/2379973711/export-7f4c36ec267ded3a5fa94a0382bdf75d-paradise_island_ep.res' at thread -1
+Loading resource: res://.godot/exported/2379973711/export-6ac1a667a86136f3460e10664bdd7c62-paradise_island_translucent_glass_blue.res remapped: res://.godot/exported/2379973711/export-6ac1a667a86136f3460e10664bdd7c62-paradise_island_translucent_glass_blue.res
+Completed load for: 'res://levels/paradise_island/terrain/materials/paradise_island_translucent_glass_blue.tres' remapped 'res://.godot/exported/2379973711/export-6ac1a667a86136f3460e10664bdd7c62-paradise_island_translucent_glass_blue.res' at thread -1
+Loading resource: res://.godot/exported/2379973711/export-7ba4f95af306ceb7ee68a5bdd511b877-paradise_island_concrete_gray.res remapped: res://.godot/exported/2379973711/export-7ba4f95af306ceb7ee68a5bdd511b877-paradise_island_concrete_gray.res
+Loading resource: res://levels/paradise_island/terrain/materials/textures/paradise_texture_5d5e9a2b68c632a37b239cedb9aa1f2d.res remapped: res://levels/paradise_island/terrain/materials/textures/paradise_texture_5d5e9a2b68c632a37b239cedb9aa1f2d.res
+BasisU: Transcoding a 256x256 image with 8 mipmaps into BPTC_RGBA took 1 ms.
+Completed load for: 'res://levels/paradise_island/terrain/materials/textures/paradise_texture_5d5e9a2b68c632a37b239cedb9aa1f2d.res' remapped 'res://levels/paradise_island/terrain/materials/textures/paradise_texture_5d5e9a2b68c632a37b239cedb9aa1f2d.res' at thread -1
+Completed load for: 'res://levels/paradise_island/terrain/materials/paradise_island_concrete_gray.tres' remapped 'res://.godot/exported/2379973711/export-7ba4f95af306ceb7ee68a5bdd511b877-paradise_island_concrete_gray.res' at thread -1
+Loading resource: res://.godot/exported/2379973711/export-699c98aa50a41b974f373fc714b99818-paradise_island_metal_03.res remapped: res://.godot/exported/2379973711/export-699c98aa50a41b974f373fc714b99818-paradise_island_metal_03.res
+Completed load for: 'res://levels/paradise_island/terrain/materials/paradise_island_metal_03.tres' remapped 'res://.godot/exported/2379973711/export-699c98aa50a41b974f373fc714b99818-paradise_island_metal_03.res' at thread -1
+Loading resource: res://.godot/exported/2379973711/export-cc390bfd033a32c087ef26703c9b933b-paradise_island_palm_billboard_continuous.res remapped: res://.godot/exported/2379973711/export-cc390bfd033a32c087ef26703c9b933b-paradise_island_palm_billboard_continuous.res
+Loading resource: res://levels/paradise_island/terrain/materials/textures/paradise_texture_e7438e24348dd65e1851bf7cead694bd.res remapped: res://levels/paradise_island/terrain/materials/textures/paradise_texture_e7438e24348dd65e1851bf7cead694bd.res
+BasisU: Transcoding a 4096x2656 image with 12 mipmaps into BPTC_RGBA took 167 ms.
+Completed load for: 'res://levels/paradise_island/terrain/materials/textures/paradise_texture_e7438e24348dd65e1851bf7cead694bd.res' remapped 'res://levels/paradise_island/terrain/materials/textures/paradise_texture_e7438e24348dd65e1851bf7cead694bd.res' at thread -1
+Completed load for: 'res://levels/paradise_island/terrain/materials/paradise_island_palm_billboard_continuous.tres' remapped 'res://.godot/exported/2379973711/export-cc390bfd033a32c087ef26703c9b933b-paradise_island_palm_billboard_continuous.res' at thread -1
+Loading cache for shader SceneForwardClusteredShaderRD, variant 0
+Loading cache for shader SceneForwardClusteredShaderRD, variant 1
+Loading cache for shader SceneForwardClusteredShaderRD, variant 2
+Loading cache for shader SceneForwardClusteredShaderRD, variant 3
+Loading cache for shader SceneForwardClusteredShaderRD, variant 4
+Loading cache for shader SceneForwardClusteredShaderRD, variant 5
+Loading cache for shader SceneForwardClusteredShaderRD, variant 6
+Loading cache for shader SceneForwardClusteredShaderRD, variant 7
+Loading cache for shader SceneForwardClusteredShaderRD, variant 0
+Loading cache for shader SceneForwardClusteredShaderRD, variant 1
+Loading cache for shader SceneForwardClusteredShaderRD, variant 2
+Loading cache for shader SceneForwardClusteredShaderRD, variant 3
+Loading cache for shader SceneForwardClusteredShaderRD, variant 4
+Loading cache for shader SceneForwardClusteredShaderRD, variant 5
+Loading cache for shader SceneForwardClusteredShaderRD, variant 6
+Loading cache for shader SceneForwardClusteredShaderRD, variant 7
+Loading cache for shader SceneForwardClusteredShaderRD, variant 8
+Loading cache for shader SceneForwardClusteredShaderRD, variant 9
+Loading cache for shader SceneForwardClusteredShaderRD, variant 10
+Loading cache for shader SceneForwardClusteredShaderRD, variant 11
+Loading cache for shader SceneForwardClusteredShaderRD, variant 12
+Loading cache for shader SceneForwardClusteredShaderRD, variant 13
+Loading cache for shader SceneForwardClusteredShaderRD, variant 14
+Loading cache for shader SceneForwardClusteredShaderRD, variant 15
+Loading cache for shader SceneForwardClusteredShaderRD, variant 16
+Loading cache for shader SceneForwardClusteredShaderRD, variant 17
+Loading cache for shader SceneForwardClusteredShaderRD, variant 18
+Loading cache for shader SceneForwardClusteredShaderRD, variant 19
+Completed load for: 'res://levels/paradise_island/terrain/paradise_island.glb' remapped 'res://levels/paradise_island/terrain/paradise_island.glb' at thread -1
+Loading resource: res://world/terrain/baked_tree_projected_shadows.png remapped: res://world/terrain/baked_tree_projected_shadows.png
+Loading resource: res://.godot/imported/baked_tree_projected_shadows.png-43bdd4f4b841a8813f801f225aa34416.ctex remapped: res://.godot/imported/baked_tree_projected_shadows.png-43bdd4f4b841a8813f801f225aa34416.ctex
+Completed load for: 'res://world/terrain/baked_tree_projected_shadows.png' remapped 'res://world/terrain/baked_tree_projected_shadows.png' at thread -1
+Loading resource: res://world/vegetation/palms/textures/palm_billboard_normal.png remapped: res://world/vegetation/palms/textures/palm_billboard_normal.png
+Loading resource: res://.godot/imported/palm_billboard_normal.png-0413ce8b1d2168ee2a98a5129e219e0b.s3tc.ctex remapped: res://.godot/imported/palm_billboard_normal.png-0413ce8b1d2168ee2a98a5129e219e0b.s3tc.ctex
+Completed load for: 'res://world/vegetation/palms/textures/palm_billboard_normal.png' remapped 'res://world/vegetation/palms/textures/palm_billboard_normal.png' at thread -1
+Loading resource: res://world/vegetation/palms/textures/palm_billboard_ao.png remapped: res://world/vegetation/palms/textures/palm_billboard_ao.png
+Loading resource: res://.godot/imported/palm_billboard_ao.png-2760a172968c1a0e3a091439616bd000.s3tc.ctex remapped: res://.godot/imported/palm_billboard_ao.png-2760a172968c1a0e3a091439616bd000.s3tc.ctex
+Completed load for: 'res://world/vegetation/palms/textures/palm_billboard_ao.png' remapped 'res://world/vegetation/palms/textures/palm_billboard_ao.png' at thread -1
+Loading resource: res://world/vegetation/palms/textures/palm_billboard_height.png remapped: res://world/vegetation/palms/textures/palm_billboard_height.png
+Loading resource: res://.godot/imported/palm_billboard_height.png-ca3c8b60ccd26a2fe42ba655917fbab3.s3tc.ctex remapped: res://.godot/imported/palm_billboard_height.png-ca3c8b60ccd26a2fe42ba655917fbab3.s3tc.ctex
+Completed load for: 'res://world/vegetation/palms/textures/palm_billboard_height.png' remapped 'res://world/vegetation/palms/textures/palm_billboard_height.png' at thread -1
+Loading resource: res://world/vegetation/palms/palm_impostor_ground_shadows.glb remapped: res://world/vegetation/palms/palm_impostor_ground_shadows.glb
+Loading resource: res://.godot/imported/palm_impostor_ground_shadows.glb-0a67ab4b56062801c4bdaa481d375423.scn remapped: res://.godot/imported/palm_impostor_ground_shadows.glb-0a67ab4b56062801c4bdaa481d375423.scn
+Completed load for: 'res://world/vegetation/palms/palm_impostor_ground_shadows.glb' remapped 'res://world/vegetation/palms/palm_impostor_ground_shadows.glb' at thread -1
+Loading resource: res://world/vegetation/palms/shaders/palm_impostor_ground_shadow.gdshader remapped: res://world/vegetation/palms/shaders/palm_impostor_ground_shadow.gdshader
+Completed load for: 'res://world/vegetation/palms/shaders/palm_impostor_ground_shadow.gdshader' remapped 'res://world/vegetation/palms/shaders/palm_impostor_ground_shadow.gdshader' at thread -1
+Loading resource: res://.godot/exported/2379973711/export-96df219e4db0ba63def8984e3f11d061-ocean_3d.scn remapped: res://.godot/exported/2379973711/export-96df219e4db0ba63def8984e3f11d061-ocean_3d.scn
+Loading resource: res://world/water/ocean/shaders/ocean_water.gdshader remapped: res://world/water/ocean/shaders/ocean_water.gdshader
+Completed load for: 'res://world/water/ocean/shaders/ocean_water.gdshader' remapped 'res://world/water/ocean/shaders/ocean_water.gdshader' at thread -1
+Loading resource: res://.godot/exported/2379973711/export-623970005e09e59a463f46fd2190a9a5-ocean_surface_3d.scn remapped: res://.godot/exported/2379973711/export-623970005e09e59a463f46fd2190a9a5-ocean_surface_3d.scn
+Loading cache for shader SceneForwardClusteredShaderRD, variant 0
+Loading cache for shader SceneForwardClusteredShaderRD, variant 1
+Loading cache for shader SceneForwardClusteredShaderRD, variant 2
+Loading cache for shader SceneForwardClusteredShaderRD, variant 3
+Loading cache for shader SceneForwardClusteredShaderRD, variant 4
+Loading cache for shader SceneForwardClusteredShaderRD, variant 5
+Loading cache for shader SceneForwardClusteredShaderRD, variant 6
+Loading cache for shader SceneForwardClusteredShaderRD, variant 7
+Loading cache for shader SceneForwardClusteredShaderRD, variant 0
+Loading cache for shader SceneForwardClusteredShaderRD, variant 1
+Loading cache for shader SceneForwardClusteredShaderRD, variant 2
+Loading cache for shader SceneForwardClusteredShaderRD, variant 3
+Loading cache for shader SceneForwardClusteredShaderRD, variant 4
+Loading cache for shader SceneForwardClusteredShaderRD, variant 5
+Loading cache for shader SceneForwardClusteredShaderRD, variant 6
+Loading cache for shader SceneForwardClusteredShaderRD, variant 7
+Loading cache for shader SceneForwardClusteredShaderRD, variant 8
+Loading cache for shader SceneForwardClusteredShaderRD, variant 9
+Loading cache for shader SceneForwardClusteredShaderRD, variant 10
+Loading cache for shader SceneForwardClusteredShaderRD, variant 11
+Loading cache for shader SceneForwardClusteredShaderRD, variant 12
+Loading cache for shader SceneForwardClusteredShaderRD, variant 13
+Loading cache for shader SceneForwardClusteredShaderRD, variant 14
+Loading cache for shader SceneForwardClusteredShaderRD, variant 15
+Loading cache for shader SceneForwardClusteredShaderRD, variant 16
+Loading cache for shader SceneForwardClusteredShaderRD, variant 17
+Loading cache for shader SceneForwardClusteredShaderRD, variant 18
+Loading cache for shader SceneForwardClusteredShaderRD, variant 19
+Completed load for: 'res://world/water/ocean/ocean_surface_3d.tscn' remapped 'res://.godot/exported/2379973711/export-623970005e09e59a463f46fd2190a9a5-ocean_surface_3d.scn' at thread -1
+Completed load for: 'res://world/water/ocean/ocean_3d.tscn' remapped 'res://.godot/exported/2379973711/export-96df219e4db0ba63def8984e3f11d061-ocean_3d.scn' at thread -1
+Loading resource: res://.godot/exported/2379973711/export-a425b826145e393aef1af98409e0d843-dev_test_a_event_wave.res remapped: res://.godot/exported/2379973711/export-a425b826145e393aef1af98409e0d843-dev_test_a_event_wave.res
+Completed load for: 'res://world/water/ocean/events/dev_test_a_event_wave.tres' remapped 'res://.godot/exported/2379973711/export-a425b826145e393aef1af98409e0d843-dev_test_a_event_wave.res' at thread -1
+Loading resource: res://.godot/exported/2379973711/export-31a321cc55a368a603b4e23c7b08460a-ambient_wildlife.scn remapped: res://.godot/exported/2379973711/export-31a321cc55a368a603b4e23c7b08460a-ambient_wildlife.scn
+Completed load for: 'res://levels/paradise_island/wildlife/ambient_wildlife.tscn' remapped 'res://.godot/exported/2379973711/export-31a321cc55a368a603b4e23c7b08460a-ambient_wildlife.scn' at thread -1
+Loading resource: res://.godot/exported/2379973711/export-db9f67ac87d443148649aeceb0f09755-jet_ski_with_rider.scn remapped: res://.godot/exported/2379973711/export-db9f67ac87d443148649aeceb0f09755-jet_ski_with_rider.scn
+Loading resource: res://.godot/exported/2379973711/export-b3f87f5101e784477e814d831c57509b-jet_ski_01.scn remapped: res://.godot/exported/2379973711/export-b3f87f5101e784477e814d831c57509b-jet_ski_01.scn
+Loading resource: res://gameplay/vehicles/jet_ski_01/jet_ski_01_hull.glb remapped: res://gameplay/vehicles/jet_ski_01/jet_ski_01_hull.glb
+Loading resource: res://.godot/imported/jet_ski_01_hull.glb-ca9ff5b56b6c6f0e4990fef83ed7dbbe.scn remapped: res://.godot/imported/jet_ski_01_hull.glb-ca9ff5b56b6c6f0e4990fef83ed7dbbe.scn
+Completed load for: 'res://gameplay/vehicles/jet_ski_01/jet_ski_01_hull.glb' remapped 'res://gameplay/vehicles/jet_ski_01/jet_ski_01_hull.glb' at thread -1
+Loading resource: res://gameplay/vehicles/jet_ski_01/jet_ski_01_handle.glb remapped: res://gameplay/vehicles/jet_ski_01/jet_ski_01_handle.glb
+Loading resource: res://.godot/imported/jet_ski_01_handle.glb-6b4fe8f58760cfa7bb230e3355ef2635.scn remapped: res://.godot/imported/jet_ski_01_handle.glb-6b4fe8f58760cfa7bb230e3355ef2635.scn
+Completed load for: 'res://gameplay/vehicles/jet_ski_01/jet_ski_01_handle.glb' remapped 'res://gameplay/vehicles/jet_ski_01/jet_ski_01_handle.glb' at thread -1
+Loading resource: res://audio/sfx/vehicles/jet_ski/engine/Motor.ogg remapped: res://audio/sfx/vehicles/jet_ski/engine/Motor.ogg
+Loading resource: res://.godot/imported/Motor.ogg-9b84357ff53920223135d53ac47e020a.oggvorbisstr remapped: res://.godot/imported/Motor.ogg-9b84357ff53920223135d53ac47e020a.oggvorbisstr
+Completed load for: 'res://audio/sfx/vehicles/jet_ski/engine/Motor.ogg' remapped 'res://audio/sfx/vehicles/jet_ski/engine/Motor.ogg' at thread -1
+Loading resource: res://audio/sfx/vehicles/jet_ski/water/Splash_1.ogg remapped: res://audio/sfx/vehicles/jet_ski/water/Splash_1.ogg
+Loading resource: res://.godot/imported/Splash_1.ogg-88a2c1a524c6b5a06aa2d73a9c4b51bc.oggvorbisstr remapped: res://.godot/imported/Splash_1.ogg-88a2c1a524c6b5a06aa2d73a9c4b51bc.oggvorbisstr
+Completed load for: 'res://audio/sfx/vehicles/jet_ski/water/Splash_1.ogg' remapped 'res://audio/sfx/vehicles/jet_ski/water/Splash_1.ogg' at thread -1
+Loading resource: res://audio/sfx/vehicles/jet_ski/water/Splash_3.ogg remapped: res://audio/sfx/vehicles/jet_ski/water/Splash_3.ogg
+Loading resource: res://.godot/imported/Splash_3.ogg-e8736719238744adaa057529ac0c16c2.oggvorbisstr remapped: res://.godot/imported/Splash_3.ogg-e8736719238744adaa057529ac0c16c2.oggvorbisstr
+Completed load for: 'res://audio/sfx/vehicles/jet_ski/water/Splash_3.ogg' remapped 'res://audio/sfx/vehicles/jet_ski/water/Splash_3.ogg' at thread -1
+Loading resource: res://audio/sfx/vehicles/jet_ski/water/Splash_Heavy_1.ogg remapped: res://audio/sfx/vehicles/jet_ski/water/Splash_Heavy_1.ogg
+Loading resource: res://.godot/imported/Splash_Heavy_1.ogg-f770407e0156afb51b1d4cdc28cc0d53.oggvorbisstr remapped: res://.godot/imported/Splash_Heavy_1.ogg-f770407e0156afb51b1d4cdc28cc0d53.oggvorbisstr
+Completed load for: 'res://audio/sfx/vehicles/jet_ski/water/Splash_Heavy_1.ogg' remapped 'res://audio/sfx/vehicles/jet_ski/water/Splash_Heavy_1.ogg' at thread -1
+Loading resource: res://audio/sfx/vehicles/jet_ski/water/Splash_Heavy_2.ogg remapped: res://audio/sfx/vehicles/jet_ski/water/Splash_Heavy_2.ogg
+Loading resource: res://.godot/imported/Splash_Heavy_2.ogg-d08b34ee3b476b719b00deb705643138.oggvorbisstr remapped: res://.godot/imported/Splash_Heavy_2.ogg-d08b34ee3b476b719b00deb705643138.oggvorbisstr
+Completed load for: 'res://audio/sfx/vehicles/jet_ski/water/Splash_Heavy_2.ogg' remapped 'res://audio/sfx/vehicles/jet_ski/water/Splash_Heavy_2.ogg' at thread -1
+Loading resource: res://audio/sfx/vehicles/jet_ski/water/Running_Water_1.ogg remapped: res://audio/sfx/vehicles/jet_ski/water/Running_Water_1.ogg
+Loading resource: res://.godot/imported/Running_Water_1.ogg-c37d9d35005717cfa72d643200706414.oggvorbisstr remapped: res://.godot/imported/Running_Water_1.ogg-c37d9d35005717cfa72d643200706414.oggvorbisstr
+Completed load for: 'res://audio/sfx/vehicles/jet_ski/water/Running_Water_1.ogg' remapped 'res://audio/sfx/vehicles/jet_ski/water/Running_Water_1.ogg' at thread -1
+Loading resource: res://audio/sfx/vehicles/jet_ski/water/Running_Water_2.ogg remapped: res://audio/sfx/vehicles/jet_ski/water/Running_Water_2.ogg
+Loading resource: res://.godot/imported/Running_Water_2.ogg-7b1fcca1be3d3001670caa8c9b710186.oggvorbisstr remapped: res://.godot/imported/Running_Water_2.ogg-7b1fcca1be3d3001670caa8c9b710186.oggvorbisstr
+Completed load for: 'res://audio/sfx/vehicles/jet_ski/water/Running_Water_2.ogg' remapped 'res://audio/sfx/vehicles/jet_ski/water/Running_Water_2.ogg' at thread -1
+Loading resource: res://audio/sfx/vehicles/jet_ski/water/Running_Water_4.ogg remapped: res://audio/sfx/vehicles/jet_ski/water/Running_Water_4.ogg
+Loading resource: res://.godot/imported/Running_Water_4.ogg-48f1505ad2f895489a9c0bf96c7e9731.oggvorbisstr remapped: res://.godot/imported/Running_Water_4.ogg-48f1505ad2f895489a9c0bf96c7e9731.oggvorbisstr
+Completed load for: 'res://audio/sfx/vehicles/jet_ski/water/Running_Water_4.ogg' remapped 'res://audio/sfx/vehicles/jet_ski/water/Running_Water_4.ogg' at thread -1
+Loading resource: res://.godot/exported/2379973711/export-4ba078bb84dec2a265187f7d94b4028e-vehicle_water_effects_3d.scn remapped: res://.godot/exported/2379973711/export-4ba078bb84dec2a265187f7d94b4028e-vehicle_water_effects_3d.scn
+Loading resource: res://.godot/exported/2379973711/export-f9d0172310a9a7d25db75995cdc7c3fb-wake_trail_3d.scn remapped: res://.godot/exported/2379973711/export-f9d0172310a9a7d25db75995cdc7c3fb-wake_trail_3d.scn
+Completed load for: 'res://gameplay/vehicles/common/water_effects/wake/wake_trail_3d.tscn' remapped 'res://.godot/exported/2379973711/export-f9d0172310a9a7d25db75995cdc7c3fb-wake_trail_3d.scn' at thread -1
+Loading resource: res://.godot/exported/2379973711/export-b4fab8fef3982ab28b88f92ab53cca93-hull_foam_3d.scn remapped: res://.godot/exported/2379973711/export-b4fab8fef3982ab28b88f92ab53cca93-hull_foam_3d.scn
+Completed load for: 'res://gameplay/vehicles/common/water_effects/hull/hull_foam_3d.tscn' remapped 'res://.godot/exported/2379973711/export-b4fab8fef3982ab28b88f92ab53cca93-hull_foam_3d.scn' at thread -1
+Completed load for: 'res://gameplay/vehicles/common/water_effects/vehicle_water_effects_3d.tscn' remapped 'res://.godot/exported/2379973711/export-4ba078bb84dec2a265187f7d94b4028e-vehicle_water_effects_3d.scn' at thread -1
+Completed load for: 'res://gameplay/vehicles/jet_ski_01/jet_ski_01.tscn' remapped 'res://.godot/exported/2379973711/export-b3f87f5101e784477e814d831c57509b-jet_ski_01.scn' at thread -1
+Loading resource: res://.godot/exported/2379973711/export-f6caf0749c6595e814a0e88552d67ce2-rider_rig.scn remapped: res://.godot/exported/2379973711/export-f6caf0749c6595e814a0e88552d67ce2-rider_rig.scn
+Loading resource: res://gameplay/riders/rider_bot/rider_bot.glb remapped: res://gameplay/riders/rider_bot/rider_bot.glb
+Loading resource: res://.godot/imported/rider_bot.glb-219762fb7dc7c441d1f94e8beefb4fc0.scn remapped: res://.godot/imported/rider_bot.glb-219762fb7dc7c441d1f94e8beefb4fc0.scn
+Completed load for: 'res://gameplay/riders/rider_bot/rider_bot.glb' remapped 'res://gameplay/riders/rider_bot/rider_bot.glb' at thread -1
+Completed load for: 'res://gameplay/riders/common/rider_rig.tscn' remapped 'res://.godot/exported/2379973711/export-f6caf0749c6595e814a0e88552d67ce2-rider_rig.scn' at thread -1
+Loading resource: res://.godot/exported/2379973711/export-a55c07955f76d5dbce4b05418985a3d6-fallen_rider_3d.scn remapped: res://.godot/exported/2379973711/export-a55c07955f76d5dbce4b05418985a3d6-fallen_rider_3d.scn
+Loading resource: res://.godot/exported/2379973711/export-f74b532647601a0c9b98ee389296a081-fallen_rider_reduced_seed.scn remapped: res://.godot/exported/2379973711/export-f74b532647601a0c9b98ee389296a081-fallen_rider_reduced_seed.scn
+Completed load for: 'res://gameplay/riders/common/fallen_rider_reduced_seed.tscn' remapped 'res://.godot/exported/2379973711/export-f74b532647601a0c9b98ee389296a081-fallen_rider_reduced_seed.scn' at thread -1
+Completed load for: 'res://gameplay/riders/common/fallen_rider_3d.tscn' remapped 'res://.godot/exported/2379973711/export-a55c07955f76d5dbce4b05418985a3d6-fallen_rider_3d.scn' at thread -1
+Completed load for: 'res://gameplay/vehicles/jet_ski_01/jet_ski_with_rider.tscn' remapped 'res://.godot/exported/2379973711/export-db9f67ac87d443148649aeceb0f09755-jet_ski_with_rider.scn' at thread -1
+Loading resource: res://audio/music/Storm Chaser.ogg remapped: res://audio/music/Storm Chaser.ogg
+Loading resource: res://.godot/imported/Storm Chaser.ogg-da6f27f6c80537902cb55bbf419c04a9.oggvorbisstr remapped: res://.godot/imported/Storm Chaser.ogg-da6f27f6c80537902cb55bbf419c04a9.oggvorbisstr
+Completed load for: 'res://audio/music/Storm Chaser.ogg' remapped 'res://audio/music/Storm Chaser.ogg' at thread -1
+Loading resource: res://.godot/exported/2379973711/export-5b56239b8155488227feda9cc7348741-boundary_tsunami_event_wave.res remapped: res://.godot/exported/2379973711/export-5b56239b8155488227feda9cc7348741-boundary_tsunami_event_wave.res
+Completed load for: 'res://world/water/ocean/events/boundary_tsunami_event_wave.tres' remapped 'res://.godot/exported/2379973711/export-5b56239b8155488227feda9cc7348741-boundary_tsunami_event_wave.res' at thread -1
+Loading resource: res://.godot/exported/2379973711/export-bf1c08733e0e2a532bdc5affca987954-chase_camera.scn remapped: res://.godot/exported/2379973711/export-bf1c08733e0e2a532bdc5affca987954-chase_camera.scn
+Loading resource: res://systems/camera/underwater/textures/bubble_additive.png remapped: res://systems/camera/underwater/textures/bubble_additive.png
+Loading resource: res://.godot/imported/bubble_additive.png-b808e4914a37540ca7bf81c25c405a25.ctex remapped: res://.godot/imported/bubble_additive.png-b808e4914a37540ca7bf81c25c405a25.ctex
+WARNING: Image format RGB8 not supported by hardware, converting to RGBA8.
+     at: _validate_texture_format (servers/rendering/renderer_rd/storage_rd/texture_storage.cpp:2855)
+Completed load for: 'res://systems/camera/underwater/textures/bubble_additive.png' remapped 'res://systems/camera/underwater/textures/bubble_additive.png' at thread -1
+Completed load for: 'res://systems/camera/chase_camera.tscn' remapped 'res://.godot/exported/2379973711/export-bf1c08733e0e2a532bdc5affca987954-chase_camera.scn' at thread -1
+Loading resource: res://.godot/exported/2379973711/export-e1b982943768efb2d77316fdff312a9a-palm_tree.scn remapped: res://.godot/exported/2379973711/export-e1b982943768efb2d77316fdff312a9a-palm_tree.scn
+Loading resource: res://world/vegetation/palms/meshes/palm_tree_mesh.res remapped: res://world/vegetation/palms/meshes/palm_tree_mesh.res
+Loading resource: res://world/vegetation/palms/textures/palm_tree_image.jpg remapped: res://world/vegetation/palms/textures/palm_tree_image.jpg
+Loading resource: res://.godot/imported/palm_tree_image.jpg-0cb42ce7c2933cdc6e6544deaf448a9e.s3tc.ctex remapped: res://.godot/imported/palm_tree_image.jpg-0cb42ce7c2933cdc6e6544deaf448a9e.s3tc.ctex
+Completed load for: 'res://world/vegetation/palms/textures/palm_tree_image.jpg' remapped 'res://world/vegetation/palms/textures/palm_tree_image.jpg' at thread -1
+Completed load for: 'res://world/vegetation/palms/meshes/palm_tree_mesh.res' remapped 'res://world/vegetation/palms/meshes/palm_tree_mesh.res' at thread -1
+Completed load for: 'res://world/vegetation/palms/palm_tree.tscn' remapped 'res://.godot/exported/2379973711/export-e1b982943768efb2d77316fdff312a9a-palm_tree.scn' at thread -1
+Loading resource: res://world/props/boats/boat_01.glb remapped: res://world/props/boats/boat_01.glb
+Loading resource: res://.godot/imported/boat_01.glb-a9a5fca471401944770ad254fb155240.scn remapped: res://.godot/imported/boat_01.glb-a9a5fca471401944770ad254fb155240.scn
+Completed load for: 'res://world/props/boats/boat_01.glb' remapped 'res://world/props/boats/boat_01.glb' at thread -1
+Loading resource: res://world/props/boats/boat_02.glb remapped: res://world/props/boats/boat_02.glb
+Loading resource: res://.godot/imported/boat_02.glb-11899692cc0a66a6ca33da49f7fa22f6.scn remapped: res://.godot/imported/boat_02.glb-11899692cc0a66a6ca33da49f7fa22f6.scn
+Completed load for: 'res://world/props/boats/boat_02.glb' remapped 'res://world/props/boats/boat_02.glb' at thread -1
+Loading resource: res://.godot/exported/2379973711/export-28aef62f92cc4d3b5b303f411d5e4dbf-ramp_01.scn remapped: res://.godot/exported/2379973711/export-28aef62f92cc4d3b5b303f411d5e4dbf-ramp_01.scn
+Loading resource: res://gameplay/race/course/ramps/ramp_01.glb remapped: res://gameplay/race/course/ramps/ramp_01.glb
+Loading resource: res://.godot/imported/ramp_01.glb-9b8ca642ba94da45ff2fc43f01f13b27.scn remapped: res://.godot/imported/ramp_01.glb-9b8ca642ba94da45ff2fc43f01f13b27.scn
+Completed load for: 'res://gameplay/race/course/ramps/ramp_01.glb' remapped 'res://gameplay/race/course/ramps/ramp_01.glb' at thread -1
+Completed load for: 'res://gameplay/race/course/ramps/ramp_01.tscn' remapped 'res://.godot/exported/2379973711/export-28aef62f92cc4d3b5b303f411d5e4dbf-ramp_01.scn' at thread -1
+Loading resource: res://.godot/exported/2379973711/export-1efb995f02f447c1590ac0f402a18faf-ramp_02.scn remapped: res://.godot/exported/2379973711/export-1efb995f02f447c1590ac0f402a18faf-ramp_02.scn
+Loading resource: res://gameplay/race/course/ramps/ramp_02.glb remapped: res://gameplay/race/course/ramps/ramp_02.glb
+Loading resource: res://.godot/imported/ramp_02.glb-fd70422f5d15500d5ff4f31f91e6d4f6.scn remapped: res://.godot/imported/ramp_02.glb-fd70422f5d15500d5ff4f31f91e6d4f6.scn
+Completed load for: 'res://gameplay/race/course/ramps/ramp_02.glb' remapped 'res://gameplay/race/course/ramps/ramp_02.glb' at thread -1
+Completed load for: 'res://gameplay/race/course/ramps/ramp_02.tscn' remapped 'res://.godot/exported/2379973711/export-1efb995f02f447c1590ac0f402a18faf-ramp_02.scn' at thread -1
+Loading resource: res://world/props/rocks/rock_01.glb remapped: res://world/props/rocks/rock_01.glb
+Loading resource: res://.godot/imported/rock_01.glb-e7bc99d506a40b0c79867e7528cc440b.scn remapped: res://.godot/imported/rock_01.glb-e7bc99d506a40b0c79867e7528cc440b.scn
+Completed load for: 'res://world/props/rocks/rock_01.glb' remapped 'res://world/props/rocks/rock_01.glb' at thread -1
+Loading resource: res://world/props/rocks/rock_02.glb remapped: res://world/props/rocks/rock_02.glb
+Loading resource: res://.godot/imported/rock_02.glb-50bc1b8b40dc1fd0561d14e2c5504db2.scn remapped: res://.godot/imported/rock_02.glb-50bc1b8b40dc1fd0561d14e2c5504db2.scn
+Completed load for: 'res://world/props/rocks/rock_02.glb' remapped 'res://world/props/rocks/rock_02.glb' at thread -1
+Loading resource: res://world/props/rocks/rock_03.glb remapped: res://world/props/rocks/rock_03.glb
+Loading resource: res://.godot/imported/rock_03.glb-ed1753a7e5d84b450adf24b638868026.scn remapped: res://.godot/imported/rock_03.glb-ed1753a7e5d84b450adf24b638868026.scn
+Completed load for: 'res://world/props/rocks/rock_03.glb' remapped 'res://world/props/rocks/rock_03.glb' at thread -1
+Loading resource: res://world/props/buildings/beach_hotel/beach_hotel.glb remapped: res://world/props/buildings/beach_hotel/beach_hotel.glb
+Loading resource: res://.godot/imported/beach_hotel.glb-41208953350804d155e01b00ee6732cb.scn remapped: res://.godot/imported/beach_hotel.glb-41208953350804d155e01b00ee6732cb.scn
+Completed load for: 'res://world/props/buildings/beach_hotel/beach_hotel.glb' remapped 'res://world/props/buildings/beach_hotel/beach_hotel.glb' at thread -1
+Loading resource: res://world/props/terrain/independent_island.glb remapped: res://world/props/terrain/independent_island.glb
+Loading resource: res://.godot/imported/independent_island.glb-6616cd526610a61761735023f271e101.scn remapped: res://.godot/imported/independent_island.glb-6616cd526610a61761735023f271e101.scn
+Completed load for: 'res://world/props/terrain/independent_island.glb' remapped 'res://world/props/terrain/independent_island.glb' at thread -1
+Loading resource: res://levels/paradise_island/props/lights/hanging_light.glb remapped: res://levels/paradise_island/props/lights/hanging_light.glb
+Loading resource: res://.godot/imported/hanging_light.glb-f0805a2d6ae5e5cdddd7c6ea7f30c70f.scn remapped: res://.godot/imported/hanging_light.glb-f0805a2d6ae5e5cdddd7c6ea7f30c70f.scn
+Loading resource: res://.godot/exported/2379973711/export-074dc6477cd6ecb3e39b89b9f150c2fe-hanging_light_emisive.res remapped: res://.godot/exported/2379973711/export-074dc6477cd6ecb3e39b89b9f150c2fe-hanging_light_emisive.res
+Completed load for: 'res://levels/paradise_island/props/lights/materials/hanging_light_emisive.tres' remapped 'res://.godot/exported/2379973711/export-074dc6477cd6ecb3e39b89b9f150c2fe-hanging_light_emisive.res' at thread -1
+Loading resource: res://.godot/exported/2379973711/export-a656c0bbf9532afb0d8cdf1507099073-hangin_light_rope.res remapped: res://.godot/exported/2379973711/export-a656c0bbf9532afb0d8cdf1507099073-hangin_light_rope.res
+Completed load for: 'res://levels/paradise_island/props/lights/materials/hangin_light_rope.tres' remapped 'res://.godot/exported/2379973711/export-a656c0bbf9532afb0d8cdf1507099073-hangin_light_rope.res' at thread -1
+Completed load for: 'res://levels/paradise_island/props/lights/hanging_light.glb' remapped 'res://levels/paradise_island/props/lights/hanging_light.glb' at thread -1
+Loading resource: res://.godot/exported/2379973711/export-c5cb2d3f2c9e4e5f097619bfc748093d-buoy.scn remapped: res://.godot/exported/2379973711/export-c5cb2d3f2c9e4e5f097619bfc748093d-buoy.scn
+Loading resource: res://gameplay/race/course/buoys/buoy_left.glb remapped: res://gameplay/race/course/buoys/buoy_left.glb
+Loading resource: res://.godot/imported/buoy_left.glb-6871f96acd08481c4bc97f3b64ead3d8.scn remapped: res://.godot/imported/buoy_left.glb-6871f96acd08481c4bc97f3b64ead3d8.scn
+Completed load for: 'res://gameplay/race/course/buoys/buoy_left.glb' remapped 'res://gameplay/race/course/buoys/buoy_left.glb' at thread -1
+Loading resource: res://gameplay/race/course/buoys/buoy_right.glb remapped: res://gameplay/race/course/buoys/buoy_right.glb
+Loading resource: res://.godot/imported/buoy_right.glb-8bdd55a0f299921a8c613f00fbaa3681.scn remapped: res://.godot/imported/buoy_right.glb-8bdd55a0f299921a8c613f00fbaa3681.scn
+Completed load for: 'res://gameplay/race/course/buoys/buoy_right.glb' remapped 'res://gameplay/race/course/buoys/buoy_right.glb' at thread -1
+Completed load for: 'res://gameplay/race/course/buoys/buoy.tscn' remapped 'res://.godot/exported/2379973711/export-c5cb2d3f2c9e4e5f097619bfc748093d-buoy.scn' at thread -1
+Loading resource: res://.godot/exported/2379973711/export-188def32936b4a21ff58c5282a93e558-pause_menu.scn remapped: res://.godot/exported/2379973711/export-188def32936b4a21ff58c5282a93e558-pause_menu.scn
+Completed load for: 'res://ui/pause_menu/pause_menu.tscn' remapped 'res://.godot/exported/2379973711/export-188def32936b4a21ff58c5282a93e558-pause_menu.scn' at thread -1
+Loading resource: res://.godot/exported/2379973711/export-53a6c8ea314f844927f758ca882be5bd-tree_impostor_multimesh.scn remapped: res://.godot/exported/2379973711/export-53a6c8ea314f844927f758ca882be5bd-tree_impostor_multimesh.scn
+Completed load for: 'res://world/vegetation/trees/tree_impostor_multimesh.tscn' remapped 'res://.godot/exported/2379973711/export-53a6c8ea314f844927f758ca882be5bd-tree_impostor_multimesh.scn' at thread -1
+Loading cache for shader SceneForwardClusteredShaderRD, variant 0
+Loading cache for shader SceneForwardClusteredShaderRD, variant 1
+Loading cache for shader SceneForwardClusteredShaderRD, variant 2
+Loading cache for shader SceneForwardClusteredShaderRD, variant 3
+Loading cache for shader SceneForwardClusteredShaderRD, variant 4
+Loading cache for shader SceneForwardClusteredShaderRD, variant 5
+Loading cache for shader SceneForwardClusteredShaderRD, variant 6
+Loading cache for shader SceneForwardClusteredShaderRD, variant 7
+Loading cache for shader SceneForwardClusteredShaderRD, variant 0
+Loading cache for shader SceneForwardClusteredShaderRD, variant 1
+Loading cache for shader SceneForwardClusteredShaderRD, variant 2
+Loading cache for shader SceneForwardClusteredShaderRD, variant 3
+Loading cache for shader SceneForwardClusteredShaderRD, variant 4
+Loading cache for shader SceneForwardClusteredShaderRD, variant 5
+Loading cache for shader SceneForwardClusteredShaderRD, variant 6
+Loading cache for shader SceneForwardClusteredShaderRD, variant 7
+Loading cache for shader SceneForwardClusteredShaderRD, variant 8
+Loading cache for shader SceneForwardClusteredShaderRD, variant 9
+Loading cache for shader SceneForwardClusteredShaderRD, variant 10
+Loading cache for shader SceneForwardClusteredShaderRD, variant 11
+Loading cache for shader SceneForwardClusteredShaderRD, variant 12
+Loading cache for shader SceneForwardClusteredShaderRD, variant 13
+Loading cache for shader SceneForwardClusteredShaderRD, variant 14
+Loading cache for shader SceneForwardClusteredShaderRD, variant 15
+Loading cache for shader SceneForwardClusteredShaderRD, variant 16
+Loading cache for shader SceneForwardClusteredShaderRD, variant 17
+Loading cache for shader SceneForwardClusteredShaderRD, variant 18
+Loading cache for shader SceneForwardClusteredShaderRD, variant 19
+WARNING: Image format RGBFloat not supported by hardware, converting to RGBAFloat.
+     at: _validate_texture_format (servers/rendering/renderer_rd/storage_rd/texture_storage.cpp:2855)
+Completed load for: 'res://levels/paradise_island/paradise_island.tscn' remapped 'res://.godot/exported/2379973711/export-ab60d6440cfee26812cb4281138dcd45-paradise_island.scn' at thread -1
+[80518.767 ms] LEVEL_RESOURCE_LOADED: res://levels/paradise_island/paradise_island.tscn +1911.700 ms
+[80518.815 ms] CHANGE_SCENE_BEGIN: res://levels/paradise_island/paradise_island.tscn +   0.048 ms
+Loading cache for shader SceneForwardClusteredShaderRD, variant 0
+Loading cache for shader SceneForwardClusteredShaderRD, variant 1
+Loading cache for shader SceneForwardClusteredShaderRD, variant 2
+Loading cache for shader SceneForwardClusteredShaderRD, variant 3
+Loading cache for shader SceneForwardClusteredShaderRD, variant 4
+Loading cache for shader SceneForwardClusteredShaderRD, variant 5
+Loading cache for shader SceneForwardClusteredShaderRD, variant 6
+Loading cache for shader SceneForwardClusteredShaderRD, variant 7
+Loading cache for shader SceneForwardClusteredShaderRD, variant 0
+Loading cache for shader SceneForwardClusteredShaderRD, variant 1
+Loading cache for shader SceneForwardClusteredShaderRD, variant 2
+Loading cache for shader SceneForwardClusteredShaderRD, variant 3
+Loading cache for shader SceneForwardClusteredShaderRD, variant 4
+Loading cache for shader SceneForwardClusteredShaderRD, variant 5
+Loading cache for shader SceneForwardClusteredShaderRD, variant 6
+Loading cache for shader SceneForwardClusteredShaderRD, variant 7
+Loading cache for shader SceneForwardClusteredShaderRD, variant 8
+Loading cache for shader SceneForwardClusteredShaderRD, variant 9
+Loading cache for shader SceneForwardClusteredShaderRD, variant 10
+Loading cache for shader SceneForwardClusteredShaderRD, variant 11
+Loading cache for shader SceneForwardClusteredShaderRD, variant 12
+Loading cache for shader SceneForwardClusteredShaderRD, variant 13
+Loading cache for shader SceneForwardClusteredShaderRD, variant 14
+Loading cache for shader SceneForwardClusteredShaderRD, variant 15
+Loading cache for shader SceneForwardClusteredShaderRD, variant 16
+Loading cache for shader SceneForwardClusteredShaderRD, variant 17
+Loading cache for shader SceneForwardClusteredShaderRD, variant 18
+Loading cache for shader SceneForwardClusteredShaderRD, variant 19
+Loading cache for shader ParticlesShaderRD, variant 0
+[80660.289 ms] CHANGE_SCENE_QUEUED: res://levels/paradise_island/paradise_island.tscn + 141.474 ms
+[91593.827 ms] LEVEL_ENTER_TREE: ParadiseIsland    +10933.538 ms
+[91595.801 ms] LEVEL_REFERENCES_RESOLVED: ParadiseIsland +   1.974 ms
+[91598.329 ms] LEVEL_ROOT_ENTER_TREE_DONE: ParadiseIsland +   2.528 ms
+[91598.973 ms] GRAPHICS_SCENE_REFRESH_QUEUED       +   0.644 ms
+WARNING: GENERAL - Message Id Number: 0 | Message Id Name: ../steamos-mesa/src/vulkan/runtime/vk_pipeline_cache.c:246
+        Insufficient memory for pipeline cache data
+        Objects - 1
+                Object[0] - VK_OBJECT_TYPE_PIPELINE_CACHE, Handle 115469744
+     at: _debug_messenger_callback (drivers/vulkan/rendering_context_driver_vulkan.cpp:654)
+Updated PSO cache (6.1 MiB)
+[91637.040 ms] SKY_RESOURCE_LOAD_BEGIN: res://world/environment/sky/hdris/kloofendal_48d_partly_cloudy_puresky_4k.hdr +  38.067 ms
+[91637.105 ms] SKY_RESOURCE_LOADED: res://world/environment/sky/hdris/kloofendal_48d_partly_cloudy_puresky_4k.hdr +   0.065 ms
+[91637.165 ms] SKY_READY                           +   0.060 ms
+[91637.202 ms] TERRAIN_MATERIAL_SCAN_BEGIN         +   0.037 ms
+[91637.877 ms] TERRAIN_READY                       +   0.675 ms
+[91637.948 ms] OCEAN_SURFACE_READY_BEGIN           +   0.071 ms
+[91637.988 ms] OCEAN_MESH_REBUILD_BEGIN #1         +   0.040 ms
+[91638.079 ms] OCEAN_MESH_CACHE_LOAD_BEGIN         +   0.091 ms
+Loading resource: res://world/water/ocean/mesh_cache/ocean_surface_high.res remapped: res://world/water/ocean/mesh_cache/ocean_surface_high.res
+Completed load for: 'res://world/water/ocean/mesh_cache/ocean_surface_high.res' remapped 'res://world/water/ocean/mesh_cache/ocean_surface_high.res' at thread -1
+[91826.291 ms] OCEAN_MESH_CACHE_LOAD_END           + 188.212 ms
+[91826.316 ms] OCEAN_MESH_CACHE_HIT                +   0.025 ms
+[91826.325 ms] OCEAN_MESH_CACHE_ASSIGN_BEGIN       +   0.009 ms
+[91826.364 ms] OCEAN_MESH_CACHE_ASSIGN_END         +   0.039 ms
+[91828.099 ms] OCEAN_BUILD_DEBUG_GUIDES_BEGIN      +   1.735 ms
+[91828.368 ms] OCEAN_BUILD_DEBUG_GUIDES_END        +   0.269 ms
+[91828.386 ms] OCEAN_MESH_REBUILD_END #1           +   0.018 ms
+[91828.399 ms] OCEAN_SURFACE_MESHES_ENSURED        +   0.013 ms
+[91828.445 ms] OCEAN_SURFACE_READY_END             +   0.046 ms
+[91828.458 ms] OCEAN_READY_BEGIN                   +   0.013 ms
+[91830.123 ms] OCEAN_CORE_READY                    +   1.665 ms
+[91830.445 ms] OCEAN_HEIGHT_MAPS_BEGIN             +   0.322 ms
+[91847.431 ms] OCEAN_HEIGHT_MAPS_READY             +  16.986 ms
+[91847.902 ms] OCEAN_READY_END                     +   0.471 ms
+[91847.943 ms] WILDLIFE_SPAWN_BEGIN                +   0.041 ms
+[91856.927 ms] WILDLIFE_BIRDS_READY                +   8.984 ms
+[91859.034 ms] WILDLIFE_FISH_READY                 +   2.107 ms
+[91859.790 ms] WILDLIFE_DOLPHINS_READY             +   0.756 ms
+[91860.938 ms] WILDLIFE_READY                      +   1.148 ms
+[91861.623 ms] RIDER_READY_BEGIN                   +   0.685 ms
+[91861.808 ms] RIDER_READY                         +   0.185 ms
+Loading cache for shader ParticlesShaderRD, variant 0
+[91871.969 ms] RIDER_READY_BEGIN                   +  10.161 ms
+[91872.149 ms] RIDER_READY                         +   0.180 ms
+[91872.284 ms] JETSKI_READY_BEGIN                  +   0.135 ms
+[91872.462 ms] JETSKI_READY                        +   0.178 ms
+[91875.022 ms] PAUSE_MENU_READY                    +   2.560 ms
+[91875.577 ms] LEVEL_ROOT_READY_BEGIN: ParadiseIsland +   0.555 ms
+[91876.620 ms] LEVEL_ROOT_READY: ParadiseIsland    +   1.043 ms
+[91876.735 ms] FIRST_FRAME_TRACE_QUEUED: ParadiseIsland +   0.115 ms
+Loading cache for shader CanvasShaderRD, variant 0
+Loading cache for shader CanvasShaderRD, variant 1
+Loading cache for shader CanvasShaderRD, variant 2
+Loading cache for shader CanvasShaderRD, variant 3
+Loading cache for shader CanvasShaderRD, variant 4
+Loading cache for shader CanvasShaderRD, variant 5
+Loading cache for shader ParticlesShaderRD, variant 0
+[91893.900 ms] GRAPHICS_APPLY_BEGIN                +  17.165 ms
+[91896.119 ms] GRAPHICS_TARGETS_COLLECTED          +   2.219 ms
+[91898.050 ms] GRAPHICS_APPLY_END                  +   1.931 ms
+WARNING: Image format RGBFloat not supported by hardware, converting to RGBAFloat.
+     at: _validate_texture_format (servers/rendering/renderer_rd/storage_rd/texture_storage.cpp:2855)
+Loading cache for shader ParticlesShaderRD, variant 0
+WARNING: Image format RGBFloat not supported by hardware, converting to RGBAFloat.
+     at: _validate_texture_format (servers/rendering/renderer_rd/storage_rd/texture_storage.cpp:2855)
+WARNING: Image format RGBFloat not supported by hardware, converting to RGBAFloat.
+     at: _validate_texture_format (servers/rendering/renderer_rd/storage_rd/texture_storage.cpp:2855)
+WARNING: Image format RGBFloat not supported by hardware, converting to RGBAFloat.
+     at: _validate_texture_format (servers/rendering/renderer_rd/storage_rd/texture_storage.cpp:2855)
+WARNING: Image format RGBFloat not supported by hardware, converting to RGBAFloat.
+     at: _validate_texture_format (servers/rendering/renderer_rd/storage_rd/texture_storage.cpp:2855)
+WARNING: Image format RGBFloat not supported by hardware, converting to RGBAFloat.
+     at: _validate_texture_format (servers/rendering/renderer_rd/storage_rd/texture_storage.cpp:2855)
+WARNING: Image format RGBFloat not supported by hardware, converting to RGBAFloat.
+     at: _validate_texture_format (servers/rendering/renderer_rd/storage_rd/texture_storage.cpp:2855)
+WARNING: Image format RGBFloat not supported by hardware, converting to RGBAFloat.
+     at: _validate_texture_format (servers/rendering/renderer_rd/storage_rd/texture_storage.cpp:2855)
+[91909.903 ms] FIRST_FRAME_TRACE_CALLBACK: ParadiseIsland +  11.853 ms
+[91910.611 ms] FIRST_RENDER_PRE_DRAW: ParadiseIsland +   0.708 ms
+[91924.784 ms] FIRST_RENDER_POST_DRAW: ParadiseIsland +  14.173 ms
+XInput: Refreshing devices.
+XInput: Absolute pointing device: xwayland-pointer:10
+XInput: Using touch device: xwayland-touch:10
+XInput: Absolute pointing device: xwayland-touch:10
+XInput: Absolute pointing device: xwayland-tablet stylus:10
+XInput: Absolute pointing device: xwayland-tablet eraser:10
+XInput: Absolute pointing device: xwayland-tablet cursor:10
+[91947.170 ms] FIRST_PROCESS_FRAME: ParadiseIsland +  22.386 ms
+[91965.958 ms] FIRST_FRAME_DRAWN: ParadiseIsland   +  18.788 ms
+XR: Clearing primary interface
+XR: Removed interface "Native mobile"
+XR: Removed interface "OpenXR"
+PulseAudio: context terminated
+Freeing Default Tex_Blit Shader
+MultiUmaBuffer '{DEBUG_ENABLED unavailable}' used a total of 7 buffers. A large number may indicate a waste of VRAM and can be brought down by tweaking MAX_EXTRA_BUFFERS for this buffer.
+MultiUmaBuffer '{DEBUG_ENABLED unavailable}' used a total of 0 buffers. A large number may indicate a waste of VRAM and can be brought down by tweaking MAX_EXTRA_BUFFERS for this buffer.
+MultiUmaBuffer '{DEBUG_ENABLED unavailable}' used a total of 7 buffers. A large number may indicate a waste of VRAM and can be brought down by tweaking MAX_EXTRA_BUFFERS for this buffer.
+MultiUmaBuffer '{DEBUG_ENABLED unavailable}' used a total of 14 buffers. A large number may indicate a waste of VRAM and can be brought down by tweaking MAX_EXTRA_BUFFERS for this buffer.
+MultiUmaBuffer '{DEBUG_ENABLED unavailable}' used a total of 1 buffers. A large number may indicate a waste of VRAM and can be brought down by tweaking MAX_EXTRA_BUFFERS for this buffer.
+Accessibility: window 0 adapter destroyed.
+WARNING: 7 RIDs of type "Texture" were leaked.
+   at: finalize (servers/rendering/rendering_device.cpp:8900)
+Updated PSO cache (6.8 MiB)
+(deck@SteamDeck Games)$ 

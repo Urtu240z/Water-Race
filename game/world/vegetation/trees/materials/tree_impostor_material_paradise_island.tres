@@ -1,18 +1,18 @@
 [gd_resource type="ShaderMaterial" format=3 uid="uid://cblg21bayh8pb"]
 
-[ext_resource type="Shader" uid="uid://cas1owxnfhkqw" path="res://world/vegetation/trees/shaders/tree_impostor.gdshader" id="1_milh0"]
-[ext_resource type="Texture2D" uid="uid://dk6kfw3e1gxi" path="res://world/vegetation/trees/textures/tree_atlas_mask.png" id="2_j4nio"]
-[ext_resource type="Texture2D" uid="uid://tpoojthw1oen" path="res://world/vegetation/trees/textures/tree_atlas_nor.png" id="3_mnvwp"]
-[ext_resource type="Texture2D" uid="uid://d10ybk4pluq4t" path="res://world/vegetation/trees/textures/tree_atlas_tex.png" id="4_xntdd"]
-[ext_resource type="Texture2D" uid="uid://dol5sam12jba1" path="res://world/vegetation/trees/textures/tree_volume_nor.png" id="5_6rq5l"]
+[ext_resource type="Shader" uid="uid://cas1owxnfhkqw" path="res://world/vegetation/trees/shaders/tree_impostor.gdshader" id="1_l7px7"]
+[ext_resource type="Texture2D" uid="uid://dk6kfw3e1gxi" path="res://world/vegetation/trees/textures/tree_atlas_mask.png" id="2_2e8yb"]
+[ext_resource type="Texture2D" uid="uid://tpoojthw1oen" path="res://world/vegetation/trees/textures/tree_atlas_nor.png" id="3_qnpre"]
+[ext_resource type="Texture2D" uid="uid://d10ybk4pluq4t" path="res://world/vegetation/trees/textures/tree_atlas_tex.png" id="4_vf8vc"]
+[ext_resource type="Texture2D" uid="uid://dol5sam12jba1" path="res://world/vegetation/trees/textures/tree_volume_nor.png" id="5_q3sc7"]
 
 [resource]
 render_priority = 0
-shader = ExtResource("1_milh0")
-shader_parameter/tree_tex = ExtResource("4_xntdd")
-shader_parameter/tree_mask = ExtResource("2_j4nio")
-shader_parameter/tree_normal = ExtResource("3_mnvwp")
-shader_parameter/volume_normal = ExtResource("5_6rq5l")
+shader = ExtResource("1_l7px7")
+shader_parameter/tree_tex = ExtResource("4_vf8vc")
+shader_parameter/tree_mask = ExtResource("2_2e8yb")
+shader_parameter/tree_normal = ExtResource("3_qnpre")
+shader_parameter/volume_normal = ExtResource("5_q3sc7")
 shader_parameter/use_instance_species = true
 shader_parameter/manual_species = 0.0
 shader_parameter/weight_beech_a = 15.0

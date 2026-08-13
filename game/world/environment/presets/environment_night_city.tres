@@ -10,15 +10,16 @@ sky_material = SubResource("PanoramaSkyMaterial_yr2pm")
 
 [resource]
 background_mode = 2
-background_energy_multiplier = 0.2
+background_energy_multiplier = 2.0
 sky = SubResource("Sky_a8k7l")
 sky_rotation = Vector3(0.07531096, 2.8094566, 0)
 ambient_light_source = 3
 reflected_light_source = 2
 tonemap_mode = 4
+tonemap_exposure = 0.5
 tonemap_white = 1.74
 tonemap_agx_white = 16.5
-tonemap_agx_contrast = 1.23
+tonemap_agx_contrast = 1.63
 ssao_intensity = 0.0
 ssil_radius = 16.0
 ssil_intensity = 2.94
@@ -42,6 +43,6 @@ fog_depth_end = 1169.3
 volumetric_fog_density = 0.0115
 volumetric_fog_temporal_reprojection_enabled = false
 adjustment_enabled = true
-adjustment_brightness = 1.44
-adjustment_contrast = 0.96
+adjustment_brightness = 0.68
+adjustment_contrast = 0.975
 adjustment_saturation = 0.73

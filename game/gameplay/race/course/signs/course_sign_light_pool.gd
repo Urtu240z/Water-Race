@@ -363,8 +363,23 @@ func _activate_slot(
 	light.visible = true
 
 
-func _light_position_for_sign(sign_record: SignRecord, vehicle_position: Vector3) -> Vector3:
-	var surface_point := _closest_surface_point(sign_record, vehicle_position)
+func _light_position_for_sign(
+	sign_record: SignRecord,
+	vehicle_position: Vector3
+) -> Vector3:
+	var mesh_aabb := sign_record.mesh_instance.mesh.get_aabb()
+	var sign_center_world := sign_record.mesh_instance.to_global(
+		mesh_aabb.get_center()
+	)
+
+	var tracking_point := vehicle_position
+	tracking_point.y = sign_center_world.y
+
+	var surface_point := _closest_surface_point(
+		sign_record,
+		tracking_point
+	)
+
 	return _offset_surface_point(surface_point, vehicle_position)
 
 
