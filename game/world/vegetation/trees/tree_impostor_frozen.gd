@@ -127,10 +127,18 @@ func _exit_tree() -> void:
 
 		var contribution: int = int(_zone_contributions[instance_id])
 
-		if contribution <= 0:
+		if contribution > 0:
+
+			_release_contribution(instance_id)
+
 			continue
 
-		_release_contribution(instance_id)
+		# La contribución de esta zona ya es 0, pero puede que siga siendo
+		# owner de una transición de descongelado en curso (edge case:
+		# el jugador salió de la última zona con smooth_unfreeze y la zona
+		# se destruye a mitad de la transición). Cancelarla y restaurar
+		# freeze_billboard = 0.
+		_cancel_own_transition(instance_id)
 
 
 # ============================================================
@@ -283,14 +291,32 @@ func _is_compatible_multimesh(
 	if not material is ShaderMaterial:
 		return false
 
-	# get_shader_parameter() devuelve el default (no null) si el shader
-	# declara freeze_billboard (uniform normal o instance uniform), y null
-	# si no lo declara. Es barato y robusto.
+	# freezebillboard y frozen_camera_position son INSTANCE UNIFORMS del
+	# shader efectivo, no shader_parameter del ShaderMaterial. Detectar su
+	# existencia no puede hacerse con get_shader_parameter() (devuelve null
+	# incluso en compatibles hasta que se escribe la primera instancia) ni
+	# con get_shader_uniform_list() (omite los instance uniforms). Por eso
+	# se inspecciona la declaración del shader efectivo.
 	var shader_material: ShaderMaterial = (
 		material as ShaderMaterial
 	)
 
-	return shader_material.get_shader_parameter("freeze_billboard") != null
+	if shader_material.shader == null:
+		return false
+
+	return _shader_declares_freeze_billboard(shader_material.shader)
+
+
+# Devuelve true si el shader efectivo declara el instance uniform
+# `freeze_billboard` del tree impostor compatible.
+static func _shader_declares_freeze_billboard(shader: Shader) -> bool:
+
+	if shader == null:
+		return false
+
+	return shader.get_code().contains(
+		"instance uniform float freeze_billboard"
+	)
 
 
 func _pick_nearest(
@@ -611,6 +637,38 @@ func _release_contribution(instance_id: int) -> void:
 func _is_player(body: Node3D) -> bool:
 
 	return body is JetSkiController
+
+
+# Cancela la transición de descongelado de un MultiMesh solo si ESTA zona
+# es su owner y el contador ya llegó a 0 (edge case de smooth_unfreeze con
+# la zona destruida a mitad de transición). Restaura freeze_billboard = 0.
+#
+# No toca nada si count > 0 (otra zona sigue activa) o si el owner es otra
+# zona.
+func _cancel_own_transition(instance_id: int) -> void:
+
+	var state: Dictionary = _registry_state(instance_id)
+
+	if int(state["count"]) > 0:
+		return
+
+	if not state["owner"] == self:
+		return
+
+	if float(state["unfreeze_t"]) < 0.0:
+		return
+
+	state["unfreeze_t"] = -1.0
+
+	state["owner"] = null
+
+	var multi_mesh: MultiMeshInstance3D = (
+		_get_multimesh_by_id(instance_id)
+	)
+
+	if multi_mesh != null and is_instance_valid(multi_mesh):
+
+		_apply(multi_mesh, state)
 
 
 func _get_camera_position() -> Vector3:
