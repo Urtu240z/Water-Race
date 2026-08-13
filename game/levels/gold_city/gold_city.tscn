@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://8h4lqtd66nw0" path="res://gameplay/race/race_level_bootstrap.gd" id="1_rxnkn"]
 [ext_resource type="LightmapGIData" uid="uid://db6vmlwdmdf54" path="res://levels/gold_city/night_city.lmbake" id="2_1e2c5"]
+[ext_resource type="PackedScene" uid="uid://dorndfex7am55" path="res://world/vegetation/trees/tree_impostor_frozen.tscn" id="2_cfohk"]
 [ext_resource type="PackedScene" path="res://ui/pause_menu/pause_menu.tscn" id="3_7grvo"]
 [ext_resource type="Script" uid="uid://bhgjw8t7kbunx" path="res://world/vegetation/vegetation_quality_controller.gd" id="4_0amq1"]
 [ext_resource type="Script" uid="uid://b6855v0gxv4ik" path="res://world/environment/sky/sky_environment_controller.gd" id="5_lq81a"]
@@ -79,7 +80,7 @@
 material = ExtResource("35_iyaox")
 size = Vector2(2, 2)
 
-[sub_resource type="MultiMesh" id="MultiMesh_q2anr"]
+[sub_resource type="MultiMesh" id="MultiMesh_cfohk"]
 resource_local_to_scene = true
 transform_format = 1
 use_custom_data = true
@@ -88,7 +89,7 @@ metadata/tree_bake_version = 1
 metadata/tree_bake_signature = "version=1|node=TreeImpostors/TreeImpostorMultimesh/Trees|global_transform=[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-610.7966, 10.83205, -185.6404)]|target_count=625|radius_x=132.0|radius_z=203.0|min_spacing=3.85|max_spacing=18.15|poisson_attempts=24|candidate_multiplier=2.0|seed=12345|min_scale=4.0|max_scale=10.0|center_bias=66.0|snap=true|ray_above=100.0|ray_below=300.0|collision_mask=4294967295|valid_ground=[\"Terrain_Master_COL\", \"Terrain_COL\"]|reject_slope=true|max_slope=11.0|avoid_visual=true|visual_roots=[]|visual_radius=0.8|visual_clearance=1.0|avoid_water=true|water_path=|water_height=1.0|mesh_aabb=[P: (-1.0, -1.0, 0.0), S: (2.0, 2.0, 0.0)]"
 metadata/tree_bake_source = "TreeImpostors/TreeImpostorMultimesh/Trees"
 
-[sub_resource type="MultiMesh" id="MultiMesh_cfohk"]
+[sub_resource type="MultiMesh" id="MultiMesh_iyaox"]
 resource_local_to_scene = true
 transform_format = 1
 use_custom_data = true
@@ -97,7 +98,7 @@ metadata/tree_bake_version = 1
 metadata/tree_bake_signature = "version=1|node=TreeImpostors/TreeImpostorMultimesh7/Trees|global_transform=[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-57.23305, 10.83205, -1034.105)]|target_count=650|radius_x=300.0|radius_z=200.0|min_spacing=7.2|max_spacing=30.0|poisson_attempts=24|candidate_multiplier=2.0|seed=12345|min_scale=4.0|max_scale=15.0|center_bias=66.0|snap=true|ray_above=100.0|ray_below=300.0|collision_mask=4294967295|valid_ground=[\"Terrain_Master_COL\", \"Terrain_COL\"]|reject_slope=true|max_slope=40.0|avoid_visual=true|visual_roots=[]|visual_radius=0.8|visual_clearance=1.0|avoid_water=true|water_path=|water_height=8.0|mesh_aabb=[P: (-1.0, -1.0, 0.0), S: (2.0, 2.0, 0.0)]"
 metadata/tree_bake_source = "TreeImpostors/TreeImpostorMultimesh7/Trees"
 
-[sub_resource type="MultiMesh" id="MultiMesh_iyaox"]
+[sub_resource type="MultiMesh" id="MultiMesh_4k6sa"]
 resource_local_to_scene = true
 transform_format = 1
 use_custom_data = true
@@ -106,7 +107,133 @@ metadata/tree_bake_version = 1
 metadata/tree_bake_signature = "version=1|node=TreeImpostors/TreeImpostorMultimesh12/Trees|global_transform=[X: (0.366805, 0.0, -0.930298), Y: (0.0, 1.0, 0.0), Z: (0.930298, 0.0, 0.366805), O: (-389.9239, 10.83205, -867.3134)]|target_count=650|radius_x=300.0|radius_z=200.0|min_spacing=7.2|max_spacing=30.0|poisson_attempts=24|candidate_multiplier=2.0|seed=12345|min_scale=4.0|max_scale=15.0|center_bias=66.0|snap=true|ray_above=100.0|ray_below=300.0|collision_mask=4294967295|valid_ground=[\"Terrain_Master_COL\", \"Terrain_COL\"]|reject_slope=true|max_slope=40.0|avoid_visual=true|visual_roots=[]|visual_radius=0.8|visual_clearance=1.0|avoid_water=true|water_path=|water_height=8.0|mesh_aabb=[P: (-1.0, -1.0, 0.0), S: (2.0, 2.0, 0.0)]"
 metadata/tree_bake_source = "TreeImpostors/TreeImpostorMultimesh12/Trees"
 
-[sub_resource type="MultiMesh" id="MultiMesh_4k6sa"]
+[sub_resource type="MultiMesh" id="MultiMesh_ogabk"]
+resource_local_to_scene = true
+transform_format = 1
+use_custom_data = true
+mesh = SubResource("QuadMesh_wwatn")
+metadata/tree_bake_version = 1
+metadata/tree_bake_signature = "version=1|node=TreeImpostors/TreeImpostorMultimesh13/Trees|global_transform=[X: (0.196637, 0.0, -0.980476), Y: (0.0, 1.0, 0.0), Z: (0.980476, 0.0, 0.196637), O: (-694.6492, 10.83205, -962.4242)]|target_count=650|radius_x=300.0|radius_z=200.0|min_spacing=7.2|max_spacing=30.0|poisson_attempts=24|candidate_multiplier=2.0|seed=12345|min_scale=4.0|max_scale=15.0|center_bias=66.0|snap=true|ray_above=100.0|ray_below=300.0|collision_mask=4294967295|valid_ground=[\"Terrain_Master_COL\", \"Terrain_COL\"]|reject_slope=true|max_slope=40.0|avoid_visual=true|visual_roots=[]|visual_radius=0.8|visual_clearance=1.0|avoid_water=true|water_path=|water_height=8.0|mesh_aabb=[P: (-1.0, -1.0, 0.0), S: (2.0, 2.0, 0.0)]"
+metadata/tree_bake_source = "TreeImpostors/TreeImpostorMultimesh13/Trees"
+
+[sub_resource type="MultiMesh" id="MultiMesh_laf3l"]
+resource_local_to_scene = true
+transform_format = 1
+use_custom_data = true
+mesh = SubResource("QuadMesh_wwatn")
+metadata/tree_bake_version = 1
+metadata/tree_bake_signature = "version=1|node=TreeImpostors/TreeImpostorMultimesh14/Trees|global_transform=[X: (0.196637, 0.0, -0.980476), Y: (0.0, 1.0, 0.0), Z: (0.980476, 0.0, 0.196637), O: (-889.9717, 10.83205, -224.825)]|target_count=650|radius_x=300.0|radius_z=200.0|min_spacing=7.2|max_spacing=30.0|poisson_attempts=24|candidate_multiplier=2.0|seed=12345|min_scale=4.0|max_scale=15.0|center_bias=66.0|snap=true|ray_above=100.0|ray_below=300.0|collision_mask=4294967295|valid_ground=[\"Terrain_Master_COL\", \"Terrain_COL\"]|reject_slope=true|max_slope=40.0|avoid_visual=true|visual_roots=[]|visual_radius=0.8|visual_clearance=1.0|avoid_water=true|water_path=|water_height=8.0|mesh_aabb=[P: (-1.0, -1.0, 0.0), S: (2.0, 2.0, 0.0)]"
+metadata/tree_bake_source = "TreeImpostors/TreeImpostorMultimesh14/Trees"
+
+[sub_resource type="MultiMesh" id="MultiMesh_4scdh"]
+resource_local_to_scene = true
+transform_format = 1
+use_custom_data = true
+mesh = SubResource("QuadMesh_wwatn")
+metadata/tree_bake_version = 1
+metadata/tree_bake_signature = "version=1|node=TreeImpostors/TreeImpostorMultimesh15/Trees|global_transform=[X: (-0.19017, 0.0, -0.981751), Y: (0.0, 1.0, 0.0), Z: (0.981751, 0.0, -0.19017), O: (-600.8392, 10.83205, -425.5289)]|target_count=650|radius_x=300.0|radius_z=200.0|min_spacing=7.2|max_spacing=30.0|poisson_attempts=24|candidate_multiplier=2.0|seed=12345|min_scale=4.0|max_scale=15.0|center_bias=66.0|snap=true|ray_above=100.0|ray_below=300.0|collision_mask=4294967295|valid_ground=[\"Terrain_Master_COL\", \"Terrain_COL\"]|reject_slope=true|max_slope=40.0|avoid_visual=true|visual_roots=[]|visual_radius=0.8|visual_clearance=1.0|avoid_water=true|water_path=|water_height=1.0|mesh_aabb=[P: (-1.0, -1.0, 0.0), S: (2.0, 2.0, 0.0)]"
+metadata/tree_bake_source = "TreeImpostors/TreeImpostorMultimesh15/Trees"
+
+[sub_resource type="MultiMesh" id="MultiMesh_df66w"]
+resource_local_to_scene = true
+transform_format = 1
+use_custom_data = true
+mesh = SubResource("QuadMesh_wwatn")
+metadata/tree_bake_version = 1
+metadata/tree_bake_signature = "version=1|node=TreeImpostors/TreeImpostorMultimesh16/Trees|global_transform=[X: (-0.745826, 0.0, -0.666141), Y: (0.0, 1.0, 0.0), Z: (0.666141, 0.0, -0.745826), O: (-289.5641, 10.83205, -395.3161)]|target_count=650|radius_x=300.0|radius_z=200.0|min_spacing=7.2|max_spacing=30.0|poisson_attempts=24|candidate_multiplier=2.0|seed=12345|min_scale=4.0|max_scale=15.0|center_bias=66.0|snap=true|ray_above=100.0|ray_below=300.0|collision_mask=4294967295|valid_ground=[\"Terrain_Master_COL\", \"Terrain_COL\"]|reject_slope=true|max_slope=40.0|avoid_visual=true|visual_roots=[]|visual_radius=0.8|visual_clearance=1.0|avoid_water=true|water_path=|water_height=1.0|mesh_aabb=[P: (-1.0, -1.0, 0.0), S: (2.0, 2.0, 0.0)]"
+metadata/tree_bake_source = "TreeImpostors/TreeImpostorMultimesh16/Trees"
+
+[sub_resource type="MultiMesh" id="MultiMesh_0gqsi"]
+resource_local_to_scene = true
+transform_format = 1
+use_custom_data = true
+mesh = SubResource("QuadMesh_wwatn")
+metadata/tree_bake_version = 1
+metadata/tree_bake_signature = "version=1|node=TreeImpostors/TreeImpostorMultimesh17/Trees|global_transform=[X: (0.414476, 0.0, -0.91006), Y: (0.0, 1.0, 0.0), Z: (0.91006, 0.0, 0.414476), O: (-393.0674, 10.83205, -188.3428)]|target_count=650|radius_x=300.0|radius_z=200.0|min_spacing=7.2|max_spacing=30.0|poisson_attempts=24|candidate_multiplier=2.0|seed=12345|min_scale=4.0|max_scale=15.0|center_bias=66.0|snap=true|ray_above=100.0|ray_below=300.0|collision_mask=4294967295|valid_ground=[\"Terrain_Master_COL\", \"Terrain_COL\"]|reject_slope=true|max_slope=40.0|avoid_visual=true|visual_roots=[]|visual_radius=0.8|visual_clearance=1.0|avoid_water=true|water_path=|water_height=1.0|mesh_aabb=[P: (-1.0, -1.0, 0.0), S: (2.0, 2.0, 0.0)]"
+metadata/tree_bake_source = "TreeImpostors/TreeImpostorMultimesh17/Trees"
+
+[sub_resource type="MultiMesh" id="MultiMesh_y3rlo"]
+resource_local_to_scene = true
+transform_format = 1
+use_custom_data = true
+mesh = SubResource("QuadMesh_wwatn")
+metadata/tree_bake_version = 1
+metadata/tree_bake_signature = "version=1|node=TreeImpostors/TreeImpostorMultimesh18/Trees|global_transform=[X: (-0.146333, 0.0, -0.989235), Y: (0.0, 1.0, 0.0), Z: (0.989235, 0.0, -0.146333), O: (51.19116, 10.83205, 1335.416)]|target_count=650|radius_x=300.0|radius_z=200.0|min_spacing=7.2|max_spacing=30.0|poisson_attempts=24|candidate_multiplier=2.0|seed=12345|min_scale=4.0|max_scale=15.0|center_bias=66.0|snap=true|ray_above=100.0|ray_below=300.0|collision_mask=4294967295|valid_ground=[\"Terrain_Master_COL\", \"Terrain_COL\"]|reject_slope=true|max_slope=40.0|avoid_visual=true|visual_roots=[]|visual_radius=0.8|visual_clearance=1.0|avoid_water=true|water_path=|water_height=1.0|mesh_aabb=[P: (-1.0, -1.0, 0.0), S: (2.0, 2.0, 0.0)]"
+metadata/tree_bake_source = "TreeImpostors/TreeImpostorMultimesh18/Trees"
+
+[sub_resource type="MultiMesh" id="MultiMesh_hrvh4"]
+resource_local_to_scene = true
+transform_format = 1
+use_custom_data = true
+mesh = SubResource("QuadMesh_wwatn")
+metadata/tree_bake_version = 1
+metadata/tree_bake_signature = "version=1|node=TreeImpostors/TreeImpostorMultimesh19/Trees|global_transform=[X: (-0.146333, 0.0, -0.989235), Y: (0.0, 1.0, 0.0), Z: (0.989235, 0.0, -0.146333), O: (-286.9816, 10.83205, 1335.416)]|target_count=650|radius_x=300.0|radius_z=200.0|min_spacing=7.2|max_spacing=30.0|poisson_attempts=24|candidate_multiplier=2.0|seed=12345|min_scale=4.0|max_scale=15.0|center_bias=66.0|snap=true|ray_above=100.0|ray_below=300.0|collision_mask=4294967295|valid_ground=[\"Terrain_Master_COL\", \"Terrain_COL\"]|reject_slope=true|max_slope=40.0|avoid_visual=true|visual_roots=[]|visual_radius=0.8|visual_clearance=1.0|avoid_water=true|water_path=|water_height=1.0|mesh_aabb=[P: (-1.0, -1.0, 0.0), S: (2.0, 2.0, 0.0)]"
+metadata/tree_bake_source = "TreeImpostors/TreeImpostorMultimesh19/Trees"
+
+[sub_resource type="MultiMesh" id="MultiMesh_n0k1o"]
+resource_local_to_scene = true
+transform_format = 1
+use_custom_data = true
+mesh = SubResource("QuadMesh_wwatn")
+metadata/tree_bake_version = 1
+metadata/tree_bake_signature = "version=1|node=TreeImpostors/TreeImpostorMultimesh20/Trees|global_transform=[X: (-0.922194, 0.0, -0.386728), Y: (0.0, 1.0, 0.0), Z: (0.386728, 0.0, -0.922194), O: (-484.5443, 10.83205, 1045.611)]|target_count=650|radius_x=300.0|radius_z=200.0|min_spacing=7.2|max_spacing=30.0|poisson_attempts=24|candidate_multiplier=2.0|seed=12345|min_scale=4.0|max_scale=15.0|center_bias=66.0|snap=true|ray_above=100.0|ray_below=300.0|collision_mask=4294967295|valid_ground=[\"Terrain_Master_COL\", \"Terrain_COL\"]|reject_slope=true|max_slope=40.0|avoid_visual=true|visual_roots=[]|visual_radius=0.8|visual_clearance=1.0|avoid_water=true|water_path=|water_height=1.0|mesh_aabb=[P: (-1.0, -1.0, 0.0), S: (2.0, 2.0, 0.0)]"
+metadata/tree_bake_source = "TreeImpostors/TreeImpostorMultimesh20/Trees"
+
+[sub_resource type="MultiMesh" id="MultiMesh_vbdm5"]
+resource_local_to_scene = true
+transform_format = 1
+use_custom_data = true
+mesh = SubResource("QuadMesh_wwatn")
+metadata/tree_bake_version = 1
+metadata/tree_bake_signature = "version=1|node=TreeImpostors/TreeImpostorMultimesh21/Trees|global_transform=[X: (-0.858885, 0.0, -0.512169), Y: (0.0, 1.0, 0.0), Z: (0.512169, 0.0, -0.858885), O: (-337.765, 10.83205, 793.9142)]|target_count=650|radius_x=300.0|radius_z=200.0|min_spacing=7.2|max_spacing=30.0|poisson_attempts=24|candidate_multiplier=2.0|seed=12345|min_scale=4.0|max_scale=15.0|center_bias=66.0|snap=true|ray_above=100.0|ray_below=300.0|collision_mask=4294967295|valid_ground=[\"Terrain_Master_COL\", \"Terrain_COL\"]|reject_slope=true|max_slope=40.0|avoid_visual=true|visual_roots=[]|visual_radius=0.8|visual_clearance=1.0|avoid_water=true|water_path=|water_height=1.0|mesh_aabb=[P: (-1.0, -1.0, 0.0), S: (2.0, 2.0, 0.0)]"
+metadata/tree_bake_source = "TreeImpostors/TreeImpostorMultimesh21/Trees"
+
+[sub_resource type="MultiMesh" id="MultiMesh_iegie"]
+resource_local_to_scene = true
+transform_format = 1
+use_custom_data = true
+mesh = SubResource("QuadMesh_wwatn")
+metadata/tree_bake_version = 1
+metadata/tree_bake_signature = "version=1|node=TreeImpostors/TreeImpostorMultimesh22/Trees|global_transform=[X: (-0.978754, 0.0, -0.205036), Y: (0.0, 1.0, 0.0), Z: (0.205036, 0.0, -0.978754), O: (-538.2195, 17.03798, 347.8682)]|target_count=650|radius_x=522.0|radius_z=251.0|min_spacing=7.2|max_spacing=30.0|poisson_attempts=24|candidate_multiplier=2.0|seed=12345|min_scale=4.0|max_scale=15.0|center_bias=66.0|snap=true|ray_above=100.0|ray_below=300.0|collision_mask=4294967295|valid_ground=[\"Terrain_Master_COL\", \"Terrain_COL\"]|reject_slope=true|max_slope=40.0|avoid_visual=true|visual_roots=[]|visual_radius=0.8|visual_clearance=1.0|avoid_water=true|water_path=|water_height=1.0|mesh_aabb=[P: (-1.0, -1.0, 0.0), S: (2.0, 2.0, 0.0)]"
+metadata/tree_bake_source = "TreeImpostors/TreeImpostorMultimesh22/Trees"
+
+[sub_resource type="MultiMesh" id="MultiMesh_8o7o7"]
+resource_local_to_scene = true
+transform_format = 1
+use_custom_data = true
+mesh = SubResource("QuadMesh_wwatn")
+metadata/tree_bake_version = 1
+metadata/tree_bake_signature = "version=1|node=TreeImpostors/TreeImpostorMultimesh23/Trees|global_transform=[X: (-0.116167, 0.0, -0.99323), Y: (0.0, 1.0, 0.0), Z: (0.99323, 0.0, -0.116167), O: (-940.0971, 17.03798, 153.558)]|target_count=650|radius_x=522.0|radius_z=251.0|min_spacing=7.2|max_spacing=30.0|poisson_attempts=24|candidate_multiplier=2.0|seed=12345|min_scale=4.0|max_scale=15.0|center_bias=66.0|snap=true|ray_above=100.0|ray_below=300.0|collision_mask=4294967295|valid_ground=[\"Terrain_Master_COL\", \"Terrain_COL\"]|reject_slope=true|max_slope=40.0|avoid_visual=true|visual_roots=[]|visual_radius=0.8|visual_clearance=1.0|avoid_water=true|water_path=|water_height=1.0|mesh_aabb=[P: (-1.0, -1.0, 0.0), S: (2.0, 2.0, 0.0)]"
+metadata/tree_bake_source = "TreeImpostors/TreeImpostorMultimesh23/Trees"
+
+[sub_resource type="MultiMesh" id="MultiMesh_ndnrr"]
+resource_local_to_scene = true
+transform_format = 1
+use_custom_data = true
+mesh = SubResource("QuadMesh_wwatn")
+metadata/tree_bake_version = 1
+metadata/tree_bake_signature = "version=1|node=TreeImpostors/TreeImpostorMultimesh24/Trees|global_transform=[X: (-0.116167, 0.0, -0.99323), Y: (0.0, 1.0, 0.0), Z: (0.99323, 0.0, -0.116167), O: (-940.0971, 17.03798, 541.3354)]|target_count=650|radius_x=522.0|radius_z=251.0|min_spacing=7.2|max_spacing=30.0|poisson_attempts=24|candidate_multiplier=2.0|seed=12345|min_scale=4.0|max_scale=15.0|center_bias=66.0|snap=true|ray_above=100.0|ray_below=300.0|collision_mask=4294967295|valid_ground=[\"Terrain_Master_COL\", \"Terrain_COL\"]|reject_slope=true|max_slope=40.0|avoid_visual=true|visual_roots=[]|visual_radius=0.8|visual_clearance=1.0|avoid_water=true|water_path=|water_height=1.0|mesh_aabb=[P: (-1.0, -1.0, 0.0), S: (2.0, 2.0, 0.0)]"
+metadata/tree_bake_source = "TreeImpostors/TreeImpostorMultimesh24/Trees"
+
+[sub_resource type="MultiMesh" id="MultiMesh_twiso"]
+resource_local_to_scene = true
+transform_format = 1
+use_custom_data = true
+mesh = SubResource("QuadMesh_wwatn")
+metadata/tree_bake_version = 1
+metadata/tree_bake_signature = "version=1|node=TreeImpostors/TreeImpostorMultimesh25/Trees|global_transform=[X: (-0.116167, 0.0, -0.99323), Y: (0.0, 1.0, 0.0), Z: (0.99323, 0.0, -0.116167), O: (-940.0971, 17.03798, -617.4438)]|target_count=650|radius_x=522.0|radius_z=251.0|min_spacing=7.2|max_spacing=30.0|poisson_attempts=24|candidate_multiplier=2.0|seed=12345|min_scale=4.0|max_scale=15.0|center_bias=66.0|snap=true|ray_above=100.0|ray_below=300.0|collision_mask=4294967295|valid_ground=[\"Terrain_Master_COL\", \"Terrain_COL\"]|reject_slope=true|max_slope=40.0|avoid_visual=true|visual_roots=[]|visual_radius=0.8|visual_clearance=1.0|avoid_water=true|water_path=|water_height=1.0|mesh_aabb=[P: (-1.0, -1.0, 0.0), S: (2.0, 2.0, 0.0)]"
+metadata/tree_bake_source = "TreeImpostors/TreeImpostorMultimesh25/Trees"
+
+[sub_resource type="MultiMesh" id="MultiMesh_ax04d"]
+resource_local_to_scene = true
+transform_format = 1
+use_custom_data = true
+mesh = SubResource("QuadMesh_wwatn")
+metadata/tree_bake_version = 1
+metadata/tree_bake_signature = "version=1|node=TreeImpostors/TreeImpostorMultimesh26/Trees|global_transform=[X: (-0.116167, 0.0, -0.99323), Y: (0.0, 1.0, 0.0), Z: (0.99323, 0.0, -0.116167), O: (-732.5676, 17.03798, -1262.909)]|target_count=650|radius_x=522.0|radius_z=251.0|min_spacing=7.2|max_spacing=30.0|poisson_attempts=24|candidate_multiplier=2.0|seed=12345|min_scale=4.0|max_scale=15.0|center_bias=66.0|snap=true|ray_above=100.0|ray_below=300.0|collision_mask=4294967295|valid_ground=[\"Terrain_Master_COL\", \"Terrain_COL\"]|reject_slope=true|max_slope=40.0|avoid_visual=true|visual_roots=[]|visual_radius=0.8|visual_clearance=1.0|avoid_water=true|water_path=|water_height=1.0|mesh_aabb=[P: (-1.0, -1.0, 0.0), S: (2.0, 2.0, 0.0)]"
+metadata/tree_bake_source = "TreeImpostors/TreeImpostorMultimesh26/Trees"
+
+[sub_resource type="MultiMesh" id="MultiMesh_m4ykd"]
 resource_local_to_scene = true
 transform_format = 1
 use_custom_data = true
@@ -115,7 +242,7 @@ metadata/tree_bake_version = 1
 metadata/tree_bake_signature = "version=1|node=TreeImpostors/TreeImpostorMultimesh8/Trees|global_transform=[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-57.23305, 10.83205, -806.863)]|target_count=650|radius_x=300.0|radius_z=200.0|min_spacing=7.2|max_spacing=30.0|poisson_attempts=24|candidate_multiplier=2.0|seed=12345|min_scale=4.0|max_scale=10.0|center_bias=66.0|snap=true|ray_above=100.0|ray_below=300.0|collision_mask=4294967295|valid_ground=[\"Terrain_Master_COL\", \"Terrain_COL\"]|reject_slope=true|max_slope=40.0|avoid_visual=true|visual_roots=[]|visual_radius=0.8|visual_clearance=1.0|avoid_water=true|water_path=|water_height=8.0|mesh_aabb=[P: (-1.0, -1.0, 0.0), S: (2.0, 2.0, 0.0)]"
 metadata/tree_bake_source = "TreeImpostors/TreeImpostorMultimesh8/Trees"
 
-[sub_resource type="MultiMesh" id="MultiMesh_ogabk"]
+[sub_resource type="MultiMesh" id="MultiMesh_1oymc"]
 resource_local_to_scene = true
 transform_format = 1
 use_custom_data = true
@@ -124,7 +251,7 @@ metadata/tree_bake_version = 1
 metadata/tree_bake_signature = "version=1|node=TreeImpostors/TreeImpostorMultimesh11/Trees|global_transform=[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (16.8927, 10.83205, -1458.824)]|target_count=2000|radius_x=364.0|radius_z=350.0|min_spacing=12.0|max_spacing=30.0|poisson_attempts=24|candidate_multiplier=2.0|seed=12345|min_scale=4.0|max_scale=20.0|center_bias=66.0|snap=true|ray_above=100.0|ray_below=300.0|collision_mask=4294967295|valid_ground=[\"Terrain_Master_COL\", \"Terrain_COL\"]|reject_slope=true|max_slope=40.0|avoid_visual=true|visual_roots=[]|visual_radius=0.8|visual_clearance=1.0|avoid_water=true|water_path=|water_height=8.0|mesh_aabb=[P: (-1.0, -1.0, 0.0), S: (2.0, 2.0, 0.0)]"
 metadata/tree_bake_source = "TreeImpostors/TreeImpostorMultimesh11/Trees"
 
-[sub_resource type="MultiMesh" id="MultiMesh_laf3l"]
+[sub_resource type="MultiMesh" id="MultiMesh_3et1x"]
 resource_local_to_scene = true
 transform_format = 1
 use_custom_data = true
@@ -133,7 +260,7 @@ metadata/tree_bake_version = 1
 metadata/tree_bake_signature = "version=1|node=TreeImpostors/TreeImpostorMultimesh9/Trees|global_transform=[X: (0.927813, 0.0, -0.373047), Y: (0.0, 1.0, 0.0), Z: (0.373047, 0.0, 0.927813), O: (-41.02448, 10.83205, -554.1461)]|target_count=650|radius_x=300.0|radius_z=200.0|min_spacing=7.2|max_spacing=30.0|poisson_attempts=24|candidate_multiplier=2.0|seed=12345|min_scale=4.0|max_scale=10.0|center_bias=66.0|snap=true|ray_above=100.0|ray_below=300.0|collision_mask=4294967295|valid_ground=[\"Terrain_Master_COL\", \"Terrain_COL\"]|reject_slope=true|max_slope=40.0|avoid_visual=true|visual_roots=[]|visual_radius=0.8|visual_clearance=1.0|avoid_water=true|water_path=|water_height=3.0|mesh_aabb=[P: (-1.0, -1.0, 0.0), S: (2.0, 2.0, 0.0)]"
 metadata/tree_bake_source = "TreeImpostors/TreeImpostorMultimesh9/Trees"
 
-[sub_resource type="MultiMesh" id="MultiMesh_4scdh"]
+[sub_resource type="MultiMesh" id="MultiMesh_uonmy"]
 resource_local_to_scene = true
 transform_format = 1
 use_custom_data = true
@@ -142,7 +269,7 @@ metadata/tree_bake_version = 1
 metadata/tree_bake_signature = "version=1|node=TreeImpostors/TreeImpostorMultimesh10/Trees|global_transform=[X: (0.975888, 0.0, 0.218271), Y: (0.0, 1.0, 0.0), Z: (-0.218271, 0.0, 0.975888), O: (-50.56749, 10.83205, -338.9808)]|target_count=650|radius_x=300.0|radius_z=200.0|min_spacing=7.2|max_spacing=30.0|poisson_attempts=24|candidate_multiplier=2.0|seed=12345|min_scale=4.0|max_scale=10.0|center_bias=66.0|snap=true|ray_above=100.0|ray_below=300.0|collision_mask=4294967295|valid_ground=[\"Terrain_Master_COL\", \"Terrain_COL\"]|reject_slope=true|max_slope=10.0|avoid_visual=true|visual_roots=[]|visual_radius=0.8|visual_clearance=1.0|avoid_water=true|water_path=|water_height=3.0|mesh_aabb=[P: (-1.0, -1.0, 0.0), S: (2.0, 2.0, 0.0)]"
 metadata/tree_bake_source = "TreeImpostors/TreeImpostorMultimesh10/Trees"
 
-[sub_resource type="MultiMesh" id="MultiMesh_df66w"]
+[sub_resource type="MultiMesh" id="MultiMesh_mmqtf"]
 resource_local_to_scene = true
 transform_format = 1
 use_custom_data = true
@@ -151,7 +278,7 @@ metadata/tree_bake_version = 1
 metadata/tree_bake_signature = "version=1|node=TreeImpostors/TreeImpostorMultimesh6/Trees|global_transform=[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-433.6221, 10.83205, -220.5449)]|target_count=625|radius_x=168.0|radius_z=203.0|min_spacing=3.85|max_spacing=18.15|poisson_attempts=24|candidate_multiplier=2.0|seed=12345|min_scale=4.0|max_scale=10.0|center_bias=66.0|snap=true|ray_above=100.0|ray_below=300.0|collision_mask=4294967295|valid_ground=[\"Terrain_Master_COL\", \"Terrain_COL\"]|reject_slope=true|max_slope=11.0|avoid_visual=true|visual_roots=[]|visual_radius=0.8|visual_clearance=1.0|avoid_water=true|water_path=|water_height=1.0|mesh_aabb=[P: (-1.0, -1.0, 0.0), S: (2.0, 2.0, 0.0)]"
 metadata/tree_bake_source = "TreeImpostors/TreeImpostorMultimesh6/Trees"
 
-[sub_resource type="MultiMesh" id="MultiMesh_0gqsi"]
+[sub_resource type="MultiMesh" id="MultiMesh_rvdsh"]
 resource_local_to_scene = true
 transform_format = 1
 use_custom_data = true
@@ -160,7 +287,7 @@ metadata/tree_bake_version = 1
 metadata/tree_bake_signature = "version=1|node=TreeImpostors/TreeImpostorMultimesh2/Trees|global_transform=[X: (0.918, 0.0, -0.396581), Y: (0.0, 1.0, 0.0), Z: (0.396581, 0.0, 0.918), O: (-379.4524, 10.83205, 123.0416)]|target_count=625|radius_x=299.0|radius_z=269.0|min_spacing=3.85|max_spacing=15.15|poisson_attempts=24|candidate_multiplier=2.0|seed=12345|min_scale=4.0|max_scale=10.0|center_bias=66.0|snap=true|ray_above=100.0|ray_below=300.0|collision_mask=4294967295|valid_ground=[\"Terrain_Master_COL\", \"Terrain_COL\"]|reject_slope=true|max_slope=40.0|avoid_visual=true|visual_roots=[]|visual_radius=0.8|visual_clearance=1.0|avoid_water=true|water_path=|water_height=7.0|mesh_aabb=[P: (-1.0, -1.0, 0.0), S: (2.0, 2.0, 0.0)]"
 metadata/tree_bake_source = "TreeImpostors/TreeImpostorMultimesh2/Trees"
 
-[sub_resource type="MultiMesh" id="MultiMesh_y3rlo"]
+[sub_resource type="MultiMesh" id="MultiMesh_2315n"]
 resource_local_to_scene = true
 transform_format = 1
 use_custom_data = true
@@ -169,7 +296,7 @@ metadata/tree_bake_version = 1
 metadata/tree_bake_signature = "version=1|node=TreeImpostors/TreeImpostorMultimesh4/Trees|global_transform=[X: (0.918, 0.0, -0.396581), Y: (0.0, 1.0, 0.0), Z: (0.396581, 0.0, 0.918), O: (-391.3713, 10.83205, 274.9254)]|target_count=625|radius_x=168.0|radius_z=269.0|min_spacing=3.85|max_spacing=15.15|poisson_attempts=24|candidate_multiplier=2.0|seed=12345|min_scale=4.0|max_scale=10.0|center_bias=66.0|snap=true|ray_above=100.0|ray_below=300.0|collision_mask=4294967295|valid_ground=[\"Terrain_Master_COL\", \"Terrain_COL\"]|reject_slope=true|max_slope=40.0|avoid_visual=true|visual_roots=[]|visual_radius=0.8|visual_clearance=1.0|avoid_water=true|water_path=|water_height=7.0|mesh_aabb=[P: (-1.0, -1.0, 0.0), S: (2.0, 2.0, 0.0)]"
 metadata/tree_bake_source = "TreeImpostors/TreeImpostorMultimesh4/Trees"
 
-[sub_resource type="MultiMesh" id="MultiMesh_hrvh4"]
+[sub_resource type="MultiMesh" id="MultiMesh_4684c"]
 resource_local_to_scene = true
 transform_format = 1
 use_custom_data = true
@@ -178,7 +305,7 @@ metadata/tree_bake_version = 1
 metadata/tree_bake_signature = "version=1|node=TreeImpostors/TreeImpostorMultimesh5/Trees|global_transform=[X: (0.918, 0.0, -0.396581), Y: (0.0, 1.0, 0.0), Z: (0.396581, 0.0, 0.918), O: (-649.4985, 10.83205, 653.8905)]|target_count=625|radius_x=198.0|radius_z=174.0|min_spacing=6.25|max_spacing=22.6|poisson_attempts=24|candidate_multiplier=2.0|seed=12345|min_scale=4.0|max_scale=10.0|center_bias=66.0|snap=true|ray_above=100.0|ray_below=300.0|collision_mask=4294967295|valid_ground=[\"Terrain_Master_COL\", \"Terrain_COL\"]|reject_slope=true|max_slope=40.0|avoid_visual=true|visual_roots=[]|visual_radius=0.8|visual_clearance=1.0|avoid_water=true|water_path=|water_height=1.0|mesh_aabb=[P: (-1.0, -1.0, 0.0), S: (2.0, 2.0, 0.0)]"
 metadata/tree_bake_source = "TreeImpostors/TreeImpostorMultimesh5/Trees"
 
-[sub_resource type="MultiMesh" id="MultiMesh_n0k1o"]
+[sub_resource type="MultiMesh" id="MultiMesh_8yoyd"]
 resource_local_to_scene = true
 transform_format = 1
 use_custom_data = true
@@ -622,7 +749,7 @@ shader_parameter/water_level = 2.0
 shader_parameter/wet_sand_height = 4.10000006109492
 shader_parameter/debug_view = 0
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_iegie"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_8yoyd"]
 resource_local_to_scene = true
 render_priority = 0
 shader = ExtResource("30_q2anr")
@@ -658,7 +785,7 @@ size = Vector3(234.65327, 26.61683, 71.67698)
 [sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_g5j8w"]
 data = PackedVector3Array(-117.3266, 13.308399, 35.8385, 117.3266, 13.308399, 35.8385, -117.3266, -13.308399, 35.8385, 117.3266, 13.308399, 35.8385, 117.3266, -13.308399, 35.8385, -117.3266, -13.308399, 35.8385, 117.3266, 13.308399, -35.8385, -117.3266, 13.308399, -35.8385, 117.3266, -13.308399, -35.8385, -117.3266, 13.308399, -35.8385, -117.3266, -13.308399, -35.8385, 117.3266, -13.308399, -35.8385, 117.3266, 13.308399, 35.8385, 117.3266, 13.308399, -35.8385, 117.3266, -13.308399, 35.8385, 117.3266, 13.308399, -35.8385, 117.3266, -13.308399, -35.8385, 117.3266, -13.308399, 35.8385, -117.3266, 13.308399, -35.8385, -117.3266, 13.308399, 35.8385, -117.3266, -13.308399, -35.8385, -117.3266, 13.308399, 35.8385, -117.3266, -13.308399, 35.8385, -117.3266, -13.308399, -35.8385, 117.3266, 13.308399, 35.8385, -117.3266, 13.308399, 35.8385, 117.3266, 13.308399, -35.8385, -117.3266, 13.308399, 35.8385, -117.3266, 13.308399, -35.8385, 117.3266, 13.308399, -35.8385, -117.3266, -13.308399, 35.8385, 117.3266, -13.308399, 35.8385, -117.3266, -13.308399, -35.8385, 117.3266, -13.308399, 35.8385, 117.3266, -13.308399, -35.8385, -117.3266, -13.308399, -35.8385)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_8o7o7"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_scmhv"]
 resource_local_to_scene = true
 render_priority = 0
 shader = ExtResource("41_j7oal")
@@ -823,7 +950,7 @@ shader_parameter/foam_scroll_speed = 0.00999999977648
 shader_parameter/foam_roughness = 0.15999999642368
 shader_parameter/ocean_foam_detail_quality = 1
 shader_parameter/ocean_foam_evaluation_distance = 520.0
-shader_parameter/ocean_surface_enabled = false
+shader_parameter/ocean_surface_enabled = true
 shader_parameter/ocean_logical_origin_offset_xz = Vector2(0, 0)
 shader_parameter/ocean_detail_center_xz = Vector2(0, 0)
 shader_parameter/ocean_detailed_wave_fade_start = 170.0
@@ -886,7 +1013,7 @@ shader_parameter/custom_reflection_minimum_surface_weight = 0.34
 shader_parameter/custom_reflection_maximum_surface_weight = 0.88
 shader_parameter/custom_reflection_emission_strength = 0.2999999932944
 
-[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_ndnrr"]
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_5bves"]
 resource_local_to_scene = true
 blend_mode = 1
 
@@ -913,7 +1040,7 @@ point_count = 3
 [sub_resource type="CurveTexture" id="CurveTexture_bubble_shrink"]
 curve = SubResource("Curve_bubble_shrink")
 
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_twiso"]
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_xhxpx"]
 resource_local_to_scene = true
 particle_flag_disable_z = true
 emission_shape_offset = Vector3(0, 600, 0)
@@ -936,7 +1063,7 @@ turbulence_influence_max = 0.082
 turbulence_initial_displacement_min = -47.5
 turbulence_initial_displacement_max = 94.5
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ax04d"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_m8vqh"]
 resource_local_to_scene = true
 render_priority = -127
 shader = ExtResource("55_5sm3d")
@@ -972,18 +1099,6 @@ cull_mode = 2
 emission_enabled = true
 emission = Color(0.5048562, 0.6049689, 0.15148997, 1)
 emission_energy_multiplier = 8.28
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_yrkm7"]
-cull_mode = 2
-emission_enabled = true
-emission = Color(0.7075863, 0.6321381, 0.55624765, 1)
-emission_energy_multiplier = 16.0
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_iyevr"]
-cull_mode = 2
-emission_enabled = true
-emission = Color(0, 0.41907236, 0.73546946, 1)
-emission_energy_multiplier = 3.56
 
 [sub_resource type="PrismMesh" id="PrismMesh_tpwhi"]
 material = ExtResource("63_mnvpt")
@@ -1088,6 +1203,18 @@ sign_light_pulse_influence = 0.99
 arrow_sign_light_energy_multiplier = 1.0
 wrong_sign_light_energy_multiplier = 1.0
 
+[node name="TreeImpostorFrozen" parent="." unique_id=125031249 instance=ExtResource("2_cfohk")]
+transform = Transform3D(4.017289, 0, -1.0681369, 0, 1.41, 0, 0.76778215, 0, 5.588845, -540.7408, -5.0414896, -617.3956)
+target_multimeshes = Array[NodePath]([NodePath("../TreeImpostors/TreeImpostorMultimesh15/Trees"), NodePath("../TreeImpostors/TreeImpostorMultimesh15/TreeShadows")])
+smooth_unfreeze = true
+unfreeze_duration = 1.0
+
+[node name="TreeImpostorFrozen2" parent="." unique_id=469109216 instance=ExtResource("2_cfohk")]
+transform = Transform3D(3.6087203, 0, 2.6779165, 0, 1.41, 0, -1.9248998, 0, 5.020445, -423.3858, -5.0414896, -102.44544)
+target_multimeshes = Array[NodePath]([NodePath("../TreeImpostors/TreeImpostorMultimesh17/Trees"), NodePath("../TreeImpostors/TreeImpostorMultimesh17/TreeShadows"), NodePath("../TreeImpostors/TreeImpostorMultimesh6/TreeShadows"), NodePath("../TreeImpostors/TreeImpostorMultimesh6/Trees")])
+smooth_unfreeze = true
+unfreeze_duration = 1.0
+
 [node name="TreeProjectedShadowBaker" type="Node3D" parent="." unique_id=472315960]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.510468, -49.139404, -57.103714)
 script = ExtResource("72_ol3en")
@@ -1116,7 +1243,7 @@ tree_shadows_enabled = true
 [node name="Trees" parent="TreeImpostors/TreeImpostorMultimesh" index="0" unique_id=184116622]
 material_override = ExtResource("35_iyaox")
 gi_mode = 2
-multimesh = SubResource("MultiMesh_q2anr")
+multimesh = SubResource("MultiMesh_cfohk")
 area_radius_x = 132.0
 area_radius_z = 203.0
 min_spacing = 3.85
@@ -1128,7 +1255,7 @@ max_ground_slope_degrees = 11.0
 visible = true
 cast_shadow = 3
 gi_mode = 2
-multimesh = SubResource("MultiMesh_q2anr")
+multimesh = SubResource("MultiMesh_cfohk")
 
 [node name="TreeImpostorMultimesh7" parent="TreeImpostors" unique_id=1134543349 instance=ExtResource("32_mdq0j")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -57.233047, 10.8320465, -1034.1053)
@@ -1145,7 +1272,7 @@ tree_shadows_enabled = true
 [node name="Trees" parent="TreeImpostors/TreeImpostorMultimesh7" index="0" unique_id=184116622]
 material_override = ExtResource("35_iyaox")
 gi_mode = 2
-multimesh = SubResource("MultiMesh_cfohk")
+multimesh = SubResource("MultiMesh_iyaox")
 target_count = 650
 area_radius_x = 300.0
 area_radius_z = 200.0
@@ -1159,7 +1286,7 @@ minimum_height_above_water = 8.0
 visible = true
 cast_shadow = 3
 gi_mode = 2
-multimesh = SubResource("MultiMesh_cfohk")
+multimesh = SubResource("MultiMesh_iyaox")
 
 [node name="TreeImpostorMultimesh12" parent="TreeImpostors" unique_id=1986823325 instance=ExtResource("32_mdq0j")]
 transform = Transform3D(0.36680532, 0, 0.9302978, 0, 1, 0, -0.9302978, 0, 0.36680532, -389.92386, 10.8320465, -867.31335)
@@ -1176,7 +1303,7 @@ tree_shadows_enabled = true
 [node name="Trees" parent="TreeImpostors/TreeImpostorMultimesh12" index="0" unique_id=184116622]
 material_override = ExtResource("35_iyaox")
 gi_mode = 2
-multimesh = SubResource("MultiMesh_iyaox")
+multimesh = SubResource("MultiMesh_4k6sa")
 target_count = 650
 area_radius_x = 300.0
 area_radius_z = 200.0
@@ -1190,7 +1317,417 @@ minimum_height_above_water = 8.0
 visible = true
 cast_shadow = 3
 gi_mode = 2
-multimesh = SubResource("MultiMesh_iyaox")
+multimesh = SubResource("MultiMesh_4k6sa")
+
+[node name="TreeImpostorMultimesh13" parent="TreeImpostors" unique_id=1498221898 instance=ExtResource("32_mdq0j")]
+transform = Transform3D(0.1966369, 0, 0.98047644, 0, 1, 0, -0.98047644, 0, 0.1966369, -694.6492, 10.8320465, -962.4242)
+target_count = 650
+area_radius_x = 300.0
+area_radius_z = 200.0
+min_spacing = 7.199999999999999
+max_spacing = 30.0
+max_scale = 15.0
+valid_ground_name_contains = PackedStringArray("Terrain_Master_COL", "Terrain_COL")
+minimum_height_above_water = 8.0
+tree_shadows_enabled = true
+
+[node name="Trees" parent="TreeImpostors/TreeImpostorMultimesh13" index="0" unique_id=184116622]
+material_override = ExtResource("35_iyaox")
+gi_mode = 2
+multimesh = SubResource("MultiMesh_ogabk")
+target_count = 650
+area_radius_x = 300.0
+area_radius_z = 200.0
+min_spacing = 7.199999999999999
+max_spacing = 30.0
+max_scale = 15.0
+valid_ground_name_contains = PackedStringArray("Terrain_Master_COL", "Terrain_COL")
+minimum_height_above_water = 8.0
+
+[node name="TreeShadows" parent="TreeImpostors/TreeImpostorMultimesh13" index="1" unique_id=1425367268]
+visible = true
+cast_shadow = 3
+gi_mode = 2
+multimesh = SubResource("MultiMesh_ogabk")
+
+[node name="TreeImpostorMultimesh14" parent="TreeImpostors" unique_id=1159119503 instance=ExtResource("32_mdq0j")]
+transform = Transform3D(0.1966369, 0, 0.98047644, 0, 1, 0, -0.98047644, 0, 0.1966369, -889.9717, 10.8320465, -224.82498)
+target_count = 650
+area_radius_x = 300.0
+area_radius_z = 200.0
+min_spacing = 7.199999999999999
+max_spacing = 30.0
+max_scale = 15.0
+valid_ground_name_contains = PackedStringArray("Terrain_Master_COL", "Terrain_COL")
+minimum_height_above_water = 8.0
+tree_shadows_enabled = true
+
+[node name="Trees" parent="TreeImpostors/TreeImpostorMultimesh14" index="0" unique_id=184116622]
+material_override = ExtResource("35_iyaox")
+gi_mode = 2
+multimesh = SubResource("MultiMesh_laf3l")
+target_count = 650
+area_radius_x = 300.0
+area_radius_z = 200.0
+min_spacing = 7.199999999999999
+max_spacing = 30.0
+max_scale = 15.0
+valid_ground_name_contains = PackedStringArray("Terrain_Master_COL", "Terrain_COL")
+minimum_height_above_water = 8.0
+
+[node name="TreeShadows" parent="TreeImpostors/TreeImpostorMultimesh14" index="1" unique_id=1425367268]
+visible = true
+cast_shadow = 3
+gi_mode = 2
+multimesh = SubResource("MultiMesh_laf3l")
+
+[node name="TreeImpostorMultimesh15" parent="TreeImpostors" unique_id=1624150071 instance=ExtResource("32_mdq0j")]
+transform = Transform3D(-0.19016978, 0, 0.98175126, 0, 1, 0, -0.98175126, 0, -0.19016978, -600.83923, 10.8320465, -425.52887)
+target_count = 650
+area_radius_x = 300.0
+area_radius_z = 200.0
+min_spacing = 7.199999999999999
+max_spacing = 30.0
+max_scale = 15.0
+valid_ground_name_contains = PackedStringArray("Terrain_Master_COL", "Terrain_COL")
+tree_shadows_enabled = true
+
+[node name="Trees" parent="TreeImpostors/TreeImpostorMultimesh15" index="0" unique_id=184116622]
+material_override = ExtResource("35_iyaox")
+gi_mode = 2
+multimesh = SubResource("MultiMesh_4scdh")
+target_count = 650
+area_radius_x = 300.0
+area_radius_z = 200.0
+min_spacing = 7.199999999999999
+max_spacing = 30.0
+max_scale = 15.0
+valid_ground_name_contains = PackedStringArray("Terrain_Master_COL", "Terrain_COL")
+
+[node name="TreeShadows" parent="TreeImpostors/TreeImpostorMultimesh15" index="1" unique_id=1425367268]
+visible = true
+cast_shadow = 3
+gi_mode = 2
+multimesh = SubResource("MultiMesh_4scdh")
+
+[node name="TreeImpostorMultimesh16" parent="TreeImpostors" unique_id=269200502 instance=ExtResource("32_mdq0j")]
+transform = Transform3D(-0.7458256, 0, 0.6661412, 0, 1, 0, -0.6661412, 0, -0.7458256, -289.5641, 10.8320465, -395.31613)
+target_count = 650
+area_radius_x = 300.0
+area_radius_z = 200.0
+min_spacing = 7.199999999999999
+max_spacing = 30.0
+max_scale = 15.0
+valid_ground_name_contains = PackedStringArray("Terrain_Master_COL", "Terrain_COL")
+tree_shadows_enabled = true
+
+[node name="Trees" parent="TreeImpostors/TreeImpostorMultimesh16" index="0" unique_id=184116622]
+material_override = ExtResource("35_iyaox")
+gi_mode = 2
+multimesh = SubResource("MultiMesh_df66w")
+target_count = 650
+area_radius_x = 300.0
+area_radius_z = 200.0
+min_spacing = 7.199999999999999
+max_spacing = 30.0
+max_scale = 15.0
+valid_ground_name_contains = PackedStringArray("Terrain_Master_COL", "Terrain_COL")
+
+[node name="TreeShadows" parent="TreeImpostors/TreeImpostorMultimesh16" index="1" unique_id=1425367268]
+visible = true
+cast_shadow = 3
+gi_mode = 2
+multimesh = SubResource("MultiMesh_df66w")
+
+[node name="TreeImpostorMultimesh17" parent="TreeImpostors" unique_id=1665214655 instance=ExtResource("32_mdq0j")]
+transform = Transform3D(0.414476, 0, 0.91006017, 0, 1, 0, -0.91006017, 0, 0.414476, -393.06738, 10.8320465, -188.34283)
+target_count = 650
+area_radius_x = 300.0
+area_radius_z = 200.0
+min_spacing = 7.199999999999999
+max_spacing = 30.0
+max_scale = 15.0
+valid_ground_name_contains = PackedStringArray("Terrain_Master_COL", "Terrain_COL")
+tree_shadows_enabled = true
+
+[node name="Trees" parent="TreeImpostors/TreeImpostorMultimesh17" index="0" unique_id=184116622]
+material_override = ExtResource("35_iyaox")
+gi_mode = 2
+multimesh = SubResource("MultiMesh_0gqsi")
+target_count = 650
+area_radius_x = 300.0
+area_radius_z = 200.0
+min_spacing = 7.199999999999999
+max_spacing = 30.0
+max_scale = 15.0
+valid_ground_name_contains = PackedStringArray("Terrain_Master_COL", "Terrain_COL")
+
+[node name="TreeShadows" parent="TreeImpostors/TreeImpostorMultimesh17" index="1" unique_id=1425367268]
+visible = true
+cast_shadow = 3
+gi_mode = 2
+multimesh = SubResource("MultiMesh_0gqsi")
+
+[node name="TreeImpostorMultimesh18" parent="TreeImpostors" unique_id=170371762 instance=ExtResource("32_mdq0j")]
+transform = Transform3D(-0.14633283, 0, 0.98923534, 0, 1, 0, -0.98923534, 0, -0.14633283, 51.191162, 10.8320465, 1335.4156)
+target_count = 650
+area_radius_x = 300.0
+area_radius_z = 200.0
+min_spacing = 7.199999999999999
+max_spacing = 30.0
+max_scale = 15.0
+valid_ground_name_contains = PackedStringArray("Terrain_Master_COL", "Terrain_COL")
+tree_shadows_enabled = true
+
+[node name="Trees" parent="TreeImpostors/TreeImpostorMultimesh18" index="0" unique_id=184116622]
+material_override = ExtResource("35_iyaox")
+gi_mode = 2
+multimesh = SubResource("MultiMesh_y3rlo")
+target_count = 650
+area_radius_x = 300.0
+area_radius_z = 200.0
+min_spacing = 7.199999999999999
+max_spacing = 30.0
+max_scale = 15.0
+valid_ground_name_contains = PackedStringArray("Terrain_Master_COL", "Terrain_COL")
+
+[node name="TreeShadows" parent="TreeImpostors/TreeImpostorMultimesh18" index="1" unique_id=1425367268]
+visible = true
+cast_shadow = 3
+gi_mode = 2
+multimesh = SubResource("MultiMesh_y3rlo")
+
+[node name="TreeImpostorMultimesh19" parent="TreeImpostors" unique_id=2112689422 instance=ExtResource("32_mdq0j")]
+transform = Transform3D(-0.14633283, 0, 0.98923534, 0, 1, 0, -0.98923534, 0, -0.14633283, -286.98157, 10.8320465, 1335.4156)
+target_count = 650
+area_radius_x = 300.0
+area_radius_z = 200.0
+min_spacing = 7.199999999999999
+max_spacing = 30.0
+max_scale = 15.0
+valid_ground_name_contains = PackedStringArray("Terrain_Master_COL", "Terrain_COL")
+tree_shadows_enabled = true
+
+[node name="Trees" parent="TreeImpostors/TreeImpostorMultimesh19" index="0" unique_id=184116622]
+material_override = ExtResource("35_iyaox")
+gi_mode = 2
+multimesh = SubResource("MultiMesh_hrvh4")
+target_count = 650
+area_radius_x = 300.0
+area_radius_z = 200.0
+min_spacing = 7.199999999999999
+max_spacing = 30.0
+max_scale = 15.0
+valid_ground_name_contains = PackedStringArray("Terrain_Master_COL", "Terrain_COL")
+
+[node name="TreeShadows" parent="TreeImpostors/TreeImpostorMultimesh19" index="1" unique_id=1425367268]
+visible = true
+cast_shadow = 3
+gi_mode = 2
+multimesh = SubResource("MultiMesh_hrvh4")
+
+[node name="TreeImpostorMultimesh20" parent="TreeImpostors" unique_id=1803705493 instance=ExtResource("32_mdq0j")]
+transform = Transform3D(-0.9221935, 0, 0.3867285, 0, 1, 0, -0.3867285, 0, -0.9221935, -484.54428, 10.8320465, 1045.6111)
+target_count = 650
+area_radius_x = 300.0
+area_radius_z = 200.0
+min_spacing = 7.199999999999999
+max_spacing = 30.0
+max_scale = 15.0
+valid_ground_name_contains = PackedStringArray("Terrain_Master_COL", "Terrain_COL")
+tree_shadows_enabled = true
+
+[node name="Trees" parent="TreeImpostors/TreeImpostorMultimesh20" index="0" unique_id=184116622]
+material_override = ExtResource("35_iyaox")
+gi_mode = 2
+multimesh = SubResource("MultiMesh_n0k1o")
+target_count = 650
+area_radius_x = 300.0
+area_radius_z = 200.0
+min_spacing = 7.199999999999999
+max_spacing = 30.0
+max_scale = 15.0
+valid_ground_name_contains = PackedStringArray("Terrain_Master_COL", "Terrain_COL")
+
+[node name="TreeShadows" parent="TreeImpostors/TreeImpostorMultimesh20" index="1" unique_id=1425367268]
+visible = true
+cast_shadow = 3
+gi_mode = 2
+multimesh = SubResource("MultiMesh_n0k1o")
+
+[node name="TreeImpostorMultimesh21" parent="TreeImpostors" unique_id=2044147443 instance=ExtResource("32_mdq0j")]
+transform = Transform3D(-0.8588848, 0, 0.5121687, 0, 1, 0, -0.5121687, 0, -0.8588848, -337.76495, 10.8320465, 793.91425)
+target_count = 650
+area_radius_x = 300.0
+area_radius_z = 200.0
+min_spacing = 7.199999999999999
+max_spacing = 30.0
+max_scale = 15.0
+valid_ground_name_contains = PackedStringArray("Terrain_Master_COL", "Terrain_COL")
+tree_shadows_enabled = true
+
+[node name="Trees" parent="TreeImpostors/TreeImpostorMultimesh21" index="0" unique_id=184116622]
+material_override = ExtResource("35_iyaox")
+gi_mode = 2
+multimesh = SubResource("MultiMesh_vbdm5")
+target_count = 650
+area_radius_x = 300.0
+area_radius_z = 200.0
+min_spacing = 7.199999999999999
+max_spacing = 30.0
+max_scale = 15.0
+valid_ground_name_contains = PackedStringArray("Terrain_Master_COL", "Terrain_COL")
+
+[node name="TreeShadows" parent="TreeImpostors/TreeImpostorMultimesh21" index="1" unique_id=1425367268]
+visible = true
+cast_shadow = 3
+gi_mode = 2
+multimesh = SubResource("MultiMesh_vbdm5")
+
+[node name="TreeImpostorMultimesh22" parent="TreeImpostors" unique_id=1733468786 instance=ExtResource("32_mdq0j")]
+transform = Transform3D(-0.9787544, 0, 0.20503604, 0, 1, 0, -0.20503604, 0, -0.9787544, -538.2195, 17.03798, 347.86816)
+target_count = 650
+area_radius_x = 522.0
+area_radius_z = 251.0
+min_spacing = 7.199999999999999
+max_spacing = 30.0
+max_scale = 15.0
+valid_ground_name_contains = PackedStringArray("Terrain_Master_COL", "Terrain_COL")
+tree_shadows_enabled = true
+
+[node name="Trees" parent="TreeImpostors/TreeImpostorMultimesh22" index="0" unique_id=184116622]
+material_override = ExtResource("35_iyaox")
+gi_mode = 2
+multimesh = SubResource("MultiMesh_iegie")
+target_count = 650
+area_radius_x = 522.0
+area_radius_z = 251.0
+min_spacing = 7.199999999999999
+max_spacing = 30.0
+max_scale = 15.0
+valid_ground_name_contains = PackedStringArray("Terrain_Master_COL", "Terrain_COL")
+
+[node name="TreeShadows" parent="TreeImpostors/TreeImpostorMultimesh22" index="1" unique_id=1425367268]
+visible = true
+cast_shadow = 3
+gi_mode = 2
+multimesh = SubResource("MultiMesh_iegie")
+
+[node name="TreeImpostorMultimesh23" parent="TreeImpostors" unique_id=915781601 instance=ExtResource("32_mdq0j")]
+transform = Transform3D(-0.1161671, 0, 0.9932298, 0, 1, 0, -0.9932298, 0, -0.1161671, -940.0971, 17.03798, 153.55804)
+target_count = 650
+area_radius_x = 522.0
+area_radius_z = 251.0
+min_spacing = 7.199999999999999
+max_spacing = 30.0
+max_scale = 15.0
+valid_ground_name_contains = PackedStringArray("Terrain_Master_COL", "Terrain_COL")
+tree_shadows_enabled = true
+
+[node name="Trees" parent="TreeImpostors/TreeImpostorMultimesh23" index="0" unique_id=184116622]
+material_override = ExtResource("35_iyaox")
+gi_mode = 2
+multimesh = SubResource("MultiMesh_8o7o7")
+target_count = 650
+area_radius_x = 522.0
+area_radius_z = 251.0
+min_spacing = 7.199999999999999
+max_spacing = 30.0
+max_scale = 15.0
+valid_ground_name_contains = PackedStringArray("Terrain_Master_COL", "Terrain_COL")
+
+[node name="TreeShadows" parent="TreeImpostors/TreeImpostorMultimesh23" index="1" unique_id=1425367268]
+visible = true
+cast_shadow = 3
+gi_mode = 2
+multimesh = SubResource("MultiMesh_8o7o7")
+
+[node name="TreeImpostorMultimesh24" parent="TreeImpostors" unique_id=602065958 instance=ExtResource("32_mdq0j")]
+transform = Transform3D(-0.1161671, 0, 0.9932298, 0, 1, 0, -0.9932298, 0, -0.1161671, -940.0971, 17.03798, 541.3354)
+target_count = 650
+area_radius_x = 522.0
+area_radius_z = 251.0
+min_spacing = 7.199999999999999
+max_spacing = 30.0
+max_scale = 15.0
+valid_ground_name_contains = PackedStringArray("Terrain_Master_COL", "Terrain_COL")
+tree_shadows_enabled = true
+
+[node name="Trees" parent="TreeImpostors/TreeImpostorMultimesh24" index="0" unique_id=184116622]
+material_override = ExtResource("35_iyaox")
+gi_mode = 2
+multimesh = SubResource("MultiMesh_ndnrr")
+target_count = 650
+area_radius_x = 522.0
+area_radius_z = 251.0
+min_spacing = 7.199999999999999
+max_spacing = 30.0
+max_scale = 15.0
+valid_ground_name_contains = PackedStringArray("Terrain_Master_COL", "Terrain_COL")
+
+[node name="TreeShadows" parent="TreeImpostors/TreeImpostorMultimesh24" index="1" unique_id=1425367268]
+visible = true
+cast_shadow = 3
+gi_mode = 2
+multimesh = SubResource("MultiMesh_ndnrr")
+
+[node name="TreeImpostorMultimesh25" parent="TreeImpostors" unique_id=1671929967 instance=ExtResource("32_mdq0j")]
+transform = Transform3D(-0.1161671, 0, 0.9932298, 0, 1, 0, -0.9932298, 0, -0.1161671, -940.0971, 17.03798, -617.44385)
+target_count = 650
+area_radius_x = 522.0
+area_radius_z = 251.0
+min_spacing = 7.199999999999999
+max_spacing = 30.0
+max_scale = 15.0
+valid_ground_name_contains = PackedStringArray("Terrain_Master_COL", "Terrain_COL")
+tree_shadows_enabled = true
+
+[node name="Trees" parent="TreeImpostors/TreeImpostorMultimesh25" index="0" unique_id=184116622]
+material_override = ExtResource("35_iyaox")
+gi_mode = 2
+multimesh = SubResource("MultiMesh_twiso")
+target_count = 650
+area_radius_x = 522.0
+area_radius_z = 251.0
+min_spacing = 7.199999999999999
+max_spacing = 30.0
+max_scale = 15.0
+valid_ground_name_contains = PackedStringArray("Terrain_Master_COL", "Terrain_COL")
+
+[node name="TreeShadows" parent="TreeImpostors/TreeImpostorMultimesh25" index="1" unique_id=1425367268]
+visible = true
+cast_shadow = 3
+gi_mode = 2
+multimesh = SubResource("MultiMesh_twiso")
+
+[node name="TreeImpostorMultimesh26" parent="TreeImpostors" unique_id=1200041273 instance=ExtResource("32_mdq0j")]
+transform = Transform3D(-0.1161671, 0, 0.9932298, 0, 1, 0, -0.9932298, 0, -0.1161671, -732.56757, 17.03798, -1262.9089)
+target_count = 650
+area_radius_x = 522.0
+area_radius_z = 251.0
+min_spacing = 7.199999999999999
+max_spacing = 30.0
+max_scale = 15.0
+valid_ground_name_contains = PackedStringArray("Terrain_Master_COL", "Terrain_COL")
+tree_shadows_enabled = true
+
+[node name="Trees" parent="TreeImpostors/TreeImpostorMultimesh26" index="0" unique_id=184116622]
+material_override = ExtResource("35_iyaox")
+gi_mode = 2
+multimesh = SubResource("MultiMesh_ax04d")
+target_count = 650
+area_radius_x = 522.0
+area_radius_z = 251.0
+min_spacing = 7.199999999999999
+max_spacing = 30.0
+max_scale = 15.0
+valid_ground_name_contains = PackedStringArray("Terrain_Master_COL", "Terrain_COL")
+
+[node name="TreeShadows" parent="TreeImpostors/TreeImpostorMultimesh26" index="1" unique_id=1425367268]
+visible = true
+cast_shadow = 3
+gi_mode = 2
+multimesh = SubResource("MultiMesh_ax04d")
 
 [node name="TreeImpostorMultimesh8" parent="TreeImpostors" unique_id=993176215 instance=ExtResource("32_mdq0j")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -57.233047, 10.8320465, -806.863)
@@ -1206,7 +1743,7 @@ tree_shadows_enabled = true
 [node name="Trees" parent="TreeImpostors/TreeImpostorMultimesh8" index="0" unique_id=184116622]
 material_override = ExtResource("35_iyaox")
 gi_mode = 2
-multimesh = SubResource("MultiMesh_4k6sa")
+multimesh = SubResource("MultiMesh_m4ykd")
 target_count = 650
 area_radius_x = 300.0
 area_radius_z = 200.0
@@ -1219,7 +1756,7 @@ minimum_height_above_water = 8.0
 visible = true
 cast_shadow = 3
 gi_mode = 2
-multimesh = SubResource("MultiMesh_4k6sa")
+multimesh = SubResource("MultiMesh_m4ykd")
 
 [node name="TreeImpostorMultimesh11" parent="TreeImpostors" unique_id=1508385198 instance=ExtResource("32_mdq0j")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.8927, 10.8320465, -1458.8245)
@@ -1236,7 +1773,7 @@ tree_shadows_enabled = true
 [node name="Trees" parent="TreeImpostors/TreeImpostorMultimesh11" index="0" unique_id=184116622]
 material_override = ExtResource("35_iyaox")
 gi_mode = 2
-multimesh = SubResource("MultiMesh_ogabk")
+multimesh = SubResource("MultiMesh_1oymc")
 target_count = 2000
 area_radius_x = 364.0
 area_radius_z = 350.0
@@ -1250,7 +1787,7 @@ minimum_height_above_water = 8.0
 visible = true
 cast_shadow = 3
 gi_mode = 2
-multimesh = SubResource("MultiMesh_ogabk")
+multimesh = SubResource("MultiMesh_1oymc")
 
 [node name="TreeImpostorMultimesh9" parent="TreeImpostors" unique_id=1738861367 instance=ExtResource("32_mdq0j")]
 transform = Transform3D(0.9278126, 0, 0.37304667, 0, 1, 0, -0.37304667, 0, 0.9278126, -41.024483, 10.8320465, -554.1461)
@@ -1266,7 +1803,7 @@ tree_shadows_enabled = true
 [node name="Trees" parent="TreeImpostors/TreeImpostorMultimesh9" index="0" unique_id=184116622]
 material_override = ExtResource("35_iyaox")
 gi_mode = 2
-multimesh = SubResource("MultiMesh_laf3l")
+multimesh = SubResource("MultiMesh_3et1x")
 target_count = 650
 area_radius_x = 300.0
 area_radius_z = 200.0
@@ -1279,7 +1816,7 @@ minimum_height_above_water = 3.0
 visible = true
 cast_shadow = 3
 gi_mode = 2
-multimesh = SubResource("MultiMesh_laf3l")
+multimesh = SubResource("MultiMesh_3et1x")
 
 [node name="TreeImpostorMultimesh10" parent="TreeImpostors" unique_id=846307287 instance=ExtResource("32_mdq0j")]
 transform = Transform3D(0.9758881, 0, -0.21827143, 0, 1, 0, 0.21827143, 0, 0.9758881, -50.56749, 10.8320465, -338.98077)
@@ -1296,7 +1833,7 @@ tree_shadows_enabled = true
 [node name="Trees" parent="TreeImpostors/TreeImpostorMultimesh10" index="0" unique_id=184116622]
 material_override = ExtResource("35_iyaox")
 gi_mode = 2
-multimesh = SubResource("MultiMesh_4scdh")
+multimesh = SubResource("MultiMesh_uonmy")
 target_count = 650
 area_radius_x = 300.0
 area_radius_z = 200.0
@@ -1310,7 +1847,7 @@ minimum_height_above_water = 3.0
 visible = true
 cast_shadow = 3
 gi_mode = 2
-multimesh = SubResource("MultiMesh_4scdh")
+multimesh = SubResource("MultiMesh_uonmy")
 
 [node name="TreeImpostorMultimesh6" parent="TreeImpostors" unique_id=390950833 instance=ExtResource("32_mdq0j")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -433.62213, 10.8320465, -220.54488)
@@ -1325,7 +1862,7 @@ tree_shadows_enabled = true
 [node name="Trees" parent="TreeImpostors/TreeImpostorMultimesh6" index="0" unique_id=184116622]
 material_override = ExtResource("35_iyaox")
 gi_mode = 2
-multimesh = SubResource("MultiMesh_df66w")
+multimesh = SubResource("MultiMesh_mmqtf")
 area_radius_x = 168.0
 area_radius_z = 203.0
 min_spacing = 3.85
@@ -1337,7 +1874,7 @@ max_ground_slope_degrees = 11.0
 visible = true
 cast_shadow = 3
 gi_mode = 2
-multimesh = SubResource("MultiMesh_df66w")
+multimesh = SubResource("MultiMesh_mmqtf")
 
 [node name="TreeImpostorMultimesh2" parent="TreeImpostors" unique_id=836958728 instance=ExtResource("32_mdq0j")]
 transform = Transform3D(0.91799974, 0, 0.396581, 0, 1, 0, -0.396581, 0, 0.91799974, -379.4524, 10.8320465, 123.041565)
@@ -1352,7 +1889,7 @@ tree_shadows_enabled = true
 [node name="Trees" parent="TreeImpostors/TreeImpostorMultimesh2" index="0" unique_id=184116622]
 material_override = ExtResource("35_iyaox")
 gi_mode = 2
-multimesh = SubResource("MultiMesh_0gqsi")
+multimesh = SubResource("MultiMesh_rvdsh")
 area_radius_x = 299.0
 area_radius_z = 269.0
 min_spacing = 3.85
@@ -1364,7 +1901,7 @@ minimum_height_above_water = 7.0
 visible = true
 cast_shadow = 3
 gi_mode = 2
-multimesh = SubResource("MultiMesh_0gqsi")
+multimesh = SubResource("MultiMesh_rvdsh")
 
 [node name="TreeImpostorMultimesh4" parent="TreeImpostors" unique_id=383595827 instance=ExtResource("32_mdq0j")]
 transform = Transform3D(0.91799974, 0, 0.396581, 0, 1, 0, -0.396581, 0, 0.91799974, -391.37134, 10.8320465, 274.92538)
@@ -1379,7 +1916,7 @@ tree_shadows_enabled = true
 [node name="Trees" parent="TreeImpostors/TreeImpostorMultimesh4" index="0" unique_id=184116622]
 material_override = ExtResource("35_iyaox")
 gi_mode = 2
-multimesh = SubResource("MultiMesh_y3rlo")
+multimesh = SubResource("MultiMesh_2315n")
 area_radius_x = 168.0
 area_radius_z = 269.0
 min_spacing = 3.85
@@ -1391,7 +1928,7 @@ minimum_height_above_water = 7.0
 visible = true
 cast_shadow = 3
 gi_mode = 2
-multimesh = SubResource("MultiMesh_y3rlo")
+multimesh = SubResource("MultiMesh_2315n")
 
 [node name="TreeImpostorMultimesh5" parent="TreeImpostors" unique_id=1666605584 instance=ExtResource("32_mdq0j")]
 transform = Transform3D(0.91799974, 0, 0.396581, 0, 1, 0, -0.396581, 0, 0.91799974, -649.49854, 10.8320465, 653.8905)
@@ -1405,7 +1942,7 @@ tree_shadows_enabled = true
 [node name="Trees" parent="TreeImpostors/TreeImpostorMultimesh5" index="0" unique_id=184116622]
 material_override = ExtResource("35_iyaox")
 gi_mode = 2
-multimesh = SubResource("MultiMesh_hrvh4")
+multimesh = SubResource("MultiMesh_4684c")
 area_radius_x = 198.0
 area_radius_z = 174.0
 min_spacing = 6.25
@@ -1416,7 +1953,7 @@ valid_ground_name_contains = PackedStringArray("Terrain_Master_COL", "Terrain_CO
 visible = true
 cast_shadow = 3
 gi_mode = 2
-multimesh = SubResource("MultiMesh_hrvh4")
+multimesh = SubResource("MultiMesh_4684c")
 
 [node name="TreeImpostorMultimesh3" parent="TreeImpostors" unique_id=1495973294 instance=ExtResource("32_mdq0j")]
 transform = Transform3D(0.91799974, 0, 0.396581, 0, 1, 0, -0.396581, 0, 0.91799974, -445.86667, 10.8320465, -20.985092)
@@ -1431,7 +1968,7 @@ tree_shadows_enabled = true
 [node name="Trees" parent="TreeImpostors/TreeImpostorMultimesh3" index="0" unique_id=184116622]
 material_override = ExtResource("35_iyaox")
 gi_mode = 2
-multimesh = SubResource("MultiMesh_n0k1o")
+multimesh = SubResource("MultiMesh_8yoyd")
 area_radius_x = 299.0
 area_radius_z = 269.0
 min_spacing = 3.85
@@ -1443,7 +1980,7 @@ minimum_height_above_water = 7.9
 visible = true
 cast_shadow = 3
 gi_mode = 2
-multimesh = SubResource("MultiMesh_n0k1o")
+multimesh = SubResource("MultiMesh_8yoyd")
 
 [node name="LightmapGI" type="LightmapGI" parent="." unique_id=1117524579]
 bounces = 2
@@ -2325,7 +2862,7 @@ visible = false
 [node name="Terrain_VIS" parent="TerrainRoot/Gold_City/Scene Collection/Collection/Terrain" parent_id_path=PackedInt32Array(297389943, 1315796497) index="6" unique_id=1256756484]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.51312256, 0.32681274, 0.9812622)
 material_override = SubResource("ShaderMaterial_5h1yh")
-material_overlay = SubResource("ShaderMaterial_iegie")
+material_overlay = SubResource("ShaderMaterial_8yoyd")
 
 [node name="SM_Palm_Impostor_Zone_GoldCity_001_VIS" parent="TerrainRoot/Gold_City/Scene Collection/PALM_IMPOSTORS_VIS" parent_id_path=PackedInt32Array(297389943, 76625302) index="0" unique_id=464716858]
 material_override = ExtResource("36_403n4")
@@ -2377,7 +2914,7 @@ shape = SubResource("ConcavePolygonShape3D_g5j8w")
 [node name="WaterIntegration" type="Node3D" parent="." unique_id=1889730552]
 
 [node name="Ocean" parent="WaterIntegration" unique_id=1340264265 instance=ExtResource("40_3mclj")]
-ocean_material = SubResource("ShaderMaterial_8o7o7")
+ocean_material = SubResource("ShaderMaterial_scmhv")
 wave_world_size_a = 153.5
 wave_world_size_b = 104.0
 wave_amplitude_a = 0.7999999821184
@@ -2447,6 +2984,8 @@ bones/5/scale = Vector3(1, 0.99999994, 0.99999994)
 bones/6/position = Vector3(-0.045697533, 0.10575647, -0.00599908)
 bones/6/scale = Vector3(0.99999994, 1.0000001, 1)
 bones/7/scale = Vector3(0.99999994, 1, 0.99999994)
+bones/8/position = Vector3(-9.685755e-08, 0.27867126, -2.0861626e-07)
+bones/8/scale = Vector3(1, 1, 0.9999999)
 bones/9/rotation = Quaternion(2.2111117e-16, -6.0766336e-11, -3.5107657e-08, 1)
 bones/10/position = Vector3(0.026818521, 0.02464804, 0.015739927)
 bones/10/rotation = Quaternion(0.2532839, 0.061619177, -0.22821042, 0.9380674)
@@ -2476,6 +3015,7 @@ bones/24/rotation = Quaternion(0.13183951, 0.13147534, -0.2248103, 0.9564481)
 bones/25/rotation = Quaternion(0.43952805, 0.59007734, -0.55047023, 0.39446965)
 bones/25/scale = Vector3(1.0000001, 1.0000001, 1)
 bones/26/scale = Vector3(1, 0.99999994, 0.9999999)
+bones/27/scale = Vector3(1, 0.9999999, 0.99999994)
 bones/29/position = Vector3(-0.026817312, 0.024661459, 0.015761862)
 bones/29/rotation = Quaternion(0.25309613, -0.0613242, 0.22735296, 0.93834555)
 bones/30/position = Vector3(-3.958121e-09, 0.04187095, 1.1144547e-07)
@@ -2662,7 +3202,7 @@ editor_preview_mode = 0
 
 [node name="EntryBubbles" parent="CameraSystem/ChaseCamera/Camera3D/UnderwaterEffect/WaterCrossingOverlay" index="0"]
 visible = false
-material = SubResource("CanvasItemMaterial_ndnrr")
+material = SubResource("CanvasItemMaterial_5bves")
 position = Vector2(1, 1.76)
 amount = 500
 texture = SubResource("GradientTexture2D_pl0kw")
@@ -2670,10 +3210,10 @@ lifetime = 20.0
 speed_scale = 8.0
 explosiveness = 1.0
 randomness = 1.0
-process_material = SubResource("ParticleProcessMaterial_twiso")
+process_material = SubResource("ParticleProcessMaterial_xhxpx")
 
 [node name="UnderwaterPostProcess" parent="CameraSystem/ChaseCamera/Camera3D/UnderwaterEffect" index="1" unique_id=1854893749]
-material_override = SubResource("ShaderMaterial_ax04d")
+material_override = SubResource("ShaderMaterial_m8vqh")
 
 [node name="Debug" type="Node" parent="." unique_id=1303880580]
 
@@ -2773,27 +3313,30 @@ transform = Transform3D(0.3716938, 0, -0.33443052, 0, 0.5, 0, 0.33443052, 0, 0.3
 [node name="Boat_2" parent="Atrezzo" unique_id=1280069477 instance=ExtResource("60_2cq5j")]
 transform = Transform3D(-0.82091784, 0, 0.87526774, 0, 1.1999999, 0, -0.87526774, 0, -0.82091784, 345.85632, -10.093709, 219.55032)
 
-[node name="Boat_2_VIS" parent="Atrezzo/Boat_2" index="0" unique_id=1711130682]
+[node name="Boat_2_VIS" parent="Atrezzo/Boat_2" index="0" unique_id=860346582]
 transform = Transform3D(1.0000001, 0, 0, 0, 1, 0, 0, 0, 1.0000001, 0, 0, 0)
-surface_material_override/4 = SubResource("StandardMaterial3D_yrkm7")
 
-[node name="Boat_2_COL" parent="Atrezzo/Boat_2" index="1" unique_id=1628030358]
+[node name="Boat_2_COL" parent="Atrezzo/Boat_2" index="1" unique_id=131296536]
 visible = false
 
 [node name="OmniLight3D" type="OmniLight3D" parent="Atrezzo/Boat_2" unique_id=455881687]
-transform = Transform3D(0.83333343, 0, 0, 0, 0.8333333, 0, 0, 0, 0.83333343, 36.454224, 37.317654, 0.5342102)
-light_energy = 13.078
+transform = Transform3D(0.8333334, 0, 2.9802322e-08, 0, 0.8333333, 0, -2.9802322e-08, 0, 0.8333334, 42.951263, 56.906982, 8.896614)
+light_color = Color(1, 0.9137255, 0.7411765, 1)
+light_energy = 1000.0
+light_specular = 0.0
 light_bake_mode = 1
-omni_range = 70.065
-omni_attenuation = 0.826
+shadow_enabled = true
+shadow_blur = 10.0
+omni_range = 119.966
 
 [node name="OmniLight3D2" type="OmniLight3D" parent="Atrezzo/Boat_2" unique_id=599698458]
-transform = Transform3D(0.83333343, 0, 0, 0, 0.8333333, 0, 0, 0, 0.83333343, -58.44696, 38.839928, -1.4468384)
-light_color = Color(0.38, 0.566, 1, 1)
-light_energy = 2.0
-light_bake_mode = 1
-omni_range = 70.065
-omni_attenuation = 0.826
+transform = Transform3D(0.83333343, 0, 0, 0, 0.8333333, 0, 0, 0, 0.83333343, -58.44696, 23.642128, -1.4468384)
+light_color = Color(0, 0.6516728, 0.8064055, 1)
+light_energy = 500.0
+light_specular = 0.0
+shadow_enabled = true
+shadow_blur = 7.293
+omni_range = 78.021
 
 [node name="Rock8" parent="Atrezzo" unique_id=571328736 instance=ExtResource("61_874od")]
 transform = Transform3D(33.475, 0, 0, 0, 33.475, 0, 0, 0, 33.475, 157.0853, -40.529305, 376.03717)
@@ -2804,7 +3347,7 @@ surface_material_override/0 = ExtResource("62_gecxy")
 
 [node name="Jump1" type="MeshInstance3D" parent="Atrezzo" unique_id=1190177101]
 transform = Transform3D(-0.18113187, 0, 0.9834588, 0, 1, 0, -0.9834588, 0, -0.18113187, 255.78401, 1.2042637, 254.27094)
-material_override = SubResource("StandardMaterial3D_iyevr")
+material_override = ExtResource("16_w15id")
 mesh = SubResource("PrismMesh_tpwhi")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Atrezzo/Jump1" unique_id=1563769446]
@@ -2815,8 +3358,8 @@ shape = SubResource("ConcavePolygonShape3D_djt2o")
 
 [node name="Jump4" type="MeshInstance3D" parent="Atrezzo" unique_id=1929662083]
 transform = Transform3D(-0.18113187, 0, 0.9834588, 0, 1, 0, -0.9834588, 0, -0.18113187, 235.55669, 1.2042637, 355.65494)
+material_override = ExtResource("16_w15id")
 mesh = SubResource("PrismMesh_tpwhi")
-surface_material_override/0 = SubResource("StandardMaterial3D_iyevr")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Atrezzo/Jump4" unique_id=1041393990]
 physics_material_override = SubResource("PhysicsMaterial_rtwgq")
@@ -2826,8 +3369,8 @@ shape = SubResource("ConcavePolygonShape3D_djt2o")
 
 [node name="Jump5" type="MeshInstance3D" parent="Atrezzo" unique_id=601217171]
 transform = Transform3D(-0.18113187, 0, 0.9834588, 0, 1, 0, -0.9834588, 0, -0.18113187, 290.26944, 1.2042637, 464.31085)
+material_override = ExtResource("16_w15id")
 mesh = SubResource("PrismMesh_tpwhi")
-surface_material_override/0 = SubResource("StandardMaterial3D_iyevr")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Atrezzo/Jump5" unique_id=1185602380]
 physics_material_override = SubResource("PhysicsMaterial_rtwgq")
@@ -2837,8 +3380,8 @@ shape = SubResource("ConcavePolygonShape3D_djt2o")
 
 [node name="Jump2" type="MeshInstance3D" parent="Atrezzo" unique_id=982363763]
 transform = Transform3D(-0.18113187, 0, 0.9834588, 0, 1, 0, -0.9834588, 0, -0.18113187, 217.87936, 1.2042637, 160.06549)
+material_override = ExtResource("16_w15id")
 mesh = SubResource("PrismMesh_tpwhi")
-surface_material_override/0 = SubResource("StandardMaterial3D_iyevr")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Atrezzo/Jump2" unique_id=363621744]
 physics_material_override = SubResource("PhysicsMaterial_rtwgq")
@@ -2848,14 +3391,23 @@ shape = SubResource("ConcavePolygonShape3D_djt2o")
 
 [node name="Jump3" type="MeshInstance3D" parent="Atrezzo" unique_id=1836126976]
 transform = Transform3D(-0.18113187, 0, 0.9834588, 0, 1, 0, -0.9834588, 0, -0.18113187, 232.30806, 1.2042637, -8.943954)
+material_override = ExtResource("16_w15id")
 mesh = SubResource("PrismMesh_tpwhi")
-surface_material_override/0 = SubResource("StandardMaterial3D_iyevr")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Atrezzo/Jump3" unique_id=2017955259]
 physics_material_override = SubResource("PhysicsMaterial_rtwgq")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Atrezzo/Jump3/StaticBody3D" unique_id=1708739139]
 shape = SubResource("ConcavePolygonShape3D_djt2o")
+
+[node name="AreaLight3D" type="AreaLight3D" parent="." unique_id=472932610]
+transform = Transform3D(0.6869495, 0.72670525, 3.1765296e-08, 1.1110301e-15, -4.37114e-08, 1, 0.72670525, -0.6869495, -3.0027522e-08, 352.41745, 2.122757, 226.33623)
+light_color = Color(0, 0.92011076, 0.9669445, 1)
+light_energy = 1000.0
+light_specular = 0.552
+area_range = 135.349
+area_attenuation = 0.741
+area_size = Vector2(170.748, 3.837)
 
 [node name="Circuit" type="Node3D" parent="." unique_id=1519848915]
 
@@ -3125,6 +3677,20 @@ transform = Transform3D(-0.4889062, 0, -0.5488129, 0, 0.735, 0, 0.5488129, 0, -0
 [editable path="TreeImpostors/TreeImpostorMultimesh"]
 [editable path="TreeImpostors/TreeImpostorMultimesh7"]
 [editable path="TreeImpostors/TreeImpostorMultimesh12"]
+[editable path="TreeImpostors/TreeImpostorMultimesh13"]
+[editable path="TreeImpostors/TreeImpostorMultimesh14"]
+[editable path="TreeImpostors/TreeImpostorMultimesh15"]
+[editable path="TreeImpostors/TreeImpostorMultimesh16"]
+[editable path="TreeImpostors/TreeImpostorMultimesh17"]
+[editable path="TreeImpostors/TreeImpostorMultimesh18"]
+[editable path="TreeImpostors/TreeImpostorMultimesh19"]
+[editable path="TreeImpostors/TreeImpostorMultimesh20"]
+[editable path="TreeImpostors/TreeImpostorMultimesh21"]
+[editable path="TreeImpostors/TreeImpostorMultimesh22"]
+[editable path="TreeImpostors/TreeImpostorMultimesh23"]
+[editable path="TreeImpostors/TreeImpostorMultimesh24"]
+[editable path="TreeImpostors/TreeImpostorMultimesh25"]
+[editable path="TreeImpostors/TreeImpostorMultimesh26"]
 [editable path="TreeImpostors/TreeImpostorMultimesh8"]
 [editable path="TreeImpostors/TreeImpostorMultimesh11"]
 [editable path="TreeImpostors/TreeImpostorMultimesh9"]

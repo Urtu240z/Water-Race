@@ -1,4 +1,4 @@
-[gd_scene load_steps=3 format=3 uid="uid://btw2x05c8jv003"]
+[gd_scene format=3 uid="uid://dorndfex7am55"]
 
 [ext_resource type="Script" path="res://world/vegetation/trees/tree_impostor_frozen.gd" id="1_wqoht"]
 

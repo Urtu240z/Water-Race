@@ -6,5 +6,7 @@
 resource_name = "_BoatRailings_GF"
 cull_mode = 2
 albedo_texture = ExtResource("texture_f8bc7e738079")
+metallic = 1.0
+metallic_specular = 0.44
 roughness = 0.5
 metadata/_gltf_primary_texture_coord = 0

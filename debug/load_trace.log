@@ -1,11 +1,110 @@
 
 ========== WATER RACE LOAD TRACE ==========
-[    1.334 ms] GAME START                          +   1.334 ms
-[    1.390 ms] GRAPHICS_AUTOLOAD_READY_BEGIN       +   0.056 ms
-[    1.422 ms] GRAPHICS_PROFILES_LOAD_BEGIN        +   0.032 ms
-[    3.609 ms] GRAPHICS_PROFILES_LOADED            +   2.187 ms
-[    3.655 ms] GRAPHICS_INITIAL_APPLY_QUEUED       +   0.046 ms
-[    3.802 ms] GRAPHICS_AUTOLOAD_READY_END         +   0.147 ms
-[    4.232 ms] GRAPHICS_APPLY_BEGIN                +   0.430 ms
-[    4.252 ms] GRAPHICS_TARGETS_COLLECTED          +   0.020 ms
-[    4.282 ms] GRAPHICS_APPLY_END                  +   0.030 ms
+[    1.430 ms] GAME START                          +   1.430 ms
+[    1.471 ms] LEVEL_ENTER_TREE: GoldCity          +   0.041 ms
+[    1.492 ms] LEVEL_REFERENCES_RESOLVED: GoldCity +   0.021 ms
+[    2.360 ms] LEVEL_ROOT_ENTER_TREE_DONE: GoldCity +   0.868 ms
+[   33.969 ms] GRAPHICS_AUTOLOAD_READY_BEGIN       +  31.609 ms
+[   34.044 ms] GRAPHICS_PROFILES_LOAD_BEGIN        +   0.075 ms
+[   36.377 ms] GRAPHICS_PROFILES_LOADED            +   2.333 ms
+[   36.424 ms] GRAPHICS_INITIAL_APPLY_QUEUED       +   0.047 ms
+[   36.437 ms] GRAPHICS_AUTOLOAD_READY_END         +   0.013 ms
+[   36.924 ms] TREE_BAKE_LOAD_BEGIN: /root/GoldCity/TreeImpostors/TreeImpostorMultimesh/Trees +   0.487 ms
+[   38.493 ms] TREE_BAKE_LOADED: /root/GoldCity/TreeImpostors/TreeImpostorMultimesh/Trees +   1.569 ms
+[   43.138 ms] TREE_BAKE_LOAD_BEGIN: /root/GoldCity/TreeImpostors/TreeImpostorMultimesh7/Trees +   4.645 ms
+[   44.938 ms] TREE_BAKE_LOADED: /root/GoldCity/TreeImpostors/TreeImpostorMultimesh7/Trees +   1.800 ms
+[   46.186 ms] TREE_BAKE_LOAD_BEGIN: /root/GoldCity/TreeImpostors/TreeImpostorMultimesh12/Trees +   1.248 ms
+[   47.682 ms] TREE_BAKE_LOADED: /root/GoldCity/TreeImpostors/TreeImpostorMultimesh12/Trees +   1.496 ms
+[   48.583 ms] TREE_BAKE_LOAD_BEGIN: /root/GoldCity/TreeImpostors/TreeImpostorMultimesh13/Trees +   0.901 ms
+[   49.193 ms] TREE_BAKE_LOADED: /root/GoldCity/TreeImpostors/TreeImpostorMultimesh13/Trees +   0.610 ms
+[   50.166 ms] TREE_BAKE_LOAD_BEGIN: /root/GoldCity/TreeImpostors/TreeImpostorMultimesh14/Trees +   0.973 ms
+[   50.744 ms] TREE_BAKE_LOADED: /root/GoldCity/TreeImpostors/TreeImpostorMultimesh14/Trees +   0.578 ms
+[   51.995 ms] TREE_BAKE_LOAD_BEGIN: /root/GoldCity/TreeImpostors/TreeImpostorMultimesh15/Trees +   1.251 ms
+[   52.657 ms] TREE_BAKE_LOADED: /root/GoldCity/TreeImpostors/TreeImpostorMultimesh15/Trees +   0.662 ms
+[   53.552 ms] TREE_BAKE_LOAD_BEGIN: /root/GoldCity/TreeImpostors/TreeImpostorMultimesh16/Trees +   0.895 ms
+[   54.151 ms] TREE_BAKE_LOADED: /root/GoldCity/TreeImpostors/TreeImpostorMultimesh16/Trees +   0.599 ms
+[   55.085 ms] TREE_BAKE_LOAD_BEGIN: /root/GoldCity/TreeImpostors/TreeImpostorMultimesh17/Trees +   0.934 ms
+[   55.710 ms] TREE_BAKE_LOADED: /root/GoldCity/TreeImpostors/TreeImpostorMultimesh17/Trees +   0.625 ms
+[   56.673 ms] TREE_BAKE_LOAD_BEGIN: /root/GoldCity/TreeImpostors/TreeImpostorMultimesh18/Trees +   0.963 ms
+[   57.273 ms] TREE_BAKE_LOADED: /root/GoldCity/TreeImpostors/TreeImpostorMultimesh18/Trees +   0.600 ms
+[   58.985 ms] TREE_BAKE_LOAD_BEGIN: /root/GoldCity/TreeImpostors/TreeImpostorMultimesh19/Trees +   1.712 ms
+[   59.594 ms] TREE_BAKE_LOADED: /root/GoldCity/TreeImpostors/TreeImpostorMultimesh19/Trees +   0.609 ms
+[   60.476 ms] TREE_BAKE_LOAD_BEGIN: /root/GoldCity/TreeImpostors/TreeImpostorMultimesh20/Trees +   0.882 ms
+[   61.181 ms] TREE_BAKE_LOADED: /root/GoldCity/TreeImpostors/TreeImpostorMultimesh20/Trees +   0.705 ms
+[   62.082 ms] TREE_BAKE_LOAD_BEGIN: /root/GoldCity/TreeImpostors/TreeImpostorMultimesh21/Trees +   0.901 ms
+[   62.663 ms] TREE_BAKE_LOADED: /root/GoldCity/TreeImpostors/TreeImpostorMultimesh21/Trees +   0.581 ms
+[   63.545 ms] TREE_BAKE_LOAD_BEGIN: /root/GoldCity/TreeImpostors/TreeImpostorMultimesh22/Trees +   0.882 ms
+[   64.161 ms] TREE_BAKE_LOADED: /root/GoldCity/TreeImpostors/TreeImpostorMultimesh22/Trees +   0.616 ms
+[   65.076 ms] TREE_BAKE_LOAD_BEGIN: /root/GoldCity/TreeImpostors/TreeImpostorMultimesh23/Trees +   0.915 ms
+[   65.645 ms] TREE_BAKE_LOADED: /root/GoldCity/TreeImpostors/TreeImpostorMultimesh23/Trees +   0.569 ms
+[   66.811 ms] TREE_BAKE_LOAD_BEGIN: /root/GoldCity/TreeImpostors/TreeImpostorMultimesh24/Trees +   1.166 ms
+[   67.408 ms] TREE_BAKE_LOADED: /root/GoldCity/TreeImpostors/TreeImpostorMultimesh24/Trees +   0.597 ms
+[   68.243 ms] TREE_BAKE_LOAD_BEGIN: /root/GoldCity/TreeImpostors/TreeImpostorMultimesh25/Trees +   0.835 ms
+[   68.833 ms] TREE_BAKE_LOADED: /root/GoldCity/TreeImpostors/TreeImpostorMultimesh25/Trees +   0.590 ms
+[   69.723 ms] TREE_BAKE_LOAD_BEGIN: /root/GoldCity/TreeImpostors/TreeImpostorMultimesh26/Trees +   0.890 ms
+[   70.267 ms] TREE_BAKE_LOADED: /root/GoldCity/TreeImpostors/TreeImpostorMultimesh26/Trees +   0.544 ms
+[   71.162 ms] TREE_BAKE_LOAD_BEGIN: /root/GoldCity/TreeImpostors/TreeImpostorMultimesh8/Trees +   0.895 ms
+[   73.158 ms] TREE_BAKE_LOADED: /root/GoldCity/TreeImpostors/TreeImpostorMultimesh8/Trees +   1.996 ms
+[   74.364 ms] TREE_BAKE_LOAD_BEGIN: /root/GoldCity/TreeImpostors/TreeImpostorMultimesh11/Trees +   1.206 ms
+[   76.257 ms] TREE_BAKE_LOADED: /root/GoldCity/TreeImpostors/TreeImpostorMultimesh11/Trees +   1.893 ms
+[   77.542 ms] TREE_BAKE_LOAD_BEGIN: /root/GoldCity/TreeImpostors/TreeImpostorMultimesh9/Trees +   1.285 ms
+[   79.344 ms] TREE_BAKE_LOADED: /root/GoldCity/TreeImpostors/TreeImpostorMultimesh9/Trees +   1.802 ms
+[   80.543 ms] TREE_BAKE_LOAD_BEGIN: /root/GoldCity/TreeImpostors/TreeImpostorMultimesh10/Trees +   1.199 ms
+[   82.376 ms] TREE_BAKE_LOADED: /root/GoldCity/TreeImpostors/TreeImpostorMultimesh10/Trees +   1.833 ms
+[   83.628 ms] TREE_BAKE_LOAD_BEGIN: /root/GoldCity/TreeImpostors/TreeImpostorMultimesh6/Trees +   1.252 ms
+[   85.521 ms] TREE_BAKE_LOADED: /root/GoldCity/TreeImpostors/TreeImpostorMultimesh6/Trees +   1.893 ms
+[   87.127 ms] TREE_BAKE_LOAD_BEGIN: /root/GoldCity/TreeImpostors/TreeImpostorMultimesh2/Trees +   1.606 ms
+[   88.920 ms] TREE_BAKE_LOADED: /root/GoldCity/TreeImpostors/TreeImpostorMultimesh2/Trees +   1.793 ms
+[   89.949 ms] TREE_BAKE_LOAD_BEGIN: /root/GoldCity/TreeImpostors/TreeImpostorMultimesh4/Trees +   1.029 ms
+[   91.669 ms] TREE_BAKE_LOADED: /root/GoldCity/TreeImpostors/TreeImpostorMultimesh4/Trees +   1.720 ms
+[   92.950 ms] TREE_BAKE_LOAD_BEGIN: /root/GoldCity/TreeImpostors/TreeImpostorMultimesh5/Trees +   1.281 ms
+[   94.806 ms] TREE_BAKE_LOADED: /root/GoldCity/TreeImpostors/TreeImpostorMultimesh5/Trees +   1.856 ms
+[   96.301 ms] TREE_BAKE_LOAD_BEGIN: /root/GoldCity/TreeImpostors/TreeImpostorMultimesh3/Trees +   1.495 ms
+[   98.284 ms] TREE_BAKE_LOADED: /root/GoldCity/TreeImpostors/TreeImpostorMultimesh3/Trees +   1.983 ms
+[  102.685 ms] PAUSE_MENU_READY                    +   4.401 ms
+[  103.063 ms] SKY_RESOURCE_LOAD_BEGIN: uid://olqtngkjhlxu +   0.378 ms
+[  103.094 ms] SKY_RESOURCE_LOADED: uid://olqtngkjhlxu +   0.031 ms
+[  103.147 ms] SKY_READY                           +   0.053 ms
+[  103.275 ms] TERRAIN_MATERIAL_SCAN_BEGIN         +   0.128 ms
+[  104.281 ms] TERRAIN_READY                       +   1.006 ms
+[  104.321 ms] OCEAN_SURFACE_READY_BEGIN           +   0.040 ms
+[  104.359 ms] OCEAN_MESH_REBUILD_BEGIN #1         +   0.038 ms
+[  104.550 ms] OCEAN_MESH_CACHE_LOAD_BEGIN         +   0.191 ms
+[  250.425 ms] OCEAN_MESH_CACHE_LOAD_END           + 145.875 ms
+[  250.473 ms] OCEAN_MESH_CACHE_HIT                +   0.048 ms
+[  250.486 ms] OCEAN_MESH_CACHE_ASSIGN_BEGIN       +   0.013 ms
+[  250.522 ms] OCEAN_MESH_CACHE_ASSIGN_END         +   0.036 ms
+[  251.371 ms] OCEAN_BUILD_DEBUG_GUIDES_BEGIN      +   0.849 ms
+[  251.400 ms] OCEAN_BUILD_DEBUG_GUIDES_END        +   0.029 ms
+[  251.412 ms] OCEAN_MESH_REBUILD_END #1           +   0.012 ms
+[  251.426 ms] OCEAN_SURFACE_MESHES_ENSURED        +   0.014 ms
+[  251.465 ms] OCEAN_SURFACE_READY_END             +   0.039 ms
+[  251.480 ms] OCEAN_READY_BEGIN                   +   0.015 ms
+[  252.223 ms] OCEAN_CORE_READY                    +   0.743 ms
+[  252.241 ms] OCEAN_HEIGHT_MAPS_BEGIN             +   0.018 ms
+[  253.662 ms] OCEAN_HEIGHT_MAPS_READY             +   1.421 ms
+[  253.689 ms] OCEAN_READY_END                     +   0.027 ms
+[  253.719 ms] WILDLIFE_SPAWN_BEGIN                +   0.030 ms
+[  261.541 ms] WILDLIFE_BIRDS_READY                +   7.822 ms
+[  266.508 ms] WILDLIFE_FISH_READY                 +   4.967 ms
+[  267.562 ms] WILDLIFE_DOLPHINS_READY             +   1.054 ms
+[  268.437 ms] WILDLIFE_READY                      +   0.875 ms
+[  269.030 ms] RIDER_READY_BEGIN                   +   0.593 ms
+[  269.173 ms] RIDER_READY                         +   0.143 ms
+[  276.800 ms] RIDER_READY_BEGIN                   +   7.627 ms
+[  276.957 ms] RIDER_READY                         +   0.157 ms
+[  277.049 ms] JETSKI_READY_BEGIN                  +   0.092 ms
+[  277.195 ms] JETSKI_READY                        +   0.146 ms
+[  281.205 ms] LEVEL_ROOT_READY_BEGIN: GoldCity    +   4.010 ms
+[  289.762 ms] LEVEL_ROOT_READY: GoldCity          +   8.557 ms
+[  289.812 ms] FIRST_FRAME_TRACE_QUEUED: GoldCity  +   0.050 ms
+[ 1027.627 ms] GRAPHICS_APPLY_BEGIN                + 737.815 ms
+[ 1031.996 ms] GRAPHICS_TARGETS_COLLECTED          +   4.369 ms
+[ 1033.408 ms] GRAPHICS_APPLY_END                  +   1.412 ms
+[ 1043.747 ms] UNDERWATER_PREWARM_BEGIN            +  10.339 ms
+[ 1145.746 ms] UNDERWATER_PREWARM_END              + 101.999 ms
+[ 1145.820 ms] FIRST_FRAME_TRACE_CALLBACK: GoldCity +   0.074 ms
+[ 1167.184 ms] FIRST_PROCESS_FRAME: GoldCity       +  21.364 ms
+[ 1170.489 ms] FIRST_RENDER_PRE_DRAW: GoldCity     +   3.305 ms
+[ 1481.711 ms] FIRST_RENDER_POST_DRAW: GoldCity    + 311.222 ms
+[ 1481.790 ms] FIRST_FRAME_DRAWN: GoldCity         +   0.079 ms

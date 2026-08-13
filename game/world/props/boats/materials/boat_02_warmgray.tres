@@ -2,6 +2,6 @@
 
 [resource]
 resource_name = "[WarmGray1]"
-cull_mode = 2
-albedo_color = Color(0.93328965, 0.98432255, 0.98432255, 1)
-roughness = 0.5
+metallic = 0.71
+metallic_specular = 0.97
+roughness = 0.01

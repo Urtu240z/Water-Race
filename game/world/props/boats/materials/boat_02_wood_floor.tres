@@ -6,5 +6,7 @@
 resource_name = "Wood_Floor2"
 cull_mode = 2
 albedo_texture = ExtResource("texture_96c6bd9db527")
-roughness = 0.5
+metallic = 0.5
+metallic_specular = 0.93
+roughness = 0.0
 metadata/_gltf_primary_texture_coord = 0
