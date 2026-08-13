@@ -145,6 +145,19 @@ uniform float specular :
 
 
 // ============================================================
+// BILLBOARD FREEZE
+// ============================================================
+
+group_uniforms BillboardFreeze;
+
+uniform float freeze_billboard :
+	hint_range(0.0, 1.0, 0.01) = 0.0;
+
+uniform vec3 frozen_camera_position =
+	vec3(0.0);
+
+
+// ============================================================
 // FINAL COLOR
 // ============================================================
 
@@ -589,8 +602,19 @@ void vertex() {
 			0.0
 		);
 
+	vec3 billboard_camera_ws =
+		mix(
+			CAMERA_POSITION_WORLD,
+			frozen_camera_position,
+			clamp(
+				freeze_billboard,
+				0.0,
+				1.0
+			)
+		);
+
 	vec3 to_camera_ws =
-		CAMERA_POSITION_WORLD
+		billboard_camera_ws
 		- origin_ws;
 
 	to_camera_ws.y =

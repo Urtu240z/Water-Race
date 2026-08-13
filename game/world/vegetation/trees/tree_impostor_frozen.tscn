@@ -1,0 +1,12 @@
+[gd_scene load_steps=3 format=3 uid="uid://btw2x05c8jv003"]
+
+[ext_resource type="Script" path="res://world/vegetation/trees/tree_impostor_frozen.gd" id="1_wqoht"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ek1ow"]
+size = Vector3(20, 20, 20)
+
+[node name="TreeImpostorFrozen" type="Area3D"]
+script = ExtResource("1_wqoht")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_ek1ow")
