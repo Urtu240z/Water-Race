@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Water Race"
-run/main_scene="res://startup/startup_bootstrap.tscn"
+run/main_scene="uid://cf71so1prahki"
 config/features=PackedStringArray("4.7", "Forward Plus")
 boot_splash/bg_color=Color(0, 0, 0, 1)
 boot_splash/show_image=false

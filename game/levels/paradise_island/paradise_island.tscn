@@ -20,6 +20,7 @@
 [ext_resource type="Texture2D" uid="uid://cpw3o0egt3xhj" path="res://shared/materials/terrain/textures/terrain_master/grass_normal.png" id="22_2sw4f"]
 [ext_resource type="Texture2D" uid="uid://bjbtr4wpa2non" path="res://shared/materials/terrain/textures/terrain_master/grass_orm.png" id="23_dehlt"]
 [ext_resource type="Texture2D" uid="uid://u0a4uawsdt4x" path="res://shared/materials/terrain/textures/terrain_master/moss_albedo.png" id="24_u0oh0"]
+[ext_resource type="Material" uid="uid://6doukc5dprt7" path="res://shared/materials/terrain/materials/rocks_02.tres" id="25_ert0j"]
 [ext_resource type="Texture2D" uid="uid://dgxnwr48qllj6" path="res://shared/materials/terrain/textures/terrain_master/moss_normal.png" id="25_ywwvg"]
 [ext_resource type="Texture2D" uid="uid://dw445jkd1svoe" path="res://shared/materials/terrain/textures/terrain_master/moss_orm.png" id="26_lcrxj"]
 [ext_resource type="Texture2D" uid="uid://q5yx1piuynov" path="res://shared/materials/terrain/textures/terrain_master/rock_albedo.png" id="27_jb3b0"]
@@ -78,22 +79,22 @@ shader_parameter/dry_sand_albedo = ExtResource("18_ikh8v")
 shader_parameter/dry_sand_orm = ExtResource("20_8v1g3")
 shader_parameter/dry_sand_normal = ExtResource("19_cjg0n")
 shader_parameter/dry_sand_tint = Color(1, 1, 1, 1)
-shader_parameter/dry_sand_brightness = 1.45999996736608
-shader_parameter/dry_sand_contrast = 0.5499999877064
-shader_parameter/dry_sand_saturation = 1.0
+shader_parameter/dry_sand_brightness = 1.62999996356624
+shader_parameter/dry_sand_contrast = 1.01999997720096
+shader_parameter/dry_sand_saturation = 0.88999998010672
 shader_parameter/wet_sand_albedo = ExtResource("30_8aq2h")
 shader_parameter/wet_sand_orm = ExtResource("32_xspgj")
 shader_parameter/wet_sand_normal = ExtResource("31_4l3kd")
 shader_parameter/wet_sand_tint = Color(1, 1, 1, 1)
 shader_parameter/wet_sand_brightness = 0.3999999910592
-shader_parameter/wet_sand_contrast = 1.0
+shader_parameter/wet_sand_contrast = 1.67999996244864
 shader_parameter/wet_sand_saturation = 1.0
 shader_parameter/grass_albedo = ExtResource("21_5pg1t")
 shader_parameter/grass_orm = ExtResource("23_dehlt")
 shader_parameter/grass_normal = ExtResource("22_2sw4f")
 shader_parameter/grass_tint = Color(0.75, 1, 0.65, 1)
-shader_parameter/grass_brightness = 0.61999998614176
-shader_parameter/grass_contrast = 0.9499999787656
+shader_parameter/grass_brightness = 1.0499999765304
+shader_parameter/grass_contrast = 1.08999997563632
 shader_parameter/grass_saturation = 1.8999999575312
 shader_parameter/rock_albedo = ExtResource("27_jb3b0")
 shader_parameter/rock_orm = ExtResource("29_toamk")
@@ -117,15 +118,15 @@ shader_parameter/triplanar_sharpness = 1.5
 shader_parameter/dry_sand_normal_strength = 1.05000001564626
 shader_parameter/wet_sand_normal_strength = 1.35000002011662
 shader_parameter/grass_normal_strength = 1.70000002533204
-shader_parameter/rock_normal_strength = 1.65000002458698
+shader_parameter/rock_normal_strength = 2.0
 shader_parameter/moss_normal_strength = 2.0
-shader_parameter/hex_tiling_mode = 2
+shader_parameter/hex_tiling_mode = 3
 shader_parameter/hex_rotation_strength = 0.11999999731776
-shader_parameter/hex_weight_contrast = 0.98999997787152
+shader_parameter/hex_weight_contrast = 0.1999999955296
 shader_parameter/hex_luminance_influence = 0.0999999977648
 shader_parameter/hex_blend_exponent = 1.0
 shader_parameter/material_sample_threshold = 0.002
-shader_parameter/water_level = 0.12
+shader_parameter/water_level = 2.205
 shader_parameter/wet_sand_height = 5.0
 shader_parameter/debug_view = 0
 
@@ -133,12 +134,12 @@ shader_parameter/debug_view = 0
 render_priority = 0
 shader = ExtResource("27_lh2je")
 shader_parameter/shadow_texture = ExtResource("12_qj7v8")
-shader_parameter/mask_center = Vector3(134.9561, -55.96886, 114.5202)
-shader_parameter/mask_right = Vector3(0.829735, 0, 0.558158)
-shader_parameter/mask_up = Vector3(0.408467, 0.681505, -0.607211)
+shader_parameter/mask_center = Vector3(134.95612, -55.968857, 114.5202)
+shader_parameter/mask_right = Vector3(0.8297349, 0, 0.5581576)
+shader_parameter/mask_up = Vector3(0.4084673, 0.68150496, -0.60721123)
 shader_parameter/capture_size = 1567.5691
-shader_parameter/to_sun_direction = Vector3(-0.380387, 0.731813, 0.565468)
-shader_parameter/shadow_strength = 0.91999997943616
+shader_parameter/to_sun_direction = Vector3(-0.38038722, 0.73181343, 0.56546855)
+shader_parameter/shadow_strength = 0.7999999821184
 shader_parameter/shadow_gamma = 0.4
 shader_parameter/shadow_threshold = 0.0
 shader_parameter/solid_shadow = false
@@ -197,7 +198,7 @@ shader_parameter/breakup = 0.0
 material = ExtResource("15_6i7i5")
 size = Vector2(10000, 10000)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ert0j"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ord5u"]
 resource_local_to_scene = true
 render_priority = 0
 shader = ExtResource("41_48bym")
@@ -362,7 +363,7 @@ shader_parameter/foam_scroll_speed = 0.13
 shader_parameter/foam_roughness = 0.70999998413008
 shader_parameter/ocean_foam_detail_quality = 1
 shader_parameter/ocean_foam_evaluation_distance = 520.0
-shader_parameter/ocean_surface_enabled = false
+shader_parameter/ocean_surface_enabled = true
 shader_parameter/ocean_logical_origin_offset_xz = Vector2(0, 0)
 shader_parameter/ocean_detail_center_xz = Vector2(0, 0)
 shader_parameter/ocean_detailed_wave_fade_start = 170.0
@@ -425,7 +426,7 @@ shader_parameter/custom_reflection_minimum_surface_weight = 0.34
 shader_parameter/custom_reflection_maximum_surface_weight = 0.88
 shader_parameter/custom_reflection_emission_strength = 0.1499999966472
 
-[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_ord5u"]
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_hb254"]
 resource_local_to_scene = true
 blend_mode = 1
 
@@ -452,7 +453,7 @@ point_count = 3
 [sub_resource type="CurveTexture" id="CurveTexture_bubble_shrink"]
 curve = SubResource("Curve_bubble_shrink")
 
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_hb254"]
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_4s1c0"]
 resource_local_to_scene = true
 particle_flag_disable_z = true
 emission_shape_offset = Vector3(0, 600, 0)
@@ -475,7 +476,7 @@ turbulence_influence_max = 0.082
 turbulence_initial_displacement_min = -47.5
 turbulence_initial_displacement_max = 94.5
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_4s1c0"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qsxv0"]
 resource_local_to_scene = true
 render_priority = -127
 shader = ExtResource("55_gee3e")
@@ -524,7 +525,7 @@ data = PackedVector3Array(8.577499, 2.925, 4.5074997, 8.577499, -2.925, 4.507499
 material = ExtResource("69_jnsb7")
 size = Vector2(2, 2)
 
-[sub_resource type="MultiMesh" id="MultiMesh_qsxv0"]
+[sub_resource type="MultiMesh" id="MultiMesh_lh2je"]
 resource_local_to_scene = true
 transform_format = 1
 use_custom_data = true
@@ -602,6 +603,7 @@ surface_material_override/0 = ExtResource("33_iekhu")
 surface_material_override/0 = ExtResource("33_iekhu")
 
 [node name="Rock2_VIS" parent="TerrainRoot/test_island" index="3" unique_id=133010865]
+material_override = ExtResource("25_ert0j")
 surface_material_override/0 = ExtResource("33_iekhu")
 
 [node name="Rock3_VIS" parent="TerrainRoot/test_island" index="4" unique_id=787983472]
@@ -676,7 +678,7 @@ mesh = SubResource("PlaneMesh_tpwhi")
 [node name="WaterIntegration" type="Node3D" parent="." unique_id=1889730552]
 
 [node name="Ocean" parent="WaterIntegration" unique_id=1340264265 instance=ExtResource("40_5h17r")]
-ocean_material = SubResource("ShaderMaterial_ert0j")
+ocean_material = SubResource("ShaderMaterial_ord5u")
 wave_world_size_a = 283.5
 wave_world_size_b = 223.0
 wave_amplitude_a = 1.46999996714256
@@ -776,7 +778,6 @@ bones/24/rotation = Quaternion(0.13183951, 0.13147534, -0.2248103, 0.9564481)
 bones/25/rotation = Quaternion(0.43952805, 0.59007734, -0.55047023, 0.39446965)
 bones/25/scale = Vector3(1.0000001, 1.0000001, 1)
 bones/26/scale = Vector3(1, 0.99999994, 0.9999999)
-bones/27/position = Vector3(-2.9825742e-10, 0.27841514, 4.8592856e-08)
 bones/29/position = Vector3(-0.026817312, 0.024661459, 0.015761862)
 bones/29/rotation = Quaternion(0.25309613, -0.0613242, 0.22735296, 0.93834555)
 bones/30/position = Vector3(-3.958121e-09, 0.04187095, 1.1144547e-07)
@@ -802,12 +803,8 @@ bones/41/rotation = Quaternion(-0.0545863, 0.054581683, -0.15248315, 0.98528683)
 bones/42/rotation = Quaternion(0.05447704, -0.054683316, 0.15428944, 0.985006)
 bones/43/position = Vector3(2.8401814e-09, 0.021000098, 2.9347216e-08)
 bones/43/rotation = Quaternion(0.13074756, -0.13122135, 0.22274286, 0.9571163)
-bones/45/position = Vector3(-6.982418e-09, 0.43905485, -2.2728273e-09)
-bones/46/position = Vector3(9.280655e-09, 0.4452782, -2.0814248e-09)
 bones/47/position = Vector3(-1.2781584e-08, 0.14997412, -1.344597e-08)
 bones/47/rotation = Quaternion(0.3242161, -0.00014739741, -1.0539367e-07, 0.94598305)
-bones/49/position = Vector3(-1.2923408e-08, 0.43905368, -2.2650966e-09)
-bones/50/position = Vector3(-1.0939593e-09, 0.44527858, 3.188938e-09)
 bones/51/position = Vector3(-6.275741e-09, 0.1499741, 1.0166332e-08)
 bones/51/rotation = Quaternion(0.32421583, -0.00014736943, -1.4682928e-07, 0.9459832)
 
@@ -984,7 +981,7 @@ editor_preview_mode = 0
 
 [node name="EntryBubbles" parent="CameraSystem/ChaseCamera/Camera3D/UnderwaterEffect/WaterCrossingOverlay" index="0"]
 visible = false
-material = SubResource("CanvasItemMaterial_ord5u")
+material = SubResource("CanvasItemMaterial_hb254")
 position = Vector2(1, 1.76)
 amount = 500
 texture = SubResource("GradientTexture2D_pl0kw")
@@ -992,10 +989,10 @@ lifetime = 20.0
 speed_scale = 8.0
 explosiveness = 1.0
 randomness = 1.0
-process_material = SubResource("ParticleProcessMaterial_hb254")
+process_material = SubResource("ParticleProcessMaterial_4s1c0")
 
 [node name="UnderwaterPostProcess" parent="CameraSystem/ChaseCamera/Camera3D/UnderwaterEffect" index="1" unique_id=1854893749]
-material_override = SubResource("ShaderMaterial_4s1c0")
+material_override = SubResource("ShaderMaterial_qsxv0")
 
 [node name="Atrezzo" type="Node3D" parent="." unique_id=1365592301]
 
@@ -1465,7 +1462,7 @@ canopy_vertical_margin = 0.1
 canopy_surface_normal_fade = 0.45
 
 [node name="Trees" parent="Vegetation/TreesImpostorA2/TreeImpostorMultimesh4" index="0" unique_id=184116622]
-multimesh = SubResource("MultiMesh_qsxv0")
+multimesh = SubResource("MultiMesh_lh2je")
 target_count = 120
 area_radius_x = 130.0
 area_radius_z = 100.0
@@ -1479,7 +1476,7 @@ max_ground_slope_degrees = 30.0
 minimum_height_above_water = 3.5
 
 [node name="TreeShadows" parent="Vegetation/TreesImpostorA2/TreeImpostorMultimesh4" index="1" unique_id=1425367268]
-multimesh = SubResource("MultiMesh_qsxv0")
+multimesh = SubResource("MultiMesh_lh2je")
 
 [node name="TreeImpostorMultimesh5" parent="Vegetation/TreesImpostorA2" unique_id=1603035267 instance=ExtResource("69_4s1c0")]
 physics_interpolation_mode = 2
@@ -1535,6 +1532,12 @@ script = ExtResource("74_qsxv0")
 terrain_mesh_path = NodePath("../TerrainRoot/test_island/Terrain_Master_VIS")
 sun_light_path = NodePath("../Environment/DirectionalLight3D2")
 output_png_path = "uid://ip2r2uwxmiib"
+texture_resolution = 4096
+world_padding = 20.0
+forced_alpha_cutoff = 0.5800000000000001
+shadow_alpha_multiplier = 1.08
+shadow_alpha_power = 0.78
+extra_light_shadow_strength = 0.0
 
 [editable path="TerrainRoot/test_island"]
 [editable path="TerrainRoot/test_island/PalmImpostorGroundShadows"]

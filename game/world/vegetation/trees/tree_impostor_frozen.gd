@@ -39,7 +39,7 @@ var max_auto_search_distance: float = 150.0
 @export_group("Behaviour")
 
 # Transición suave al descongelar (el billboard rota de vuelta a la cámara).
-@export var smooth_unfreeze: bool = true
+@export var smooth_unfreeze: bool = false
 
 # Duración de la transición de descongelado.
 @export_range(0.05, 2.0, 0.05)
@@ -70,7 +70,14 @@ var _resolved: bool = false
 
 var _multimeshes: Array[MultiMeshInstance3D] = []
 
-var _private_materials: Dictionary = {}
+# Ids capturados al resolver (válidos aunque el nodo se libere después).
+var _multimesh_ids: Array[int] = []
+
+# Contribución de ESTA zona a cada MultiMesh controlado (id -> entero).
+#
+# Solo se usa para poder retirar la contribución propia si la zona se
+# destruye o si un MultiMesh deja de ser válido, sin tocar otras zonas.
+var _zone_contributions: Dictionary = {}
 
 var _player_inside: bool = false
 
@@ -90,12 +97,40 @@ func _ready() -> void:
 	if _multimeshes.is_empty():
 		return
 
-	_prepare_private_materials()
+	_multimesh_ids.clear()
+
+	for multi_mesh: MultiMeshInstance3D in _multimeshes:
+
+		_multimesh_ids.append(
+			multi_mesh.get_instance_id()
+		)
 
 	body_entered.connect(_on_body_entered)
 	body_exited.connect(_on_body_exited)
 
 	set_process(false)
+
+
+# ============================================================
+# EXIT TREE - CLEANUP
+# ============================================================
+
+func _exit_tree() -> void:
+
+	# En el editor no hay lógica activa.
+	if Engine.is_editor_hint():
+		return
+
+	# La zona desaparece: retira SOLO su propia contribución a cada
+	# MultiMesh, sin resetear zonas que sigan activas.
+	for instance_id: int in _zone_contributions:
+
+		var contribution: int = int(_zone_contributions[instance_id])
+
+		if contribution <= 0:
+			continue
+
+		_release_contribution(instance_id)
 
 
 # ============================================================
@@ -124,18 +159,30 @@ func _resolve_targets() -> void:
 
 			var target_node: Node = get_node_or_null(target_path)
 
-			if target_node is MultiMeshInstance3D:
-
-				_multimeshes.append(
-					target_node as MultiMeshInstance3D
-				)
-
-			else:
+			if not target_node is MultiMeshInstance3D:
 
 				push_warning(
-					"TreeImpostorFrozen %s: target %s not a MultiMeshInstance3D."
+					"TreeImpostorFrozen %s: target %s is not a MultiMeshInstance3D."
 					% [name, target_path]
 				)
+
+				continue
+
+			var target_mm: MultiMeshInstance3D = (
+				target_node as MultiMeshInstance3D
+			)
+
+			if not _is_compatible_multimesh(target_mm):
+
+				push_warning(
+					"TreeImpostorFrozen %s: target %s is not a compatible "
+					+ "tree impostor (tree_impostor.gdshader with freeze_billboard)."
+					% [name, target_path]
+				)
+
+				continue
+
+			_multimeshes.append(target_mm)
 
 		return
 
@@ -159,11 +206,16 @@ func _find_nearest_multimesh() -> MultiMeshInstance3D:
 	# 1) Grupo de vegetación (si los MultiMeshes llegaran a etiquetarse).
 	for candidate: Node in get_tree().get_nodes_in_group(&"vegetation"):
 
-		if candidate is MultiMeshInstance3D:
+		if not candidate is MultiMeshInstance3D:
+			continue
 
-			candidates.append(
-				candidate as MultiMeshInstance3D
-			)
+		var candidate_mm: MultiMeshInstance3D = (
+			candidate as MultiMeshInstance3D
+		)
+
+		if _is_compatible_multimesh(candidate_mm):
+
+			candidates.append(candidate_mm)
 
 	# 2) Fallback: escaneo único de todo el árbol de la escena.
 	if candidates.is_empty():
@@ -186,9 +238,13 @@ func _collect_multimeshes(
 
 	if node is MultiMeshInstance3D:
 
-		collected.append(
+		var candidate_mm: MultiMeshInstance3D = (
 			node as MultiMeshInstance3D
 		)
+
+		if _is_compatible_multimesh(candidate_mm):
+
+			collected.append(candidate_mm)
 
 	for child: Node in node.get_children():
 
@@ -196,6 +252,45 @@ func _collect_multimeshes(
 			child,
 			collected
 		)
+
+
+# ============================================================
+# COMPATIBILITY
+# ============================================================
+
+func _is_compatible_multimesh(
+	multi_mesh: MultiMeshInstance3D
+) -> bool:
+
+	if not is_instance_valid(multi_mesh):
+		return false
+
+	if multi_mesh.multimesh == null:
+		return false
+
+	var mesh: Mesh = multi_mesh.multimesh.mesh
+
+	if mesh == null:
+		return false
+
+	# El material efectivo de render es material_override si está presente
+	# (p. ej. TreeShadows usa override con tree_impostor_shadow.gdshader).
+	var material: Material = multi_mesh.material_override
+
+	if material == null:
+		material = mesh.material
+
+	if not material is ShaderMaterial:
+		return false
+
+	# get_shader_parameter() devuelve el default (no null) si el shader
+	# declara freeze_billboard (uniform normal o instance uniform), y null
+	# si no lo declara. Es barato y robusto.
+	var shader_material: ShaderMaterial = (
+		material as ShaderMaterial
+	)
+
+	return shader_material.get_shader_parameter("freeze_billboard") != null
 
 
 func _pick_nearest(
@@ -234,78 +329,6 @@ func _pick_nearest(
 
 
 # ============================================================
-# PRIVATE MATERIALS
-# ============================================================
-#
-# Para no congelar bosques de otras zonas que comparten el mismo
-# ShaderMaterial, cada MultiMesh controlado recibe una instancia de
-# material propia (una sola, reutilizable).
-
-func _prepare_private_materials() -> void:
-
-	_private_materials.clear()
-
-	for multi_mesh: MultiMeshInstance3D in _multimeshes:
-
-		var private_material: ShaderMaterial = (
-			_make_private_material(multi_mesh)
-		)
-
-		if private_material != null:
-
-			_private_materials[multi_mesh.get_instance_id()] = (
-				private_material
-			)
-
-
-func _make_private_material(
-	multi_mesh: MultiMeshInstance3D
-) -> ShaderMaterial:
-
-	if multi_mesh.multimesh == null:
-		return null
-
-	var mesh: Mesh = multi_mesh.multimesh.mesh
-
-	if mesh == null:
-		return null
-
-	var material: Material = mesh.material
-
-	if not material is ShaderMaterial:
-		return null
-
-	var shader_material: ShaderMaterial = (
-		material as ShaderMaterial
-	)
-
-	# Ya tiene una copia privada preparada.
-	if shader_material.get_meta("tree_impostor_frozen_private", false):
-		return shader_material
-
-	# Debe ser un impostor con el shader de billboard congelable.
-	if shader_material.get_shader_parameter("freeze_billboard") == null:
-		return null
-
-	var private_copy: Material = (
-		shader_material.duplicate()
-	)
-
-	if not private_copy is ShaderMaterial:
-		return null
-
-	var private_shader_material: ShaderMaterial = (
-		private_copy as ShaderMaterial
-	)
-
-	private_shader_material.set_meta("tree_impostor_frozen_private", true)
-
-	mesh.material = private_shader_material
-
-	return private_shader_material
-
-
-# ============================================================
 # BODY SIGNALS
 # ============================================================
 
@@ -317,6 +340,16 @@ func _on_body_entered(body: Node3D) -> void:
 	_player_inside = true
 
 	for multi_mesh: MultiMeshInstance3D in _multimeshes:
+
+		if not is_instance_valid(multi_mesh):
+			continue
+
+		var instance_id: int = multi_mesh.get_instance_id()
+
+		# Contribución de esta zona (defensivo ante enter dobles).
+		_zone_contributions[instance_id] = (
+			int(_zone_contributions.get(instance_id, 0)) + 1
+		)
 
 		var state: Dictionary = _get_state(multi_mesh)
 
@@ -345,7 +378,24 @@ func _on_body_exited(body: Node3D) -> void:
 
 	_player_inside = false
 
-	for multi_mesh: MultiMeshInstance3D in _multimeshes:
+	for index: int in range(_multimeshes.size()):
+
+		var instance_id: int = _multimesh_ids[index]
+
+		# Solo decrementa si ESTA zona aportó al contador del MultiMesh.
+		var my_contribution: int = int(
+			_zone_contributions.get(instance_id, 0)
+		)
+
+		if my_contribution <= 0:
+			continue
+
+		_zone_contributions[instance_id] = my_contribution - 1
+
+		var multi_mesh: MultiMeshInstance3D = _multimeshes[index]
+
+		if not is_instance_valid(multi_mesh):
+			continue
 
 		var state: Dictionary = _get_state(multi_mesh)
 
@@ -388,7 +438,16 @@ func _process(delta: float) -> void:
 
 	var duration: float = maxf(unfreeze_duration, 0.001)
 
-	for multi_mesh: MultiMeshInstance3D in _multimeshes:
+	for index: int in range(_multimeshes.size()):
+
+		var multi_mesh: MultiMeshInstance3D = _multimeshes[index]
+
+		# MultiMesh dejó de ser válido: retira la contribución de esta zona.
+		if not is_instance_valid(multi_mesh):
+
+			_release_contribution(_multimesh_ids[index])
+
+			continue
 
 		var state: Dictionary = _get_state(multi_mesh)
 
@@ -445,14 +504,7 @@ func _apply(
 	state: Dictionary
 ) -> void:
 
-	var private_material: ShaderMaterial = (
-		_private_materials.get(
-			multi_mesh.get_instance_id(),
-			null
-		)
-	)
-
-	if private_material == null:
+	if not is_instance_valid(multi_mesh):
 		return
 
 	var amount: float = 0.0
@@ -465,14 +517,16 @@ func _apply(
 
 		amount = float(state["unfreeze_t"])
 
-	private_material.set_shader_parameter(
+	# Instance uniforms: valores por MultiMeshInstance3D, sin duplicar
+	# el ShaderMaterial compartido entre bosques.
+	multi_mesh.set_instance_shader_parameter(
 		"freeze_billboard",
 		amount
 	)
 
 	# El shader usa frozen_camera_position con freeze_billboard = 1,
 	# y mix() hacia la cámara real mientras freeze_billboard baja a 0.
-	private_material.set_shader_parameter(
+	multi_mesh.set_instance_shader_parameter(
 		"frozen_camera_position",
 		state["orig_pos"]
 	)
@@ -486,7 +540,10 @@ static func _get_state(
 	multi_mesh: MultiMeshInstance3D
 ) -> Dictionary:
 
-	var instance_id: int = multi_mesh.get_instance_id()
+	return _registry_state(multi_mesh.get_instance_id())
+
+
+static func _registry_state(instance_id: int) -> Dictionary:
 
 	if not _registry.has(instance_id):
 
@@ -498,6 +555,57 @@ static func _get_state(
 		}
 
 	return _registry[instance_id]
+
+
+func _get_multimesh_by_id(instance_id: int) -> MultiMeshInstance3D:
+
+	for index: int in range(_multimeshes.size()):
+
+		if _multimesh_ids[index] == instance_id:
+
+			return _multimeshes[index]
+
+	return null
+
+
+# ============================================================
+# CONTRIBUTION CLEANUP
+# ============================================================
+
+func _release_contribution(instance_id: int) -> void:
+
+	var my_contribution: int = int(
+		_zone_contributions.get(instance_id, 0)
+	)
+
+	if my_contribution <= 0:
+		return
+
+	_zone_contributions[instance_id] = 0
+
+	var state: Dictionary = _registry_state(instance_id)
+
+	var remaining: int = maxi(
+		int(state["count"]) - my_contribution,
+		0
+	)
+
+	state["count"] = remaining
+
+	# Si al retirar esta zona ya no queda nadie activo, restaurar freeze.
+	if remaining == 0:
+
+		state["unfreeze_t"] = -1.0
+
+		state["owner"] = null
+
+		var multi_mesh: MultiMeshInstance3D = (
+			_get_multimesh_by_id(instance_id)
+		)
+
+		if multi_mesh != null and is_instance_valid(multi_mesh):
+
+			_apply(multi_mesh, state)
 
 
 func _is_player(body: Node3D) -> bool:

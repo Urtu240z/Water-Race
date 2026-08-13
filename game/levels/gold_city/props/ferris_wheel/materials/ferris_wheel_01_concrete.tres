@@ -1,6 +1,6 @@
 [gd_resource type="StandardMaterial3D" format=3 uid="uid://bs8uilhqsfitm"]
 
-[ext_resource type="Texture2D" path="res://levels/gold_city/material_textures/gold_city_texture_5df2812ba2ac6663903aa4a75da9b957.res" id="texture_5df2812ba2ac"]
+[ext_resource type="Texture2D" path="res://levels/gold_city/material_textures/gold_city_texture_5df2812ba2ac6663903aa4a75da9b957.res" id="1_f4j0c"]
 
 [resource]
 resource_name = "ferrys_wheel_01_concrete"
@@ -8,7 +8,7 @@ transparency = 2
 alpha_scissor_threshold = 0.5
 alpha_antialiasing_mode = 0
 cull_mode = 2
-albedo_texture = ExtResource("texture_5df2812ba2ac")
+albedo_texture = ExtResource("1_f4j0c")
 roughness = 0.5
 emission_enabled = true
 emission = Color(1, 0, 1, 1)

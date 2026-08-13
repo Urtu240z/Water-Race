@@ -10,5 +10,5 @@ albedo_texture = ExtResource("texture_a98fd7f471d5")
 roughness = 0.5
 emission_enabled = true
 emission = Color(0, 0.7994714, 0.7994711, 1)
-emission_energy_multiplier = 16.0
+emission_energy_multiplier = 100.0
 metadata/_gltf_primary_texture_coord = 0

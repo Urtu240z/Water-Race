@@ -150,10 +150,10 @@ uniform float specular :
 
 group_uniforms BillboardFreeze;
 
-uniform float freeze_billboard :
+instance uniform float freeze_billboard :
 	hint_range(0.0, 1.0, 0.01) = 0.0;
 
-uniform vec3 frozen_camera_position =
+instance uniform vec3 frozen_camera_position =
 	vec3(0.0);
 
 
