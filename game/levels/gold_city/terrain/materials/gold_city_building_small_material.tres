@@ -23,6 +23,6 @@ shader_parameter/vertical_fade_width = 0.08
 [resource]
 resource_name = "gold_city_building_small_material"
 next_pass = SubResource("ShaderMaterial_fqfof")
-cull_mode = 2
+cull_mode = 1
 albedo_color = Color(0, 0.026572708, 0.9063871, 1)
 roughness = 0.5

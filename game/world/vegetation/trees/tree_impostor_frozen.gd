@@ -435,7 +435,7 @@ func _on_body_entered(body: Node3D) -> void:
 	if debug_events:
 		print(
 			"[TreeImpostorFrozen ", name, "] BODY_ENTER body=",
-			body.get_path() if body != null else "<null>",
+			str(body.get_path()) if body != null else "<null>",
 			" isPlayer=", body is JetSkiController,
 		)
 
@@ -518,7 +518,7 @@ func _on_body_exited(body: Node3D) -> void:
 		if debug_events:
 			print(
 				"[TreeImpostorFrozen ", name, "] BODY_EXIT body=",
-				body.get_path() if body != null else "<null>",
+				str(body.get_path()) if body != null else "<null>",
 				" jetski_pos=", body.global_position if body != null else Vector3.ZERO,
 				" zone_pos=", global_position,
 				" count_before=", count_before,
