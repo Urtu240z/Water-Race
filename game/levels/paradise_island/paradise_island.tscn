@@ -1240,15 +1240,6 @@ max_scale = 15.0
 ray_above_height = 500.0
 ray_below_depth = 600.0
 minimum_height_above_water = 3.5
-canopy_shadow_strength = 1.0
-canopy_per_tree_density = 1.0
-canopy_radius_factor = 0.1
-canopy_extra_radius = 0.0
-canopy_falloff_power = 0.25
-canopy_density_gamma = 0.25
-canopy_texture_resolution = 64
-canopy_vertical_margin = 0.1
-canopy_surface_normal_fade = 0.45
 
 [node name="TreeImpostorMultimesh2" parent="Vegetation/TreesImpostorA" unique_id=1060155242 instance=ExtResource("69_4s1c0")]
 physics_interpolation_mode = 2
@@ -1262,15 +1253,6 @@ max_scale = 15.0
 ray_above_height = 500.0
 ray_below_depth = 600.0
 minimum_height_above_water = 3.5
-canopy_shadow_strength = 1.0
-canopy_per_tree_density = 1.0
-canopy_radius_factor = 0.1
-canopy_extra_radius = 0.0
-canopy_falloff_power = 0.25
-canopy_density_gamma = 0.25
-canopy_texture_resolution = 64
-canopy_vertical_margin = 0.1
-canopy_surface_normal_fade = 0.45
 
 [node name="TreeImpostorMultimesh3" parent="Vegetation/TreesImpostorA" unique_id=518976443 instance=ExtResource("69_4s1c0")]
 physics_interpolation_mode = 2
@@ -1285,15 +1267,6 @@ max_scale = 15.0
 ray_above_height = 500.0
 ray_below_depth = 600.0
 minimum_height_above_water = 3.5
-canopy_shadow_strength = 1.0
-canopy_per_tree_density = 1.0
-canopy_radius_factor = 0.1
-canopy_extra_radius = 0.0
-canopy_falloff_power = 0.25
-canopy_density_gamma = 0.25
-canopy_texture_resolution = 64
-canopy_vertical_margin = 0.1
-canopy_surface_normal_fade = 0.45
 
 [node name="TreeImpostorMultimesh4" parent="Vegetation/TreesImpostorA" unique_id=1744630115 instance=ExtResource("69_4s1c0")]
 physics_interpolation_mode = 2
@@ -1309,15 +1282,6 @@ ray_above_height = 500.0
 ray_below_depth = 600.0
 max_ground_slope_degrees = 30.0
 minimum_height_above_water = 3.5
-canopy_shadow_strength = 1.0
-canopy_per_tree_density = 1.0
-canopy_radius_factor = 0.1
-canopy_extra_radius = 0.0
-canopy_falloff_power = 0.25
-canopy_density_gamma = 0.25
-canopy_texture_resolution = 64
-canopy_vertical_margin = 0.1
-canopy_surface_normal_fade = 0.45
 
 [node name="TreeImpostorMultimesh5" parent="Vegetation/TreesImpostorA" unique_id=1571362172 instance=ExtResource("69_4s1c0")]
 physics_interpolation_mode = 2
@@ -1333,14 +1297,6 @@ ray_above_height = 500.0
 ray_below_depth = 600.0
 max_ground_slope_degrees = 30.0
 minimum_height_above_water = 3.5
-canopy_shadow_strength = 1.0
-canopy_per_tree_density = 1.0
-canopy_radius_factor = 0.1
-canopy_extra_radius = 0.0
-canopy_falloff_power = 0.25
-canopy_density_gamma = 0.25
-canopy_texture_resolution = 64
-canopy_world_padding = 30.0
 
 [node name="TreeImpostorMultimesh6" parent="Vegetation/TreesImpostorA" unique_id=76881492 instance=ExtResource("69_4s1c0")]
 physics_interpolation_mode = 2
@@ -1356,15 +1312,6 @@ ray_above_height = 500.0
 ray_below_depth = 600.0
 max_ground_slope_degrees = 30.0
 minimum_height_above_water = 3.5
-canopy_shadow_strength = 1.0
-canopy_per_tree_density = 1.0
-canopy_radius_factor = 0.1
-canopy_extra_radius = 0.0
-canopy_falloff_power = 0.25
-canopy_density_gamma = 0.25
-canopy_texture_resolution = 64
-canopy_vertical_margin = 0.1
-canopy_surface_normal_fade = 0.45
 
 [node name="TreesImpostorA2" type="Node3D" parent="Vegetation" unique_id=554206026]
 transform = Transform3D(-0.9999313, 0, 0.011732489, 0, 1, 0, -0.011732489, 0, -0.9999313, 365.93063, 0, 61.77307)
@@ -1382,15 +1329,6 @@ max_scale = 15.0
 ray_above_height = 500.0
 ray_below_depth = 600.0
 minimum_height_above_water = 3.5
-canopy_shadow_strength = 1.0
-canopy_per_tree_density = 1.0
-canopy_radius_factor = 0.1
-canopy_extra_radius = 0.0
-canopy_falloff_power = 0.25
-canopy_density_gamma = 0.25
-canopy_texture_resolution = 64
-canopy_vertical_margin = 0.1
-canopy_surface_normal_fade = 0.45
 
 [node name="TreeImpostorMultimesh2" parent="Vegetation/TreesImpostorA2" unique_id=1929277709 instance=ExtResource("69_4s1c0")]
 physics_interpolation_mode = 2
@@ -1404,15 +1342,6 @@ max_scale = 15.0
 ray_above_height = 500.0
 ray_below_depth = 600.0
 minimum_height_above_water = 3.5
-canopy_shadow_strength = 1.0
-canopy_per_tree_density = 1.0
-canopy_radius_factor = 0.1
-canopy_extra_radius = 0.0
-canopy_falloff_power = 0.25
-canopy_density_gamma = 0.25
-canopy_texture_resolution = 64
-canopy_vertical_margin = 0.1
-canopy_surface_normal_fade = 0.45
 
 [node name="TreeImpostorMultimesh3" parent="Vegetation/TreesImpostorA2" unique_id=260671266 instance=ExtResource("69_4s1c0")]
 physics_interpolation_mode = 2
@@ -1427,15 +1356,6 @@ max_scale = 15.0
 ray_above_height = 500.0
 ray_below_depth = 600.0
 minimum_height_above_water = 3.5
-canopy_shadow_strength = 1.0
-canopy_per_tree_density = 1.0
-canopy_radius_factor = 0.1
-canopy_extra_radius = 0.0
-canopy_falloff_power = 0.25
-canopy_density_gamma = 0.25
-canopy_texture_resolution = 64
-canopy_vertical_margin = 0.1
-canopy_surface_normal_fade = 0.45
 
 [node name="TreeImpostorMultimesh4" parent="Vegetation/TreesImpostorA2" unique_id=1742539657 instance=ExtResource("69_4s1c0")]
 physics_interpolation_mode = 2
@@ -1451,15 +1371,6 @@ ray_above_height = 500.0
 ray_below_depth = 600.0
 max_ground_slope_degrees = 30.0
 minimum_height_above_water = 3.5
-canopy_shadow_strength = 1.0
-canopy_per_tree_density = 1.0
-canopy_radius_factor = 0.1
-canopy_extra_radius = 0.0
-canopy_falloff_power = 0.25
-canopy_density_gamma = 0.25
-canopy_texture_resolution = 64
-canopy_vertical_margin = 0.1
-canopy_surface_normal_fade = 0.45
 
 [node name="Trees" parent="Vegetation/TreesImpostorA2/TreeImpostorMultimesh4" index="0" unique_id=184116622]
 multimesh = SubResource("MultiMesh_lh2je")
@@ -1492,15 +1403,6 @@ ray_above_height = 500.0
 ray_below_depth = 600.0
 max_ground_slope_degrees = 30.0
 minimum_height_above_water = 3.5
-canopy_shadow_strength = 1.0
-canopy_per_tree_density = 1.0
-canopy_radius_factor = 0.1
-canopy_extra_radius = 0.0
-canopy_falloff_power = 0.25
-canopy_density_gamma = 0.25
-canopy_texture_resolution = 64
-canopy_vertical_margin = 0.1
-canopy_surface_normal_fade = 0.45
 
 [node name="TreeImpostorMultimesh6" parent="Vegetation/TreesImpostorA2" unique_id=1220529755 instance=ExtResource("69_4s1c0")]
 physics_interpolation_mode = 2
@@ -1516,15 +1418,6 @@ ray_above_height = 500.0
 ray_below_depth = 600.0
 max_ground_slope_degrees = 30.0
 minimum_height_above_water = 3.5
-canopy_shadow_strength = 1.0
-canopy_per_tree_density = 1.0
-canopy_radius_factor = 0.1
-canopy_extra_radius = 0.0
-canopy_falloff_power = 0.25
-canopy_density_gamma = 0.25
-canopy_texture_resolution = 64
-canopy_vertical_margin = 0.1
-canopy_surface_normal_fade = 0.45
 
 [node name="ProjectedTreeShadowBaker" type="Node3D" parent="." unique_id=2105173533]
 visible = false

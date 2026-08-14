@@ -9,6 +9,28 @@ const OCEAN_GROUP: StringName = &"ocean_3d"
 const SHAPE_BOX: int = 0
 const SHAPE_CIRCLE: int = 1
 const SIGNATURE_UPDATE_INTERVAL: float = 0.25
+const VISUAL_BOX_NAME: NodePath = NodePath("VisualBox")
+
+
+# ============================================================
+# AREA - COLLISION SIZE
+# ============================================================
+
+# Tamaño real de la caja de colisión (CollisionShape3D con BoxShape3D).
+# Se dimensiona con este export y no con non-uniform scale del root.
+# Compatible con @tool: al cambiar aquí se actualiza el BoxShape3D al instante.
+# El cubo visual "VisualBox" se redimensiona en paralelo y es visible en el
+# editor (oculto en runtime), para que siempre se vea el área de colisión.
+#
+# Vector3.ZERO = no forzar tamaños; se conserva la geometría que ya tenga el
+# CollisionShape3D (útil para instancias con subresource editable).
+@export_group("Area")
+@export var area_size: Vector3 = Vector3.ZERO:
+	set(value):
+		if area_size == value:
+			return
+		area_size = value
+		_update_collision_shape()
 
 @export_group("Ocean")
 @export_node_path("Ocean3D") var ocean_path: NodePath:
@@ -57,6 +79,7 @@ func _ready() -> void:
 	monitorable = false
 	collision_layer = 0
 	collision_mask = 0
+	_update_collision_shape()
 	_resolve_ocean()
 	_last_signature = _build_signature()
 	set_process(true)
@@ -74,6 +97,7 @@ func _process(delta: float) -> void:
 	if current_signature == _last_signature:
 		return
 	_last_signature = current_signature
+	_update_collision_shape()
 	_notify_ocean_changed()
 	if Engine.is_editor_hint():
 		update_configuration_warnings()
@@ -164,6 +188,51 @@ func get_calm_zone_data() -> Dictionary:
 
 func _get_collision_shape() -> CollisionShape3D:
 	return get_node_or_null("CollisionShape3D") as CollisionShape3D
+
+
+# ============================================================
+# COLLISION / VISUAL SYNC
+# ============================================================
+
+# Aplica area_size al BoxShape3D del CollisionShape3D hijo y redimensiona el
+# cubo visual "VisualBox" para que la colisión SIEMPRE se vea en el editor.
+#
+# - area_size en Vector3.ZERO -> se conserva el tamaño ya existente.
+# - Cada instancia usa su propio BoxShape3D/BoxMesh (resource_local_to_scene).
+# - El VisualBox copia el transform del CollisionShape3D, así que también
+#   queda alineado en instancias con CollisionShape3D editable desplazado.
+func _update_collision_shape() -> void:
+
+	var shape_node := _get_collision_shape()
+	var visual := get_node_or_null(VISUAL_BOX_NAME) as MeshInstance3D
+
+	if shape_node == null and visual == null:
+		return
+
+	var box: BoxShape3D = null
+	if (
+		shape_node != null
+		and shape_node.shape is BoxShape3D
+	):
+		box = shape_node.shape as BoxShape3D
+
+	var target := area_size
+	if not (
+		area_size.x > 0.0
+		and area_size.y > 0.0
+		and area_size.z > 0.0
+	):
+		target = box.size if box != null else area_size
+
+	if box != null:
+		box.size = target
+
+	if visual != null:
+		if visual.mesh is BoxMesh:
+			(visual.mesh as BoxMesh).size = target
+		if shape_node != null:
+			visual.transform = shape_node.transform
+		visual.visible = Engine.is_editor_hint()
 
 
 func _resolve_ocean() -> void:

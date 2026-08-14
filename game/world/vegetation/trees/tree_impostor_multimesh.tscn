@@ -22,7 +22,6 @@ metadata/tree_bake_source = "Trees"
 script = ExtResource("1_v6wlq")
 valid_ground_name_contains = PackedStringArray("Terrain_Master_COL")
 tree_shadows_enabled = false
-canopy_enabled = false
 
 [node name="Trees" type="MultiMeshInstance3D" parent="." unique_id=184116622]
 physics_interpolation_mode = 2

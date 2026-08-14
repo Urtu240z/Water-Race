@@ -1,0 +1,7 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://p8ciladw7qdh"]
+
+[resource]
+resource_name = "gold_city_pierre_blue"
+cull_mode = 2
+albedo_color = Color(0.025664607, 0, 0.906438, 1)
+roughness = 0.5

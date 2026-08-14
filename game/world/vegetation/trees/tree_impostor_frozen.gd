@@ -8,8 +8,30 @@
 ## Soporta varias zonas sobre el mismo MultiMesh mediante un registro
 ## estático compartido por instancia: solo se descongela cuando el contador
 ## de zonas activas vuelve a cero.
+@tool
 class_name TreeImpostorFrozen
 extends Area3D
+
+
+# ============================================================
+# AREA - TRIGGER SIZE FROM ROOT
+# ============================================================
+
+@export_group("Area")
+
+# Tamaño físico real del trigger. Controla internamente
+# CollisionShape3D.shape.size (BoxShape3D).
+#
+# El root debe mantener Scale = (1,1,1): todo el dimensionado se hace con
+# este export, no con non-uniform scale del Area3D (Godot desaconseja
+# escalar CollisionShape3D). Compatible con @tool: al cambiar aquí se
+# actualiza el BoxShape3D al instante, sin Editable Children.
+@export var area_size: Vector3 = Vector3(20, 20, 20):
+	set(value):
+		if area_size == value:
+			return
+		area_size = value
+		_update_collision_shape()
 
 
 # ============================================================
@@ -44,6 +66,17 @@ var max_auto_search_distance: float = 150.0
 # Duración de la transición de descongelado.
 @export_range(0.05, 2.0, 0.05)
 var unfreeze_duration: float = 0.4
+
+
+# ============================================================
+# DIAGNOSTICS
+# ============================================================
+
+@export_group("Diagnostics")
+
+# Instrumentación temporal: imprime entradas/salidas de body, counts y
+# freeze_billboard en runtime para diagnosticar detección/premanencia.
+@export var debug_events: bool = false
 
 
 # ============================================================
@@ -88,6 +121,10 @@ var _player_inside: bool = false
 
 func _ready() -> void:
 
+	# Sincroniza el BoxShape3D con area_size (también en editor). Robusto:
+	# no falla si el hijo o su shape aún no están disponibles en la carga.
+	_update_collision_shape()
+
 	# En el editor solo interesa editar la escena, no ejecutar la lógica.
 	if Engine.is_editor_hint():
 		return
@@ -109,6 +146,33 @@ func _ready() -> void:
 	body_exited.connect(_on_body_exited)
 
 	set_process(false)
+
+
+# ============================================================
+# AREA - COLLISION SHAPE SYNC
+# ============================================================
+
+# Aplica area_size al BoxShape3D del CollisionShape3D hijo, permitiendo
+# dimensionar el trigger desde el root de la instancia sin Editable
+# Children. Cada instancia tiene su propio BoxShape3D (resource_local_to_scene).
+func _update_collision_shape() -> void:
+
+	var shape_node: CollisionShape3D = (
+		get_node_or_null("CollisionShape3D") as CollisionShape3D
+	)
+
+	if shape_node == null:
+		return
+
+	var shape := shape_node.shape as BoxShape3D
+
+	if shape == null:
+		return
+
+	if shape.size == area_size:
+		return
+
+	shape.size = area_size
 
 
 # ============================================================
@@ -170,8 +234,11 @@ func _resolve_targets() -> void:
 			if not target_node is MultiMeshInstance3D:
 
 				push_warning(
-					"TreeImpostorFrozen %s: target %s is not a MultiMeshInstance3D."
-					% [name, target_path]
+					"TreeImpostorFrozen "
+					+ name
+					+ ": target "
+					+ String(target_path)
+					+ " is not a MultiMeshInstance3D."
 				)
 
 				continue
@@ -182,10 +249,15 @@ func _resolve_targets() -> void:
 
 			if not _is_compatible_multimesh(target_mm):
 
+				# Un target no compatible (p. ej. TreeShadows) se ignora con
+				# warning, pero NO interrumpe el resto de targets del array.
 				push_warning(
-					"TreeImpostorFrozen %s: target %s is not a compatible "
-					+ "tree impostor (tree_impostor.gdshader with freeze_billboard)."
-					% [name, target_path]
+					"TreeImpostorFrozen "
+					+ name
+					+ ": target "
+					+ String(target_path)
+					+ " is not a compatible tree impostor "
+					+ "(tree_impostor.gdshader with freeze_billboard)."
 				)
 
 				continue
@@ -360,6 +432,13 @@ func _pick_nearest(
 
 func _on_body_entered(body: Node3D) -> void:
 
+	if debug_events:
+		print(
+			"[TreeImpostorFrozen ", name, "] BODY_ENTER body=",
+			body.get_path() if body != null else "<null>",
+			" isPlayer=", body is JetSkiController,
+		)
+
 	if not _is_player(body):
 		return
 
@@ -393,6 +472,13 @@ func _on_body_entered(body: Node3D) -> void:
 
 		_apply(multi_mesh, state)
 
+		if debug_events:
+			print(
+				"[TreeImpostorFrozen ", name, "]   mm=", multi_mesh.name,
+				" count=", state["count"],
+				" freeze=", multi_mesh.get_instance_shader_parameter("freeze_billboard"),
+			)
+
 
 func _on_body_exited(body: Node3D) -> void:
 
@@ -425,7 +511,19 @@ func _on_body_exited(body: Node3D) -> void:
 
 		var state: Dictionary = _get_state(multi_mesh)
 
+		var count_before: int = int(state["count"])
+
 		state["count"] = maxi(int(state["count"]) - 1, 0)
+
+		if debug_events:
+			print(
+				"[TreeImpostorFrozen ", name, "] BODY_EXIT body=",
+				body.get_path() if body != null else "<null>",
+				" jetski_pos=", body.global_position if body != null else Vector3.ZERO,
+				" zone_pos=", global_position,
+				" count_before=", count_before,
+				" count_after=", state["count"],
+			)
 
 		# Aún hay otra zona activa -> sigue congelado.
 		if int(state["count"]) > 0:
@@ -452,6 +550,14 @@ func _on_body_exited(body: Node3D) -> void:
 			state["owner"] = null
 
 			_apply(multi_mesh, state)
+
+		if debug_events:
+			print(
+				"[TreeImpostorFrozen ", name, "]   UNFREEZE mm=",
+				multi_mesh.name,
+				" freeze=",
+				multi_mesh.get_instance_shader_parameter("freeze_billboard"),
+			)
 
 
 # ============================================================

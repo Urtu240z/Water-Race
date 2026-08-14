@@ -1,0 +1,28 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://cjduq0550cxk"]
+
+[ext_resource type="Shader" uid="uid://bfnesn2v47myr" path="res://levels/gold_city/city/buildings/shaders/building_windows_procedural.gdshader" id="1_v3mko"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_yy46i"]
+render_priority = 0
+shader = ExtResource("1_v3mko")
+shader_parameter/base_color = Color(0.34915644, 0.36045155, 0.37551108, 1)
+shader_parameter/roughness_value = 0.31999999284736
+shader_parameter/metallic_value = 0.55999998748288
+shader_parameter/windows_per_meter = Vector2(0.695, 0.5)
+shader_parameter/window_fill = Vector2(0.64, 0.55)
+shader_parameter/edge_softness = 0.0930000044175
+shader_parameter/lit_probability = 0.25999999418848
+shader_parameter/window_color = Color(1, 0.7845824, 0.6940106, 1)
+shader_parameter/emission_strength = 64.0
+shader_parameter/random_seed = 0.0
+shader_parameter/animate_windows = false
+shader_parameter/change_speed = 0.08
+shader_parameter/vertical_normal_limit = 0.3
+shader_parameter/vertical_fade_width = 0.08
+
+[resource]
+resource_name = "gold_city_building_big_material"
+next_pass = SubResource("ShaderMaterial_yy46i")
+cull_mode = 2
+albedo_color = Color(0.30150244, 0.30150244, 0.30150244, 1)
+roughness = 0.5

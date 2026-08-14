@@ -8,10 +8,13 @@ extends Node3D
 
 const TREES_NODE_PATH: NodePath = NodePath("Trees")
 const SHADOWS_NODE_PATH: NodePath = NodePath("TreeShadows")
-const CANOPY_NODE_PATH: NodePath = NodePath("CanopyAmbientShadow")
 
 const DEFAULT_SHADOW_MATERIAL: Material = preload(
 	"res://world/vegetation/trees/materials/tree_impostor_shadow_material.tres"
+)
+
+const DEFAULT_TREE_MATERIAL: Material = preload(
+	"res://world/vegetation/trees/materials/tree_impostor_material_paradise_island.tres"
 )
 
 
@@ -22,6 +25,10 @@ const DEFAULT_SHADOW_MATERIAL: Material = preload(
 @export_group("Trees")
 
 @export var trees_enabled: bool = true
+
+@export_subgroup("Material")
+
+@export var tree_material: Material = DEFAULT_TREE_MATERIAL
 
 
 # ============================================================
@@ -156,81 +163,6 @@ var minimum_height_above_water: float = 1.0
 
 
 # ============================================================
-# CANOPY AMBIENT SHADOW
-# ============================================================
-
-@export_group("Canopy Ambient Shadow")
-
-@export var canopy_enabled: bool = true
-
-
-# ============================================================
-# CANOPY - AMBIENT
-# ============================================================
-
-@export_subgroup("Ambient Shadow")
-
-@export var canopy_shadow_color: Color = Color(
-	0.045,
-	0.038,
-	0.025,
-	1.0
-)
-
-@export_range(0.0, 1.0, 0.01)
-var canopy_shadow_strength: float = 0.55
-
-@export_range(0.01, 1.0, 0.01)
-var canopy_per_tree_density: float = 0.16
-
-@export_range(0.1, 3.0, 0.05)
-var canopy_radius_factor: float = 1.25
-
-@export_range(0.0, 10.0, 0.1)
-var canopy_extra_radius: float = 1.5
-
-@export_range(0.25, 5.0, 0.05)
-var canopy_falloff_power: float = 1.25
-
-@export_range(0.25, 3.0, 0.05)
-var canopy_density_gamma: float = 0.75
-
-
-# ============================================================
-# CANOPY - TEXTURE
-# ============================================================
-
-@export_subgroup("Texture")
-
-@export_range(64, 1024, 64)
-var canopy_texture_resolution: int = 256
-
-@export_range(0, 16, 1)
-var canopy_blur_radius_pixels: int = 4
-
-@export_range(0, 4, 1)
-var canopy_blur_passes: int = 2
-
-@export_range(0.0, 30.0, 0.5)
-var canopy_world_padding: float = 3.0
-
-@export var canopy_flip_texture_z: bool = true
-
-
-# ============================================================
-# CANOPY - PROJECTION
-# ============================================================
-
-@export_subgroup("Projection")
-
-@export_range(0.1, 50.0, 0.5)
-var canopy_vertical_margin: float = 3.0
-
-@export_range(0.0, 1.0, 0.01)
-var canopy_surface_normal_fade: float = 0.55
-
-
-# ============================================================
 # ROOT EDITOR
 # ============================================================
 
@@ -248,10 +180,6 @@ var editor_update_interval: float = 0.35
 var regenerate_forest_button = regenerate_forest
 
 
-@export_tool_button("Rebuild Canopy")
-var rebuild_canopy_button = rebuild_canopy
-
-
 # ============================================================
 # INTERNAL
 # ============================================================
@@ -260,7 +188,7 @@ var _editor_elapsed: float = 0.0
 
 var _last_tree_signature: String = ""
 var _last_shadow_signature: String = ""
-var _last_canopy_signature: String = ""
+var _last_tree_material_signature: String = ""
 
 var _editor_rebuild_queued: bool = false
 
@@ -273,17 +201,13 @@ func _enter_tree() -> void:
 
 	# Parent entra en el árbol antes que sus hijos.
 	#
-	# Aplicamos aquí los parámetros para que Trees y Canopy
-	# ya tengan los valores correctos cuando ejecuten _ready().
+	# Aplicamos aquí los parámetros para que Trees
+	# ya tenga los valores correctos cuando ejecute _ready().
 	_apply_tree_properties(
 		false
 	)
 
 	_apply_shadow_properties()
-
-	_apply_canopy_properties(
-		false
-	)
 
 
 # ============================================================
@@ -299,10 +223,6 @@ func _ready() -> void:
 	)
 
 	_apply_shadow_properties()
-
-	_apply_canopy_properties(
-		false
-	)
 
 	_capture_signatures()
 
@@ -342,8 +262,8 @@ func _process(delta: float) -> void:
 		_build_shadow_signature()
 	)
 
-	var new_canopy_signature: String = (
-		_build_canopy_signature()
+	var new_tree_material_signature: String = (
+		_build_tree_material_signature()
 	)
 
 
@@ -357,9 +277,9 @@ func _process(delta: float) -> void:
 		!= _last_shadow_signature
 	)
 
-	var canopy_changed: bool = (
-		new_canopy_signature
-		!= _last_canopy_signature
+	var tree_material_changed: bool = (
+		new_tree_material_signature
+		!= _last_tree_material_signature
 	)
 
 
@@ -370,23 +290,21 @@ func _process(delta: float) -> void:
 		return
 
 
+	if tree_material_changed:
+
+		_apply_tree_material()
+
+		_last_tree_material_signature = (
+			new_tree_material_signature
+		)
+
+
 	if shadows_changed:
 
 		_apply_shadow_properties()
 
 		_last_shadow_signature = (
 			new_shadow_signature
-		)
-
-
-	if canopy_changed:
-
-		_apply_canopy_properties(
-			true
-		)
-
-		_last_canopy_signature = (
-			new_canopy_signature
 		)
 
 
@@ -402,32 +320,9 @@ func regenerate_forest() -> void:
 
 	_apply_shadow_properties()
 
-	_apply_canopy_properties(
-		false
-	)
-
 	_sync_shadow_multimesh()
 
-	call_deferred(
-		"_deferred_rebuild_canopy"
-	)
-
 	_capture_signatures()
-
-
-# ============================================================
-# PUBLIC - CANOPY ONLY
-# ============================================================
-
-func rebuild_canopy() -> void:
-
-	_apply_canopy_properties(
-		true
-	)
-
-	_last_canopy_signature = (
-		_build_canopy_signature()
-	)
 
 
 # ============================================================
@@ -478,9 +373,6 @@ func _apply_tree_properties(
 	trees.visible = trees_enabled
 
 	# Layer 2.
-	#
-	# Así el Decal del canopy, que usa Cull Mask 1,
-	# nunca oscurece los árboles.
 	trees.layers = 2
 
 
@@ -488,6 +380,14 @@ func _apply_tree_properties(
 	trees.cast_shadow = (
 		GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	)
+
+
+	# Material visual de este bosque.
+	#
+	# Utilizamos material_override (no mesh.material) para que
+	# cada instancia de la escena tenga su propio material sin
+	# duplicar ni compartir la geometría ni el recurso de malla.
+	_apply_tree_material()
 
 
 	# --------------------------------------------------------
@@ -667,6 +567,26 @@ func _apply_tree_properties(
 
 
 # ============================================================
+# APPLY TREE MATERIAL
+# ============================================================
+
+func _apply_tree_material() -> void:
+
+	var trees: MultiMeshInstance3D = (
+		_get_trees()
+	)
+
+
+	if trees == null:
+		return
+
+
+	trees.material_override = (
+		tree_material
+	)
+
+
+# ============================================================
 # APPLY TREE SHADOWS
 # ============================================================
 
@@ -748,176 +668,6 @@ func _sync_shadow_multimesh() -> void:
 
 
 # ============================================================
-# APPLY CANOPY
-# ============================================================
-
-func _apply_canopy_properties(
-	rebuild: bool
-) -> void:
-
-	var canopy: Decal = (
-		_get_canopy()
-	)
-
-
-	if canopy == null:
-		return
-
-
-	# --------------------------------------------------------
-	# DECAL NODE
-	# --------------------------------------------------------
-
-	# SOLO terrain visual layer 1.
-	canopy.cull_mask = 1
-
-
-	# --------------------------------------------------------
-	# SOURCE
-	# --------------------------------------------------------
-
-	canopy.set(
-		"trees_path",
-		NodePath("../Trees")
-	)
-
-
-	# --------------------------------------------------------
-	# AMBIENT
-	# --------------------------------------------------------
-
-	canopy.set(
-		"ambient_shadow_enabled",
-		canopy_enabled
-	)
-
-	canopy.set(
-		"shadow_color",
-		canopy_shadow_color
-	)
-
-	canopy.set(
-		"shadow_strength",
-		canopy_shadow_strength
-	)
-
-	canopy.set(
-		"per_tree_density",
-		canopy_per_tree_density
-	)
-
-	canopy.set(
-		"canopy_radius_factor",
-		canopy_radius_factor
-	)
-
-	canopy.set(
-		"canopy_extra_radius",
-		canopy_extra_radius
-	)
-
-	canopy.set(
-		"canopy_falloff_power",
-		canopy_falloff_power
-	)
-
-	canopy.set(
-		"density_gamma",
-		canopy_density_gamma
-	)
-
-
-	# --------------------------------------------------------
-	# TEXTURE
-	# --------------------------------------------------------
-
-	canopy.set(
-		"texture_resolution",
-		canopy_texture_resolution
-	)
-
-	canopy.set(
-		"blur_radius_pixels",
-		canopy_blur_radius_pixels
-	)
-
-	canopy.set(
-		"blur_passes",
-		canopy_blur_passes
-	)
-
-	canopy.set(
-		"world_padding",
-		canopy_world_padding
-	)
-
-	canopy.set(
-		"flip_texture_z",
-		canopy_flip_texture_z
-	)
-
-
-	# --------------------------------------------------------
-	# PROJECTION
-	# --------------------------------------------------------
-
-	canopy.set(
-		"vertical_margin",
-		canopy_vertical_margin
-	)
-
-	canopy.set(
-		"surface_normal_fade",
-		canopy_surface_normal_fade
-	)
-
-
-	# El root se encarga de detectar cambios.
-	# Evitamos que el Canopy haga otro polling por su cuenta.
-	canopy.set(
-		"auto_sync_in_editor",
-		false
-	)
-
-
-	if rebuild:
-
-		if canopy.has_method(
-			"rebuild_from_trees"
-		):
-
-			canopy.call(
-				"rebuild_from_trees"
-			)
-
-
-# ============================================================
-# DEFERRED CANOPY
-# ============================================================
-
-func _deferred_rebuild_canopy() -> void:
-
-	_sync_shadow_multimesh()
-
-	var canopy: Decal = (
-		_get_canopy()
-	)
-
-
-	if canopy == null:
-		return
-
-
-	if canopy.has_method(
-		"rebuild_from_trees"
-	):
-
-		canopy.call(
-			"rebuild_from_trees"
-		)
-
-
-# ============================================================
 # CHILD ACCESS
 # ============================================================
 
@@ -949,23 +699,6 @@ func _get_tree_shadows() -> MultiMeshInstance3D:
 
 		return (
 			node as MultiMeshInstance3D
-		)
-
-
-	return null
-
-
-func _get_canopy() -> Decal:
-
-	var node: Node = get_node_or_null(
-		CANOPY_NODE_PATH
-	)
-
-
-	if node is Decal:
-
-		return (
-			node as Decal
 		)
 
 
@@ -1092,28 +825,10 @@ func _build_shadow_signature() -> String:
 	])
 
 
-func _build_canopy_signature() -> String:
+func _build_tree_material_signature() -> String:
 
 	return str([
-		canopy_enabled,
-
-		canopy_shadow_color,
-		canopy_shadow_strength,
-		canopy_per_tree_density,
-
-		canopy_radius_factor,
-		canopy_extra_radius,
-		canopy_falloff_power,
-		canopy_density_gamma,
-
-		canopy_texture_resolution,
-		canopy_blur_radius_pixels,
-		canopy_blur_passes,
-		canopy_world_padding,
-		canopy_flip_texture_z,
-
-		canopy_vertical_margin,
-		canopy_surface_normal_fade
+		tree_material
 	])
 
 
@@ -1127,6 +842,6 @@ func _capture_signatures() -> void:
 		_build_shadow_signature()
 	)
 
-	_last_canopy_signature = (
-		_build_canopy_signature()
+	_last_tree_material_signature = (
+		_build_tree_material_signature()
 	)
