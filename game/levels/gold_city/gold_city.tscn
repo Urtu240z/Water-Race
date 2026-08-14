@@ -31,6 +31,7 @@
 [ext_resource type="Shader" uid="uid://b21on15wovwva" path="res://world/vegetation/trees/shaders/tree_baked_shadow_unshaded_overlay.gdshader" id="23_mdq0j"]
 [ext_resource type="Texture2D" uid="uid://djr4jtluu1lp5" path="res://levels/gold_city/terrain/gold_city_tree_shadows.png" id="24_qxbdv"]
 [ext_resource type="Material" uid="uid://qij14peslt0q" path="res://levels/paradise_island/terrain/materials/paradise_island_stone_coursed_rough.tres" id="24_uj1no"]
+[ext_resource type="PackedScene" path="res://world/props/lights/dynamic_area_emitter_3d.tscn" id="27_qxbdv"]
 [ext_resource type="PackedScene" uid="uid://dqbhmwx6tvlx0" path="res://world/vegetation/trees/tree_impostor_multimesh.tscn" id="32_mdq0j"]
 [ext_resource type="Shader" uid="uid://bfnesn2v47myr" path="res://levels/gold_city/city/buildings/shaders/building_windows_procedural.gdshader" id="34_xltpy"]
 [ext_resource type="Material" uid="uid://b4rxe5bb73l7n" path="res://world/vegetation/trees/materials/tree_impostor_material_gold_city.tres" id="35_iyaox"]
@@ -683,13 +684,16 @@ visible = false
 [node name="OLDS" parent="TerrainRoot/Gold_City/Scene Collection" parent_id_path=PackedInt32Array(297389943, 1682598167) index="7" unique_id=2080716734]
 visible = false
 
-[node name="AreaLight3D" type="AreaLight3D" parent="TerrainRoot/Gold_City/Scene Collection/Tunnel2" parent_id_path=PackedInt32Array(297389943, 196685833) index="1" unique_id=1087815502]
-transform = Transform3D(1, 0, 0, 0, 0.06834464, 0.99766177, 0, -0.99766177, 0.06834464, 0, 15.638588, 625.0503)
-light_energy = 7.103
-light_specular = 3.345
-area_range = 140.29
-area_attenuation = -0.552
-area_size = Vector2(210.2417, 21.208897)
+[node name="DynamicAreaEmitter3D" parent="TerrainRoot/Gold_City/Scene Collection/Tunnel2" parent_id_path=PackedInt32Array(297389943, 196685833) index="1" unique_id=488125315 instance=ExtResource("27_qxbdv")]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, -91.349594, 11.387218, 597.84686)
+size = Vector2(52.17, 26.57)
+light_color = Color(1, 0, 0, 1)
+light_energy = 100.0
+light_range = 30.0
+attenuation = 0.5
+shadows_enabled = true
+emission_energy = 100.0
+animate_hue = true
 
 [node name="WaterIntegration" type="Node3D" parent="." unique_id=1889730552]
 
