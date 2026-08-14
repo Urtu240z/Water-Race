@@ -603,7 +603,6 @@ light_color = Color(0.46146327, 0.5451962, 0.4992094, 1)
 light_energy = 2.034
 light_indirect_energy = 16.0
 light_specular = 7.281
-light_bake_mode = 1
 shadow_enabled = true
 shadow_blur = 3.5
 directional_shadow_mode = 1
@@ -660,17 +659,37 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.185, 0)
 [node name="medium_b_37" parent="TerrainRoot/Gold_City/Scene Collection/Buildings_Medium" parent_id_path=PackedInt32Array(297389943, 701381463) index="30" unique_id=1513833679]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.25, 0)
 
-[node name="Terrain_VIS" parent="TerrainRoot/Gold_City/Scene Collection/Terrain" parent_id_path=PackedInt32Array(297389943, 1864945746) index="0" unique_id=717890379]
+[node name="Atrezzo" parent="TerrainRoot/Gold_City/Scene Collection" parent_id_path=PackedInt32Array(297389943, 1682598167) index="3" unique_id=2122749616]
+visible = false
+
+[node name="Terrain" parent="TerrainRoot/Gold_City/Scene Collection" parent_id_path=PackedInt32Array(297389943, 1682598167) index="4" unique_id=1864945746]
+visible = false
+
+[node name="Terrain_VIS" parent="TerrainRoot/Gold_City/Scene Collection/Terrain" index="0" unique_id=717890379]
 material_override = SubResource("ShaderMaterial_0gqsi")
 material_overlay = SubResource("ShaderMaterial_mdq0j")
 
-[node name="Passtrough_VIS" parent="TerrainRoot/Gold_City/Scene Collection/Bridges" parent_id_path=PackedInt32Array(297389943, 1304534719) index="2" unique_id=930924910]
+[node name="Bridges" parent="TerrainRoot/Gold_City/Scene Collection" parent_id_path=PackedInt32Array(297389943, 1682598167) index="5" unique_id=1304534719]
+visible = false
+
+[node name="Passtrough_VIS" parent="TerrainRoot/Gold_City/Scene Collection/Bridges" index="2" unique_id=930924910]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -37.6653, -59.61348, 181.44055)
 surface_material_override/0 = ExtResource("23_dnql6")
 surface_material_override/1 = ExtResource("24_uj1no")
 
+[node name="Collisions" parent="TerrainRoot/Gold_City/Scene Collection" parent_id_path=PackedInt32Array(297389943, 1682598167) index="6" unique_id=1653424750]
+visible = false
+
 [node name="OLDS" parent="TerrainRoot/Gold_City/Scene Collection" parent_id_path=PackedInt32Array(297389943, 1682598167) index="7" unique_id=2080716734]
 visible = false
+
+[node name="AreaLight3D" type="AreaLight3D" parent="TerrainRoot/Gold_City/Scene Collection/Tunnel2" parent_id_path=PackedInt32Array(297389943, 196685833) index="1" unique_id=1087815502]
+transform = Transform3D(1, 0, 0, 0, 0.06834464, 0.99766177, 0, -0.99766177, 0.06834464, 0, 15.638588, 625.0503)
+light_energy = 7.103
+light_specular = 3.345
+area_range = 140.29
+area_attenuation = -0.552
+area_size = Vector2(210.2417, 21.208897)
 
 [node name="WaterIntegration" type="Node3D" parent="." unique_id=1889730552]
 
@@ -1034,7 +1053,6 @@ transform = Transform3D(-0.48855057, -0.87253565, -4.5707025e-09, -8.7422784e-08
 light_color = Color(1, 0, 0.5666666, 1)
 light_energy = 400.0
 light_specular = 0.513
-light_bake_mode = 1
 shadow_enabled = true
 shadow_bias = 0.0
 shadow_opacity = 0.85
@@ -1771,7 +1789,7 @@ quality = 0
 bounces = 1
 directional = true
 use_texture_for_bounces = false
-texel_scale = 0.5
+texel_scale = 0.13
 light_data = ExtResource("2_1e2c5")
 
 [node name="Debug" type="Node" parent="." unique_id=1303880580]

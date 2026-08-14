@@ -4,6 +4,7 @@
 
 [resource]
 script = ExtResource("1_profile")
+mesh_lod_bias = 0.0
 ssao = false
 ssil = false
 ocean_middle_radius = 2000.0

@@ -1,0 +1,31 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://world/props/lights/dynamic_area_emitter_3d.gd" id="1_script"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_emitter"]
+resource_local_to_scene = true
+shading_mode = 0
+albedo_color = Color(1, 1, 1, 1)
+emission_enabled = true
+emission = Color(1, 1, 1, 1)
+emission_energy_multiplier = 1.0
+
+[sub_resource type="QuadMesh" id="QuadMesh_emitter"]
+resource_local_to_scene = true
+material = SubResource("StandardMaterial3D_emitter")
+size = Vector2(10, 1)
+
+[node name="DynamicAreaEmitter3D" type="Node3D"]
+script = ExtResource("1_script")
+
+[node name="EmitterMesh" type="MeshInstance3D" parent="."]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0, 0)
+mesh = SubResource("QuadMesh_emitter")
+
+[node name="AreaLight3D" type="AreaLight3D" parent="."]
+area_size = Vector2(10, 1)
+light_energy = 1.0
+area_range = 5.0
+area_attenuation = 1.0
+area_normalize_energy = true
+shadow_enabled = false
