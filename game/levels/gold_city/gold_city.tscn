@@ -27,6 +27,10 @@
 [ext_resource type="Texture2D" uid="uid://cvvyxbgnxwgtw" path="res://shared/materials/terrain/textures/terrain_master/wet_sand_albedo.png" id="20_laf3l"]
 [ext_resource type="Texture2D" uid="uid://cm7w5uwuuwkx8" path="res://shared/materials/terrain/textures/terrain_master/wet_sand_normal.png" id="21_4scdh"]
 [ext_resource type="Texture2D" uid="uid://cexe4l4551x8v" path="res://shared/materials/terrain/textures/terrain_master/wet_sand_orm.png" id="22_df66w"]
+[ext_resource type="Material" uid="uid://cm7anuehw0t3q" path="res://shared/materials/stone/materials/plastered_stone_wall.res" id="23_dnql6"]
+[ext_resource type="Shader" uid="uid://b21on15wovwva" path="res://world/vegetation/trees/shaders/tree_baked_shadow_unshaded_overlay.gdshader" id="23_mdq0j"]
+[ext_resource type="Texture2D" uid="uid://djr4jtluu1lp5" path="res://levels/gold_city/terrain/gold_city_tree_shadows.png" id="24_qxbdv"]
+[ext_resource type="Material" uid="uid://qij14peslt0q" path="res://levels/paradise_island/terrain/materials/paradise_island_stone_coursed_rough.tres" id="24_uj1no"]
 [ext_resource type="PackedScene" uid="uid://dqbhmwx6tvlx0" path="res://world/vegetation/trees/tree_impostor_multimesh.tscn" id="32_mdq0j"]
 [ext_resource type="Shader" uid="uid://bfnesn2v47myr" path="res://levels/gold_city/city/buildings/shaders/building_windows_procedural.gdshader" id="34_xltpy"]
 [ext_resource type="Material" uid="uid://b4rxe5bb73l7n" path="res://world/vegetation/trees/materials/tree_impostor_material_gold_city.tres" id="35_iyaox"]
@@ -132,7 +136,28 @@ shader_parameter/water_level = 2.205
 shader_parameter/wet_sand_height = 5.0
 shader_parameter/debug_view = 0
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_y3rlo"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ol3en"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("23_mdq0j")
+shader_parameter/shadow_texture = ExtResource("24_qxbdv")
+shader_parameter/mask_center = Vector3(-236.06909, 49.172195, 282.7168)
+shader_parameter/mask_right = Vector3(0.9239262, 0, -0.3825708)
+shader_parameter/mask_up = Vector3(-0.261995, 0.72870535, -0.63273)
+shader_parameter/capture_size = 3424.6086
+shader_parameter/to_sun_direction = Vector3(0.27878138, 0.6848274, 0.6732699)
+shader_parameter/shadow_strength = 1.0
+shader_parameter/shadow_gamma = 0.4
+shader_parameter/shadow_threshold = 0.01
+shader_parameter/solid_shadow = false
+shader_parameter/solid_threshold = 0.05
+shader_parameter/use_stretch_fade = true
+shader_parameter/stretch_fade_start = 0.55
+shader_parameter/stretch_fade_end = 0.2
+shader_parameter/stretch_fade_power = 1.5
+shader_parameter/minimum_stretch_visibility = 0.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_q2anr"]
 resource_local_to_scene = true
 render_priority = 0
 shader = ExtResource("41_j7oal")
@@ -368,7 +393,7 @@ lifetime = 60.0
 fade_out_time = 7.0
 metadata/_custom_type_script = "uid://d28g2y2o80558"
 
-[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_hrvh4"]
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_cfohk"]
 resource_local_to_scene = true
 blend_mode = 1
 
@@ -395,7 +420,7 @@ point_count = 3
 [sub_resource type="CurveTexture" id="CurveTexture_bubble_shrink"]
 curve = SubResource("Curve_bubble_shrink")
 
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_n0k1o"]
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_iyaox"]
 resource_local_to_scene = true
 particle_flag_disable_z = true
 emission_shape_offset = Vector3(0, 600, 0)
@@ -418,7 +443,7 @@ turbulence_influence_max = 0.082
 turbulence_initial_displacement_min = -47.5
 turbulence_initial_displacement_max = 94.5
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_vbdm5"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4k6sa"]
 resource_local_to_scene = true
 render_priority = -127
 shader = ExtResource("55_5sm3d")
@@ -547,11 +572,11 @@ emission_enabled = true
 emission = Color(1, 0, 0.016666412, 1)
 emission_energy_multiplier = 16.0
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_iegie"]
+[sub_resource type="BoxShape3D" id="BoxShape3D_ogabk"]
 resource_local_to_scene = true
 size = Vector3(83.137, 90.025, 149.727)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_8o7o7"]
+[sub_resource type="BoxShape3D" id="BoxShape3D_laf3l"]
 resource_local_to_scene = true
 size = Vector3(89.876, 91.745, 133.916)
 
@@ -575,6 +600,7 @@ compositor = SubResource("Compositor_ep46c")
 [node name="Moon" type="DirectionalLight3D" parent="Environment" unique_id=1488093793 groups=["graphics_quality_directional_light"]]
 transform = Transform3D(-0.95417726, 0.068544365, 0.2912857, 0.24282512, 0.7462169, 0.6198358, -0.17487602, 0.66216475, -0.7286675, 0, 0, 0)
 light_color = Color(0.46146327, 0.5451962, 0.4992094, 1)
+light_energy = 2.034
 light_indirect_energy = 16.0
 light_specular = 7.281
 light_bake_mode = 1
@@ -606,7 +632,7 @@ additional_sky_paths = PackedStringArray("uid://olqtngkjhlxu")
 sky_preset = 5
 panorama_rotation_degrees = Vector3(4.315, 160.97, 0)
 sky_rotation_degrees = 160.97
-sky_energy_multiplier = 0.2
+sky_energy_multiplier = 0.8
 ambient_sky_contribution = 1.0
 
 [node name="TerrainRoot" type="Node3D" parent="." unique_id=432130367 groups=["graphics_quality_terrain"]]
@@ -619,19 +645,40 @@ mesh = SubResource("PlaneMesh_tpwhi")
 [node name="Gold_City" parent="TerrainRoot" unique_id=297389943 instance=ExtResource("15_t65j4")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -131.304, 0, -218.843)
 
-[node name="Terrain_VIS" parent="TerrainRoot/Gold_City/Scene Collection/Terrain" parent_id_path=PackedInt32Array(297389943, 1658662165) index="0" unique_id=1675499283]
-material_override = SubResource("ShaderMaterial_0gqsi")
+[node name="big_b_107" parent="TerrainRoot/Gold_City/Scene Collection/Bulildings_Big" parent_id_path=PackedInt32Array(297389943, 508744260) index="9" unique_id=1020967176]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 15.602, 0)
 
-[node name="Collisions" parent="TerrainRoot/Gold_City/Scene Collection" parent_id_path=PackedInt32Array(297389943, 78414820) index="6" unique_id=666869260]
+[node name="big_b_137" parent="TerrainRoot/Gold_City/Scene Collection/Bulildings_Big" parent_id_path=PackedInt32Array(297389943, 508744260) index="42" unique_id=559426056]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.475, 0)
+
+[node name="big_b_22" parent="TerrainRoot/Gold_City/Scene Collection/Bulildings_Big" parent_id_path=PackedInt32Array(297389943, 508744260) index="64" unique_id=448812966]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.455, 0)
+
+[node name="medium_b_11" parent="TerrainRoot/Gold_City/Scene Collection/Buildings_Medium" parent_id_path=PackedInt32Array(297389943, 1404778972) index="2" unique_id=173584212]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.185, 0)
+
+[node name="medium_b_37" parent="TerrainRoot/Gold_City/Scene Collection/Buildings_Medium" parent_id_path=PackedInt32Array(297389943, 1404778972) index="30" unique_id=489802268]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.25, 0)
+
+[node name="Terrain_VIS" parent="TerrainRoot/Gold_City/Scene Collection/Terrain" parent_id_path=PackedInt32Array(297389943, 1679783188) index="0" unique_id=459822433]
+material_override = SubResource("ShaderMaterial_0gqsi")
+material_overlay = SubResource("ShaderMaterial_ol3en")
+
+[node name="Passtrough_VIS" parent="TerrainRoot/Gold_City/Scene Collection/Bridges" parent_id_path=PackedInt32Array(297389943, 778985330) index="2" unique_id=931730324]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -37.6653, -59.61348, 181.44055)
+surface_material_override/0 = ExtResource("23_dnql6")
+surface_material_override/1 = ExtResource("24_uj1no")
+
+[node name="Collisions" parent="TerrainRoot/Gold_City/Scene Collection" parent_id_path=PackedInt32Array(297389943, 646047009) index="6" unique_id=1148599491]
 visible = false
 
-[node name="OLDS" parent="TerrainRoot/Gold_City/Scene Collection" parent_id_path=PackedInt32Array(297389943, 78414820) index="7" unique_id=350115140]
+[node name="OLDS" parent="TerrainRoot/Gold_City/Scene Collection" parent_id_path=PackedInt32Array(297389943, 646047009) index="7" unique_id=875628370]
 visible = false
 
 [node name="WaterIntegration" type="Node3D" parent="." unique_id=1889730552]
 
 [node name="Ocean" parent="WaterIntegration" unique_id=1340264265 instance=ExtResource("40_3mclj")]
-ocean_material = SubResource("ShaderMaterial_y3rlo")
+ocean_material = SubResource("ShaderMaterial_q2anr")
 wave_world_size_a = 153.5
 wave_world_size_b = 104.0
 wave_amplitude_a = 0.7999999821184
@@ -656,6 +703,7 @@ metadata/_custom_type_script = "uid://cvayffg86y5d3"
 
 [node name="CalmWaterArea3D" parent="WaterIntegration" unique_id=1837580228 instance=ExtResource("38_8wtvr")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -453.55353, 3.0099335, -247.60738)
+visible = false
 area_size = Vector3(1080.42, 55.769, 3203.886)
 ocean_path = NodePath("../Ocean")
 wave_strength = 0.64
@@ -919,7 +967,7 @@ editor_preview_mode = 0
 
 [node name="EntryBubbles" parent="CameraSystem/ChaseCamera/Camera3D/UnderwaterEffect/WaterCrossingOverlay" index="0"]
 visible = false
-material = SubResource("CanvasItemMaterial_hrvh4")
+material = SubResource("CanvasItemMaterial_cfohk")
 position = Vector2(1, 1.76)
 amount = 500
 texture = SubResource("GradientTexture2D_pl0kw")
@@ -927,10 +975,10 @@ lifetime = 20.0
 speed_scale = 8.0
 explosiveness = 1.0
 randomness = 1.0
-process_material = SubResource("ParticleProcessMaterial_n0k1o")
+process_material = SubResource("ParticleProcessMaterial_iyaox")
 
 [node name="UnderwaterPostProcess" parent="CameraSystem/ChaseCamera/Camera3D/UnderwaterEffect" index="1" unique_id=1854893749]
-material_override = SubResource("ShaderMaterial_vbdm5")
+material_override = SubResource("ShaderMaterial_4k6sa")
 
 [node name="Props" type="Node3D" parent="." unique_id=1365592301]
 
@@ -1648,13 +1696,14 @@ valid_ground_name_contains = PackedStringArray("Terrain_Master_COL", "Terrain_CO
 minimum_height_above_water = 7.0
 
 [node name="TreeImpostorMultimesh4" parent="Props/Vegetation/TreeImpostors" unique_id=383595827 instance=ExtResource("32_mdq0j")]
-transform = Transform3D(0.91799974, 0, 0.396581, 0, 1, 0, -0.396581, 0, 0.91799974, -391.37134, 10.8320465, 274.92538)
+transform = Transform3D(0.91799974, 0, 0.396581, 0, 1, 0, -0.396581, 0, 0.91799974, -427.02563, 10.8320465, 283.54153)
 tree_material = ExtResource("35_iyaox")
 area_radius_x = 168.0
 area_radius_z = 269.0
 min_spacing = 3.85
 max_spacing = 15.15
 valid_ground_name_contains = PackedStringArray("Terrain_Master_COL", "Terrain_COL")
+reject_steep_slopes = false
 minimum_height_above_water = 7.0
 
 [node name="TreeImpostorMultimesh5" parent="Props/Vegetation/TreeImpostors" unique_id=1666605584 instance=ExtResource("32_mdq0j")]
@@ -1687,7 +1736,7 @@ unfreeze_duration = 1.0
 debug_events = true
 
 [node name="CollisionShape3D" parent="Props/Vegetation/TreeImpostorsFrozen/TreeImpostorFrozen" index="0" unique_id=1790283657]
-shape = SubResource("BoxShape3D_iegie")
+shape = SubResource("BoxShape3D_ogabk")
 
 [node name="TreeImpostorFrozen2" parent="Props/Vegetation/TreeImpostorsFrozen" unique_id=469109216 instance=ExtResource("2_cfohk")]
 transform = Transform3D(0.8735965, 0, 0.48664874, 0, 1, 0, -0.48665488, 0, 0.8735977, -423.3858, 2.4459906, -116.46263)
@@ -1698,12 +1747,12 @@ unfreeze_duration = 1.0
 debug_events = true
 
 [node name="CollisionShape3D" parent="Props/Vegetation/TreeImpostorsFrozen/TreeImpostorFrozen2" index="0" unique_id=1790283657]
-shape = SubResource("BoxShape3D_8o7o7")
+shape = SubResource("BoxShape3D_laf3l")
 
 [node name="TreeProjectedShadowBaker" type="Node3D" parent="Props/Vegetation" unique_id=472315960]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.510468, -49.139404, -57.103714)
 script = ExtResource("72_ol3en")
-terrain_mesh_path = NodePath("../../../TerrainRoot/Gold_City/Scene Collection/Collection/Terrain/Terrain_VIS")
+terrain_mesh_path = NodePath("../../../TerrainRoot/Gold_City/Scene Collection/Terrain/Terrain_VIS")
 sun_light_path = NodePath("../../../Environment/Sun")
 output_png_path = "res://levels/gold_city/terrain/gold_city_tree_shadows.png"
 texture_resolution = 4096

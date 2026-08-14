@@ -1,0 +1,25 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://bf578nnv46kfa"]
+
+[ext_resource type="Texture2D" uid="uid://cxmvt5w4b3ret" path="res://shared/materials/stone/textures/plastered_stone_wall/plastered_stone_wall_albedo.jpg" id="1_6kxrf"]
+[ext_resource type="Texture2D" uid="uid://dpg2bleuhgq6i" path="res://shared/materials/stone/textures/plastered_stone_wall/plastered_stone_wall_orm.jpg" id="2_fduce"]
+[ext_resource type="Texture2D" uid="uid://1l24jn6ay7at" path="res://shared/materials/stone/textures/plastered_stone_wall/plastered_stone_wall_normal.jpg" id="3_gjplg"]
+
+[resource]
+resource_name = "BLACK UC40577"
+cull_mode = 2
+albedo_color = Color(11.854618, 11.857062, 11.857549, 1)
+albedo_texture = ExtResource("1_6kxrf")
+metallic = 1.0
+metallic_specular = 0.54
+metallic_texture = ExtResource("2_fduce")
+metallic_texture_channel = 2
+roughness_texture = ExtResource("2_fduce")
+roughness_texture_channel = 1
+normal_enabled = true
+normal_texture = ExtResource("3_gjplg")
+ao_enabled = true
+ao_light_affect = 0.82
+ao_texture = ExtResource("2_fduce")
+uv1_scale = Vector3(0.04, 0.04, 0.04)
+uv1_triplanar = true
+uv1_triplanar_sharpness = 1.1892073
