@@ -7,7 +7,7 @@
 [resource]
 resource_name = "BLACK UC40577"
 cull_mode = 2
-albedo_color = Color(11.854618, 11.857062, 11.857549, 1)
+albedo_color = Color(1.6197081, 1.6197081, 1.6197081, 1)
 albedo_texture = ExtResource("1_6kxrf")
 metallic = 1.0
 metallic_specular = 0.54
@@ -16,10 +16,12 @@ metallic_texture_channel = 2
 roughness_texture = ExtResource("2_fduce")
 roughness_texture_channel = 1
 normal_enabled = true
+normal_scale = 1.28
 normal_texture = ExtResource("3_gjplg")
 ao_enabled = true
-ao_light_affect = 0.82
+ao_light_affect = 0.81
 ao_texture = ExtResource("2_fduce")
-uv1_scale = Vector3(0.04, 0.04, 0.04)
+uv1_scale = Vector3(0.095, 0.095, 0.095)
 uv1_triplanar = true
-uv1_triplanar_sharpness = 1.1892073
+uv1_triplanar_sharpness = 0.5467004
+uv1_world_triplanar = true

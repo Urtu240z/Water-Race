@@ -15,5 +15,5 @@ albedo_texture = SubResource("PortableCompressedTexture2D_eaecq")
 roughness = 0.5
 emission_enabled = true
 emission = Color(0.35686275, 1, 1, 1)
-emission_energy_multiplier = 1000.0
+emission_energy_multiplier = 10.0
 metadata/_gltf_primary_texture_coord = 0
