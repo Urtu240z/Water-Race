@@ -100,6 +100,18 @@ var ground_collision_mask: int = 0xFFFFFFFF
 	"Terrain_Master_COL"
 ])
 
+# Visual meshes used only while baking tree placement. These paths are chosen
+# from the forest root and converted automatically for the Trees child.
+@export var ground_visual_meshes: Array[NodePath] = []
+
+# A level can mark one shared Terrain_VIS with this group so every forest zone
+# uses it without repeating a NodePath override.
+@export var use_grouped_visual_ground: bool = true
+
+@export var ground_visual_group: StringName = (
+	&"tree_impostor_ground"
+)
+
 
 # ============================================================
 # TREES - SLOPE
@@ -484,6 +496,24 @@ func _apply_tree_properties(
 		valid_ground_name_contains
 	)
 
+	trees.set(
+		"ground_visual_mesh_paths",
+		_convert_paths_for_child(
+			trees,
+			ground_visual_meshes
+		)
+	)
+
+	trees.set(
+		"use_grouped_visual_ground",
+		use_grouped_visual_ground
+	)
+
+	trees.set(
+		"ground_visual_group",
+		ground_visual_group
+	)
+
 
 	# --------------------------------------------------------
 	# SLOPE
@@ -802,6 +832,9 @@ func _build_tree_signature() -> String:
 		ground_collision_mask,
 
 		valid_ground_name_contains,
+		ground_visual_meshes,
+		use_grouped_visual_ground,
+		ground_visual_group,
 
 		reject_steep_slopes,
 		max_ground_slope_degrees,

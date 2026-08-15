@@ -4,17 +4,17 @@ ERROR: Failed to read the root certificate store.
    at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)
 
 ========== WATER RACE LOAD TRACE ==========
-[    0.948 ms] GAME START                          +   0.948 ms
-[    1.031 ms] GRAPHICS_AUTOLOAD_READY_BEGIN       +   0.083 ms
-[    1.079 ms] GRAPHICS_PROFILES_LOAD_BEGIN        +   0.048 ms
-[    3.303 ms] GRAPHICS_PROFILES_LOADED            +   2.224 ms
-[    3.347 ms] GRAPHICS_INITIAL_APPLY_QUEUED       +   0.044 ms
-[    3.361 ms] GRAPHICS_AUTOLOAD_READY_END         +   0.014 ms
-[  121.832 ms] RIDER_READY_BEGIN                   + 118.471 ms
-[  121.985 ms] RIDER_READY                         +   0.153 ms
-[  122.030 ms] GRAPHICS_APPLY_BEGIN                +   0.045 ms
-[  122.189 ms] GRAPHICS_TARGETS_COLLECTED          +   0.159 ms
-[  122.240 ms] GRAPHICS_APPLY_END                  +   0.051 ms
+[    1.069 ms] GAME START                          +   1.069 ms
+[    1.125 ms] GRAPHICS_AUTOLOAD_READY_BEGIN       +   0.056 ms
+[    1.162 ms] GRAPHICS_PROFILES_LOAD_BEGIN        +   0.037 ms
+[    3.943 ms] GRAPHICS_PROFILES_LOADED            +   2.781 ms
+[    4.002 ms] GRAPHICS_INITIAL_APPLY_QUEUED       +   0.059 ms
+[    4.018 ms] GRAPHICS_AUTOLOAD_READY_END         +   0.016 ms
+[  141.128 ms] RIDER_READY_BEGIN                   + 137.110 ms
+[  141.305 ms] RIDER_READY                         +   0.177 ms
+[  141.380 ms] GRAPHICS_APPLY_BEGIN                +   0.075 ms
+[  141.398 ms] GRAPHICS_TARGETS_COLLECTED          +   0.018 ms
+[  141.460 ms] GRAPHICS_APPLY_END                  +   0.062 ms
 === RIDER IDENTITY MIGRATION VALIDATION ===
 PASS: RiderRig scene loads.
 PASS: RiderRig default remains physical Athletic Female as rider_03.
@@ -82,9 +82,9 @@ PASS: rider_04 selection hides rider_01.
 PASS: rider_04 selection hides rider_02.
 PASS: rider_04 selection hides rider_03.
 PASS: rider_04 selection hides rider_05.
-FAIL: rider_05 normal runtime has no staged compatible GLB.
-FAIL: rider_05 normal runtime has no staged compatible GLB .import.
-FAIL: rider_05 has no generated staging artifact at runtime root.
+PASS: rider_05 normal runtime has no staged compatible GLB.
+PASS: rider_05 normal runtime has no staged compatible GLB .import.
+PASS: rider_05 has no generated staging artifact at runtime root.
 PASS: rider_05 runtime mesh loads.
 PASS: rider_05 runtime skin loads.
 PASS: rider_05 has one runtime surface.
@@ -95,4 +95,4 @@ PASS: rider_05 selection hides rider_01.
 PASS: rider_05 selection hides rider_02.
 PASS: rider_05 selection hides rider_03.
 PASS: rider_05 selection hides rider_04.
-IDENTITY_MIGRATION_STATUS=FAIL
+IDENTITY_MIGRATION_STATUS=PASS

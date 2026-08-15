@@ -1,0 +1,28 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+ERROR: Failed to read the root certificate store.
+   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)
+
+========== WATER RACE LOAD TRACE ==========
+[    1.447 ms] GAME START                          +   1.447 ms
+[    1.487 ms] GRAPHICS_AUTOLOAD_READY_BEGIN       +   0.040 ms
+[    1.516 ms] GRAPHICS_PROFILES_LOAD_BEGIN        +   0.029 ms
+[    4.291 ms] GRAPHICS_PROFILES_LOADED            +   2.775 ms
+[    4.349 ms] GRAPHICS_INITIAL_APPLY_QUEUED       +   0.058 ms
+[    4.365 ms] GRAPHICS_AUTOLOAD_READY_END         +   0.016 ms
+ERROR: Missing baked tree MultiMesh: res://world/vegetation/trees/baked/_node3d_2___multimeshinstance3d_3.res
+Open Paradise Island in the editor and use Regenerate Forest.
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://world/vegetation/trees/tree_impostor_multimesh.gd:233)
+       [1] _run (res://dev/tests/vegetation/_tmp_validate_tree_visual_ground.gd:28)
+SCRIPT ERROR: Invalid call. Nonexistent function 'surface_get_array_len' in base 'PlaneMesh'.
+   at: _build_visual_ground_mesh_signature (res://world/vegetation/trees/tree_impostor_multimesh.gd:1845)
+   GDScript backtrace (most recent call first):
+       [0] _build_visual_ground_mesh_signature (res://world/vegetation/trees/tree_impostor_multimesh.gd:1845)
+       [1] _ensure_visual_ground_bodies (res://world/vegetation/trees/tree_impostor_multimesh.gd:1742)
+       [2] _run (res://dev/tests/vegetation/_tmp_validate_tree_visual_ground.gd:38)
+[    5.708 ms] GRAPHICS_APPLY_BEGIN                +   1.343 ms
+[    5.741 ms] GRAPHICS_TARGETS_COLLECTED          +   0.033 ms
+[    5.776 ms] GRAPHICS_APPLY_END                  +   0.035 ms
+TREE_VISUAL_GROUND_STATUS=PASS

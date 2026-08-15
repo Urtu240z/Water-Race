@@ -16,6 +16,18 @@ const BAKED_DIRECTORY: String = (
 
 const BAKE_VERSION: int = 1
 
+const VISUAL_GROUND_GROUP_DEFAULT: StringName = (
+	&"tree_impostor_ground"
+)
+
+const VISUAL_GROUND_BODY_NAME: StringName = (
+	&"_TreeImpostorBakeGround"
+)
+
+# Reserved for editor-only tree placement. The temporary body is never packed
+# into the level and therefore has no runtime physics cost.
+const VISUAL_GROUND_COLLISION_LAYER: int = 1 << 31
+
 
 # ============================================================
 # DISTRIBUTION
@@ -86,6 +98,18 @@ var ground_collision_mask: int = 0xFFFFFFFF
 	PackedStringArray([
 		"Terrain_Master_COL"
 	])
+)
+
+# Optional paths to visual meshes that should be treated as placement ground
+# while baking. Paths are resolved from this Trees node.
+@export var ground_visual_mesh_paths: Array[NodePath] = []
+
+# A level can mark one shared Terrain_VIS with this group instead of repeating
+# the same NodePath on every forest zone.
+@export var use_grouped_visual_ground: bool = true
+
+@export var ground_visual_group: StringName = (
+	VISUAL_GROUND_GROUP_DEFAULT
 )
 
 
@@ -249,6 +273,35 @@ func _generate() -> void:
 		)
 
 		return
+
+
+	# --------------------------------------------------------
+	# EDITOR-ONLY VISUAL GROUND
+	# --------------------------------------------------------
+
+	var visual_ground_meshes: Array[MeshInstance3D] = []
+	var visual_ground_active: bool = false
+
+
+	if snap_to_ground:
+
+		visual_ground_meshes = (
+			_resolve_visual_ground_meshes()
+		)
+
+
+		visual_ground_active = (
+			_ensure_visual_ground_bodies(
+				visual_ground_meshes
+			)
+		)
+
+
+		# Newly-created StaticBody3D nodes become queryable on the next
+		# physics frame. Existing cached bodies also pass through this single
+		# editor-only frame so all forests behave deterministically.
+		if visual_ground_active:
+			await get_tree().physics_frame
 
 
 	# --------------------------------------------------------
@@ -499,7 +552,11 @@ func _generate() -> void:
 				PhysicsRayQueryParameters3D.create(
 					ray_from,
 					ray_to,
-					ground_collision_mask
+					(
+						VISUAL_GROUND_COLLISION_LAYER
+						if visual_ground_active
+						else ground_collision_mask
+					)
 				)
 			)
 
@@ -783,7 +840,9 @@ func _generate() -> void:
 		" | water: ",
 		rejected_water,
 		" | visual blockers: ",
-		visual_blocker_aabbs.size()
+		visual_blocker_aabbs.size(),
+		" | visual ground meshes: ",
+		visual_ground_meshes.size()
 	)
 
 
@@ -1410,6 +1469,43 @@ func _build_bake_signature() -> String:
 
 
 	signature += (
+		"|ground_visual_paths="
+		+ str(
+			ground_visual_mesh_paths
+		)
+	)
+
+
+	signature += (
+		"|ground_visual_group="
+		+ str([
+			use_grouped_visual_ground,
+			ground_visual_group
+		])
+	)
+
+
+	var visual_ground_signatures: Array[String] = []
+
+
+	for visual_ground: MeshInstance3D in (
+		_resolve_visual_ground_meshes()
+	):
+
+		visual_ground_signatures.append(
+			_build_visual_ground_mesh_signature(
+				visual_ground
+			)
+		)
+
+
+	signature += (
+		"|ground_visual_meshes="
+		+ str(visual_ground_signatures)
+	)
+
+
+	signature += (
 		"|reject_slope="
 		+ str(
 			reject_steep_slopes
@@ -1535,12 +1631,287 @@ func _sync_shadow_multimesh() -> void:
 
 
 # ============================================================
+# EDITOR-ONLY VISUAL GROUND
+# ============================================================
+
+func _resolve_visual_ground_meshes() -> Array[MeshInstance3D]:
+
+	var result: Array[MeshInstance3D] = []
+	var seen_instance_ids: Dictionary = {}
+
+
+	for mesh_path: NodePath in ground_visual_mesh_paths:
+
+		if mesh_path == NodePath(""):
+			continue
+
+
+		var source_node: Node = get_node_or_null(mesh_path)
+
+
+		if source_node == null:
+
+			push_warning(
+				"Visual ground mesh path not found: "
+				+ String(mesh_path)
+			)
+
+			continue
+
+
+		_collect_visual_ground_meshes(
+			source_node,
+			result,
+			seen_instance_ids
+		)
+
+
+	if (
+		use_grouped_visual_ground
+		and not ground_visual_group.is_empty()
+		and is_inside_tree()
+	):
+
+		for grouped_node: Node in get_tree().get_nodes_in_group(
+			ground_visual_group
+		):
+
+			_collect_visual_ground_meshes(
+				grouped_node,
+				result,
+				seen_instance_ids
+			)
+
+
+	return result
+
+
+func _collect_visual_ground_meshes(
+	node: Node,
+	result: Array[MeshInstance3D],
+	seen_instance_ids: Dictionary
+) -> void:
+
+	if node is MeshInstance3D:
+
+		var mesh_instance: MeshInstance3D = (
+			node as MeshInstance3D
+		)
+
+		var instance_id: int = mesh_instance.get_instance_id()
+
+
+		if (
+			mesh_instance.mesh != null
+			and not seen_instance_ids.has(instance_id)
+		):
+
+			seen_instance_ids[instance_id] = true
+			result.append(mesh_instance)
+
+
+	for child: Node in node.get_children():
+
+		_collect_visual_ground_meshes(
+			child,
+			result,
+			seen_instance_ids
+		)
+
+
+func _ensure_visual_ground_bodies(
+	mesh_instances: Array[MeshInstance3D]
+) -> bool:
+
+	var valid_body_count: int = 0
+
+
+	for mesh_instance: MeshInstance3D in mesh_instances:
+
+		if not is_instance_valid(mesh_instance):
+			continue
+
+
+		var source_mesh: Mesh = mesh_instance.mesh
+
+
+		if source_mesh == null:
+			continue
+
+
+		var mesh_signature: String = (
+			_build_visual_ground_mesh_signature(
+				mesh_instance
+			)
+		)
+
+		var existing_body: StaticBody3D = (
+			mesh_instance.get_node_or_null(
+				NodePath(String(VISUAL_GROUND_BODY_NAME))
+			) as StaticBody3D
+		)
+
+
+		if (
+			existing_body != null
+			and String(
+				existing_body.get_meta(
+					"tree_bake_mesh_signature",
+					""
+				)
+			) != mesh_signature
+		):
+
+			existing_body.free()
+			existing_body = null
+
+
+		if existing_body == null:
+
+			var trimesh_shape: Shape3D = (
+				source_mesh.create_trimesh_shape()
+			)
+
+
+			if trimesh_shape == null:
+
+				push_warning(
+					"Could not create editor tree-bake ground from: "
+					+ String(mesh_instance.get_path())
+				)
+
+				continue
+
+
+			existing_body = StaticBody3D.new()
+			existing_body.name = VISUAL_GROUND_BODY_NAME
+			existing_body.collision_layer = (
+				VISUAL_GROUND_COLLISION_LAYER
+			)
+			existing_body.collision_mask = 0
+			existing_body.set_meta(
+				"tree_bake_visual_ground",
+				true
+			)
+			existing_body.set_meta(
+				"tree_bake_mesh_signature",
+				mesh_signature
+			)
+
+
+			# Internal + ownerless means it is shared by every forest bake in
+			# this editor session but is never serialized into the level.
+			mesh_instance.add_child(
+				existing_body,
+				false,
+				Node.INTERNAL_MODE_BACK
+			)
+
+
+			var collision_shape: CollisionShape3D = (
+				CollisionShape3D.new()
+			)
+
+			collision_shape.shape = trimesh_shape
+			existing_body.add_child(
+				collision_shape,
+				false,
+				Node.INTERNAL_MODE_BACK
+			)
+
+
+		valid_body_count += 1
+
+
+	return valid_body_count > 0
+
+
+func _build_visual_ground_mesh_signature(
+	mesh_instance: MeshInstance3D
+) -> String:
+
+	var source_mesh: Mesh = mesh_instance.mesh
+
+
+	if source_mesh == null:
+		return "missing"
+
+
+	var surface_sizes: Array[String] = []
+
+
+	for surface_index: int in source_mesh.get_surface_count():
+
+		var vertex_count: int = 0
+		var index_count: int = 0
+
+
+		if source_mesh is ArrayMesh:
+
+			var array_mesh: ArrayMesh = source_mesh as ArrayMesh
+			vertex_count = array_mesh.surface_get_array_len(surface_index)
+			index_count = array_mesh.surface_get_array_index_len(surface_index)
+
+		else:
+
+			var surface_arrays: Array = (
+				source_mesh.surface_get_arrays(surface_index)
+			)
+
+
+			if surface_arrays.size() > Mesh.ARRAY_VERTEX:
+
+				var vertices: Variant = surface_arrays[Mesh.ARRAY_VERTEX]
+
+
+				if vertices is PackedVector3Array:
+					vertex_count = (vertices as PackedVector3Array).size()
+
+
+			if surface_arrays.size() > Mesh.ARRAY_INDEX:
+
+				var indices: Variant = surface_arrays[Mesh.ARRAY_INDEX]
+
+
+				if indices is PackedInt32Array:
+					index_count = (indices as PackedInt32Array).size()
+
+
+		surface_sizes.append(
+			str([
+				vertex_count,
+				index_count
+			])
+		)
+
+
+	return str([
+		mesh_instance.get_path(),
+		source_mesh.resource_path,
+		source_mesh.get_aabb(),
+		mesh_instance.global_transform,
+		surface_sizes
+	])
+
+
+# ============================================================
 # VALID GROUND
 # ============================================================
 
 func _is_valid_ground_collider(
 	collider: Object
 ) -> bool:
+
+	if (
+		collider is Node
+		and bool(
+			(collider as Node).get_meta(
+				"tree_bake_visual_ground",
+				false
+			)
+		)
+	):
+		return true
 
 	if valid_ground_name_contains.is_empty():
 		return true

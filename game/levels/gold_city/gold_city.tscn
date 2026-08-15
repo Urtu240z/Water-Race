@@ -30,7 +30,7 @@
 [ext_resource type="Material" uid="uid://cm7anuehw0t3q" path="res://shared/materials/stone/materials/plastered_stone_wall.res" id="23_dnql6"]
 [ext_resource type="Shader" uid="uid://b21on15wovwva" path="res://world/vegetation/trees/shaders/tree_baked_shadow_unshaded_overlay.gdshader" id="23_mdq0j"]
 [ext_resource type="Texture2D" uid="uid://djr4jtluu1lp5" path="res://levels/gold_city/terrain/gold_city_tree_shadows.png" id="24_qxbdv"]
-[ext_resource type="Material" uid="uid://qij14peslt0q" path="res://levels/paradise_island/terrain/materials/paradise_island_stone_coursed_rough.tres" id="24_uj1no"]
+[ext_resource type="Material" uid="uid://dr0ylqvywolfe" path="res://shared/materials/plastic/materials/plastic_02.tres" id="26_ogabk"]
 [ext_resource type="Material" uid="uid://dpu00es22gb1t" path="res://shared/materials/metal/materials/rusty_metal_sheet.res" id="27_iyaox"]
 [ext_resource type="PackedScene" path="res://world/props/lights/dynamic_area_emitter_3d.tscn" id="27_qxbdv"]
 [ext_resource type="Texture2D" uid="uid://bnsw8hbxeetde" path="res://shared/materials/metal/textures/rusty_metal_03/rusty_metal_03_albedo.jpg" id="28_4k6sa"]
@@ -143,7 +143,7 @@ shader_parameter/water_level = 2.205
 shader_parameter/wet_sand_height = 5.0
 shader_parameter/debug_view = 0
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_4scdh"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ogabk"]
 resource_local_to_scene = true
 render_priority = 0
 shader = ExtResource("23_mdq0j")
@@ -153,7 +153,7 @@ shader_parameter/mask_right = Vector3(0.9239262, 0, -0.3825708)
 shader_parameter/mask_up = Vector3(-0.261995, 0.72870535, -0.63273)
 shader_parameter/capture_size = 3424.6086
 shader_parameter/to_sun_direction = Vector3(0.27878138, 0.6848274, 0.6732699)
-shader_parameter/shadow_strength = 1.0
+shader_parameter/shadow_strength = 0.80999998189488
 shader_parameter/shadow_gamma = 0.4
 shader_parameter/shadow_threshold = 0.01
 shader_parameter/solid_shadow = false
@@ -161,8 +161,8 @@ shader_parameter/solid_threshold = 0.05
 shader_parameter/use_stretch_fade = true
 shader_parameter/stretch_fade_start = 0.55
 shader_parameter/stretch_fade_end = 0.2
-shader_parameter/stretch_fade_power = 1.5
-shader_parameter/minimum_stretch_visibility = 0.0
+shader_parameter/stretch_fade_power = 0.5000000074506
+shader_parameter/minimum_stretch_visibility = 0.57999998703584
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jv4a7"]
 albedo_color = Color(0.33660772, 0.33660758, 0.3366076, 1)
@@ -183,7 +183,7 @@ uv1_scale = Vector3(0.26, 0.26, 0.26)
 uv1_triplanar = true
 uv1_triplanar_sharpness = 103.9684
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_df66w"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_laf3l"]
 resource_local_to_scene = true
 render_priority = 0
 shader = ExtResource("41_j7oal")
@@ -419,7 +419,7 @@ lifetime = 60.0
 fade_out_time = 7.0
 metadata/_custom_type_script = "uid://d28g2y2o80558"
 
-[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_0gqsi"]
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_4scdh"]
 resource_local_to_scene = true
 blend_mode = 1
 
@@ -446,7 +446,7 @@ point_count = 3
 [sub_resource type="CurveTexture" id="CurveTexture_bubble_shrink"]
 curve = SubResource("Curve_bubble_shrink")
 
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_y3rlo"]
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_df66w"]
 resource_local_to_scene = true
 particle_flag_disable_z = true
 emission_shape_offset = Vector3(0, 600, 0)
@@ -469,7 +469,7 @@ turbulence_influence_max = 0.082
 turbulence_initial_displacement_min = -47.5
 turbulence_initial_displacement_max = 94.5
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_hrvh4"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_y3rlo"]
 resource_local_to_scene = true
 render_priority = -127
 shader = ExtResource("55_5sm3d")
@@ -586,11 +586,11 @@ emission_enabled = true
 emission = Color(1, 0, 0.016666412, 1)
 emission_energy_multiplier = 16.0
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_n0k1o"]
+[sub_resource type="BoxShape3D" id="BoxShape3D_hrvh4"]
 resource_local_to_scene = true
 size = Vector3(83.137, 90.025, 149.727)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_vbdm5"]
+[sub_resource type="BoxShape3D" id="BoxShape3D_n0k1o"]
 resource_local_to_scene = true
 size = Vector3(89.876, 91.745, 133.916)
 
@@ -652,7 +652,7 @@ ambient_sky_contribution = 1.0
 script = ExtResource("12_hh2mw")
 
 [node name="SeabedPlane" type="MeshInstance3D" parent="TerrainRoot" unique_id=1286908535]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -68.184326, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -190.28682, 0)
 mesh = SubResource("PlaneMesh_tpwhi")
 
 [node name="Gold_City" parent="TerrainRoot" unique_id=297389943 instance=ExtResource("15_t65j4")]
@@ -673,20 +673,28 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.185, 0)
 [node name="medium_b_37" parent="TerrainRoot/Gold_City/Scene Collection/Buildings_Medium" parent_id_path=PackedInt32Array(297389943, 701381463) index="30" unique_id=1513833679]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.25, 0)
 
-[node name="Terrain_VIS" parent="TerrainRoot/Gold_City/Scene Collection/Terrain" parent_id_path=PackedInt32Array(297389943, 1864945746) index="0" unique_id=717890379]
+[node name="medium_b_50" parent="TerrainRoot/Gold_City/Scene Collection/Buildings_Medium" parent_id_path=PackedInt32Array(297389943, 701381463) index="45" unique_id=2065091899]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.022, 9.445, 16.88)
+
+[node name="Terrain_VIS" parent="TerrainRoot/Gold_City/Scene Collection/Terrain" parent_id_path=PackedInt32Array(297389943, 1864945746) index="0" unique_id=717890379 groups=["tree_impostor_ground"]]
 material_override = SubResource("ShaderMaterial_0gqsi")
-material_overlay = SubResource("ShaderMaterial_4scdh")
+material_overlay = SubResource("ShaderMaterial_ogabk")
 
 [node name="Passtrough_VIS" parent="TerrainRoot/Gold_City/Scene Collection/Bridges" parent_id_path=PackedInt32Array(297389943, 1304534719) index="2" unique_id=930924910]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -37.6653, -59.61348, 181.44055)
 surface_material_override/0 = ExtResource("23_dnql6")
-surface_material_override/1 = ExtResource("24_uj1no")
+surface_material_override/1 = ExtResource("26_ogabk")
 
 [node name="Bridge_Big_VIS" parent="TerrainRoot/Gold_City/Scene Collection/Bridges" parent_id_path=PackedInt32Array(297389943, 1304534719) index="3" unique_id=824363736]
 surface_material_override/0 = ExtResource("27_iyaox")
 surface_material_override/1 = ExtResource("27_iyaox")
 surface_material_override/6 = SubResource("StandardMaterial3D_jv4a7")
 surface_material_override/7 = ExtResource("23_dnql6")
+
+[node name="Collisions" parent="TerrainRoot/Gold_City/Scene Collection" parent_id_path=PackedInt32Array(297389943, 1682598167) index="6" unique_id=1653424750]
+visible = false
+
+[node name="CollisionShape3D" parent="TerrainRoot/Gold_City/Scene Collection/Collisions/Terrain_COL" parent_id_path=PackedInt32Array(297389943, 454405527) index="0" unique_id=205403981]
+debug_color = Color(18.892157, 18.892157, 0, 1)
 
 [node name="OLDS" parent="TerrainRoot/Gold_City/Scene Collection" parent_id_path=PackedInt32Array(297389943, 1682598167) index="7" unique_id=2080716734]
 visible = false
@@ -731,7 +739,7 @@ animate_hue = true
 [node name="WaterIntegration" type="Node3D" parent="." unique_id=1889730552]
 
 [node name="Ocean" parent="WaterIntegration" unique_id=1340264265 instance=ExtResource("40_3mclj")]
-ocean_material = SubResource("ShaderMaterial_df66w")
+ocean_material = SubResource("ShaderMaterial_laf3l")
 wave_world_size_a = 153.5
 wave_world_size_b = 104.0
 wave_amplitude_a = 0.7999999821184
@@ -1018,7 +1026,7 @@ editor_preview_mode = 0
 
 [node name="EntryBubbles" parent="CameraSystem/ChaseCamera/Camera3D/UnderwaterEffect/WaterCrossingOverlay" index="0"]
 visible = false
-material = SubResource("CanvasItemMaterial_0gqsi")
+material = SubResource("CanvasItemMaterial_4scdh")
 position = Vector2(1, 1.76)
 amount = 500
 texture = SubResource("GradientTexture2D_pl0kw")
@@ -1026,10 +1034,10 @@ lifetime = 20.0
 speed_scale = 8.0
 explosiveness = 1.0
 randomness = 1.0
-process_material = SubResource("ParticleProcessMaterial_y3rlo")
+process_material = SubResource("ParticleProcessMaterial_df66w")
 
 [node name="UnderwaterPostProcess" parent="CameraSystem/ChaseCamera/Camera3D/UnderwaterEffect" index="1" unique_id=1854893749]
-material_override = SubResource("ShaderMaterial_hrvh4")
+material_override = SubResource("ShaderMaterial_y3rlo")
 
 [node name="Props" type="Node3D" parent="." unique_id=1365592301]
 
@@ -1107,7 +1115,7 @@ light_specular = 0.0
 light_range = 40.0
 shadows_enabled = true
 shadow_blur = 1.03
-omni_energy_scale = 1.5
+omni_energy_scale = 3.22
 omni_surface_offset = 10.0
 emission_energy = 100.0
 animate_hue = true
@@ -1521,11 +1529,11 @@ area_radius_x = 132.0
 area_radius_z = 203.0
 min_spacing = 3.85
 max_spacing = 18.15
-valid_ground_name_contains = PackedStringArray("Terrain_Master_COL", "Terrain_COL")
+valid_ground_name_contains = PackedStringArray("Terrain_Master_COL", "Terrain_COL", "Terrain_VIS")
 max_ground_slope_degrees = 11.0
 
 [node name="TreeImpostorMultimesh7" parent="Props/Vegetation/TreeImpostors" unique_id=1134543349 instance=ExtResource("32_mdq0j")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -57.233047, 10.8320465, -1034.1053)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -57.233047, 57.270805, -1034.1053)
 tree_material = ExtResource("35_iyaox")
 target_count = 650
 area_radius_x = 300.0
@@ -1533,7 +1541,7 @@ area_radius_z = 200.0
 min_spacing = 7.199999999999999
 max_spacing = 30.0
 max_scale = 15.0
-valid_ground_name_contains = PackedStringArray("Terrain_Master_COL", "Terrain_COL")
+valid_ground_name_contains = PackedStringArray("Terrain_Master_COL", "Terrain_COL", "Terrain_VIS")
 minimum_height_above_water = 8.0
 
 [node name="TreeImpostorMultimesh12" parent="Props/Vegetation/TreeImpostors" unique_id=1986823325 instance=ExtResource("32_mdq0j")]
@@ -1545,7 +1553,7 @@ area_radius_z = 200.0
 min_spacing = 7.199999999999999
 max_spacing = 30.0
 max_scale = 15.0
-valid_ground_name_contains = PackedStringArray("Terrain_Master_COL", "Terrain_COL")
+valid_ground_name_contains = PackedStringArray("Terrain_Master_COL", "Terrain_COL", "Terrain_VIS")
 minimum_height_above_water = 8.0
 
 [node name="TreeImpostorMultimesh13" parent="Props/Vegetation/TreeImpostors" unique_id=1498221898 instance=ExtResource("32_mdq0j")]
@@ -1557,7 +1565,7 @@ area_radius_z = 200.0
 min_spacing = 7.199999999999999
 max_spacing = 30.0
 max_scale = 15.0
-valid_ground_name_contains = PackedStringArray("Terrain_Master_COL", "Terrain_COL")
+valid_ground_name_contains = PackedStringArray("Terrain_Master_COL", "Terrain_COL", "Terrain_VIS")
 minimum_height_above_water = 8.0
 
 [node name="TreeImpostorMultimesh14" parent="Props/Vegetation/TreeImpostors" unique_id=1159119503 instance=ExtResource("32_mdq0j")]
@@ -1569,7 +1577,7 @@ area_radius_z = 200.0
 min_spacing = 7.199999999999999
 max_spacing = 30.0
 max_scale = 15.0
-valid_ground_name_contains = PackedStringArray("Terrain_Master_COL", "Terrain_COL")
+valid_ground_name_contains = PackedStringArray("Terrain_Master_COL", "Terrain_COL", "Terrain_VIS")
 minimum_height_above_water = 8.0
 
 [node name="TreeImpostorMultimesh15" parent="Props/Vegetation/TreeImpostors" unique_id=1624150071 instance=ExtResource("32_mdq0j")]
@@ -1581,7 +1589,7 @@ area_radius_z = 200.0
 min_spacing = 7.199999999999999
 max_spacing = 30.0
 max_scale = 15.0
-valid_ground_name_contains = PackedStringArray("Terrain_Master_COL", "Terrain_COL")
+valid_ground_name_contains = PackedStringArray("Terrain_Master_COL", "Terrain_COL", "Terrain_VIS")
 
 [node name="TreeImpostorMultimesh16" parent="Props/Vegetation/TreeImpostors" unique_id=269200502 instance=ExtResource("32_mdq0j")]
 transform = Transform3D(-0.7458256, 0, 0.6661412, 0, 1, 0, -0.6661412, 0, -0.7458256, -289.5641, 10.8320465, -395.31613)
@@ -1592,7 +1600,7 @@ area_radius_z = 200.0
 min_spacing = 7.199999999999999
 max_spacing = 30.0
 max_scale = 15.0
-valid_ground_name_contains = PackedStringArray("Terrain_Master_COL", "Terrain_COL")
+valid_ground_name_contains = PackedStringArray("Terrain_Master_COL", "Terrain_COL", "Terrain_VIS")
 
 [node name="TreeImpostorMultimesh17" parent="Props/Vegetation/TreeImpostors" unique_id=1665214655 instance=ExtResource("32_mdq0j")]
 transform = Transform3D(0.414476, 0, 0.91006017, 0, 1, 0, -0.91006017, 0, 0.414476, -393.06738, 10.8320465, -188.34283)
@@ -1603,7 +1611,7 @@ area_radius_z = 200.0
 min_spacing = 7.199999999999999
 max_spacing = 30.0
 max_scale = 15.0
-valid_ground_name_contains = PackedStringArray("Terrain_Master_COL", "Terrain_COL")
+valid_ground_name_contains = PackedStringArray("Terrain_Master_COL", "Terrain_COL", "Terrain_VIS")
 
 [node name="TreeImpostorMultimesh18" parent="Props/Vegetation/TreeImpostors" unique_id=170371762 instance=ExtResource("32_mdq0j")]
 transform = Transform3D(-0.14633283, 0, 0.98923534, 0, 1, 0, -0.98923534, 0, -0.14633283, 51.191162, 10.8320465, 1335.4156)
@@ -1614,7 +1622,7 @@ area_radius_z = 200.0
 min_spacing = 7.199999999999999
 max_spacing = 30.0
 max_scale = 15.0
-valid_ground_name_contains = PackedStringArray("Terrain_Master_COL", "Terrain_COL")
+valid_ground_name_contains = PackedStringArray("Terrain_Master_COL", "Terrain_COL", "Terrain_VIS")
 
 [node name="TreeImpostorMultimesh19" parent="Props/Vegetation/TreeImpostors" unique_id=2112689422 instance=ExtResource("32_mdq0j")]
 transform = Transform3D(-0.14633283, 0, 0.98923534, 0, 1, 0, -0.98923534, 0, -0.14633283, -286.98157, 10.8320465, 1335.4156)
@@ -1625,7 +1633,7 @@ area_radius_z = 200.0
 min_spacing = 7.199999999999999
 max_spacing = 30.0
 max_scale = 15.0
-valid_ground_name_contains = PackedStringArray("Terrain_Master_COL", "Terrain_COL")
+valid_ground_name_contains = PackedStringArray("Terrain_Master_COL", "Terrain_COL", "Terrain_VIS")
 
 [node name="TreeImpostorMultimesh20" parent="Props/Vegetation/TreeImpostors" unique_id=1803705493 instance=ExtResource("32_mdq0j")]
 transform = Transform3D(-0.9221935, 0, 0.3867285, 0, 1, 0, -0.3867285, 0, -0.9221935, -484.54428, 10.8320465, 1045.6111)
@@ -1636,7 +1644,7 @@ area_radius_z = 200.0
 min_spacing = 7.199999999999999
 max_spacing = 30.0
 max_scale = 15.0
-valid_ground_name_contains = PackedStringArray("Terrain_Master_COL", "Terrain_COL")
+valid_ground_name_contains = PackedStringArray("Terrain_Master_COL", "Terrain_COL", "Terrain_VIS")
 
 [node name="TreeImpostorMultimesh21" parent="Props/Vegetation/TreeImpostors" unique_id=2044147443 instance=ExtResource("32_mdq0j")]
 transform = Transform3D(-0.8588848, 0, 0.5121687, 0, 1, 0, -0.5121687, 0, -0.8588848, -337.76495, 10.8320465, 793.91425)
@@ -1647,7 +1655,7 @@ area_radius_z = 200.0
 min_spacing = 7.199999999999999
 max_spacing = 30.0
 max_scale = 15.0
-valid_ground_name_contains = PackedStringArray("Terrain_Master_COL", "Terrain_COL")
+valid_ground_name_contains = PackedStringArray("Terrain_Master_COL", "Terrain_COL", "Terrain_VIS")
 
 [node name="TreeImpostorMultimesh22" parent="Props/Vegetation/TreeImpostors" unique_id=1733468786 instance=ExtResource("32_mdq0j")]
 transform = Transform3D(-0.9787544, 0, 0.20503604, 0, 1, 0, -0.20503604, 0, -0.9787544, -538.2195, 17.03798, 347.86816)
@@ -1658,7 +1666,7 @@ area_radius_z = 251.0
 min_spacing = 7.199999999999999
 max_spacing = 30.0
 max_scale = 15.0
-valid_ground_name_contains = PackedStringArray("Terrain_Master_COL", "Terrain_COL")
+valid_ground_name_contains = PackedStringArray("Terrain_Master_COL", "Terrain_COL", "Terrain_VIS")
 
 [node name="TreeImpostorMultimesh23" parent="Props/Vegetation/TreeImpostors" unique_id=915781601 instance=ExtResource("32_mdq0j")]
 transform = Transform3D(-0.1161671, 0, 0.9932298, 0, 1, 0, -0.9932298, 0, -0.1161671, -940.0971, 17.03798, 153.55804)
@@ -1669,7 +1677,7 @@ area_radius_z = 251.0
 min_spacing = 7.199999999999999
 max_spacing = 30.0
 max_scale = 15.0
-valid_ground_name_contains = PackedStringArray("Terrain_Master_COL", "Terrain_COL")
+valid_ground_name_contains = PackedStringArray("Terrain_Master_COL", "Terrain_COL", "Terrain_VIS")
 
 [node name="TreeImpostorMultimesh24" parent="Props/Vegetation/TreeImpostors" unique_id=602065958 instance=ExtResource("32_mdq0j")]
 transform = Transform3D(-0.1161671, 0, 0.9932298, 0, 1, 0, -0.9932298, 0, -0.1161671, -940.0971, 17.03798, 541.3354)
@@ -1680,7 +1688,7 @@ area_radius_z = 251.0
 min_spacing = 7.199999999999999
 max_spacing = 30.0
 max_scale = 15.0
-valid_ground_name_contains = PackedStringArray("Terrain_Master_COL", "Terrain_COL")
+valid_ground_name_contains = PackedStringArray("Terrain_Master_COL", "Terrain_COL", "Terrain_VIS")
 
 [node name="TreeImpostorMultimesh25" parent="Props/Vegetation/TreeImpostors" unique_id=1671929967 instance=ExtResource("32_mdq0j")]
 transform = Transform3D(-0.1161671, 0, 0.9932298, 0, 1, 0, -0.9932298, 0, -0.1161671, -940.0971, 17.03798, -617.44385)
@@ -1691,7 +1699,7 @@ area_radius_z = 251.0
 min_spacing = 7.199999999999999
 max_spacing = 30.0
 max_scale = 15.0
-valid_ground_name_contains = PackedStringArray("Terrain_Master_COL", "Terrain_COL")
+valid_ground_name_contains = PackedStringArray("Terrain_Master_COL", "Terrain_COL", "Terrain_VIS")
 
 [node name="TreeImpostorMultimesh26" parent="Props/Vegetation/TreeImpostors" unique_id=1200041273 instance=ExtResource("32_mdq0j")]
 transform = Transform3D(-0.1161671, 0, 0.9932298, 0, 1, 0, -0.9932298, 0, -0.1161671, -732.56757, 17.03798, -1262.9089)
@@ -1702,7 +1710,7 @@ area_radius_z = 251.0
 min_spacing = 7.199999999999999
 max_spacing = 30.0
 max_scale = 15.0
-valid_ground_name_contains = PackedStringArray("Terrain_Master_COL", "Terrain_COL")
+valid_ground_name_contains = PackedStringArray("Terrain_Master_COL", "Terrain_COL", "Terrain_VIS")
 
 [node name="TreeImpostorMultimesh8" parent="Props/Vegetation/TreeImpostors" unique_id=993176215 instance=ExtResource("32_mdq0j")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -57.233047, 10.8320465, -806.863)
@@ -1712,7 +1720,7 @@ area_radius_x = 300.0
 area_radius_z = 200.0
 min_spacing = 7.199999999999999
 max_spacing = 30.0
-valid_ground_name_contains = PackedStringArray("Terrain_Master_COL", "Terrain_COL")
+valid_ground_name_contains = PackedStringArray("Terrain_Master_COL", "Terrain_COL", "Terrain_VIS")
 minimum_height_above_water = 8.0
 
 [node name="TreeImpostorMultimesh11" parent="Props/Vegetation/TreeImpostors" unique_id=1508385198 instance=ExtResource("32_mdq0j")]
@@ -1724,7 +1732,7 @@ area_radius_z = 350.0
 min_spacing = 12.0
 max_spacing = 30.0
 max_scale = 20.0
-valid_ground_name_contains = PackedStringArray("Terrain_Master_COL", "Terrain_COL")
+valid_ground_name_contains = PackedStringArray("Terrain_Master_COL", "Terrain_COL", "Terrain_VIS")
 minimum_height_above_water = 8.0
 
 [node name="TreeImpostorMultimesh9" parent="Props/Vegetation/TreeImpostors" unique_id=1738861367 instance=ExtResource("32_mdq0j")]
@@ -1735,7 +1743,7 @@ area_radius_x = 300.0
 area_radius_z = 200.0
 min_spacing = 7.199999999999999
 max_spacing = 30.0
-valid_ground_name_contains = PackedStringArray("Terrain_Master_COL", "Terrain_COL")
+valid_ground_name_contains = PackedStringArray("Terrain_Master_COL", "Terrain_COL", "Terrain_VIS")
 minimum_height_above_water = 3.0
 
 [node name="TreeImpostorMultimesh10" parent="Props/Vegetation/TreeImpostors" unique_id=846307287 instance=ExtResource("32_mdq0j")]
@@ -1746,7 +1754,7 @@ area_radius_x = 300.0
 area_radius_z = 200.0
 min_spacing = 7.199999999999999
 max_spacing = 30.0
-valid_ground_name_contains = PackedStringArray("Terrain_Master_COL", "Terrain_COL")
+valid_ground_name_contains = PackedStringArray("Terrain_Master_COL", "Terrain_COL", "Terrain_VIS")
 max_ground_slope_degrees = 10.0
 minimum_height_above_water = 3.0
 
@@ -1757,7 +1765,7 @@ area_radius_x = 168.0
 area_radius_z = 203.0
 min_spacing = 3.85
 max_spacing = 18.15
-valid_ground_name_contains = PackedStringArray("Terrain_Master_COL", "Terrain_COL")
+valid_ground_name_contains = PackedStringArray("Terrain_Master_COL", "Terrain_COL", "Terrain_VIS")
 max_ground_slope_degrees = 11.0
 
 [node name="TreeImpostorMultimesh2" parent="Props/Vegetation/TreeImpostors" unique_id=836958728 instance=ExtResource("32_mdq0j")]
@@ -1767,7 +1775,7 @@ area_radius_x = 299.0
 area_radius_z = 269.0
 min_spacing = 3.85
 max_spacing = 15.15
-valid_ground_name_contains = PackedStringArray("Terrain_Master_COL", "Terrain_COL")
+valid_ground_name_contains = PackedStringArray("Terrain_Master_COL", "Terrain_COL", "Terrain_VIS")
 minimum_height_above_water = 7.0
 
 [node name="TreeImpostorMultimesh4" parent="Props/Vegetation/TreeImpostors" unique_id=383595827 instance=ExtResource("32_mdq0j")]
@@ -1777,7 +1785,7 @@ area_radius_x = 168.0
 area_radius_z = 269.0
 min_spacing = 3.85
 max_spacing = 15.15
-valid_ground_name_contains = PackedStringArray("Terrain_Master_COL", "Terrain_COL")
+valid_ground_name_contains = PackedStringArray("Terrain_Master_COL", "Terrain_COL", "Terrain_VIS")
 reject_steep_slopes = false
 minimum_height_above_water = 7.0
 
@@ -1788,7 +1796,7 @@ area_radius_x = 198.0
 area_radius_z = 174.0
 min_spacing = 6.25
 max_spacing = 22.6
-valid_ground_name_contains = PackedStringArray("Terrain_Master_COL", "Terrain_COL")
+valid_ground_name_contains = PackedStringArray("Terrain_Master_COL", "Terrain_COL", "Terrain_VIS")
 
 [node name="TreeImpostorMultimesh3" parent="Props/Vegetation/TreeImpostors" unique_id=1495973294 instance=ExtResource("32_mdq0j")]
 transform = Transform3D(0.91799974, 0, 0.396581, 0, 1, 0, -0.396581, 0, 0.91799974, -445.86667, 10.8320465, -20.985092)
@@ -1797,7 +1805,7 @@ area_radius_x = 299.0
 area_radius_z = 269.0
 min_spacing = 3.85
 max_spacing = 15.15
-valid_ground_name_contains = PackedStringArray("Terrain_Master_COL", "Terrain_COL")
+valid_ground_name_contains = PackedStringArray("Terrain_Master_COL", "Terrain_COL", "Terrain_VIS")
 minimum_height_above_water = 7.9
 
 [node name="TreeImpostorsFrozen" type="Node3D" parent="Props/Vegetation" unique_id=669900686]
@@ -1811,7 +1819,7 @@ unfreeze_duration = 1.0
 debug_events = true
 
 [node name="CollisionShape3D" parent="Props/Vegetation/TreeImpostorsFrozen/TreeImpostorFrozen" index="0" unique_id=1790283657]
-shape = SubResource("BoxShape3D_n0k1o")
+shape = SubResource("BoxShape3D_hrvh4")
 
 [node name="TreeImpostorFrozen2" parent="Props/Vegetation/TreeImpostorsFrozen" unique_id=469109216 instance=ExtResource("2_cfohk")]
 transform = Transform3D(0.8735965, 0, 0.48664874, 0, 1, 0, -0.48665488, 0, 0.8735977, -423.3858, 2.4459906, -116.46263)
@@ -1822,7 +1830,7 @@ unfreeze_duration = 1.0
 debug_events = true
 
 [node name="CollisionShape3D" parent="Props/Vegetation/TreeImpostorsFrozen/TreeImpostorFrozen2" index="0" unique_id=1790283657]
-shape = SubResource("BoxShape3D_vbdm5")
+shape = SubResource("BoxShape3D_n0k1o")
 
 [node name="TreeProjectedShadowBaker" type="Node3D" parent="Props/Vegetation" unique_id=472315960]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.510468, -49.139404, -57.103714)

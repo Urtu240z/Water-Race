@@ -1,15 +1,18 @@
-[gd_resource type="StandardMaterial3D" format=3]
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://dr0ylqvywolfe"]
 
-[ext_resource type="Texture2D" path="../textures/plastic_02/plastic_02_albedo.png" id="Color"]
-[ext_resource type="Texture2D" path="../textures/plastic_02/plastic_02_height.png" id="Displacement"]
-[ext_resource type="Texture2D" path="../textures/plastic_02/plastic_02_roughness.png" id="Roughness"]
-[ext_resource type="Texture2D" path="../textures/plastic_02/plastic_02_normal.png" id="NormalGL"]
+[ext_resource type="Texture2D" uid="uid://6m16u4hl8bvh" path="res://shared/materials/plastic/textures/plastic_02/plastic_02_albedo.png" id="Color"]
+[ext_resource type="Texture2D" uid="uid://dv4u8pwt5f4y2" path="res://shared/materials/plastic/textures/plastic_02/plastic_02_height.png" id="Displacement"]
+[ext_resource type="Texture2D" uid="uid://cmru1xrpf2amt" path="res://shared/materials/plastic/textures/plastic_02/plastic_02_normal.png" id="NormalGL"]
+[ext_resource type="Texture2D" uid="uid://bcvufmb75fh65" path="res://shared/materials/plastic/textures/plastic_02/plastic_02_roughness.png" id="Roughness"]
+
 [resource]
 albedo_texture = ExtResource("Color")
 roughness_texture = ExtResource("Roughness")
 roughness_texture_channel = 4
-normal_texture = ExtResource("NormalGL")
 normal_enabled = true
-heightmap_texture = ExtResource("Displacement")
-heightmap_scale = 1.0
+normal_texture = ExtResource("NormalGL")
 heightmap_enabled = true
+heightmap_scale = 1.0
+heightmap_texture = ExtResource("Displacement")
+uv1_scale = Vector3(0.055, 0.055, 0.055)
+uv1_triplanar = true

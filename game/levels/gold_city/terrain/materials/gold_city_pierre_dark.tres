@@ -2,7 +2,6 @@
 
 [resource]
 resource_name = "gold_city_pierre_dark"
-cull_mode = 1
 albedo_color = Color(0.2914528, 0.2914528, 0.2914528, 1)
 roughness = 0.5
 emission_enabled = true

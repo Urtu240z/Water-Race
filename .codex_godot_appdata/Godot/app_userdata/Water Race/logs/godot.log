@@ -4,95 +4,19 @@ ERROR: Failed to read the root certificate store.
    at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)
 
 ========== WATER RACE LOAD TRACE ==========
-[    1.069 ms] GAME START                          +   1.069 ms
-[    1.125 ms] GRAPHICS_AUTOLOAD_READY_BEGIN       +   0.056 ms
-[    1.162 ms] GRAPHICS_PROFILES_LOAD_BEGIN        +   0.037 ms
-[    3.943 ms] GRAPHICS_PROFILES_LOADED            +   2.781 ms
-[    4.002 ms] GRAPHICS_INITIAL_APPLY_QUEUED       +   0.059 ms
-[    4.018 ms] GRAPHICS_AUTOLOAD_READY_END         +   0.016 ms
-[  141.128 ms] RIDER_READY_BEGIN                   + 137.110 ms
-[  141.305 ms] RIDER_READY                         +   0.177 ms
-[  141.380 ms] GRAPHICS_APPLY_BEGIN                +   0.075 ms
-[  141.398 ms] GRAPHICS_TARGETS_COLLECTED          +   0.018 ms
-[  141.460 ms] GRAPHICS_APPLY_END                  +   0.062 ms
-=== RIDER IDENTITY MIGRATION VALIDATION ===
-PASS: RiderRig scene loads.
-PASS: RiderRig default remains physical Athletic Female as rider_03.
-PASS: JetSkiWithRider scene loads.
-PASS: JetSkiWithRider keeps physical Athletic Male as rider_02.
-PASS: Exactly six selectable Rider identities are exposed.
-PASS: rider_bot is present in the selector catalog.
-PASS: rider_01 is present in the selector catalog.
-PASS: rider_02 is present in the selector catalog.
-PASS: rider_03 is present in the selector catalog.
-PASS: rider_04 is present in the selector catalog.
-PASS: rider_05 is present in the selector catalog.
-PASS: The rig keeps one canonical Skeleton3D.
-PASS: The canonical skeleton keeps 52 bones.
-PASS: rider_bot GLB exists.
-PASS: rider_01 normal runtime has no staged compatible GLB.
-PASS: rider_01 normal runtime has no staged compatible GLB .import.
-PASS: rider_01 has no generated staging artifact at runtime root.
-PASS: rider_01 runtime mesh loads.
-PASS: rider_01 runtime skin loads.
-PASS: rider_01 has one runtime surface.
-PASS: rider_01 has 52 runtime binds.
-PASS: rider_01 has exactly one rig mesh.
-PASS: rider_01 is selectable using preserved value 3.
-PASS: rider_01 selection hides rider_02.
-PASS: rider_01 selection hides rider_03.
-PASS: rider_01 selection hides rider_04.
-PASS: rider_01 selection hides rider_05.
-PASS: rider_02 normal runtime has no staged compatible GLB.
-PASS: rider_02 normal runtime has no staged compatible GLB .import.
-PASS: rider_02 has no generated staging artifact at runtime root.
-PASS: rider_02 runtime mesh loads.
-PASS: rider_02 runtime skin loads.
-PASS: rider_02 has one runtime surface.
-PASS: rider_02 has 52 runtime binds.
-PASS: rider_02 has exactly one rig mesh.
-PASS: rider_02 is selectable using preserved value 4.
-PASS: rider_02 selection hides rider_01.
-PASS: rider_02 selection hides rider_03.
-PASS: rider_02 selection hides rider_04.
-PASS: rider_02 selection hides rider_05.
-PASS: rider_03 normal runtime has no staged compatible GLB.
-PASS: rider_03 normal runtime has no staged compatible GLB .import.
-PASS: rider_03 has no generated staging artifact at runtime root.
-PASS: rider_03 runtime mesh loads.
-PASS: rider_03 runtime skin loads.
-PASS: rider_03 has one runtime surface.
-PASS: rider_03 has 52 runtime binds.
-PASS: rider_03 has exactly one rig mesh.
-PASS: rider_03 is selectable using preserved value 5.
-PASS: rider_03 selection hides rider_01.
-PASS: rider_03 selection hides rider_02.
-PASS: rider_03 selection hides rider_04.
-PASS: rider_03 selection hides rider_05.
-PASS: rider_04 normal runtime has no staged compatible GLB.
-PASS: rider_04 normal runtime has no staged compatible GLB .import.
-PASS: rider_04 has no generated staging artifact at runtime root.
-PASS: rider_04 runtime mesh loads.
-PASS: rider_04 runtime skin loads.
-PASS: rider_04 has one runtime surface.
-PASS: rider_04 has 52 runtime binds.
-PASS: rider_04 has exactly one rig mesh.
-PASS: rider_04 is selectable using preserved value 1.
-PASS: rider_04 selection hides rider_01.
-PASS: rider_04 selection hides rider_02.
-PASS: rider_04 selection hides rider_03.
-PASS: rider_04 selection hides rider_05.
-PASS: rider_05 normal runtime has no staged compatible GLB.
-PASS: rider_05 normal runtime has no staged compatible GLB .import.
-PASS: rider_05 has no generated staging artifact at runtime root.
-PASS: rider_05 runtime mesh loads.
-PASS: rider_05 runtime skin loads.
-PASS: rider_05 has one runtime surface.
-PASS: rider_05 has 52 runtime binds.
-PASS: rider_05 has exactly one rig mesh.
-PASS: rider_05 is selectable using preserved value 6.
-PASS: rider_05 selection hides rider_01.
-PASS: rider_05 selection hides rider_02.
-PASS: rider_05 selection hides rider_03.
-PASS: rider_05 selection hides rider_04.
-IDENTITY_MIGRATION_STATUS=PASS
+[    1.445 ms] GAME START                          +   1.445 ms
+[    1.540 ms] GRAPHICS_AUTOLOAD_READY_BEGIN       +   0.095 ms
+[    1.589 ms] GRAPHICS_PROFILES_LOAD_BEGIN        +   0.049 ms
+[    4.454 ms] GRAPHICS_PROFILES_LOADED            +   2.865 ms
+[    4.512 ms] GRAPHICS_INITIAL_APPLY_QUEUED       +   0.058 ms
+[    4.530 ms] GRAPHICS_AUTOLOAD_READY_END         +   0.018 ms
+ERROR: Missing baked tree MultiMesh: res://world/vegetation/trees/baked/_node3d_2___multimeshinstance3d_3.res
+Open Paradise Island in the editor and use Regenerate Forest.
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://world/vegetation/trees/tree_impostor_multimesh.gd:233)
+       [1] _run (res://dev/tests/vegetation/_tmp_validate_tree_visual_ground.gd:28)
+[    5.851 ms] GRAPHICS_APPLY_BEGIN                +   1.321 ms
+[    5.885 ms] GRAPHICS_TARGETS_COLLECTED          +   0.034 ms
+[    5.955 ms] GRAPHICS_APPLY_END                  +   0.070 ms
+TREE_VISUAL_GROUND_STATUS=PASS
