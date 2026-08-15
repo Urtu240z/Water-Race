@@ -594,6 +594,15 @@ size = Vector3(83.137, 90.025, 149.727)
 resource_local_to_scene = true
 size = Vector3(89.876, 91.745, 133.916)
 
+[sub_resource type="Curve3D" id="Curve3D_ogabk"]
+closed = true
+_data = {
+"points": PackedVector3Array(-51.458, 0, 49.603, 51.458, 0, -49.603, -80.18, 0, 12.629, -33.411, 0, -43.284, 33.411, 0, 43.284, 163.71597, -0.00039291382, 111.691284, -32.976, 0, 7.896, 32.976, 0, -7.896, 301.49, 0, 164.804, -24.176, 0, -41.653, 24.176, 0, 41.653, 429.671, 0, 207.809, -7.56, 0, -35.789, 7.56, 0, 35.789, 475.185, 0, 305.558, 40.014, 0, -48.932, -40.014, 0, 48.932, 448.777, 0, 465.237, 26.346, 0, -10.542, -26.346, 0, 10.542, 327.45, 0, 522.863, 36.365, 0, -100.879, -36.365, 0, 100.879, 238.734, 0, 639.582, 34.362, 0, 110.971, -34.362, 0, -110.971, 9.523, 0, 584.658, 51.112, 0, 102.058, -51.112, 0, -102.058, -118.012, 0, 335.603),
+"tilts": PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+}
+point_count = 10
+up_vector_enabled = false
+
 [node name="GoldCity" type="Node3D" unique_id=2091620036]
 script = ExtResource("1_rxnkn")
 ocean_path = NodePath("WaterIntegration/Ocean")
@@ -1040,6 +1049,7 @@ process_material = SubResource("ParticleProcessMaterial_df66w")
 material_override = SubResource("ShaderMaterial_y3rlo")
 
 [node name="Props" type="Node3D" parent="." unique_id=1365592301]
+visible = false
 
 [node name="Lights" type="Node3D" parent="Props" unique_id=988101137]
 
@@ -1851,6 +1861,21 @@ sector_root_path = NodePath("")
 atrezzo_root_path = NodePath("../..")
 terrain_root_path = NodePath("../../../TerrainRoot")
 player_path = NodePath("../../../Gameplay/JetSki")
+
+[node name="BoatTraffic" type="Node3D" parent="." unique_id=1365381692]
+
+[node name="Path3D" type="Path3D" parent="BoatTraffic" unique_id=606053058]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -570.7688, 0.070186615, -717.3736)
+curve = SubResource("Curve3D_ogabk")
+debug_custom_color = Color(1, 1, 1, 1)
+
+[node name="PathFollow3D" type="PathFollow3D" parent="BoatTraffic/Path3D" unique_id=438121644]
+transform = Transform3D(-0.6125319, 1.0907094e-06, -0.79044634, 0, 1.0000101, 1.3798522e-06, 0.79044634, 8.4521145e-07, -0.6125319, 125.57363, -0.0003436467, 76.15925)
+progress = 228.17
+rotation_mode = 2
+
+[node name="boat_01" parent="BoatTraffic/Path3D/PathFollow3D" unique_id=522515633 instance=ExtResource("59_2cchu")]
+transform = Transform3D(0.09808238, 0, 0.3826289, 0, 0.395, 0, -0.3826289, 0, 0.09808238, 0, -5.099314, 0)
 
 [node name="LightmapGI" type="LightmapGI" parent="." unique_id=1117524579]
 quality = 0
