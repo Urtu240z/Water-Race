@@ -1,0 +1,75 @@
+[gd_scene format=3 uid="uid://d3de7lqmmag47"]
+
+[ext_resource type="Script" uid="uid://ce3n326xrj4q5" path="res://world/props/boats/traffic/boat_traffic_actor.gd" id="1_actor"]
+[ext_resource type="PackedScene" path="res://gameplay/vehicles/common/water_effects/wake/wake_trail_3d.tscn" id="2_wake"]
+
+[sub_resource type="BoxShape3D" id="BoxShape_main"]
+resource_local_to_scene = true
+size = Vector3(6.8, 3.2, 20)
+
+[sub_resource type="BoxShape3D" id="BoxShape_bow"]
+resource_local_to_scene = true
+size = Vector3(5, 2.6, 7)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial_debug"]
+no_depth_test = true
+shading_mode = 0
+vertex_color_use_as_albedo = true
+
+[sub_resource type="ImmediateMesh" id="ImmediateMesh_debug"]
+
+[node name="BoatTrafficActor" type="AnimatableBody3D" unique_id=911452795]
+script = ExtResource("1_actor")
+
+[node name="VisibilityNotifier" type="VisibleOnScreenNotifier3D" parent="."]
+aabb = AABB(-8, -4, -14, 16, 8, 28)
+
+[node name="ModelPivot" type="Node3D" parent="." unique_id=1867007240]
+transform = Transform3D(-0.1827985, 0, 0.3501567, 0, 0.395, 0, -0.3501567, 0, -0.1827985, 0, -1.421934, 0)
+
+[node name="ModelContainer" type="Node3D" parent="ModelPivot" unique_id=1712853078]
+
+[node name="MainHullCollision" type="CollisionShape3D" parent="." unique_id=88629793]
+transform = Transform3D(-0.88647276, 0, -0.4627808, 0, 1, 0, 0.4627808, 0, -0.88647276, -0.2313904, 0.2, -0.44323638)
+shape = SubResource("BoxShape_main")
+
+[node name="BowCollision" type="CollisionShape3D" parent="." unique_id=1899565691]
+transform = Transform3D(-0.88647276, 0, -0.4627808, 0, 1, 0, 0.4627808, 0, -0.88647276, 4.8591986, 0, 9.307964)
+shape = SubResource("BoxShape_bow")
+
+[node name="WaterSamples" type="Node3D" parent="." unique_id=1769637072]
+
+[node name="Front" type="Marker3D" parent="WaterSamples" unique_id=2009448249]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 10)
+
+[node name="Rear" type="Marker3D" parent="WaterSamples" unique_id=1127042968]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="Left" type="Marker3D" parent="WaterSamples" unique_id=783774438]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0, 0)
+
+[node name="Right" type="Marker3D" parent="WaterSamples" unique_id=921681558]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, 0)
+
+[node name="WakePoints" type="Node3D" parent="." unique_id=948493096]
+
+[node name="SternCenter" type="Marker3D" parent="WakePoints" unique_id=562150252]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="SternLeft" type="Marker3D" parent="WakePoints" unique_id=2078440246]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0, -10)
+
+[node name="SternRight" type="Marker3D" parent="WakePoints" unique_id=2048247554]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0, -10)
+
+[node name="WakeRoot" type="Node3D" parent="." unique_id=1783521056]
+top_level = true
+
+[node name="BoatWake" parent="WakeRoot" unique_id=1534652267 instance=ExtResource("2_wake")]
+
+[node name="DebugDraw" type="MeshInstance3D" parent="." unique_id=666733862]
+top_level = true
+visible = false
+material_override = SubResource("StandardMaterial_debug")
+cast_shadow = 0
+mesh = SubResource("ImmediateMesh_debug")

@@ -124,6 +124,8 @@ group_uniforms Clipmap;
 uniform bool ocean_surface_enabled = false;
 uniform vec2 ocean_logical_origin_offset_xz = vec2(0.0);
 uniform vec2 ocean_detail_center_xz = vec2(0.0);
+uniform float ripple_visibility_fade_start : hint_range(0.0, 1000.0, 1.0) = 70.0;
+uniform float ripple_visibility_fade_end : hint_range(1.0, 1200.0, 1.0) = 130.0;
 uniform float ocean_detailed_wave_fade_start = 170.0;
 uniform float ocean_detailed_wave_fade_end = 280.0;
 uniform float ocean_medium_wave_fade_end = 680.0;
@@ -328,7 +330,11 @@ vec4 sample_wave_state(vec2 world_xz) {
 		? 0.0
 		: clipmap_wave_scale(world_xz);
 	float ripple_distance = length(world_xz - ocean_detail_center_xz);
-	float ripple_scale = 1.0 - smoothstep(70.0, 130.0, ripple_distance);
+	float ripple_scale = 1.0 - smoothstep(
+		ripple_visibility_fade_start,
+		max(ripple_visibility_fade_end, ripple_visibility_fade_start + 1.0),
+		ripple_distance
+	);
 	float interaction_scale = 1.0 - smoothstep(
 		vehicle_interaction_clipmap_distance * 0.82,
 		vehicle_interaction_clipmap_distance,

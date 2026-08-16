@@ -64,6 +64,7 @@
 [ext_resource type="PackedScene" uid="uid://c8qf6cnfoysg8" path="res://gameplay/race/course/ramps/ramp_02.tscn" id="58_nsw8i"]
 [ext_resource type="PackedScene" uid="uid://dphl8jrmqmgci" path="res://world/props/boats/boat_01.glb" id="59_2cchu"]
 [ext_resource type="PackedScene" uid="uid://df1oaix0ta45m" path="res://world/props/boats/boat_02.glb" id="60_2cq5j"]
+[ext_resource type="PackedScene" uid="uid://d3de7lqmmag47" path="res://world/props/boats/traffic/boat_traffic_actor.tscn" id="61_boat_traffic"]
 [ext_resource type="Material" uid="uid://cwtgldc4ahbeu" path="res://shared/materials/terrain/materials/aerial_rocks_02.res" id="62_gecxy"]
 [ext_resource type="Material" uid="uid://dk2h67ph6buix" path="res://shared/materials/metal/materials/rusty_metal_03.res" id="63_mnvpt"]
 [ext_resource type="PackedScene" uid="uid://dmqjonl673mxd" path="res://gameplay/race/course/buoys/buoy.tscn" id="64_f7uhg"]
@@ -143,7 +144,7 @@ shader_parameter/water_level = 2.205
 shader_parameter/wet_sand_height = 5.0
 shader_parameter/debug_view = 0
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ogabk"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_laf3l"]
 resource_local_to_scene = true
 render_priority = 0
 shader = ExtResource("23_mdq0j")
@@ -183,7 +184,7 @@ uv1_scale = Vector3(0.26, 0.26, 0.26)
 uv1_triplanar = true
 uv1_triplanar_sharpness = 103.9684
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_laf3l"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4scdh"]
 resource_local_to_scene = true
 render_priority = 0
 shader = ExtResource("41_j7oal")
@@ -267,7 +268,9 @@ shader_parameter/directional_wake_wavelength = 2.4
 shader_parameter/directional_wake_propagation_speed = 2.8
 shader_parameter/directional_wake_opening_slope = 0.085
 shader_parameter/directional_wake_arm_width = 0.62
-shader_parameter/directional_wake_center_depression = 0.065
+shader_parameter/directional_wake_center_depression = 0.08
+shader_parameter/directional_wake_center_turbulence = 0.12
+shader_parameter/directional_wake_center_turbulence_wavelength_scale = 3.0
 shader_parameter/directional_wake_duration = 5.2
 shader_parameter/directional_wake_attenuation = 0.16
 shader_parameter/directional_wake_turn_strength = 0.65
@@ -351,6 +354,8 @@ shader_parameter/ocean_foam_evaluation_distance = 520.0
 shader_parameter/ocean_surface_enabled = true
 shader_parameter/ocean_logical_origin_offset_xz = Vector2(0, 0)
 shader_parameter/ocean_detail_center_xz = Vector2(0, 0)
+shader_parameter/ripple_visibility_fade_start = 220.0
+shader_parameter/ripple_visibility_fade_end = 360.0
 shader_parameter/ocean_detailed_wave_fade_start = 170.0
 shader_parameter/ocean_detailed_wave_fade_end = 280.0
 shader_parameter/ocean_medium_wave_fade_end = 700.0
@@ -419,7 +424,7 @@ lifetime = 60.0
 fade_out_time = 7.0
 metadata/_custom_type_script = "uid://d28g2y2o80558"
 
-[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_4scdh"]
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_df66w"]
 resource_local_to_scene = true
 blend_mode = 1
 
@@ -446,7 +451,7 @@ point_count = 3
 [sub_resource type="CurveTexture" id="CurveTexture_bubble_shrink"]
 curve = SubResource("Curve_bubble_shrink")
 
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_df66w"]
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_0gqsi"]
 resource_local_to_scene = true
 particle_flag_disable_z = true
 emission_shape_offset = Vector3(0, 600, 0)
@@ -634,7 +639,6 @@ directional_shadow_max_distance = 8192.0
 
 [node name="Sun" type="DirectionalLight3D" parent="Environment" unique_id=1424115820 groups=["graphics_quality_directional_light"]]
 transform = Transform3D(0.8861791, 0.3700911, 0.27878147, -0.45361236, 0.57030445, 0.68482745, 0.09445829, -0.7333384, 0.67327, 0, 0, 0)
-visible = false
 light_color = Color(0.82647467, 0.6933553, 0.57007265, 1)
 light_energy = 2.253
 light_volumetric_fog_energy = 16.0
@@ -687,7 +691,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.022, 9.445, 16.88)
 
 [node name="Terrain_VIS" parent="TerrainRoot/Gold_City/Scene Collection/Terrain" parent_id_path=PackedInt32Array(297389943, 1864945746) index="0" unique_id=717890379 groups=["tree_impostor_ground"]]
 material_override = SubResource("ShaderMaterial_0gqsi")
-material_overlay = SubResource("ShaderMaterial_ogabk")
+material_overlay = SubResource("ShaderMaterial_laf3l")
 
 [node name="Passtrough_VIS" parent="TerrainRoot/Gold_City/Scene Collection/Bridges" parent_id_path=PackedInt32Array(297389943, 1304534719) index="2" unique_id=930924910]
 surface_material_override/0 = ExtResource("23_dnql6")
@@ -748,7 +752,7 @@ animate_hue = true
 [node name="WaterIntegration" type="Node3D" parent="." unique_id=1889730552]
 
 [node name="Ocean" parent="WaterIntegration" unique_id=1340264265 instance=ExtResource("40_3mclj")]
-ocean_material = SubResource("ShaderMaterial_laf3l")
+ocean_material = SubResource("ShaderMaterial_4scdh")
 wave_world_size_a = 153.5
 wave_world_size_b = 104.0
 wave_amplitude_a = 0.7999999821184
@@ -761,6 +765,10 @@ landing_wave_maximum_amplitude = 1.0
 landing_wave_minimum_depression = 0.0
 landing_wave_minimum_wavelength = 4.55
 landing_wave_maximum_wavelength = 8.0
+directional_wake_center_depression = 0.08
+directional_wake_center_turbulence = 0.12
+directional_wake_center_turbulence_wavelength_scale = 3.0
+directional_wake_physics_response = 0.35
 
 [node name="EventWave3D" type="Node3D" parent="WaterIntegration" unique_id=2144384760]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 248.49646, -283.8418, 0)
@@ -1035,7 +1043,7 @@ editor_preview_mode = 0
 
 [node name="EntryBubbles" parent="CameraSystem/ChaseCamera/Camera3D/UnderwaterEffect/WaterCrossingOverlay" index="0"]
 visible = false
-material = SubResource("CanvasItemMaterial_4scdh")
+material = SubResource("CanvasItemMaterial_df66w")
 position = Vector2(1, 1.76)
 amount = 500
 texture = SubResource("GradientTexture2D_pl0kw")
@@ -1043,13 +1051,12 @@ lifetime = 20.0
 speed_scale = 8.0
 explosiveness = 1.0
 randomness = 1.0
-process_material = SubResource("ParticleProcessMaterial_df66w")
+process_material = SubResource("ParticleProcessMaterial_0gqsi")
 
 [node name="UnderwaterPostProcess" parent="CameraSystem/ChaseCamera/Camera3D/UnderwaterEffect" index="1" unique_id=1854893749]
 material_override = SubResource("ShaderMaterial_y3rlo")
 
 [node name="Props" type="Node3D" parent="." unique_id=1365592301]
-visible = false
 
 [node name="Lights" type="Node3D" parent="Props" unique_id=988101137]
 
@@ -1870,12 +1877,17 @@ curve = SubResource("Curve3D_ogabk")
 debug_custom_color = Color(1, 1, 1, 1)
 
 [node name="PathFollow3D" type="PathFollow3D" parent="BoatTraffic/Path3D" unique_id=438121644]
-transform = Transform3D(-0.6125319, 1.0907094e-06, -0.79044634, 0, 1.0000101, 1.3798522e-06, 0.79044634, 8.4521145e-07, -0.6125319, 125.57363, -0.0003436467, 76.15925)
-progress = 228.17
-rotation_mode = 2
+transform = Transform3D(-0.74906576, 0, 0.6624667, 0, 1.0000103, 0, -0.6624667, 0, -0.74906576, -85.012726, 0, 17.688492)
+progress = 2059.15
+rotation_mode = 1
+use_model_front = true
+tilt_enabled = false
 
-[node name="boat_01" parent="BoatTraffic/Path3D/PathFollow3D" unique_id=522515633 instance=ExtResource("59_2cchu")]
-transform = Transform3D(0.09808238, 0, 0.3826289, 0, 0.395, 0, -0.3826289, 0, 0.09808238, 0, -5.099314, 0)
+[node name="BoatTrafficActor" parent="BoatTraffic/Path3D/PathFollow3D" unique_id=408924039 instance=ExtResource("61_boat_traffic")]
+heading_response = 0.75
+maximum_yaw_rate_degrees = 12.0
+model_rotation_offset_degrees = Vector3(0, 270.112, 0)
+water_provider_path = NodePath("../../../../WaterIntegration/Ocean")
 
 [node name="LightmapGI" type="LightmapGI" parent="." unique_id=1117524579]
 quality = 0

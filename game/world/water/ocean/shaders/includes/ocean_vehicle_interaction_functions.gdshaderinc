@@ -74,10 +74,6 @@ vec4 sample_directional_wake_state(vec2 logical_xz) {
 		float front_distance = initial_width + age * front_speed;
 		float absolute_lateral = abs(lateral);
 		float front_offset = absolute_lateral - front_distance;
-		if (front_offset > arm_width * 3.2
-			|| front_offset < -safe_wavelength * 2.2) {
-			continue;
-		}
 		float crest_x = front_offset;
 		float valley_x = front_offset + safe_wavelength * 0.72;
 		float recovery_x = front_offset + safe_wavelength * 1.45;
@@ -99,8 +95,13 @@ vec4 sample_directional_wake_state(vec2 logical_xz) {
 				/ (recovery_width * recovery_width);
 		float age_fade = exp(-age * directional_wake_attenuation)
 			* (1.0 - smoothstep(duration * 0.62, duration, age));
+		float wake_intensity = clamp(
+			directional_wake_intensities[index],
+			0.0,
+			2.0
+		);
 		float base_amplitude = directional_wake_amplitude
-			* clamp(directional_wake_intensities[index], 0.0, 1.0)
+			* wake_intensity
 			* age_fade * endpoint_gate;
 		if (base_amplitude <= 0.00001) {
 			continue;
@@ -128,7 +129,7 @@ vec4 sample_directional_wake_state(vec2 logical_xz) {
 			-lateral * lateral / (center_width * center_width)
 		);
 		float depression = directional_wake_center_depression
-			* clamp(directional_wake_intensities[index], 0.0, 1.0)
+			* wake_intensity
 			* center_gaussian
 			* exp(-age * 1.65)
 			* (1.0 - smoothstep(0.75, 1.8, age))
@@ -137,6 +138,45 @@ vec4 sample_directional_wake_state(vec2 logical_xz) {
 		derivatives += right * (
 			depression * 2.0 * lateral / (center_width * center_width)
 		);
+
+		// A continuous, overlapping wave field fills the water between both
+		// Kelvin arms. It is driven by sample age, so it moves smoothly without
+		// spawning discrete rings or resetting at segment boundaries.
+		float center_span = max(front_distance * 0.82, center_width);
+		float center_mask = 1.0 - smoothstep(
+			center_span * 0.58,
+			center_span,
+			absolute_lateral
+		);
+		float turbulence_age_gate = smoothstep(0.04, 0.24, age)
+			* (1.0 - smoothstep(duration * 0.70, duration, age));
+		float turbulence_wave_number = 6.28318530718 / max(
+			safe_wavelength * directional_wake_center_turbulence_wavelength_scale,
+			0.25
+		);
+		float turbulence_phase_speed = max(
+			source_speed * 0.72 + directional_wake_propagation_speed * 0.85,
+			0.1
+		);
+		float primary_phase = age * turbulence_phase_speed
+			* turbulence_wave_number + lateral * turbulence_wave_number * 0.32;
+		float secondary_phase = age * (turbulence_phase_speed * 1.61 + 0.37)
+			* turbulence_wave_number - lateral * turbulence_wave_number * 0.53;
+		float turbulence_signal = sin(primary_phase) * 0.68
+			+ sin(secondary_phase) * 0.32;
+		float turbulence_amplitude = directional_wake_center_turbulence
+			* wake_intensity * age_fade * turbulence_age_gate
+			* endpoint_gate * center_mask;
+		height += turbulence_signal * turbulence_amplitude;
+		vec2 primary_phase_gradient = age_gradient * turbulence_phase_speed
+			* turbulence_wave_number + right * turbulence_wave_number * 0.32;
+		vec2 secondary_phase_gradient = age_gradient
+			* (turbulence_phase_speed * 1.61 + 0.37)
+			* turbulence_wave_number - right * turbulence_wave_number * 0.53;
+		derivatives += (
+			cos(primary_phase) * primary_phase_gradient * 0.68
+			+ cos(secondary_phase) * secondary_phase_gradient * 0.32
+		) * turbulence_amplitude;
 		float closure_front = initial_width * 0.55
 			+ age * directional_wake_propagation_speed * 0.38;
 		float closure_width = max(center_width * 0.72, 0.16);
@@ -148,7 +188,7 @@ vec4 sample_directional_wake_state(vec2 logical_xz) {
 		float closure_age_gate = smoothstep(0.08, 0.42, age)
 			* (1.0 - smoothstep(0.82, 1.75, age));
 		float closure_recovery = directional_wake_center_depression
-			* 0.30 * clamp(directional_wake_intensities[index], 0.0, 1.0)
+			* 0.30 * wake_intensity
 			* closure_gaussian * closure_age_gate * endpoint_gate;
 		height += closure_recovery;
 		float closure_derivative = closure_recovery
@@ -172,6 +212,7 @@ vec4 sample_directional_wake_state(vec2 logical_xz) {
 						* arm_width * 0.18
 					+ depression * 0.35
 					+ closure_recovery
+					+ abs(turbulence_signal * turbulence_amplitude) * 1.8
 				) * 1.35,
 				0.0,
 				1.0

@@ -48,6 +48,13 @@ var wake_maximum_width_multiplier: float = 2.60
 var wake_opening_distance: float = 6.0
 var mesh_update_interval: float = 0.05
 var directional_history_lifetime: float = 4.2
+var wake_strength_multiplier: float = 1.0
+var directional_strength_multiplier: float = 1.0
+var directional_physics_enabled: bool = false
+## Ocean3D ignores inactive sources entirely, including their physical wake.
+var directional_source_active: bool = true
+## Requested cadence for this source. Ocean3D chooses the fastest active source.
+var requested_directional_update_interval: float = 0.05
 
 var sample_count: int:
 	get:
@@ -113,6 +120,11 @@ var _foam_settings: WaterFoamSettings
 var _foam_noise_texture: Texture2D
 var _foam_settings_signature: int = -1
 var _normal_material: ShaderMaterial
+var _external_source_enabled: bool = false
+var _external_source_generating: bool = false
+var _external_visibility_active: bool = true
+var _external_horizontal_speed: float = 0.0
+var _external_forward_direction: Vector3 = Vector3.FORWARD
 
 @onready var _wake_mesh: MeshInstance3D = $WakeMesh
 
@@ -143,6 +155,10 @@ func configure(
 ) -> void:
 	_unregister_ocean_material()
 	_disconnect_vehicle_signals()
+	_external_source_enabled = false
+	_external_source_generating = false
+	_external_visibility_active = true
+	directional_source_active = true
 	_vehicle = vehicle
 	_ocean = ocean
 	_propulsion_point = propulsion_point
@@ -163,6 +179,73 @@ func configure(
 			_rear_right,
 			_propulsion_point
 		)
+
+
+## Configures the existing visual trail for a deterministic external mover.
+## This deliberately does not replace Ocean3D's authoritative JetSki wake
+## source; it registers as an additional directional source instead.
+func configure_external_source(
+	ocean: Ocean3D,
+	propulsion_point: Marker3D,
+	rear_left: Marker3D = null,
+	rear_right: Marker3D = null
+) -> void:
+	_unregister_ocean_material()
+	_disconnect_vehicle_signals()
+	_vehicle = null
+	_ocean = ocean
+	_propulsion_point = propulsion_point
+	_rear_left = rear_left
+	_rear_right = rear_right
+	_front_left = null
+	_front_right = null
+	_external_source_enabled = true
+	_external_source_generating = false
+	_external_visibility_active = true
+	directional_source_active = true
+	if is_instance_valid(_ocean):
+		if _normal_material != null:
+			_ocean.register_external_water_material(_normal_material)
+		_ocean.register_additional_directional_wake_source(self)
+
+
+func update_external_source(
+	horizontal_speed: float,
+	forward_direction: Vector3,
+	generating: bool
+) -> void:
+	if not _external_source_enabled:
+		return
+	_external_horizontal_speed = maxf(horizontal_speed, 0.0)
+	var flat_forward := Vector3(
+		forward_direction.x,
+		0.0,
+		forward_direction.z
+	)
+	if flat_forward.is_finite() and flat_forward.length_squared() > 0.000001:
+		_external_forward_direction = flat_forward.normalized()
+	_external_source_generating = generating and _external_visibility_active
+
+
+## Suspends an external mover's complete wake contribution without stopping it.
+## Clearing on exit prevents an off-screen history from appearing all at once
+## when the mover becomes visible again.
+func set_external_visibility_active(active: bool) -> void:
+	if not _external_source_enabled:
+		return
+	_external_visibility_active = active
+	directional_source_active = active
+	if is_instance_valid(_wake_mesh):
+		_wake_mesh.visible = active
+	if not active:
+		_external_source_generating = false
+		clear_trail(false)
+	else:
+		_segment_break_pending = true
+		_has_last_sample = false
+		_sample_elapsed = wake_sample_maximum_interval
+	if is_instance_valid(_ocean):
+		_ocean.request_directional_wake_refresh()
 
 
 func configure_quality(
@@ -296,7 +379,59 @@ func fill_directional_shader_segments(
 	var newest_index := _samples.size() - 1
 	var first_index := newest_index
 	var covered_distance: float = 0.0
-	if allowed_segments > 0 and newest_index > 0:
+	# Keep the stored history distance-bounded while its leading segment follows
+	# the propulsion point every frame. Without this live head, the wake endpoint
+	# advances only whenever a persistent sample is added and visibly steps.
+	if (
+		allowed_segments > 0
+		and newest_index >= 0
+		and not _segment_break_pending
+		and _can_add_sample()
+	):
+		var newest_sample := _samples[newest_index]
+		var live_position := _propulsion_point.global_position
+		var live_start := Vector2(
+			newest_sample.position.x,
+			newest_sample.position.z
+		)
+		var live_end := Vector2(live_position.x, live_position.z)
+		var live_distance := live_start.distance_to(live_end)
+		if live_distance > 0.0001 and live_distance <= maximum_distance:
+			var live_speed := _water_relative_horizontal_speed()
+			var live_speed_factor := clampf(
+				inverse_lerp(wake_minimum_speed, wake_full_speed, live_speed)
+					* wake_strength_multiplier,
+				0.0,
+				1.0
+			)
+			var live_forward := _real_movement_direction(live_position)
+			start_positions[0] = live_start + logical_origin_xz
+			end_positions[0] = live_end + logical_origin_xz
+			start_times[0] = simulation_time - maxf(newest_sample.age, 0.0)
+			end_times[0] = simulation_time
+			intensities[0] = clampf(
+				(newest_sample.speed_factor + live_speed_factor) * 0.5
+					* directional_strength_multiplier,
+				0.0,
+				2.0
+			)
+			widths[0] = maxf(
+				(newest_sample.initial_width + _measured_hull_half_width()) * 0.5,
+				0.1
+			)
+			biases[0] = clampf(
+				(newest_sample.steering_bias + _current_steering_bias(live_forward))
+					* 0.5,
+				-1.0,
+				1.0
+			)
+			speeds[0] = maxf(
+				(newest_sample.horizontal_speed + live_speed) * 0.5,
+				0.0
+			)
+			export_count = 1
+			covered_distance = live_distance
+	if allowed_segments > export_count and newest_index > 0:
 		for index in range(newest_index - 1, -1, -1):
 			var newer := _samples[index + 1]
 			var older := _samples[index]
@@ -319,8 +454,9 @@ func fill_directional_shader_segments(
 			var older := _samples[pair_index - 1]
 			if not newer.break_before and newer.segment_id == older.segment_id:
 				valid_pair_count += 1
+		var historical_budget := maxi(allowed_segments - export_count, 1)
 		var pair_stride := maxi(
-			ceili(float(valid_pair_count) / float(allowed_segments)),
+			ceili(float(valid_pair_count) / float(historical_budget)),
 			1
 		)
 		var newer_index := newest_index
@@ -364,9 +500,10 @@ func fill_directional_shader_segments(
 			start_times[export_count] = simulation_time - maxf(older.age, 0.0)
 			end_times[export_count] = simulation_time - maxf(newer.age, 0.0)
 			intensities[export_count] = clampf(
-				(older.speed_factor + newer.speed_factor) * 0.5,
+				(older.speed_factor + newer.speed_factor) * 0.5
+					* directional_strength_multiplier,
 				0.0,
-				1.0
+				2.0
 			)
 			widths[export_count] = maxf(
 				(older.initial_width + newer.initial_width) * 0.5,
@@ -430,6 +567,7 @@ func _try_add_sample() -> void:
 		0.0,
 		1.0
 	)
+	speed_factor = clampf(speed_factor * wake_strength_multiplier, 0.0, 1.0)
 	var measured_half_width := _measured_hull_half_width()
 	var initial_width := measured_half_width * wake_initial_width_multiplier
 	initial_width *= lerpf(0.94, 1.08, speed_factor)
@@ -455,6 +593,15 @@ func _try_add_sample() -> void:
 
 
 func _can_add_sample() -> bool:
+	if _external_source_enabled:
+		return (
+			wake_enabled
+			and _external_visibility_active
+			and _external_source_generating
+			and is_instance_valid(_ocean)
+			and is_instance_valid(_propulsion_point)
+			and _external_horizontal_speed > wake_minimum_speed
+		)
 	return (
 		wake_enabled
 		and is_instance_valid(_vehicle)
@@ -479,6 +626,19 @@ func mark_segment_break() -> void:
 
 
 func _update_segment_continuity() -> void:
+	if _external_source_enabled:
+		var external_generating := (
+			wake_enabled
+			and _external_visibility_active
+			and _external_source_generating
+			and is_instance_valid(_ocean)
+			and is_instance_valid(_propulsion_point)
+			and _external_horizontal_speed > wake_minimum_speed
+		)
+		if _was_generating_wake and not external_generating:
+			mark_segment_break()
+		_was_generating_wake = external_generating
+		return
 	var generating_wake := (
 		is_instance_valid(_vehicle)
 		and _vehicle.navigation_state
@@ -507,7 +667,11 @@ func _disconnect_vehicle_signals() -> void:
 
 
 func _unregister_ocean_material() -> void:
-	if is_instance_valid(_ocean) and _normal_material != null:
+	if not is_instance_valid(_ocean):
+		return
+	if _external_source_enabled:
+		_ocean.unregister_additional_directional_wake_source(self)
+	if _normal_material != null:
 		_ocean.unregister_external_water_material(_normal_material)
 
 
@@ -740,11 +904,19 @@ func _real_movement_direction(sample_position: Vector3) -> Vector3:
 	if _has_last_sample:
 		movement = sample_position - _last_sample_position
 		movement.y = 0.0
-	if movement.length_squared() <= 0.0001 and is_instance_valid(_vehicle):
+	if movement.length_squared() <= 0.0001 and _external_source_enabled:
+		movement = _external_forward_direction
+	elif movement.length_squared() <= 0.0001 and is_instance_valid(_vehicle):
 		movement = _water_relative_horizontal_velocity()
 		movement.y = 0.0
 	if movement.length_squared() <= 0.0001 or not movement.is_finite():
-		movement = -_vehicle.global_basis.z if is_instance_valid(_vehicle) else Vector3.FORWARD
+		movement = (
+			_external_forward_direction
+			if _external_source_enabled
+			else -_vehicle.global_basis.z
+			if is_instance_valid(_vehicle)
+			else Vector3.FORWARD
+		)
 		movement.y = 0.0
 	if movement.length_squared() <= 0.000001:
 		return Vector3.FORWARD
@@ -789,6 +961,8 @@ func _current_steering_bias(movement_direction: Vector3) -> float:
 
 
 func _water_relative_horizontal_velocity() -> Vector3:
+	if _external_source_enabled:
+		return _external_forward_direction * _external_horizontal_speed
 	if not is_instance_valid(_vehicle):
 		return Vector3.ZERO
 	var relative_velocity := (
@@ -805,7 +979,18 @@ func _water_relative_horizontal_speed() -> float:
 
 func _update_foam_intensity(delta: float) -> void:
 	var target_intensity: float = 0.0
-	if not (
+	if _external_source_enabled:
+		if _external_source_generating:
+			target_intensity = clampf(
+				inverse_lerp(
+					wake_minimum_speed,
+					maxf(wake_full_speed, wake_minimum_speed + 0.001),
+					_external_horizontal_speed
+				) * wake_strength_multiplier,
+				0.0,
+				2.0
+			)
+	elif not (
 		_foam_settings == null
 		or not _foam_settings.foam_enabled
 		or not is_instance_valid(_vehicle)
@@ -838,6 +1023,7 @@ func _update_foam_material(force_update: bool) -> void:
 	if not force_update and signature == _foam_settings_signature:
 		var current_material := _wake_mesh.material_override as ShaderMaterial
 		if current_material != null and is_instance_valid(_ocean):
+			_apply_external_material_strength(current_material)
 			current_material.set_shader_parameter(
 				&"simulation_time",
 				_ocean.get_simulation_time()
@@ -845,6 +1031,8 @@ func _update_foam_material(force_update: bool) -> void:
 			current_material.set_shader_parameter(&"foam_intensity", foam_intensity)
 		return
 	var material := _wake_mesh.material_override as ShaderMaterial
+	if material != null:
+		_apply_external_material_strength(material)
 	if material != null and _foam_settings != null:
 		material.set_shader_parameter(&"foam_noise_texture", _foam_noise_texture)
 		material.set_shader_parameter(&"foam_color", _foam_settings.foam_color)
@@ -865,3 +1053,22 @@ func _update_foam_material(force_update: bool) -> void:
 			_foam_settings.wake_foam_emission
 		)
 	_foam_settings_signature = signature
+
+
+func _apply_external_material_strength(material: ShaderMaterial) -> void:
+	if not _external_source_enabled or material == null:
+		return
+	var strength := clampf(wake_strength_multiplier, 0.0, 4.0)
+	var strength_ratio := strength * 0.25
+	material.set_shader_parameter(
+		&"opacity_boost",
+		lerpf(1.75, 4.0, strength_ratio)
+	)
+	material.set_shader_parameter(
+		&"core_opacity",
+		lerpf(0.38, 0.68, strength_ratio)
+	)
+	material.set_shader_parameter(
+		&"emission_strength",
+		lerpf(0.10, 0.30, strength_ratio)
+	)
