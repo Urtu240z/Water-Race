@@ -1,228 +1,73 @@
 Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
-D3D12 12_0 - Forward+ - Using Device #0: NVIDIA - NVIDIA GeForce RTX 4070 Laptop GPU
 
+ERROR: Failed to read the root certificate store.
+   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)
 
 ========== WATER RACE LOAD TRACE ==========
-[    1.394 ms] GAME START                          +   1.394 ms
-[    1.516 ms] GRAPHICS_AUTOLOAD_READY_BEGIN       +   0.122 ms
-[    1.573 ms] GRAPHICS_PROFILES_LOAD_BEGIN        +   0.057 ms
-[    4.015 ms] GRAPHICS_PROFILES_LOADED            +   2.442 ms
-[    4.073 ms] GRAPHICS_INITIAL_APPLY_QUEUED       +   0.058 ms
-[    4.134 ms] GRAPHICS_AUTOLOAD_READY_END         +   0.061 ms
-[    9.836 ms] GRAPHICS_APPLY_BEGIN                +   5.702 ms
-[    9.914 ms] GRAPHICS_TARGETS_COLLECTED          +   0.078 ms
-[   10.058 ms] GRAPHICS_APPLY_END                  +   0.144 ms
-[ 3692.681 ms] LEVEL_ENTER_TREE: GoldCity          +3682.623 ms
-[ 3692.746 ms] LEVEL_REFERENCES_RESOLVED: GoldCity +   0.065 ms
-[ 3693.796 ms] LEVEL_ROOT_ENTER_TREE_DONE: GoldCity +   1.050 ms
-[ 3693.841 ms] GRAPHICS_SCENE_REFRESH_QUEUED       +   0.045 ms
-[ 3738.807 ms] SKY_RESOURCE_LOAD_BEGIN: uid://olqtngkjhlxu +  44.966 ms
-[ 3738.871 ms] SKY_RESOURCE_LOADED: uid://olqtngkjhlxu +   0.064 ms
-[ 3739.043 ms] SKY_READY                           +   0.172 ms
-[ 3739.354 ms] TERRAIN_MATERIAL_SCAN_BEGIN         +   0.311 ms
-[ 3740.158 ms] TERRAIN_READY                       +   0.804 ms
-[ 3740.186 ms] OCEAN_SURFACE_READY_BEGIN           +   0.028 ms
-[ 3742.048 ms] OCEAN_MESH_REBUILD_BEGIN #1         +   1.862 ms
-[ 3742.273 ms] OCEAN_MESH_CACHE_LOAD_BEGIN         +   0.225 ms
-[ 3899.634 ms] OCEAN_MESH_CACHE_LOAD_END           + 157.361 ms
-[ 3899.692 ms] OCEAN_MESH_CACHE_HIT                +   0.058 ms
-[ 3899.924 ms] OCEAN_MESH_CACHE_ASSIGN_BEGIN       +   0.232 ms
-[ 3900.011 ms] OCEAN_MESH_CACHE_ASSIGN_END         +   0.087 ms
-[ 3900.882 ms] OCEAN_BUILD_DEBUG_GUIDES_BEGIN      +   0.871 ms
-[ 3900.911 ms] OCEAN_BUILD_DEBUG_GUIDES_END        +   0.029 ms
-[ 3900.951 ms] OCEAN_MESH_REBUILD_END #1           +   0.040 ms
-[ 3900.988 ms] OCEAN_SURFACE_MESHES_ENSURED        +   0.037 ms
-[ 3901.032 ms] OCEAN_SURFACE_READY_END             +   0.044 ms
-[ 3901.051 ms] OCEAN_READY_BEGIN                   +   0.019 ms
-[ 3901.668 ms] OCEAN_CORE_READY                    +   0.617 ms
-[ 3901.686 ms] OCEAN_HEIGHT_MAPS_BEGIN             +   0.018 ms
-[ 3904.608 ms] OCEAN_HEIGHT_MAPS_READY             +   2.922 ms
-[ 3904.649 ms] OCEAN_READY_END                     +   0.041 ms
-[ 3905.423 ms] RIDER_READY_BEGIN                   +   0.774 ms
-[ 3905.564 ms] RIDER_READY                         +   0.141 ms
-[ 3912.162 ms] RIDER_READY_BEGIN                   +   6.598 ms
-[ 3912.301 ms] RIDER_READY                         +   0.139 ms
-[ 3912.385 ms] JETSKI_READY_BEGIN                  +   0.084 ms
-[ 3912.525 ms] JETSKI_READY                        +   0.140 ms
-ERROR: Missing baked tree MultiMesh: res://world/vegetation/trees/baked/profile_boat_traffic_render__goldcity__props__vegetation__treeimpostors__treeimpostormultimesh__trees.res
-Open Paradise Island in the editor and use Regenerate Forest.
-   at: push_error (core/variant/variant_utility.cpp:1023)
-   GDScript backtrace (most recent call first):
-       [0] _ready (res://world/vegetation/trees/tree_impostor_multimesh.gd:233)
-       [1] _run_profile (res://dev/tests/boats/profile_boat_traffic_render.gd:30)
-ERROR: Missing baked tree MultiMesh: res://world/vegetation/trees/baked/profile_boat_traffic_render__goldcity__props__vegetation__treeimpostors__treeimpostormultimesh7__trees.res
-Open Paradise Island in the editor and use Regenerate Forest.
-   at: push_error (core/variant/variant_utility.cpp:1023)
-   GDScript backtrace (most recent call first):
-       [0] _ready (res://world/vegetation/trees/tree_impostor_multimesh.gd:233)
-       [1] _run_profile (res://dev/tests/boats/profile_boat_traffic_render.gd:30)
-ERROR: Missing baked tree MultiMesh: res://world/vegetation/trees/baked/profile_boat_traffic_render__goldcity__props__vegetation__treeimpostors__treeimpostormultimesh12__trees.res
-Open Paradise Island in the editor and use Regenerate Forest.
-   at: push_error (core/variant/variant_utility.cpp:1023)
-   GDScript backtrace (most recent call first):
-       [0] _ready (res://world/vegetation/trees/tree_impostor_multimesh.gd:233)
-       [1] _run_profile (res://dev/tests/boats/profile_boat_traffic_render.gd:30)
-ERROR: Missing baked tree MultiMesh: res://world/vegetation/trees/baked/profile_boat_traffic_render__goldcity__props__vegetation__treeimpostors__treeimpostormultimesh13__trees.res
-Open Paradise Island in the editor and use Regenerate Forest.
-   at: push_error (core/variant/variant_utility.cpp:1023)
-   GDScript backtrace (most recent call first):
-       [0] _ready (res://world/vegetation/trees/tree_impostor_multimesh.gd:233)
-       [1] _run_profile (res://dev/tests/boats/profile_boat_traffic_render.gd:30)
-ERROR: Missing baked tree MultiMesh: res://world/vegetation/trees/baked/profile_boat_traffic_render__goldcity__props__vegetation__treeimpostors__treeimpostormultimesh14__trees.res
-Open Paradise Island in the editor and use Regenerate Forest.
-   at: push_error (core/variant/variant_utility.cpp:1023)
-   GDScript backtrace (most recent call first):
-       [0] _ready (res://world/vegetation/trees/tree_impostor_multimesh.gd:233)
-       [1] _run_profile (res://dev/tests/boats/profile_boat_traffic_render.gd:30)
-ERROR: Missing baked tree MultiMesh: res://world/vegetation/trees/baked/profile_boat_traffic_render__goldcity__props__vegetation__treeimpostors__treeimpostormultimesh15__trees.res
-Open Paradise Island in the editor and use Regenerate Forest.
-   at: push_error (core/variant/variant_utility.cpp:1023)
-   GDScript backtrace (most recent call first):
-       [0] _ready (res://world/vegetation/trees/tree_impostor_multimesh.gd:233)
-       [1] _run_profile (res://dev/tests/boats/profile_boat_traffic_render.gd:30)
-ERROR: Missing baked tree MultiMesh: res://world/vegetation/trees/baked/profile_boat_traffic_render__goldcity__props__vegetation__treeimpostors__treeimpostormultimesh16__trees.res
-Open Paradise Island in the editor and use Regenerate Forest.
-   at: push_error (core/variant/variant_utility.cpp:1023)
-   GDScript backtrace (most recent call first):
-       [0] _ready (res://world/vegetation/trees/tree_impostor_multimesh.gd:233)
-       [1] _run_profile (res://dev/tests/boats/profile_boat_traffic_render.gd:30)
-ERROR: Missing baked tree MultiMesh: res://world/vegetation/trees/baked/profile_boat_traffic_render__goldcity__props__vegetation__treeimpostors__treeimpostormultimesh17__trees.res
-Open Paradise Island in the editor and use Regenerate Forest.
-   at: push_error (core/variant/variant_utility.cpp:1023)
-   GDScript backtrace (most recent call first):
-       [0] _ready (res://world/vegetation/trees/tree_impostor_multimesh.gd:233)
-       [1] _run_profile (res://dev/tests/boats/profile_boat_traffic_render.gd:30)
-ERROR: Missing baked tree MultiMesh: res://world/vegetation/trees/baked/profile_boat_traffic_render__goldcity__props__vegetation__treeimpostors__treeimpostormultimesh18__trees.res
-Open Paradise Island in the editor and use Regenerate Forest.
-   at: push_error (core/variant/variant_utility.cpp:1023)
-   GDScript backtrace (most recent call first):
-       [0] _ready (res://world/vegetation/trees/tree_impostor_multimesh.gd:233)
-       [1] _run_profile (res://dev/tests/boats/profile_boat_traffic_render.gd:30)
-ERROR: Missing baked tree MultiMesh: res://world/vegetation/trees/baked/profile_boat_traffic_render__goldcity__props__vegetation__treeimpostors__treeimpostormultimesh19__trees.res
-Open Paradise Island in the editor and use Regenerate Forest.
-   at: push_error (core/variant/variant_utility.cpp:1023)
-   GDScript backtrace (most recent call first):
-       [0] _ready (res://world/vegetation/trees/tree_impostor_multimesh.gd:233)
-       [1] _run_profile (res://dev/tests/boats/profile_boat_traffic_render.gd:30)
-ERROR: Missing baked tree MultiMesh: res://world/vegetation/trees/baked/profile_boat_traffic_render__goldcity__props__vegetation__treeimpostors__treeimpostormultimesh20__trees.res
-Open Paradise Island in the editor and use Regenerate Forest.
-   at: push_error (core/variant/variant_utility.cpp:1023)
-   GDScript backtrace (most recent call first):
-       [0] _ready (res://world/vegetation/trees/tree_impostor_multimesh.gd:233)
-       [1] _run_profile (res://dev/tests/boats/profile_boat_traffic_render.gd:30)
-ERROR: Missing baked tree MultiMesh: res://world/vegetation/trees/baked/profile_boat_traffic_render__goldcity__props__vegetation__treeimpostors__treeimpostormultimesh21__trees.res
-Open Paradise Island in the editor and use Regenerate Forest.
-   at: push_error (core/variant/variant_utility.cpp:1023)
-   GDScript backtrace (most recent call first):
-       [0] _ready (res://world/vegetation/trees/tree_impostor_multimesh.gd:233)
-       [1] _run_profile (res://dev/tests/boats/profile_boat_traffic_render.gd:30)
-ERROR: Missing baked tree MultiMesh: res://world/vegetation/trees/baked/profile_boat_traffic_render__goldcity__props__vegetation__treeimpostors__treeimpostormultimesh22__trees.res
-Open Paradise Island in the editor and use Regenerate Forest.
-   at: push_error (core/variant/variant_utility.cpp:1023)
-   GDScript backtrace (most recent call first):
-       [0] _ready (res://world/vegetation/trees/tree_impostor_multimesh.gd:233)
-       [1] _run_profile (res://dev/tests/boats/profile_boat_traffic_render.gd:30)
-ERROR: Missing baked tree MultiMesh: res://world/vegetation/trees/baked/profile_boat_traffic_render__goldcity__props__vegetation__treeimpostors__treeimpostormultimesh23__trees.res
-Open Paradise Island in the editor and use Regenerate Forest.
-   at: push_error (core/variant/variant_utility.cpp:1023)
-   GDScript backtrace (most recent call first):
-       [0] _ready (res://world/vegetation/trees/tree_impostor_multimesh.gd:233)
-       [1] _run_profile (res://dev/tests/boats/profile_boat_traffic_render.gd:30)
-ERROR: Missing baked tree MultiMesh: res://world/vegetation/trees/baked/profile_boat_traffic_render__goldcity__props__vegetation__treeimpostors__treeimpostormultimesh24__trees.res
-Open Paradise Island in the editor and use Regenerate Forest.
-   at: push_error (core/variant/variant_utility.cpp:1023)
-   GDScript backtrace (most recent call first):
-       [0] _ready (res://world/vegetation/trees/tree_impostor_multimesh.gd:233)
-       [1] _run_profile (res://dev/tests/boats/profile_boat_traffic_render.gd:30)
-ERROR: Missing baked tree MultiMesh: res://world/vegetation/trees/baked/profile_boat_traffic_render__goldcity__props__vegetation__treeimpostors__treeimpostormultimesh25__trees.res
-Open Paradise Island in the editor and use Regenerate Forest.
-   at: push_error (core/variant/variant_utility.cpp:1023)
-   GDScript backtrace (most recent call first):
-       [0] _ready (res://world/vegetation/trees/tree_impostor_multimesh.gd:233)
-       [1] _run_profile (res://dev/tests/boats/profile_boat_traffic_render.gd:30)
-ERROR: Missing baked tree MultiMesh: res://world/vegetation/trees/baked/profile_boat_traffic_render__goldcity__props__vegetation__treeimpostors__treeimpostormultimesh26__trees.res
-Open Paradise Island in the editor and use Regenerate Forest.
-   at: push_error (core/variant/variant_utility.cpp:1023)
-   GDScript backtrace (most recent call first):
-       [0] _ready (res://world/vegetation/trees/tree_impostor_multimesh.gd:233)
-       [1] _run_profile (res://dev/tests/boats/profile_boat_traffic_render.gd:30)
-ERROR: Missing baked tree MultiMesh: res://world/vegetation/trees/baked/profile_boat_traffic_render__goldcity__props__vegetation__treeimpostors__treeimpostormultimesh8__trees.res
-Open Paradise Island in the editor and use Regenerate Forest.
-   at: push_error (core/variant/variant_utility.cpp:1023)
-   GDScript backtrace (most recent call first):
-       [0] _ready (res://world/vegetation/trees/tree_impostor_multimesh.gd:233)
-       [1] _run_profile (res://dev/tests/boats/profile_boat_traffic_render.gd:30)
-ERROR: Missing baked tree MultiMesh: res://world/vegetation/trees/baked/profile_boat_traffic_render__goldcity__props__vegetation__treeimpostors__treeimpostormultimesh11__trees.res
-Open Paradise Island in the editor and use Regenerate Forest.
-   at: push_error (core/variant/variant_utility.cpp:1023)
-   GDScript backtrace (most recent call first):
-       [0] _ready (res://world/vegetation/trees/tree_impostor_multimesh.gd:233)
-       [1] _run_profile (res://dev/tests/boats/profile_boat_traffic_render.gd:30)
-ERROR: Missing baked tree MultiMesh: res://world/vegetation/trees/baked/profile_boat_traffic_render__goldcity__props__vegetation__treeimpostors__treeimpostormultimesh9__trees.res
-Open Paradise Island in the editor and use Regenerate Forest.
-   at: push_error (core/variant/variant_utility.cpp:1023)
-   GDScript backtrace (most recent call first):
-       [0] _ready (res://world/vegetation/trees/tree_impostor_multimesh.gd:233)
-       [1] _run_profile (res://dev/tests/boats/profile_boat_traffic_render.gd:30)
-ERROR: Missing baked tree MultiMesh: res://world/vegetation/trees/baked/profile_boat_traffic_render__goldcity__props__vegetation__treeimpostors__treeimpostormultimesh10__trees.res
-Open Paradise Island in the editor and use Regenerate Forest.
-   at: push_error (core/variant/variant_utility.cpp:1023)
-   GDScript backtrace (most recent call first):
-       [0] _ready (res://world/vegetation/trees/tree_impostor_multimesh.gd:233)
-       [1] _run_profile (res://dev/tests/boats/profile_boat_traffic_render.gd:30)
-ERROR: Missing baked tree MultiMesh: res://world/vegetation/trees/baked/profile_boat_traffic_render__goldcity__props__vegetation__treeimpostors__treeimpostormultimesh6__trees.res
-Open Paradise Island in the editor and use Regenerate Forest.
-   at: push_error (core/variant/variant_utility.cpp:1023)
-   GDScript backtrace (most recent call first):
-       [0] _ready (res://world/vegetation/trees/tree_impostor_multimesh.gd:233)
-       [1] _run_profile (res://dev/tests/boats/profile_boat_traffic_render.gd:30)
-ERROR: Missing baked tree MultiMesh: res://world/vegetation/trees/baked/profile_boat_traffic_render__goldcity__props__vegetation__treeimpostors__treeimpostormultimesh2__trees.res
-Open Paradise Island in the editor and use Regenerate Forest.
-   at: push_error (core/variant/variant_utility.cpp:1023)
-   GDScript backtrace (most recent call first):
-       [0] _ready (res://world/vegetation/trees/tree_impostor_multimesh.gd:233)
-       [1] _run_profile (res://dev/tests/boats/profile_boat_traffic_render.gd:30)
-ERROR: Missing baked tree MultiMesh: res://world/vegetation/trees/baked/profile_boat_traffic_render__goldcity__props__vegetation__treeimpostors__treeimpostormultimesh4__trees.res
-Open Paradise Island in the editor and use Regenerate Forest.
-   at: push_error (core/variant/variant_utility.cpp:1023)
-   GDScript backtrace (most recent call first):
-       [0] _ready (res://world/vegetation/trees/tree_impostor_multimesh.gd:233)
-       [1] _run_profile (res://dev/tests/boats/profile_boat_traffic_render.gd:30)
-ERROR: Missing baked tree MultiMesh: res://world/vegetation/trees/baked/profile_boat_traffic_render__goldcity__props__vegetation__treeimpostors__treeimpostormultimesh5__trees.res
-Open Paradise Island in the editor and use Regenerate Forest.
-   at: push_error (core/variant/variant_utility.cpp:1023)
-   GDScript backtrace (most recent call first):
-       [0] _ready (res://world/vegetation/trees/tree_impostor_multimesh.gd:233)
-       [1] _run_profile (res://dev/tests/boats/profile_boat_traffic_render.gd:30)
-ERROR: Missing baked tree MultiMesh: res://world/vegetation/trees/baked/profile_boat_traffic_render__goldcity__props__vegetation__treeimpostors__treeimpostormultimesh3__trees.res
-Open Paradise Island in the editor and use Regenerate Forest.
-   at: push_error (core/variant/variant_utility.cpp:1023)
-   GDScript backtrace (most recent call first):
-       [0] _ready (res://world/vegetation/trees/tree_impostor_multimesh.gd:233)
-       [1] _run_profile (res://dev/tests/boats/profile_boat_traffic_render.gd:30)
-[ 3926.218 ms] PAUSE_MENU_READY                    +  13.693 ms
-[ 3926.261 ms] LEVEL_ROOT_READY_BEGIN: GoldCity    +   0.043 ms
-[ 3935.528 ms] LEVEL_ROOT_READY: GoldCity          +   9.267 ms
-[ 3935.579 ms] FIRST_FRAME_TRACE_QUEUED: GoldCity  +   0.051 ms
-[ 4511.719 ms] GRAPHICS_APPLY_BEGIN                + 576.140 ms
-[ 4514.183 ms] GRAPHICS_TARGETS_COLLECTED          +   2.464 ms
-[ 4514.522 ms] GRAPHICS_APPLY_END                  +   0.339 ms
-[ 4523.586 ms] UNDERWATER_PREWARM_BEGIN            +   9.064 ms
-[ 4613.348 ms] UNDERWATER_PREWARM_END              +  89.762 ms
-[ 4613.938 ms] FIRST_FRAME_TRACE_CALLBACK: GoldCity +   0.590 ms
-[TreeImpostorFrozen TreeImpostorFrozen2] BODY_ENTER body=/root/ProfileBoatTrafficRender/GoldCity/Props/Ramps/Ramp6/RampVisual/Ramp1_COL isPlayer=false
-[TreeImpostorFrozen TreeImpostorFrozen2] BODY_ENTER body=/root/ProfileBoatTrafficRender/GoldCity/TerrainRoot/Gold_City/Scene Collection/Collisions/Terrain_COL isPlayer=false
-[TreeImpostorFrozen TreeImpostorFrozen] BODY_ENTER body=/root/ProfileBoatTrafficRender/GoldCity/Props/Circuit/Signals/arrow_flat/arrow_flat_COL isPlayer=false
-[TreeImpostorFrozen TreeImpostorFrozen] BODY_ENTER body=/root/ProfileBoatTrafficRender/GoldCity/Props/Ramps/Ramp4/RampVisual/Ramp1_COL isPlayer=false
-[TreeImpostorFrozen TreeImpostorFrozen] BODY_ENTER body=/root/ProfileBoatTrafficRender/GoldCity/Props/Circuit/Signals/arrow_flat2/arrow_flat_COL isPlayer=false
-[TreeImpostorFrozen TreeImpostorFrozen] BODY_ENTER body=/root/ProfileBoatTrafficRender/GoldCity/TerrainRoot/Gold_City/Scene Collection/Collisions/Terrain_COL isPlayer=false
-[ 4630.175 ms] FIRST_PROCESS_FRAME: GoldCity       +  16.237 ms
-[ 4631.332 ms] FIRST_RENDER_PRE_DRAW: GoldCity     +   1.157 ms
-[ 5093.088 ms] FIRST_RENDER_POST_DRAW: GoldCity    + 461.756 ms
-[ 5093.152 ms] FIRST_FRAME_DRAWN: GoldCity         +   0.064 ms
-PROFILE_RESULT phase=foam_only fps=133.0 frame_ms_avg=7.52 frame_ms_p95=15.32 process_ms=6.92 physics_ms=13.06 draw_calls=586 active_segments=0 vertices=4675543.0
-PROFILE_RESULT phase=directional_8 fps=117.5 frame_ms_avg=8.51 frame_ms_p95=16.83 process_ms=7.41 physics_ms=10.99 draw_calls=590 active_segments=8 vertices=4678447.0
-WARNING: [Physics interpolation] Interpolated Camera3D triggered from outside physics process: "/root/ProfileBoatTrafficRender/GoldCity/@Camera3D@24" (possibly benign).
-   at: _notification (scene/3d/camera_3d.cpp:218)
-PROFILE_RESULT phase=directional_16 fps=111.4 frame_ms_avg=8.98 frame_ms_p95=15.91 process_ms=7.17 physics_ms=11.38 draw_calls=593 active_segments=16 vertices=4679263.0
-PROFILE_RESULT phase=wake_disabled fps=118.9 frame_ms_avg=8.41 frame_ms_p95=17.81 process_ms=7.25 physics_ms=14.09 draw_calls=584 active_segments=0 vertices=4624939.0
+[    1.223 ms] GAME START                          +   1.223 ms
+[    1.296 ms] GRAPHICS_AUTOLOAD_READY_BEGIN       +   0.073 ms
+[    1.341 ms] GRAPHICS_PROFILES_LOAD_BEGIN        +   0.045 ms
+[    3.898 ms] GRAPHICS_PROFILES_LOADED            +   2.557 ms
+[    3.962 ms] GRAPHICS_INITIAL_APPLY_QUEUED       +   0.064 ms
+[    3.980 ms] GRAPHICS_AUTOLOAD_READY_END         +   0.018 ms
+[    4.427 ms] GRAPHICS_APPLY_BEGIN                +   0.447 ms
+[    4.463 ms] GRAPHICS_TARGETS_COLLECTED          +   0.036 ms
+[    4.497 ms] GRAPHICS_APPLY_END                  +   0.034 ms
+PASS: BoatTrafficActor scene loads
+PASS: Ocean3D scene loads
+PASS: Gold City scene still parses
+[ 6429.239 ms] GRAPHICS_SCENE_REFRESH_QUEUED       +6424.742 ms
+[ 6429.479 ms] OCEAN_SURFACE_READY_BEGIN           +   0.240 ms
+[ 6429.780 ms] OCEAN_MESH_REBUILD_BEGIN #1         +   0.301 ms
+[ 6430.595 ms] OCEAN_MESH_CACHE_LOAD_BEGIN         +   0.815 ms
+[ 6839.291 ms] OCEAN_MESH_CACHE_LOAD_END           + 408.696 ms
+[ 6839.407 ms] OCEAN_MESH_CACHE_HIT                +   0.116 ms
+[ 6839.552 ms] OCEAN_MESH_CACHE_ASSIGN_BEGIN       +   0.145 ms
+[ 6839.770 ms] OCEAN_MESH_CACHE_ASSIGN_END         +   0.218 ms
+[ 6840.889 ms] OCEAN_BUILD_DEBUG_GUIDES_BEGIN      +   1.119 ms
+[ 6840.935 ms] OCEAN_BUILD_DEBUG_GUIDES_END        +   0.046 ms
+[ 6841.029 ms] OCEAN_MESH_REBUILD_END #1           +   0.094 ms
+[ 6841.069 ms] OCEAN_SURFACE_MESHES_ENSURED        +   0.040 ms
+[ 6841.301 ms] OCEAN_SURFACE_READY_END             +   0.232 ms
+[ 6841.346 ms] OCEAN_READY_BEGIN                   +   0.045 ms
+[ 6842.988 ms] OCEAN_CORE_READY                    +   1.642 ms
+[ 6843.039 ms] OCEAN_HEIGHT_MAPS_BEGIN             +   0.051 ms
+[ 6845.626 ms] OCEAN_HEIGHT_MAPS_READY             +   2.587 ms
+[ 6845.722 ms] OCEAN_READY_END                     +   0.096 ms
+[ 8404.407 ms] GRAPHICS_APPLY_BEGIN                +1558.685 ms
+[ 8404.569 ms] GRAPHICS_TARGETS_COLLECTED          +   0.162 ms
+[ 8404.671 ms] GRAPHICS_APPLY_END                  +   0.102 ms
+PASS: Looped progress remains in range
+PASS: Physics-step path movement advances
+PASS: Closed PathFollow loops cleanly
+PASS: Actor transform remains finite
+PASS: Water-follow basis remains valid
+PASS: Actor follows Ocean3D height
+PASS: Heading inertia respects the angular speed limit
+PASS: Heading inertia produces controlled sliding through turns
+PASS: Ribbon live head updates at physics-frame cadence
+PASS: Ribbon mesh rebuild cadence stays below the 60 Hz live head
+PASS: AnimatableBody3D reports controlled motion to physics
+PASS: Reverse mode decreases path progress
+PASS: Reverse mode keeps a finite controlled velocity
+PASS: Main collision is a simple box
+PASS: Bow collision is a simple box
+PASS: Imported concave StaticBody3D is removed
+PASS: AnimatableBody3D registers both collision shapes
+PASS: JetSki collision layer can query the traffic body
+PASS: Visual wake accumulates a bounded trail
+PASS: Traffic wake uses a clearly visible foam material
+PASS: Ribbon uses one ten-vertex tangent frame per section
+PASS: Ribbon shader does not evaluate the legacy global interaction loop
+PASS: Traffic wake does not activate the legacy global ripple field
+PASS: Traffic ribbon stays out of Ocean3D's global directional field
+PASS: Ocean3D registers one simplified local traffic-wake source
+PASS: Ribbon mesh uses at most one base-ocean sample per rebuilt section
+PASS: Simplified local wake exposes navigable center and arm displacement
+PASS: Navigable wake participates in Ocean3D water samples
+PASS: Off-screen suspension preserves history while hiding visuals and physics
+PASS: Off-screen traffic no longer deforms Ocean3D
+PASS: Off-screen traffic continues following its route
+PASS: Returning on-screen restores local physics and fades the preserved ribbon in
+PASS: Gold City contains exactly one BoatTrafficActor prototype
+BOAT_TRAFFIC_VALIDATION failures=0

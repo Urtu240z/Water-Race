@@ -244,6 +244,7 @@ var _directional_wake_scratch_widths := PackedFloat32Array()
 var _directional_wake_scratch_biases := PackedFloat32Array()
 var _directional_wake_scratch_speeds := PackedFloat32Array()
 var _additional_directional_wake_sources: Array[WakeTrail3D] = []
+var _local_wake_physics_sources: Array[WakeTrail3D] = []
 var _directional_wake_active_count: int = 0
 var _effective_directional_wake_sample_count: int = MAX_DIRECTIONAL_WAKE_SEGMENTS
 var _effective_ripple_count: int = MAX_RIPPLES
@@ -272,6 +273,7 @@ var _maximum_requested_interaction_derivative: float = 0.0
 var _average_propagated_wake_distance: float = 0.0
 var _oldest_directional_segment_age: float = 0.0
 var _directional_wake_updated_last_tick: bool = false
+var _base_surface_sample_count: int = 0
 var _static_parameters_dirty: bool = true
 var _ripple_parameters_dirty: bool = true
 var _editor_refresh_elapsed: float = 0.0
@@ -743,6 +745,16 @@ func unregister_additional_directional_wake_source(source: WakeTrail3D) -> void:
 	_interaction_update_elapsed = maxf(vehicle_interaction_update_interval, 0.01)
 
 
+func register_local_wake_physics_source(source: WakeTrail3D) -> void:
+	if not is_instance_valid(source) or _local_wake_physics_sources.has(source):
+		return
+	_local_wake_physics_sources.append(source)
+
+
+func unregister_local_wake_physics_source(source: WakeTrail3D) -> void:
+	_local_wake_physics_sources.erase(source)
+
+
 func request_directional_wake_refresh() -> void:
 	_interaction_update_elapsed = maxf(vehicle_interaction_update_interval, 0.01)
 
@@ -817,6 +829,8 @@ func get_graphics_quality_debug_status() -> Dictionary:
 			_effective_directional_wake_sample_count
 		),
 		"active_directional_segments": _directional_wake_active_count,
+		"local_wake_physics_sources": _local_wake_physics_sources.size(),
+		"base_surface_sample_count": _base_surface_sample_count,
 		"effective_landing_impacts": _effective_landing_impact_count,
 		"active_landing_impacts": active_landings,
 		"interaction_distance": vehicle_interaction_clipmap_distance,
@@ -890,6 +904,52 @@ func sample_height(world_position: Vector3) -> float:
 	return water_level + _sample_surface_offset(
 		world_to_logical_xz(world_position),
 		_simulation_time
+	)
+
+
+## Environmental surface frame with all vehicle interactions excluded.
+func sample_base_surface(
+	world_position: Vector3,
+	out_sample: WaterSample3D = null
+) -> WaterSample3D:
+	_base_surface_sample_count += 1
+	var sample := out_sample.reset() if out_sample != null else WaterSample3D.new()
+	var logical_xz := world_to_logical_xz(world_position)
+	var step := maxf(normal_sample_step, MIN_SAMPLE_STEP)
+	var center := _sample_base_surface_offset(logical_xz, _simulation_time)
+	var left := _sample_base_surface_offset(logical_xz - Vector2(step, 0.0), _simulation_time)
+	var right := _sample_base_surface_offset(logical_xz + Vector2(step, 0.0), _simulation_time)
+	var back := _sample_base_surface_offset(logical_xz - Vector2(0.0, step), _simulation_time)
+	var front := _sample_base_surface_offset(logical_xz + Vector2(0.0, step), _simulation_time)
+	var derivatives := Vector2(
+		(right - left) / (2.0 * step),
+		(front - back) / (2.0 * step)
+	)
+	sample.surface_position = Vector3(
+		world_position.x,
+		water_level + center,
+		world_position.z
+	)
+	sample.normal = Vector3(-derivatives.x, 1.0, -derivatives.y).normalized()
+	sample.velocity = Vector3.ZERO
+	sample.signed_depth = sample.surface_position.y - world_position.y
+	sample.provider = self
+	sample.valid = sample.surface_position.is_finite() and sample.normal.is_finite()
+	return sample
+
+
+func sample_local_wake_height(world_position: Vector3) -> float:
+	var height := 0.0
+	for index in range(_local_wake_physics_sources.size() - 1, -1, -1):
+		var source := _local_wake_physics_sources[index]
+		if not is_instance_valid(source):
+			_local_wake_physics_sources.remove_at(index)
+		elif source.is_local_wake_physics_active():
+			height += source.sample_simplified_wake_height(world_position)
+	return clampf(
+		height,
+		-vehicle_interaction_maximum_displacement,
+		vehicle_interaction_maximum_displacement
 	)
 
 
@@ -1079,6 +1139,16 @@ func _sample_surface_offset(logical_xz: Vector2, sample_time: float) -> float:
 		* _sample_calm_wave_scale(world_xz)
 		+ _sample_ripple_height(logical_xz, sample_time)
 		+ _sample_navigable_directional_wake_height(logical_xz, sample_time)
+		+ sample_local_wake_height(Vector3(world_xz.x, water_level, world_xz.y))
+		+ _sample_event_wave_height(logical_xz, sample_time)
+	)
+
+
+func _sample_base_surface_offset(logical_xz: Vector2, sample_time: float) -> float:
+	var world_xz := logical_to_world_xz(logical_xz)
+	return (
+		_sample_macro_height(logical_xz, sample_time)
+			* _sample_calm_wave_scale(world_xz)
 		+ _sample_event_wave_height(logical_xz, sample_time)
 	)
 
@@ -1709,7 +1779,7 @@ func _update_directional_wake_segments() -> void:
 		)
 		_append_directional_wake_scratch(
 			exported_count,
-			source.directional_physics_enabled
+			source.physics_enabled
 		)
 		remaining_slots = (
 			_effective_directional_wake_sample_count
@@ -1726,7 +1796,11 @@ func _collect_directional_wake_sources() -> Array[WakeTrail3D]:
 		var source := _additional_directional_wake_sources[index]
 		if not is_instance_valid(source):
 			_additional_directional_wake_sources.remove_at(index)
-		elif source != _wake_source and source.directional_source_active:
+		elif (
+			source != _wake_source
+			and source.directional_source_active
+			and source.legacy_global_deformation_enabled
+		):
 			sources.append(source)
 	return sources
 
@@ -1734,7 +1808,11 @@ func _collect_directional_wake_sources() -> Array[WakeTrail3D]:
 func _resolve_directional_wake_update_interval() -> float:
 	var resolved_interval := maxf(vehicle_interaction_update_interval, 0.01)
 	for source in _additional_directional_wake_sources:
-		if is_instance_valid(source) and source.directional_source_active:
+		if (
+			is_instance_valid(source)
+			and source.directional_source_active
+			and source.legacy_global_deformation_enabled
+		):
 			resolved_interval = minf(
 				resolved_interval,
 				clampf(source.requested_directional_update_interval, 0.01, 0.25)

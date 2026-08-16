@@ -54,6 +54,9 @@ const MIN_SAMPLE_SEPARATION: float = 0.1
 @export_range(0.0, 30.0, 0.1, "or_greater", "suffix:m/s") var wake_minimum_speed: float = 2.0
 @export_range(0.0, 2.0, 0.05, "or_greater") var directional_wake_strength: float = 1.5
 @export var navigable_wake_enabled: bool = true
+## Benchmark/compatibility switch. Keep disabled in gameplay: Wake V2 renders
+## and samples locally instead of adding per-vertex work to the whole ocean.
+@export var legacy_global_deformation_enabled: bool = false
 @export var physical_wake_enabled: bool = true
 @export_range(0.0, 6.0, 0.05, "or_greater") var physical_wake_strength: float = 1.0
 @export_range(0.5, 30.0, 0.25, "or_greater", "suffix:m") var physical_wake_interval_distance: float = 5.0
@@ -376,7 +379,9 @@ func _configure_wake_trail() -> void:
 	_wake_trail.wake_full_speed = maxf(wake_minimum_speed + 6.0, speed_mps)
 	_wake_trail.wake_strength_multiplier = wake_visual_strength
 	_wake_trail.directional_strength_multiplier = directional_wake_strength
-	_wake_trail.directional_physics_enabled = navigable_wake_enabled
+	_wake_trail.physics_enabled = navigable_wake_enabled
+	_wake_trail.legacy_global_deformation_enabled = legacy_global_deformation_enabled
+	_wake_trail.history_capture_enabled = true
 	_wake_trail.wake_surface_offset = 0.18
 	_wake_trail.wake_initial_width_multiplier = 1.0
 	_wake_trail.wake_maximum_width_multiplier = 2.2
@@ -452,7 +457,12 @@ func _apply_wake_lod_interval(update_interval: float) -> void:
 	if not is_instance_valid(_wake_trail):
 		return
 	var safe_interval := clampf(update_interval, 0.01, 0.25)
-	_wake_trail.mesh_update_interval = safe_interval
+	var mesh_interval := 0.1
+	if safe_interval <= 0.02:
+		mesh_interval = 1.0 / 30.0
+	elif safe_interval <= 0.04:
+		mesh_interval = 1.0 / 20.0
+	_wake_trail.mesh_update_interval = mesh_interval
 	_wake_trail.requested_directional_update_interval = safe_interval
 
 
@@ -481,7 +491,6 @@ func _update_wakes() -> void:
 		forward = forward.normalized()
 	var visual_generating := (
 		wake_enabled
-		and _camera_effects_active
 		and current_speed > wake_minimum_speed
 		and is_instance_valid(_ocean)
 	)
@@ -489,7 +498,11 @@ func _update_wakes() -> void:
 		_wake_trail.wake_enabled = wake_enabled
 		_wake_trail.wake_strength_multiplier = wake_visual_strength
 		_wake_trail.update_external_source(current_speed, forward, visual_generating)
-	_update_physical_wake(current_speed if _camera_effects_active else 0.0)
+	_update_physical_wake(
+		current_speed
+		if _camera_effects_active and legacy_global_deformation_enabled
+		else 0.0
+	)
 
 
 func _update_physical_wake(current_speed: float) -> void:

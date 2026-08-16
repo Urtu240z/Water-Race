@@ -4,7 +4,6 @@ render_mode blend_mix, depth_prepass_alpha, cull_disabled;
 uniform vec4 foam_color : source_color = vec4(0.76, 0.92, 0.98, 0.58);
 uniform sampler2D foam_noise_texture : repeat_enable, filter_linear_mipmap;
 uniform float simulation_time = 0.0;
-uniform vec2 ocean_logical_origin_offset_xz = vec2(0.0);
 uniform float foam_intensity = 0.0;
 uniform float macro_noise_scale = 0.055;
 uniform float detail_noise_scale = 0.19;
@@ -14,19 +13,23 @@ uniform float edge_softness : hint_range(0.01, 0.49, 0.01) = 0.16;
 uniform float opacity_boost : hint_range(0.0, 4.0, 0.01) = 1.0;
 uniform float core_opacity : hint_range(0.0, 1.0, 0.01) = 0.22;
 uniform float emission_strength : hint_range(0.0, 2.0, 0.01) = 0.05;
-
-#define OCEAN_INTERACTION_CONTEXT
-
-#include "res://world/water/ocean/shaders/includes/ocean_vehicle_interaction_uniforms.gdshaderinc"
-#include "res://world/water/ocean/shaders/includes/ocean_vehicle_interaction_functions.gdshaderinc"
+uniform vec3 live_head_delta_world = vec3(0.0);
+uniform float visual_fade : hint_range(0.0, 1.0, 0.01) = 1.0;
+uniform float local_crest_height : hint_range(0.0, 1.0, 0.01) = 0.24;
+uniform float local_center_depression : hint_range(0.0, 0.5, 0.01) = 0.08;
 
 
 void vertex() {
-	vec3 world_position = (MODEL_MATRIX * vec4(VERTEX, 1.0)).xyz;
-	vec2 logical_xz = world_position.xz + ocean_logical_origin_offset_xz;
-	float interaction_height = sample_vehicle_interaction_state(logical_xz).x;
+	float cross_profile = max(1.0 - abs(UV.x * 2.0 - 1.0), 0.0);
+	float age_fade = 1.0 - smoothstep(0.52, 1.0, COLOR.r);
+	float speed_scale = mix(0.45, 1.0, clamp(COLOR.g, 0.0, 1.0));
+	float local_height = abs(UV2.x) > 0.5
+		? local_crest_height * cross_profile
+		: -local_center_depression * cross_profile;
+	vec3 world_displacement = live_head_delta_world * UV2.y
+		+ vec3(0.0, local_height * age_fade * speed_scale, 0.0);
 	vec3 local_displacement = inverse(mat3(MODEL_MATRIX))
-		* vec3(0.0, interaction_height, 0.0);
+		* world_displacement;
 	VERTEX += local_displacement;
 }
 
@@ -159,5 +162,9 @@ void fragment() {
 		* bright_core
 		* core_opacity
 		* foam_intensity;
-	ALPHA = clamp(max(base_alpha * opacity_boost, core_alpha), 0.0, 0.94);
+	ALPHA = clamp(
+		max(base_alpha * opacity_boost, core_alpha) * visual_fade,
+		0.0,
+		0.94
+	);
 }

@@ -53,6 +53,7 @@ func _run_validation() -> void:
 	actor.wake_width = 4.0
 	actor.physical_wake_interval_distance = 3.0
 	follow.add_child(actor)
+	var wake := actor.get_node_or_null("WakeRoot/BoatWake") as WakeTrail3D
 
 	var initial_progress := follow.progress
 	var previous_progress := initial_progress
@@ -60,11 +61,6 @@ func _run_validation() -> void:
 	var previous_heading := actor.global_basis.z
 	var maximum_heading_step := 0.0
 	var observed_heading_lag := false
-	var previous_directional_end := Vector2.ZERO
-	var has_previous_directional_end := false
-	var consecutive_stale_directional_frames := 0
-	var maximum_stale_directional_frames := 0
-	var directional_live_update_count := 0
 	for _frame in 210:
 		await get_tree().physics_frame
 		if follow.progress + 0.01 < previous_progress:
@@ -86,26 +82,6 @@ func _run_validation() -> void:
 				current_heading.angle_to(target_heading.normalized()) > deg_to_rad(2.0)
 			)
 		previous_heading = current_heading
-		var frame_ocean_status := ocean.get_graphics_quality_debug_status()
-		if int(frame_ocean_status.get("active_directional_segments", 0)) > 0:
-			var frame_directional_ends := ocean.get(
-				"_directional_wake_end_positions"
-			) as PackedVector2Array
-			var current_directional_end := frame_directional_ends[0]
-			if has_previous_directional_end:
-				if current_directional_end.distance_squared_to(
-					previous_directional_end
-				) <= 0.000001:
-					consecutive_stale_directional_frames += 1
-				else:
-					directional_live_update_count += 1
-					consecutive_stale_directional_frames = 0
-				maximum_stale_directional_frames = maxi(
-					maximum_stale_directional_frames,
-					consecutive_stale_directional_frames
-				)
-			previous_directional_end = current_directional_end
-			has_previous_directional_end = true
 
 	var path_length := curve.get_baked_length()
 	_check(follow.progress >= 0.0 and follow.progress < path_length, "Looped progress remains in range")
@@ -119,10 +95,13 @@ func _run_validation() -> void:
 		"Heading inertia respects the angular speed limit"
 	)
 	_check(observed_heading_lag, "Heading inertia produces controlled sliding through turns")
+	var wake_runtime_status := wake.get_graphics_quality_debug_status() if wake != null else {}
+	var live_head_updates := int(wake_runtime_status.get("live_head_update_count", 0))
+	var mesh_rebuilds := int(wake_runtime_status.get("mesh_rebuild_count", 0))
+	_check(live_head_updates >= 180, "Ribbon live head updates at physics-frame cadence")
 	_check(
-		directional_live_update_count > 60
-			and maximum_stale_directional_frames <= 2,
-		"Directional wake head updates continuously at physics-frame cadence"
+		mesh_rebuilds > 0 and mesh_rebuilds < live_head_updates,
+		"Ribbon mesh rebuild cadence stays below the 60 Hz live head"
 	)
 	var physics_velocity: Vector3 = PhysicsServer3D.body_get_state(
 		actor.get_rid(),
@@ -166,7 +145,6 @@ func _run_validation() -> void:
 			break
 	_check(actor_was_hit, "JetSki collision layer can query the traffic body")
 
-	var wake := actor.get_node_or_null("WakeRoot/BoatWake") as WakeTrail3D
 	_check(wake != null and wake.sample_count >= 2 and wake.sample_count <= 40, "Visual wake accumulates a bounded trail")
 	var wake_mesh := wake.get_node_or_null("WakeMesh") as MeshInstance3D if wake != null else null
 	var wake_material := wake_mesh.material_override as ShaderMaterial if wake_mesh != null else null
@@ -176,76 +154,82 @@ func _run_validation() -> void:
 		else 0.0
 	)
 	_check(opacity_boost >= 3.0, "Traffic wake uses a clearly visible foam material")
-	var ocean_status := ocean.get_graphics_quality_debug_status()
-	_check(int(ocean_status.get("active_ripples", 0)) > 0, "Distance-spaced physical wake reaches Ocean3D")
+	var wake_vertex_count := 0
+	if wake_mesh != null and wake_mesh.mesh != null and wake_mesh.mesh.get_surface_count() > 0:
+		var wake_arrays := wake_mesh.mesh.surface_get_arrays(0)
+		wake_vertex_count = (wake_arrays[Mesh.ARRAY_VERTEX] as PackedVector3Array).size()
+	_check(wake_vertex_count == wake.sample_count * 10, "Ribbon uses one ten-vertex tangent frame per section")
+	var wake_shader_code := ""
+	if wake_material != null and wake_material.shader != null:
+		wake_shader_code = wake_material.shader.code
 	_check(
-		int(ocean_status.get("active_directional_segments", 0)) > 0,
-		"Traffic wake feeds Ocean3D's continuous directional wake"
+		not wake_shader_code.contains("sample_vehicle_interaction_state"),
+		"Ribbon shader does not evaluate the legacy global interaction loop"
 	)
-	var directional_starts := ocean.get(
-		"_directional_wake_start_positions"
-	) as PackedVector2Array
-	var directional_ends := ocean.get(
-		"_directional_wake_end_positions"
-	) as PackedVector2Array
-	var directional_navigable := ocean.get(
-		"_directional_wake_navigable"
-	) as PackedInt32Array
+	var ocean_status := ocean.get_graphics_quality_debug_status()
+	_check(
+		int(ocean_status.get("active_ripples", 0)) == 0,
+		"Traffic wake does not activate the legacy global ripple field"
+	)
+	_check(
+		int(ocean_status.get("active_directional_segments", 0)) == 0
+			and not wake.legacy_global_deformation_enabled,
+		"Traffic ribbon stays out of Ocean3D's global directional field"
+	)
+	_check(
+		int(ocean_status.get("local_wake_physics_sources", 0)) == 1,
+		"Ocean3D registers one simplified local traffic-wake source"
+	)
+	var base_surface_samples := int(ocean_status.get("base_surface_sample_count", 0))
+	_check(
+		base_surface_samples <= mesh_rebuilds * wake.wake_maximum_points,
+		"Ribbon mesh uses at most one base-ocean sample per rebuilt section"
+	)
 	var strongest_navigable_height := 0.0
 	var strongest_navigable_position := Vector3.ZERO
-	var active_directional_count := int(
-		ocean_status.get("active_directional_segments", 0)
-	)
-	for segment_index in active_directional_count:
-		if directional_navigable[segment_index] == 0:
-			continue
-		var segment := (
-			directional_ends[segment_index]
-			- directional_starts[segment_index]
+	var wake_positions := wake.get_sample_positions()
+	for segment_index in range(wake_positions.size() - 1):
+		var start_xz := Vector2(
+			wake_positions[segment_index].x,
+			wake_positions[segment_index].z
 		)
+		var end_xz := Vector2(
+			wake_positions[segment_index + 1].x,
+			wake_positions[segment_index + 1].z
+		)
+		var segment := end_xz - start_xz
 		if segment.length_squared() <= 0.0001:
 			continue
-		var midpoint := (
-			directional_starts[segment_index]
-			+ directional_ends[segment_index]
-		) * 0.5
+		var midpoint := (start_xz + end_xz) * 0.5
 		var direction := segment.normalized()
 		var right := Vector2(-direction.y, direction.x)
-		for lateral_step in range(-16, 17):
-			var logical_position := midpoint + right * float(lateral_step) * 0.5
-			var world_xz := ocean.logical_to_world_xz(logical_position)
+		for lateral_step in range(-24, 25):
+			var world_xz := midpoint + right * float(lateral_step) * 0.5
 			var world_position := Vector3(world_xz.x, 0.0, world_xz.y)
-			var wake_height := absf(
-				ocean.sample_directional_wake_height(world_position)
-			)
+			var wake_height := absf(ocean.sample_local_wake_height(world_position))
 			if wake_height > strongest_navigable_height:
 				strongest_navigable_height = wake_height
 				strongest_navigable_position = world_position
 	_check(
 		strongest_navigable_height >= 0.04,
-		"Directional wake exposes navigable center and arm displacement"
+		"Simplified local wake exposes navigable center and arm displacement"
 	)
 	var navigable_sample := ocean.sample_water(strongest_navigable_position)
 	_check(
 		navigable_sample.valid and navigable_sample.normal.is_finite(),
 		"Navigable wake participates in Ocean3D water samples"
 	)
-	var ripple_amplitudes := ocean.get("_ripple_amplitudes") as PackedFloat32Array
-	var maximum_ripple_amplitude := 0.0
-	for ripple_amplitude: float in ripple_amplitudes:
-		maximum_ripple_amplitude = maxf(maximum_ripple_amplitude, ripple_amplitude)
-	_check(maximum_ripple_amplitude >= 0.08, "Traffic wake keeps subtle physical ripple interaction")
-
 	var progress_before_suspension := follow.progress
+	var history_before_suspension := wake.sample_count
 	actor.call(&"_set_camera_effects_active", false)
-	ocean.call(&"_update_directional_wake_segments")
 	var suspended_ocean_status := ocean.get_graphics_quality_debug_status()
 	_check(
 		not wake.directional_source_active
-			and wake.sample_count == 0
+			and wake.sample_count == history_before_suspension
 			and wake_mesh != null
-			and not wake_mesh.visible,
-		"Off-screen suspension clears and hides the complete traffic wake"
+			and not wake_mesh.visible
+			and not wake.is_local_wake_physics_active(),
+		"Off-screen suspension preserves history while hiding visuals and physics"
 	)
 	_check(
 		int(suspended_ocean_status.get("active_directional_segments", 0)) == 0,
@@ -257,6 +241,15 @@ func _run_validation() -> void:
 		"Off-screen traffic continues following its route"
 	)
 	actor.call(&"_set_camera_effects_active", true)
+	for _frame in 15:
+		await get_tree().physics_frame
+	var resumed_wake_status := wake.get_graphics_quality_debug_status()
+	_check(
+		wake_mesh.visible
+			and wake.is_local_wake_physics_active()
+			and float(resumed_wake_status.get("visual_fade", 0.0)) >= 0.9,
+		"Returning on-screen restores local physics and fades the preserved ribbon in"
+	)
 
 	var actor_count := 0
 	for node_index in gold_city_scene.get_state().get_node_count():
