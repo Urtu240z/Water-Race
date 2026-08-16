@@ -98,10 +98,10 @@ func _run_validation() -> void:
 	var wake_runtime_status := wake.get_graphics_quality_debug_status() if wake != null else {}
 	var live_head_updates := int(wake_runtime_status.get("live_head_update_count", 0))
 	var mesh_rebuilds := int(wake_runtime_status.get("mesh_rebuild_count", 0))
-	_check(live_head_updates >= 180, "Ribbon live head updates at physics-frame cadence")
+	_check(live_head_updates == 0, "Detached traffic-boat foam ribbon stays disabled")
 	_check(
-		mesh_rebuilds > 0 and mesh_rebuilds < live_head_updates,
-		"Ribbon mesh rebuild cadence stays below the 60 Hz live head"
+		mesh_rebuilds == 0,
+		"Traffic wake history does not rebuild a detached foam mesh"
 	)
 	var physics_velocity: Vector3 = PhysicsServer3D.body_get_state(
 		actor.get_rid(),
@@ -145,20 +145,24 @@ func _run_validation() -> void:
 			break
 	_check(actor_was_hit, "JetSki collision layer can query the traffic body")
 
-	_check(wake != null and wake.sample_count >= 2 and wake.sample_count <= 40, "Visual wake accumulates a bounded trail")
+	_check(wake != null and wake.sample_count >= 2 and wake.sample_count <= 128, "Foam history accumulates a bounded trail")
 	var wake_mesh := wake.get_node_or_null("WakeMesh") as MeshInstance3D if wake != null else null
 	var wake_material := wake_mesh.material_override as ShaderMaterial if wake_mesh != null else null
-	var opacity_boost := (
-		float(wake_material.get_shader_parameter(&"opacity_boost"))
-		if wake_material != null
-		else 0.0
+	_check(
+		wake_mesh != null
+			and not wake_mesh.visible
+			and wake.surface_count == 0
+			and not wake.ribbon_render_enabled,
+		"Traffic wake does not use an intersecting foam ribbon"
 	)
-	_check(opacity_boost >= 3.0, "Traffic wake uses a clearly visible foam material")
-	var wake_vertex_count := 0
-	if wake_mesh != null and wake_mesh.mesh != null and wake_mesh.mesh.get_surface_count() > 0:
-		var wake_arrays := wake_mesh.mesh.surface_get_arrays(0)
-		wake_vertex_count = (wake_arrays[Mesh.ARRAY_VERTEX] as PackedVector3Array).size()
-	_check(wake_vertex_count == wake.sample_count * 10, "Ribbon uses one ten-vertex tangent frame per section")
+	_check(
+		wake.get_node_or_null("WakeWaterPatch") == null,
+		"Traffic wake does not render low-resolution water-patch fins"
+	)
+	_check(
+		wake.vertex_count == 0,
+		"Ocean-integrated traffic foam requires no ribbon vertices"
+	)
 	var wake_shader_code := ""
 	if wake_material != null and wake_material.shader != null:
 		wake_shader_code = wake_material.shader.code
@@ -172,9 +176,52 @@ func _run_validation() -> void:
 		"Traffic wake does not activate the legacy global ripple field"
 	)
 	_check(
-		int(ocean_status.get("active_directional_segments", 0)) == 0
-			and not wake.legacy_global_deformation_enabled,
-		"Traffic ribbon stays out of Ocean3D's global directional field"
+		int(ocean_status.get("active_directional_segments", 0)) > 0
+			and wake.legacy_global_deformation_enabled,
+		"Traffic wake deforms the real Ocean3D directional field"
+	)
+	var ocean_material := ocean.get_active_water_material()
+	var foam_history_durations: PackedFloat32Array = (
+		ocean_material.get_shader_parameter(
+			&"directional_wake_foam_history_durations"
+		)
+	)
+	_check(
+		ocean_material != null
+			and ocean_material.shader != null
+			and ocean_material.shader.code.contains("vehicle_wake_foam_strength")
+			and ocean_material.shader.code.contains("vehicle_foam_uv"),
+		"Ocean shader renders persistent vehicle-wake foam on its own surface"
+	)
+	_check(
+		wake.wake_lifetime >= 19.5
+			and wake.wake_sample_maximum_interval >= 0.24
+			and wake.local_physics_lifetime <= 6.5
+			and ocean.directional_wake_duration >= 19.5
+			and ocean.directional_wake_deformation_duration <= 6.5
+			and is_equal_approx(
+				ocean.directional_wake_foam_fade_start
+					/ ocean.directional_wake_duration,
+				0.75
+			)
+			and ocean.directional_wake_foam_end_width_multiplier >= 2.0
+			and ocean.directional_wake_foam_irregularity >= 0.4
+			and foam_history_durations.size() == 16
+			and foam_history_durations[0] >= wake.oldest_age - 0.2,
+		"Foam keeps a short wave lifetime and an irregular fading final quarter"
+	)
+	var bounds_min: Vector2 = ocean_material.get_shader_parameter(
+		&"directional_wake_bounds_min"
+	)
+	var bounds_max: Vector2 = ocean_material.get_shader_parameter(
+		&"directional_wake_bounds_max"
+	)
+	_check(
+		bounds_min.is_finite()
+			and bounds_max.is_finite()
+			and bounds_max.x > bounds_min.x
+			and bounds_max.y > bounds_min.y,
+		"Directional deformation publishes finite spatial shader bounds"
 	)
 	_check(
 		int(ocean_status.get("local_wake_physics_sources", 0)) == 1,
@@ -222,20 +269,36 @@ func _run_validation() -> void:
 	var progress_before_suspension := follow.progress
 	var history_before_suspension := wake.sample_count
 	actor.call(&"_set_camera_effects_active", false)
+	# This scene has no gameplay camera. Keep the manually forced off-screen
+	# state from being replaced by the actor's periodic camera probe.
+	actor.set(&"_camera_optimization_elapsed", -1.0)
+	for _frame in 10:
+		await get_tree().physics_frame
 	var suspended_ocean_status := ocean.get_graphics_quality_debug_status()
+	var suspended_deformation_weights: PackedFloat32Array = (
+		ocean_material.get_shader_parameter(
+			&"directional_wake_deformation_weights"
+		)
+	)
+	var suspended_deformation_is_zero := true
+	for segment_index in int(suspended_ocean_status.get("active_directional_segments", 0)):
+		if suspended_deformation_weights[segment_index] > 0.0001:
+			suspended_deformation_is_zero = false
+			break
 	_check(
-		not wake.directional_source_active
-			and wake.sample_count == history_before_suspension
+			wake.directional_source_active
+			and not wake.directional_deformation_active
+			and wake.sample_count > history_before_suspension
 			and wake_mesh != null
 			and not wake_mesh.visible
 			and not wake.is_local_wake_physics_active(),
-		"Off-screen suspension preserves history while hiding visuals and physics"
+		"Off-screen suspension keeps sparse world-space foam capture active"
 	)
 	_check(
-		int(suspended_ocean_status.get("active_directional_segments", 0)) == 0,
-		"Off-screen traffic no longer deforms Ocean3D"
+		int(suspended_ocean_status.get("active_directional_segments", 0)) > 0
+			and suspended_deformation_is_zero,
+		"Off-screen traffic retains foam but no longer deforms Ocean3D"
 	)
-	await get_tree().physics_frame
 	_check(
 		not is_equal_approx(follow.progress, progress_before_suspension),
 		"Off-screen traffic continues following its route"
@@ -243,19 +306,39 @@ func _run_validation() -> void:
 	actor.call(&"_set_camera_effects_active", true)
 	for _frame in 15:
 		await get_tree().physics_frame
-	var resumed_wake_status := wake.get_graphics_quality_debug_status()
 	_check(
-		wake_mesh.visible
+		not wake_mesh.visible
 			and wake.is_local_wake_physics_active()
-			and float(resumed_wake_status.get("visual_fade", 0.0)) >= 0.9,
-		"Returning on-screen restores local physics and fades the preserved ribbon in"
+			and wake.directional_source_active
+			and wake.directional_deformation_active,
+		"Returning on-screen restores ocean foam and local wake physics"
 	)
 
 	var actor_count := 0
-	for node_index in gold_city_scene.get_state().get_node_count():
-		if gold_city_scene.get_state().get_node_name(node_index) == &"BoatTrafficActor":
+	var gold_city_state := gold_city_scene.get_state()
+	# Absence of an instance override means the actor script's enabled default.
+	var gold_city_wake_deformation_enabled := true
+	for node_index in gold_city_state.get_node_count():
+		if gold_city_state.get_node_name(node_index) == &"BoatTrafficActor":
 			actor_count += 1
+			for property_index in gold_city_state.get_node_property_count(node_index):
+				if (
+					gold_city_state.get_node_property_name(
+						node_index,
+						property_index
+					) == &"legacy_global_deformation_enabled"
+				):
+					gold_city_wake_deformation_enabled = bool(
+						gold_city_state.get_node_property_value(
+							node_index,
+							property_index
+						)
+					)
 	_check(actor_count == 1, "Gold City contains exactly one BoatTrafficActor prototype")
+	_check(
+		gold_city_wake_deformation_enabled,
+		"Gold City keeps real traffic-boat ocean deformation enabled"
+	)
 
 	test_root.queue_free()
 	await get_tree().process_frame

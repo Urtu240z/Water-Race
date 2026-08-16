@@ -115,6 +115,10 @@ uniform float crest_foam_start : hint_range(0.0, 2.0, 0.01) = 0.46;
 uniform float crest_foam_end : hint_range(0.0, 3.0, 0.01) = 0.94;
 uniform float crest_foam_strength : hint_range(0.0, 2.0, 0.01) = 0.82;
 uniform float ripple_foam_strength : hint_range(0.0, 2.0, 0.01) = 0.18;
+uniform vec4 vehicle_wake_foam_color : source_color = vec4(0.90, 0.97, 1.0, 1.0);
+uniform float vehicle_wake_foam_strength : hint_range(0.0, 3.0, 0.01) = 1.0;
+uniform float vehicle_wake_foam_start : hint_range(0.0, 1.0, 0.01) = 0.035;
+uniform float vehicle_wake_foam_end : hint_range(0.0, 1.0, 0.01) = 0.32;
 uniform float foam_macro_scale : hint_range(0.001, 1.0, 0.001) = 0.055;
 uniform float foam_detail_scale : hint_range(0.001, 2.0, 0.001) = 0.19;
 uniform float foam_scroll_speed : hint_range(0.0, 2.0, 0.01) = 0.13;
@@ -203,6 +207,7 @@ group_uniforms;
 varying float interpolated_wave_height;
 varying float interpolated_wave_slope;
 varying float interpolated_ripple_energy;
+varying float interpolated_vehicle_interaction_energy;
 varying vec2 interpolated_world_xz;
 varying float interpolated_ocean_ring_id;
 
@@ -355,7 +360,10 @@ float sample_calm_macro_height(vec2 world_xz) {
 
 
 
-vec4 sample_wave_state(vec2 world_xz) {
+vec4 sample_wave_state(
+	vec2 world_xz,
+	out float vehicle_interaction_energy
+) {
 	vec2 logical_xz = world_xz + ocean_logical_origin_offset_xz;
 	float step_size = max(geometry_normal_step, 0.05);
 	float macro_height = sample_calm_macro_height(world_xz);
@@ -408,6 +416,7 @@ vec4 sample_wave_state(vec2 world_xz) {
 	vec4 interaction = interaction_scale > 0.0001
 		? sample_vehicle_interaction_state(logical_xz)
 		: vec4(0.0);
+	vehicle_interaction_energy = interaction.w * interaction_scale;
 	vec3 event_wave = sample_event_wave_state(logical_xz);
 	float ripple_weight = interaction_ripple_weight();
 	return vec4(
@@ -419,22 +428,24 @@ vec4 sample_wave_state(vec2 world_xz) {
 			+ ripple.yz * ripple_scale * ripple_weight
 			+ interaction.yz * interaction_scale
 			+ event_wave.yz,
-		max(
-			ripple.w * ripple_scale * ripple_weight,
-			interaction.w * interaction_scale
-		)
+		ripple.w * ripple_scale * ripple_weight
 	);
 }
 
 
 void vertex() {
 	vec2 world_xz = VERTEX.xz;
-	vec4 wave_state = sample_wave_state(world_xz);
+	float vehicle_interaction_energy = 0.0;
+	vec4 wave_state = sample_wave_state(
+		world_xz,
+		vehicle_interaction_energy
+	);
 	VERTEX.y = water_level + wave_state.x;
 	NORMAL = normalize(vec3(-wave_state.y, 1.0, -wave_state.z));
 	interpolated_wave_height = wave_state.x;
 	interpolated_wave_slope = length(wave_state.yz);
 	interpolated_ripple_energy = wave_state.w;
+	interpolated_vehicle_interaction_energy = vehicle_interaction_energy;
 	interpolated_world_xz = world_xz;
 	interpolated_ocean_ring_id = COLOR.r;
 }
@@ -1023,7 +1034,35 @@ void fragment() {
 		* crest_foam_strength
 		* calm_scales.z;
 	float ripple_foam = interpolated_ripple_energy * ripple_foam_strength;
-	float foam_mask = foam_enabled
+	float vehicle_wake_energy = clamp(
+		(interpolated_vehicle_interaction_energy - vehicle_wake_foam_start)
+			/ max(vehicle_wake_foam_end - vehicle_wake_foam_start, 0.001),
+		0.0,
+		1.0
+	);
+	// Vehicle foam uses unanimated world coordinates: its breakup pattern stays
+	// attached to the water location instead of scrolling with the ocean noise.
+	float vehicle_foam_noise = 0.5;
+	if (
+		foam_enabled
+		&& interpolated_vehicle_interaction_energy > vehicle_wake_foam_start * 0.25
+		&& foam_distance_gate > 0.0001
+	) {
+		vec2 vehicle_foam_uv = logical_xz * (foam_macro_scale * 1.85)
+			+ vec2(17.13, -9.47);
+		vehicle_foam_noise = texture(foam_noise_texture, vehicle_foam_uv).r;
+	}
+	float vehicle_noise_width = max(fwidth(vehicle_foam_noise) * 1.5, 0.015);
+	float vehicle_foam_breakup = smoothstep(
+		0.38 - vehicle_noise_width,
+		0.62 + vehicle_noise_width,
+		vehicle_foam_noise
+	);
+	float vehicle_wake_foam = vehicle_wake_energy
+		* vehicle_wake_foam_strength
+		* mix(0.25, 1.0, vehicle_foam_breakup)
+		* foam_distance_gate;
+	float environment_foam_mask = foam_enabled
 		? clamp(
 			(shoreline + crest_foam + ripple_foam)
 				* mix(0.42, 1.0, foam_breakup)
@@ -1031,6 +1070,12 @@ void fragment() {
 			0.0,
 			1.0
 		)
+		: 0.0;
+	float vehicle_foam_mask = foam_enabled
+		? clamp(vehicle_wake_foam, 0.0, 1.0)
+		: 0.0;
+	float foam_mask = foam_enabled
+		? clamp(environment_foam_mask + vehicle_foam_mask, 0.0, 1.0)
 		: 0.0;
 
 	float reflection_waterline_uv_y = calculate_projected_waterline_uv_y(
@@ -1326,7 +1371,12 @@ void fragment() {
 		underwater_surface_color,
 		camera_underwater_factor
 	);
-	final_color = mix(final_color, foam_color.rgb, foam_mask);
+	final_color = mix(final_color, foam_color.rgb, environment_foam_mask);
+	final_color = mix(
+		final_color,
+		vehicle_wake_foam_color.rgb,
+		vehicle_foam_mask
+	);
 	final_color = mix(
 		final_color,
 		underwater_surface_fog_color.rgb,

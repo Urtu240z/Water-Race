@@ -108,8 +108,15 @@ const MACRO_MATERIAL_SYNC_INTERVAL: float = 0.25
 @export_range(0.0, 0.5, 0.005, "suffix:m") var directional_wake_center_turbulence: float = 0.08
 @export_range(0.5, 6.0, 0.05) var directional_wake_center_turbulence_wavelength_scale: float = 2.5
 @export_range(0.0, 1.0, 0.01) var directional_wake_physics_response: float = 0.35
-@export_range(4.0, 100.0, 1.0, "suffix:m") var directional_wake_maximum_distance: float = 46.0
-@export_range(0.25, 12.0, 0.05, "suffix:s") var directional_wake_duration: float = 5.2
+@export_range(4.0, 300.0, 1.0, "suffix:m") var directional_wake_maximum_distance: float = 180.0
+## Total history retained by the ocean. The final part can carry stationary foam
+## even after physical wave deformation has already disappeared.
+@export_range(0.25, 30.0, 0.05, "suffix:s") var directional_wake_duration: float = 20.0
+@export_range(0.25, 12.0, 0.05, "suffix:s") var directional_wake_deformation_duration: float = 6.5
+@export_range(0.0, 30.0, 0.05, "suffix:s") var directional_wake_foam_fade_start: float = 15.0
+@export_range(1.0, 3.0, 0.05) var directional_wake_foam_end_width_multiplier: float = 2.0
+@export_range(0.0, 0.5, 0.01) var directional_wake_foam_irregularity: float = 0.40
+@export_range(0.0, 0.9, 0.01) var directional_wake_foam_lateral_fade_start: float = 0.32
 @export_range(0.0, 1.0, 0.005) var directional_wake_attenuation: float = 0.16
 @export_range(0.0, 2.0, 0.01) var directional_wake_turn_strength: float = 0.65
 @export_range(0.01, 0.25, 0.001, "suffix:s") var vehicle_interaction_update_interval: float = 0.05
@@ -234,7 +241,11 @@ var _directional_wake_intensities := PackedFloat32Array()
 var _directional_wake_widths := PackedFloat32Array()
 var _directional_wake_biases := PackedFloat32Array()
 var _directional_wake_speeds := PackedFloat32Array()
+var _directional_wake_deformation_weights := PackedFloat32Array()
+var _directional_wake_foam_history_durations := PackedFloat32Array()
 var _directional_wake_navigable := PackedInt32Array()
+var _directional_wake_bounds_min := Vector2(1.0e20, 1.0e20)
+var _directional_wake_bounds_max := Vector2(-1.0e20, -1.0e20)
 var _directional_wake_scratch_start_positions := PackedVector2Array()
 var _directional_wake_scratch_end_positions := PackedVector2Array()
 var _directional_wake_scratch_start_times := PackedFloat32Array()
@@ -1161,7 +1172,7 @@ func _sample_navigable_directional_wake_height(
 		return 0.0
 	var height := 0.0
 	var safe_wavelength := maxf(directional_wake_wavelength, 0.05)
-	var duration := maxf(directional_wake_duration, 0.05)
+	var duration := maxf(directional_wake_deformation_duration, 0.05)
 	var arm_width := maxf(directional_wake_arm_width, 0.08)
 	for index in _directional_wake_active_count:
 		if _directional_wake_navigable[index] == 0:
@@ -1550,6 +1561,8 @@ func _initialize_vehicle_interactions() -> void:
 	_directional_wake_widths.resize(MAX_DIRECTIONAL_WAKE_SEGMENTS)
 	_directional_wake_biases.resize(MAX_DIRECTIONAL_WAKE_SEGMENTS)
 	_directional_wake_speeds.resize(MAX_DIRECTIONAL_WAKE_SEGMENTS)
+	_directional_wake_deformation_weights.resize(MAX_DIRECTIONAL_WAKE_SEGMENTS)
+	_directional_wake_foam_history_durations.resize(MAX_DIRECTIONAL_WAKE_SEGMENTS)
 	_directional_wake_navigable.resize(MAX_DIRECTIONAL_WAKE_SEGMENTS)
 	_directional_wake_scratch_start_positions.resize(MAX_DIRECTIONAL_WAKE_SEGMENTS)
 	_directional_wake_scratch_end_positions.resize(MAX_DIRECTIONAL_WAKE_SEGMENTS)
@@ -1567,6 +1580,8 @@ func _initialize_vehicle_interactions() -> void:
 	_directional_wake_widths.fill(0.0)
 	_directional_wake_biases.fill(0.0)
 	_directional_wake_speeds.fill(0.0)
+	_directional_wake_deformation_weights.fill(0.0)
+	_directional_wake_foam_history_durations.fill(0.0)
 	_directional_wake_navigable.fill(0)
 	_directional_wake_scratch_start_positions.fill(Vector2.ZERO)
 	_directional_wake_scratch_end_positions.fill(Vector2.ZERO)
@@ -1779,12 +1794,15 @@ func _update_directional_wake_segments() -> void:
 		)
 		_append_directional_wake_scratch(
 			exported_count,
-			source.physics_enabled
+			source.physics_enabled and source.directional_global_physics_enabled,
+			source.directional_deformation_active,
+			clampf(source.oldest_age, 0.5, directional_wake_duration)
 		)
 		remaining_slots = (
 			_effective_directional_wake_sample_count
 			- _directional_wake_active_count
 		)
+	_update_directional_wake_bounds()
 	_directional_wake_updated_last_tick = _directional_wake_active_count > 0
 
 
@@ -1822,6 +1840,8 @@ func _resolve_directional_wake_update_interval() -> float:
 
 func _clear_directional_wake_output() -> void:
 	_directional_wake_active_count = 0
+	_directional_wake_bounds_min = Vector2(1.0e20, 1.0e20)
+	_directional_wake_bounds_max = Vector2(-1.0e20, -1.0e20)
 	_directional_wake_start_positions.fill(Vector2.ZERO)
 	_directional_wake_end_positions.fill(Vector2.ZERO)
 	_directional_wake_start_times.fill(-INF)
@@ -1830,10 +1850,61 @@ func _clear_directional_wake_output() -> void:
 	_directional_wake_widths.fill(0.0)
 	_directional_wake_biases.fill(0.0)
 	_directional_wake_speeds.fill(0.0)
+	_directional_wake_deformation_weights.fill(0.0)
+	_directional_wake_foam_history_durations.fill(0.0)
 	_directional_wake_navigable.fill(0)
 
 
-func _append_directional_wake_scratch(count: int, navigable: bool) -> void:
+func _update_directional_wake_bounds() -> void:
+	if _directional_wake_active_count <= 0:
+		return
+	var safe_wavelength := maxf(directional_wake_wavelength, 0.05)
+	var safe_arm_width := maxf(directional_wake_arm_width, 0.08)
+	for index in _directional_wake_active_count:
+		var oldest_creation_time := minf(
+			_directional_wake_start_times[index],
+			_directional_wake_end_times[index]
+		)
+		var deformation_weight := clampf(
+			_directional_wake_deformation_weights[index],
+			0.0,
+			1.0
+		)
+		var age := clampf(
+			_simulation_time - oldest_creation_time,
+			0.0,
+			maxf(directional_wake_deformation_duration, 0.05)
+		) * deformation_weight
+		var front_speed := directional_wake_propagation_speed + maxf(
+			_directional_wake_speeds[index],
+			0.0
+		) * directional_wake_opening_slope
+		var deformation_reach := maxf(_directional_wake_widths[index], 0.15) + (
+			age * front_speed
+		) + safe_wavelength * 1.65 + safe_arm_width * 2.0
+		var foam_reach := maxf(_directional_wake_widths[index], 0.15) * (
+			1.1 * maxf(directional_wake_foam_end_width_multiplier, 1.0)
+		)
+		var reach := maxf(foam_reach, deformation_reach * deformation_weight)
+		var expansion := Vector2(reach, reach)
+		_directional_wake_bounds_min = _directional_wake_bounds_min.min(
+			_directional_wake_start_positions[index].min(
+				_directional_wake_end_positions[index]
+			) - expansion
+		)
+		_directional_wake_bounds_max = _directional_wake_bounds_max.max(
+			_directional_wake_start_positions[index].max(
+				_directional_wake_end_positions[index]
+			) + expansion
+		)
+
+
+func _append_directional_wake_scratch(
+	count: int,
+	navigable: bool,
+	deformation_active: bool,
+	foam_history_duration: float
+) -> void:
 	var available := (
 		_effective_directional_wake_sample_count
 		- _directional_wake_active_count
@@ -1864,6 +1935,13 @@ func _append_directional_wake_scratch(count: int, navigable: bool) -> void:
 		)
 		_directional_wake_speeds[target_index] = (
 			_directional_wake_scratch_speeds[source_index]
+		)
+		_directional_wake_deformation_weights[target_index] = (
+			1.0 if deformation_active else 0.0
+		)
+		_directional_wake_foam_history_durations[target_index] = maxf(
+			foam_history_duration,
+			0.5
 		)
 		_directional_wake_navigable[target_index] = 1 if navigable else 0
 	_directional_wake_active_count += copy_count
@@ -3028,6 +3106,26 @@ func _push_static_parameters(material: ShaderMaterial) -> void:
 	)
 	material.set_shader_parameter(&"directional_wake_duration", directional_wake_duration)
 	material.set_shader_parameter(
+		&"directional_wake_deformation_duration",
+		directional_wake_deformation_duration
+	)
+	material.set_shader_parameter(
+		&"directional_wake_foam_fade_start",
+		minf(directional_wake_foam_fade_start, directional_wake_duration)
+	)
+	material.set_shader_parameter(
+		&"directional_wake_foam_end_width_multiplier",
+		directional_wake_foam_end_width_multiplier
+	)
+	material.set_shader_parameter(
+		&"directional_wake_foam_irregularity",
+		directional_wake_foam_irregularity
+	)
+	material.set_shader_parameter(
+		&"directional_wake_foam_lateral_fade_start",
+		directional_wake_foam_lateral_fade_start
+	)
+	material.set_shader_parameter(
 		&"directional_wake_attenuation",
 		directional_wake_attenuation
 	)
@@ -3319,7 +3417,23 @@ func _push_directional_wake_parameters(material: ShaderMaterial) -> void:
 		&"directional_wake_speeds",
 		_directional_wake_speeds
 	)
-	_interaction_uniform_write_count += 8
+	material.set_shader_parameter(
+		&"directional_wake_deformation_weights",
+		_directional_wake_deformation_weights
+	)
+	material.set_shader_parameter(
+		&"directional_wake_foam_history_durations",
+		_directional_wake_foam_history_durations
+	)
+	material.set_shader_parameter(
+		&"directional_wake_bounds_min",
+		_directional_wake_bounds_min
+	)
+	material.set_shader_parameter(
+		&"directional_wake_bounds_max",
+		_directional_wake_bounds_max
+	)
+	_interaction_uniform_write_count += 12
 
 
 func _push_hull_pressure_parameters(material: ShaderMaterial) -> void:

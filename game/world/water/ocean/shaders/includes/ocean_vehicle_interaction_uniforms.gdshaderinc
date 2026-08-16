@@ -37,6 +37,12 @@ uniform float directional_wake_intensities[16];
 uniform float directional_wake_widths[16];
 uniform float directional_wake_biases[16];
 uniform float directional_wake_speeds[16];
+uniform float directional_wake_deformation_weights[16];
+uniform float directional_wake_foam_history_durations[16];
+// Logical-space bounds of every currently visible wake packet. Ocean vertices
+// outside this rectangle return before entering the expensive segment loop.
+uniform vec2 directional_wake_bounds_min = vec2(1e20);
+uniform vec2 directional_wake_bounds_max = vec2(-1e20);
 uniform float directional_wake_amplitude : hint_range(0.0, 0.5, 0.005) = 0.16;
 uniform float directional_wake_wavelength : hint_range(0.25, 12.0, 0.05) = 2.4;
 uniform float directional_wake_propagation_speed : hint_range(0.0, 12.0, 0.05) = 2.8;
@@ -45,7 +51,12 @@ uniform float directional_wake_arm_width : hint_range(0.1, 4.0, 0.05) = 0.62;
 uniform float directional_wake_center_depression : hint_range(0.0, 0.5, 0.005) = 0.065;
 uniform float directional_wake_center_turbulence : hint_range(0.0, 0.5, 0.005) = 0.08;
 uniform float directional_wake_center_turbulence_wavelength_scale : hint_range(0.5, 6.0, 0.05) = 2.5;
-uniform float directional_wake_duration : hint_range(0.25, 12.0, 0.05) = 5.2;
+uniform float directional_wake_duration : hint_range(0.25, 30.0, 0.05) = 20.0;
+uniform float directional_wake_deformation_duration : hint_range(0.25, 12.0, 0.05) = 6.5;
+uniform float directional_wake_foam_fade_start : hint_range(0.0, 30.0, 0.05) = 15.0;
+uniform float directional_wake_foam_end_width_multiplier : hint_range(1.0, 3.0, 0.05) = 2.0;
+uniform float directional_wake_foam_irregularity : hint_range(0.0, 0.5, 0.01) = 0.40;
+uniform float directional_wake_foam_lateral_fade_start : hint_range(0.0, 0.9, 0.01) = 0.32;
 uniform float directional_wake_attenuation : hint_range(0.0, 1.0, 0.005) = 0.16;
 uniform float directional_wake_turn_strength : hint_range(0.0, 2.0, 0.01) = 0.65;
 

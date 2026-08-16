@@ -50,12 +50,13 @@ func _run() -> void:
 	actor.call(&"_set_camera_effects_active", true)
 	for _frame in 180:
 		await get_tree().physics_frame
-	_position_camera(camera, actor)
+	_position_camera(camera, actor, wake)
 	# Freeze the boat and its history so every phase renders identical geometry.
 	actor.process_mode = Node.PROCESS_MODE_DISABLED
 	_benchmark_cpu_surface_sampling(ocean, wake)
 	var results := {}
 	results["A_LOCAL_OFF"] = await _measure_phase(ocean, wake, false, false, false)
+	_save_benchmark_screenshot("res://.godot/traffic_wake_v2_off.png")
 	results["B_RIBBON_ONLY"] = await _measure_phase(ocean, wake, true, false, false)
 	results["C_RIBBON_LOCAL_PHYSICS"] = await _measure_phase(
 		ocean,
@@ -64,14 +65,29 @@ func _run() -> void:
 		true,
 		false
 	)
-	results["D_RIBBON_LEGACY_GLOBAL"] = await _measure_phase(
+	for _frame in 2:
+		await get_tree().process_frame
+	_save_benchmark_screenshot("res://.godot/traffic_wake_v2_visual.png")
+	results["D_RIBBON_BOUNDED_OCEAN"] = await _measure_phase(
 		ocean,
 		wake,
 		true,
 		false,
 		true
 	)
+	for _frame in 2:
+		await get_tree().process_frame
+	_save_benchmark_screenshot("res://.godot/traffic_wake_bounded_ocean.png")
 	results["E_ALL_ENABLED"] = await _measure_phase(ocean, wake, true, true, true)
+	# Isolate deposited foam from the young physical Kelvin packet so the
+	# diagnostic image can prove its width, breakup and final-quarter fade.
+	wake.directional_deformation_active = false
+	ocean.request_directional_wake_refresh()
+	ocean.call(&"_update_directional_wake_segments")
+	_position_top_down_camera(camera, actor, wake)
+	for _frame in 2:
+		await get_tree().process_frame
+	_save_benchmark_screenshot("res://.godot/traffic_wake_foam_topdown.png")
 	for label: String in results:
 		var frame_msec := float(results[label])
 		print(
@@ -83,9 +99,9 @@ func _run() -> void:
 		% (float(results["B_RIBBON_ONLY"]) - float(results["A_LOCAL_OFF"]))
 	)
 	print(
-		"TRAFFIC_WAKE_LEGACY_GLOBAL_DELTA_MSEC=%.3f"
+		"TRAFFIC_WAKE_BOUNDED_OCEAN_DELTA_MSEC=%.3f"
 		% (
-			float(results["D_RIBBON_LEGACY_GLOBAL"])
+			float(results["D_RIBBON_BOUNDED_OCEAN"])
 			- float(results["B_RIBBON_ONLY"])
 		)
 	)
@@ -95,6 +111,20 @@ func _run() -> void:
 	packed = null
 	await get_tree().process_frame
 	get_tree().quit(0)
+
+
+func _save_benchmark_screenshot(screenshot_path: String) -> void:
+	var screenshot_error := get_tree().root.get_texture().get_image().save_png(
+		screenshot_path
+	)
+	print(
+		"TRAFFIC_WAKE_V2_SCREENSHOT=%s"
+		% (
+			ProjectSettings.globalize_path(screenshot_path)
+			if screenshot_error == OK
+			else "ERROR_%d" % screenshot_error
+		)
+	)
 
 
 func _benchmark_cpu_surface_sampling(ocean: Ocean3D, wake: WakeTrail3D) -> void:
@@ -146,22 +176,6 @@ func _measure_phase(
 	if wake_mesh != null:
 		wake_mesh.visible = visual_active
 	ocean.clear_ripples()
-	if legacy_global_active:
-		var wake_positions := wake.get_sample_positions()
-		var ripple_origin := (
-			wake_positions[-1]
-			if not wake_positions.is_empty()
-			else Vector3.ZERO
-		)
-		for ripple_index in 12:
-			ocean.add_ripple(
-				ripple_origin + Vector3(float(ripple_index), 0.0, 0.0),
-				0.12,
-				3.6,
-				3.0,
-				0.38,
-				30.0
-			)
 	ocean.request_directional_wake_refresh()
 	ocean.call(&"_update_directional_wake_segments")
 	var phase_status := ocean.get_graphics_quality_debug_status()
@@ -186,11 +200,52 @@ func _measure_phase(
 	)
 
 
-func _position_camera(camera: Camera3D, actor: BoatTrafficActor) -> void:
+func _position_camera(
+	camera: Camera3D,
+	actor: BoatTrafficActor,
+	wake: WakeTrail3D
+) -> void:
 	var camera_rig := camera.get_parent()
 	if camera_rig != null:
 		camera_rig.process_mode = Node.PROCESS_MODE_DISABLED
-	var focus := actor.global_position + actor.global_basis.z * 8.0
-	camera.global_position = focus + Vector3(22.0, 17.0, 18.0)
+	var focus := actor.global_position
+	var trail_direction := actor.global_basis.z
+	if wake != null:
+		var positions := wake.get_sample_positions()
+		if positions.size() >= 2:
+			focus = (positions[0] + positions[-1]) * 0.5
+			trail_direction = positions[-1] - positions[0]
+	trail_direction.y = 0.0
+	if trail_direction.length_squared() <= 0.0001:
+		trail_direction = Vector3.FORWARD
+	else:
+		trail_direction = trail_direction.normalized()
+	var trail_right := trail_direction.cross(Vector3.UP).normalized()
+	camera.global_position = focus + trail_right * 12.0 + Vector3.UP * 3.8
+	camera.fov = 58.0
 	camera.look_at(focus, Vector3.UP)
+	camera.current = true
+
+
+func _position_top_down_camera(
+	camera: Camera3D,
+	actor: BoatTrafficActor,
+	wake: WakeTrail3D
+) -> void:
+	var focus := actor.global_position
+	var trail_direction := actor.global_basis.z
+	var height := 34.0
+	var positions := wake.get_sample_positions()
+	if positions.size() >= 2:
+		focus = (positions[0] + positions[-1]) * 0.5
+		trail_direction = positions[-1] - positions[0]
+		height = maxf(34.0, trail_direction.length() * 0.82)
+	trail_direction.y = 0.0
+	if trail_direction.length_squared() <= 0.0001:
+		trail_direction = Vector3.FORWARD
+	else:
+		trail_direction = trail_direction.normalized()
+	camera.global_position = focus + Vector3.UP * height
+	camera.fov = 52.0
+	camera.look_at(focus, trail_direction)
 	camera.current = true

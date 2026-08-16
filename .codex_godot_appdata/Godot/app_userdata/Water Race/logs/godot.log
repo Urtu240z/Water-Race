@@ -4,39 +4,39 @@ ERROR: Failed to read the root certificate store.
    at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)
 
 ========== WATER RACE LOAD TRACE ==========
-[    1.223 ms] GAME START                          +   1.223 ms
-[    1.296 ms] GRAPHICS_AUTOLOAD_READY_BEGIN       +   0.073 ms
-[    1.341 ms] GRAPHICS_PROFILES_LOAD_BEGIN        +   0.045 ms
-[    3.898 ms] GRAPHICS_PROFILES_LOADED            +   2.557 ms
-[    3.962 ms] GRAPHICS_INITIAL_APPLY_QUEUED       +   0.064 ms
-[    3.980 ms] GRAPHICS_AUTOLOAD_READY_END         +   0.018 ms
-[    4.427 ms] GRAPHICS_APPLY_BEGIN                +   0.447 ms
-[    4.463 ms] GRAPHICS_TARGETS_COLLECTED          +   0.036 ms
-[    4.497 ms] GRAPHICS_APPLY_END                  +   0.034 ms
+[    1.439 ms] GAME START                          +   1.439 ms
+[    1.495 ms] GRAPHICS_AUTOLOAD_READY_BEGIN       +   0.056 ms
+[    1.583 ms] GRAPHICS_PROFILES_LOAD_BEGIN        +   0.088 ms
+[    4.282 ms] GRAPHICS_PROFILES_LOADED            +   2.699 ms
+[    4.344 ms] GRAPHICS_INITIAL_APPLY_QUEUED       +   0.062 ms
+[    4.362 ms] GRAPHICS_AUTOLOAD_READY_END         +   0.018 ms
+[    4.838 ms] GRAPHICS_APPLY_BEGIN                +   0.476 ms
+[    4.875 ms] GRAPHICS_TARGETS_COLLECTED          +   0.037 ms
+[    4.959 ms] GRAPHICS_APPLY_END                  +   0.084 ms
 PASS: BoatTrafficActor scene loads
 PASS: Ocean3D scene loads
 PASS: Gold City scene still parses
-[ 6429.239 ms] GRAPHICS_SCENE_REFRESH_QUEUED       +6424.742 ms
-[ 6429.479 ms] OCEAN_SURFACE_READY_BEGIN           +   0.240 ms
-[ 6429.780 ms] OCEAN_MESH_REBUILD_BEGIN #1         +   0.301 ms
-[ 6430.595 ms] OCEAN_MESH_CACHE_LOAD_BEGIN         +   0.815 ms
-[ 6839.291 ms] OCEAN_MESH_CACHE_LOAD_END           + 408.696 ms
-[ 6839.407 ms] OCEAN_MESH_CACHE_HIT                +   0.116 ms
-[ 6839.552 ms] OCEAN_MESH_CACHE_ASSIGN_BEGIN       +   0.145 ms
-[ 6839.770 ms] OCEAN_MESH_CACHE_ASSIGN_END         +   0.218 ms
-[ 6840.889 ms] OCEAN_BUILD_DEBUG_GUIDES_BEGIN      +   1.119 ms
-[ 6840.935 ms] OCEAN_BUILD_DEBUG_GUIDES_END        +   0.046 ms
-[ 6841.029 ms] OCEAN_MESH_REBUILD_END #1           +   0.094 ms
-[ 6841.069 ms] OCEAN_SURFACE_MESHES_ENSURED        +   0.040 ms
-[ 6841.301 ms] OCEAN_SURFACE_READY_END             +   0.232 ms
-[ 6841.346 ms] OCEAN_READY_BEGIN                   +   0.045 ms
-[ 6842.988 ms] OCEAN_CORE_READY                    +   1.642 ms
-[ 6843.039 ms] OCEAN_HEIGHT_MAPS_BEGIN             +   0.051 ms
-[ 6845.626 ms] OCEAN_HEIGHT_MAPS_READY             +   2.587 ms
-[ 6845.722 ms] OCEAN_READY_END                     +   0.096 ms
-[ 8404.407 ms] GRAPHICS_APPLY_BEGIN                +1558.685 ms
-[ 8404.569 ms] GRAPHICS_TARGETS_COLLECTED          +   0.162 ms
-[ 8404.671 ms] GRAPHICS_APPLY_END                  +   0.102 ms
+[ 6037.573 ms] GRAPHICS_SCENE_REFRESH_QUEUED       +6032.614 ms
+[ 6037.744 ms] OCEAN_SURFACE_READY_BEGIN           +   0.171 ms
+[ 6037.832 ms] OCEAN_MESH_REBUILD_BEGIN #1         +   0.088 ms
+[ 6038.443 ms] OCEAN_MESH_CACHE_LOAD_BEGIN         +   0.611 ms
+[ 6273.037 ms] OCEAN_MESH_CACHE_LOAD_END           + 234.594 ms
+[ 6273.255 ms] OCEAN_MESH_CACHE_HIT                +   0.218 ms
+[ 6273.563 ms] OCEAN_MESH_CACHE_ASSIGN_BEGIN       +   0.308 ms
+[ 6273.685 ms] OCEAN_MESH_CACHE_ASSIGN_END         +   0.122 ms
+[ 6275.115 ms] OCEAN_BUILD_DEBUG_GUIDES_BEGIN      +   1.430 ms
+[ 6275.210 ms] OCEAN_BUILD_DEBUG_GUIDES_END        +   0.095 ms
+[ 6275.272 ms] OCEAN_MESH_REBUILD_END #1           +   0.062 ms
+[ 6275.426 ms] OCEAN_SURFACE_MESHES_ENSURED        +   0.154 ms
+[ 6275.564 ms] OCEAN_SURFACE_READY_END             +   0.138 ms
+[ 6275.650 ms] OCEAN_READY_BEGIN                   +   0.086 ms
+[ 6277.209 ms] OCEAN_CORE_READY                    +   1.559 ms
+[ 6277.261 ms] OCEAN_HEIGHT_MAPS_BEGIN             +   0.052 ms
+[ 6279.001 ms] OCEAN_HEIGHT_MAPS_READY             +   1.740 ms
+[ 6279.087 ms] OCEAN_READY_END                     +   0.086 ms
+[ 7609.338 ms] GRAPHICS_APPLY_BEGIN                +1330.251 ms
+[ 7609.646 ms] GRAPHICS_TARGETS_COLLECTED          +   0.308 ms
+[ 7609.785 ms] GRAPHICS_APPLY_END                  +   0.139 ms
 PASS: Looped progress remains in range
 PASS: Physics-step path movement advances
 PASS: Closed PathFollow loops cleanly
@@ -56,7 +56,8 @@ PASS: Imported concave StaticBody3D is removed
 PASS: AnimatableBody3D registers both collision shapes
 PASS: JetSki collision layer can query the traffic body
 PASS: Visual wake accumulates a bounded trail
-PASS: Traffic wake uses a clearly visible foam material
+PASS: Traffic wake keeps visible foam without a glowing ghost line
+PASS: Traffic wake renders locally deformed water crests and center turbulence
 PASS: Ribbon uses one ten-vertex tangent frame per section
 PASS: Ribbon shader does not evaluate the legacy global interaction loop
 PASS: Traffic wake does not activate the legacy global ripple field

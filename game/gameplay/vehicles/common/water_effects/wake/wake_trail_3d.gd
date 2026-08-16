@@ -41,6 +41,10 @@ var wake_lifetime: float = 1.8
 var wake_maximum_points: int = 72
 var wake_sample_minimum_distance: float = 0.4
 var wake_sample_maximum_interval: float = 0.1
+## External traffic sources keep laying foam while culled, but store fewer
+## history points. The live shader head still interpolates between them.
+var offscreen_sample_distance_multiplier: float = 2.0
+var offscreen_sample_interval_multiplier: float = 2.0
 var wake_surface_offset: float = 0.025
 var wake_fade_start_ratio: float = 0.14
 var wake_initial_width_multiplier: float = 1.05
@@ -51,9 +55,30 @@ var directional_history_lifetime: float = 4.2
 var wake_strength_multiplier: float = 1.0
 var directional_strength_multiplier: float = 1.0
 var physics_enabled: bool = false
+## The traffic boat uses the cheaper local CPU sampler for navigation, while
+## the directional shader remains visual-only to avoid evaluating it twice.
+var directional_global_physics_enabled: bool = true
+## Allows Ocean3D to keep rendering deposited foam while suppressing the
+## displacement packet belonging to an off-screen traffic boat.
+var directional_deformation_active: bool = true
 var visual_fade_duration: float = 0.2
+var local_visual_crest_height: float = 0.10
+var local_visual_center_depression: float = 0.025
+var local_visual_center_turbulence_height: float = 0.0
+var local_visual_arm_half_width_multiplier: float = 0.34
+var local_physics_height_multiplier: float = 2.4
+var local_physics_lifetime: float = 6.5
 var history_capture_enabled: bool = true
 var visual_enabled: bool = true
+## Disables the detached foam ribbon while preserving wake history for ocean
+## deformation and ocean-integrated foam.
+var ribbon_render_enabled: bool = true:
+	set(value):
+		ribbon_render_enabled = value
+		if is_node_ready() and is_instance_valid(_wake_mesh):
+			_wake_mesh.visible = value and visual_enabled
+			if not value and _array_mesh.get_surface_count() > 0:
+				_array_mesh.clear_surfaces()
 var legacy_global_deformation_enabled: bool = true
 ## Ocean3D ignores inactive sources entirely, including their physical wake.
 var directional_source_active: bool = true
@@ -147,6 +172,7 @@ func _ready() -> void:
 	process_physics_priority = 10
 	_mesh_arrays.resize(Mesh.ARRAY_MAX)
 	_wake_mesh.mesh = _array_mesh
+	_wake_mesh.visible = ribbon_render_enabled
 	var source_material := _wake_mesh.material_override as ShaderMaterial
 	if source_material != null:
 		_normal_material = source_material.duplicate() as ShaderMaterial
@@ -174,6 +200,8 @@ func configure(
 	_external_visibility_active = true
 	visual_enabled = true
 	_runtime_physics_active = true
+	directional_global_physics_enabled = true
+	directional_deformation_active = true
 	directional_source_active = true
 	_vehicle = vehicle
 	_ocean = ocean
@@ -218,6 +246,8 @@ func configure_external_source(
 	_external_visibility_active = true
 	visual_enabled = true
 	_runtime_physics_active = true
+	directional_global_physics_enabled = false
+	directional_deformation_active = true
 	directional_source_active = legacy_global_deformation_enabled
 	if is_instance_valid(_ocean):
 		_ocean.register_additional_directional_wake_source(self)
@@ -242,7 +272,9 @@ func update_external_source(
 	_external_source_generating = generating
 
 
-## Suspends rendering and physical influence without discarding trail history.
+## Suspends rendering and physical influence without discarding deposited
+## foam. Sparse world-space capture continues, while Ocean3D exports the
+## source with zero deformation weight.
 func set_external_visibility_active(active: bool) -> void:
 	if not _external_source_enabled:
 		return
@@ -250,14 +282,18 @@ func set_external_visibility_active(active: bool) -> void:
 	_external_visibility_active = active
 	visual_enabled = active
 	_runtime_physics_active = active
-	directional_source_active = active and legacy_global_deformation_enabled
+	directional_deformation_active = active and legacy_global_deformation_enabled
+	directional_source_active = legacy_global_deformation_enabled
 	if is_instance_valid(_wake_mesh):
-		_wake_mesh.visible = active
+		_wake_mesh.visible = active and ribbon_render_enabled
 	if active:
+		requested_directional_update_interval = 1.0 / 60.0
 		_mesh_dirty = true
 		_mesh_update_elapsed = mesh_update_interval
 		if not was_active:
 			_visual_fade = 0.0
+	else:
+		requested_directional_update_interval = 0.1
 	if is_instance_valid(_ocean):
 		_ocean.request_directional_wake_refresh()
 
@@ -320,13 +356,15 @@ func _physics_process(delta: float) -> void:
 	if _samples.is_empty():
 		if _array_mesh.get_surface_count() > 0:
 			_array_mesh.clear_surfaces()
-	elif visual_enabled and (
+	elif visual_enabled and ribbon_render_enabled and (
 		_mesh_dirty or _mesh_update_elapsed >= mesh_update_interval
 	):
 		_rebuild_mesh()
 		_mesh_dirty = false
 		_mesh_update_elapsed = 0.0
-	if visual_enabled:
+	elif not ribbon_render_enabled and _array_mesh.get_surface_count() > 0:
+		_array_mesh.clear_surfaces()
+	if visual_enabled and ribbon_render_enabled:
 		# Rebuilds can change the head anchor. Update this afterwards so the
 		# newest section never receives one frame of stale extrapolation.
 		_update_live_visual_state(delta)
@@ -399,13 +437,19 @@ func sample_simplified_wake_height(world_position: Vector3) -> float:
 	var best_index: int = -1
 	var best_ratio: float = 0.0
 	var best_distance_squared: float = INF
+	var lifetime := maxf(minf(wake_lifetime, local_physics_lifetime), 0.1)
 	for index in range(_samples.size() - 1):
-		var older := _samples[index]
-		var newer := _samples[index + 1]
-		if newer.break_before or newer.segment_id != older.segment_id:
+		var candidate_older := _samples[index]
+		var candidate_newer := _samples[index + 1]
+		if candidate_older.age > lifetime and candidate_newer.age > lifetime:
 			continue
-		var start := Vector2(older.position.x, older.position.z)
-		var finish := Vector2(newer.position.x, newer.position.z)
+		if (
+			candidate_newer.break_before
+			or candidate_newer.segment_id != candidate_older.segment_id
+		):
+			continue
+		var start := Vector2(candidate_older.position.x, candidate_older.position.z)
+		var finish := Vector2(candidate_newer.position.x, candidate_newer.position.z)
 		var segment := finish - start
 		var segment_length_squared := segment.length_squared()
 		if segment_length_squared <= 0.0001:
@@ -422,16 +466,23 @@ func sample_simplified_wake_height(world_position: Vector3) -> float:
 			best_ratio = ratio
 	if best_index < 0:
 		return 0.0
-	var older := _samples[best_index]
-	var newer := _samples[best_index + 1]
-	var age := lerpf(older.age, newer.age, best_ratio)
-	var lifetime := maxf(wake_lifetime, 0.1)
+	var selected_older := _samples[best_index]
+	var selected_newer := _samples[best_index + 1]
+	var age := lerpf(selected_older.age, selected_newer.age, best_ratio)
 	if age < 0.12 or age >= lifetime:
 		return 0.0
-	var initial_width := lerpf(older.initial_width, newer.initial_width, best_ratio)
-	var source_speed := lerpf(older.horizontal_speed, newer.horizontal_speed, best_ratio)
+	var initial_width := lerpf(
+		selected_older.initial_width,
+		selected_newer.initial_width,
+		best_ratio
+	)
+	var source_speed := lerpf(
+		selected_older.horizontal_speed,
+		selected_newer.horizontal_speed,
+		best_ratio
+	)
 	var intensity := clampf(
-		lerpf(older.speed_factor, newer.speed_factor, best_ratio)
+		lerpf(selected_older.speed_factor, selected_newer.speed_factor, best_ratio)
 			* directional_strength_multiplier,
 		0.0,
 		2.0
@@ -457,9 +508,15 @@ func sample_simplified_wake_height(world_position: Vector3) -> float:
 	)
 	var age_fade := 1.0 - smoothstep(lifetime * 0.58, lifetime, age)
 	var height := (
-		_ocean.directional_wake_amplitude * crest
-			- _ocean.directional_wake_center_depression * center_depression
-	) * intensity * age_fade * _ocean.directional_wake_physics_response
+		(
+			_ocean.directional_wake_amplitude * crest
+				- _ocean.directional_wake_center_depression * center_depression
+		)
+		* intensity
+		* age_fade
+		* _ocean.directional_wake_physics_response
+		* local_physics_height_multiplier
+	)
 	return clampf(
 		height,
 		-_ocean.vehicle_interaction_maximum_displacement,
@@ -477,17 +534,28 @@ func _ensure_physics_bounds() -> void:
 	var minimum := Vector2(INF, INF)
 	var maximum := Vector2(-INF, -INF)
 	var maximum_reach := 1.0
+	var physics_lifetime := maxf(
+		minf(wake_lifetime, local_physics_lifetime),
+		0.1
+	)
+	var has_recent_sample := false
 	for sample in _samples:
+		if sample.age > physics_lifetime:
+			continue
+		has_recent_sample = true
 		var horizontal := Vector2(sample.position.x, sample.position.z)
 		minimum = minimum.min(horizontal)
 		maximum = maximum.max(horizontal)
 		maximum_reach = maxf(
 			maximum_reach,
-			sample.initial_width + wake_lifetime * (
+			sample.initial_width + physics_lifetime * (
 				_ocean.directional_wake_propagation_speed
 					+ sample.horizontal_speed * _ocean.directional_wake_opening_slope
 			) + _ocean.directional_wake_arm_width * 2.0
 		)
+	if not has_recent_sample:
+		_physics_bounds = Rect2()
+		return
 	var expansion := Vector2(maximum_reach, maximum_reach)
 	_physics_bounds = Rect2(
 		minimum - expansion,
@@ -705,10 +773,15 @@ func _try_add_sample() -> void:
 	var distance_from_last: float = (
 		sample_position.distance_to(_last_sample_position) if _has_last_sample else INF
 	)
+	var effective_sample_distance := wake_sample_minimum_distance
+	var effective_sample_interval := wake_sample_maximum_interval
+	if _external_source_enabled and not _external_visibility_active:
+		effective_sample_distance *= maxf(offscreen_sample_distance_multiplier, 1.0)
+		effective_sample_interval *= maxf(offscreen_sample_interval_multiplier, 1.0)
 	if (
 		_has_last_sample
-		and distance_from_last < wake_sample_minimum_distance
-		and _sample_elapsed < wake_sample_maximum_interval
+		and distance_from_last < effective_sample_distance
+		and _sample_elapsed < effective_sample_interval
 	):
 		return
 	var forward := _real_movement_direction(sample_position)
@@ -887,9 +960,9 @@ func _rebuild_mesh() -> void:
 			+ sample.horizontal_speed * _ocean.directional_wake_opening_slope
 		)
 		var rail_half_width := clampf(
-			_ocean.directional_wake_arm_width * 0.34,
+			_ocean.directional_wake_arm_width * local_visual_arm_half_width_multiplier,
 			0.16,
-			0.48
+			1.2
 		)
 		released_front = maxf(
 			released_front,
@@ -926,6 +999,10 @@ func _rebuild_mesh() -> void:
 			alpha * 0.68 * (1.0 - steering_bias * 0.22)
 		)
 		var head_weight := 1.0 if index == _samples.size() - 1 else 0.0
+		var local_height_scale := (
+			(1.0 - smoothstep(0.52, 1.0, age_ratio))
+			* lerpf(0.45, 1.0, clampf(sample.speed_factor, 0.0, 1.0))
+		)
 		for lane_index in 10:
 			var lateral_offset := 0.0
 			match lane_index:
@@ -952,9 +1029,32 @@ func _rebuild_mesh() -> void:
 				else center_color if lane_index < 7
 				else right_color
 			)
+			var signed_amplitude := (
+				local_visual_crest_height
+				if absf(strip_id) > 0.5
+				else -local_visual_center_depression + (
+					local_visual_center_turbulence_height
+					* (
+						0.5 + 0.5 * sin(
+							cumulative_length * 1.8
+							- _ocean.get_simulation_time() * 4.2
+						)
+					)
+				)
+			)
+			var profile_derivative := 0.0
+			if not is_equal_approx(strip_uv, 0.5):
+				profile_derivative = 1.0 if strip_uv < 0.5 else -1.0
+				profile_derivative /= (
+					rail_half_width
+					if absf(strip_id) > 0.5
+					else central_half_width
+				)
+			var local_slope := signed_amplitude * local_height_scale * profile_derivative
+			var wake_normal := (water_normal - right * local_slope).normalized()
 			_append_wake_vertex(
 				surface_position + right * lateral_offset,
-				water_normal,
+				wake_normal,
 				vertex_color,
 				Vector2(strip_uv, cumulative_length),
 				Vector2(strip_id, head_weight)
@@ -984,6 +1084,10 @@ func _rebuild_mesh() -> void:
 	_mesh_arrays[Mesh.ARRAY_TEX_UV2] = _uv2s
 	_mesh_arrays[Mesh.ARRAY_INDEX] = _indices
 	_array_mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, _mesh_arrays)
+	var visual_bounds := _array_mesh.get_aabb().grow(
+		maxf(local_visual_crest_height, local_visual_center_depression) + 1.0
+	)
+	_wake_mesh.custom_aabb = visual_bounds
 
 
 func _sample_tangent(index: int) -> Vector3:
@@ -1174,14 +1278,23 @@ func _update_live_visual_state(delta: float) -> void:
 		1.0,
 		maxf(delta, 0.0) / maxf(visual_fade_duration, 0.001)
 	)
-	if _normal_material == null or not is_instance_valid(_propulsion_point):
+	if not is_instance_valid(_propulsion_point):
 		return
 	var live_delta := _propulsion_point.global_position - _mesh_head_anchor_position
 	live_delta.y = 0.0
 	if not live_delta.is_finite() or live_delta.length() > wake_sample_minimum_distance * 3.0:
 		live_delta = Vector3.ZERO
-	_normal_material.set_shader_parameter(&"live_head_delta_world", live_delta)
-	_normal_material.set_shader_parameter(&"visual_fade", _visual_fade)
+	if _normal_material != null:
+		_normal_material.set_shader_parameter(&"live_head_delta_world", live_delta)
+		_normal_material.set_shader_parameter(&"visual_fade", _visual_fade)
+		_normal_material.set_shader_parameter(
+			&"local_crest_height",
+			local_visual_crest_height
+		)
+		_normal_material.set_shader_parameter(
+			&"local_center_depression",
+			local_visual_center_depression
+		)
 	live_head_update_count += 1
 
 
@@ -1197,10 +1310,23 @@ func _update_foam_material(force_update: bool) -> void:
 			)
 			current_material.set_shader_parameter(&"foam_intensity", foam_intensity)
 			current_material.set_shader_parameter(&"visual_fade", _visual_fade)
+			current_material.set_shader_parameter(
+				&"local_crest_height",
+				local_visual_crest_height
+			)
+			current_material.set_shader_parameter(
+				&"local_center_depression",
+				local_visual_center_depression
+			)
 		return
 	var material := _wake_mesh.material_override as ShaderMaterial
 	if material != null:
 		_apply_external_material_strength(material)
+		material.set_shader_parameter(&"local_crest_height", local_visual_crest_height)
+		material.set_shader_parameter(
+			&"local_center_depression",
+			local_visual_center_depression
+		)
 	if material != null and _foam_settings != null:
 		material.set_shader_parameter(&"foam_noise_texture", _foam_noise_texture)
 		material.set_shader_parameter(&"foam_color", _foam_settings.foam_color)
@@ -1230,13 +1356,13 @@ func _apply_external_material_strength(material: ShaderMaterial) -> void:
 	var strength_ratio := strength * 0.25
 	material.set_shader_parameter(
 		&"opacity_boost",
-		lerpf(1.75, 4.0, strength_ratio)
+		lerpf(1.25, 2.55, strength_ratio)
 	)
 	material.set_shader_parameter(
 		&"core_opacity",
-		lerpf(0.38, 0.68, strength_ratio)
+		lerpf(0.22, 0.46, strength_ratio)
 	)
 	material.set_shader_parameter(
 		&"emission_strength",
-		lerpf(0.10, 0.30, strength_ratio)
+		lerpf(0.035, 0.12, strength_ratio)
 	)
