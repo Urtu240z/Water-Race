@@ -13,6 +13,7 @@ const MAX_LANDING_IMPACTS: int = 4
 const MAX_DIRECTIONAL_WAKE_SEGMENTS: int = 16
 const MAX_CALM_WATER_AREAS: int = 4
 const MAX_EVENT_WAVES: int = 4
+const MAX_WATER_EXCLUSION_VOLUMES: int = 8
 const MAX_EVENT_WAVE_HORIZONTAL_FLOW: float = 10.0
 const MIN_SAMPLE_STEP: float = 0.05
 const MACRO_MATERIAL_SYNC_INTERVAL: float = 0.25
@@ -170,6 +171,14 @@ var _calm_zone_axes := PackedVector4Array()
 var _calm_zone_extents_transitions := PackedVector4Array()
 var _calm_zone_strengths := PackedVector4Array()
 var _calm_water_areas_dirty: bool = true
+var _water_exclusion_volume_refs: Array[WeakRef] = []
+var _water_exclusion_centers_radii := PackedVector4Array()
+var _water_exclusion_inverse_rows_x := PackedVector4Array()
+var _water_exclusion_inverse_rows_y := PackedVector4Array()
+var _water_exclusion_inverse_rows_z := PackedVector4Array()
+var _water_exclusion_volume_count: int = 0
+var _water_exclusion_volumes_dirty: bool = true
+var _water_exclusion_shader_support_cache: Dictionary = {}
 var _event_wave_refs: Array[WeakRef] = []
 var _event_wave_active := PackedInt32Array()
 var _event_wave_origins := PackedVector2Array()
@@ -242,6 +251,7 @@ var _directional_wake_widths := PackedFloat32Array()
 var _directional_wake_biases := PackedFloat32Array()
 var _directional_wake_speeds := PackedFloat32Array()
 var _directional_wake_deformation_weights := PackedFloat32Array()
+var _directional_wake_persistent_foam_weights := PackedFloat32Array()
 var _directional_wake_foam_history_durations := PackedFloat32Array()
 var _directional_wake_navigable := PackedInt32Array()
 var _directional_wake_bounds_min := Vector2(1.0e20, 1.0e20)
@@ -309,11 +319,12 @@ func _ready() -> void:
 	_initialize_landing_impacts()
 	_initialize_vehicle_interactions()
 	_initialize_event_waves()
+	_initialize_water_exclusion_volumes()
 	_resolve_targets()
 	_refresh_material_cache()
 	_configure_surface()
 	configure_ripple_emitter(ripple_emitter_target)
-	set_process(Engine.is_editor_hint())
+	set_process(Engine.is_editor_hint() or _water_exclusion_volumes_dirty)
 	set_physics_process(not Engine.is_editor_hint())
 	_push_all_shader_parameters()
 	_trace_mark("OCEAN_CORE_READY")
@@ -327,6 +338,10 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	if not Engine.is_editor_hint():
+		if _water_exclusion_volumes_dirty:
+			_rebuild_water_exclusion_volumes()
+			_push_water_exclusion_parameters_to_all_materials()
+		set_process(_water_exclusion_volumes_dirty)
 		return
 	_editor_refresh_elapsed += maxf(delta, 0.0)
 	if _editor_refresh_elapsed < 0.25:
@@ -343,6 +358,9 @@ func _process(delta: float) -> void:
 		_push_static_parameters_to_all_materials()
 	if _ripple_parameters_dirty:
 		_push_ripple_parameters_to_all_materials()
+	if _water_exclusion_volumes_dirty:
+		_rebuild_water_exclusion_volumes()
+		_push_water_exclusion_parameters_to_all_materials()
 
 
 func _physics_process(delta: float) -> void:
@@ -455,6 +473,31 @@ func register_calm_water_area(calm_area: Node3D) -> void:
 			return
 	_calm_water_area_refs.append(weakref(calm_area))
 	queue_calm_water_area_update()
+
+
+func register_water_exclusion_volume(volume: Node3D) -> void:
+	if not is_instance_valid(volume):
+		return
+	for volume_ref: WeakRef in _water_exclusion_volume_refs:
+		if volume_ref.get_ref() == volume:
+			return
+	_water_exclusion_volume_refs.append(weakref(volume))
+	queue_water_exclusion_volume_update()
+
+
+func unregister_water_exclusion_volume(volume: Node3D) -> void:
+	for index in range(_water_exclusion_volume_refs.size() - 1, -1, -1):
+		var registered_volume: Node = (
+			_water_exclusion_volume_refs[index].get_ref() as Node
+		)
+		if registered_volume == null or registered_volume == volume:
+			_water_exclusion_volume_refs.remove_at(index)
+	queue_water_exclusion_volume_update()
+
+
+func queue_water_exclusion_volume_update() -> void:
+	_water_exclusion_volumes_dirty = true
+	set_process(true)
 
 
 func unregister_calm_water_area(calm_area: Node3D) -> void:
@@ -996,8 +1039,17 @@ func sample_surface_derivatives(world_position: Vector3) -> Vector2:
 func sample_water_velocity(world_position: Vector3) -> Vector3:
 	var logical_xz := world_to_logical_xz(world_position)
 	const TIME_STEP: float = 0.02
-	var previous_height := _sample_surface_offset(logical_xz, _simulation_time - TIME_STEP)
-	var next_height := _sample_surface_offset(logical_xz, _simulation_time + TIME_STEP)
+	# Local traffic wake samples use their current history age for both calls,
+	# so they cancel out of this finite difference. Excluding them here avoids
+	# two full closest-segment searches per buoyancy point with identical output.
+	var previous_height := _sample_surface_offset_without_local_wake(
+		logical_xz,
+		_simulation_time - TIME_STEP
+	)
+	var next_height := _sample_surface_offset_without_local_wake(
+		logical_xz,
+		_simulation_time + TIME_STEP
+	)
 	var horizontal_flow := _sample_event_wave_horizontal_flow(logical_xz, _simulation_time)
 	return Vector3(horizontal_flow.x, (next_height - previous_height) / (2.0 * TIME_STEP), horizontal_flow.y)
 
@@ -1146,11 +1198,21 @@ func _configure_surface() -> void:
 func _sample_surface_offset(logical_xz: Vector2, sample_time: float) -> float:
 	var world_xz := logical_to_world_xz(logical_xz)
 	return (
+		_sample_surface_offset_without_local_wake(logical_xz, sample_time)
+		+ sample_local_wake_height(Vector3(world_xz.x, water_level, world_xz.y))
+	)
+
+
+func _sample_surface_offset_without_local_wake(
+	logical_xz: Vector2,
+	sample_time: float
+) -> float:
+	var world_xz := logical_to_world_xz(logical_xz)
+	return (
 		_sample_macro_height(logical_xz, sample_time)
-		* _sample_calm_wave_scale(world_xz)
+			* _sample_calm_wave_scale(world_xz)
 		+ _sample_ripple_height(logical_xz, sample_time)
 		+ _sample_navigable_directional_wake_height(logical_xz, sample_time)
-		+ sample_local_wake_height(Vector3(world_xz.x, water_level, world_xz.y))
 		+ _sample_event_wave_height(logical_xz, sample_time)
 	)
 
@@ -1495,6 +1557,19 @@ func _initialize_event_waves() -> void:
 	_event_wave_trough_widths.fill(1.0)
 	_event_wave_parameters_dirty = true
 
+
+func _initialize_water_exclusion_volumes() -> void:
+	_water_exclusion_centers_radii.resize(MAX_WATER_EXCLUSION_VOLUMES)
+	_water_exclusion_inverse_rows_x.resize(MAX_WATER_EXCLUSION_VOLUMES)
+	_water_exclusion_inverse_rows_y.resize(MAX_WATER_EXCLUSION_VOLUMES)
+	_water_exclusion_inverse_rows_z.resize(MAX_WATER_EXCLUSION_VOLUMES)
+	_water_exclusion_centers_radii.fill(Vector4.ZERO)
+	_water_exclusion_inverse_rows_x.fill(Vector4.ZERO)
+	_water_exclusion_inverse_rows_y.fill(Vector4.ZERO)
+	_water_exclusion_inverse_rows_z.fill(Vector4.ZERO)
+	_water_exclusion_volume_count = 0
+	_water_exclusion_volumes_dirty = true
+
 func _expire_event_waves() -> void:
 	for index in MAX_EVENT_WAVES:
 		if _event_wave_active[index] == 0: continue
@@ -1562,6 +1637,7 @@ func _initialize_vehicle_interactions() -> void:
 	_directional_wake_biases.resize(MAX_DIRECTIONAL_WAKE_SEGMENTS)
 	_directional_wake_speeds.resize(MAX_DIRECTIONAL_WAKE_SEGMENTS)
 	_directional_wake_deformation_weights.resize(MAX_DIRECTIONAL_WAKE_SEGMENTS)
+	_directional_wake_persistent_foam_weights.resize(MAX_DIRECTIONAL_WAKE_SEGMENTS)
 	_directional_wake_foam_history_durations.resize(MAX_DIRECTIONAL_WAKE_SEGMENTS)
 	_directional_wake_navigable.resize(MAX_DIRECTIONAL_WAKE_SEGMENTS)
 	_directional_wake_scratch_start_positions.resize(MAX_DIRECTIONAL_WAKE_SEGMENTS)
@@ -1581,6 +1657,7 @@ func _initialize_vehicle_interactions() -> void:
 	_directional_wake_biases.fill(0.0)
 	_directional_wake_speeds.fill(0.0)
 	_directional_wake_deformation_weights.fill(0.0)
+	_directional_wake_persistent_foam_weights.fill(0.0)
 	_directional_wake_foam_history_durations.fill(0.0)
 	_directional_wake_navigable.fill(0)
 	_directional_wake_scratch_start_positions.fill(Vector2.ZERO)
@@ -1796,6 +1873,7 @@ func _update_directional_wake_segments() -> void:
 			exported_count,
 			source.physics_enabled and source.directional_global_physics_enabled,
 			source.directional_deformation_active,
+			source.directional_persistent_foam_enabled,
 			clampf(source.oldest_age, 0.5, directional_wake_duration)
 		)
 		remaining_slots = (
@@ -1851,6 +1929,7 @@ func _clear_directional_wake_output() -> void:
 	_directional_wake_biases.fill(0.0)
 	_directional_wake_speeds.fill(0.0)
 	_directional_wake_deformation_weights.fill(0.0)
+	_directional_wake_persistent_foam_weights.fill(0.0)
 	_directional_wake_foam_history_durations.fill(0.0)
 	_directional_wake_navigable.fill(0)
 
@@ -1870,6 +1949,11 @@ func _update_directional_wake_bounds() -> void:
 			0.0,
 			1.0
 		)
+		var persistent_foam_weight := clampf(
+			_directional_wake_persistent_foam_weights[index],
+			0.0,
+			1.0
+		)
 		var age := clampf(
 			_simulation_time - oldest_creation_time,
 			0.0,
@@ -1885,7 +1969,10 @@ func _update_directional_wake_bounds() -> void:
 		var foam_reach := maxf(_directional_wake_widths[index], 0.15) * (
 			1.1 * maxf(directional_wake_foam_end_width_multiplier, 1.0)
 		)
-		var reach := maxf(foam_reach, deformation_reach * deformation_weight)
+		var reach := maxf(
+			foam_reach * persistent_foam_weight,
+			deformation_reach * deformation_weight
+		)
 		var expansion := Vector2(reach, reach)
 		_directional_wake_bounds_min = _directional_wake_bounds_min.min(
 			_directional_wake_start_positions[index].min(
@@ -1903,6 +1990,7 @@ func _append_directional_wake_scratch(
 	count: int,
 	navigable: bool,
 	deformation_active: bool,
+	persistent_foam_enabled: bool,
 	foam_history_duration: float
 ) -> void:
 	var available := (
@@ -1938,6 +2026,9 @@ func _append_directional_wake_scratch(
 		)
 		_directional_wake_deformation_weights[target_index] = (
 			1.0 if deformation_active else 0.0
+		)
+		_directional_wake_persistent_foam_weights[target_index] = (
+			1.0 if persistent_foam_enabled else 0.0
 		)
 		_directional_wake_foam_history_durations[target_index] = maxf(
 			foam_history_duration,
@@ -2800,6 +2891,7 @@ func _push_all_parameters_to_material(material: ShaderMaterial) -> void:
 	_push_landing_impact_parameters(material)
 	_push_vehicle_interaction_parameters(material)
 	_push_calm_water_parameters(material)
+	_push_water_exclusion_parameters(material)
 	_push_event_wave_parameters(material)
 
 func _push_event_wave_parameters_to_all_materials() -> void:
@@ -2893,6 +2985,114 @@ func _push_calm_water_parameters(material: ShaderMaterial) -> void:
 		_calm_zone_extents_transitions
 	)
 	material.set_shader_parameter(&"calm_zone_strengths", _calm_zone_strengths)
+
+
+func _push_water_exclusion_parameters_to_all_materials() -> void:
+	for material in _all_ocean_materials():
+		_push_water_exclusion_parameters(material)
+	_water_exclusion_volumes_dirty = false
+
+
+func _push_water_exclusion_parameters(material: ShaderMaterial) -> void:
+	if material == null or material.shader == null:
+		return
+	if not _shader_supports_water_exclusion(material.shader):
+		return
+	material.set_shader_parameter(
+		&"water_exclusion_volume_count",
+		_water_exclusion_volume_count
+	)
+	material.set_shader_parameter(
+		&"water_exclusion_centers_radii",
+		_water_exclusion_centers_radii
+	)
+	material.set_shader_parameter(
+		&"water_exclusion_inverse_rows_x",
+		_water_exclusion_inverse_rows_x
+	)
+	material.set_shader_parameter(
+		&"water_exclusion_inverse_rows_y",
+		_water_exclusion_inverse_rows_y
+	)
+	material.set_shader_parameter(
+		&"water_exclusion_inverse_rows_z",
+		_water_exclusion_inverse_rows_z
+	)
+
+
+func _shader_supports_water_exclusion(shader: Shader) -> bool:
+	var shader_id := shader.get_instance_id()
+	if _water_exclusion_shader_support_cache.has(shader_id):
+		return bool(_water_exclusion_shader_support_cache[shader_id])
+	for uniform_data: Dictionary in shader.get_shader_uniform_list():
+		if uniform_data.get("name", "") == "water_exclusion_volume_count":
+			_water_exclusion_shader_support_cache[shader_id] = true
+			return true
+	_water_exclusion_shader_support_cache[shader_id] = false
+	return false
+
+
+func _rebuild_water_exclusion_volumes() -> void:
+	if (
+		_water_exclusion_centers_radii.size()
+		!= MAX_WATER_EXCLUSION_VOLUMES
+	):
+		_initialize_water_exclusion_volumes()
+	_water_exclusion_centers_radii.fill(Vector4.ZERO)
+	_water_exclusion_inverse_rows_x.fill(Vector4.ZERO)
+	_water_exclusion_inverse_rows_y.fill(Vector4.ZERO)
+	_water_exclusion_inverse_rows_z.fill(Vector4.ZERO)
+	_water_exclusion_volume_count = 0
+	for index in range(_water_exclusion_volume_refs.size() - 1, -1, -1):
+		if _water_exclusion_volume_refs[index].get_ref() == null:
+			_water_exclusion_volume_refs.remove_at(index)
+	for volume_ref: WeakRef in _water_exclusion_volume_refs:
+		if _water_exclusion_volume_count >= MAX_WATER_EXCLUSION_VOLUMES:
+			break
+		var volume := volume_ref.get_ref() as Node3D
+		if not is_instance_valid(volume) or not bool(volume.get(&"enabled")):
+			continue
+		var volume_size: Vector3 = volume.get(&"size")
+		volume_size = Vector3(
+			maxf(volume_size.x, 0.001),
+			maxf(volume_size.y, 0.001),
+			maxf(volume_size.z, 0.001)
+		)
+		var unit_box_to_world := volume.global_transform.scaled_local(volume_size)
+		if absf(unit_box_to_world.basis.determinant()) <= 0.000001:
+			continue
+		var world_to_unit_box := unit_box_to_world.affine_inverse()
+		var output_index := _water_exclusion_volume_count
+		var radius := 0.5 * (
+			unit_box_to_world.basis.x.length()
+				+ unit_box_to_world.basis.y.length()
+				+ unit_box_to_world.basis.z.length()
+		)
+		_water_exclusion_centers_radii[output_index] = Vector4(
+			unit_box_to_world.origin.x,
+			unit_box_to_world.origin.y,
+			unit_box_to_world.origin.z,
+			radius
+		)
+		_water_exclusion_inverse_rows_x[output_index] = Vector4(
+			world_to_unit_box.basis.x.x,
+			world_to_unit_box.basis.y.x,
+			world_to_unit_box.basis.z.x,
+			world_to_unit_box.origin.x
+		)
+		_water_exclusion_inverse_rows_y[output_index] = Vector4(
+			world_to_unit_box.basis.x.y,
+			world_to_unit_box.basis.y.y,
+			world_to_unit_box.basis.z.y,
+			world_to_unit_box.origin.y
+		)
+		_water_exclusion_inverse_rows_z[output_index] = Vector4(
+			world_to_unit_box.basis.x.z,
+			world_to_unit_box.basis.y.z,
+			world_to_unit_box.basis.z.z,
+			world_to_unit_box.origin.z
+		)
+		_water_exclusion_volume_count += 1
 
 
 func _rebuild_calm_water_zones() -> void:
@@ -3422,6 +3622,10 @@ func _push_directional_wake_parameters(material: ShaderMaterial) -> void:
 		_directional_wake_deformation_weights
 	)
 	material.set_shader_parameter(
+		&"directional_wake_persistent_foam_weights",
+		_directional_wake_persistent_foam_weights
+	)
+	material.set_shader_parameter(
 		&"directional_wake_foam_history_durations",
 		_directional_wake_foam_history_durations
 	)
@@ -3433,7 +3637,7 @@ func _push_directional_wake_parameters(material: ShaderMaterial) -> void:
 		&"directional_wake_bounds_max",
 		_directional_wake_bounds_max
 	)
-	_interaction_uniform_write_count += 12
+	_interaction_uniform_write_count += 13
 
 
 func _push_hull_pressure_parameters(material: ShaderMaterial) -> void:

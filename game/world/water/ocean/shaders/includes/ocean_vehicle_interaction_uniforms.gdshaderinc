@@ -38,6 +38,7 @@ uniform float directional_wake_widths[16];
 uniform float directional_wake_biases[16];
 uniform float directional_wake_speeds[16];
 uniform float directional_wake_deformation_weights[16];
+uniform float directional_wake_persistent_foam_weights[16];
 uniform float directional_wake_foam_history_durations[16];
 // Logical-space bounds of every currently visible wake packet. Ocean vertices
 // outside this rectangle return before entering the expensive segment loop.

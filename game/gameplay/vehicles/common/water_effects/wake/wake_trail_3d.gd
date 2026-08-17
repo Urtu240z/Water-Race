@@ -58,6 +58,9 @@ var physics_enabled: bool = false
 ## The traffic boat uses the cheaper local CPU sampler for navigation, while
 ## the directional shader remains visual-only to avoid evaluating it twice.
 var directional_global_physics_enabled: bool = true
+## Only traffic boats opt into the long world-space foam channel. The player
+## JetSki keeps the original ripple/interaction foam path.
+var directional_persistent_foam_enabled: bool = false
 ## Allows Ocean3D to keep rendering deposited foam while suppressing the
 ## displacement packet belonging to an off-screen traffic boat.
 var directional_deformation_active: bool = true
@@ -68,6 +71,10 @@ var local_visual_center_turbulence_height: float = 0.0
 var local_visual_arm_half_width_multiplier: float = 0.34
 var local_physics_height_multiplier: float = 2.4
 var local_physics_lifetime: float = 6.5
+## Traffic wakes can use a coarser centerline for buoyancy than the visual
+## history. This keeps the physical wave smooth while avoiding dozens of
+## redundant closest-segment tests for every JetSki water probe.
+var local_physics_segment_stride: int = 1
 var history_capture_enabled: bool = true
 var visual_enabled: bool = true
 ## Disables the detached foam ribbon while preserving wake history for ocean
@@ -160,6 +167,7 @@ var _external_horizontal_speed: float = 0.0
 var _external_forward_direction: Vector3 = Vector3.FORWARD
 var _physics_bounds := Rect2()
 var _physics_bounds_dirty: bool = true
+var _physics_first_recent_sample_index: int = 0
 var _runtime_physics_active: bool = true
 var _base_surface_sample_scratch := WaterSample3D.new()
 var _mesh_head_anchor_position: Vector3 = Vector3.ZERO
@@ -201,6 +209,7 @@ func configure(
 	visual_enabled = true
 	_runtime_physics_active = true
 	directional_global_physics_enabled = true
+	directional_persistent_foam_enabled = false
 	directional_deformation_active = true
 	directional_source_active = true
 	_vehicle = vehicle
@@ -389,6 +398,7 @@ func clear_trail(suppress_next_tick: bool = true) -> void:
 	foam_intensity = 0.0
 	_physics_bounds = Rect2()
 	_physics_bounds_dirty = true
+	_physics_first_recent_sample_index = 0
 
 
 func apply_world_rebase(shift: Vector3) -> void:
@@ -438,21 +448,31 @@ func sample_simplified_wake_height(world_position: Vector3) -> float:
 	var best_ratio: float = 0.0
 	var best_distance_squared: float = INF
 	var lifetime := maxf(minf(wake_lifetime, local_physics_lifetime), 0.1)
-	for index in range(_samples.size() - 1):
+	var stride := maxi(local_physics_segment_stride, 1)
+	var index := clampi(
+		_physics_first_recent_sample_index,
+		0,
+		maxi(_samples.size() - 1, 0)
+	)
+	while index < _samples.size() - 1:
 		var candidate_older := _samples[index]
-		var candidate_newer := _samples[index + 1]
+		var newer_index := mini(index + stride, _samples.size() - 1)
+		var candidate_newer := _samples[newer_index]
 		if candidate_older.age > lifetime and candidate_newer.age > lifetime:
+			index = newer_index
 			continue
 		if (
 			candidate_newer.break_before
 			or candidate_newer.segment_id != candidate_older.segment_id
 		):
+			index = newer_index
 			continue
 		var start := Vector2(candidate_older.position.x, candidate_older.position.z)
 		var finish := Vector2(candidate_newer.position.x, candidate_newer.position.z)
 		var segment := finish - start
 		var segment_length_squared := segment.length_squared()
 		if segment_length_squared <= 0.0001:
+			index = newer_index
 			continue
 		var ratio := clampf(
 			(query - start).dot(segment) / segment_length_squared,
@@ -464,10 +484,14 @@ func sample_simplified_wake_height(world_position: Vector3) -> float:
 			best_distance_squared = distance_squared
 			best_index = index
 			best_ratio = ratio
+		index = newer_index
 	if best_index < 0:
 		return 0.0
 	var selected_older := _samples[best_index]
-	var selected_newer := _samples[best_index + 1]
+	var selected_newer := _samples[mini(
+		best_index + stride,
+		_samples.size() - 1
+	)]
 	var age := lerpf(selected_older.age, selected_newer.age, best_ratio)
 	if age < 0.12 or age >= lifetime:
 		return 0.0
@@ -538,8 +562,17 @@ func _ensure_physics_bounds() -> void:
 		minf(wake_lifetime, local_physics_lifetime),
 		0.1
 	)
+	_physics_first_recent_sample_index = _samples.size()
+	for index in _samples.size():
+		if _samples[index].age <= physics_lifetime:
+			_physics_first_recent_sample_index = index
+			break
+	if _physics_first_recent_sample_index >= _samples.size():
+		_physics_bounds = Rect2()
+		return
 	var has_recent_sample := false
-	for sample in _samples:
+	for index in range(_physics_first_recent_sample_index, _samples.size()):
+		var sample := _samples[index]
 		if sample.age > physics_lifetime:
 			continue
 		has_recent_sample = true
@@ -757,6 +790,11 @@ func fill_directional_shader_segments(
 func _age_samples(delta: float) -> void:
 	for sample in _samples:
 		sample.age += delta
+	# Recent physics samples are a shorter moving window than the retained
+	# visual/foam history. Rebuild its bounds and first index once this tick,
+	# then all water probes reuse the result.
+	if physics_enabled and _external_source_enabled:
+		_physics_bounds_dirty = true
 	var retention_lifetime := wake_lifetime
 	if legacy_global_deformation_enabled:
 		retention_lifetime = maxf(wake_lifetime, directional_history_lifetime)

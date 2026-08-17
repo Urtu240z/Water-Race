@@ -50,6 +50,7 @@ uniform int ripple_effective_count : hint_range(1, 12, 1) = 12;
 
 #include "res://world/water/ocean/shaders/includes/ocean_vehicle_interaction_uniforms.gdshaderinc"
 #include "res://world/water/ocean/shaders/includes/ocean_event_wave_uniforms.gdshaderinc"
+#include "res://world/water/ocean/shaders/includes/ocean_water_exclusion.gdshaderinc"
 
 group_uniforms SurfaceDetail;
 uniform sampler2D surface_normal_texture_a : hint_normal, repeat_enable, filter_linear_mipmap_anisotropic;
@@ -141,7 +142,7 @@ group_uniforms;
 varying float interpolated_wave_height;
 varying float interpolated_wave_slope;
 varying float interpolated_ripple_energy;
-varying float interpolated_vehicle_interaction_energy;
+varying float interpolated_traffic_foam_energy;
 varying vec2 interpolated_world_xz;
 varying float interpolated_ocean_ring_id;
 
@@ -297,7 +298,7 @@ float sample_calm_macro_height(vec2 world_xz) {
 
 vec4 sample_wave_state(
 	vec2 world_xz,
-	out float vehicle_interaction_energy
+	out float traffic_foam_energy
 ) {
 	vec2 logical_xz = world_xz + ocean_logical_origin_offset_xz;
 	float step_size = max(geometry_normal_step, 0.05);
@@ -348,10 +349,15 @@ vec4 sample_wave_state(
 		vehicle_interaction_clipmap_distance,
 		ripple_distance
 	);
-	vec4 interaction = interaction_scale > 0.0001
-		? sample_vehicle_interaction_state(logical_xz)
-		: vec4(0.0);
-	vehicle_interaction_energy = interaction.w * interaction_scale;
+	float persistent_foam_energy = 0.0;
+	vec4 interaction = vec4(0.0);
+	if (interaction_scale > 0.0001) {
+		interaction = sample_vehicle_interaction_state(
+			logical_xz,
+			persistent_foam_energy
+		);
+	}
+	traffic_foam_energy = persistent_foam_energy * interaction_scale;
 	vec3 event_wave = sample_event_wave_state(logical_xz);
 	float ripple_weight = interaction_ripple_weight();
 	return vec4(
@@ -363,24 +369,27 @@ vec4 sample_wave_state(
 			+ ripple.yz * ripple_scale * ripple_weight
 			+ interaction.yz * interaction_scale
 			+ event_wave.yz,
-		ripple.w * ripple_scale * ripple_weight
+		max(
+			ripple.w * ripple_scale * ripple_weight,
+			interaction.w * interaction_scale
+		)
 	);
 }
 
 
 void vertex() {
 	vec2 world_xz = VERTEX.xz;
-	float vehicle_interaction_energy = 0.0;
+	float traffic_foam_energy = 0.0;
 	vec4 wave_state = sample_wave_state(
 		world_xz,
-		vehicle_interaction_energy
+		traffic_foam_energy
 	);
 	VERTEX.y = water_level + wave_state.x;
 	NORMAL = normalize(vec3(-wave_state.y, 1.0, -wave_state.z));
 	interpolated_wave_height = wave_state.x;
 	interpolated_wave_slope = length(wave_state.yz);
 	interpolated_ripple_energy = wave_state.w;
-	interpolated_vehicle_interaction_energy = vehicle_interaction_energy;
+	interpolated_traffic_foam_energy = traffic_foam_energy;
 	interpolated_world_xz = world_xz;
 	interpolated_ocean_ring_id = COLOR.r;
 }
@@ -452,6 +461,9 @@ void fragment() {
 		water_level + interpolated_wave_height,
 		interpolated_world_xz.y
 	);
+	if (water_position_is_excluded(world_fragment_position)) {
+		discard;
+	}
 	float camera_distance = length(CAMERA_POSITION_WORLD - world_fragment_position);
 	float camera_underwater_factor = 1.0 - smoothstep(
 		-0.05,
@@ -647,7 +659,7 @@ void fragment() {
 		* calm_scales.z;
 	float ripple_foam = interpolated_ripple_energy * ripple_foam_strength;
 	float vehicle_wake_energy = clamp(
-		(interpolated_vehicle_interaction_energy - vehicle_wake_foam_start)
+		(interpolated_traffic_foam_energy - vehicle_wake_foam_start)
 			/ max(vehicle_wake_foam_end - vehicle_wake_foam_start, 0.001),
 		0.0,
 		1.0
@@ -657,7 +669,7 @@ void fragment() {
 	float vehicle_foam_noise = 0.5;
 	if (
 		foam_enabled
-		&& interpolated_vehicle_interaction_energy > vehicle_wake_foam_start * 0.25
+		&& interpolated_traffic_foam_energy > vehicle_wake_foam_start * 0.25
 		&& foam_distance_gate > 0.0001
 	) {
 		vec2 vehicle_foam_uv = logical_xz * (foam_macro_scale * 1.85)

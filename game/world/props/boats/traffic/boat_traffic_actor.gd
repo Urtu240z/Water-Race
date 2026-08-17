@@ -70,11 +70,6 @@ const MIN_SAMPLE_SEPARATION: float = 0.1
 
 @export_group("Collision")
 @export var collision_enabled: bool = true
-@export var collision_rotation_offset_degrees: Vector3 = Vector3(0.0, -152.4333, 0.0)
-@export var collision_main_size: Vector3 = Vector3(6.8, 3.2, 20.0)
-@export var collision_main_offset: Vector3 = Vector3(0.0, 0.2, 0.5)
-@export var collision_bow_size: Vector3 = Vector3(5.0, 2.6, 7.0)
-@export var collision_bow_offset: Vector3 = Vector3(0.0, 0.0, -10.5)
 
 @export_group("Debug")
 @export var debug_draw: bool = false
@@ -85,8 +80,9 @@ var _water_provider: WaterSurfaceProvider3D
 var _ocean: Ocean3D
 var _model_pivot: Node3D
 var _model_container: Node3D
-var _main_collision: CollisionShape3D
-var _bow_collision: CollisionShape3D
+var _model_collision: CollisionShape3D
+var _model_collision_import_transform := Transform3D.IDENTITY
+var _has_model_collision_import_transform: bool = false
 var _front_marker: Marker3D
 var _rear_marker: Marker3D
 var _left_marker: Marker3D
@@ -174,8 +170,7 @@ func _cache_nodes() -> void:
 	_path = _path_follow.get_parent() as Path3D if is_instance_valid(_path_follow) else null
 	_model_pivot = get_node_or_null("ModelPivot") as Node3D
 	_model_container = get_node_or_null("ModelPivot/ModelContainer") as Node3D
-	_main_collision = get_node_or_null("MainHullCollision") as CollisionShape3D
-	_bow_collision = get_node_or_null("BowCollision") as CollisionShape3D
+	_model_collision = get_node_or_null("ModelHullCollision") as CollisionShape3D
 	_front_marker = get_node_or_null("WaterSamples/Front") as Marker3D
 	_rear_marker = get_node_or_null("WaterSamples/Rear") as Marker3D
 	_left_marker = get_node_or_null("WaterSamples/Left") as Marker3D
@@ -379,6 +374,7 @@ func _configure_wake_trail() -> void:
 	_wake_trail.wake_full_speed = maxf(wake_minimum_speed + 6.0, speed_mps)
 	_wake_trail.wake_strength_multiplier = wake_visual_strength
 	_wake_trail.directional_strength_multiplier = directional_wake_strength
+	_wake_trail.directional_persistent_foam_enabled = true
 	_wake_trail.physics_enabled = navigable_wake_enabled
 	_wake_trail.legacy_global_deformation_enabled = legacy_global_deformation_enabled
 	_wake_trail.history_capture_enabled = true
@@ -390,6 +386,7 @@ func _configure_wake_trail() -> void:
 	_wake_trail.local_visual_arm_half_width_multiplier = 0.55
 	_wake_trail.local_physics_height_multiplier = 4.2
 	_wake_trail.local_physics_lifetime = 6.5
+	_wake_trail.local_physics_segment_stride = 2
 	_wake_trail.wake_fade_start_ratio = 0.48
 	_wake_trail.ribbon_render_enabled = false
 	_wake_trail.wake_surface_offset = 0.045
@@ -612,27 +609,12 @@ func _apply_marker_configuration() -> void:
 
 
 func _apply_collision_configuration() -> void:
-	var collision_basis := Basis.from_euler(
-		collision_rotation_offset_degrees * PI / 180.0
-	).orthonormalized()
-	if is_instance_valid(_main_collision):
-		_main_collision.disabled = not collision_enabled
-		_main_collision.transform = Transform3D(
-			collision_basis,
-			collision_basis * collision_main_offset
-		)
-		var main_shape := _main_collision.shape as BoxShape3D
-		if main_shape != null:
-			main_shape.size = collision_main_size.max(Vector3.ONE * 0.1)
-	if is_instance_valid(_bow_collision):
-		_bow_collision.disabled = not collision_enabled
-		_bow_collision.transform = Transform3D(
-			collision_basis,
-			collision_basis * collision_bow_offset
-		)
-		var bow_shape := _bow_collision.shape as BoxShape3D
-		if bow_shape != null:
-			bow_shape.size = collision_bow_size.max(Vector3.ONE * 0.1)
+	if not is_instance_valid(_model_collision):
+		return
+	_sync_model_collision_transform()
+	_model_collision.disabled = (
+		not collision_enabled or _model_collision.shape == null
+	)
 
 
 func _queue_model_rebuild() -> void:
@@ -646,6 +628,7 @@ func _rebuild_model() -> void:
 	_model_rebuild_queued = false
 	if not is_instance_valid(_model_container):
 		return
+	_clear_model_collision()
 	for child in _model_container.get_children():
 		_model_container.remove_child(child)
 		child.queue_free()
@@ -654,7 +637,59 @@ func _rebuild_model() -> void:
 	var model_instance := model_scene.instantiate()
 	model_instance.name = "BoatModel"
 	_model_container.add_child(model_instance)
+	_configure_collision_from_model(model_instance)
 	_prepare_model_tree(model_instance)
+
+
+func _clear_model_collision() -> void:
+	_has_model_collision_import_transform = false
+	_model_collision_import_transform = Transform3D.IDENTITY
+	if not is_instance_valid(_model_collision):
+		return
+	_model_collision.shape = null
+	_model_collision.disabled = true
+
+
+func _configure_collision_from_model(model_root: Node) -> void:
+	if not is_instance_valid(_model_collision):
+		return
+	var imported_collision := _find_imported_collision_shape(model_root)
+	if imported_collision == null or imported_collision.shape == null:
+		push_warning(
+			"BoatTrafficActor model has no imported -colonly collision shape."
+		)
+		return
+	_model_collision.shape = imported_collision.shape.duplicate(true)
+	_model_collision_import_transform = (
+		_model_pivot.global_transform.affine_inverse()
+			* imported_collision.global_transform
+	)
+	_has_model_collision_import_transform = true
+	_apply_collision_configuration()
+
+
+func _find_imported_collision_shape(node: Node) -> CollisionShape3D:
+	if node is CollisionShape3D:
+		var collision_shape := node as CollisionShape3D
+		if collision_shape.shape != null:
+			return collision_shape
+	for child in node.get_children():
+		var result := _find_imported_collision_shape(child)
+		if result != null:
+			return result
+	return null
+
+
+func _sync_model_collision_transform() -> void:
+	if (
+		not is_instance_valid(_model_collision)
+		or not is_instance_valid(_model_pivot)
+		or not _has_model_collision_import_transform
+	):
+		return
+	_model_collision.transform = (
+		_model_pivot.transform * _model_collision_import_transform
+	)
 
 
 func _prepare_model_tree(node: Node) -> void:
@@ -676,6 +711,7 @@ func _apply_model_transform() -> void:
 	_model_pivot.position = model_position_offset
 	_model_pivot.rotation_degrees = model_rotation_offset_degrees
 	_model_pivot.scale = model_scale.max(Vector3.ONE * 0.001)
+	_sync_model_collision_transform()
 
 
 func _update_debug_draw() -> void:

@@ -3,14 +3,6 @@
 [ext_resource type="Script" uid="uid://ce3n326xrj4q5" path="res://world/props/boats/traffic/boat_traffic_actor.gd" id="1_actor"]
 [ext_resource type="PackedScene" path="res://gameplay/vehicles/common/water_effects/wake/wake_trail_3d.tscn" id="2_wake"]
 
-[sub_resource type="BoxShape3D" id="BoxShape_main"]
-resource_local_to_scene = true
-size = Vector3(6.8, 3.2, 20)
-
-[sub_resource type="BoxShape3D" id="BoxShape_bow"]
-resource_local_to_scene = true
-size = Vector3(5, 2.6, 7)
-
 [sub_resource type="StandardMaterial3D" id="StandardMaterial_debug"]
 no_depth_test = true
 shading_mode = 0
@@ -29,13 +21,7 @@ transform = Transform3D(-0.1827985, 0, 0.3501567, 0, 0.395, 0, -0.3501567, 0, -0
 
 [node name="ModelContainer" type="Node3D" parent="ModelPivot" unique_id=1712853078]
 
-[node name="MainHullCollision" type="CollisionShape3D" parent="." unique_id=88629793]
-transform = Transform3D(-0.88647276, 0, -0.4627808, 0, 1, 0, 0.4627808, 0, -0.88647276, -0.2313904, 0.2, -0.44323638)
-shape = SubResource("BoxShape_main")
-
-[node name="BowCollision" type="CollisionShape3D" parent="." unique_id=1899565691]
-transform = Transform3D(-0.88647276, 0, -0.4627808, 0, 1, 0, 0.4627808, 0, -0.88647276, 4.8591986, 0, 9.307964)
-shape = SubResource("BoxShape_bow")
+[node name="ModelHullCollision" type="CollisionShape3D" parent="." unique_id=88629793]
 
 [node name="WaterSamples" type="Node3D" parent="." unique_id=1769637072]
 

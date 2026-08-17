@@ -98,6 +98,14 @@ func _run_validation() -> void:
 	var wake_runtime_status := wake.get_graphics_quality_debug_status() if wake != null else {}
 	var live_head_updates := int(wake_runtime_status.get("live_head_update_count", 0))
 	var mesh_rebuilds := int(wake_runtime_status.get("mesh_rebuild_count", 0))
+	var default_player_wake := WakeTrail3D.new()
+	_check(
+		wake != null
+			and wake.directional_persistent_foam_enabled
+			and not default_player_wake.directional_persistent_foam_enabled,
+		"Traffic foam is opt-in while the JetSki keeps its original foam channel"
+	)
+	default_player_wake.free()
 	_check(live_head_updates == 0, "Detached traffic-boat foam ribbon stays disabled")
 	_check(
 		mesh_rebuilds == 0,
@@ -120,29 +128,56 @@ func _run_validation() -> void:
 	_check(reverse_velocity.is_finite(), "Reverse mode keeps a finite controlled velocity")
 	actor.reverse = false
 
-	var main_collision := actor.get_node_or_null("MainHullCollision") as CollisionShape3D
-	var bow_collision := actor.get_node_or_null("BowCollision") as CollisionShape3D
-	_check(main_collision != null and main_collision.shape is BoxShape3D, "Main collision is a simple box")
-	_check(bow_collision != null and bow_collision.shape is BoxShape3D, "Bow collision is a simple box")
-	_check(actor.find_children("*", "StaticBody3D", true, false).is_empty(), "Imported concave StaticBody3D is removed")
+	var model_collision := (
+		actor.get_node_or_null("ModelHullCollision") as CollisionShape3D
+	)
+	var imported_hull_shape := (
+		model_collision.shape as ConcavePolygonShape3D
+		if model_collision != null
+		else null
+	)
+	var imported_hull_faces := (
+		imported_hull_shape.get_faces()
+		if imported_hull_shape != null
+		else PackedVector3Array()
+	)
+	_check(
+		imported_hull_shape != null and imported_hull_faces.size() >= 3,
+		"Traffic collision uses the model's imported -colonly hull"
+	)
+	_check(
+		actor.find_children("*", "StaticBody3D", true, false).is_empty(),
+		"Imported nested StaticBody3D is folded into the moving actor"
+	)
 	var physics_shape_count := PhysicsServer3D.body_get_shape_count(actor.get_rid())
-	_check(physics_shape_count == 2, "AnimatableBody3D registers both collision shapes")
-	var point_query := PhysicsPointQueryParameters3D.new()
+	_check(physics_shape_count == 1, "AnimatableBody3D registers one exact hull shape")
 	var physics_body_transform: Transform3D = PhysicsServer3D.body_get_state(
 		actor.get_rid(),
 		PhysicsServer3D.BODY_STATE_TRANSFORM
 	)
 	var physics_shape_transform := PhysicsServer3D.body_get_shape_transform(actor.get_rid(), 0)
-	point_query.position = (physics_body_transform * physics_shape_transform).origin
-	point_query.collision_mask = actor.collision_layer
-	point_query.collide_with_bodies = true
-	point_query.collide_with_areas = false
-	var point_hits := actor.get_world_3d().direct_space_state.intersect_point(point_query, 8)
 	var actor_was_hit := false
-	for hit in point_hits:
-		if hit.get("collider") == actor:
-			actor_was_hit = true
-			break
+	if imported_hull_faces.size() >= 3:
+		var local_a := imported_hull_faces[0]
+		var local_b := imported_hull_faces[1]
+		var local_c := imported_hull_faces[2]
+		var local_normal := (local_b - local_a).cross(local_c - local_a).normalized()
+		var local_center := (local_a + local_b + local_c) / 3.0
+		var shape_world_transform := physics_body_transform * physics_shape_transform
+		var world_center := shape_world_transform * local_center
+		var world_normal := (shape_world_transform.basis * local_normal).normalized()
+		var ray_query := PhysicsRayQueryParameters3D.create(
+			world_center + world_normal * 1.0,
+			world_center - world_normal * 1.0,
+			actor.collision_layer
+		)
+		ray_query.collide_with_bodies = true
+		ray_query.collide_with_areas = false
+		ray_query.hit_back_faces = true
+		var ray_hit := actor.get_world_3d().direct_space_state.intersect_ray(
+			ray_query
+		)
+		actor_was_hit = ray_hit.get("collider") == actor
 	_check(actor_was_hit, "JetSki collision layer can query the traffic body")
 
 	_check(wake != null and wake.sample_count >= 2 and wake.sample_count <= 128, "Foam history accumulates a bounded trail")
@@ -186,12 +221,23 @@ func _run_validation() -> void:
 			&"directional_wake_foam_history_durations"
 		)
 	)
+	var persistent_foam_weights: PackedFloat32Array = (
+		ocean_material.get_shader_parameter(
+			&"directional_wake_persistent_foam_weights"
+		)
+	)
 	_check(
 		ocean_material != null
 			and ocean_material.shader != null
 			and ocean_material.shader.code.contains("vehicle_wake_foam_strength")
-			and ocean_material.shader.code.contains("vehicle_foam_uv"),
-		"Ocean shader renders persistent vehicle-wake foam on its own surface"
+			and ocean_material.shader.code.contains("vehicle_foam_uv")
+			and ocean_material.shader.code.contains(
+				"interpolated_traffic_foam_energy"
+			)
+			and ocean_material.shader.code.contains(
+				"interaction.w * interaction_scale"
+			),
+		"Ocean shader isolates persistent traffic foam from ordinary ripple foam"
 	)
 	_check(
 		wake.wake_lifetime >= 19.5
@@ -207,7 +253,9 @@ func _run_validation() -> void:
 			and ocean.directional_wake_foam_end_width_multiplier >= 2.0
 			and ocean.directional_wake_foam_irregularity >= 0.4
 			and foam_history_durations.size() == 16
-			and foam_history_durations[0] >= wake.oldest_age - 0.2,
+			and foam_history_durations[0] >= wake.oldest_age - 0.2
+			and persistent_foam_weights.size() == 16
+			and persistent_foam_weights[0] > 0.99,
 		"Foam keeps a short wave lifetime and an irregular fading final quarter"
 	)
 	var bounds_min: Vector2 = ocean_material.get_shader_parameter(

@@ -5,8 +5,14 @@ vec2 interaction_safe_direction(vec2 direction, vec2 fallback) {
 }
 
 
-// x: height, yz: spatial derivatives, w: deformation energy.
-vec4 sample_directional_wake_state(vec2 logical_xz) {
+// x: height, yz: spatial derivatives, w: ordinary interaction energy.
+// Long-lived traffic foam is returned separately so it cannot alter the
+// original JetSki/rider foam path.
+vec4 sample_directional_wake_state(
+	vec2 logical_xz,
+	out float persistent_foam_energy
+) {
+	persistent_foam_energy = 0.0;
 	if (!directional_wake_enabled || directional_wake_active_count <= 0) {
 		return vec4(0.0);
 	}
@@ -41,6 +47,11 @@ vec4 sample_directional_wake_state(vec2 logical_xz) {
 			0.0,
 			1.0
 		);
+		float persistent_foam_weight = clamp(
+			directional_wake_persistent_foam_weights[index],
+			0.0,
+			1.0
+		);
 		// A second cheap gate keeps each vertex away from packet math belonging
 		// to distant parts of a curved trail. This is what makes several wake
 		// segments affordable without losing their continuous shape.
@@ -66,7 +77,7 @@ vec4 sample_directional_wake_state(vec2 logical_xz) {
 		) + coarse_age * coarse_speed
 			+ safe_wavelength * 1.65 + arm_width * 2.0;
 		float coarse_reach = max(
-			foam_reach,
+			foam_reach * persistent_foam_weight,
 			deformation_reach * deformation_weight
 		);
 		vec2 coarse_min = min(
@@ -132,75 +143,80 @@ vec4 sample_directional_wake_state(vec2 logical_xz) {
 			0.0,
 			2.0
 		);
-		// Foam is a separate world-space memory of the hull path. It does not
-		// follow the laterally propagating crest, so it remains where the boat
-		// passed. Hold it through foam_fade_start, then dissolve it until the
-		// total history duration expires.
-		float foam_history_duration = clamp(
-			directional_wake_foam_history_durations[index],
-			0.5,
-			duration
-		);
-		// Use 75% of the history actually present. While the trail grows, and if
-		// a very fast source reaches its point cap, its visible last quarter still
-		// fades and reaches the full widening instead of waiting for 20 seconds.
-		float foam_fade_start = min(
-			max(directional_wake_foam_fade_start, 0.0),
-			foam_history_duration * 0.75
-		);
-		float foam_entry_gate = smoothstep(0.04, 0.28, age);
-		// A linear tail envelope is intentionally used here. Applying this after
-		// the old threshold curve made most of the fade remain visually white
-		// until the final metres.
-		float foam_tail_alpha = 1.0 - clamp(
-			(age - foam_fade_start)
-				/ max(foam_history_duration - foam_fade_start, 0.001),
-			0.0,
-			1.0
-		);
-		float normalized_age = clamp(age / foam_history_duration, 0.0, 1.0);
-		float width_growth = mix(
-			1.0,
-			max(directional_wake_foam_end_width_multiplier, 1.0),
-			smoothstep(0.0, 1.0, normalized_age)
-		);
-		// Fixed world-space phases make the center drift and width variation
-		// irregular without swimming as simulation_time advances.
-		float irregular_phase_a = dot(closest_point, vec2(0.37, 0.21));
-		float irregular_phase_b = dot(closest_point, vec2(-0.19, 0.43));
-		float irregular_signal = sin(irregular_phase_a)
-			* 0.64 + sin(irregular_phase_b + 1.73) * 0.36;
-		float irregularity = clamp(directional_wake_foam_irregularity, 0.0, 0.5);
-		float center_drift = irregular_signal * initial_width * irregularity
-			* smoothstep(0.04, 0.65, normalized_age);
-		float width_variation = 1.0 + sin(
-			irregular_phase_a * 0.61 - irregular_phase_b * 0.47 + 0.83
-		) * irregularity * 0.55;
-		float trail_foam_width = max(
-			initial_width * 1.10 * width_growth * width_variation,
-			0.90
-		);
-		float normalized_lateral = abs(lateral - center_drift)
-			/ trail_foam_width;
-		float trail_foam_profile = 1.0 - smoothstep(
-			clamp(directional_wake_foam_lateral_fade_start, 0.0, 0.95),
-			1.0,
-			normalized_lateral
-		);
-		float foam_coverage = clamp(
-			trail_foam_profile
-				* clamp(wake_intensity * 0.72, 0.0, 1.0)
-				* foam_entry_gate * foam_tail_alpha * endpoint_gate,
-			0.0,
-			1.0
-		);
-		// Encode coverage across the exact range decoded by the ocean fragment.
-		// This prevents threshold saturation from hiding the first 24% of fade.
-		float trail_foam_signal = mix(0.035, 0.32, foam_coverage);
-		energy = max(
-			energy,
-			trail_foam_signal
-		);
+		if (persistent_foam_weight > 0.0001) {
+			// Foam is a separate world-space memory of the traffic hull path. It
+			// does not follow the laterally propagating crest and never feeds the
+			// ordinary JetSki interaction energy below.
+			float foam_history_duration = clamp(
+				directional_wake_foam_history_durations[index],
+				0.5,
+				duration
+			);
+			// Use 75% of the history actually present. While the trail grows, and
+			// if a fast source reaches its point cap, its visible last quarter still
+			// fades and reaches the full widening.
+			float foam_fade_start = min(
+				max(directional_wake_foam_fade_start, 0.0),
+				foam_history_duration * 0.75
+			);
+			float foam_entry_gate = smoothstep(0.04, 0.28, age);
+			float foam_tail_alpha = 1.0 - clamp(
+				(age - foam_fade_start)
+					/ max(foam_history_duration - foam_fade_start, 0.001),
+				0.0,
+				1.0
+			);
+			float normalized_age = clamp(
+				age / foam_history_duration,
+				0.0,
+				1.0
+			);
+			float width_growth = mix(
+				1.0,
+				max(directional_wake_foam_end_width_multiplier, 1.0),
+				smoothstep(0.0, 1.0, normalized_age)
+			);
+			// Fixed world-space phases make the center drift and width variation
+			// irregular without swimming as simulation_time advances.
+			float irregular_phase_a = dot(closest_point, vec2(0.37, 0.21));
+			float irregular_phase_b = dot(closest_point, vec2(-0.19, 0.43));
+			float irregular_signal = sin(irregular_phase_a)
+				* 0.64 + sin(irregular_phase_b + 1.73) * 0.36;
+			float irregularity = clamp(
+				directional_wake_foam_irregularity,
+				0.0,
+				0.5
+			);
+			float center_drift = irregular_signal * initial_width * irregularity
+				* smoothstep(0.04, 0.65, normalized_age);
+			float width_variation = 1.0 + sin(
+				irregular_phase_a * 0.61 - irregular_phase_b * 0.47 + 0.83
+			) * irregularity * 0.55;
+			float trail_foam_width = max(
+				initial_width * 1.10 * width_growth * width_variation,
+				0.90
+			);
+			float normalized_lateral = abs(lateral - center_drift)
+				/ trail_foam_width;
+			float trail_foam_profile = 1.0 - smoothstep(
+				clamp(directional_wake_foam_lateral_fade_start, 0.0, 0.95),
+				1.0,
+				normalized_lateral
+			);
+			float foam_coverage = clamp(
+				trail_foam_profile
+					* clamp(wake_intensity * 0.72, 0.0, 1.0)
+					* foam_entry_gate * foam_tail_alpha * endpoint_gate,
+				0.0,
+				1.0
+			);
+			// Encode coverage across the exact range decoded by the ocean fragment.
+			float trail_foam_signal = mix(0.035, 0.32, foam_coverage);
+			persistent_foam_energy = max(
+				persistent_foam_energy,
+				trail_foam_signal * persistent_foam_weight
+			);
+		}
 		// Once the source leaves the camera, retain only the cheap deposited
 		// foam calculation above. The physical packet is no longer evaluated.
 		if (deformation_weight <= 0.0001 || age >= deformation_duration) {
@@ -741,7 +757,11 @@ vec4 sample_hull_pressure_state(vec2 logical_xz) {
 }
 
 
-vec4 sample_vehicle_interaction_state(vec2 logical_xz) {
+vec4 sample_vehicle_interaction_state(
+	vec2 logical_xz,
+	out float persistent_foam_energy
+) {
+	persistent_foam_energy = 0.0;
 	bool include_wake = ocean_interaction_debug_mode == 0
 		|| ocean_interaction_debug_mode == 2
 		|| ocean_interaction_debug_mode == 4;
@@ -751,9 +771,15 @@ vec4 sample_vehicle_interaction_state(vec2 logical_xz) {
 	bool include_landing = ocean_interaction_debug_mode == 0
 		|| ocean_interaction_debug_mode == 1
 		|| ocean_interaction_debug_mode == 4;
-	vec4 wake_state = include_wake
-		? sample_directional_wake_state(logical_xz)
-		: vec4(0.0);
+	float wake_persistent_foam_energy = 0.0;
+	vec4 wake_state = vec4(0.0);
+	if (include_wake) {
+		wake_state = sample_directional_wake_state(
+			logical_xz,
+			wake_persistent_foam_energy
+		);
+	}
+	persistent_foam_energy = wake_persistent_foam_energy;
 	vec4 hull_state = include_hull
 		? sample_hull_pressure_state(logical_xz)
 		: vec4(0.0);

@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://world/water/ocean/water_exclusion_volume_3d.gd" id="1_volume"]
+
+[node name="WaterExclusionVolume3D" type="Node3D"]
+script = ExtResource("1_volume")
