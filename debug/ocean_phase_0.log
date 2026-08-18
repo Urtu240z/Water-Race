@@ -1,0 +1,169 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+
+========== WATER RACE LOAD TRACE ==========
+[    1.564 ms] GAME START                          +   1.564 ms
+[    2.338 ms] GRAPHICS_AUTOLOAD_READY_BEGIN       +   0.774 ms
+[    2.559 ms] GRAPHICS_PROFILES_LOAD_BEGIN        +   0.221 ms
+[    4.870 ms] GRAPHICS_PROFILES_LOADED            +   2.311 ms
+[    5.110 ms] GRAPHICS_INITIAL_APPLY_QUEUED       +   0.240 ms
+[    5.180 ms] GRAPHICS_AUTOLOAD_READY_END         +   0.070 ms
+[    5.241 ms] OCEAN_SURFACE_READY_BEGIN           +   0.061 ms
+[    5.297 ms] OCEAN_MESH_REBUILD_BEGIN #1         +   0.056 ms
+[    5.460 ms] OCEAN_MESH_CACHE_LOAD_BEGIN         +   0.163 ms
+[  116.071 ms] OCEAN_MESH_CACHE_LOAD_END           + 110.611 ms
+[  116.275 ms] OCEAN_MESH_CACHE_HIT                +   0.204 ms
+[  117.045 ms] OCEAN_MESH_CACHE_ASSIGN_BEGIN       +   0.770 ms
+[  117.309 ms] OCEAN_MESH_CACHE_ASSIGN_END         +   0.264 ms
+[  118.560 ms] OCEAN_BUILD_DEBUG_GUIDES_BEGIN      +   1.251 ms
+[  118.698 ms] OCEAN_BUILD_DEBUG_GUIDES_END        +   0.138 ms
+[  118.739 ms] OCEAN_MESH_REBUILD_END #1           +   0.041 ms
+[  118.779 ms] OCEAN_SURFACE_MESHES_ENSURED        +   0.040 ms
+[  118.830 ms] OCEAN_SURFACE_READY_END             +   0.051 ms
+[  118.870 ms] OCEAN_READY_BEGIN                   +   0.040 ms
+[  119.875 ms] OCEAN_CORE_READY                    +   1.005 ms
+[  119.970 ms] OCEAN_HEIGHT_MAPS_BEGIN             +   0.095 ms
+[  121.504 ms] OCEAN_HEIGHT_MAPS_READY             +   1.534 ms
+[  121.585 ms] OCEAN_READY_END                     +   0.081 ms
+[  696.617 ms] GRAPHICS_APPLY_BEGIN                + 575.032 ms
+[  696.931 ms] GRAPHICS_TARGETS_COLLECTED          +   0.314 ms
+[  697.837 ms] GRAPHICS_APPLY_END                  +   0.906 ms
+OCEAN_PHASE_0_BEGIN mode=full throughput_calls=1200 workload_observations=120
+OCEAN_PHASE_0_ROW section=existing_api scenario=empty path=fixed metric=sample_height mean=3.628 p95=4.350 p99=5.200 max=5.200 us_per_call
+OCEAN_PHASE_0_ROW section=existing_api scenario=empty path=fixed metric=sample_normal mean=13.848 p95=16.400 p99=17.250 max=17.250 us_per_call
+OCEAN_PHASE_0_ROW section=existing_api scenario=empty path=fixed metric=sample_water mean=24.521 p95=26.025 p99=26.475 max=26.475 us_per_call
+OCEAN_PHASE_0_ROW section=existing_api scenario=empty path=sequence metric=sample_height mean=3.725 p95=4.975 p99=5.975 max=5.975 us_per_call
+OCEAN_PHASE_0_ROW section=existing_api scenario=empty path=sequence metric=sample_normal mean=13.710 p95=15.600 p99=18.450 max=18.450 us_per_call
+OCEAN_PHASE_0_ROW section=existing_api scenario=empty path=sequence metric=sample_water mean=25.018 p95=29.125 p99=30.550 max=30.550 us_per_call
+OCEAN_PHASE_0_ROW section=existing_api scenario=empty path=sequence metric=physics_workload_4_queries mean=104.467 p95=135.000 p99=162.000 max=693.000 us_per_workload
+OCEAN_PHASE_0_ROW section=existing_api scenario=empty path=sequence metric=physics_workload_16_queries mean=399.892 p95=496.000 p99=561.000 max=660.000 us_per_workload
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=ripples_0 path=near_interaction metric=sample_height mean=3.819 p95=5.150 p99=7.675 max=7.675 us_per_call
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=ripples_0 path=near_interaction metric=physics_workload_4_queries mean=128.658 p95=163.000 p99=211.000 max=245.000 us_per_workload
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=ripples_0 path=near_interaction metric=physics_workload_16_queries mean=613.258 p95=863.000 p99=973.000 max=1026.000 us_per_workload
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=ripples_0 path=far_from_interaction metric=sample_height mean=5.281 p95=8.300 p99=11.150 max=11.150 us_per_call
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=ripples_0 path=far_from_interaction metric=physics_workload_4_queries mean=188.750 p95=248.000 p99=300.000 max=302.000 us_per_workload
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=ripples_0 path=far_from_interaction metric=physics_workload_16_queries mean=489.075 p95=733.000 p99=826.000 max=1124.000 us_per_workload
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=ripples_6 path=near_interaction metric=sample_height mean=10.436 p95=12.925 p99=13.600 max=13.600 us_per_call
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=ripples_6 path=near_interaction metric=physics_workload_4_queries mean=236.317 p95=312.000 p99=396.000 max=411.000 us_per_workload
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=ripples_6 path=near_interaction metric=physics_workload_16_queries mean=610.058 p95=736.000 p99=880.000 max=986.000 us_per_workload
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=ripples_6 path=far_from_interaction metric=sample_height mean=5.706 p95=7.600 p99=16.775 max=16.775 us_per_call
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=ripples_6 path=far_from_interaction metric=physics_workload_4_queries mean=276.608 p95=357.000 p99=453.000 max=534.000 us_per_workload
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=ripples_6 path=far_from_interaction metric=physics_workload_16_queries mean=781.133 p95=1079.000 p99=1260.000 max=1294.000 us_per_workload
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=ripples_12 path=near_interaction metric=sample_height mean=13.646 p95=16.450 p99=18.025 max=18.025 us_per_call
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=ripples_12 path=near_interaction metric=physics_workload_4_queries mean=223.850 p95=361.000 p99=372.000 max=374.000 us_per_workload
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=ripples_12 path=near_interaction metric=physics_workload_16_queries mean=762.108 p95=843.000 p99=950.000 max=983.000 us_per_workload
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=ripples_12 path=far_from_interaction metric=sample_height mean=6.695 p95=7.475 p99=9.250 max=9.250 us_per_call
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=ripples_12 path=far_from_interaction metric=physics_workload_4_queries mean=174.100 p95=185.000 p99=200.000 max=219.000 us_per_workload
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=ripples_12 path=far_from_interaction metric=physics_workload_16_queries mean=772.425 p95=1041.000 p99=1337.000 max=1347.000 us_per_workload
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=empty_recheck_after_ripples path=near_interaction metric=sample_height mean=7.571 p95=13.750 p99=16.100 max=16.100 us_per_call
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=empty_recheck_after_ripples path=near_interaction metric=physics_workload_4_queries mean=170.075 p95=247.000 p99=311.000 max=344.000 us_per_workload
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=empty_recheck_after_ripples path=near_interaction metric=physics_workload_16_queries mean=527.958 p95=713.000 p99=773.000 max=819.000 us_per_workload
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=empty_recheck_after_ripples path=far_from_interaction metric=sample_height mean=3.789 p95=5.300 p99=9.350 max=9.350 us_per_call
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=empty_recheck_after_ripples path=far_from_interaction metric=physics_workload_4_queries mean=139.733 p95=185.000 p99=214.000 max=289.000 us_per_workload
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=empty_recheck_after_ripples path=far_from_interaction metric=physics_workload_16_queries mean=672.350 p95=794.000 p99=865.000 max=865.000 us_per_workload
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=directional_wakes_0 path=near_interaction metric=sample_height mean=5.604 p95=7.225 p99=8.450 max=8.450 us_per_call
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=directional_wakes_0 path=near_interaction metric=physics_workload_4_queries mean=185.517 p95=253.000 p99=368.000 max=477.000 us_per_workload
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=directional_wakes_0 path=near_interaction metric=physics_workload_16_queries mean=417.142 p95=697.000 p99=786.000 max=910.000 us_per_workload
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=directional_wakes_0 path=far_from_interaction metric=sample_height mean=3.765 p95=6.275 p99=7.275 max=7.275 us_per_call
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=directional_wakes_0 path=far_from_interaction metric=physics_workload_4_queries mean=189.592 p95=251.000 p99=306.000 max=401.000 us_per_workload
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=directional_wakes_0 path=far_from_interaction metric=physics_workload_16_queries mean=488.692 p95=771.000 p99=940.000 max=961.000 us_per_workload
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=directional_wakes_4 path=near_interaction metric=sample_height mean=9.370 p95=16.300 p99=21.150 max=21.150 us_per_call
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=directional_wakes_4 path=near_interaction metric=physics_workload_4_queries mean=258.842 p95=363.000 p99=442.000 max=518.000 us_per_workload
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=directional_wakes_4 path=near_interaction metric=physics_workload_16_queries mean=609.417 p95=910.000 p99=996.000 max=1043.000 us_per_workload
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=directional_wakes_4 path=far_from_interaction metric=sample_height mean=4.603 p95=5.400 p99=5.925 max=5.925 us_per_call
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=directional_wakes_4 path=far_from_interaction metric=physics_workload_4_queries mean=167.983 p95=252.000 p99=315.000 max=388.000 us_per_workload
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=directional_wakes_4 path=far_from_interaction metric=physics_workload_16_queries mean=579.333 p95=926.000 p99=946.000 max=1032.000 us_per_workload
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=directional_wakes_8 path=near_interaction metric=sample_height mean=12.416 p95=14.975 p99=16.700 max=16.700 us_per_call
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=directional_wakes_8 path=near_interaction metric=physics_workload_4_queries mean=330.642 p95=457.000 p99=533.000 max=744.000 us_per_workload
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=directional_wakes_8 path=near_interaction metric=physics_workload_16_queries mean=692.750 p95=874.000 p99=914.000 max=1253.000 us_per_workload
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=directional_wakes_8 path=far_from_interaction metric=sample_height mean=5.502 p95=8.950 p99=9.600 max=9.600 us_per_call
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=directional_wakes_8 path=far_from_interaction metric=physics_workload_4_queries mean=275.475 p95=364.000 p99=438.000 max=458.000 us_per_workload
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=directional_wakes_8 path=far_from_interaction metric=physics_workload_16_queries mean=639.050 p95=882.000 p99=1085.000 max=1270.000 us_per_workload
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=directional_wakes_16 path=near_interaction metric=sample_height mean=13.693 p95=17.900 p99=19.125 max=19.125 us_per_call
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=directional_wakes_16 path=near_interaction metric=physics_workload_4_queries mean=258.033 p95=341.000 p99=445.000 max=611.000 us_per_workload
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=directional_wakes_16 path=near_interaction metric=physics_workload_16_queries mean=1046.783 p95=1281.000 p99=1370.000 max=1394.000 us_per_workload
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=directional_wakes_16 path=far_from_interaction metric=sample_height mean=7.593 p95=12.625 p99=13.250 max=13.250 us_per_call
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=directional_wakes_16 path=far_from_interaction metric=physics_workload_4_queries mean=305.467 p95=417.000 p99=472.000 max=553.000 us_per_workload
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=directional_wakes_16 path=far_from_interaction metric=physics_workload_16_queries mean=761.025 p95=932.000 p99=1035.000 max=1397.000 us_per_workload
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=empty_recheck_after_directional_wakes path=near_interaction metric=sample_height mean=5.651 p95=6.675 p99=6.925 max=6.925 us_per_call
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=empty_recheck_after_directional_wakes path=near_interaction metric=physics_workload_4_queries mean=188.233 p95=243.000 p99=293.000 max=305.000 us_per_workload
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=empty_recheck_after_directional_wakes path=near_interaction metric=physics_workload_16_queries mean=687.908 p95=844.000 p99=968.000 max=1002.000 us_per_workload
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=empty_recheck_after_directional_wakes path=far_from_interaction metric=sample_height mean=5.288 p95=7.525 p99=8.750 max=8.750 us_per_call
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=empty_recheck_after_directional_wakes path=far_from_interaction metric=physics_workload_4_queries mean=177.000 p95=255.000 p99=315.000 max=510.000 us_per_workload
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=empty_recheck_after_directional_wakes path=far_from_interaction metric=physics_workload_16_queries mean=553.608 p95=831.000 p99=872.000 max=912.000 us_per_workload
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=event_waves_0 path=near_interaction metric=sample_height mean=6.821 p95=6.975 p99=10.175 max=10.175 us_per_call
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=event_waves_0 path=near_interaction metric=physics_workload_4_queries mean=107.267 p95=145.000 p99=155.000 max=189.000 us_per_workload
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=event_waves_0 path=near_interaction metric=physics_workload_16_queries mean=391.358 p95=452.000 p99=522.000 max=715.000 us_per_workload
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=event_waves_0 path=far_from_interaction metric=sample_height mean=4.034 p95=6.500 p99=6.525 max=6.525 us_per_call
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=event_waves_0 path=far_from_interaction metric=physics_workload_4_queries mean=96.583 p95=112.000 p99=134.000 max=135.000 us_per_workload
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=event_waves_0 path=far_from_interaction metric=physics_workload_16_queries mean=483.717 p95=668.000 p99=725.000 max=729.000 us_per_workload
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=event_waves_2 path=near_interaction metric=sample_height mean=10.029 p95=11.900 p99=19.750 max=19.750 us_per_call
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=event_waves_2 path=near_interaction metric=physics_workload_4_queries mean=176.633 p95=270.000 p99=356.000 max=360.000 us_per_workload
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=event_waves_2 path=near_interaction metric=physics_workload_16_queries mean=605.975 p95=897.000 p99=997.000 max=1058.000 us_per_workload
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=event_waves_2 path=far_from_interaction metric=sample_height mean=5.029 p95=6.700 p99=10.550 max=10.550 us_per_call
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=event_waves_2 path=far_from_interaction metric=physics_workload_4_queries mean=256.217 p95=325.000 p99=362.000 max=374.000 us_per_workload
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=event_waves_2 path=far_from_interaction metric=physics_workload_16_queries mean=630.058 p95=1021.000 p99=1076.000 max=1119.000 us_per_workload
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=event_waves_4 path=near_interaction metric=sample_height mean=12.406 p95=14.475 p99=28.075 max=28.075 us_per_call
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=event_waves_4 path=near_interaction metric=physics_workload_4_queries mean=248.983 p95=347.000 p99=454.000 max=460.000 us_per_workload
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=event_waves_4 path=near_interaction metric=physics_workload_16_queries mean=797.958 p95=1113.000 p99=1273.000 max=1306.000 us_per_workload
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=event_waves_4 path=far_from_interaction metric=sample_height mean=6.654 p95=10.575 p99=15.400 max=15.400 us_per_call
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=event_waves_4 path=far_from_interaction metric=physics_workload_4_queries mean=232.875 p95=328.000 p99=346.000 max=497.000 us_per_workload
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=event_waves_4 path=far_from_interaction metric=physics_workload_16_queries mean=705.033 p95=765.000 p99=809.000 max=959.000 us_per_workload
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=empty_recheck_after_event_waves path=near_interaction metric=sample_height mean=7.464 p95=10.225 p99=13.950 max=13.950 us_per_call
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=empty_recheck_after_event_waves path=near_interaction metric=physics_workload_4_queries mean=190.667 p95=248.000 p99=293.000 max=302.000 us_per_workload
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=empty_recheck_after_event_waves path=near_interaction metric=physics_workload_16_queries mean=444.142 p95=627.000 p99=739.000 max=742.000 us_per_workload
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=empty_recheck_after_event_waves path=far_from_interaction metric=sample_height mean=3.648 p95=4.500 p99=4.550 max=4.550 us_per_call
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=empty_recheck_after_event_waves path=far_from_interaction metric=physics_workload_4_queries mean=181.783 p95=233.000 p99=300.000 max=322.000 us_per_workload
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=empty_recheck_after_event_waves path=far_from_interaction metric=physics_workload_16_queries mean=494.800 p95=721.000 p99=782.000 max=856.000 us_per_workload
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=calm_zones_0 path=near_interaction metric=sample_height mean=5.805 p95=6.800 p99=7.075 max=7.075 us_per_call
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=calm_zones_0 path=near_interaction metric=physics_workload_4_queries mean=144.900 p95=185.000 p99=224.000 max=267.000 us_per_workload
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=calm_zones_0 path=near_interaction metric=physics_workload_16_queries mean=545.467 p95=810.000 p99=887.000 max=913.000 us_per_workload
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=calm_zones_0 path=far_from_interaction metric=sample_height mean=3.740 p95=5.525 p99=6.125 max=6.125 us_per_call
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=calm_zones_0 path=far_from_interaction metric=physics_workload_4_queries mean=141.817 p95=188.000 p99=244.000 max=286.000 us_per_workload
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=calm_zones_0 path=far_from_interaction metric=physics_workload_16_queries mean=462.950 p95=739.000 p99=798.000 max=1012.000 us_per_workload
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=calm_zones_2 path=near_interaction metric=sample_height mean=6.654 p95=10.225 p99=10.300 max=10.300 us_per_call
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=calm_zones_2 path=near_interaction metric=physics_workload_4_queries mean=156.642 p95=213.000 p99=243.000 max=284.000 us_per_workload
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=calm_zones_2 path=near_interaction metric=physics_workload_16_queries mean=642.125 p95=1071.000 p99=1111.000 max=1323.000 us_per_workload
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=calm_zones_2 path=far_from_interaction metric=sample_height mean=5.920 p95=9.150 p99=13.600 max=13.600 us_per_call
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=calm_zones_2 path=far_from_interaction metric=physics_workload_4_queries mean=186.633 p95=279.000 p99=331.000 max=384.000 us_per_workload
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=calm_zones_2 path=far_from_interaction metric=physics_workload_16_queries mean=582.858 p95=650.000 p99=721.000 max=755.000 us_per_workload
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=calm_zones_4 path=near_interaction metric=sample_height mean=12.652 p95=15.850 p99=16.125 max=16.125 us_per_call
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=calm_zones_4 path=near_interaction metric=physics_workload_4_queries mean=229.100 p95=358.000 p99=376.000 max=387.000 us_per_workload
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=calm_zones_4 path=near_interaction metric=physics_workload_16_queries mean=844.017 p95=1174.000 p99=1381.000 max=1568.000 us_per_workload
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=calm_zones_4 path=far_from_interaction metric=sample_height mean=7.320 p95=10.100 p99=13.325 max=13.325 us_per_call
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=calm_zones_4 path=far_from_interaction metric=physics_workload_4_queries mean=199.158 p95=274.000 p99=289.000 max=291.000 us_per_workload
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=calm_zones_4 path=far_from_interaction metric=physics_workload_16_queries mean=801.675 p95=1095.000 p99=1212.000 max=1267.000 us_per_workload
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=empty_recheck_after_calm_zones path=near_interaction metric=sample_height mean=7.143 p95=8.475 p99=10.150 max=10.150 us_per_call
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=empty_recheck_after_calm_zones path=near_interaction metric=physics_workload_4_queries mean=187.383 p95=244.000 p99=266.000 max=275.000 us_per_workload
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=empty_recheck_after_calm_zones path=near_interaction metric=physics_workload_16_queries mean=464.683 p95=768.000 p99=994.000 max=1671.000 us_per_workload
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=empty_recheck_after_calm_zones path=far_from_interaction metric=sample_height mean=3.606 p95=4.550 p99=6.350 max=6.350 us_per_call
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=empty_recheck_after_calm_zones path=far_from_interaction metric=physics_workload_4_queries mean=174.783 p95=219.000 p99=286.000 max=290.000 us_per_workload
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=empty_recheck_after_calm_zones path=far_from_interaction metric=physics_workload_16_queries mean=542.708 p95=737.000 p99=781.000 max=801.000 us_per_workload
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=combined_typical path=near_interaction metric=sample_height mean=23.846 p95=30.625 p99=34.000 max=34.000 us_per_call
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=combined_typical path=near_interaction metric=physics_workload_4_queries mean=414.850 p95=635.000 p99=688.000 max=754.000 us_per_workload
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=combined_typical path=near_interaction metric=physics_workload_16_queries mean=1355.933 p95=1680.000 p99=1737.000 max=1875.000 us_per_workload
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=combined_typical path=far_from_interaction metric=sample_height mean=10.170 p95=12.525 p99=13.500 max=13.500 us_per_call
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=combined_typical path=far_from_interaction metric=physics_workload_4_queries mean=322.892 p95=539.000 p99=548.000 max=568.000 us_per_workload
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=combined_typical path=far_from_interaction metric=physics_workload_16_queries mean=1137.725 p95=1260.000 p99=1440.000 max=1452.000 us_per_workload
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=combined_maximum path=near_interaction metric=sample_height mean=32.606 p95=45.975 p99=46.875 max=46.875 us_per_call
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=combined_maximum path=near_interaction metric=physics_workload_4_queries mean=565.208 p95=652.000 p99=777.000 max=1137.000 us_per_workload
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=combined_maximum path=near_interaction metric=physics_workload_16_queries mean=2254.808 p95=2514.000 p99=2698.000 max=2930.000 us_per_workload
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=combined_maximum path=far_from_interaction metric=sample_height mean=16.338 p95=20.725 p99=20.725 max=20.725 us_per_call
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=combined_maximum path=far_from_interaction metric=physics_workload_4_queries mean=585.042 p95=858.000 p99=989.000 max=1176.000 us_per_workload
+OCEAN_PHASE_0_ROW section=interaction_scaling scenario=combined_maximum path=far_from_interaction metric=physics_workload_16_queries mean=1841.217 p95=2125.000 p99=2351.000 max=2637.000 us_per_workload
+OCEAN_PHASE_0_ROW section=runtime_maintenance scenario=combined_maximum path=not_spatial metric=expire_ripples mean=1.033 p95=1.150 p99=1.150 max=1.150 us_per_call
+OCEAN_PHASE_0_ROW section=runtime_maintenance scenario=combined_maximum path=not_spatial metric=expire_event_waves mean=2.150 p95=6.875 p99=6.875 max=6.875 us_per_call
+OCEAN_PHASE_0_ROW section=runtime_maintenance scenario=combined_maximum path=not_spatial metric=expire_landing_impacts mean=0.500 p95=0.575 p99=0.575 max=0.575 us_per_call
+OCEAN_PHASE_0_ROW section=runtime_maintenance scenario=directional_wakes_16_snapshot path=not_spatial metric=rebuild_directional_bounds mean=11.445 p95=36.150 p99=36.150 max=36.150 us_per_call
+OCEAN_PHASE_0_ROW section=runtime_maintenance scenario=combined_maximum path=not_spatial metric=push_ripple_uniforms mean=14.535 p95=22.875 p99=22.875 max=22.875 us_per_call
+OCEAN_PHASE_0_ROW section=runtime_maintenance scenario=combined_maximum path=not_spatial metric=push_event_wave_uniforms mean=393.730 p95=659.975 p99=659.975 max=659.975 us_per_call
+OCEAN_PHASE_0_ROW section=runtime_maintenance scenario=combined_maximum path=not_spatial metric=push_landing_impact_uniforms mean=6.360 p95=7.000 p99=7.000 max=7.000 us_per_call
+OCEAN_PHASE_0_ROW section=runtime_maintenance scenario=combined_maximum path=not_spatial metric=push_directional_wake_uniforms mean=1.513 p95=1.775 p99=1.775 max=1.775 us_per_call
+OCEAN_PHASE_0_ROW section=runtime_maintenance scenario=combined_maximum path=not_spatial metric=push_calm_zone_uniforms mean=0.890 p95=1.050 p99=1.050 max=1.050 us_per_call
+OCEAN_PHASE_0_ROWS=131
+OCEAN_PHASE_0_FAILURES=0
+OCEAN_PHASE_0_STABLE=false CONTROL_SPREAD=0.478
+OCEAN_PHASE_0_JSON=C:/Users/ehort/Documents/GODOT PROJECTS/Water Race/game/.godot/ocean_benchmarks/ocean_phase_0_full_2026-08-18T11-14-18.json
+OCEAN_PHASE_0_CSV=C:/Users/ehort/Documents/GODOT PROJECTS/Water Race/game/.godot/ocean_benchmarks/ocean_phase_0_full_2026-08-18T11-14-18.csv
+OCEAN_PHASE_0_ELAPSED_MSEC=11351.496
+OCEAN_PHASE_0_BENCHMARK=PASS

@@ -18,6 +18,10 @@ const QUICK_WARMUP_CALLS := 40
 const THROUGHPUT_CHUNK_SIZE := 40
 const POSITION_SEQUENCE_SIZE := 512
 const CPU_PRECONDITION_USEC := 2_000_000
+const STABILITY_CONTROL_QUERY_COUNT := 256
+const DEFAULT_STABILITY_CONTROL_OBSERVATIONS := 7
+const QUICK_STABILITY_CONTROL_OBSERVATIONS := 3
+const STABILITY_CONTROL_WARMUP_QUERIES := 32
 const MAXIMUM_CONTROL_MEDIAN_SPREAD := 0.25
 const MINIMUM_WORKLOAD_LINEARITY := 0.75
 const MAXIMUM_WORKLOAD_LINEARITY := 1.35
@@ -34,7 +38,9 @@ var _throughput_calls := DEFAULT_THROUGHPUT_CALLS
 var _workload_observations := DEFAULT_WORKLOAD_OBSERVATIONS
 var _maintenance_iterations := DEFAULT_MAINTENANCE_ITERATIONS
 var _warmup_calls := DEFAULT_WARMUP_CALLS
+var _stability_control_observations := DEFAULT_STABILITY_CONTROL_OBSERVATIONS
 var _rows: Array[Dictionary] = []
+var _stability_controls: Array[Dictionary] = []
 var _event_wave_owners: Array[Node] = []
 var _near_positions := PackedVector3Array()
 var _far_positions := PackedVector3Array()
@@ -71,12 +77,29 @@ func _run() -> void:
 			_workload_observations,
 		]
 	)
+	var existing_before := _measure_stability_control("existing_api_empty", "before")
 	_run_existing_api_baseline()
+	var existing_after := _measure_stability_control("existing_api_empty", "after")
+	_attach_local_control("existing_api", "empty", existing_before, existing_after)
 	await _cool_down()
 	await _run_interaction_scaling()
 	await _cool_down()
+	var maintenance_before := _measure_stability_control(
+		"runtime_maintenance_combined_maximum",
+		"before"
+	)
 	_run_runtime_maintenance()
 	_clear_all_fixtures()
+	var maintenance_after := _measure_stability_control(
+		"runtime_maintenance_combined_maximum",
+		"after"
+	)
+	_attach_local_control(
+		"runtime_maintenance",
+		"*",
+		maintenance_before,
+		maintenance_after
+	)
 	var report := _build_report()
 	var paths := _write_report(report)
 	_print_summary(paths)
@@ -98,6 +121,7 @@ func _apply_command_line_options() -> void:
 	_workload_observations = QUICK_WORKLOAD_OBSERVATIONS
 	_maintenance_iterations = QUICK_MAINTENANCE_ITERATIONS
 	_warmup_calls = QUICK_WARMUP_CALLS
+	_stability_control_observations = QUICK_STABILITY_CONTROL_OBSERVATIONS
 
 
 func _is_quick_run() -> bool:
@@ -343,40 +367,56 @@ func _measure_water_workload(
 
 func _run_interaction_scaling() -> void:
 	for count in [0, 6, 12]:
-		_configure_single_interaction("ripples", count)
-		await _measure_interaction_case("ripples_%d" % count)
-		await _cool_down()
-	await _measure_empty_recheck("after_ripples")
-	await _cool_down()
+		await _run_bracketed_interaction_case(
+			"ripples",
+			count,
+			"ripples_%d" % count
+		)
 	for count in [0, 4, 8, 16]:
-		_configure_single_interaction("directional_wakes", count)
-		await _measure_interaction_case("directional_wakes_%d" % count)
-		await _cool_down()
-	await _measure_empty_recheck("after_directional_wakes")
-	await _cool_down()
+		await _run_bracketed_interaction_case(
+			"directional_wakes",
+			count,
+			"directional_wakes_%d" % count
+		)
 	for count in [0, 2, 4]:
-		_configure_single_interaction("event_waves", count)
-		await _measure_interaction_case("event_waves_%d" % count)
-		await _cool_down()
-	await _measure_empty_recheck("after_event_waves")
-	await _cool_down()
+		await _run_bracketed_interaction_case(
+			"event_waves",
+			count,
+			"event_waves_%d" % count
+		)
 	for count in [0, 2, 4]:
-		_configure_single_interaction("calm_zones", count)
-		await _measure_interaction_case("calm_zones_%d" % count)
-		await _cool_down()
-	await _measure_empty_recheck("after_calm_zones")
-	await _cool_down()
-	_configure_combined_interactions(false)
-	await _measure_interaction_case("combined_typical")
-	await _cool_down()
-	_configure_combined_interactions(true)
-	await _measure_interaction_case("combined_maximum")
+		await _run_bracketed_interaction_case(
+			"calm_zones",
+			count,
+			"calm_zones_%d" % count
+		)
+	await _run_bracketed_combined_case(false, "combined_typical")
+	await _run_bracketed_combined_case(true, "combined_maximum")
 	_clear_all_fixtures()
 
 
-func _measure_empty_recheck(label: String) -> void:
+func _run_bracketed_interaction_case(
+	kind: String,
+	count: int,
+	scenario: String
+) -> void:
+	var before := _measure_stability_control(scenario, "before")
+	_configure_single_interaction(kind, count)
+	await _measure_interaction_case(scenario)
 	_clear_all_fixtures()
-	await _measure_interaction_case("empty_recheck_%s" % label)
+	var after := _measure_stability_control(scenario, "after")
+	_attach_local_control("interaction_scaling", scenario, before, after)
+	await _cool_down()
+
+
+func _run_bracketed_combined_case(maximum: bool, scenario: String) -> void:
+	var before := _measure_stability_control(scenario, "before")
+	_configure_combined_interactions(maximum)
+	await _measure_interaction_case(scenario)
+	_clear_all_fixtures()
+	var after := _measure_stability_control(scenario, "after")
+	_attach_local_control("interaction_scaling", scenario, before, after)
+	await _cool_down()
 
 
 func _cool_down() -> void:
@@ -444,7 +484,8 @@ func _measure_interaction_case(scenario: String) -> void:
 			"us_per_workload",
 			_measure_water_workload(positions, 16)
 		)
-		await _cool_down()
+		if path_name != "far_from_interaction":
+			await _cool_down()
 
 
 func _seed_ripples(count: int) -> void:
@@ -794,6 +835,113 @@ func _clear_event_waves() -> void:
 
 
 # ---------------------------------------------------------------------------
+# Phase 0.1: long empty controls and local normalization
+# ---------------------------------------------------------------------------
+
+func _measure_stability_control(scenario: String, side: String) -> Dictionary:
+	_clear_all_fixtures()
+	var sample := WaterSample3D.new()
+	var position_count := _near_positions.size()
+	for warmup_index in STABILITY_CONTROL_WARMUP_QUERIES:
+		_ocean.sample_water(
+			_near_positions[warmup_index % position_count],
+			sample
+		)
+		_sink_float += sample.signed_depth
+	var per_query_timings := PackedFloat64Array()
+	var sequence_index := 0
+	for _observation in _stability_control_observations:
+		var started := Time.get_ticks_usec()
+		for _query in STABILITY_CONTROL_QUERY_COUNT:
+			_ocean.sample_water(
+				_near_positions[sequence_index % position_count],
+				sample
+			)
+			_sink_float += sample.signed_depth
+			sequence_index += 1
+		var elapsed := Time.get_ticks_usec() - started
+		per_query_timings.append(
+			float(elapsed) / float(STABILITY_CONTROL_QUERY_COUNT)
+		)
+	var stats := _stats(
+		per_query_timings,
+		_stability_control_observations * STABILITY_CONTROL_QUERY_COUNT
+	)
+	var control := {
+		"scenario": scenario,
+		"side": side,
+		"query_count_per_block": STABILITY_CONTROL_QUERY_COUNT,
+		"warmup_queries": STABILITY_CONTROL_WARMUP_QUERIES,
+		"stats": stats,
+	}
+	_stability_controls.append(control)
+	print(
+		(
+			"OCEAN_PHASE_0_CONTROL scenario=%s side=%s blocks=%d "
+			+ "queries_per_block=%d median=%.3f p95=%.3f us_per_query"
+		)
+		% [
+			scenario,
+			side,
+			_stability_control_observations,
+			STABILITY_CONTROL_QUERY_COUNT,
+			float(stats.get("median", 0.0)),
+			float(stats.get("p95", 0.0)),
+		]
+	)
+	return control
+
+
+func _attach_local_control(
+	section: String,
+	scenario: String,
+	before: Dictionary,
+	after: Dictionary
+) -> void:
+	var before_stats := before.get("stats", {}) as Dictionary
+	var after_stats := after.get("stats", {}) as Dictionary
+	var before_median := float(before_stats.get("median", 0.0))
+	var after_median := float(after_stats.get("median", 0.0))
+	var reference := (before_median + after_median) * 0.5
+	var local_drift := 0.0
+	if reference > 0.0:
+		local_drift = absf(after_median - before_median) / reference
+	for row: Dictionary in _rows:
+		if String(row.get("section", "")) != section:
+			continue
+		if scenario != "*" and String(row.get("scenario", "")) != scenario:
+			continue
+		var local_control := {
+			"before_us_per_query": before_median,
+			"after_us_per_query": after_median,
+			"reference_us_per_query": reference,
+			"relative_drift": local_drift,
+		}
+		var query_count := _metric_query_count(String(row.get("metric", "")))
+		if query_count > 0 and reference > 0.0:
+			var row_stats := row.get("stats", {}) as Dictionary
+			var row_median_per_query := (
+				float(row_stats.get("median", 0.0)) / float(query_count)
+			)
+			local_control["row_median_us_per_query"] = row_median_per_query
+			local_control["normalized_median_per_query_ratio"] = (
+				row_median_per_query / reference
+			)
+		row["local_control"] = local_control
+
+
+func _metric_query_count(metric: String) -> int:
+	match metric:
+		"sample_water":
+			return 1
+		"physics_workload_4_queries":
+			return 4
+		"physics_workload_16_queries":
+			return 16
+	return 0
+
+
+# ---------------------------------------------------------------------------
 # Results and metadata
 # ---------------------------------------------------------------------------
 
@@ -866,17 +1014,21 @@ func _percentile(sorted: PackedFloat64Array, ratio: float) -> float:
 func _build_report() -> Dictionary:
 	_stability = _evaluate_stability()
 	return {
-		"schema": "ocean_phase_0_cpu_v1",
+		"schema": "ocean_phase_0_cpu_v2",
 		"metadata": _collect_metadata(),
 		"notes": [
 			"CPU benchmark only; no authoritative GPU timings are claimed.",
 			"Throughput percentiles describe per-chunk averages.",
 			"Physics workload percentiles describe complete 4- or 16-query units.",
+			"Only long empty sample_water controls determine session stability.",
+			"Each measured scenario stores its immediately adjacent empty controls and local normalization.",
+			"Four- and sixteen-query workload linearity is diagnostic and does not gate stability.",
 			"Landing-impact arrays are GPU visual state; their physical CPU effect is represented by ripples.",
 			"Directional query fixtures snapshot the exact bounded arrays consumed by Ocean3D.",
 			"Boat-traffic source collection and local-wake maintenance remain covered by the dedicated Gold City benchmark.",
 		],
 		"rows": _rows,
+		"stability_controls": _stability_controls,
 		"stability": _stability,
 		"failures": _failure_count,
 		"elapsed_ms": float(Time.get_ticks_usec() - _started_usec) / 1000.0,
@@ -909,6 +1061,9 @@ func _collect_metadata() -> Dictionary:
 		"workload_observations": _workload_observations,
 		"maintenance_iterations": _maintenance_iterations,
 		"warmup_calls": _warmup_calls,
+		"stability_control_query_count": STABILITY_CONTROL_QUERY_COUNT,
+		"stability_control_observations": _stability_control_observations,
+		"stability_control_warmup_queries": STABILITY_CONTROL_WARMUP_QUERIES,
 		"cpu_precondition_usec": CPU_PRECONDITION_USEC,
 		"cpu_precondition_calls": _precondition_calls,
 		"cpu_precondition_enabled": _has_user_argument("--precondition"),
@@ -935,20 +1090,8 @@ func _image_metadata(image: Image) -> Dictionary:
 
 func _evaluate_stability() -> Dictionary:
 	var control_medians := PackedFloat64Array()
-	for row: Dictionary in _rows:
-		if (
-			String(row.get("section", "")) != "interaction_scaling"
-			or String(row.get("path", "")) != "near_interaction"
-			or String(row.get("metric", "")) != "physics_workload_4_queries"
-		):
-			continue
-		var scenario := String(row.get("scenario", ""))
-		if not (
-			scenario.ends_with("_0")
-			or scenario.begins_with("empty_recheck_")
-		):
-			continue
-		var stats := row.get("stats", {}) as Dictionary
+	for control: Dictionary in _stability_controls:
+		var stats := control.get("stats", {}) as Dictionary
 		control_medians.append(float(stats.get("median", 0.0)))
 	var sorted_controls := control_medians.duplicate()
 	sorted_controls.sort()
@@ -980,16 +1123,14 @@ func _evaluate_stability() -> Dictionary:
 		control_medians.size() >= 8
 		and control_spread <= MAXIMUM_CONTROL_MEDIAN_SPREAD
 	)
-	var empty_linearity := float(linearity["existing_empty"])
-	stable = stable and (
-		empty_linearity >= MINIMUM_WORKLOAD_LINEARITY
-		and empty_linearity <= MAXIMUM_WORKLOAD_LINEARITY
-	)
 	return {
 		"stable": stable,
+		"gate_method": "long_empty_sample_water_blocks",
 		"control_count": control_medians.size(),
-		"control_medians_us": control_medians,
-		"control_reference_median_us": control_reference,
+		"queries_per_control_block": STABILITY_CONTROL_QUERY_COUNT,
+		"observations_per_control": _stability_control_observations,
+		"control_medians_us_per_query": control_medians,
+		"control_reference_median_us_per_query": control_reference,
 		"control_relative_spread": control_spread,
 		"maximum_control_relative_spread": MAXIMUM_CONTROL_MEDIAN_SPREAD,
 		"workload_linearity": linearity,
@@ -997,6 +1138,7 @@ func _evaluate_stability() -> Dictionary:
 			MINIMUM_WORKLOAD_LINEARITY,
 			MAXIMUM_WORKLOAD_LINEARITY
 		),
+		"workload_linearity_is_gate": false,
 	}
 
 
@@ -1065,29 +1207,26 @@ func _write_report(report: Dictionary) -> Dictionary:
 	else:
 		csv_file.store_line(
 			"section,scenario,path,metric,unit,observations,total_calls,"
-			+ "mean,min,median,p95,p99,max"
+			+ "mean,min,median,p95,p99,max,"
+			+ "local_empty_before_us_per_query,"
+			+ "local_empty_after_us_per_query,"
+			+ "local_empty_reference_us_per_query,"
+			+ "local_control_relative_drift,"
+			+ "normalized_median_per_query_ratio"
 		)
 		for row: Dictionary in _rows:
-			var stats := row["stats"] as Dictionary
-			csv_file.store_csv_line(
-				PackedStringArray(
-					[
-						String(row["section"]),
-						String(row["scenario"]),
-						String(row["path"]),
-						String(row["metric"]),
-						String(row["unit"]),
-						str(stats.get("observations", 0)),
-						str(stats.get("total_calls", 0)),
-						"%.6f" % float(stats.get("mean", 0.0)),
-						"%.6f" % float(stats.get("min", 0.0)),
-						"%.6f" % float(stats.get("median", 0.0)),
-						"%.6f" % float(stats.get("p95", 0.0)),
-						"%.6f" % float(stats.get("p99", 0.0)),
-						"%.6f" % float(stats.get("max", 0.0)),
-					]
-				)
-			)
+			csv_file.store_csv_line(_csv_row_fields(row))
+		for control: Dictionary in _stability_controls:
+			var control_row := {
+				"section": "stability_control",
+				"scenario": control.get("scenario", ""),
+				"path": control.get("side", ""),
+				"metric": "empty_sample_water_%d_queries"
+					% STABILITY_CONTROL_QUERY_COUNT,
+				"unit": "us_per_query",
+				"stats": control.get("stats", {}),
+			}
+			csv_file.store_csv_line(_csv_row_fields(control_row))
 		csv_file.close()
 	return {
 		"json": ProjectSettings.globalize_path(json_path),
@@ -1095,8 +1234,47 @@ func _write_report(report: Dictionary) -> Dictionary:
 	}
 
 
+func _csv_row_fields(row: Dictionary) -> PackedStringArray:
+	var stats := row.get("stats", {}) as Dictionary
+	var local_control := row.get("local_control", {}) as Dictionary
+	var normalized := ""
+	if local_control.has("normalized_median_per_query_ratio"):
+		normalized = "%.6f" % float(
+			local_control["normalized_median_per_query_ratio"]
+		)
+	return PackedStringArray(
+		[
+			String(row.get("section", "")),
+			String(row.get("scenario", "")),
+			String(row.get("path", "")),
+			String(row.get("metric", "")),
+			String(row.get("unit", "")),
+			str(stats.get("observations", 0)),
+			str(stats.get("total_calls", 0)),
+			"%.6f" % float(stats.get("mean", 0.0)),
+			"%.6f" % float(stats.get("min", 0.0)),
+			"%.6f" % float(stats.get("median", 0.0)),
+			"%.6f" % float(stats.get("p95", 0.0)),
+			"%.6f" % float(stats.get("p99", 0.0)),
+			"%.6f" % float(stats.get("max", 0.0)),
+			_csv_optional_float(local_control, "before_us_per_query"),
+			_csv_optional_float(local_control, "after_us_per_query"),
+			_csv_optional_float(local_control, "reference_us_per_query"),
+			_csv_optional_float(local_control, "relative_drift"),
+			normalized,
+		]
+	)
+
+
+func _csv_optional_float(values: Dictionary, key: String) -> String:
+	if not values.has(key):
+		return ""
+	return "%.6f" % float(values[key])
+
+
 func _print_summary(paths: Dictionary) -> void:
 	print("OCEAN_PHASE_0_ROWS=%d" % _rows.size())
+	print("OCEAN_PHASE_0_CONTROLS=%d" % _stability_controls.size())
 	print("OCEAN_PHASE_0_FAILURES=%d" % _failure_count)
 	print(
 		"OCEAN_PHASE_0_STABLE=%s CONTROL_SPREAD=%.3f"

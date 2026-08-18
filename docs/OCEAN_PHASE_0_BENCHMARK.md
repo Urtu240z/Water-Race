@@ -22,9 +22,11 @@ Interaction scaling is isolated for:
 - Calm zones: 0, 2, and 4
 - Combined typical and combined maximum snapshots
 
-Every interaction case uses deterministic near and far paths. Empty reference
-cases are repeated throughout the run so CPU-frequency or scheduler drift is
-visible instead of being mistaken for Ocean3D scaling.
+Every interaction case uses deterministic near and far paths. A long empty
+control is measured immediately before and after every scenario. Each control
+contains blocks of 256 consecutive `sample_water()` calls, making the stability
+decision far less sensitive to a single scheduler migration than the real
+four-query workloads.
 
 Landing-impact arrays are not included in CPU query scaling. Their dedicated
 state is evaluated by the water shader; the corresponding authoritative CPU
@@ -77,7 +79,17 @@ graphics profile, renderer, physics frequency, image layout, command line,
 iteration counts, and benchmark methodology.
 
 Throughput percentiles are per-chunk averages. Physics workload percentiles are
-complete four- or sixteen-query observations.
+complete four- or sixteen-query observations. Those real workloads are retained
+unchanged because they represent one and four JetSkis.
+
+The JSON stores all long controls separately and embeds the immediately
+adjacent before/after control values in each scenario row. The CSV contains the
+same controls plus these local-normalization columns:
+
+- Empty median immediately before and after the scenario
+- Their local reference average and relative drift
+- Scenario median per query divided by that local empty reference, where the
+  measured metric is `sample_water()` or a 4/16-query water workload
 
 ## Stability gate
 
@@ -94,17 +106,15 @@ must also produce:
 OCEAN_PHASE_0_STABLE=true
 ```
 
-The stability gate currently requires:
-
-- Eight empty-control medians to remain within a 25% relative spread.
-- The empty-ocean sixteen-query workload median to remain between 3x and 5.4x
-  its four-query median. Typical and maximum ratios remain recorded as useful
-  diagnostics, but they are not stability gates because sustained combined
-  work can change the CPU frequency regime within the timed workload.
+The stability gate uses only the medians of the long empty controls and requires
+them to remain within a 25% relative spread. The four- and sixteen-query
+workloads never decide whether a session is stable. Their linearity ratios are
+still stored as diagnostics.
 
 If the gate fails, keep the report as diagnostic evidence but do not compare it
-against later optimizations. Close background workloads, allow thermally
-constrained hardware to settle, and repeat the full run.
+against later optimizations. Do not loosen the 25% threshold merely to obtain a
+passing result; investigate the long-control data and the local before/after
+drift first.
 
 ## Deliberately separate work
 
