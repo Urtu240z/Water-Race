@@ -259,6 +259,9 @@ var _directional_wake_bounds_min := Vector2(1.0e20, 1.0e20)
 var _directional_wake_bounds_max := Vector2(-1.0e20, -1.0e20)
 var _directional_wake_physics_bounds_min := Vector2(1.0e20, 1.0e20)
 var _directional_wake_physics_bounds_max := Vector2(-1.0e20, -1.0e20)
+var _directional_wake_physics_bounds_intersection_min := Vector2(-1.0e20, -1.0e20)
+var _directional_wake_physics_bounds_intersection_max := Vector2(1.0e20, 1.0e20)
+var _directional_wake_segment_physics_bounds := PackedVector4Array()
 var _directional_wake_scratch_start_positions := PackedVector2Array()
 var _directional_wake_scratch_end_positions := PackedVector2Array()
 var _directional_wake_scratch_start_times := PackedFloat32Array()
@@ -1246,9 +1249,24 @@ func _sample_navigable_directional_wake_height(
 	var safe_wavelength := maxf(directional_wake_wavelength, 0.05)
 	var duration := maxf(directional_wake_deformation_duration, 0.05)
 	var arm_width := maxf(directional_wake_arm_width, 0.08)
+	var segment_culling_required := (
+		logical_xz.x < _directional_wake_physics_bounds_intersection_min.x
+		or logical_xz.y < _directional_wake_physics_bounds_intersection_min.y
+		or logical_xz.x > _directional_wake_physics_bounds_intersection_max.x
+		or logical_xz.y > _directional_wake_physics_bounds_intersection_max.y
+	)
 	for index in _directional_wake_active_count:
 		if _directional_wake_navigable[index] == 0:
 			continue
+		if segment_culling_required:
+			var segment_bounds := _directional_wake_segment_physics_bounds[index]
+			if (
+				logical_xz.x < segment_bounds.x
+				or logical_xz.y < segment_bounds.y
+				or logical_xz.x > segment_bounds.z
+				or logical_xz.y > segment_bounds.w
+			):
+				continue
 		var segment := (
 			_directional_wake_end_positions[index]
 			- _directional_wake_start_positions[index]
@@ -1650,6 +1668,9 @@ func _initialize_vehicle_interactions() -> void:
 	_directional_wake_persistent_foam_weights.resize(MAX_DIRECTIONAL_WAKE_SEGMENTS)
 	_directional_wake_foam_history_durations.resize(MAX_DIRECTIONAL_WAKE_SEGMENTS)
 	_directional_wake_navigable.resize(MAX_DIRECTIONAL_WAKE_SEGMENTS)
+	_directional_wake_segment_physics_bounds.resize(
+		MAX_DIRECTIONAL_WAKE_SEGMENTS
+	)
 	_directional_wake_scratch_start_positions.resize(MAX_DIRECTIONAL_WAKE_SEGMENTS)
 	_directional_wake_scratch_end_positions.resize(MAX_DIRECTIONAL_WAKE_SEGMENTS)
 	_directional_wake_scratch_start_times.resize(MAX_DIRECTIONAL_WAKE_SEGMENTS)
@@ -1670,6 +1691,9 @@ func _initialize_vehicle_interactions() -> void:
 	_directional_wake_persistent_foam_weights.fill(0.0)
 	_directional_wake_foam_history_durations.fill(0.0)
 	_directional_wake_navigable.fill(0)
+	_directional_wake_segment_physics_bounds.fill(
+		Vector4(1.0e20, 1.0e20, -1.0e20, -1.0e20)
+	)
 	_directional_wake_scratch_start_positions.fill(Vector2.ZERO)
 	_directional_wake_scratch_end_positions.fill(Vector2.ZERO)
 	_directional_wake_scratch_start_times.fill(-INF)
@@ -1934,6 +1958,11 @@ func _clear_directional_wake_output() -> void:
 	_directional_wake_bounds_max = Vector2(-1.0e20, -1.0e20)
 	_directional_wake_physics_bounds_min = Vector2(1.0e20, 1.0e20)
 	_directional_wake_physics_bounds_max = Vector2(-1.0e20, -1.0e20)
+	_directional_wake_physics_bounds_intersection_min = Vector2(-1.0e20, -1.0e20)
+	_directional_wake_physics_bounds_intersection_max = Vector2(1.0e20, 1.0e20)
+	_directional_wake_segment_physics_bounds.fill(
+		Vector4(1.0e20, 1.0e20, -1.0e20, -1.0e20)
+	)
 	_directional_wake_start_positions.fill(Vector2.ZERO)
 	_directional_wake_end_positions.fill(Vector2.ZERO)
 	_directional_wake_start_times.fill(-INF)
@@ -2005,18 +2034,40 @@ func _update_directional_wake_bounds() -> void:
 				safe_arm_width
 			)
 			var physical_expansion := Vector2(physical_reach, physical_reach)
+			var segment_physics_bounds_min := (
+				_directional_wake_start_positions[index].min(
+					_directional_wake_end_positions[index]
+				) - physical_expansion
+			)
+			var segment_physics_bounds_max := (
+				_directional_wake_start_positions[index].max(
+					_directional_wake_end_positions[index]
+				) + physical_expansion
+			)
+			_directional_wake_segment_physics_bounds[index] = Vector4(
+				segment_physics_bounds_min.x,
+				segment_physics_bounds_min.y,
+				segment_physics_bounds_max.x,
+				segment_physics_bounds_max.y
+			)
+			_directional_wake_physics_bounds_intersection_min = (
+				_directional_wake_physics_bounds_intersection_min.max(
+					segment_physics_bounds_min
+				)
+			)
+			_directional_wake_physics_bounds_intersection_max = (
+				_directional_wake_physics_bounds_intersection_max.min(
+					segment_physics_bounds_max
+				)
+			)
 			_directional_wake_physics_bounds_min = (
 				_directional_wake_physics_bounds_min.min(
-					_directional_wake_start_positions[index].min(
-						_directional_wake_end_positions[index]
-					) - physical_expansion
+					segment_physics_bounds_min
 				)
 			)
 			_directional_wake_physics_bounds_max = (
 				_directional_wake_physics_bounds_max.max(
-					_directional_wake_start_positions[index].max(
-						_directional_wake_end_positions[index]
-					) + physical_expansion
+					segment_physics_bounds_max
 				)
 			)
 

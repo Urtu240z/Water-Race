@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://dev/benchmarks/benchmark_ocean_phase_1b.gd" id="1_runner"]
+[ext_resource type="PackedScene" path="res://dev/benchmarks/benchmark_ocean_phase_0.tscn" id="2_phase_0"]
+
+[node name="BenchmarkOceanPhase1B" type="Node"]
+script = ExtResource("1_runner")
+
+[node name="BenchmarkOceanPhase0" parent="." instance=ExtResource("2_phase_0")]
+auto_run = false
+quit_when_finished = false
