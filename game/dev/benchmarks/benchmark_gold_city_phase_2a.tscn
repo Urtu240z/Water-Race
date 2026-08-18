@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://dev/benchmarks/benchmark_gold_city_phase_2a.gd" id="1_runner"]
+
+[node name="BenchmarkGoldCityPhase2A" type="Node"]
+script = ExtResource("1_runner")
