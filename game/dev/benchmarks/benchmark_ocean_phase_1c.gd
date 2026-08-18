@@ -49,6 +49,15 @@ func _run() -> void:
 	if traffic_actors.size() != 3:
 		_fail("Expected 3 Gold City traffic actors; found %d." % traffic_actors.size())
 		return
+	var fast_path_ocean_ok := true
+	for actor: BoatTrafficActor in traffic_actors:
+		if not is_instance_valid(actor.get(&"_ocean")):
+			fast_path_ocean_ok = false
+			break
+	if not fast_path_ocean_ok:
+		_fail("Gold City traffic actors did not resolve an Ocean3D fast path.")
+		return
+	print("OCEAN_PHASE_1C_FASTPATH=ocean3d actors=%d" % traffic_actors.size())
 	for actor: BoatTrafficActor in traffic_actors:
 		actor.camera_visibility_optimization_enabled = false
 		actor.call(&"_set_camera_effects_active", true)
@@ -149,7 +158,8 @@ func _run() -> void:
 	for pair: Dictionary in pairs:
 		if bool(pair["both_valid"]):
 			valid_pair_count += 1
-	var pooled := _pool(rounds)
+	var pooled := _pool(_valid_pair_rounds(pairs))
+	var pooled_unfiltered := _pool(rounds)
 
 	var frequency := _frequency_summary(trigger_counts, traffic_actors)
 	var estimated_saved_us_per_second := (
@@ -172,6 +182,7 @@ func _run() -> void:
 			"maximum_local_drift": MAXIMUM_LOCAL_DRIFT,
 			"old_workload": "4x sample_water() per boat water-target update",
 			"new_workload": "4x sample_height() per boat water-target update",
+			"gold_city_resolved_fast_path": "ocean3d",
 		},
 		"snapshot": _snapshot_metadata(ocean, boat_queries),
 		"regression": regression_rows,
@@ -179,6 +190,7 @@ func _run() -> void:
 		"timing_rounds": rounds,
 		"timing_pairs": pairs,
 		"pooled": pooled.duplicate(true),
+		"pooled_unfiltered": pooled_unfiltered.duplicate(true),
 		"pooled_valid_pair_count": valid_pair_count,
 		"frequency": frequency,
 		"estimated_saved_us_per_second": estimated_saved_us_per_second,
@@ -200,6 +212,16 @@ func _run() -> void:
 			float(pooled["new_normalized_median_ratio"]),
 			float(pooled["pooled_reduction_percent"]),
 			valid_pair_count,
+		]
+	)
+	print(
+		"OCEAN_PHASE_1C_POOLED_UNFILTERED old_us_q=%.4f new_us_q=%.4f old_norm=%.4f new_norm=%.4f reduction=%.2f%% (all rounds, raw)"
+		% [
+			float(pooled_unfiltered["old_median_us_per_query"]),
+			float(pooled_unfiltered["new_median_us_per_query"]),
+			float(pooled_unfiltered["old_normalized_median_ratio"]),
+			float(pooled_unfiltered["new_normalized_median_ratio"]),
+			float(pooled_unfiltered["pooled_reduction_percent"]),
 		]
 	)
 	print(
@@ -296,6 +318,16 @@ func _build_pairs(rounds: Array[Dictionary]) -> Array[Dictionary]:
 	return pairs
 
 
+func _valid_pair_rounds(pairs: Array[Dictionary]) -> Array[Dictionary]:
+	var result: Array[Dictionary] = []
+	for pair: Dictionary in pairs:
+		if not bool(pair["both_valid"]):
+			continue
+		result.append(pair["old_round"] as Dictionary)
+		result.append(pair["new_round"] as Dictionary)
+	return result
+
+
 func _pool(rounds: Array[Dictionary]) -> Dictionary:
 	var old_values := PackedFloat64Array()
 	var new_values := PackedFloat64Array()
@@ -314,6 +346,7 @@ func _pool(rounds: Array[Dictionary]) -> Dictionary:
 	var new_ratio := _median(new_ratios)
 	var old_us := float(old_stats["median"])
 	var new_us := float(new_stats["median"])
+	var has_data := old_values.size() > 0 and new_values.size() > 0
 	return {
 		"old_median_us_per_query": old_us,
 		"new_median_us_per_query": new_us,
@@ -321,11 +354,12 @@ func _pool(rounds: Array[Dictionary]) -> Dictionary:
 		"new_stats_us_per_query": new_stats,
 		"old_normalized_median_ratio": old_ratio,
 		"new_normalized_median_ratio": new_ratio,
+		"had_valid_rounds": has_data,
 		"pooled_raw_change_percent": (
-			(new_us - old_us) / old_us * 100.0 if old_us > 0.0 else INF
+			(new_us - old_us) / old_us * 100.0 if has_data and old_us > 0.0 else INF
 		),
 		"pooled_reduction_percent": (
-			(1.0 - new_ratio / old_ratio) * 100.0 if old_ratio > 0.0 else INF
+			(1.0 - new_ratio / old_ratio) * 100.0 if has_data and old_ratio > 0.0 else INF
 		),
 	}
 

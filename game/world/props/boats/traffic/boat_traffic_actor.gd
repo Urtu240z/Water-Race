@@ -101,6 +101,10 @@ var _front_surface_position: Vector3 = Vector3.ZERO
 var _rear_surface_position: Vector3 = Vector3.ZERO
 var _left_surface_position: Vector3 = Vector3.ZERO
 var _right_surface_position: Vector3 = Vector3.ZERO
+var _front_sample_scratch := WaterSample3D.new()
+var _rear_sample_scratch := WaterSample3D.new()
+var _left_sample_scratch := WaterSample3D.new()
+var _right_sample_scratch := WaterSample3D.new()
 var _target_water_height: float = 0.0
 var _target_pitch: float = 0.0
 var _target_roll: float = 0.0
@@ -300,7 +304,7 @@ func _update_water_follow(delta: float, snap: bool) -> void:
 
 
 func _sample_water_target() -> void:
-	if not is_instance_valid(_ocean) or not is_instance_valid(_path_follow):
+	if not is_instance_valid(_path_follow):
 		return
 	var path_transform := _path_follow.global_transform
 	var center := path_transform.origin
@@ -320,21 +324,48 @@ func _sample_water_target() -> void:
 	var rear_query := center - forward * half_length
 	var left_query := center - right * half_width
 	var right_query := center + right * half_width
-	var front_height := _ocean.sample_height(front_query)
-	var rear_height := _ocean.sample_height(rear_query)
-	var left_height := _ocean.sample_height(left_query)
-	var right_height := _ocean.sample_height(right_query)
-	if not (
-		is_finite(front_height)
-		and is_finite(rear_height)
-		and is_finite(left_height)
-		and is_finite(right_height)
-	):
+	var front_height := 0.0
+	var rear_height := 0.0
+	var left_height := 0.0
+	var right_height := 0.0
+	if is_instance_valid(_ocean):
+		front_height = _ocean.sample_height(front_query)
+		rear_height = _ocean.sample_height(rear_query)
+		left_height = _ocean.sample_height(left_query)
+		right_height = _ocean.sample_height(right_query)
+		if not (
+			is_finite(front_height)
+			and is_finite(rear_height)
+			and is_finite(left_height)
+			and is_finite(right_height)
+		):
+			return
+		_front_surface_position = Vector3(front_query.x, front_height, front_query.z)
+		_rear_surface_position = Vector3(rear_query.x, rear_height, rear_query.z)
+		_left_surface_position = Vector3(left_query.x, left_height, left_query.z)
+		_right_surface_position = Vector3(right_query.x, right_height, right_query.z)
+	elif is_instance_valid(_water_provider):
+		var front_sample := _water_provider.sample_water(front_query, _front_sample_scratch)
+		var rear_sample := _water_provider.sample_water(rear_query, _rear_sample_scratch)
+		var left_sample := _water_provider.sample_water(left_query, _left_sample_scratch)
+		var right_sample := _water_provider.sample_water(right_query, _right_sample_scratch)
+		if not (
+			front_sample.valid
+			and rear_sample.valid
+			and left_sample.valid
+			and right_sample.valid
+		):
+			return
+		_front_surface_position = front_sample.surface_position
+		_rear_surface_position = rear_sample.surface_position
+		_left_surface_position = left_sample.surface_position
+		_right_surface_position = right_sample.surface_position
+		front_height = _front_surface_position.y
+		rear_height = _rear_surface_position.y
+		left_height = _left_surface_position.y
+		right_height = _right_surface_position.y
+	else:
 		return
-	_front_surface_position = Vector3(front_query.x, front_height, front_query.z)
-	_rear_surface_position = Vector3(rear_query.x, rear_height, rear_query.z)
-	_left_surface_position = Vector3(left_query.x, left_height, left_query.z)
-	_right_surface_position = Vector3(right_query.x, right_height, right_query.z)
 	_target_water_height = (
 		(front_height + rear_height + left_height + right_height) * 0.25
 		+ waterline_offset
