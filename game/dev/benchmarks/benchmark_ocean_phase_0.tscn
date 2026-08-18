@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://dev/benchmarks/benchmark_ocean_phase_0.gd" id="1_runner"]
+[ext_resource type="PackedScene" path="res://world/water/ocean/ocean_3d.tscn" id="2_ocean"]
+
+[node name="BenchmarkOceanPhase0" type="Node"]
+script = ExtResource("1_runner")
+
+[node name="Ocean3D" parent="." instance=ExtResource("2_ocean")]

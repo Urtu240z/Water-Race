@@ -144,7 +144,7 @@ shader_parameter/water_level = 2.205
 shader_parameter/wet_sand_height = 5.0
 shader_parameter/debug_view = 0
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_4scdh"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_laf3l"]
 resource_local_to_scene = true
 render_priority = 0
 shader = ExtResource("23_mdq0j")
@@ -165,7 +165,7 @@ shader_parameter/stretch_fade_end = 0.2
 shader_parameter/stretch_fade_power = 0.5000000074506
 shader_parameter/minimum_stretch_visibility = 0.57999998703584
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_df66w"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4scdh"]
 resource_local_to_scene = true
 render_priority = 0
 shader = ExtResource("41_j7oal")
@@ -284,11 +284,11 @@ shader_parameter/vehicle_interaction_clipmap_distance = 86.0
 shader_parameter/ocean_interaction_debug_mode = 0
 shader_parameter/vehicle_interaction_exaggerated_debug = false
 shader_parameter/vehicle_interaction_debug_multiplier = 3.5
-shader_parameter/water_exclusion_volume_count = 1
-shader_parameter/water_exclusion_centers_radii = PackedVector4Array(-627.5078, 0.070186615, -722.14, 4.274926, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
-shader_parameter/water_exclusion_inverse_rows_x = PackedVector4Array(-0.070668936, 0, -0.37732637, -316.8278, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
-shader_parameter/water_exclusion_inverse_rows_y = PackedVector4Array(0, 0.49999487, 0, -0.035092946, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
-shader_parameter/water_exclusion_inverse_rows_z = PackedVector4Array(0.24915974, 0, -0.046664786, 122.65118, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/water_exclusion_volume_count = 3
+shader_parameter/water_exclusion_centers_radii = PackedVector4Array(-627.5078, 0.070186615, -722.14, 4.274926, -627.5078, 0.070186615, -726.7247, 4.274926, -627.5078, 0.070186615, -715.40784, 4.274926, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/water_exclusion_inverse_rows_x = PackedVector4Array(-0.070668936, 0, -0.37732637, -316.8278, -0.070668936, 0, -0.37732637, -318.55768, -0.070668936, 0, -0.37732637, -314.28754, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/water_exclusion_inverse_rows_y = PackedVector4Array(0, 0.49999487, 0, -0.035092946, 0, 0.49999487, 0, -0.035092946, 0, 0.49999487, 0, -0.035092946, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/water_exclusion_inverse_rows_z = PackedVector4Array(0.24915974, 0, -0.046664786, 122.65118, 0.24915974, 0, -0.046664786, 122.43723, 0.24915974, 0, -0.046664786, 122.96533, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 shader_parameter/surface_normal_texture_a = ExtResource("43_e78yh")
 shader_parameter/surface_normal_texture_b = ExtResource("44_o65k7")
 shader_parameter/surface_warp_texture = ExtResource("45_1p4wu")
@@ -424,7 +424,7 @@ lifetime = 60.0
 fade_out_time = 7.0
 metadata/_custom_type_script = "uid://d28g2y2o80558"
 
-[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_0gqsi"]
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_df66w"]
 resource_local_to_scene = true
 blend_mode = 1
 
@@ -451,7 +451,7 @@ point_count = 3
 [sub_resource type="CurveTexture" id="CurveTexture_bubble_shrink"]
 curve = SubResource("Curve_bubble_shrink")
 
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_y3rlo"]
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_0gqsi"]
 resource_local_to_scene = true
 particle_flag_disable_z = true
 emission_shape_offset = Vector3(0, 600, 0)
@@ -474,7 +474,7 @@ turbulence_influence_max = 0.082
 turbulence_initial_displacement_min = -47.5
 turbulence_initial_displacement_max = 94.5
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_hrvh4"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_y3rlo"]
 resource_local_to_scene = true
 render_priority = -127
 shader = ExtResource("55_5sm3d")
@@ -591,11 +591,11 @@ emission_enabled = true
 emission = Color(1, 0, 0.016666412, 1)
 emission_energy_multiplier = 16.0
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_n0k1o"]
+[sub_resource type="BoxShape3D" id="BoxShape3D_hrvh4"]
 resource_local_to_scene = true
 size = Vector3(83.137, 90.025, 149.727)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_vbdm5"]
+[sub_resource type="BoxShape3D" id="BoxShape3D_n0k1o"]
 resource_local_to_scene = true
 size = Vector3(89.876, 91.745, 133.916)
 
@@ -692,7 +692,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.022, 9.445, 16.88)
 
 [node name="Terrain_VIS" parent="TerrainRoot/Gold_City/Scene Collection/Terrain" parent_id_path=PackedInt32Array(297389943, 1864945746) index="0" unique_id=717890379 groups=["tree_impostor_ground"]]
 material_override = SubResource("ShaderMaterial_0gqsi")
-material_overlay = SubResource("ShaderMaterial_4scdh")
+material_overlay = SubResource("ShaderMaterial_laf3l")
 
 [node name="Passtrough_VIS" parent="TerrainRoot/Gold_City/Scene Collection/Bridges" parent_id_path=PackedInt32Array(297389943, 1304534719) index="2" unique_id=930924910]
 surface_material_override/0 = ExtResource("23_dnql6")
@@ -753,7 +753,7 @@ animate_hue = true
 [node name="WaterIntegration" type="Node3D" parent="." unique_id=1889730552]
 
 [node name="Ocean" parent="WaterIntegration" unique_id=1340264265 instance=ExtResource("40_3mclj")]
-ocean_material = SubResource("ShaderMaterial_df66w")
+ocean_material = SubResource("ShaderMaterial_4scdh")
 wave_world_size_a = 153.5
 wave_world_size_b = 104.0
 wave_amplitude_a = 0.7999999821184
@@ -1044,7 +1044,7 @@ editor_preview_mode = 0
 
 [node name="EntryBubbles" parent="CameraSystem/ChaseCamera/Camera3D/UnderwaterEffect/WaterCrossingOverlay" index="0"]
 visible = false
-material = SubResource("CanvasItemMaterial_0gqsi")
+material = SubResource("CanvasItemMaterial_df66w")
 position = Vector2(1, 1.76)
 amount = 500
 texture = SubResource("GradientTexture2D_pl0kw")
@@ -1052,10 +1052,10 @@ lifetime = 20.0
 speed_scale = 8.0
 explosiveness = 1.0
 randomness = 1.0
-process_material = SubResource("ParticleProcessMaterial_y3rlo")
+process_material = SubResource("ParticleProcessMaterial_0gqsi")
 
 [node name="UnderwaterPostProcess" parent="CameraSystem/ChaseCamera/Camera3D/UnderwaterEffect" index="1" unique_id=1854893749]
-material_override = SubResource("ShaderMaterial_hrvh4")
+material_override = SubResource("ShaderMaterial_y3rlo")
 
 [node name="Props" type="Node3D" parent="." unique_id=1365592301]
 
@@ -1838,7 +1838,7 @@ unfreeze_duration = 1.0
 debug_events = true
 
 [node name="CollisionShape3D" parent="Props/Vegetation/TreeImpostorsFrozen/TreeImpostorFrozen" index="0" unique_id=1790283657]
-shape = SubResource("BoxShape3D_n0k1o")
+shape = SubResource("BoxShape3D_hrvh4")
 
 [node name="TreeImpostorFrozen2" parent="Props/Vegetation/TreeImpostorsFrozen" unique_id=469109216 instance=ExtResource("2_cfohk")]
 transform = Transform3D(0.8735965, 0, 0.48664874, 0, 1, 0, -0.48665488, 0, 0.8735977, -423.3858, 2.4459906, -116.46263)
@@ -1849,7 +1849,7 @@ unfreeze_duration = 1.0
 debug_events = true
 
 [node name="CollisionShape3D" parent="Props/Vegetation/TreeImpostorsFrozen/TreeImpostorFrozen2" index="0" unique_id=1790283657]
-shape = SubResource("BoxShape3D_vbdm5")
+shape = SubResource("BoxShape3D_n0k1o")
 
 [node name="TreeProjectedShadowBaker" type="Node3D" parent="Props/Vegetation" unique_id=472315960]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.510468, -49.139404, -57.103714)
@@ -1885,6 +1885,45 @@ use_model_front = true
 tilt_enabled = false
 
 [node name="BoatTrafficActor" parent="BoatTraffic/Path3D/PathFollow3D" unique_id=408924039 instance=ExtResource("61_boat_traffic")]
+speed_mps = 24.0
+heading_response = 5.609999999999999
+maximum_yaw_rate_degrees = 47.5
+model_scene = ExtResource("76_ogabk")
+model_position_offset = Vector3(0, -1.112, 0)
+model_rotation_offset_degrees = Vector3(0, 0, 0)
+model_scale = Vector3(1.4, 1.4, 1.4)
+water_provider_path = NodePath("../../../../WaterIntegration/Ocean")
+sample_length = 0.5
+sample_width = 0.5
+vertical_response = 0.01
+pitch_response = 0.01
+roll_response = 0.01
+maximum_pitch_degrees = 19.8
+maximum_roll_degrees = 30.0
+wake_visual_strength = 0.5
+directional_wake_strength = 1.5
+wake_deformation_distance = null
+physical_wake_strength = 0.5
+
+[node name="WaterExclusionVolume3D" type="Node3D" parent="BoatTraffic/Path3D/PathFollow3D/BoatTrafficActor" unique_id=1514394021]
+transform = Transform3D(1.0000004, 0, -2.9802322e-08, 0, 1, 0, 2.9802322e-08, 0, 1.0000004, 0.0099487305, 0, -1.609314)
+script = ExtResource("77_laf3l")
+size = Vector3(2.605, 2, 3.945)
+metadata/_custom_type_script = "uid://bc6w686grskw2"
+
+[node name="Path3D2" type="Path3D" parent="BoatTraffic" unique_id=1611739096]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -570.7688, 0.070186615, -721.95825)
+curve = SubResource("Curve3D_ogabk")
+debug_custom_color = Color(1, 1, 1, 1)
+
+[node name="PathFollow3D" type="PathFollow3D" parent="BoatTraffic/Path3D2" unique_id=1956673171]
+transform = Transform3D(-0.18408304, 0, 0.9828841, 0, 1.0000103, 0, -0.9828841, 0, -0.18408304, -55.155396, 0, -5.0529175)
+rotation_mode = 1
+use_model_front = true
+tilt_enabled = false
+
+[node name="BoatTrafficActor" parent="BoatTraffic/Path3D2/PathFollow3D" unique_id=911452795 instance=ExtResource("61_boat_traffic")]
+speed_mps = 24.0
 heading_response = 5.609999999999999
 maximum_yaw_rate_degrees = 47.5
 model_scene = ExtResource("76_ogabk")
@@ -1903,7 +1942,44 @@ wake_visual_strength = 0.5
 directional_wake_strength = 1.5
 physical_wake_strength = 0.5
 
-[node name="WaterExclusionVolume3D" type="Node3D" parent="BoatTraffic/Path3D/PathFollow3D/BoatTrafficActor" unique_id=1514394021]
+[node name="WaterExclusionVolume3D" type="Node3D" parent="BoatTraffic/Path3D2/PathFollow3D/BoatTrafficActor" unique_id=1104694269]
+transform = Transform3D(1.0000004, 0, -2.9802322e-08, 0, 1, 0, 2.9802322e-08, 0, 1.0000004, 0.0099487305, 0, -1.609314)
+script = ExtResource("77_laf3l")
+size = Vector3(2.605, 2, 3.945)
+metadata/_custom_type_script = "uid://bc6w686grskw2"
+
+[node name="Path3D3" type="Path3D" parent="BoatTraffic" unique_id=1920398352]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -570.7688, 0.070186615, -710.6414)
+curve = SubResource("Curve3D_ogabk")
+debug_custom_color = Color(1, 1, 1, 1)
+
+[node name="PathFollow3D" type="PathFollow3D" parent="BoatTraffic/Path3D3" unique_id=2084092967]
+transform = Transform3D(-0.18408304, 0, 0.9828841, 0, 1.0000103, 0, -0.9828841, 0, -0.18408304, -55.155396, 0, -5.0529175)
+rotation_mode = 1
+use_model_front = true
+tilt_enabled = false
+
+[node name="BoatTrafficActor" parent="BoatTraffic/Path3D3/PathFollow3D" unique_id=971510947 instance=ExtResource("61_boat_traffic")]
+speed_mps = 24.0
+heading_response = 5.609999999999999
+maximum_yaw_rate_degrees = 47.5
+model_scene = ExtResource("76_ogabk")
+model_position_offset = Vector3(0, -1.112, 0)
+model_rotation_offset_degrees = Vector3(0, 0, 0)
+model_scale = Vector3(1.4, 1.4, 1.4)
+water_provider_path = NodePath("../../../../WaterIntegration/Ocean")
+sample_length = 0.5
+sample_width = 0.5
+vertical_response = 0.01
+pitch_response = 0.01
+roll_response = 0.01
+maximum_pitch_degrees = 19.8
+maximum_roll_degrees = 30.0
+wake_visual_strength = 0.5
+directional_wake_strength = 1.5
+physical_wake_strength = 0.5
+
+[node name="WaterExclusionVolume3D" type="Node3D" parent="BoatTraffic/Path3D3/PathFollow3D/BoatTrafficActor" unique_id=1920534554]
 transform = Transform3D(1.0000004, 0, -2.9802322e-08, 0, 1, 0, 2.9802322e-08, 0, 1.0000004, 0.0099487305, 0, -1.609314)
 script = ExtResource("77_laf3l")
 size = Vector3(2.605, 2, 3.945)

@@ -53,6 +53,7 @@ const MIN_SAMPLE_SEPARATION: float = 0.1
 @export_range(0.1, 30.0, 0.1, "or_greater", "suffix:s") var wake_fade: float = 20.0
 @export_range(0.0, 30.0, 0.1, "or_greater", "suffix:m/s") var wake_minimum_speed: float = 2.0
 @export_range(0.0, 2.0, 0.05, "or_greater") var directional_wake_strength: float = 1.8
+@export_range(10.0, 160.0, 1.0, "suffix:m") var wake_deformation_distance: float = 65.0
 @export var navigable_wake_enabled: bool = true
 ## Deforms the real ocean surface. Its shader work is spatially gated to the
 ## wake bounds, so vertices outside the trail skip all expensive calculations.
@@ -375,6 +376,8 @@ func _configure_wake_trail() -> void:
 	_wake_trail.wake_strength_multiplier = wake_visual_strength
 	_wake_trail.directional_strength_multiplier = directional_wake_strength
 	_wake_trail.directional_persistent_foam_enabled = true
+	_wake_trail.directional_deformation_maximum_distance = wake_deformation_distance
+	_wake_trail.directional_deformation_distance_fade_start_ratio = 0.75
 	_wake_trail.physics_enabled = navigable_wake_enabled
 	_wake_trail.legacy_global_deformation_enabled = legacy_global_deformation_enabled
 	_wake_trail.history_capture_enabled = true
@@ -386,6 +389,7 @@ func _configure_wake_trail() -> void:
 	_wake_trail.local_visual_arm_half_width_multiplier = 0.55
 	_wake_trail.local_physics_height_multiplier = 4.2
 	_wake_trail.local_physics_lifetime = 6.5
+	_wake_trail.local_physics_maximum_distance = wake_deformation_distance
 	_wake_trail.local_physics_segment_stride = 2
 	_wake_trail.wake_fade_start_ratio = 0.48
 	_wake_trail.ribbon_render_enabled = false

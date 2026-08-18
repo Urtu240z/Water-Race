@@ -1873,6 +1873,8 @@ func _update_directional_wake_segments() -> void:
 			exported_count,
 			source.physics_enabled and source.directional_global_physics_enabled,
 			source.directional_deformation_active,
+			source.directional_deformation_maximum_distance,
+			source.directional_deformation_distance_fade_start_ratio,
 			source.directional_persistent_foam_enabled,
 			clampf(source.oldest_age, 0.5, directional_wake_duration)
 		)
@@ -1990,6 +1992,8 @@ func _append_directional_wake_scratch(
 	count: int,
 	navigable: bool,
 	deformation_active: bool,
+	deformation_maximum_distance: float,
+	deformation_fade_start_ratio: float,
 	persistent_foam_enabled: bool,
 	foam_history_duration: float
 ) -> void:
@@ -1998,6 +2002,13 @@ func _append_directional_wake_scratch(
 		- _directional_wake_active_count
 	)
 	var copy_count := mini(maxi(count, 0), available)
+	var deformation_distance := 0.0
+	var safe_deformation_distance := maxf(deformation_maximum_distance, 0.1)
+	var fade_start_distance := safe_deformation_distance * clampf(
+		deformation_fade_start_ratio,
+		0.0,
+		0.99
+	)
 	for source_index in copy_count:
 		var target_index := _directional_wake_active_count + source_index
 		_directional_wake_start_positions[target_index] = (
@@ -2024,9 +2035,21 @@ func _append_directional_wake_scratch(
 		_directional_wake_speeds[target_index] = (
 			_directional_wake_scratch_speeds[source_index]
 		)
-		_directional_wake_deformation_weights[target_index] = (
-			1.0 if deformation_active else 0.0
+		var segment_length := (
+			_directional_wake_scratch_end_positions[source_index].distance_to(
+				_directional_wake_scratch_start_positions[source_index]
+			)
 		)
+		var segment_midpoint_distance := deformation_distance + segment_length * 0.5
+		var distance_weight := 1.0 - smoothstep(
+			fade_start_distance,
+			safe_deformation_distance,
+			segment_midpoint_distance
+		)
+		_directional_wake_deformation_weights[target_index] = (
+			distance_weight if deformation_active else 0.0
+		)
+		deformation_distance += segment_length
 		_directional_wake_persistent_foam_weights[target_index] = (
 			1.0 if persistent_foam_enabled else 0.0
 		)

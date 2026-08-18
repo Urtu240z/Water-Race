@@ -64,6 +64,10 @@ var directional_persistent_foam_enabled: bool = false
 ## Allows Ocean3D to keep rendering deposited foam while suppressing the
 ## displacement packet belonging to an off-screen traffic boat.
 var directional_deformation_active: bool = true
+## Spatial cap for the expensive ocean displacement. Foam may keep using the
+## complete history after the physical wave has faded out.
+var directional_deformation_maximum_distance: float = 1.0e20
+var directional_deformation_distance_fade_start_ratio: float = 0.75
 var visual_fade_duration: float = 0.2
 var local_visual_crest_height: float = 0.10
 var local_visual_center_depression: float = 0.025
@@ -71,6 +75,7 @@ var local_visual_center_turbulence_height: float = 0.0
 var local_visual_arm_half_width_multiplier: float = 0.34
 var local_physics_height_multiplier: float = 2.4
 var local_physics_lifetime: float = 6.5
+var local_physics_maximum_distance: float = 1.0e20
 ## Traffic wakes can use a coarser centerline for buoyancy than the visual
 ## history. This keeps the physical wave smooth while avoiding dozens of
 ## redundant closest-segment tests for every JetSki water probe.
@@ -562,11 +567,29 @@ func _ensure_physics_bounds() -> void:
 		minf(wake_lifetime, local_physics_lifetime),
 		0.1
 	)
-	_physics_first_recent_sample_index = _samples.size()
-	for index in _samples.size():
-		if _samples[index].age <= physics_lifetime:
-			_physics_first_recent_sample_index = index
+	var newest_index := _samples.size() - 1
+	if newest_index < 0 or _samples[newest_index].age > physics_lifetime:
+		_physics_bounds = Rect2()
+		_physics_first_recent_sample_index = _samples.size()
+		return
+	_physics_first_recent_sample_index = newest_index
+	var covered_distance := 0.0
+	var maximum_distance := maxf(local_physics_maximum_distance, 0.1)
+	for index in range(newest_index - 1, -1, -1):
+		var older := _samples[index]
+		var newer := _samples[index + 1]
+		if older.age > physics_lifetime:
 			break
+		if newer.break_before or newer.segment_id != older.segment_id:
+			break
+		var pair_distance := Vector2(
+			newer.position.x - older.position.x,
+			newer.position.z - older.position.z
+		).length()
+		if covered_distance + pair_distance > maximum_distance:
+			break
+		covered_distance += pair_distance
+		_physics_first_recent_sample_index = index
 	if _physics_first_recent_sample_index >= _samples.size():
 		_physics_bounds = Rect2()
 		return
@@ -581,7 +604,7 @@ func _ensure_physics_bounds() -> void:
 		maximum = maximum.max(horizontal)
 		maximum_reach = maxf(
 			maximum_reach,
-			sample.initial_width + physics_lifetime * (
+			sample.initial_width + minf(sample.age, physics_lifetime) * (
 				_ocean.directional_wake_propagation_speed
 					+ sample.horizontal_speed * _ocean.directional_wake_opening_slope
 			) + _ocean.directional_wake_arm_width * 2.0
