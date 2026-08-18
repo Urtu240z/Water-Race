@@ -173,6 +173,17 @@ var _external_forward_direction: Vector3 = Vector3.FORWARD
 var _physics_bounds := Rect2()
 var _physics_bounds_dirty: bool = true
 var _physics_first_recent_sample_index: int = 0
+var _local_wake_candidate_start := PackedVector2Array()
+var _local_wake_candidate_segment := PackedVector2Array()
+var _local_wake_candidate_length_squared := PackedFloat64Array()
+var _local_wake_candidate_older_index := PackedInt32Array()
+var _local_wake_candidate_newer_index := PackedInt32Array()
+var _local_wake_cache_built: bool = false
+var _local_wake_cache_dirty: bool = true
+var _local_wake_cache_sample_count: int = 0
+var _local_wake_cache_stride: int = 1
+var _local_wake_cache_lifetime: float = 0.1
+var _local_wake_cache_first_recent: int = 0
 var _runtime_physics_active: bool = true
 var _base_surface_sample_scratch := WaterSample3D.new()
 var _mesh_head_anchor_position: Vector3 = Vector3.ZERO
@@ -326,6 +337,7 @@ func configure_quality(
 		_samples.pop_front()
 	_mesh_dirty = true
 	_physics_bounds_dirty = true
+	_local_wake_cache_dirty = true
 
 
 func get_graphics_quality_debug_status() -> Dictionary:
@@ -404,6 +416,12 @@ func clear_trail(suppress_next_tick: bool = true) -> void:
 	_physics_bounds = Rect2()
 	_physics_bounds_dirty = true
 	_physics_first_recent_sample_index = 0
+	_local_wake_candidate_start.clear()
+	_local_wake_candidate_segment.clear()
+	_local_wake_candidate_length_squared.clear()
+	_local_wake_candidate_older_index.clear()
+	_local_wake_candidate_newer_index.clear()
+	_local_wake_cache_dirty = true
 
 
 func apply_world_rebase(shift: Vector3) -> void:
@@ -416,6 +434,7 @@ func apply_world_rebase(shift: Vector3) -> void:
 		_last_sample_position -= horizontal_shift
 	_rebase_count += 1
 	_physics_bounds_dirty = true
+	_local_wake_cache_dirty = true
 	_rebuild_mesh()
 	_mesh_dirty = false
 	_mesh_update_elapsed = 0.0
@@ -452,33 +471,12 @@ func sample_simplified_wake_height(world_position: Vector3) -> float:
 	var best_index: int = -1
 	var best_ratio: float = 0.0
 	var best_distance_squared: float = INF
-	var lifetime := maxf(minf(wake_lifetime, local_physics_lifetime), 0.1)
-	var stride := maxi(local_physics_segment_stride, 1)
-	var index := clampi(
-		_physics_first_recent_sample_index,
-		0,
-		maxi(_samples.size() - 1, 0)
-	)
-	while index < _samples.size() - 1:
-		var candidate_older := _samples[index]
-		var newer_index := mini(index + stride, _samples.size() - 1)
-		var candidate_newer := _samples[newer_index]
-		if candidate_older.age > lifetime and candidate_newer.age > lifetime:
-			index = newer_index
-			continue
-		if (
-			candidate_newer.break_before
-			or candidate_newer.segment_id != candidate_older.segment_id
-		):
-			index = newer_index
-			continue
-		var start := Vector2(candidate_older.position.x, candidate_older.position.z)
-		var finish := Vector2(candidate_newer.position.x, candidate_newer.position.z)
-		var segment := finish - start
-		var segment_length_squared := segment.length_squared()
-		if segment_length_squared <= 0.0001:
-			index = newer_index
-			continue
+	if not _local_wake_candidate_cache_valid():
+		_rebuild_local_wake_candidate_cache()
+	for candidate_index in _local_wake_candidate_start.size():
+		var start := _local_wake_candidate_start[candidate_index]
+		var segment := _local_wake_candidate_segment[candidate_index]
+		var segment_length_squared := _local_wake_candidate_length_squared[candidate_index]
 		var ratio := clampf(
 			(query - start).dot(segment) / segment_length_squared,
 			0.0,
@@ -487,16 +485,13 @@ func sample_simplified_wake_height(world_position: Vector3) -> float:
 		var distance_squared := query.distance_squared_to(start + segment * ratio)
 		if distance_squared < best_distance_squared:
 			best_distance_squared = distance_squared
-			best_index = index
+			best_index = candidate_index
 			best_ratio = ratio
-		index = newer_index
 	if best_index < 0:
 		return 0.0
-	var selected_older := _samples[best_index]
-	var selected_newer := _samples[mini(
-		best_index + stride,
-		_samples.size() - 1
-	)]
+	var lifetime := maxf(minf(wake_lifetime, local_physics_lifetime), 0.1)
+	var selected_older := _samples[_local_wake_candidate_older_index[best_index]]
+	var selected_newer := _samples[_local_wake_candidate_newer_index[best_index]]
 	var age := lerpf(selected_older.age, selected_newer.age, best_ratio)
 	if age < 0.12 or age >= lifetime:
 		return 0.0
@@ -617,6 +612,67 @@ func _ensure_physics_bounds() -> void:
 		minimum - expansion,
 		maximum - minimum + expansion * 2.0
 	)
+
+
+func _local_wake_candidate_cache_valid() -> bool:
+	if not _local_wake_cache_built:
+		return false
+	if _local_wake_cache_dirty:
+		return false
+	if _local_wake_cache_sample_count != _samples.size():
+		return false
+	if _local_wake_cache_stride != maxi(local_physics_segment_stride, 1):
+		return false
+	if _local_wake_cache_lifetime != maxf(minf(wake_lifetime, local_physics_lifetime), 0.1):
+		return false
+	if _local_wake_cache_first_recent != _physics_first_recent_sample_index:
+		return false
+	return true
+
+
+func _rebuild_local_wake_candidate_cache() -> void:
+	var lifetime := maxf(minf(wake_lifetime, local_physics_lifetime), 0.1)
+	var stride := maxi(local_physics_segment_stride, 1)
+	var size := _samples.size()
+	var first_recent := clampi(_physics_first_recent_sample_index, 0, maxi(size - 1, 0))
+	_local_wake_candidate_start.clear()
+	_local_wake_candidate_segment.clear()
+	_local_wake_candidate_length_squared.clear()
+	_local_wake_candidate_older_index.clear()
+	_local_wake_candidate_newer_index.clear()
+	var index := first_recent
+	while index < size - 1:
+		var newer_index := mini(index + stride, size - 1)
+		var candidate_older := _samples[index]
+		var candidate_newer := _samples[newer_index]
+		if candidate_older.age > lifetime and candidate_newer.age > lifetime:
+			index = newer_index
+			continue
+		if (
+			candidate_newer.break_before
+			or candidate_newer.segment_id != candidate_older.segment_id
+		):
+			index = newer_index
+			continue
+		var start := Vector2(candidate_older.position.x, candidate_older.position.z)
+		var finish := Vector2(candidate_newer.position.x, candidate_newer.position.z)
+		var segment := finish - start
+		var segment_length_squared := segment.length_squared()
+		if segment_length_squared <= 0.0001:
+			index = newer_index
+			continue
+		_local_wake_candidate_start.append(start)
+		_local_wake_candidate_segment.append(segment)
+		_local_wake_candidate_length_squared.append(segment_length_squared)
+		_local_wake_candidate_older_index.append(index)
+		_local_wake_candidate_newer_index.append(newer_index)
+		index = newer_index
+	_local_wake_cache_built = true
+	_local_wake_cache_dirty = false
+	_local_wake_cache_sample_count = size
+	_local_wake_cache_stride = stride
+	_local_wake_cache_lifetime = lifetime
+	_local_wake_cache_first_recent = first_recent
 
 
 func fill_directional_shader_segments(
@@ -818,6 +874,7 @@ func _age_samples(delta: float) -> void:
 	# then all water probes reuse the result.
 	if physics_enabled and _external_source_enabled:
 		_physics_bounds_dirty = true
+		_local_wake_cache_dirty = true
 	var retention_lifetime := wake_lifetime
 	if legacy_global_deformation_enabled:
 		retention_lifetime = maxf(wake_lifetime, directional_history_lifetime)
@@ -825,6 +882,7 @@ func _age_samples(delta: float) -> void:
 		_samples.pop_front()
 		_mesh_dirty = true
 		_physics_bounds_dirty = true
+		_local_wake_cache_dirty = true
 
 
 func _try_add_sample() -> void:
@@ -872,6 +930,7 @@ func _try_add_sample() -> void:
 		_segment_break_pending
 	))
 	_physics_bounds_dirty = true
+	_local_wake_cache_dirty = true
 	_segment_break_pending = false
 	_was_generating_wake = true
 	_mesh_dirty = true
