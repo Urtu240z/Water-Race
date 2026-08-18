@@ -1,28 +1,28 @@
 
 ========== WATER RACE LOAD TRACE ==========
-[    1.278 ms] GAME START                          +   1.278 ms
-[    1.355 ms] GRAPHICS_AUTOLOAD_READY_BEGIN       +   0.077 ms
-[    1.395 ms] GRAPHICS_PROFILES_LOAD_BEGIN        +   0.040 ms
-[    4.324 ms] GRAPHICS_PROFILES_LOADED            +   2.929 ms
-[    4.394 ms] GRAPHICS_INITIAL_APPLY_QUEUED       +   0.070 ms
-[    4.417 ms] GRAPHICS_AUTOLOAD_READY_END         +   0.023 ms
-[    4.896 ms] OCEAN_SURFACE_READY_BEGIN           +   0.479 ms
-[    4.937 ms] OCEAN_MESH_REBUILD_BEGIN #1         +   0.041 ms
-[    5.090 ms] OCEAN_MESH_CACHE_LOAD_BEGIN         +   0.153 ms
-[  121.353 ms] OCEAN_MESH_CACHE_LOAD_END           + 116.263 ms
-[  121.417 ms] OCEAN_MESH_CACHE_HIT                +   0.064 ms
-[  121.559 ms] OCEAN_MESH_CACHE_ASSIGN_BEGIN       +   0.142 ms
-[  121.776 ms] OCEAN_MESH_CACHE_ASSIGN_END         +   0.217 ms
-[  123.200 ms] OCEAN_BUILD_DEBUG_GUIDES_BEGIN      +   1.424 ms
-[  123.233 ms] OCEAN_BUILD_DEBUG_GUIDES_END        +   0.033 ms
-[  123.249 ms] OCEAN_MESH_REBUILD_END #1           +   0.016 ms
-[  123.266 ms] OCEAN_SURFACE_MESHES_ENSURED        +   0.017 ms
-[  123.295 ms] OCEAN_SURFACE_READY_END             +   0.029 ms
-[  123.313 ms] OCEAN_READY_BEGIN                   +   0.018 ms
-[  124.415 ms] OCEAN_CORE_READY                    +   1.102 ms
-[  124.448 ms] OCEAN_HEIGHT_MAPS_BEGIN             +   0.033 ms
-[  125.653 ms] OCEAN_HEIGHT_MAPS_READY             +   1.205 ms
-[  125.675 ms] OCEAN_READY_END                     +   0.022 ms
-[  730.633 ms] GRAPHICS_APPLY_BEGIN                + 604.958 ms
-[  730.751 ms] GRAPHICS_TARGETS_COLLECTED          +   0.118 ms
-[  731.038 ms] GRAPHICS_APPLY_END                  +   0.287 ms
+[    1.261 ms] GAME START                          +   1.261 ms
+[    1.331 ms] GRAPHICS_AUTOLOAD_READY_BEGIN       +   0.070 ms
+[    1.373 ms] GRAPHICS_PROFILES_LOAD_BEGIN        +   0.042 ms
+[    3.692 ms] GRAPHICS_PROFILES_LOADED            +   2.319 ms
+[    3.749 ms] GRAPHICS_INITIAL_APPLY_QUEUED       +   0.057 ms
+[    3.770 ms] GRAPHICS_AUTOLOAD_READY_END         +   0.021 ms
+[    5.256 ms] OCEAN_SURFACE_READY_BEGIN           +   1.486 ms
+[    5.306 ms] OCEAN_MESH_REBUILD_BEGIN #1         +   0.050 ms
+[    5.491 ms] OCEAN_MESH_CACHE_LOAD_BEGIN         +   0.185 ms
+[  118.920 ms] OCEAN_MESH_CACHE_LOAD_END           + 113.429 ms
+[  118.987 ms] OCEAN_MESH_CACHE_HIT                +   0.067 ms
+[  119.076 ms] OCEAN_MESH_CACHE_ASSIGN_BEGIN       +   0.089 ms
+[  119.163 ms] OCEAN_MESH_CACHE_ASSIGN_END         +   0.087 ms
+[  120.357 ms] OCEAN_BUILD_DEBUG_GUIDES_BEGIN      +   1.194 ms
+[  120.392 ms] OCEAN_BUILD_DEBUG_GUIDES_END        +   0.035 ms
+[  120.426 ms] OCEAN_MESH_REBUILD_END #1           +   0.034 ms
+[  120.441 ms] OCEAN_SURFACE_MESHES_ENSURED        +   0.015 ms
+[  120.480 ms] OCEAN_SURFACE_READY_END             +   0.039 ms
+[  120.519 ms] OCEAN_READY_BEGIN                   +   0.039 ms
+[  121.515 ms] OCEAN_CORE_READY                    +   0.996 ms
+[  121.534 ms] OCEAN_HEIGHT_MAPS_BEGIN             +   0.019 ms
+[  122.545 ms] OCEAN_HEIGHT_MAPS_READY             +   1.011 ms
+[  122.569 ms] OCEAN_READY_END                     +   0.024 ms
+[  714.720 ms] GRAPHICS_APPLY_BEGIN                + 592.151 ms
+[  714.838 ms] GRAPHICS_TARGETS_COLLECTED          +   0.118 ms
+[  715.136 ms] GRAPHICS_APPLY_END                  +   0.298 ms

@@ -17,6 +17,7 @@ const MAX_WATER_EXCLUSION_VOLUMES: int = 8
 const MAX_EVENT_WAVE_HORIZONTAL_FLOW: float = 10.0
 const MIN_SAMPLE_STEP: float = 0.05
 const MACRO_MATERIAL_SYNC_INTERVAL: float = 0.25
+const DIRECTIONAL_WAKE_BOUND_GAUSSIAN_SIGMAS: float = 6.0
 
 @export_group("Targets")
 @export_node_path("Node3D") var follow_target_path: NodePath
@@ -256,6 +257,8 @@ var _directional_wake_foam_history_durations := PackedFloat32Array()
 var _directional_wake_navigable := PackedInt32Array()
 var _directional_wake_bounds_min := Vector2(1.0e20, 1.0e20)
 var _directional_wake_bounds_max := Vector2(-1.0e20, -1.0e20)
+var _directional_wake_physics_bounds_min := Vector2(1.0e20, 1.0e20)
+var _directional_wake_physics_bounds_max := Vector2(-1.0e20, -1.0e20)
 var _directional_wake_scratch_start_positions := PackedVector2Array()
 var _directional_wake_scratch_end_positions := PackedVector2Array()
 var _directional_wake_scratch_start_times := PackedFloat32Array()
@@ -1232,6 +1235,13 @@ func _sample_navigable_directional_wake_height(
 ) -> float:
 	if not directional_wake_enabled or _directional_wake_active_count <= 0:
 		return 0.0
+	if (
+		logical_xz.x < _directional_wake_physics_bounds_min.x
+		or logical_xz.y < _directional_wake_physics_bounds_min.y
+		or logical_xz.x > _directional_wake_physics_bounds_max.x
+		or logical_xz.y > _directional_wake_physics_bounds_max.y
+	):
+		return 0.0
 	var height := 0.0
 	var safe_wavelength := maxf(directional_wake_wavelength, 0.05)
 	var duration := maxf(directional_wake_deformation_duration, 0.05)
@@ -1922,6 +1932,8 @@ func _clear_directional_wake_output() -> void:
 	_directional_wake_active_count = 0
 	_directional_wake_bounds_min = Vector2(1.0e20, 1.0e20)
 	_directional_wake_bounds_max = Vector2(-1.0e20, -1.0e20)
+	_directional_wake_physics_bounds_min = Vector2(1.0e20, 1.0e20)
+	_directional_wake_physics_bounds_max = Vector2(-1.0e20, -1.0e20)
 	_directional_wake_start_positions.fill(Vector2.ZERO)
 	_directional_wake_end_positions.fill(Vector2.ZERO)
 	_directional_wake_start_times.fill(-INF)
@@ -1971,11 +1983,11 @@ func _update_directional_wake_bounds() -> void:
 		var foam_reach := maxf(_directional_wake_widths[index], 0.15) * (
 			1.1 * maxf(directional_wake_foam_end_width_multiplier, 1.0)
 		)
-		var reach := maxf(
+		var visual_reach := maxf(
 			foam_reach * persistent_foam_weight,
 			deformation_reach * deformation_weight
 		)
-		var expansion := Vector2(reach, reach)
+		var expansion := Vector2(visual_reach, visual_reach)
 		_directional_wake_bounds_min = _directional_wake_bounds_min.min(
 			_directional_wake_start_positions[index].min(
 				_directional_wake_end_positions[index]
@@ -1986,6 +1998,76 @@ func _update_directional_wake_bounds() -> void:
 				_directional_wake_end_positions[index]
 			) + expansion
 		)
+		if _directional_wake_navigable[index] != 0:
+			var physical_reach := _directional_wake_physical_reach(
+				index,
+				safe_wavelength,
+				safe_arm_width
+			)
+			var physical_expansion := Vector2(physical_reach, physical_reach)
+			_directional_wake_physics_bounds_min = (
+				_directional_wake_physics_bounds_min.min(
+					_directional_wake_start_positions[index].min(
+						_directional_wake_end_positions[index]
+					) - physical_expansion
+				)
+			)
+			_directional_wake_physics_bounds_max = (
+				_directional_wake_physics_bounds_max.max(
+					_directional_wake_start_positions[index].max(
+						_directional_wake_end_positions[index]
+					) + physical_expansion
+				)
+			)
+
+
+func _directional_wake_physical_reach(
+	index: int,
+	safe_wavelength: float,
+	safe_arm_width: float
+) -> float:
+	# The CPU sampler does not use visual deformation/foam weights. Its bound
+	# must therefore cover the complete physical lifetime independently of
+	# those weights and of the age at the last interaction refresh.
+	var duration := maxf(directional_wake_deformation_duration, 0.05)
+	var initial_width := maxf(_directional_wake_widths[index], 0.15)
+	var front_speed := maxf(
+		directional_wake_propagation_speed
+			+ maxf(_directional_wake_speeds[index], 0.0)
+				* directional_wake_opening_slope,
+		0.0
+	)
+	var maximum_front := initial_width + duration * front_speed
+	var packet_reach := (
+		maximum_front
+		+ DIRECTIONAL_WAKE_BOUND_GAUSSIAN_SIGMAS
+			* safe_arm_width * 1.35
+	)
+	var center_width := maxf(initial_width * 0.72, 0.22)
+	var depression_reach := (
+		DIRECTIONAL_WAKE_BOUND_GAUSSIAN_SIGMAS * center_width
+	)
+	var turbulence_reach := maxf(maximum_front * 0.82, center_width)
+	var closure_front := (
+		initial_width * 0.55
+		+ duration * maxf(directional_wake_propagation_speed, 0.0) * 0.38
+	)
+	var closure_width := maxf(center_width * 0.72, 0.16)
+	var closure_reach := (
+		closure_front
+		+ DIRECTIONAL_WAKE_BOUND_GAUSSIAN_SIGMAS * closure_width
+	)
+	var endpoint_reach := maxf(
+		safe_wavelength * 0.8,
+		safe_arm_width * 2.0
+	)
+	return maxf(
+		maxf(packet_reach, depression_reach),
+		maxf(
+			maxf(turbulence_reach, closure_reach),
+			endpoint_reach
+		)
+	)
 
 
 func _append_directional_wake_scratch(
