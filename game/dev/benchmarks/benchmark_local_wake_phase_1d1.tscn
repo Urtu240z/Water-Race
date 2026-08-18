@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://dev/benchmarks/benchmark_local_wake_phase_1d1.gd" id="1_runner"]
+
+[node name="BenchmarkLocalWakePhase1D1" type="Node"]
+script = ExtResource("1_runner")
