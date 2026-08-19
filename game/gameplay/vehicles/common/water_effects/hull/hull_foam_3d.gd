@@ -23,6 +23,8 @@ var _propulsion_point: Marker3D
 var _settings: WaterFoamSettings
 var _noise_texture: Texture2D
 var _settings_signature: int = -1
+var _geometry_update_interval: float = 1.0 / 30.0
+var _geometry_update_elapsed: float = 0.0
 var _array_mesh := ArrayMesh.new()
 var _vertices := PackedVector3Array()
 var _normals := PackedVector3Array()
@@ -68,15 +70,22 @@ func configure(
 	_update_material_settings(true)
 
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
 	_update_material_settings(false)
 	foam_intensity = _calculate_intensity()
 	if foam_intensity <= 0.0001 or not _references_valid():
 		_mesh_instance.visible = false
 		if _array_mesh.get_surface_count() > 0:
 			_array_mesh.clear_surfaces()
+		_geometry_update_elapsed = _geometry_update_interval if _geometry_update_interval > 0.0 else 0.0
 		return
-	_rebuild_mesh()
+	_geometry_update_elapsed += delta
+	if _geometry_update_interval <= 0.0 or _geometry_update_elapsed >= _geometry_update_interval:
+		_rebuild_mesh()
+		if _geometry_update_interval > 0.0:
+			_geometry_update_elapsed = fmod(_geometry_update_elapsed, _geometry_update_interval)
+		else:
+			_geometry_update_elapsed = 0.0
 	_mesh_instance.visible = _array_mesh.get_surface_count() > 0
 	var material := _mesh_instance.material_override as ShaderMaterial
 	if material != null:
@@ -97,6 +106,7 @@ func clear_foam() -> void:
 	foam_intensity = 0.0
 	_mesh_instance.visible = false
 	_array_mesh.clear_surfaces()
+	_geometry_update_elapsed = _geometry_update_interval if _geometry_update_interval > 0.0 else 0.0
 
 
 func _calculate_intensity() -> float:
