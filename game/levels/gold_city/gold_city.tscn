@@ -985,6 +985,9 @@ impact_irregularity = 1.0
 impact_core_opacity = 0.27
 impact_sprite_emission = 0.0
 wake_fade_start_ratio = 0.5
+hull_foam_enabled = false
+wake_ribbon_foam_enabled = false
+persistent_ocean_foam_enabled = true
 
 [node name="TurbineExhaust" parent="Gameplay/JetSki/Effects" parent_id_path=PackedInt32Array(328650943, 1733691099) index="1" unique_id=1478477575]
 full_core_length = 2.0
