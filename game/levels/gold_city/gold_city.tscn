@@ -43,6 +43,7 @@
 [ext_resource type="Material" uid="uid://b4rxe5bb73l7n" path="res://world/vegetation/trees/materials/tree_impostor_material_gold_city.tres" id="35_iyaox"]
 [ext_resource type="PackedScene" path="res://world/water/ocean/calm_water_area_3d.tscn" id="38_8wtvr"]
 [ext_resource type="PackedScene" uid="uid://1d3iohmalk05" path="res://world/water/ocean/ocean_3d.tscn" id="40_3mclj"]
+[ext_resource type="Resource" uid="uid://uqc7omaamhi" path="res://levels/gold_city/water/gold_city_foam_settings.tres" id="74_gcfoam"]
 [ext_resource type="Script" uid="uid://d28g2y2o80558" path="res://world/water/ocean/events/event_wave_profile.gd" id="40_qxbdv"]
 [ext_resource type="Shader" uid="uid://dh7o8h2pae1kd" path="res://world/water/ocean/shaders/ocean_water_custom_ssr.gdshader" id="41_j7oal"]
 [ext_resource type="Texture2D" uid="uid://dpb0qhgywdm05" path="res://world/water/ocean/foam/foam_breakup_noise.tres" id="42_0dpsy"]
@@ -147,7 +148,7 @@ shader_parameter/water_level = 2.205
 shader_parameter/wet_sand_height = 5.0
 shader_parameter/debug_view = 0
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_n0k1o"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_y3rlo"]
 resource_local_to_scene = true
 render_priority = 0
 shader = ExtResource("23_mdq0j")
@@ -189,7 +190,7 @@ backlight_texture = ExtResource("29_0gqsi")
 uv1_scale = Vector3(0.085, 0.085, 0.085)
 uv1_triplanar = true
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_vbdm5"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hrvh4"]
 resource_local_to_scene = true
 render_priority = 0
 shader = ExtResource("41_j7oal")
@@ -448,7 +449,7 @@ lifetime = 60.0
 fade_out_time = 7.0
 metadata/_custom_type_script = "uid://d28g2y2o80558"
 
-[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_iegie"]
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_n0k1o"]
 resource_local_to_scene = true
 blend_mode = 1
 
@@ -475,7 +476,7 @@ point_count = 3
 [sub_resource type="CurveTexture" id="CurveTexture_bubble_shrink"]
 curve = SubResource("Curve_bubble_shrink")
 
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_8o7o7"]
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_vbdm5"]
 resource_local_to_scene = true
 particle_flag_disable_z = true
 emission_shape_offset = Vector3(0, 600, 0)
@@ -498,7 +499,7 @@ turbulence_influence_max = 0.082
 turbulence_initial_displacement_min = -47.5
 turbulence_initial_displacement_max = 94.5
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ndnrr"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_iegie"]
 resource_local_to_scene = true
 render_priority = -127
 shader = ExtResource("55_5sm3d")
@@ -615,11 +616,11 @@ emission_enabled = true
 emission = Color(1, 0, 0.016666412, 1)
 emission_energy_multiplier = 16.0
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_twiso"]
+[sub_resource type="BoxShape3D" id="BoxShape3D_8o7o7"]
 resource_local_to_scene = true
 size = Vector3(83.137, 90.025, 149.727)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_ax04d"]
+[sub_resource type="BoxShape3D" id="BoxShape3D_ndnrr"]
 resource_local_to_scene = true
 size = Vector3(89.876, 91.745, 133.916)
 
@@ -716,7 +717,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.022, 9.445, 16.88)
 
 [node name="Terrain_VIS" parent="TerrainRoot/Gold_City/Scene Collection/Terrain" parent_id_path=PackedInt32Array(297389943, 1864945746) index="0" unique_id=717890379 groups=["tree_impostor_ground"]]
 material_override = SubResource("ShaderMaterial_0gqsi")
-material_overlay = SubResource("ShaderMaterial_n0k1o")
+material_overlay = SubResource("ShaderMaterial_y3rlo")
 
 [node name="Passtrough_VIS" parent="TerrainRoot/Gold_City/Scene Collection/Bridges" parent_id_path=PackedInt32Array(297389943, 1304534719) index="2" unique_id=930924910]
 surface_material_override/0 = ExtResource("23_dnql6")
@@ -777,7 +778,8 @@ animate_hue = true
 [node name="WaterIntegration" type="Node3D" parent="." unique_id=1889730552]
 
 [node name="Ocean" parent="WaterIntegration" unique_id=1340264265 instance=ExtResource("40_3mclj")]
-ocean_material = SubResource("ShaderMaterial_vbdm5")
+foam_settings = ExtResource("74_gcfoam")
+ocean_material = SubResource("ShaderMaterial_hrvh4")
 wave_world_size_a = 153.5
 wave_world_size_b = 104.0
 wave_amplitude_a = 0.7999999821184
@@ -982,6 +984,7 @@ impact_edge_softness = 0.37
 impact_irregularity = 1.0
 impact_core_opacity = 0.27
 impact_sprite_emission = 0.0
+wake_fade_start_ratio = 0.5
 
 [node name="TurbineExhaust" parent="Gameplay/JetSki/Effects" parent_id_path=PackedInt32Array(328650943, 1733691099) index="1" unique_id=1478477575]
 full_core_length = 2.0
@@ -1068,7 +1071,7 @@ editor_preview_mode = 0
 
 [node name="EntryBubbles" parent="CameraSystem/ChaseCamera/Camera3D/UnderwaterEffect/WaterCrossingOverlay" index="0"]
 visible = false
-material = SubResource("CanvasItemMaterial_iegie")
+material = SubResource("CanvasItemMaterial_n0k1o")
 position = Vector2(1, 1.76)
 amount = 500
 texture = SubResource("GradientTexture2D_pl0kw")
@@ -1076,10 +1079,10 @@ lifetime = 20.0
 speed_scale = 8.0
 explosiveness = 1.0
 randomness = 1.0
-process_material = SubResource("ParticleProcessMaterial_8o7o7")
+process_material = SubResource("ParticleProcessMaterial_vbdm5")
 
 [node name="UnderwaterPostProcess" parent="CameraSystem/ChaseCamera/Camera3D/UnderwaterEffect" index="1" unique_id=1854893749]
-material_override = SubResource("ShaderMaterial_ndnrr")
+material_override = SubResource("ShaderMaterial_iegie")
 
 [node name="Props" type="Node3D" parent="." unique_id=1365592301]
 
@@ -1862,7 +1865,7 @@ unfreeze_duration = 1.0
 debug_events = true
 
 [node name="CollisionShape3D" parent="Props/Vegetation/TreeImpostorsFrozen/TreeImpostorFrozen" index="0" unique_id=1790283657]
-shape = SubResource("BoxShape3D_twiso")
+shape = SubResource("BoxShape3D_8o7o7")
 
 [node name="TreeImpostorFrozen2" parent="Props/Vegetation/TreeImpostorsFrozen" unique_id=469109216 instance=ExtResource("2_cfohk")]
 transform = Transform3D(0.8735965, 0, 0.48664874, 0, 1, 0, -0.48665488, 0, 0.8735977, -423.3858, 2.4459906, -116.46263)
@@ -1873,7 +1876,7 @@ unfreeze_duration = 1.0
 debug_events = true
 
 [node name="CollisionShape3D" parent="Props/Vegetation/TreeImpostorsFrozen/TreeImpostorFrozen2" index="0" unique_id=1790283657]
-shape = SubResource("BoxShape3D_ax04d")
+shape = SubResource("BoxShape3D_ndnrr")
 
 [node name="TreeProjectedShadowBaker" type="Node3D" parent="Props/Vegetation" unique_id=472315960]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.510468, -49.139404, -57.103714)

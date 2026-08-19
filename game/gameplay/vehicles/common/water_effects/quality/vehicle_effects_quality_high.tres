@@ -7,3 +7,4 @@ script = ExtResource("1_quality")
 bow_particles_per_side = 16
 rail_particles_per_side = 8
 impact_maximum_particles = 36
+wake_lifetime = 5.0

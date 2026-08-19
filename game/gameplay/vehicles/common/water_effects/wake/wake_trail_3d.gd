@@ -1098,7 +1098,7 @@ func _rebuild_mesh() -> void:
 			1.0,
 			age_ratio
 		)
-		var alpha := fade * lerpf(0.012, 0.075, sample.speed_factor)
+		var alpha := fade * lerpf(0.035, 0.16, sample.speed_factor)
 		var steering_bias := sample.steering_bias
 		var left_color := Color(
 			age_ratio,
