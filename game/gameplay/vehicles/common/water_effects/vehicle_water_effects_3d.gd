@@ -13,6 +13,14 @@ enum QualityLevel {
 	HIGH,
 }
 
+enum PersistentFoamHistoryBackend {
+	SPLAT_MASK,
+	HISTORY_MAP,
+}
+
+const HISTORY_DEPOSIT_MINIMUM_SPEED := 4.0
+const HISTORY_DEPOSIT_MINIMUM_CONTACT := 0.1
+
 @export_group("References")
 @export_node_path("RigidBody3D") var vehicle_path: NodePath
 @export_node_path("Ocean3D") var ocean_path: NodePath
@@ -122,6 +130,11 @@ enum QualityLevel {
 			_apply_water_effect_channel_settings()
 
 @export_group("Persistent Foam V2")
+@export_enum("SPLAT_MASK:0", "HISTORY_MAP:1") var persistent_foam_v2_backend: int = 0:
+	set(value):
+		persistent_foam_v2_backend = value
+		if is_inside_tree():
+			_configure_persistent_foam()
 @export var persistent_foam_v2_enabled: bool = false:
 	set(value):
 		persistent_foam_v2_enabled = value
@@ -441,6 +454,9 @@ var _left_spray_direction: Vector3 = Vector3.UP
 var _right_spray_direction: Vector3 = Vector3.UP
 var _left_contact_factor: float = 0.0
 var _right_contact_factor: float = 0.0
+var _history_has_last_sample: bool = false
+var _history_last_sample_position := Vector2.ZERO
+var _history_deposit_count: int = 0
 
 @onready var _bow_left: GPUParticles3D = $BowDropletsLeft
 @onready var _bow_right: GPUParticles3D = $BowDropletsRight
@@ -494,6 +510,7 @@ func _physics_process(delta: float) -> void:
 	if _continuous_emission_block_ticks > 0:
 		_continuous_emission_block_ticks -= 1
 	_update_active_impact_metrics()
+	_update_history_deposition()
 
 
 func get_wake_sample_positions() -> PackedVector3Array:
@@ -909,6 +926,134 @@ func _configure_persistent_foam() -> void:
 	_persistent_foam.emission = persistent_foam_v2_emission
 	_persistent_foam.roughness = persistent_foam_v2_roughness
 	_persistent_foam.specular = persistent_foam_v2_specular
+	_sync_persistent_foam_backend()
+
+
+## The persistent foam system has two selectable backends. The splat mask is the
+## default; the history map is a GPU-backed global map owned by the ocean that
+## vehicles only submit deposits into. Disabling the inactive backend keeps the
+## ocean shader sampling exactly one coverage source.
+func _sync_persistent_foam_backend() -> void:
+	if persistent_foam_v2_backend == PersistentFoamHistoryBackend.HISTORY_MAP:
+		if is_instance_valid(_persistent_foam):
+			_persistent_foam.enabled = false
+			_persistent_foam.clear_trail()
+		if is_instance_valid(_ocean):
+			_ocean.set_persistent_foam_history_requested(persistent_foam_v2_enabled, get_instance_id())
+			_sync_history_map_appearance()
+		_reset_history_deposition_gate()
+	else:
+		_persistent_foam.enabled = persistent_foam_v2_enabled
+		if is_instance_valid(_ocean):
+			_ocean.set_persistent_foam_history_requested(false, get_instance_id())
+
+
+## The GPU history map is ocean-owned and shared; when this vehicle selects the
+## HISTORY_MAP backend it mirrors the vehicle appearance exports onto the map so
+## the ocean shader sees the same visual lifecycle, breakup noise and material
+## properties as the splat mask backend.
+func _sync_history_map_appearance() -> void:
+	if not is_instance_valid(_ocean):
+		return
+	var history_map := _ocean.get_persistent_foam_history_map()
+	if not is_instance_valid(history_map):
+		return
+	history_map.set(&"lifetime", persistent_foam_v2_lifetime)
+	history_map.set(&"size_min", persistent_foam_v2_size_min)
+	history_map.set(&"size_max", persistent_foam_v2_size_max)
+	history_map.set(&"fade_in_ratio", persistent_foam_v2_fade_in_ratio)
+	history_map.set(&"fade_out_start_ratio", persistent_foam_v2_fade_out_start_ratio)
+	history_map.set(&"position_jitter", persistent_foam_v2_position_jitter)
+	history_map.set(&"rotation_random_deg", persistent_foam_v2_rotation_random)
+	history_map.set(&"scale_random_min", persistent_foam_v2_scale_random_min)
+	history_map.set(&"scale_random_max", persistent_foam_v2_scale_random_max)
+	history_map.set(&"aspect_min", persistent_foam_v2_aspect_min)
+	history_map.set(&"aspect_max", persistent_foam_v2_aspect_max)
+	history_map.set(&"irregularity", persistent_foam_v2_irregularity)
+	history_map.set(&"noise_scale", persistent_foam_v2_noise_scale)
+	history_map.set(&"noise_threshold", persistent_foam_v2_noise_threshold)
+	history_map.set(&"foam_color", persistent_foam_v2_color)
+	history_map.set(&"emission", persistent_foam_v2_emission)
+	history_map.set(&"roughness", persistent_foam_v2_roughness)
+	history_map.set(&"specular", persistent_foam_v2_specular)
+
+
+func _update_history_deposition() -> void:
+	if (
+		persistent_foam_v2_backend != PersistentFoamHistoryBackend.HISTORY_MAP
+		or not persistent_foam_v2_enabled
+	):
+		return
+	if not _history_deposit_ready():
+		return
+	var position := _propulsion_point.global_position
+	var position_xz := Vector2(position.x, position.z)
+	if _history_has_last_sample and position_xz.distance_to(_history_last_sample_position) < persistent_foam_v2_sample_distance:
+		return
+	var forward_xz := Vector2.ZERO
+	if is_instance_valid(_vehicle):
+		forward_xz = -Vector2(
+			_vehicle.global_transform.basis.z.x,
+			_vehicle.global_transform.basis.z.z
+		)
+	_ocean.submit_persistent_foam_history_deposit(
+		get_instance_id(),
+		position_xz,
+		forward_xz,
+		_history_hull_half_width() * persistent_foam_v2_width_multiplier,
+		_history_measure_intensity()
+	)
+	_history_last_sample_position = position_xz
+	_history_has_last_sample = true
+	_history_deposit_count += 1
+
+
+func _reset_history_deposition_gate() -> void:
+	_history_has_last_sample = false
+	_history_last_sample_position = Vector2.ZERO
+
+
+func _history_deposit_ready() -> bool:
+	if (
+		not is_instance_valid(_vehicle)
+		or not is_instance_valid(_ocean)
+		or not is_instance_valid(_propulsion_point)
+	):
+		return false
+	if _vehicle.navigation_state == JetSkiController.NavigationState.AIRBORNE:
+		return false
+	if _vehicle.rear_submerged_ratio <= 0.0:
+		return false
+	if _vehicle.propulsion_contact_factor < HISTORY_DEPOSIT_MINIMUM_CONTACT:
+		return false
+	if absf(_vehicle.water_relative_forward_speed) < HISTORY_DEPOSIT_MINIMUM_SPEED:
+		return false
+	return true
+
+
+func _history_hull_half_width() -> float:
+	if (
+		not is_instance_valid(_propulsion_point)
+		or not is_instance_valid(_rear_left_marker)
+		or not is_instance_valid(_rear_right_marker)
+	):
+		return 1.2
+	var interior_separation := _rear_left_marker.global_position.distance_to(
+		_rear_right_marker.global_position
+	)
+	if interior_separation > 0.01:
+		return interior_separation * 0.5
+	return 1.2
+
+
+func _history_measure_intensity() -> float:
+	if not is_instance_valid(_vehicle):
+		return 1.0
+	return clampf(
+		absf(_vehicle.water_relative_forward_speed) / 14.0,
+		0.35,
+		1.0
+	)
 
 
 func _connect_signals() -> void:

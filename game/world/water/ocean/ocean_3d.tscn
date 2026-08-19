@@ -10,6 +10,7 @@
 [ext_resource type="Texture2D" uid="uid://bblan7rbfrudb" path="res://world/water/ocean/surface_detail/surface_warp_noise.tres" id="9_warp"]
 [ext_resource type="Resource" uid="uid://cut8ab71245a" path="res://world/water/ocean/foam/default_foam_settings.tres" id="10_foam_settings"]
 [ext_resource type="Texture2D" uid="uid://dpb0qhgywdm05" path="res://world/water/ocean/foam/foam_breakup_noise.tres" id="11_foam_noise"]
+[ext_resource type="PackedScene" path="res://world/water/ocean/foam/persistent_history/persistent_foam_history_map_3d.tscn" id="12_history"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_pixel_ocean"]
 resource_local_to_scene = true
@@ -126,3 +127,5 @@ near_cell_size = 0.5
 middle_cell_size = 10.0
 far_cell_size = 100.0
 extra_cull_margin = 10.0
+
+[node name="PersistentFoamHistoryMap3D" parent="." instance=ExtResource("12_history")]

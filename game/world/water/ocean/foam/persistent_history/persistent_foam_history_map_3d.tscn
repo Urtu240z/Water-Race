@@ -1,0 +1,56 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://world/water/ocean/foam/persistent_history/persistent_foam_history_map_3d.gd" id="1_map"]
+[ext_resource type="Script" path="res://world/water/ocean/foam/persistent_history/persistent_foam_deposit_canvas.gd" id="2_depo"]
+[ext_resource type="Shader" path="res://world/water/ocean/foam/persistent_history/persistent_foam_history_update.gdshader" id="3_shader"]
+
+[node name="PersistentFoamHistoryMap3D" type="Node3D"]
+script = ExtResource("1_map")
+
+[node name="HistoryA" type="SubViewport" parent="."]
+size = Vector2i(1024, 1024)
+transparent_bg = true
+render_target_update_mode = 1
+handle_input_locally = false
+
+[node name="UpdateRect" type="ColorRect" parent="HistoryA"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+material = SubResource("ShaderMaterial_HistoryA")
+
+[node name="HistoryB" type="SubViewport" parent="."]
+size = Vector2i(1024, 1024)
+transparent_bg = true
+render_target_update_mode = 1
+handle_input_locally = false
+
+[node name="UpdateRect" type="ColorRect" parent="HistoryB"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+material = SubResource("ShaderMaterial_HistoryB")
+
+[node name="DepositViewport" type="SubViewport" parent="."]
+size = Vector2i(1024, 1024)
+transparent_bg = true
+render_target_update_mode = 1
+handle_input_locally = false
+
+[node name="DepositCanvas" type="Control" parent="DepositViewport"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("2_depo")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_HistoryA"]
+shader = ExtResource("3_shader")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_HistoryB"]
+shader = ExtResource("3_shader")

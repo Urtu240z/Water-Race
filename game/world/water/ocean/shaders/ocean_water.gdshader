@@ -137,6 +137,16 @@ uniform float persistent_foam_specular : hint_range(0.0, 1.0, 0.01) = 0.16;
 uniform float persistent_foam_irregularity : hint_range(0.0, 1.0, 0.01) = 0.80;
 uniform float persistent_foam_noise_scale : hint_range(0.01, 1.0, 0.01) = 0.12;
 uniform float persistent_foam_noise_threshold : hint_range(0.0, 1.0, 0.01) = 0.48;
+// Persistent Foam V2 - HISTORY MAP alternate backend: a GPU-backed global foam
+// history. State per pixel (RGBA): R footprint, G reveal, B age, A established.
+uniform sampler2D persistent_foam_history_texture : repeat_disable, filter_linear;
+uniform vec2 persistent_foam_history_anchor_xz = vec2(0.0);
+uniform float persistent_foam_history_world_size : hint_range(16.0, 2048.0, 16.0) = 512.0;
+uniform float persistent_foam_history_strength : hint_range(0.0, 4.0, 0.01) = 1.0;
+uniform bool persistent_foam_history_enabled = false;
+uniform float persistent_foam_size_min : hint_range(0.1, 4.0, 0.05) = 0.65;
+uniform float persistent_foam_size_max : hint_range(0.1, 6.0, 0.05) = 1.65;
+uniform float persistent_foam_fade_out_start_ratio : hint_range(0.5, 1.0, 0.01) = 0.70;
 
 group_uniforms Clipmap;
 uniform bool ocean_surface_enabled = false;
@@ -702,14 +712,7 @@ void fragment() {
 	float persistent_foam_coverage = 0.0;
 	float persistent_foam_breakup = 0.5;
 	float persistent_foam_mask = 0.0;
-	if (foam_enabled && persistent_foam_mask_enabled && foam_distance_gate > 0.0001) {
-		vec2 mask_uv = (interpolated_world_xz - persistent_foam_mask_anchor_xz)
-			/ max(persistent_foam_mask_world_size, 0.001)
-			+ 0.5;
-		vec2 mask_edge = abs(mask_uv - 0.5) * 2.0;
-		float mask_inside = 1.0 - smoothstep(0.955, 1.0, max(mask_edge.x, mask_edge.y));
-		float mask_value = mask_inside
-			* texture(persistent_foam_mask_texture, mask_uv).r;
+	if (foam_enabled && (persistent_foam_mask_enabled || persistent_foam_history_enabled) && foam_distance_gate > 0.0001) {
 		vec2 persistent_macro_uv = interpolated_world_xz * persistent_foam_noise_scale;
 		vec2 persistent_detail_uv = interpolated_world_xz * persistent_foam_noise_scale * 3.7
 			+ vec2(31.4, -17.7);
@@ -723,8 +726,47 @@ void fragment() {
 			persistent_foam_noise_threshold + persistent_noise_width,
 			persistent_combined_noise
 		);
-		persistent_foam_coverage = mask_value
-			* persistent_foam_mask_strength
+		float mask_value = 0.0;
+		if (persistent_foam_mask_enabled) {
+			vec2 mask_uv = (interpolated_world_xz - persistent_foam_mask_anchor_xz)
+				/ max(persistent_foam_mask_world_size, 0.001)
+				+ 0.5;
+			vec2 mask_edge = abs(mask_uv - 0.5) * 2.0;
+			float mask_inside = 1.0 - smoothstep(0.955, 1.0, max(mask_edge.x, mask_edge.y));
+			mask_value = mask_inside
+				* texture(persistent_foam_mask_texture, mask_uv).r;
+		}
+		float history_value = 0.0;
+		if (persistent_foam_history_enabled) {
+			vec2 history_uv = (interpolated_world_xz - persistent_foam_history_anchor_xz)
+				/ max(persistent_foam_history_world_size, 0.001)
+				+ 0.5;
+			vec2 history_edge = abs(history_uv - 0.5) * 2.0;
+			float history_inside = 1.0 - smoothstep(0.955, 1.0, max(history_edge.x, history_edge.y));
+			vec4 history_state = texture(persistent_foam_history_texture, history_uv);
+			float radius_frac = mix(
+				clamp(persistent_foam_size_min / max(persistent_foam_size_max, 0.001), 0.02, 1.0),
+				1.0,
+				clamp(history_state.g, 0.0, 1.0)
+			);
+			float history_threshold = (1.0 - radius_frac) * (1.0 - radius_frac);
+			float history_revealed = smoothstep(
+				history_threshold - 0.05,
+				history_threshold + 0.05,
+				history_state.r
+			);
+			float history_fade_out = 1.0 - smoothstep(persistent_foam_fade_out_start_ratio, 1.0, history_state.b);
+			float history_coverage = history_revealed
+				* clamp(history_state.a, 0.0, 1.0)
+				* history_fade_out;
+			history_value = history_inside * history_coverage;
+		}
+		float persistent_foam_source_strength = persistent_foam_mask_strength;
+		if (persistent_foam_history_enabled && !persistent_foam_mask_enabled) {
+			persistent_foam_source_strength = persistent_foam_history_strength;
+		}
+		persistent_foam_coverage = max(mask_value, history_value)
+			* persistent_foam_source_strength
 			* mix(1.0, persistent_foam_breakup, persistent_foam_irregularity)
 			* foam_distance_gate;
 	}

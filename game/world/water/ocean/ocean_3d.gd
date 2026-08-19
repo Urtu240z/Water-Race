@@ -167,6 +167,9 @@ var _external_materials: Array[ShaderMaterial] = []
 var _material_cache: Array[ShaderMaterial] = []
 var _persistent_foam_mask_provider: Node3D
 var _persistent_foam_mask_version: int = -1
+var _persistent_foam_history_provider: Node3D
+var _persistent_foam_history_version: int = -1
+var _history_request_refs: Array[int] = []
 var _calm_water_area_refs: Array[WeakRef] = []
 var _calm_water_zones: Array[Dictionary] = []
 var _calm_zone_centers_shapes := PackedVector4Array()
@@ -335,6 +338,7 @@ func _ready() -> void:
 	set_process(Engine.is_editor_hint() or _water_exclusion_volumes_dirty)
 	set_physics_process(not Engine.is_editor_hint())
 	_push_all_shader_parameters()
+	_initialize_persistent_foam_history()
 	_trace_mark("OCEAN_CORE_READY")
 
 	if not Engine.is_editor_hint():
@@ -405,6 +409,7 @@ func _physics_process(delta: float) -> void:
 	_update_interaction_metrics()
 	_push_time_parameter_to_all_materials()
 	_update_persistent_foam_mask_push_if_dirty()
+	_update_persistent_foam_history_push_if_dirty()
 	if _calm_water_areas_dirty:
 		_rebuild_calm_water_zones()
 		_push_calm_water_parameters_to_all_materials()
@@ -1157,7 +1162,7 @@ func unregister_external_water_material(material: ShaderMaterial) -> void:
 
 
 func apply_world_rebase(
-	_shift: Vector3,
+	shift: Vector3,
 	logical_origin_x: float,
 	logical_origin_z: float
 ) -> void:
@@ -1165,6 +1170,9 @@ func apply_world_rebase(
 		return
 	_logical_origin_xz = Vector2(logical_origin_x, logical_origin_z)
 	_push_origin_parameter_to_all_materials()
+	var history_map := get_node_or_null("PersistentFoamHistoryMap3D")
+	if is_instance_valid(history_map):
+		history_map.call(&"apply_world_rebase", shift)
 
 
 func _refresh_editor_preview() -> void:
@@ -3053,6 +3061,7 @@ func _push_all_parameters_to_material(material: ShaderMaterial) -> void:
 	_push_water_exclusion_parameters(material)
 	_push_event_wave_parameters(material)
 	_push_persistent_foam_mask_parameters(material)
+	_push_persistent_foam_history_parameters(material)
 
 func _push_event_wave_parameters_to_all_materials() -> void:
 	for material in _all_ocean_materials():
@@ -3175,6 +3184,159 @@ func _push_persistent_foam_mask_parameters(material: ShaderMaterial) -> void:
 		provider.call("get_mask_specular")
 	)
 	material.set_shader_parameter(&"persistent_foam_mask_enabled", true)
+
+
+## ---- Persistent Foam V2 HISTORY MAP uniform provider --------------------
+## The history map is owned by the ocean (one global map per ocean) and pushes
+## the persistent foam appearance uniforms plus the history texture/anchor when
+## it is the active backend. The mask helper above stays as the SPLAT_MASK
+## fallback backend.
+
+func _initialize_persistent_foam_history() -> void:
+	var history_map := get_node_or_null("PersistentFoamHistoryMap3D") as Node3D
+	if not is_instance_valid(history_map):
+		return
+	var initial_xz := Vector2.ZERO
+	if is_instance_valid(follow_target):
+		initial_xz = Vector2(follow_target.global_position.x, follow_target.global_position.z)
+	history_map.call(&"configure", self, initial_xz)
+
+
+func set_persistent_foam_history_provider(provider: Node3D) -> void:
+	_persistent_foam_history_provider = provider
+	_persistent_foam_history_version = _persistent_foam_history_params_version()
+	_push_persistent_foam_history_parameters_to_all_materials()
+
+
+func clear_persistent_foam_history_provider() -> void:
+	_persistent_foam_history_provider = null
+	_persistent_foam_history_version = -1
+	_push_persistent_foam_history_parameters_to_all_materials()
+
+
+func _persistent_foam_history_params_version() -> int:
+	if not is_instance_valid(_persistent_foam_history_provider):
+		return -1
+	return int(_persistent_foam_history_provider.call("get_history_params_version"))
+
+
+func _update_persistent_foam_history_push_if_dirty() -> void:
+	var current_version := _persistent_foam_history_params_version()
+	if current_version != _persistent_foam_history_version:
+		_persistent_foam_history_version = current_version
+		_push_persistent_foam_history_parameters_to_all_materials()
+
+
+func _push_persistent_foam_history_parameters_to_all_materials() -> void:
+	for material in _all_ocean_materials():
+		_push_persistent_foam_history_parameters(material)
+
+
+func _push_persistent_foam_history_parameters(material: ShaderMaterial) -> void:
+	if material == null or material.shader == null:
+		return
+	var provider := _persistent_foam_history_provider
+	if not is_instance_valid(provider) or not bool(provider.call("is_history_enabled")):
+		material.set_shader_parameter(&"persistent_foam_history_enabled", false)
+		return
+	material.set_shader_parameter(
+		&"persistent_foam_history_texture",
+		provider.call("get_history_texture")
+	)
+	material.set_shader_parameter(
+		&"persistent_foam_history_anchor_xz",
+		provider.call("get_history_anchor_xz")
+	)
+	material.set_shader_parameter(
+		&"persistent_foam_history_world_size",
+		provider.call("get_history_world_size")
+	)
+	material.set_shader_parameter(
+		&"persistent_foam_history_strength",
+		provider.call("get_history_strength")
+	)
+	material.set_shader_parameter(
+		&"persistent_foam_size_min",
+		provider.call("get_history_size_min")
+	)
+	material.set_shader_parameter(
+		&"persistent_foam_size_max",
+		provider.call("get_history_size_max")
+	)
+	material.set_shader_parameter(
+		&"persistent_foam_fade_out_start_ratio",
+		provider.call("get_history_fade_out_start_ratio")
+	)
+	material.set_shader_parameter(
+		&"persistent_foam_irregularity",
+		provider.call("get_history_irregularity")
+	)
+	material.set_shader_parameter(
+		&"persistent_foam_noise_scale",
+		provider.call("get_history_noise_scale")
+	)
+	material.set_shader_parameter(
+		&"persistent_foam_noise_threshold",
+		provider.call("get_history_noise_threshold")
+	)
+	material.set_shader_parameter(
+		&"persistent_foam_color",
+		provider.call("get_history_color")
+	)
+	material.set_shader_parameter(
+		&"persistent_foam_emission",
+		provider.call("get_history_emission")
+	)
+	material.set_shader_parameter(
+		&"persistent_foam_roughness",
+		provider.call("get_history_roughness")
+	)
+	material.set_shader_parameter(
+		&"persistent_foam_specular",
+		provider.call("get_history_specular")
+	)
+	material.set_shader_parameter(&"persistent_foam_history_enabled", true)
+
+
+## Vehicles are deposit SOURCES only: they submit through the ocean so the API
+## never depends on JetSkiController and multiple sources combine in one update.
+func submit_persistent_foam_history_deposit(
+	source_id: int,
+	world_xz: Vector2,
+	forward_xz: Vector2,
+	radius: float,
+	intensity: float
+) -> Node:
+	if not is_instance_valid(_persistent_foam_history_provider):
+		return null
+	return _persistent_foam_history_provider.call(
+		&"submit_deposit",
+		source_id,
+		world_xz,
+		forward_xz,
+		radius,
+		intensity
+	)
+
+
+## A vehicle that selected the HISTORY_MAP backend asks the ocean to activate
+## its global history map. Multiple vehicles can request it simultaneously, so
+## the ocean refcounts requests per source id and enables the map while any
+## source still wants it.
+func set_persistent_foam_history_requested(requested: bool, source_id: int = 0) -> void:
+	var history_map := get_node_or_null("PersistentFoamHistoryMap3D") as Node3D
+	if not is_instance_valid(history_map):
+		return
+	if requested:
+		if not _history_request_refs.has(source_id):
+			_history_request_refs.append(source_id)
+	else:
+		_history_request_refs.erase(source_id)
+	history_map.set(&"enabled", not _history_request_refs.is_empty())
+
+
+func get_persistent_foam_history_map() -> Node3D:
+	return get_node_or_null("PersistentFoamHistoryMap3D") as Node3D
 
 
 func _push_origin_parameter_to_all_materials() -> void:
