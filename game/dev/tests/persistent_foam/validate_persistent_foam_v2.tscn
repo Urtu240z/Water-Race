@@ -1,0 +1,6 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://dev/tests/persistent_foam/validate_persistent_foam_v2.gd" id="1_validate"]
+
+[node name="ValidatePersistentFoamV2" type="Node"]
+script = ExtResource("1_validate")

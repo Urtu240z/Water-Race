@@ -121,6 +121,38 @@ enum QualityLevel {
 		if is_inside_tree():
 			_apply_water_effect_channel_settings()
 
+@export_group("Persistent Foam V2")
+@export var persistent_foam_v2_enabled: bool = false:
+	set(value):
+		persistent_foam_v2_enabled = value
+		if is_inside_tree():
+			_configure_persistent_foam()
+@export_range(1.0, 60.0, 0.5, "suffix:s") var persistent_foam_v2_lifetime: float = 20.0:
+	set(value):
+		persistent_foam_v2_lifetime = value
+		if is_inside_tree():
+			_configure_persistent_foam()
+@export_range(0.2, 3.0, 0.05, "suffix:m") var persistent_foam_v2_sample_distance: float = 0.8:
+	set(value):
+		persistent_foam_v2_sample_distance = value
+		if is_inside_tree():
+			_configure_persistent_foam()
+@export_range(16, 1024, 1) var persistent_foam_v2_maximum_points: int = 256:
+	set(value):
+		persistent_foam_v2_maximum_points = value
+		if is_inside_tree():
+			_configure_persistent_foam()
+@export_range(0.1, 6.0, 0.05) var persistent_foam_v2_width_multiplier: float = 1.0:
+	set(value):
+		persistent_foam_v2_width_multiplier = value
+		if is_inside_tree():
+			_configure_persistent_foam()
+@export_range(0.0, 3.0, 0.05) var persistent_foam_v2_strength: float = 1.0:
+	set(value):
+		persistent_foam_v2_strength = value
+		if is_inside_tree():
+			_configure_persistent_foam()
+
 var current_spray_intensity: float:
 	get:
 		return _current_spray_intensity
@@ -329,6 +361,7 @@ var _right_contact_factor: float = 0.0
 @onready var _impact_pool: Node3D = $ImpactSplashPool
 @onready var _wake_trail: WakeTrail3D = $WakeTrail3D
 @onready var _hull_foam: HullFoam3D = $HullFoam3D
+@onready var _persistent_foam: PersistentFoamTrail3D = $PersistentFoamTrail3D
 
 
 func _ready() -> void:
@@ -343,6 +376,7 @@ func _initialize_effects() -> void:
 	_configure_particle_resources()
 	_configure_wake()
 	_configure_hull_foam()
+	_configure_persistent_foam()
 	_apply_water_effect_channel_settings()
 	_configure_spray_sheet()
 	_apply_quality_profile()
@@ -384,6 +418,8 @@ func clear_all_visual_effects() -> void:
 		_wake_trail.clear_trail()
 	if is_instance_valid(_hull_foam):
 		_hull_foam.clear_foam()
+	if is_instance_valid(_persistent_foam):
+		_persistent_foam.clear_trail()
 	if is_instance_valid(_spray_sheet):
 		_spray_sheet.clear_sheets()
 	_continuous_emission_block_ticks = 1
@@ -451,6 +487,18 @@ func get_graphics_quality_debug_status() -> Dictionary:
 			if is_instance_valid(_turbine_controller)
 			else {}
 		),
+	}
+
+
+func get_persistent_foam_status() -> Dictionary:
+	if not is_instance_valid(_persistent_foam):
+		return {}
+	return {
+		"enabled": _persistent_foam.enabled,
+		"sample_count": _persistent_foam.sample_count,
+		"mesh_rebuild_count": _persistent_foam.mesh_rebuild_count,
+		"rebase_count": _persistent_foam.rebase_count,
+		"validation": _persistent_foam.get_position_validation_status(),
 	}
 
 
@@ -733,6 +781,28 @@ func _apply_water_effect_channel_settings() -> void:
 		_wake_trail.ribbon_render_enabled = wake_ribbon_foam_enabled
 		_wake_trail.directional_persistent_foam_enabled = persistent_ocean_foam_enabled
 		_wake_trail.directional_deformation_active = directional_wake_deformation_enabled
+
+
+func _configure_persistent_foam() -> void:
+	if not is_instance_valid(_persistent_foam):
+		return
+	_persistent_foam.configure(
+		_vehicle,
+		_ocean,
+		_propulsion_point,
+		_rear_left_marker,
+		_rear_right_marker
+	)
+	_persistent_foam.configure_foam(
+		_ocean.foam_settings if is_instance_valid(_ocean) else null,
+		_ocean.foam_noise_texture if is_instance_valid(_ocean) else null
+	)
+	_persistent_foam.enabled = persistent_foam_v2_enabled
+	_persistent_foam.lifetime = persistent_foam_v2_lifetime
+	_persistent_foam.sample_distance = persistent_foam_v2_sample_distance
+	_persistent_foam.maximum_points = persistent_foam_v2_maximum_points
+	_persistent_foam.width_multiplier = persistent_foam_v2_width_multiplier
+	_persistent_foam.strength = persistent_foam_v2_strength
 
 
 func _connect_signals() -> void:
@@ -1105,6 +1175,8 @@ func _update_active_impact_metrics() -> void:
 func _on_world_rebased(shift: Vector3) -> void:
 	if is_instance_valid(_wake_trail):
 		_wake_trail.apply_world_rebase(shift)
+	if is_instance_valid(_persistent_foam):
+		_persistent_foam.apply_world_rebase(shift)
 	_stop_continuous_spray()
 	_clear_particle_emitters()
 	_continuous_emission_block_ticks = 1
