@@ -24,17 +24,21 @@ var anchor_xz := Vector2.ZERO
 var world_size := 512.0
 
 var _stamp_texture: Texture2D
+var _deposit_material: CanvasItemMaterial
 
 
 func _ready() -> void:
 	mouse_filter = MOUSE_FILTER_IGNORE
+	_deposit_material = CanvasItemMaterial.new()
+	_deposit_material.blend_mode = CanvasItemMaterial.BLEND_MODE_ADD
+	material = _deposit_material
 	_stamp_texture = _create_stamp_texture()
 
 
 ## Deterministic irregular stamp, generated ONCE from a fixed seed. The RED
 ## channel carries the footprint gradient (1 at center, 0 at the stamp extent)
-## and GREEN is hard 1 everywhere so the freshness flag is always set inside a
-## stamp even at its very edge.
+## and GREEN is set only where the real footprint is non-zero. Transparent
+## corners must not refresh existing history.
 func _create_stamp_texture() -> Texture2D:
 	var image := Image.create(SPLAT_TEXTURE_SIZE, SPLAT_TEXTURE_SIZE, false, Image.FORMAT_RGBA8)
 	var center := Vector2(float(SPLAT_TEXTURE_SIZE - 1) * 0.5, float(SPLAT_TEXTURE_SIZE - 1) * 0.5)
@@ -62,7 +66,8 @@ func _create_stamp_texture() -> Texture2D:
 					1.0
 				)
 				falloff = maxf(falloff, 1.0 - smoothstep(0.55, 1.0, distance))
-			image.set_pixel(x, y, Color(falloff, 1.0, 0.0, 1.0))
+			var freshness := 1.0 if falloff > 0.001 else 0.0
+			image.set_pixel(x, y, Color(falloff, freshness, 0.0, 1.0))
 	var texture := ImageTexture.create_from_image(image)
 	return texture
 
@@ -101,6 +106,7 @@ func _draw() -> void:
 			## Stamp +Y is the travel direction. Textures draw +Y down, so the
 			## on-canvas forward angle is atan2(-forward_x, forward_z).
 			rotation = atan2(-forward.x, forward.y)
+		rotation += stamp.rotation
 		draw_set_transform(
 			center_px,
 			rotation,

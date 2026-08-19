@@ -476,6 +476,13 @@ func _ready() -> void:
 	call_deferred("_initialize_effects")
 
 
+func _exit_tree() -> void:
+	## A destroyed or detached source must release its global HISTORY_MAP
+	## request, otherwise Ocean3D would keep the shared map enabled forever.
+	if is_instance_valid(_ocean):
+		_ocean.set_persistent_foam_history_requested(false, get_instance_id())
+
+
 func _initialize_effects() -> void:
 	_resolve_references()
 	_configure_particle_resources()
@@ -959,6 +966,7 @@ func _sync_history_map_appearance() -> void:
 	if not is_instance_valid(history_map):
 		return
 	history_map.set(&"lifetime", persistent_foam_v2_lifetime)
+	history_map.set(&"strength", persistent_foam_v2_strength)
 	history_map.set(&"size_min", persistent_foam_v2_size_min)
 	history_map.set(&"size_max", persistent_foam_v2_size_max)
 	history_map.set(&"fade_in_ratio", persistent_foam_v2_fade_in_ratio)

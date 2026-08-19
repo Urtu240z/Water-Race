@@ -1,8 +1,18 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene load_steps=8 format=3]
 
 [ext_resource type="Script" path="res://world/water/ocean/foam/persistent_history/persistent_foam_history_map_3d.gd" id="1_map"]
 [ext_resource type="Script" path="res://world/water/ocean/foam/persistent_history/persistent_foam_deposit_canvas.gd" id="2_depo"]
 [ext_resource type="Shader" path="res://world/water/ocean/foam/persistent_history/persistent_foam_history_update.gdshader" id="3_shader"]
+[ext_resource type="Shader" path="res://world/water/ocean/foam/persistent_history/persistent_foam_history_clear.gdshader" id="4_clear"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_HistoryA"]
+shader = ExtResource("3_shader")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_HistoryB"]
+shader = ExtResource("3_shader")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_Clear"]
+shader = ExtResource("4_clear")
 
 [node name="PersistentFoamHistoryMap3D" type="Node3D"]
 script = ExtResource("1_map")
@@ -10,6 +20,7 @@ script = ExtResource("1_map")
 [node name="HistoryA" type="SubViewport" parent="."]
 size = Vector2i(1024, 1024)
 transparent_bg = true
+use_hdr_2d = true
 render_target_update_mode = 1
 handle_input_locally = false
 
@@ -21,9 +32,19 @@ grow_horizontal = 2
 grow_vertical = 2
 material = SubResource("ShaderMaterial_HistoryA")
 
+[node name="ClearRect" type="ColorRect" parent="HistoryA"]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+material = SubResource("ShaderMaterial_Clear")
+
 [node name="HistoryB" type="SubViewport" parent="."]
 size = Vector2i(1024, 1024)
 transparent_bg = true
+use_hdr_2d = true
 render_target_update_mode = 1
 handle_input_locally = false
 
@@ -34,6 +55,15 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 material = SubResource("ShaderMaterial_HistoryB")
+
+[node name="ClearRect" type="ColorRect" parent="HistoryB"]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+material = SubResource("ShaderMaterial_Clear")
 
 [node name="DepositViewport" type="SubViewport" parent="."]
 size = Vector2i(1024, 1024)
@@ -49,8 +79,11 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("2_depo")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_HistoryA"]
-shader = ExtResource("3_shader")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_HistoryB"]
-shader = ExtResource("3_shader")
+[node name="ClearRect" type="ColorRect" parent="DepositViewport"]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+material = SubResource("ShaderMaterial_Clear")

@@ -1,4 +1,7 @@
 shader_type canvas_item;
+// RGBA is simulation state, not transparency. In particular A is allowed to
+// be zero at birth, so normal CanvasItem alpha blending would corrupt R/G/B.
+render_mode blend_disabled;
 
 // Persistent Foam V2 - HISTORY MAP state update.
 //
@@ -44,7 +47,7 @@ void fragment() {
 		old_state = texture(history_texture, old_uv);
 	}
 	vec4 dep = texture(deposit_texture, UV);
-	bool has_deposit = dep.g > 0.001;
+	bool has_deposit = dep.g > 0.001 && dep.r > 0.001;
 
 	float age = min(old_state.b + max(dt_ratio, 0.0), 1.0);
 	if (has_deposit) {
@@ -52,17 +55,23 @@ void fragment() {
 	}
 	if (age >= 1.0) {
 		COLOR = vec4(0.0);
-		return;
+	} else {
+		// Reveal progress and established alpha are monotonic so a second pass
+		// can refresh a location without making existing foam less visible.
+		float reveal = max(old_state.g, smooth01(age));
+		float established = max(
+			old_state.a,
+			smoothrange(0.0, max(fade_in_ratio, 1e-5), age)
+		);
+		// DepositViewport uses additive blending for overlapping new stamps.
+		// Clamp the merged coverage so it remains bounded in [0, 1].
+		float footprint = max(clamp(old_state.r, 0.0, 1.0), clamp(dep.r, 0.0, 1.0));
+
+		COLOR = vec4(
+			clamp(footprint, 0.0, 1.0),
+			clamp(reveal, 0.0, 1.0),
+			clamp(age, 0.0, 1.0),
+			clamp(established, 0.0, 1.0)
+		);
 	}
-
-	// Reveal progress and established alpha are monotonic so a second pass can
-	// refresh a location without ever making the existing foam less visible.
-	float reveal = max(old_state.g, smooth01(age));
-	float established = max(
-		old_state.a,
-		smoothrange(0.0, max(fade_in_ratio, 1e-5), age)
-	);
-	float footprint = max(old_state.r, dep.r);
-
-	COLOR = vec4(footprint, reveal, age, established);
 }

@@ -28,6 +28,7 @@ var enabled: bool = false:
 		if enabled == value:
 			return
 		enabled = value
+		_touch_history_params()
 		_update_active()
 		_register_with_ocean()
 		if enabled:
@@ -35,33 +36,121 @@ var enabled: bool = false:
 
 var lifetime: float = 20.0:
 	set(value):
+		if is_equal_approx(lifetime, value):
+			return
 		lifetime = value
+		_touch_history_params()
 var size_min: float = 0.65:
 	set(value):
+		if is_equal_approx(size_min, value):
+			return
 		size_min = value
+		_touch_history_params()
 var size_max: float = 1.65:
 	set(value):
+		if is_equal_approx(size_max, value):
+			return
 		size_max = value
+		_touch_history_params()
 var fade_in_ratio: float = 0.10:
 	set(value):
+		if is_equal_approx(fade_in_ratio, value):
+			return
 		fade_in_ratio = value
+		_touch_history_params()
 var fade_out_start_ratio: float = 0.70:
 	set(value):
+		if is_equal_approx(fade_out_start_ratio, value):
+			return
 		fade_out_start_ratio = value
-var position_jitter: float = 0.65
-var rotation_random_deg: float = 55.0
-var scale_random_min: float = 0.65
-var scale_random_max: float = 1.35
-var aspect_min: float = 0.55
-var aspect_max: float = 1.45
+		_touch_history_params()
 
-var irregularity: float = 0.80
-var noise_scale: float = 0.12
-var noise_threshold: float = 0.48
-var foam_color: Color = Color(0.90, 0.97, 1.0, 1.0)
-var emission: float = 0.0
-var roughness: float = 0.88
-var specular: float = 0.16
+var strength: float = 1.0:
+	set(value):
+		if is_equal_approx(strength, value):
+			return
+		strength = value
+		_touch_history_params()
+
+var position_jitter: float = 0.65:
+	set(value):
+		if is_equal_approx(position_jitter, value):
+			return
+		position_jitter = value
+		_touch_history_params()
+var rotation_random_deg: float = 55.0:
+	set(value):
+		if is_equal_approx(rotation_random_deg, value):
+			return
+		rotation_random_deg = value
+		_touch_history_params()
+var scale_random_min: float = 0.65:
+	set(value):
+		if is_equal_approx(scale_random_min, value):
+			return
+		scale_random_min = value
+		_touch_history_params()
+var scale_random_max: float = 1.35:
+	set(value):
+		if is_equal_approx(scale_random_max, value):
+			return
+		scale_random_max = value
+		_touch_history_params()
+var aspect_min: float = 0.55:
+	set(value):
+		if is_equal_approx(aspect_min, value):
+			return
+		aspect_min = value
+		_touch_history_params()
+var aspect_max: float = 1.45:
+	set(value):
+		if is_equal_approx(aspect_max, value):
+			return
+		aspect_max = value
+		_touch_history_params()
+
+var irregularity: float = 0.80:
+	set(value):
+		if is_equal_approx(irregularity, value):
+			return
+		irregularity = value
+		_touch_history_params()
+var noise_scale: float = 0.12:
+	set(value):
+		if is_equal_approx(noise_scale, value):
+			return
+		noise_scale = value
+		_touch_history_params()
+var noise_threshold: float = 0.48:
+	set(value):
+		if is_equal_approx(noise_threshold, value):
+			return
+		noise_threshold = value
+		_touch_history_params()
+var foam_color: Color = Color(0.90, 0.97, 1.0, 1.0):
+	set(value):
+		if foam_color == value:
+			return
+		foam_color = value
+		_touch_history_params()
+var emission: float = 0.0:
+	set(value):
+		if is_equal_approx(emission, value):
+			return
+		emission = value
+		_touch_history_params()
+var roughness: float = 0.88:
+	set(value):
+		if is_equal_approx(roughness, value):
+			return
+		roughness = value
+		_touch_history_params()
+var specular: float = 0.16:
+	set(value):
+		if is_equal_approx(specular, value):
+			return
+		specular = value
+		_touch_history_params()
 
 var deposit_count: int = 0
 var update_count: int = 0
@@ -80,13 +169,21 @@ var _rng_seeded: bool = false
 
 var _history_viewports: Array[SubViewport] = []
 var _update_rects: Array[ColorRect] = []
+var _clear_rects: Array[ColorRect] = []
 var _deposit_viewport: SubViewport
 var _deposit_canvas: Control
+var _deposit_clear_rect: ColorRect
+var _history_params_version: int = 0
+var _clear_serial: int = 0
+var _update_serial: int = 0
+var _update_in_flight: bool = false
+var _queued_dt_ratio: float = 0.0
+var _queued_remap_delta_uv := Vector2.ZERO
 
 
 func _ready() -> void:
 	## Runs after vehicles (priority 20) and the splat mask (priority 22) so
-	## this frame's deposit submissions are consumed in the same pass.
+	## this frame's deposit submissions are consumed by the next GPU pass.
 	process_physics_priority = 23
 	_history_viewports = [
 		$HistoryA as SubViewport,
@@ -96,11 +193,18 @@ func _ready() -> void:
 		$HistoryA/UpdateRect as ColorRect,
 		$HistoryB/UpdateRect as ColorRect,
 	]
+	_clear_rects = [
+		$HistoryA/ClearRect as ColorRect,
+		$HistoryB/ClearRect as ColorRect,
+	]
 	_deposit_viewport = $DepositViewport as SubViewport
 	_deposit_canvas = $DepositViewport/DepositCanvas as Control
+	_deposit_clear_rect = $DepositViewport/ClearRect as ColorRect
 	if is_instance_valid(_deposit_canvas):
 		_deposit_canvas.world_size = HISTORY_WORLD_SIZE
 	_update_active()
+	if enabled:
+		_clear_all_viewports()
 
 
 func configure(ocean: Ocean3D, initial_world_xz: Vector2) -> void:
@@ -162,23 +266,31 @@ func submit_deposit(
 
 
 func apply_world_rebase(shift: Vector3) -> void:
-	## The whole world shifted by `shift`; ONE global GPU map follows by moving
-	## its anchor the same amount, so stored foam stays at the same logical
-	## world XZ (REAL WorldOriginController semantics: foam shifts by
-	## -horizontal_shift in the moved domain).
-	_anchor_xz += Vector2(shift.x, shift.z)
+	## WorldOriginController increases logical_origin by shift and moves local
+	## nodes by -shift. The map stores local XZ, so its anchor must move by
+	## -shift to preserve each foam sample's logical world location.
+	_anchor_xz -= Vector2(shift.x, shift.z)
 	rebase_count += 1
+	_touch_history_params()
 	_sync_anchor()
 
 
 func clear_history() -> void:
 	_pending.clear()
+	_update_in_flight = false
+	if is_instance_valid(_deposit_canvas):
+		_deposit_canvas.clear_stamps()
 	_clear_all_viewports()
+	_accumulated_time = 0.0
 	update_count = 0
+	_write_index = 0
+	_touch_history_params()
 
 
 func _physics_process(delta: float) -> void:
 	if not enabled or Engine.is_editor_hint():
+		return
+	if _update_in_flight:
 		return
 	_track_anchor()
 	_accumulated_time += delta
@@ -220,6 +332,7 @@ func _track_anchor() -> void:
 		return
 	_anchor_xz += shift
 	anchor_count += 1
+	_touch_history_params()
 	_queue_anchor_remap(shift)
 	_deposit_canvas.anchor_xz = _anchor_xz
 
@@ -244,17 +357,32 @@ func _queue_anchor_remap(shift_xz: Vector2) -> void:
 	if shift_xz.is_zero_approx():
 		return
 	_remap_delta_uv = shift_xz / HISTORY_WORLD_SIZE
-	anchor_count += 1
 
 
 func _run_update_pass(dt_ratio: float) -> void:
-	## Rasterize any pending stamps (single-use deposit map), then advance the
-	## history state sampling the deposit map in the same pass.
+	## Rasterize deposits first. The history pass is deferred until the next
+	## frame because SubViewports update asynchronously in Godot 4.7.
+	if _update_in_flight or not is_inside_tree():
+		return
+	_update_in_flight = true
+	_update_serial += 1
+	var serial := _update_serial
+	_queued_dt_ratio = dt_ratio
+	_queued_remap_delta_uv = _remap_delta_uv
+	_remap_delta_uv = Vector2.ZERO
 	if is_instance_valid(_deposit_canvas):
 		_deposit_canvas.stamps = _pending.duplicate()
 		_deposit_canvas.mark_dirty()
 	_pending.clear()
 	_render_viewport_now(_deposit_viewport)
+	call_deferred("_complete_update_pass", serial)
+
+
+func _complete_update_pass(serial: int) -> void:
+	## Wait for DepositViewport to produce its texture before sampling it.
+	await get_tree().process_frame
+	if serial != _update_serial or not _update_in_flight:
+		return
 	var read_viewport := _history_viewports[1 - _write_index]
 	var write_viewport := _history_viewports[_write_index]
 	var update_rect := _update_rects[_write_index]
@@ -266,31 +394,69 @@ func _run_update_pass(dt_ratio: float) -> void:
 		&"deposit_texture",
 		_deposit_viewport.get_texture()
 	)
-	update_rect.material.set_shader_parameter(&"dt_ratio", dt_ratio)
+	update_rect.material.set_shader_parameter(&"dt_ratio", _queued_dt_ratio)
 	update_rect.material.set_shader_parameter(&"fade_in_ratio", fade_in_ratio)
-	update_rect.material.set_shader_parameter(&"remap_delta_uv", _remap_delta_uv)
-	_remap_delta_uv = Vector2.ZERO
+	update_rect.material.set_shader_parameter(&"remap_delta_uv", _queued_remap_delta_uv)
 	_render_viewport_now(write_viewport)
+	await get_tree().process_frame
+	if serial != _update_serial:
+		return
 	_write_index = 1 - _write_index
 	update_count += 1
+	_touch_history_params()
 	## Deposit viewport is single-use: clear it for the next pass.
 	if is_instance_valid(_deposit_canvas):
 		_deposit_canvas.clear_stamps()
+	_update_in_flight = false
 
 
 func _render_viewport_now(viewport: SubViewport) -> void:
 	if not is_instance_valid(viewport):
 		return
 	viewport.render_target_update_mode = SubViewport.UPDATE_ONCE
-	viewport.update_worlds()
 
 
 func _clear_all_viewports() -> void:
-	for viewport in _history_viewports:
-		if is_instance_valid(viewport):
-			_render_viewport_now(viewport)
+	_clear_serial += 1
+	_update_serial += 1
+	for index in _history_viewports.size():
+		var viewport := _history_viewports[index]
+		if not is_instance_valid(viewport):
+			continue
+		var update_rect := _update_rects[index] if index < _update_rects.size() else null
+		var clear_rect := _clear_rects[index] if index < _clear_rects.size() else null
+		if is_instance_valid(update_rect):
+			update_rect.visible = false
+		if is_instance_valid(clear_rect):
+			clear_rect.visible = true
+		_render_viewport_now(viewport)
 	if is_instance_valid(_deposit_viewport):
+		if is_instance_valid(_deposit_canvas):
+			_deposit_canvas.visible = false
+		if is_instance_valid(_deposit_clear_rect):
+			_deposit_clear_rect.visible = true
 		_render_viewport_now(_deposit_viewport)
+	if is_inside_tree():
+		call_deferred("_finish_gpu_clear", _clear_serial)
+
+
+func _finish_gpu_clear(serial: int) -> void:
+	## UPDATE_ONCE renders on the next frame. Keep the clear rects visible until
+	## that frame has completed, otherwise the old feedback texture survives.
+	await get_tree().process_frame
+	if serial != _clear_serial:
+		return
+	for index in _history_viewports.size():
+		var update_rect := _update_rects[index] if index < _update_rects.size() else null
+		var clear_rect := _clear_rects[index] if index < _clear_rects.size() else null
+		if is_instance_valid(clear_rect):
+			clear_rect.visible = false
+		if is_instance_valid(update_rect):
+			update_rect.visible = true
+	if is_instance_valid(_deposit_clear_rect):
+		_deposit_clear_rect.visible = false
+	if is_instance_valid(_deposit_canvas):
+		_deposit_canvas.visible = true
 
 
 func _roll_randomness() -> void:
@@ -319,7 +485,7 @@ func get_history_world_size() -> float:
 
 
 func get_history_strength() -> float:
-	return 1.0 if enabled else 0.0
+	return strength if enabled else 0.0
 
 
 func get_history_size_min() -> float:
@@ -367,7 +533,11 @@ func is_history_enabled() -> bool:
 
 
 func get_history_params_version() -> int:
-	return update_count
+	return _history_params_version
+
+
+func _touch_history_params() -> void:
+	_history_params_version += 1
 
 
 func begin_deposit_validation(count: int) -> int:
