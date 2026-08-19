@@ -1,195 +1,200 @@
 extends Node
 
-## Headless validation for PersistentFoamTrail3D ("Persistent Foam V2").
-## Proves that stored foam samples are anchored to fixed world XZ:
-## turning, aging, new deposits and mesh rebuilds never move old samples,
-## and only an explicit world rebase shifts them (the documented exception).
+## Headless validation for PersistentFoamMask3D ("Persistent Foam V2").
+##
+## Proves that deposited splats are anchored to fixed world XZ: steering,
+## aging and repeated mask repaints never move old splats, and only an explicit
+## world rebase shifts them (by the exact rebase shift). Also verifies Ocean3D
+## provider registration (texture, anchor, world size, strength, enabled) and
+## lifetime expiry.
 ##
 ## Run from the editor or CLI:
 ##   godot --headless --path game res://dev/tests/persistent_foam/validate_persistent_foam_v2.tscn
 
-const TRAIL_SCENE_PATH := "res://gameplay/vehicles/common/water_effects/persistent_foam/persistent_foam_trail_3d.tscn"
-const DEFAULT_FOAM_SETTINGS_PATH := "res://world/water/ocean/foam/default_foam_settings.tres"
-const FOAM_NOISE_PATH := "res://world/water/ocean/foam/foam_breakup_noise.tres"
+const MASK_SCENE_PATH := "res://gameplay/vehicles/common/water_effects/persistent_foam/persistent_foam_mask_3d.tscn"
+const OCEAN_SHADER_PATH := "res://world/water/ocean/shaders/ocean_water_custom_ssr.gdshader"
 
 var _failures: Array[String] = []
 
 
 class FakeOcean extends Ocean3D:
-	var sample_height_value: float = 1.0
+	var sim_time: float = 17.0
+
+	func get_simulation_time() -> float:
+		return sim_time
 
 	func sample_base_surface(
 		world_position: Vector3,
 		out_sample: WaterSample3D = null
 	) -> WaterSample3D:
 		var result := out_sample.reset() if out_sample != null else WaterSample3D.new()
-		result.surface_position = Vector3(
-			world_position.x,
-			sample_height_value,
-			world_position.z
-		)
+		result.surface_position = Vector3(world_position.x, 1.0, world_position.z)
 		result.normal = Vector3.UP
 		result.signed_depth = 0.0
 		result.provider = self
 		result.valid = true
 		return result
 
-	func get_simulation_time() -> float:
-		return 17.0
-
 
 func _ready() -> void:
-	var trail: Node3D = load(TRAIL_SCENE_PATH).instantiate()
-	get_tree().root.add_child(trail)
+	call_deferred("_run_validation")
 
-	var foam_settings := load(DEFAULT_FOAM_SETTINGS_PATH) as WaterFoamSettings
-	var noise_texture := load(FOAM_NOISE_PATH) as Texture2D
+
+func _run_validation() -> void:
+	var mask: PersistentFoamMask3D = load(MASK_SCENE_PATH).instantiate()
+	get_tree().root.add_child(mask)
+
 	var fake_ocean := FakeOcean.new()
+	var probe := ShaderMaterial.new()
+	probe.shader = load(OCEAN_SHADER_PATH)
+	fake_ocean.register_external_water_material(probe)
 
-	trail.call("configure", null, fake_ocean, null, null, null)
-	trail.call("configure_foam", foam_settings, noise_texture)
-	trail.enabled = true
-	trail.lifetime = 20.0
-	trail.sample_distance = 0.8
-	trail.maximum_points = 256
-	trail.width_multiplier = 1.0
-	trail.strength = 1.0
+	mask.configure(null, fake_ocean, null, null, null)
+	mask.strength = 1.0
+	mask.enabled = true
 
-	## Phase A/B: straight run, turn, aging, extra deposits, rebuilds.
-	## All old samples must keep their exact deposited XZ.
+	## Provider registration must reach the ocean materials.
+	_expect_equal("ocean mask enabled param", _read_param(probe, "persistent_foam_mask_enabled"), true)
+	var mask_texture: Variant = probe.get_shader_parameter("persistent_foam_mask_texture")
+	_expect_true("ocean mask texture is a Texture2D", mask_texture is Texture2D and mask_texture != null)
+	_expect_vector2_close(
+		"ocean mask anchor",
+		_read_param(probe, "persistent_foam_mask_anchor_xz"),
+		Vector2.ZERO,
+		0.001
+	)
+	_expect_close(
+		"ocean mask world size",
+		_read_param(probe, "persistent_foam_mask_world_size"),
+		512.0,
+		0.001
+	)
+	_expect_close(
+		"ocean mask strength",
+		_read_param(probe, "persistent_foam_mask_strength"),
+		1.0,
+		0.001
+	)
+	_expect_true("mask reports enabled", mask.is_mask_enabled())
+
+	## Phase A/B: deposits, then strong heading changes and new deposits.
 	var straight_forward := Vector2(1.0, 0.0)
 	for index in 20:
-		trail.call(
+		mask.call(
 			"debug_deposit_sample",
 			Vector3(float(index), 0.0, 0.0),
 			straight_forward,
 			1.2,
 			1.0
 		)
-	trail._force_mesh_rebuild = true
-	trail._update_mesh_tick(1.0 / 30.0)
-	var first_vertex_xz := _capture_vertex_xz(trail)
+	_expect_equal("sample count after 20 deposits", mask.sample_count, 20)
 
-	var captured_count: int = trail.begin_position_validation(20)
+	var captured_count: int = mask.begin_position_validation(20)
+	_expect_equal("captured samples", captured_count, 20)
+	var origin_positions: Array[Vector2] = []
+	for index in 20:
+		origin_positions.append(mask._splats[index].position_xz)
 
-	# Boat turns hard 90 then 180 degrees: subsequent deposits use new headings,
-	# while the old ribbon region must keep its geometry byte-for-byte in XZ.
 	var turn_forward := Vector2(1.0, 1.0).normalized()
 	for index in 8:
-		trail.call(
+		mask.call(
 			"debug_deposit_sample",
 			Vector3(20.0 + float(index) * 0.8, 0.0, 0.6 + float(index) * 0.6),
 			turn_forward,
 			1.2,
 			1.0
 		)
-	var reverse_half_turn := Vector2(-0.5, 0.8660254)
 	for index in 8:
-		trail.call(
+		mask.call(
 			"debug_deposit_sample",
 			Vector3(26.4 - float(index) * 0.7, 0.0, 5.4 - float(index) * 0.7),
-			reverse_half_turn,
+			Vector2(-0.5, 0.8660254),
 			1.2,
 			1.0
 		)
 
-	# Aging a few seconds and many rebuilds must not disturb stored positions.
-	trail._age_samples(3.0)
-	for tick in 30:
-		trail._update_mesh_tick(1.0 / 30.0)
-
-	var status: Dictionary = trail.get_position_validation_status()
-	var second_vertex_xz := _capture_vertex_xz(trail)
-	var geometry_region_delta := _region_delta(first_vertex_xz, second_vertex_xz, 40)
-
-	_expect_equal("captured samples", captured_count, 20)
-	_expect_equal(
-		"living samples after 3 s aging",
-		status.living_samples, 20
-	)
-	_expect_equal(
-		"max_horizontal_position_delta (turn/age/rebuild)",
-		status.max_horizontal_position_delta, 0.0
-	)
+	## Age and repeatedly repaint the mask.
+	fake_ocean.sim_time += 3.0
+	var paint_before: int = mask.paint_count
+	for repaint_index in 10:
+		mask._sync_draw_dirty()
 	_expect_true(
-		"old-region vertex XZ identical across rebuilds",
-		geometry_region_delta < 1e-9
+		"mask repainted at least 10 times",
+		mask.paint_count - paint_before >= 10
 	)
 
-	## Explicit repeated-rebuild requirement: at least 10 consecutive mesh
-	## rebuilds must stay free of errors and leave deposited XZ untouched.
-	var rebuild_count_before: int = trail.mesh_rebuild_count
-	var repeated_rebuild_delta := -1.0
-	for rebuild_index in 10:
-		trail._force_mesh_rebuild = true
-		trail._update_mesh_tick(1.0 / 30.0)
-		var surface_count_after: int = trail._array_mesh.get_surface_count()
-		var rebuild_region_delta := _region_delta(
-			first_vertex_xz,
-			_capture_vertex_xz(trail),
-			40
-		)
-		repeated_rebuild_delta = maxf(repeated_rebuild_delta, rebuild_region_delta)
-		_expect_equal(
-			"rebuild %d surface count" % (rebuild_index + 1),
-			surface_count_after,
-			1
-		)
-		_expect_true(
-			"rebuild %d preserved old-region XZ" % (rebuild_index + 1),
-			rebuild_region_delta < 1e-9
-		)
-	_expect_true(
-		"10 consecutive rebuilds executed",
-		trail.mesh_rebuild_count - rebuild_count_before >= 10
-	)
-	_expect_true(
-		"10 consecutive rebuilds preserved geometry",
-		repeated_rebuild_delta < 1e-9
-	)
-	status = trail.get_position_validation_status()
+	var status: Dictionary = mask.get_position_validation_status()
+	_expect_equal("living samples after heading/age/repaint", status.living_samples, 20)
 	_expect_equal(
-		"max_horizontal_position_delta after 10 rebuilds",
-		status.max_horizontal_position_delta, 0.0
+		"max_horizontal_position_delta = 0.0",
+		status.max_horizontal_position_delta,
+		0.0
 	)
+	var unchanged := true
+	for index in 20:
+		if not mask._splats[index].position_xz.is_equal_approx(origin_positions[index]):
+			unchanged = false
+			break
+	_expect_true("stored XZ unchanged by deposits/age/repaints", unchanged)
 
-	## Phase C: explicit world rebase is the ONLY thing allowed to move samples.
+	## Phase C: world rebase shifts stored XZ by EXACT shift only.
 	var shift := Vector3(16.0, 0.0, 8.0)
-	trail.apply_world_rebase(shift)
-	var after_rebase: Dictionary = trail.get_position_validation_status()
-	var expected_shift := Vector2(shift.x, shift.z).length()
-	_expect_equal("living samples after rebase", after_rebase.living_samples, 20)
+	mask.apply_world_rebase(shift)
+	status = mask.get_position_validation_status()
+	var expected_shift_length := Vector2(shift.x, shift.z).length()
 	_expect_close(
-		"delta after explicit rebase equals shift length",
-		after_rebase.max_horizontal_position_delta, expected_shift, 0.001
+		"delta after rebase equals shift length",
+		status.max_horizontal_position_delta,
+		expected_shift_length,
+		0.001
+	)
+	var exact_shift := true
+	for index in 20:
+		var expected := origin_positions[index] + Vector2(shift.x, shift.z)
+		if not mask._splats[index].position_xz.is_equal_approx(expected):
+			exact_shift = false
+			break
+	_expect_true("stored XZ shifted by EXACT rebase shift", exact_shift)
+	fake_ocean._update_persistent_foam_mask_push_if_dirty()
+	_expect_vector2_close(
+		"ocean mask anchor updated after rebase",
+		_read_param(probe, "persistent_foam_mask_anchor_xz"),
+		Vector2(shift.x, shift.z),
+		0.001
 	)
 
-	## Phase D: lifetime expiry removes all foam and empties the mesh.
-	trail.clear_trail()
-	trail.lifetime = 3.0
+	## Phase D: lifetime expiry removes splats and the mask empties.
+	mask.clear_trail()
+	mask.lifetime = 3.0
 	for index in 10:
-		trail.call(
+		mask.call(
 			"debug_deposit_sample",
 			Vector3(float(index), 0.0, 100.0),
 			Vector2(0.0, 1.0),
 			1.2,
 			1.0
 		)
-	trail._age_samples(4.0)
-	trail._update_mesh_tick(1.0 / 30.0)
-	_expect_equal("sample_count after lifetime expiry", trail.sample_count, 0)
+	_expect_equal("sample count after expiry deposits", mask.sample_count, 10)
+	fake_ocean.sim_time += 4.0
+	mask._physics_process(0.016)
+	_expect_equal("sample_count after lifetime expiry", mask.sample_count, 0)
+	_expect_equal("canvas has no splats after expiry", mask._canvas.splats.size(), 0)
+
+	## Phase E: disabled state must disable the ocean mask input.
+	mask.enabled = false
+	_expect_true("mask reports disabled", not mask.is_mask_enabled())
+	_expect_close("mask strength reported as 0 when disabled", mask.get_mask_strength(), 0.0, 0.001)
 	_expect_equal(
-		"mesh surface count after expiry",
-		trail._array_mesh.get_surface_count(), 0
+		"ocean mask enabled param after disable",
+		_read_param(probe, "persistent_foam_mask_enabled"),
+		false
 	)
 
 	print("PERSISTENT_FOAM_V2_VALIDATION")
-	print("  src_status=", status)
-	print("  after_rebase_status=", after_rebase)
-	print("  old_region_vertex_xz_delta=", geometry_region_delta)
-	print("  expected_rebase_shift_length=", expected_shift)
-	print("  repeated_rebuild_max_delta=", repeated_rebuild_delta)
-	print("  mesh_rebuild_count=", trail.mesh_rebuild_count)
+	print("  mask_status=", status)
+	print("  expected_rebase_shift_length=", expected_shift_length)
+	print("  paint_count=", mask.paint_count)
+	print("  rebase_count=", mask.rebase_count)
 
 	if _failures.is_empty():
 		print("RESULT: PASS")
@@ -201,23 +206,8 @@ func _ready() -> void:
 		get_tree().quit(1)
 
 
-func _capture_vertex_xz(trail: Node3D) -> PackedVector2Array:
-	var out := PackedVector2Array()
-	if trail._array_mesh.get_surface_count() <= 0:
-		return out
-	var arrays: Array = trail._array_mesh.surface_get_arrays(0)
-	var vertices: PackedVector3Array = arrays[Mesh.ARRAY_VERTEX]
-	for vertex in vertices:
-		out.append(Vector2(vertex.x, vertex.z))
-	return out
-
-
-func _region_delta(first: PackedVector2Array, second: PackedVector2Array, count: int) -> float:
-	var limit := mini(mini(count, first.size()), second.size())
-	var delta := 0.0
-	for index in limit:
-		delta = maxf(delta, first[index].distance_to(second[index]))
-	return delta
+func _read_param(material: ShaderMaterial, parameter: StringName) -> Variant:
+	return material.get_shader_parameter(parameter)
 
 
 func _expect_true(label: String, value: bool) -> void:
@@ -225,23 +215,38 @@ func _expect_true(label: String, value: bool) -> void:
 		print("  OK ", label)
 	else:
 		_failures.append(label)
+		print("  FAIL ", label)
 
 
 func _expect_equal(label: String, actual: Variant, expected: Variant) -> void:
 	if actual == expected:
 		print("  OK ", label, " = ", str(actual))
 	else:
-		_failures.append(
-			label + " -> expected " + str(expected) + " got " + str(actual)
-		)
+		_failures.append(label + " -> expected " + str(expected) + " got " + str(actual))
 		print("  FAIL ", label, " expected=", expected, " got=", actual)
 
 
-func _expect_close(label: String, actual: float, expected: float, tolerance: float) -> void:
-	if absf(actual - expected) <= tolerance:
-		print("  OK ", label, " = ", str(actual))
-	else:
-		_failures.append(
-			label + " -> expected ~" + str(expected) + " got " + str(actual)
-		)
+func _expect_close(label: String, actual: Variant, expected: float, tolerance: float) -> void:
+	if typeof(actual) != TYPE_FLOAT and typeof(actual) != TYPE_INT:
+		_failures.append(label + " -> expected ~" + str(expected) + " got " + str(actual))
 		print("  FAIL ", label, " expected~=", expected, " got=", actual)
+		return
+	var actual_float := float(actual)
+	if absf(actual_float - expected) <= tolerance:
+		print("  OK ", label, " = ", str(actual_float))
+	else:
+		_failures.append(label + " -> expected ~" + str(expected) + " got " + str(actual_float))
+		print("  FAIL ", label, " expected~=", expected, " got=", actual_float)
+
+
+func _expect_vector2_close(label: String, actual: Variant, expected: Vector2, tolerance: float) -> void:
+	if typeof(actual) != TYPE_VECTOR2:
+		_failures.append(label + " -> expected ~" + str(expected) + " got " + str(actual))
+		print("  FAIL ", label, " expected~=", expected, " got=", actual)
+		return
+	var actual_vector: Vector2 = actual
+	if actual_vector.distance_to(expected) <= tolerance:
+		print("  OK ", label, " = ", str(actual_vector))
+	else:
+		_failures.append(label + " -> expected ~" + str(expected) + " got " + str(actual_vector))
+		print("  FAIL ", label, " expected~=", expected, " got=", actual_vector)

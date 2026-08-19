@@ -361,7 +361,7 @@ var _right_contact_factor: float = 0.0
 @onready var _impact_pool: Node3D = $ImpactSplashPool
 @onready var _wake_trail: WakeTrail3D = $WakeTrail3D
 @onready var _hull_foam: HullFoam3D = $HullFoam3D
-@onready var _persistent_foam: PersistentFoamTrail3D = $PersistentFoamTrail3D
+@onready var _persistent_foam: PersistentFoamMask3D = $PersistentFoamMask3D
 
 
 func _ready() -> void:
@@ -496,7 +496,7 @@ func get_persistent_foam_status() -> Dictionary:
 	return {
 		"enabled": _persistent_foam.enabled,
 		"sample_count": _persistent_foam.sample_count,
-		"mesh_rebuild_count": _persistent_foam.mesh_rebuild_count,
+		"paint_count": _persistent_foam.paint_count,
 		"rebase_count": _persistent_foam.rebase_count,
 		"validation": _persistent_foam.get_position_validation_status(),
 	}

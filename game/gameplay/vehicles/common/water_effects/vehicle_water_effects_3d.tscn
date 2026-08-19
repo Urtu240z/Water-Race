@@ -5,7 +5,7 @@
 [ext_resource type="PackedScene" path="res://gameplay/vehicles/common/water_effects/hull/hull_foam_3d.tscn" id="3_hull_foam"]
 [ext_resource type="Script" uid="uid://cw5cqwtx4skyj" path="res://gameplay/vehicles/common/water_effects/hull/hull_spray_sheet_3d.gd" id="4_spray_sheet"]
 [ext_resource type="Shader" uid="uid://dpwjwksrmhblm" path="res://gameplay/vehicles/common/water_effects/shaders/water_stream.gdshader" id="5_stream_shader"]
-[ext_resource type="PackedScene" path="res://gameplay/vehicles/common/water_effects/persistent_foam/persistent_foam_trail_3d.tscn" id="6_persistent_foam"]
+[ext_resource type="PackedScene" path="res://gameplay/vehicles/common/water_effects/persistent_foam/persistent_foam_mask_3d.tscn" id="6_persistent_foam"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_spray_sheet"]
 render_priority = 4
@@ -79,4 +79,4 @@ local_coords = false
 
 [node name="HullFoam3D" parent="." instance=ExtResource("3_hull_foam")]
 
-[node name="PersistentFoamTrail3D" parent="." instance=ExtResource("6_persistent_foam")]
+[node name="PersistentFoamMask3D" parent="." instance=ExtResource("6_persistent_foam")]
