@@ -165,6 +165,8 @@ var _runtime_wave_texture_a: Texture2D
 var _runtime_wave_texture_b: Texture2D
 var _external_materials: Array[ShaderMaterial] = []
 var _material_cache: Array[ShaderMaterial] = []
+var _persistent_foam_mask_provider: Node3D
+var _persistent_foam_mask_version: int = -1
 var _calm_water_area_refs: Array[WeakRef] = []
 var _calm_water_zones: Array[Dictionary] = []
 var _calm_zone_centers_shapes := PackedVector4Array()
@@ -402,6 +404,7 @@ func _physics_process(delta: float) -> void:
 		_push_directional_wake_parameters_to_all_materials()
 	_update_interaction_metrics()
 	_push_time_parameter_to_all_materials()
+	_update_persistent_foam_mask_push_if_dirty()
 	if _calm_water_areas_dirty:
 		_rebuild_calm_water_zones()
 		_push_calm_water_parameters_to_all_materials()
@@ -3049,6 +3052,7 @@ func _push_all_parameters_to_material(material: ShaderMaterial) -> void:
 	_push_calm_water_parameters(material)
 	_push_water_exclusion_parameters(material)
 	_push_event_wave_parameters(material)
+	_push_persistent_foam_mask_parameters(material)
 
 func _push_event_wave_parameters_to_all_materials() -> void:
 	for material in _all_ocean_materials():
@@ -3087,6 +3091,62 @@ func _push_static_parameters_to_all_materials() -> void:
 func _push_time_parameter_to_all_materials() -> void:
 	for material in _all_ocean_materials():
 		_push_time_parameter(material)
+
+
+func set_persistent_foam_mask_provider(provider: Node3D) -> void:
+	_persistent_foam_mask_provider = provider
+	_persistent_foam_mask_version = _persistent_foam_mask_params_version()
+	_push_persistent_foam_mask_parameters_to_all_materials()
+
+
+func clear_persistent_foam_mask_provider() -> void:
+	_persistent_foam_mask_provider = null
+	_persistent_foam_mask_version = -1
+	_push_persistent_foam_mask_parameters_to_all_materials()
+
+
+func _persistent_foam_mask_params_version() -> int:
+	if not is_instance_valid(_persistent_foam_mask_provider):
+		return -1
+	return int(_persistent_foam_mask_provider.call("get_mask_params_version"))
+
+
+func _update_persistent_foam_mask_push_if_dirty() -> void:
+	var current_version := _persistent_foam_mask_params_version()
+	if current_version != _persistent_foam_mask_version:
+		_persistent_foam_mask_version = current_version
+		_push_persistent_foam_mask_parameters_to_all_materials()
+
+
+func _push_persistent_foam_mask_parameters_to_all_materials() -> void:
+	for material in _all_ocean_materials():
+		_push_persistent_foam_mask_parameters(material)
+
+
+func _push_persistent_foam_mask_parameters(material: ShaderMaterial) -> void:
+	if material == null or material.shader == null:
+		return
+	var provider := _persistent_foam_mask_provider
+	if not is_instance_valid(provider) or not bool(provider.call("is_mask_enabled")):
+		material.set_shader_parameter(&"persistent_foam_mask_enabled", false)
+		return
+	material.set_shader_parameter(
+		&"persistent_foam_mask_texture",
+		provider.call("get_mask_texture")
+	)
+	material.set_shader_parameter(
+		&"persistent_foam_mask_anchor_xz",
+		provider.call("get_mask_anchor_xz")
+	)
+	material.set_shader_parameter(
+		&"persistent_foam_mask_world_size",
+		provider.call("get_mask_world_size")
+	)
+	material.set_shader_parameter(
+		&"persistent_foam_mask_strength",
+		provider.call("get_mask_strength")
+	)
+	material.set_shader_parameter(&"persistent_foam_mask_enabled", true)
 
 
 func _push_origin_parameter_to_all_materials() -> void:

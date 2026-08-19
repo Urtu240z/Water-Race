@@ -116,6 +116,43 @@ func _ready() -> void:
 		geometry_region_delta < 1e-9
 	)
 
+	## Explicit repeated-rebuild requirement: at least 10 consecutive mesh
+	## rebuilds must stay free of errors and leave deposited XZ untouched.
+	var rebuild_count_before: int = trail.mesh_rebuild_count
+	var repeated_rebuild_delta := -1.0
+	for rebuild_index in 10:
+		trail._force_mesh_rebuild = true
+		trail._update_mesh_tick(1.0 / 30.0)
+		var surface_count_after: int = trail._array_mesh.get_surface_count()
+		var rebuild_region_delta := _region_delta(
+			first_vertex_xz,
+			_capture_vertex_xz(trail),
+			40
+		)
+		repeated_rebuild_delta = maxf(repeated_rebuild_delta, rebuild_region_delta)
+		_expect_equal(
+			"rebuild %d surface count" % (rebuild_index + 1),
+			surface_count_after,
+			1
+		)
+		_expect_true(
+			"rebuild %d preserved old-region XZ" % (rebuild_index + 1),
+			rebuild_region_delta < 1e-9
+		)
+	_expect_true(
+		"10 consecutive rebuilds executed",
+		trail.mesh_rebuild_count - rebuild_count_before >= 10
+	)
+	_expect_true(
+		"10 consecutive rebuilds preserved geometry",
+		repeated_rebuild_delta < 1e-9
+	)
+	status = trail.get_position_validation_status()
+	_expect_equal(
+		"max_horizontal_position_delta after 10 rebuilds",
+		status.max_horizontal_position_delta, 0.0
+	)
+
 	## Phase C: explicit world rebase is the ONLY thing allowed to move samples.
 	var shift := Vector3(16.0, 0.0, 8.0)
 	trail.apply_world_rebase(shift)
@@ -151,6 +188,8 @@ func _ready() -> void:
 	print("  after_rebase_status=", after_rebase)
 	print("  old_region_vertex_xz_delta=", geometry_region_delta)
 	print("  expected_rebase_shift_length=", expected_shift)
+	print("  repeated_rebuild_max_delta=", repeated_rebuild_delta)
+	print("  mesh_rebuild_count=", trail.mesh_rebuild_count)
 
 	if _failures.is_empty():
 		print("RESULT: PASS")

@@ -124,6 +124,12 @@ uniform float foam_scroll_speed : hint_range(0.0, 2.0, 0.01) = 0.13;
 uniform float foam_roughness : hint_range(0.0, 1.0, 0.01) = 0.88;
 uniform int ocean_foam_detail_quality : hint_range(0, 1, 1) = 1;
 uniform float ocean_foam_evaluation_distance : hint_range(1.0, 2000.0, 1.0) = 520.0;
+// Persistent Foam V2: world-space coverage mask composited into the ocean foam.
+uniform sampler2D persistent_foam_mask_texture : repeat_disable, filter_linear_mipmap;
+uniform vec2 persistent_foam_mask_anchor_xz = vec2(0.0);
+uniform float persistent_foam_mask_world_size : hint_range(16.0, 2048.0, 16.0) = 512.0;
+uniform float persistent_foam_mask_strength : hint_range(0.0, 4.0, 0.01) = 1.0;
+uniform bool persistent_foam_mask_enabled = false;
 
 group_uniforms Clipmap;
 uniform bool ocean_surface_enabled = false;
@@ -686,6 +692,30 @@ void fragment() {
 		* vehicle_wake_foam_strength
 		* mix(0.25, 1.0, vehicle_foam_breakup)
 		* foam_distance_gate;
+	float persistent_foam_coverage = 0.0;
+	float persistent_foam_breakup = 0.5;
+	if (foam_enabled && persistent_foam_mask_enabled && foam_distance_gate > 0.0001) {
+		vec2 mask_uv = (interpolated_world_xz - persistent_foam_mask_anchor_xz)
+			/ max(persistent_foam_mask_world_size, 0.001)
+			+ 0.5;
+		vec2 mask_edge = abs(mask_uv - 0.5) * 2.0;
+		float mask_inside = 1.0 - smoothstep(0.955, 1.0, max(mask_edge.x, mask_edge.y));
+		float mask_value = mask_inside
+			* texture(persistent_foam_mask_texture, mask_uv).r;
+		vec2 persistent_foam_uv = interpolated_world_xz * (foam_macro_scale * 1.85)
+			+ vec2(17.13, -9.47);
+		float persistent_foam_noise = texture(foam_noise_texture, persistent_foam_uv).r;
+		float persistent_noise_width = max(fwidth(persistent_foam_noise) * 1.5, 0.015);
+		persistent_foam_breakup = smoothstep(
+			0.38 - persistent_noise_width,
+			0.62 + persistent_noise_width,
+			persistent_foam_noise
+		);
+		persistent_foam_coverage = mask_value
+			* persistent_foam_mask_strength
+			* mix(0.18, 1.0, persistent_foam_breakup)
+			* foam_distance_gate;
+	}
 	float environment_foam_mask = foam_enabled
 		? clamp(
 			(shoreline + crest_foam + ripple_foam)
@@ -696,7 +726,7 @@ void fragment() {
 		)
 		: 0.0;
 	float vehicle_foam_mask = foam_enabled
-		? clamp(vehicle_wake_foam, 0.0, 1.0)
+		? clamp(vehicle_wake_foam + persistent_foam_coverage, 0.0, 1.0)
 		: 0.0;
 	float foam_mask = foam_enabled
 		? clamp(environment_foam_mask + vehicle_foam_mask, 0.0, 1.0)

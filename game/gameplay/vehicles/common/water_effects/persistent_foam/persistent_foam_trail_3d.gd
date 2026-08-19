@@ -64,7 +64,6 @@ var _foam_settings_signature: int = -1
 var _material: ShaderMaterial
 var _samples: Array[PersistentFoamSample] = []
 var _array_mesh := ArrayMesh.new()
-var _mesh_arrays: Array = []
 var _vertices := PackedVector3Array()
 var _normals := PackedVector3Array()
 var _colors := PackedColorArray()
@@ -87,7 +86,6 @@ var _validation_serials: Array[int] = []
 
 func _ready() -> void:
 	process_physics_priority = 22
-	_mesh_arrays.resize(Mesh.ARRAY_MAX)
 	if is_instance_valid(_mesh_instance):
 		_mesh_instance.mesh = _array_mesh
 		_mesh_instance.visible = enabled and not _samples.is_empty()
@@ -412,13 +410,15 @@ func _rebuild_mesh() -> void:
 				]))
 	if _indices.is_empty():
 		return
-	_mesh_arrays.fill(null)
-	_mesh_arrays[Mesh.ARRAY_VERTEX] = _vertices
-	_mesh_arrays[Mesh.ARRAY_NORMAL] = _normals
-	_mesh_arrays[Mesh.ARRAY_COLOR] = _colors
-	_mesh_arrays[Mesh.ARRAY_TEX_UV] = _uvs
-	_mesh_arrays[Mesh.ARRAY_INDEX] = _indices
-	_array_mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, _mesh_arrays)
+	var surface_arrays: Array = []
+	surface_arrays.resize(Mesh.ARRAY_MAX)
+	surface_arrays.fill(null)
+	surface_arrays[Mesh.ARRAY_VERTEX] = _vertices
+	surface_arrays[Mesh.ARRAY_NORMAL] = _normals
+	surface_arrays[Mesh.ARRAY_COLOR] = _colors
+	surface_arrays[Mesh.ARRAY_TEX_UV] = _uvs
+	surface_arrays[Mesh.ARRAY_INDEX] = _indices
+	_array_mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, surface_arrays)
 	if is_instance_valid(_mesh_instance):
 		_mesh_instance.custom_aabb = _array_mesh.get_aabb().grow(2.0)
 

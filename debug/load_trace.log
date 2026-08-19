@@ -1,11 +1,11 @@
 
 ========== WATER RACE LOAD TRACE ==========
-[    1.292 ms] GAME START                          +   1.292 ms
-[    1.343 ms] GRAPHICS_AUTOLOAD_READY_BEGIN       +   0.051 ms
-[    1.379 ms] GRAPHICS_PROFILES_LOAD_BEGIN        +   0.036 ms
-[    3.057 ms] GRAPHICS_PROFILES_LOADED            +   1.678 ms
-[    3.115 ms] GRAPHICS_INITIAL_APPLY_QUEUED       +   0.058 ms
-[    3.134 ms] GRAPHICS_AUTOLOAD_READY_END         +   0.019 ms
-[    3.564 ms] GRAPHICS_APPLY_BEGIN                +   0.430 ms
-[    3.597 ms] GRAPHICS_TARGETS_COLLECTED          +   0.033 ms
-[    3.657 ms] GRAPHICS_APPLY_END                  +   0.060 ms
+[    1.165 ms] GAME START                          +   1.165 ms
+[    1.196 ms] GRAPHICS_AUTOLOAD_READY_BEGIN       +   0.031 ms
+[    1.286 ms] GRAPHICS_PROFILES_LOAD_BEGIN        +   0.090 ms
+[    3.757 ms] GRAPHICS_PROFILES_LOADED            +   2.471 ms
+[    3.821 ms] GRAPHICS_INITIAL_APPLY_QUEUED       +   0.064 ms
+[    3.838 ms] GRAPHICS_AUTOLOAD_READY_END         +   0.017 ms
+[   24.509 ms] GRAPHICS_APPLY_BEGIN                +  20.671 ms
+[   24.540 ms] GRAPHICS_TARGETS_COLLECTED          +   0.031 ms
+[   24.593 ms] GRAPHICS_APPLY_END                  +   0.053 ms
