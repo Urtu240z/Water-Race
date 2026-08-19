@@ -3306,9 +3306,10 @@ func submit_persistent_foam_history_deposit(
 	forward_xz: Vector2,
 	radius: float,
 	intensity: float
-) -> Node:
+) -> PersistentFoamDepositCommand:
 	if not is_instance_valid(_persistent_foam_history_provider):
 		return null
+
 	return _persistent_foam_history_provider.call(
 		&"submit_deposit",
 		source_id,
@@ -3316,7 +3317,7 @@ func submit_persistent_foam_history_deposit(
 		forward_xz,
 		radius,
 		intensity
-	)
+	) as PersistentFoamDepositCommand
 
 
 ## A vehicle that selected the HISTORY_MAP backend asks the ocean to activate
