@@ -34,7 +34,10 @@
 [ext_resource type="Material" uid="uid://dpu00es22gb1t" path="res://shared/materials/metal/materials/rusty_metal_sheet.res" id="27_iyaox"]
 [ext_resource type="PackedScene" path="res://world/props/lights/dynamic_area_emitter_3d.tscn" id="27_qxbdv"]
 [ext_resource type="Material" uid="uid://bwnl621jidktp" path="res://shared/materials/metal/materials/blue_metal_plate.res" id="28_4k6sa"]
+[ext_resource type="Texture2D" uid="uid://cxmvt5w4b3ret" path="res://shared/materials/stone/textures/plastered_stone_wall/plastered_stone_wall_albedo.jpg" id="29_0gqsi"]
+[ext_resource type="Texture2D" uid="uid://dpg2bleuhgq6i" path="res://shared/materials/stone/textures/plastered_stone_wall/plastered_stone_wall_orm.jpg" id="30_y3rlo"]
 [ext_resource type="Material" uid="uid://bf578nnv46kfa" path="res://levels/gold_city/terrain/materials/BLACK UC40577.tres" id="31_4k6sa"]
+[ext_resource type="Texture2D" uid="uid://1l24jn6ay7at" path="res://shared/materials/stone/textures/plastered_stone_wall/plastered_stone_wall_normal.jpg" id="31_hrvh4"]
 [ext_resource type="PackedScene" uid="uid://dqbhmwx6tvlx0" path="res://world/vegetation/trees/tree_impostor_multimesh.tscn" id="32_mdq0j"]
 [ext_resource type="Shader" uid="uid://bfnesn2v47myr" path="res://levels/gold_city/city/buildings/shaders/building_windows_procedural.gdshader" id="34_xltpy"]
 [ext_resource type="Material" uid="uid://b4rxe5bb73l7n" path="res://world/vegetation/trees/materials/tree_impostor_material_gold_city.tres" id="35_iyaox"]
@@ -144,7 +147,7 @@ shader_parameter/water_level = 2.205
 shader_parameter/wet_sand_height = 5.0
 shader_parameter/debug_view = 0
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_laf3l"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_n0k1o"]
 resource_local_to_scene = true
 render_priority = 0
 shader = ExtResource("23_mdq0j")
@@ -165,7 +168,28 @@ shader_parameter/stretch_fade_end = 0.2
 shader_parameter/stretch_fade_power = 0.5000000074506
 shader_parameter/minimum_stretch_visibility = 0.57999998703584
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_4scdh"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qpq1s"]
+albedo_texture = ExtResource("29_0gqsi")
+metallic = 1.0
+metallic_texture = ExtResource("30_y3rlo")
+metallic_texture_channel = 2
+roughness_texture = ExtResource("30_y3rlo")
+roughness_texture_channel = 1
+emission = Color(1, 1, 1, 1)
+emission_energy_multiplier = 0.56
+normal_enabled = true
+normal_scale = 1.28
+normal_texture = ExtResource("31_hrvh4")
+ao_enabled = true
+ao_light_affect = 1.0
+ao_texture = ExtResource("30_y3rlo")
+backlight_enabled = true
+backlight = Color(0.12955841, 0.1295585, 0.12955844, 1)
+backlight_texture = ExtResource("29_0gqsi")
+uv1_scale = Vector3(0.085, 0.085, 0.085)
+uv1_triplanar = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_vbdm5"]
 resource_local_to_scene = true
 render_priority = 0
 shader = ExtResource("41_j7oal")
@@ -424,7 +448,7 @@ lifetime = 60.0
 fade_out_time = 7.0
 metadata/_custom_type_script = "uid://d28g2y2o80558"
 
-[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_df66w"]
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_iegie"]
 resource_local_to_scene = true
 blend_mode = 1
 
@@ -451,7 +475,7 @@ point_count = 3
 [sub_resource type="CurveTexture" id="CurveTexture_bubble_shrink"]
 curve = SubResource("Curve_bubble_shrink")
 
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_0gqsi"]
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_8o7o7"]
 resource_local_to_scene = true
 particle_flag_disable_z = true
 emission_shape_offset = Vector3(0, 600, 0)
@@ -474,7 +498,7 @@ turbulence_influence_max = 0.082
 turbulence_initial_displacement_min = -47.5
 turbulence_initial_displacement_max = 94.5
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_y3rlo"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ndnrr"]
 resource_local_to_scene = true
 render_priority = -127
 shader = ExtResource("55_5sm3d")
@@ -591,11 +615,11 @@ emission_enabled = true
 emission = Color(1, 0, 0.016666412, 1)
 emission_energy_multiplier = 16.0
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_hrvh4"]
+[sub_resource type="BoxShape3D" id="BoxShape3D_twiso"]
 resource_local_to_scene = true
 size = Vector3(83.137, 90.025, 149.727)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_n0k1o"]
+[sub_resource type="BoxShape3D" id="BoxShape3D_ax04d"]
 resource_local_to_scene = true
 size = Vector3(89.876, 91.745, 133.916)
 
@@ -692,7 +716,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.022, 9.445, 16.88)
 
 [node name="Terrain_VIS" parent="TerrainRoot/Gold_City/Scene Collection/Terrain" parent_id_path=PackedInt32Array(297389943, 1864945746) index="0" unique_id=717890379 groups=["tree_impostor_ground"]]
 material_override = SubResource("ShaderMaterial_0gqsi")
-material_overlay = SubResource("ShaderMaterial_laf3l")
+material_overlay = SubResource("ShaderMaterial_n0k1o")
 
 [node name="Passtrough_VIS" parent="TerrainRoot/Gold_City/Scene Collection/Bridges" parent_id_path=PackedInt32Array(297389943, 1304534719) index="2" unique_id=930924910]
 surface_material_override/0 = ExtResource("23_dnql6")
@@ -702,7 +726,7 @@ surface_material_override/1 = ExtResource("26_ogabk")
 surface_material_override/0 = ExtResource("27_iyaox")
 surface_material_override/1 = ExtResource("27_iyaox")
 surface_material_override/6 = ExtResource("28_4k6sa")
-surface_material_override/7 = ExtResource("23_dnql6")
+surface_material_override/7 = SubResource("StandardMaterial3D_qpq1s")
 
 [node name="Collisions" parent="TerrainRoot/Gold_City/Scene Collection" parent_id_path=PackedInt32Array(297389943, 1682598167) index="6" unique_id=1653424750]
 visible = false
@@ -753,7 +777,7 @@ animate_hue = true
 [node name="WaterIntegration" type="Node3D" parent="." unique_id=1889730552]
 
 [node name="Ocean" parent="WaterIntegration" unique_id=1340264265 instance=ExtResource("40_3mclj")]
-ocean_material = SubResource("ShaderMaterial_4scdh")
+ocean_material = SubResource("ShaderMaterial_vbdm5")
 wave_world_size_a = 153.5
 wave_world_size_b = 104.0
 wave_amplitude_a = 0.7999999821184
@@ -796,7 +820,7 @@ transition_distance = 100.0
 transform = Transform3D(-0.92360616, 0, 0.3833429, 0, 1, 0, -0.3833429, 0, -0.92360616, -440.45395, 1.98, -959.8083)
 
 [node name="JetSki" parent="Gameplay" unique_id=328650943 instance=ExtResource("49_1e3ik")]
-transform = Transform3D(-0.9316912, 0, 0.36325112, 0, 1, 0, -0.36325112, 0, -0.9316912, -481.843, 0.41961348, -842.17035)
+transform = Transform3D(-0.80732775, 0, 0.59010327, 0, 1, 0, -0.59010327, 0, -0.80732775, -468.94583, 2.875472, -891.3901)
 center_of_mass = Vector3(0, -0.22, 0.1)
 ocean_path = NodePath("../../WaterIntegration/Ocean")
 forward_engine_force = 10000.0
@@ -1044,7 +1068,7 @@ editor_preview_mode = 0
 
 [node name="EntryBubbles" parent="CameraSystem/ChaseCamera/Camera3D/UnderwaterEffect/WaterCrossingOverlay" index="0"]
 visible = false
-material = SubResource("CanvasItemMaterial_df66w")
+material = SubResource("CanvasItemMaterial_iegie")
 position = Vector2(1, 1.76)
 amount = 500
 texture = SubResource("GradientTexture2D_pl0kw")
@@ -1052,10 +1076,10 @@ lifetime = 20.0
 speed_scale = 8.0
 explosiveness = 1.0
 randomness = 1.0
-process_material = SubResource("ParticleProcessMaterial_0gqsi")
+process_material = SubResource("ParticleProcessMaterial_8o7o7")
 
 [node name="UnderwaterPostProcess" parent="CameraSystem/ChaseCamera/Camera3D/UnderwaterEffect" index="1" unique_id=1854893749]
-material_override = SubResource("ShaderMaterial_y3rlo")
+material_override = SubResource("ShaderMaterial_ndnrr")
 
 [node name="Props" type="Node3D" parent="." unique_id=1365592301]
 
@@ -1838,7 +1862,7 @@ unfreeze_duration = 1.0
 debug_events = true
 
 [node name="CollisionShape3D" parent="Props/Vegetation/TreeImpostorsFrozen/TreeImpostorFrozen" index="0" unique_id=1790283657]
-shape = SubResource("BoxShape3D_hrvh4")
+shape = SubResource("BoxShape3D_twiso")
 
 [node name="TreeImpostorFrozen2" parent="Props/Vegetation/TreeImpostorsFrozen" unique_id=469109216 instance=ExtResource("2_cfohk")]
 transform = Transform3D(0.8735965, 0, 0.48664874, 0, 1, 0, -0.48665488, 0, 0.8735977, -423.3858, 2.4459906, -116.46263)
@@ -1849,7 +1873,7 @@ unfreeze_duration = 1.0
 debug_events = true
 
 [node name="CollisionShape3D" parent="Props/Vegetation/TreeImpostorsFrozen/TreeImpostorFrozen2" index="0" unique_id=1790283657]
-shape = SubResource("BoxShape3D_n0k1o")
+shape = SubResource("BoxShape3D_ax04d")
 
 [node name="TreeProjectedShadowBaker" type="Node3D" parent="Props/Vegetation" unique_id=472315960]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.510468, -49.139404, -57.103714)
@@ -1902,7 +1926,6 @@ maximum_pitch_degrees = 19.8
 maximum_roll_degrees = 30.0
 wake_visual_strength = 0.5
 directional_wake_strength = 1.5
-wake_deformation_distance = null
 physical_wake_strength = 0.5
 
 [node name="WaterExclusionVolume3D" type="Node3D" parent="BoatTraffic/Path3D/PathFollow3D/BoatTrafficActor" unique_id=1514394021]
