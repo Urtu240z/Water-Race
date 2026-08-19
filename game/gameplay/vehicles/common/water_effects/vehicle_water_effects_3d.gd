@@ -99,6 +99,28 @@ enum QualityLevel {
 @export_range(1.0, 6.0, 0.05) var wake_maximum_width_multiplier: float = 2.60
 @export_range(0.5, 30.0, 0.25, "suffix:m") var wake_opening_distance: float = 6.0
 
+@export_group("Water Effect Channels")
+@export var hull_foam_enabled: bool = true:
+	set(value):
+		hull_foam_enabled = value
+		if is_inside_tree():
+			_apply_water_effect_channel_settings()
+@export var wake_ribbon_foam_enabled: bool = true:
+	set(value):
+		wake_ribbon_foam_enabled = value
+		if is_inside_tree():
+			_apply_water_effect_channel_settings()
+@export var persistent_ocean_foam_enabled: bool = false:
+	set(value):
+		persistent_ocean_foam_enabled = value
+		if is_inside_tree():
+			_apply_water_effect_channel_settings()
+@export var directional_wake_deformation_enabled: bool = true:
+	set(value):
+		directional_wake_deformation_enabled = value
+		if is_inside_tree():
+			_apply_water_effect_channel_settings()
+
 var current_spray_intensity: float:
 	get:
 		return _current_spray_intensity
@@ -321,6 +343,7 @@ func _initialize_effects() -> void:
 	_configure_particle_resources()
 	_configure_wake()
 	_configure_hull_foam()
+	_apply_water_effect_channel_settings()
 	_configure_spray_sheet()
 	_apply_quality_profile()
 	_connect_signals()
@@ -697,6 +720,19 @@ func _configure_hull_foam() -> void:
 		_ocean.foam_settings if is_instance_valid(_ocean) else null,
 		_ocean.foam_noise_texture if is_instance_valid(_ocean) else null
 	)
+
+
+func _apply_water_effect_channel_settings() -> void:
+	if is_instance_valid(_hull_foam):
+		if hull_foam_enabled:
+			_hull_foam.set_process(true)
+		else:
+			_hull_foam.set_process(false)
+			_hull_foam.clear_foam()
+	if is_instance_valid(_wake_trail):
+		_wake_trail.ribbon_render_enabled = wake_ribbon_foam_enabled
+		_wake_trail.directional_persistent_foam_enabled = persistent_ocean_foam_enabled
+		_wake_trail.directional_deformation_active = directional_wake_deformation_enabled
 
 
 func _connect_signals() -> void:

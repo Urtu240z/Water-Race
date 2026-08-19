@@ -87,6 +87,8 @@ var visual_enabled: bool = true
 var ribbon_render_enabled: bool = true:
 	set(value):
 		ribbon_render_enabled = value
+		if value:
+			_force_mesh_rebuild = true
 		if is_node_ready() and is_instance_valid(_wake_mesh):
 			_wake_mesh.visible = value and visual_enabled
 			if not value and _array_mesh.get_surface_count() > 0:
@@ -153,6 +155,15 @@ var _current_width: float = 0.0
 var _rebase_count: int = 0
 var _mesh_update_elapsed: float = 0.0
 var _mesh_dirty: bool = true
+## Benchmark-only mesh rebuild cadence (NOT exported to the Inspector). 0.0 keeps the
+## exact OLD behaviour: _mesh_dirty rebuilds immediately. >0.0 turns _mesh_dirty into
+## "changes pending" and gates the ArrayMesh rebuild to once per interval, with NO
+## catch-up (a rendered frame never runs more than one rebuild past the gate; physics
+## limits it to at most one rebuild per tick).
+var _mesh_cadence_interval: float = 0.0
+## Semantically immediate events (trail start from empty, visual re-activation, reset)
+## bypass the cadence gate once. It is NOT set by new samples.
+var _force_mesh_rebuild: bool = false
 var _array_mesh := ArrayMesh.new()
 var _vertices := PackedVector3Array()
 var _normals := PackedVector3Array()
@@ -317,6 +328,7 @@ func set_external_visibility_active(active: bool) -> void:
 		_mesh_update_elapsed = mesh_update_interval
 		if not was_active:
 			_visual_fade = 0.0
+			_force_mesh_rebuild = true
 	else:
 		requested_directional_update_interval = 0.1
 	if is_instance_valid(_ocean):
@@ -382,10 +394,29 @@ func _physics_process(delta: float) -> void:
 	if _samples.is_empty():
 		if _array_mesh.get_surface_count() > 0:
 			_array_mesh.clear_surfaces()
+		_force_mesh_rebuild = true
+	## Candidate cadence mode: _mesh_dirty means "changes pending", never "rebuild
+	## now". The ArrayMesh rebuild happens at most once per interval per physics tick
+	## (no catch-up), and only when a semantically immediate event forces it or the
+	## interval has elapsed. Sub-sample trails (<2 points) clear immediately without
+	## counting as a rebuild.
+	elif _mesh_cadence_interval > 0.0 and visual_enabled and ribbon_render_enabled:
+		if (
+			(_force_mesh_rebuild or _mesh_update_elapsed >= _mesh_cadence_interval)
+			and _mesh_dirty
+			and _samples.size() >= 2
+		):
+			_rebuild_mesh()
+			_force_mesh_rebuild = false
+			_mesh_dirty = false
+			_mesh_update_elapsed = 0.0
+		elif _samples.size() < 2 and _array_mesh.get_surface_count() > 0:
+			_array_mesh.clear_surfaces()
 	elif visual_enabled and ribbon_render_enabled and (
 		_mesh_dirty or _mesh_update_elapsed >= mesh_update_interval
 	):
 		_rebuild_mesh()
+		_force_mesh_rebuild = false
 		_mesh_dirty = false
 		_mesh_update_elapsed = 0.0
 	elif not ribbon_render_enabled and _array_mesh.get_surface_count() > 0:
@@ -411,6 +442,7 @@ func clear_trail(suppress_next_tick: bool = true) -> void:
 	_suppress_sampling_ticks = 1 if suppress_next_tick else 0
 	_mesh_dirty = true
 	_mesh_update_elapsed = 0.0
+	_force_mesh_rebuild = true
 	_array_mesh.clear_surfaces()
 	foam_intensity = 0.0
 	_physics_bounds = Rect2()
@@ -436,8 +468,12 @@ func apply_world_rebase(shift: Vector3) -> void:
 	_physics_bounds_dirty = true
 	_local_wake_cache_dirty = true
 	_rebuild_mesh()
+	_force_mesh_rebuild = false
 	_mesh_dirty = false
 	_mesh_update_elapsed = 0.0
+	_mesh_dirty = false
+	_mesh_update_elapsed = 0.0
+	_force_mesh_rebuild = false
 
 
 func get_sample_positions() -> PackedVector3Array:

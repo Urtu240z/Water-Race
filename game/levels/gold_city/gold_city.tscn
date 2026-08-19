@@ -43,7 +43,6 @@
 [ext_resource type="Material" uid="uid://b4rxe5bb73l7n" path="res://world/vegetation/trees/materials/tree_impostor_material_gold_city.tres" id="35_iyaox"]
 [ext_resource type="PackedScene" path="res://world/water/ocean/calm_water_area_3d.tscn" id="38_8wtvr"]
 [ext_resource type="PackedScene" uid="uid://1d3iohmalk05" path="res://world/water/ocean/ocean_3d.tscn" id="40_3mclj"]
-[ext_resource type="Resource" uid="uid://uqc7omaamhi" path="res://levels/gold_city/water/gold_city_foam_settings.tres" id="74_gcfoam"]
 [ext_resource type="Script" uid="uid://d28g2y2o80558" path="res://world/water/ocean/events/event_wave_profile.gd" id="40_qxbdv"]
 [ext_resource type="Shader" uid="uid://dh7o8h2pae1kd" path="res://world/water/ocean/shaders/ocean_water_custom_ssr.gdshader" id="41_j7oal"]
 [ext_resource type="Texture2D" uid="uid://dpb0qhgywdm05" path="res://world/water/ocean/foam/foam_breakup_noise.tres" id="42_0dpsy"]
@@ -81,6 +80,7 @@
 [ext_resource type="Script" uid="uid://bcftfjsjn8hc4" path="res://world/vegetation/trees/tree_projected_shadow_baker.gd" id="72_ol3en"]
 [ext_resource type="PackedScene" uid="uid://dk85eu2oeyca2" path="res://levels/gold_city/props/roller_coaster/animated_roller_coaster.glb" id="73_e6itw"]
 [ext_resource type="PackedScene" uid="uid://b43swywpnr25f" path="res://levels/gold_city/props/ferris_wheel/ferris_wheel.glb" id="73_q2anr"]
+[ext_resource type="Resource" uid="uid://uqc7omaamhi" path="res://levels/gold_city/water/gold_city_foam_settings.tres" id="74_gcfoam"]
 [ext_resource type="PackedScene" uid="uid://dk4xp0wss4t72" path="res://world/props/boats/boat_03.glb" id="76_ogabk"]
 [ext_resource type="Script" uid="uid://bc6w686grskw2" path="res://world/water/ocean/water_exclusion_volume_3d.gd" id="77_laf3l"]
 
@@ -778,7 +778,6 @@ animate_hue = true
 [node name="WaterIntegration" type="Node3D" parent="." unique_id=1889730552]
 
 [node name="Ocean" parent="WaterIntegration" unique_id=1340264265 instance=ExtResource("40_3mclj")]
-foam_settings = ExtResource("74_gcfoam")
 ocean_material = SubResource("ShaderMaterial_hrvh4")
 wave_world_size_a = 153.5
 wave_world_size_b = 104.0
@@ -796,6 +795,7 @@ directional_wake_center_depression = 0.08
 directional_wake_center_turbulence = 0.12
 directional_wake_center_turbulence_wavelength_scale = 3.0
 directional_wake_foam_irregularity = 0.22
+foam_settings = ExtResource("74_gcfoam")
 
 [node name="EventWave3D" type="Node3D" parent="WaterIntegration" unique_id=2144384760]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 248.49646, -283.8418, 0)
