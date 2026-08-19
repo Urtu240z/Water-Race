@@ -52,7 +52,77 @@ var strength: float = 1.0:
 			return
 		strength = value
 		_bump_mask_params()
-var fade_start_ratio: float = 0.70
+
+## Visual lifecycle: size grows from size_min to size_max over the lifetime,
+## alpha fades in over fade_in_ratio and fades out from fade_out_start_ratio.
+var size_min: float = 0.65:
+	set(value):
+		size_min = value
+		_sync_draw_dirty()
+var size_max: float = 1.65:
+	set(value):
+		size_max = value
+		_sync_draw_dirty()
+var fade_in_ratio: float = 0.10:
+	set(value):
+		fade_in_ratio = value
+		_sync_draw_dirty()
+var fade_out_start_ratio: float = 0.70:
+	set(value):
+		fade_out_start_ratio = value
+		_sync_draw_dirty()
+
+## Per-splat stable randomness (rolled once at creation, never re-rolled).
+var position_jitter: float = 0.65
+var rotation_random: float = 55.0
+var scale_random_min: float = 0.65
+var scale_random_max: float = 1.35
+var aspect_min: float = 0.55
+var aspect_max: float = 1.45
+
+## Ocean-side appearance: pushed to the ocean shaders as uniforms.
+var irregularity: float = 0.80:
+	set(value):
+		if irregularity == value:
+			return
+		irregularity = value
+		_bump_mask_params()
+var noise_scale: float = 0.12:
+	set(value):
+		if noise_scale == value:
+			return
+		noise_scale = value
+		_bump_mask_params()
+var noise_threshold: float = 0.48:
+	set(value):
+		if noise_threshold == value:
+			return
+		noise_threshold = value
+		_bump_mask_params()
+var foam_color: Color = Color(0.90, 0.97, 1.0, 1.0):
+	set(value):
+		if foam_color == value:
+			return
+		foam_color = value
+		_bump_mask_params()
+var emission: float = 0.0:
+	set(value):
+		if emission == value:
+			return
+		emission = value
+		_bump_mask_params()
+var roughness: float = 0.88:
+	set(value):
+		if roughness == value:
+			return
+		roughness = value
+		_bump_mask_params()
+var specular: float = 0.16:
+	set(value):
+		if specular == value:
+			return
+		specular = value
+		_bump_mask_params()
 
 var sample_count: int:
 	get:
@@ -79,6 +149,8 @@ var _mask_params_version: int = 0
 var _fade_repaint_elapsed: float = 0.0
 var _validation_origin_positions: Array[Vector2] = []
 var _validation_serials: Array[int] = []
+var _rng := RandomNumberGenerator.new()
+var _rng_seeded: bool = false
 
 @onready var _viewport: SubViewport = $MaskViewport
 @onready var _canvas: Control = $MaskViewport/MaskCanvas
@@ -137,7 +209,8 @@ func _physics_process(delta: float) -> void:
 	_update_anchor_from_vehicle()
 	_update_deposition()
 	_expire_splats()
-	if _any_splat_fading():
+	if _any_splat_living():
+		## Growth, fade-in and fade-out all animate, so repaint while living.
 		_fade_repaint_elapsed += delta
 		if _fade_repaint_elapsed >= FADE_REPAINT_INTERVAL:
 			_fade_repaint_elapsed = 0.0
@@ -177,8 +250,15 @@ func _update_deposition() -> void:
 	var position_xz := Vector2(position.x, position.z)
 	if _has_last_sample and position_xz.distance_to(_last_sample_position) < sample_distance:
 		return
+	var forward_xz := Vector2.ZERO
+	if is_instance_valid(_vehicle):
+		forward_xz = -Vector2(
+			_vehicle.global_transform.basis.z.x,
+			_vehicle.global_transform.basis.z.z
+		)
 	_append_sample(
 		position_xz,
+		forward_xz,
 		_measured_hull_half_width() * width_multiplier,
 		_measure_intensity()
 	)
@@ -186,17 +266,25 @@ func _update_deposition() -> void:
 
 func _append_sample(
 	position_xz: Vector2,
+	forward_xz: Vector2,
 	half_width: float,
 	foam_intensity: float
 ) -> PersistentFoamSplat:
 	if not position_xz.is_finite():
 		return null
+	_roll_randomness()
+	var randomness := _rolled_randomness(forward_xz)
 	var splat := PersistentFoamSplat.new()
-	splat.position_xz = position_xz
+	splat.position_xz = position_xz + randomness.jitter
+	splat.base_position_xz = position_xz
 	splat.radius = maxf(half_width, 0.05)
 	splat.intensity = clampf(foam_intensity, 0.05, 1.0)
 	splat.birth_time = _viewport_time_now()
 	splat.serial = _sample_serial
+	splat.rotation = randomness.rotation
+	splat.scale_x = randomness.scale_x
+	splat.scale_y = randomness.scale_y
+	splat.random_seed = randomness.seed
 	_sample_serial += 1
 	_splats.append(splat)
 	_last_sample_position = position_xz
@@ -204,6 +292,41 @@ func _append_sample(
 	_cull_to_limit()
 	_sync_draw_dirty()
 	return splat
+
+
+func _roll_randomness() -> void:
+	if _rng_seeded:
+		return
+	_rng.randomize()
+	_rng_seeded = true
+
+
+## Rolls per-splat visual randomness ONCE. The returned values are stored on the
+## splat and must never be re-rolled during repaint. Lateral offset is weighted
+## relative to travel direction (forward_xz).
+func _rolled_randomness(forward_xz: Vector2) -> Dictionary:
+	var jitter := Vector2.ZERO
+	if forward_xz.length_squared() > 0.0001:
+		var forward := forward_xz.normalized()
+		var lateral := Vector2(-forward.y, forward.x)
+		jitter = (
+			lateral * _rng.randf_range(-1.0, 1.0) * position_jitter
+			+ forward * _rng.randf_range(-1.0, 1.0) * position_jitter * 0.35
+		)
+	else:
+		jitter = Vector2(
+			_rng.randf_range(-1.0, 1.0) * position_jitter,
+			_rng.randf_range(-1.0, 1.0) * position_jitter * 0.35
+		)
+	var scale_factor := _rng.randf_range(scale_random_min, scale_random_max)
+	var aspect := _rng.randf_range(aspect_min, aspect_max)
+	return {
+		&"jitter": jitter,
+		&"rotation": deg_to_rad(_rng.randf_range(-rotation_random, rotation_random)),
+		&"scale_x": scale_factor * aspect,
+		&"scale_y": scale_factor,
+		&"seed": _rng.randf(),
+	}
 
 
 func _measured_hull_half_width() -> float:
@@ -241,13 +364,8 @@ func _cull_to_limit() -> void:
 		_has_last_sample = false
 
 
-func _any_splat_fading() -> bool:
-	var now := _viewport_time_now()
-	for splat: PersistentFoamSplat in _splats:
-		var ratio := (now - splat.birth_time) / maxf(lifetime, 0.001)
-		if ratio >= fade_start_ratio and ratio < 1.0:
-			return true
-	return false
+func _any_splat_living() -> bool:
+	return not _splats.is_empty()
 
 
 func _expire_splats() -> void:
@@ -301,7 +419,10 @@ func _configure_canvas() -> void:
 	_canvas.splats = _splats
 	_canvas.mask_world_size = MASK_WORLD_SIZE
 	_canvas.lifetime = lifetime
-	_canvas.fade_start_ratio = fade_start_ratio
+	_canvas.fade_in_ratio = fade_in_ratio
+	_canvas.fade_out_start_ratio = fade_out_start_ratio
+	_canvas.size_min = size_min
+	_canvas.size_max = size_max
 
 
 func _viewport_time_now() -> float:
@@ -316,7 +437,10 @@ func _sync_draw_dirty() -> void:
 	_canvas.viewport_time = _viewport_time_now()
 	_canvas.mask_anchor_xz = _anchor_xz
 	_canvas.lifetime = lifetime
-	_canvas.fade_start_ratio = fade_start_ratio
+	_canvas.fade_in_ratio = fade_in_ratio
+	_canvas.fade_out_start_ratio = fade_out_start_ratio
+	_canvas.size_min = size_min
+	_canvas.size_max = size_max
 	_canvas.mark_dirty()
 	_viewport.render_target_update_mode = SubViewport.UPDATE_ONCE
 	paint_count += 1
@@ -338,6 +462,34 @@ func get_mask_world_size() -> float:
 
 func get_mask_strength() -> float:
 	return strength if enabled else 0.0
+
+
+func get_mask_irregularity() -> float:
+	return irregularity
+
+
+func get_mask_noise_scale() -> float:
+	return noise_scale
+
+
+func get_mask_noise_threshold() -> float:
+	return noise_threshold
+
+
+func get_mask_color() -> Color:
+	return foam_color
+
+
+func get_mask_emission() -> float:
+	return emission
+
+
+func get_mask_roughness() -> float:
+	return roughness
+
+
+func get_mask_specular() -> float:
+	return specular
 
 
 func is_mask_enabled() -> bool:
@@ -400,8 +552,8 @@ func clear_position_validation() -> void:
 
 func debug_deposit_sample(
 	position: Vector3,
-	_forward: Vector2 = Vector2.ZERO,
+	forward_xz: Vector2 = Vector2.ZERO,
 	half_width: float = 1.2,
 	intensity: float = 1.0
 ) -> void:
-	_append_sample(Vector2(position.x, position.z), half_width, intensity)
+	_append_sample(Vector2(position.x, position.z), forward_xz, half_width, intensity)

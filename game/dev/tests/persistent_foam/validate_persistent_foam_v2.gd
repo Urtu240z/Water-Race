@@ -76,6 +76,32 @@ func _run_validation() -> void:
 		0.001
 	)
 	_expect_true("mask reports enabled", mask.is_mask_enabled())
+	## Appearance uniforms must reach the ocean from provider defaults.
+	_expect_close(
+		"ocean persistent foam irregularity",
+		_read_param(probe, "persistent_foam_irregularity"),
+		0.80,
+		0.001
+	)
+	_expect_close(
+		"ocean persistent foam noise scale",
+		_read_param(probe, "persistent_foam_noise_scale"),
+		0.12,
+		0.001
+	)
+	_expect_close(
+		"ocean persistent foam noise threshold",
+		_read_param(probe, "persistent_foam_noise_threshold"),
+		0.48,
+		0.001
+	)
+	_expect_true(
+		"ocean persistent foam color matches provider",
+		_read_param(probe, "persistent_foam_color") == Color(0.90, 0.97, 1.0, 1.0)
+	)
+	_expect_close("ocean persistent foam emission", _read_param(probe, "persistent_foam_emission"), 0.0, 0.001)
+	_expect_close("ocean persistent foam roughness", _read_param(probe, "persistent_foam_roughness"), 0.88, 0.001)
+	_expect_close("ocean persistent foam specular", _read_param(probe, "persistent_foam_specular"), 0.16, 0.001)
 
 	## Phase A/B: deposits, then strong heading changes and new deposits.
 	var straight_forward := Vector2(1.0, 0.0)
@@ -92,8 +118,17 @@ func _run_validation() -> void:
 	var captured_count: int = mask.begin_position_validation(20)
 	_expect_equal("captured samples", captured_count, 20)
 	var origin_positions: Array[Vector2] = []
+	var origin_rotations: Array[float] = []
+	var origin_scale_x: Array[float] = []
+	var origin_scale_y: Array[float] = []
+	var origin_seeds: Array[float] = []
 	for index in 20:
-		origin_positions.append(mask._splats[index].position_xz)
+		var splat := mask._splats[index]
+		origin_positions.append(splat.position_xz)
+		origin_rotations.append(splat.rotation)
+		origin_scale_x.append(splat.scale_x)
+		origin_scale_y.append(splat.scale_y)
+		origin_seeds.append(splat.random_seed)
 
 	var turn_forward := Vector2(1.0, 1.0).normalized()
 	for index in 8:
@@ -137,6 +172,43 @@ func _run_validation() -> void:
 			break
 	_expect_true("stored XZ unchanged by deposits/age/repaints", unchanged)
 
+	## Per-splat visual randomness must be generated once and stay frozen:
+	## new deposits, aging and 10 repaints never change stored values.
+	var rotation_delta := 0.0
+	var scale_delta := 0.0
+	var seed_delta := 0.0
+	for index in 20:
+		var splat := mask._splats[index]
+		rotation_delta = maxf(rotation_delta, absf(splat.rotation - origin_rotations[index]))
+		var sx := absf(splat.scale_x - origin_scale_x[index])
+		var sy := absf(splat.scale_y - origin_scale_y[index])
+		scale_delta = maxf(scale_delta, maxf(sx, sy))
+		seed_delta = maxf(seed_delta, absf(splat.random_seed - origin_seeds[index]))
+	_expect_close("random rotation delta = 0.0", rotation_delta, 0.0, 0.0)
+	_expect_close("random scale delta = 0.0", scale_delta, 0.0, 0.0)
+	_expect_close("random seed delta = 0.0", seed_delta, 0.0, 0.0)
+
+	## Repaint stability: reread the same splat properties after a fresh paint.
+	rotation_delta = 0.0
+	scale_delta = 0.0
+	seed_delta = 0.0
+	mask._sync_draw_dirty()
+	mask._sync_draw_dirty()
+	for index in 20:
+		var splat := mask._splats[index]
+		rotation_delta = maxf(rotation_delta, absf(splat.rotation - origin_rotations[index]))
+		scale_delta = maxf(
+			scale_delta,
+			maxf(
+				absf(splat.scale_x - origin_scale_x[index]),
+				absf(splat.scale_y - origin_scale_y[index])
+			)
+		)
+		seed_delta = maxf(seed_delta, absf(splat.random_seed - origin_seeds[index]))
+	_expect_close("random rotation delta after repaint = 0.0", rotation_delta, 0.0, 0.0)
+	_expect_close("random scale delta after repaint = 0.0", scale_delta, 0.0, 0.0)
+	_expect_close("random seed delta after repaint = 0.0", seed_delta, 0.0, 0.0)
+
 	## Phase C: world rebase shifts stored XZ by EXACT shift only.
 	var shift := Vector3(16.0, 0.0, 8.0)
 	mask.apply_world_rebase(shift)
@@ -161,6 +233,75 @@ func _run_validation() -> void:
 		_read_param(probe, "persistent_foam_mask_anchor_xz"),
 		Vector2(shift.x, shift.z),
 		0.001
+	)
+
+	## Random properties survive world rebase unmodified.
+	rotation_delta = 0.0
+	scale_delta = 0.0
+	seed_delta = 0.0
+	for index in 20:
+		var splat := mask._splats[index]
+		rotation_delta = maxf(rotation_delta, absf(splat.rotation - origin_rotations[index]))
+		scale_delta = maxf(
+			scale_delta,
+			maxf(
+				absf(splat.scale_x - origin_scale_x[index]),
+				absf(splat.scale_y - origin_scale_y[index])
+			)
+		)
+		seed_delta = maxf(seed_delta, absf(splat.random_seed - origin_seeds[index]))
+	_expect_close("random rotation delta after rebase = 0.0", rotation_delta, 0.0, 0.0)
+	_expect_close("random scale delta after rebase = 0.0", scale_delta, 0.0, 0.0)
+	_expect_close("random seed delta after rebase = 0.0", seed_delta, 0.0, 0.0)
+
+	## Appearance changes must reach the ocean uniforms on push.
+	var custom_color := Color(0.4, 0.5, 0.6, 1.0)
+	mask.irregularity = 0.9
+	mask.noise_scale = 0.2
+	mask.noise_threshold = 0.4
+	mask.foam_color = custom_color
+	mask.emission = 1.5
+	mask.roughness = 0.5
+	mask.specular = 0.3
+	fake_ocean._update_persistent_foam_mask_push_if_dirty()
+	_expect_close("ocean persistent foam irregularity updated", _read_param(probe, "persistent_foam_irregularity"), 0.9, 0.001)
+	_expect_close("ocean persistent foam noise scale updated", _read_param(probe, "persistent_foam_noise_scale"), 0.2, 0.001)
+	_expect_close("ocean persistent foam noise threshold updated", _read_param(probe, "persistent_foam_noise_threshold"), 0.4, 0.001)
+	_expect_true("ocean persistent foam color updated", _read_param(probe, "persistent_foam_color") == custom_color)
+	_expect_close("ocean persistent foam emission updated", _read_param(probe, "persistent_foam_emission"), 1.5, 0.001)
+	_expect_close("ocean persistent foam roughness updated", _read_param(probe, "persistent_foam_roughness"), 0.5, 0.001)
+	_expect_close("ocean persistent foam specular updated", _read_param(probe, "persistent_foam_specular"), 0.3, 0.001)
+
+	## Visual lifecycle mathematics: fade-in, stable middle, fade-out, growth.
+	mask.size_min = 0.55
+	mask.size_max = 1.55
+	mask.fade_in_ratio = 0.10
+	mask.fade_out_start_ratio = 0.70
+	mask.lifetime = 10.0
+	var painter := mask._canvas
+	var birth_alpha: float = painter.evaluate_life_alpha(0.0)
+	var early_alpha: float = painter.evaluate_life_alpha(0.02 * mask.lifetime)
+	var after_fade_alpha: float = painter.evaluate_life_alpha(0.20 * mask.lifetime)
+	var middle_alpha: float = painter.evaluate_life_alpha(0.40 * mask.lifetime)
+	var death_alpha: float = painter.evaluate_life_alpha(0.99 * mask.lifetime)
+	_expect_close("alpha at birth ~ 0", birth_alpha, 0.0, 0.001)
+	_expect_true("alpha rises from zero early on", early_alpha > 0.0 and early_alpha < 0.5)
+	_expect_close("alpha after fade-in ~ 1", after_fade_alpha, 1.0, 0.001)
+	_expect_close("alpha in middle life ~ 1", middle_alpha, 1.0, 0.001)
+	_expect_close("alpha at death ~ 0", death_alpha, 0.0, 0.02)
+	var growth_birth: float = painter.evaluate_growth(0.0)
+	var growth_mid: float = painter.evaluate_growth(0.5 * mask.lifetime)
+	var growth_end: float = painter.evaluate_growth(mask.lifetime)
+	_expect_close("growth at birth == size_min", growth_birth, 0.55, 0.001)
+	_expect_true("growth mid strictly between min and max", growth_mid > 0.55 and growth_mid < 1.55)
+	_expect_close("growth at end == size_max", growth_end, 1.55, 0.001)
+	var splat_radius := 1.2
+	var birth_radius := splat_radius * growth_birth
+	var middle_radius := splat_radius * growth_mid
+	var end_radius := splat_radius * growth_end
+	_expect_true(
+		"radius_at_birth < radius_at_middle < radius_at_end",
+		birth_radius < middle_radius and middle_radius < end_radius
 	)
 
 	## Phase D: lifetime expiry removes splats and the mask empties.

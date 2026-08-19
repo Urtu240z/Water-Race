@@ -130,6 +130,13 @@ uniform vec2 persistent_foam_mask_anchor_xz = vec2(0.0);
 uniform float persistent_foam_mask_world_size : hint_range(16.0, 2048.0, 16.0) = 512.0;
 uniform float persistent_foam_mask_strength : hint_range(0.0, 4.0, 0.01) = 1.0;
 uniform bool persistent_foam_mask_enabled = false;
+uniform vec4 persistent_foam_color : source_color = vec4(0.90, 0.97, 1.0, 1.0);
+uniform float persistent_foam_emission : hint_range(0.0, 5.0, 0.05) = 0.0;
+uniform float persistent_foam_roughness : hint_range(0.0, 1.0, 0.01) = 0.88;
+uniform float persistent_foam_specular : hint_range(0.0, 1.0, 0.01) = 0.16;
+uniform float persistent_foam_irregularity : hint_range(0.0, 1.0, 0.01) = 0.80;
+uniform float persistent_foam_noise_scale : hint_range(0.01, 1.0, 0.01) = 0.12;
+uniform float persistent_foam_noise_threshold : hint_range(0.0, 1.0, 0.01) = 0.48;
 
 group_uniforms Clipmap;
 uniform bool ocean_surface_enabled = false;
@@ -694,6 +701,7 @@ void fragment() {
 		* foam_distance_gate;
 	float persistent_foam_coverage = 0.0;
 	float persistent_foam_breakup = 0.5;
+	float persistent_foam_mask = 0.0;
 	if (foam_enabled && persistent_foam_mask_enabled && foam_distance_gate > 0.0001) {
 		vec2 mask_uv = (interpolated_world_xz - persistent_foam_mask_anchor_xz)
 			/ max(persistent_foam_mask_world_size, 0.001)
@@ -702,20 +710,27 @@ void fragment() {
 		float mask_inside = 1.0 - smoothstep(0.955, 1.0, max(mask_edge.x, mask_edge.y));
 		float mask_value = mask_inside
 			* texture(persistent_foam_mask_texture, mask_uv).r;
-		vec2 persistent_foam_uv = interpolated_world_xz * (foam_macro_scale * 1.85)
-			+ vec2(17.13, -9.47);
-		float persistent_foam_noise = texture(foam_noise_texture, persistent_foam_uv).r;
-		float persistent_noise_width = max(fwidth(persistent_foam_noise) * 1.5, 0.015);
+		vec2 persistent_macro_uv = interpolated_world_xz * persistent_foam_noise_scale;
+		vec2 persistent_detail_uv = interpolated_world_xz * persistent_foam_noise_scale * 3.7
+			+ vec2(31.4, -17.7);
+		float persistent_noise_macro = texture(foam_noise_texture, persistent_macro_uv).r;
+		float persistent_noise_detail = texture(foam_noise_texture, persistent_detail_uv).r;
+		float persistent_combined_noise = persistent_noise_macro * 0.7
+			+ persistent_noise_detail * 0.3;
+		float persistent_noise_width = max(fwidth(persistent_combined_noise) * 1.5, 0.02);
 		persistent_foam_breakup = smoothstep(
-			0.38 - persistent_noise_width,
-			0.62 + persistent_noise_width,
-			persistent_foam_noise
+			persistent_foam_noise_threshold - persistent_noise_width,
+			persistent_foam_noise_threshold + persistent_noise_width,
+			persistent_combined_noise
 		);
 		persistent_foam_coverage = mask_value
 			* persistent_foam_mask_strength
-			* mix(0.18, 1.0, persistent_foam_breakup)
+			* mix(1.0, persistent_foam_breakup, persistent_foam_irregularity)
 			* foam_distance_gate;
 	}
+	persistent_foam_mask = foam_enabled
+		? clamp(persistent_foam_coverage, 0.0, 1.0)
+		: 0.0;
 	float environment_foam_mask = foam_enabled
 		? clamp(
 			(shoreline + crest_foam + ripple_foam)
@@ -726,10 +741,10 @@ void fragment() {
 		)
 		: 0.0;
 	float vehicle_foam_mask = foam_enabled
-		? clamp(vehicle_wake_foam + persistent_foam_coverage, 0.0, 1.0)
+		? clamp(vehicle_wake_foam, 0.0, 1.0)
 		: 0.0;
 	float foam_mask = foam_enabled
-		? clamp(environment_foam_mask + vehicle_foam_mask, 0.0, 1.0)
+		? clamp(environment_foam_mask + vehicle_foam_mask + persistent_foam_mask, 0.0, 1.0)
 		: 0.0;
 	vec3 underwater_surface_color = mix(
 		refracted_scene,
@@ -746,6 +761,11 @@ void fragment() {
 		final_color,
 		vehicle_wake_foam_color.rgb,
 		vehicle_foam_mask
+	);
+	final_color = mix(
+		final_color,
+		persistent_foam_color.rgb,
+		persistent_foam_mask
 	);
 	final_color = mix(
 		final_color,
@@ -772,6 +792,7 @@ void fragment() {
 
 	NORMAL = visual_normal;
 	ALBEDO = final_color;
+	float non_persistent_foam = clamp(foam_mask - persistent_foam_mask, 0.0, 1.0);
 	ROUGHNESS = mix(
 		mix(
 			near_roughness,
@@ -779,15 +800,23 @@ void fragment() {
 			max(distance_opacity, fresnel)
 		),
 		foam_roughness,
-		foam_mask
+		non_persistent_foam
 	);
+	ROUGHNESS = mix(ROUGHNESS, persistent_foam_roughness, persistent_foam_mask);
 	METALLIC = 0.0;
-	SPECULAR = mix(water_specular, 0.16, foam_mask) * mix(
+	SPECULAR = mix(
+		mix(water_specular, 0.16, non_persistent_foam),
+		persistent_foam_specular,
+		persistent_foam_mask
+	) * mix(
 		1.0,
 		0.08,
 		camera_underwater_factor
 	);
 	ALPHA = final_alpha;
+	EMISSION += persistent_foam_color.rgb
+		* persistent_foam_emission
+		* persistent_foam_mask;
 
 	if (ocean_debug_show_rings) {
 		vec3 ring_color = debug_ring_color(interpolated_ocean_ring_id);

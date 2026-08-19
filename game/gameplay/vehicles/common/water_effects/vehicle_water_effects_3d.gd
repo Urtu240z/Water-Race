@@ -153,6 +153,95 @@ enum QualityLevel {
 		if is_inside_tree():
 			_configure_persistent_foam()
 
+@export_subgroup("Appearance")
+@export var persistent_foam_v2_color: Color = Color(0.90, 0.97, 1.0, 1.0):
+	set(value):
+		persistent_foam_v2_color = value
+		if is_inside_tree():
+			_configure_persistent_foam()
+@export_range(0.0, 5.0, 0.05) var persistent_foam_v2_emission: float = 0.0:
+	set(value):
+		persistent_foam_v2_emission = value
+		if is_inside_tree():
+			_configure_persistent_foam()
+@export_range(0.0, 1.0, 0.01) var persistent_foam_v2_roughness: float = 0.88:
+	set(value):
+		persistent_foam_v2_roughness = value
+		if is_inside_tree():
+			_configure_persistent_foam()
+@export_range(0.0, 1.0, 0.01) var persistent_foam_v2_specular: float = 0.16:
+	set(value):
+		persistent_foam_v2_specular = value
+		if is_inside_tree():
+			_configure_persistent_foam()
+@export_range(0.0, 0.5, 0.01) var persistent_foam_v2_fade_in_ratio: float = 0.10:
+	set(value):
+		persistent_foam_v2_fade_in_ratio = value
+		if is_inside_tree():
+			_configure_persistent_foam()
+@export_range(0.5, 1.0, 0.01) var persistent_foam_v2_fade_out_start_ratio: float = 0.70:
+	set(value):
+		persistent_foam_v2_fade_out_start_ratio = value
+		if is_inside_tree():
+			_configure_persistent_foam()
+@export_range(0.1, 4.0, 0.05) var persistent_foam_v2_size_min: float = 0.65:
+	set(value):
+		persistent_foam_v2_size_min = value
+		if is_inside_tree():
+			_configure_persistent_foam()
+@export_range(0.1, 6.0, 0.05) var persistent_foam_v2_size_max: float = 1.65:
+	set(value):
+		persistent_foam_v2_size_max = value
+		if is_inside_tree():
+			_configure_persistent_foam()
+@export_range(0.1, 2.0, 0.05) var persistent_foam_v2_scale_random_min: float = 0.65:
+	set(value):
+		persistent_foam_v2_scale_random_min = value
+		if is_inside_tree():
+			_configure_persistent_foam()
+@export_range(0.1, 3.0, 0.05) var persistent_foam_v2_scale_random_max: float = 1.35:
+	set(value):
+		persistent_foam_v2_scale_random_max = value
+		if is_inside_tree():
+			_configure_persistent_foam()
+@export_range(0.1, 2.0, 0.05) var persistent_foam_v2_aspect_min: float = 0.55:
+	set(value):
+		persistent_foam_v2_aspect_min = value
+		if is_inside_tree():
+			_configure_persistent_foam()
+@export_range(0.1, 3.0, 0.05) var persistent_foam_v2_aspect_max: float = 1.45:
+	set(value):
+		persistent_foam_v2_aspect_max = value
+		if is_inside_tree():
+			_configure_persistent_foam()
+
+@export_subgroup("Irregularity")
+@export_range(0.0, 3.0, 0.05, "suffix:m") var persistent_foam_v2_position_jitter: float = 0.65:
+	set(value):
+		persistent_foam_v2_position_jitter = value
+		if is_inside_tree():
+			_configure_persistent_foam()
+@export_range(0.0, 180.0, 1.0, "suffix:deg") var persistent_foam_v2_rotation_random: float = 55.0:
+	set(value):
+		persistent_foam_v2_rotation_random = value
+		if is_inside_tree():
+			_configure_persistent_foam()
+@export_range(0.0, 1.0, 0.01) var persistent_foam_v2_irregularity: float = 0.80:
+	set(value):
+		persistent_foam_v2_irregularity = value
+		if is_inside_tree():
+			_configure_persistent_foam()
+@export_range(0.01, 1.0, 0.01) var persistent_foam_v2_noise_scale: float = 0.12:
+	set(value):
+		persistent_foam_v2_noise_scale = value
+		if is_inside_tree():
+			_configure_persistent_foam()
+@export_range(0.0, 1.0, 0.01) var persistent_foam_v2_noise_threshold: float = 0.48:
+	set(value):
+		persistent_foam_v2_noise_threshold = value
+		if is_inside_tree():
+			_configure_persistent_foam()
+
 var current_spray_intensity: float:
 	get:
 		return _current_spray_intensity
@@ -803,6 +892,23 @@ func _configure_persistent_foam() -> void:
 	_persistent_foam.maximum_points = persistent_foam_v2_maximum_points
 	_persistent_foam.width_multiplier = persistent_foam_v2_width_multiplier
 	_persistent_foam.strength = persistent_foam_v2_strength
+	_persistent_foam.size_min = persistent_foam_v2_size_min
+	_persistent_foam.size_max = persistent_foam_v2_size_max
+	_persistent_foam.fade_in_ratio = persistent_foam_v2_fade_in_ratio
+	_persistent_foam.fade_out_start_ratio = persistent_foam_v2_fade_out_start_ratio
+	_persistent_foam.position_jitter = persistent_foam_v2_position_jitter
+	_persistent_foam.rotation_random = persistent_foam_v2_rotation_random
+	_persistent_foam.scale_random_min = persistent_foam_v2_scale_random_min
+	_persistent_foam.scale_random_max = persistent_foam_v2_scale_random_max
+	_persistent_foam.aspect_min = persistent_foam_v2_aspect_min
+	_persistent_foam.aspect_max = persistent_foam_v2_aspect_max
+	_persistent_foam.irregularity = persistent_foam_v2_irregularity
+	_persistent_foam.noise_scale = persistent_foam_v2_noise_scale
+	_persistent_foam.noise_threshold = persistent_foam_v2_noise_threshold
+	_persistent_foam.foam_color = persistent_foam_v2_color
+	_persistent_foam.emission = persistent_foam_v2_emission
+	_persistent_foam.roughness = persistent_foam_v2_roughness
+	_persistent_foam.specular = persistent_foam_v2_specular
 
 
 func _connect_signals() -> void:

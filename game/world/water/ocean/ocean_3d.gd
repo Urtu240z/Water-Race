@@ -3146,6 +3146,34 @@ func _push_persistent_foam_mask_parameters(material: ShaderMaterial) -> void:
 		&"persistent_foam_mask_strength",
 		provider.call("get_mask_strength")
 	)
+	material.set_shader_parameter(
+		&"persistent_foam_irregularity",
+		provider.call("get_mask_irregularity")
+	)
+	material.set_shader_parameter(
+		&"persistent_foam_noise_scale",
+		provider.call("get_mask_noise_scale")
+	)
+	material.set_shader_parameter(
+		&"persistent_foam_noise_threshold",
+		provider.call("get_mask_noise_threshold")
+	)
+	material.set_shader_parameter(
+		&"persistent_foam_color",
+		provider.call("get_mask_color")
+	)
+	material.set_shader_parameter(
+		&"persistent_foam_emission",
+		provider.call("get_mask_emission")
+	)
+	material.set_shader_parameter(
+		&"persistent_foam_roughness",
+		provider.call("get_mask_roughness")
+	)
+	material.set_shader_parameter(
+		&"persistent_foam_specular",
+		provider.call("get_mask_specular")
+	)
 	material.set_shader_parameter(&"persistent_foam_mask_enabled", true)
 
 
