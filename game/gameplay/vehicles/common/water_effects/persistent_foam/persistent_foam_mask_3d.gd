@@ -196,8 +196,9 @@ func clear_trail() -> void:
 func apply_world_rebase(shift: Vector3) -> void:
 	var shift_xz := Vector2(shift.x, shift.z)
 	for splat: PersistentFoamSplat in _splats:
-		splat.position_xz += shift_xz
-	_anchor_xz += shift_xz
+		splat.position_xz -= shift_xz
+		splat.base_position_xz -= shift_xz
+	_anchor_xz -= shift_xz
 	rebase_count += 1
 	_bump_mask_params()
 	_sync_draw_dirty()
@@ -246,8 +247,8 @@ func _update_deposition() -> void:
 	_was_generating = generating
 	if not generating:
 		return
-	var position := _propulsion_point.global_position
-	var position_xz := Vector2(position.x, position.z)
+	var world_position := _propulsion_point.global_position
+	var position_xz := Vector2(world_position.x, world_position.z)
 	if _has_last_sample and position_xz.distance_to(_last_sample_position) < sample_distance:
 		return
 	var forward_xz := Vector2.ZERO
@@ -551,9 +552,9 @@ func clear_position_validation() -> void:
 
 
 func debug_deposit_sample(
-	position: Vector3,
+	world_position: Vector3,
 	forward_xz: Vector2 = Vector2.ZERO,
 	half_width: float = 1.2,
 	intensity: float = 1.0
 ) -> void:
-	_append_sample(Vector2(position.x, position.z), forward_xz, half_width, intensity)
+	_append_sample(Vector2(world_position.x, world_position.z), forward_xz, half_width, intensity)

@@ -22,7 +22,7 @@ var scale_y: float
 static func roll_randomness(
 	rng: RandomNumberGenerator,
 	base_position: Vector2,
-	forward_xz: Vector2,
+	travel_forward_xz: Vector2,
 	jitter: float,
 	rotation_random_deg: float,
 	scale_min: float,
@@ -32,8 +32,8 @@ static func roll_randomness(
 ) -> Dictionary:
 	var jittered := base_position
 	if jitter > 0.0001:
-		if forward_xz.length_squared() > 0.0001:
-			var forward := forward_xz.normalized()
+		if travel_forward_xz.length_squared() > 0.0001:
+			var forward := travel_forward_xz.normalized()
 			var lateral := Vector2(-forward.y, forward.x)
 			jittered = base_position + (
 				lateral * rng.randf_range(-1.0, 1.0) * jitter

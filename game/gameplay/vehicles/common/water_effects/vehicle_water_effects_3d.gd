@@ -140,6 +140,11 @@ const HISTORY_DEPOSIT_MINIMUM_CONTACT := 0.1
 		persistent_foam_v2_enabled = value
 		if is_inside_tree():
 			_configure_persistent_foam()
+@export var persistent_foam_v2_global_settings_owner: bool = false:
+	set(value):
+		persistent_foam_v2_global_settings_owner = value
+		if is_inside_tree():
+			_configure_persistent_foam()
 @export_range(1.0, 60.0, 0.5, "suffix:s") var persistent_foam_v2_lifetime: float = 20.0:
 	set(value):
 		persistent_foam_v2_lifetime = value
@@ -481,6 +486,9 @@ func _exit_tree() -> void:
 	## request, otherwise Ocean3D would keep the shared map enabled forever.
 	if is_instance_valid(_ocean):
 		_ocean.set_persistent_foam_history_requested(false, get_instance_id())
+		var history_map := _ocean.get_persistent_foam_history_map()
+		if is_instance_valid(history_map):
+			history_map.call(&"release_settings_owner", get_instance_id())
 
 
 func _initialize_effects() -> void:
@@ -953,6 +961,9 @@ func _sync_persistent_foam_backend() -> void:
 		_persistent_foam.enabled = persistent_foam_v2_enabled
 		if is_instance_valid(_ocean):
 			_ocean.set_persistent_foam_history_requested(false, get_instance_id())
+			var history_map := _ocean.get_persistent_foam_history_map()
+			if is_instance_valid(history_map):
+				history_map.call(&"release_settings_owner", get_instance_id())
 
 
 ## The GPU history map is ocean-owned and shared; when this vehicle selects the
@@ -965,25 +976,30 @@ func _sync_history_map_appearance() -> void:
 	var history_map := _ocean.get_persistent_foam_history_map()
 	if not is_instance_valid(history_map):
 		return
-	history_map.set(&"lifetime", persistent_foam_v2_lifetime)
-	history_map.set(&"strength", persistent_foam_v2_strength)
-	history_map.set(&"size_min", persistent_foam_v2_size_min)
-	history_map.set(&"size_max", persistent_foam_v2_size_max)
-	history_map.set(&"fade_in_ratio", persistent_foam_v2_fade_in_ratio)
-	history_map.set(&"fade_out_start_ratio", persistent_foam_v2_fade_out_start_ratio)
-	history_map.set(&"position_jitter", persistent_foam_v2_position_jitter)
-	history_map.set(&"rotation_random_deg", persistent_foam_v2_rotation_random)
-	history_map.set(&"scale_random_min", persistent_foam_v2_scale_random_min)
-	history_map.set(&"scale_random_max", persistent_foam_v2_scale_random_max)
-	history_map.set(&"aspect_min", persistent_foam_v2_aspect_min)
-	history_map.set(&"aspect_max", persistent_foam_v2_aspect_max)
-	history_map.set(&"irregularity", persistent_foam_v2_irregularity)
-	history_map.set(&"noise_scale", persistent_foam_v2_noise_scale)
-	history_map.set(&"noise_threshold", persistent_foam_v2_noise_threshold)
-	history_map.set(&"foam_color", persistent_foam_v2_color)
-	history_map.set(&"emission", persistent_foam_v2_emission)
-	history_map.set(&"roughness", persistent_foam_v2_roughness)
-	history_map.set(&"specular", persistent_foam_v2_specular)
+	if not persistent_foam_v2_global_settings_owner:
+		return
+	history_map.call(&"request_settings_owner", get_instance_id())
+	history_map.call(&"apply_owner_settings", get_instance_id(), {
+		&"lifetime": persistent_foam_v2_lifetime,
+		&"strength": persistent_foam_v2_strength,
+		&"size_min": persistent_foam_v2_size_min,
+		&"size_max": persistent_foam_v2_size_max,
+		&"fade_in_ratio": persistent_foam_v2_fade_in_ratio,
+		&"fade_out_start_ratio": persistent_foam_v2_fade_out_start_ratio,
+		&"position_jitter": persistent_foam_v2_position_jitter,
+		&"rotation_random_deg": persistent_foam_v2_rotation_random,
+		&"scale_random_min": persistent_foam_v2_scale_random_min,
+		&"scale_random_max": persistent_foam_v2_scale_random_max,
+		&"aspect_min": persistent_foam_v2_aspect_min,
+		&"aspect_max": persistent_foam_v2_aspect_max,
+		&"irregularity": persistent_foam_v2_irregularity,
+		&"noise_scale": persistent_foam_v2_noise_scale,
+		&"noise_threshold": persistent_foam_v2_noise_threshold,
+		&"foam_color": persistent_foam_v2_color,
+		&"emission": persistent_foam_v2_emission,
+		&"roughness": persistent_foam_v2_roughness,
+		&"specular": persistent_foam_v2_specular,
+	})
 
 
 func _update_history_deposition() -> void:
@@ -994,8 +1010,8 @@ func _update_history_deposition() -> void:
 		return
 	if not _history_deposit_ready():
 		return
-	var position := _propulsion_point.global_position
-	var position_xz := Vector2(position.x, position.z)
+	var world_position := _propulsion_point.global_position
+	var position_xz := Vector2(world_position.x, world_position.z)
 	if _history_has_last_sample and position_xz.distance_to(_history_last_sample_position) < persistent_foam_v2_sample_distance:
 		return
 	var forward_xz := Vector2.ZERO

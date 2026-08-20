@@ -209,7 +209,7 @@ func _run_validation() -> void:
 	_expect_close("random scale delta after repaint = 0.0", scale_delta, 0.0, 0.0)
 	_expect_close("random seed delta after repaint = 0.0", seed_delta, 0.0, 0.0)
 
-	## Phase C: world rebase shifts stored XZ by EXACT shift only.
+	## Phase C: local coordinates and anchor both move opposite the logical shift.
 	var shift := Vector3(16.0, 0.0, 8.0)
 	mask.apply_world_rebase(shift)
 	status = mask.get_position_validation_status()
@@ -222,16 +222,16 @@ func _run_validation() -> void:
 	)
 	var exact_shift := true
 	for index in 20:
-		var expected := origin_positions[index] + Vector2(shift.x, shift.z)
+		var expected := origin_positions[index] - Vector2(shift.x, shift.z)
 		if not mask._splats[index].position_xz.is_equal_approx(expected):
 			exact_shift = false
 			break
-	_expect_true("stored XZ shifted by EXACT rebase shift", exact_shift)
+	_expect_true("SPLAT_MASK_REBASE", exact_shift)
 	fake_ocean._update_persistent_foam_mask_push_if_dirty()
 	_expect_vector2_close(
 		"ocean mask anchor updated after rebase",
 		_read_param(probe, "persistent_foam_mask_anchor_xz"),
-		Vector2(shift.x, shift.z),
+		-Vector2(shift.x, shift.z),
 		0.001
 	)
 

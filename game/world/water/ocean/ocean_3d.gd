@@ -3203,6 +3203,12 @@ func _initialize_persistent_foam_history() -> void:
 	var initial_xz := Vector2.ZERO
 	if is_instance_valid(follow_target):
 		initial_xz = Vector2(follow_target.global_position.x, follow_target.global_position.z)
+	elif is_instance_valid(follow_camera):
+		initial_xz = Vector2(follow_camera.global_position.x, follow_camera.global_position.z)
+	else:
+		var active_camera := get_viewport().get_camera_3d()
+		if is_instance_valid(active_camera):
+			initial_xz = Vector2(active_camera.global_position.x, active_camera.global_position.z)
 	history_map.call(&"configure", self, initial_xz)
 
 
@@ -3342,6 +3348,14 @@ func set_persistent_foam_history_requested(requested: bool, source_id: int = 0) 
 
 func get_persistent_foam_history_map() -> Node3D:
 	return get_node_or_null("PersistentFoamHistoryMap3D") as Node3D
+
+
+## Explicit global reset API. Call this only from authoritative level/race
+## reset flows; individual vehicle destruction must not erase shared history.
+func clear_persistent_foam_history() -> void:
+	var history_map := get_persistent_foam_history_map()
+	if is_instance_valid(history_map):
+		history_map.call(&"clear_history")
 
 
 func _push_origin_parameter_to_all_materials() -> void:

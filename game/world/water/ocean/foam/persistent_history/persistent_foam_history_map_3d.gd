@@ -15,13 +15,34 @@ extends Node3D
 ## fixed 30 Hz cadence with no catch-up loop (a slow frame advances only one
 ## step, clamped). Growth, fade-in and reinforcement are pure shader math.
 
-const HISTORY_TEXTURE_PIXELS := 1024.0
-const HISTORY_WORLD_SIZE := 512.0
+const DEFAULT_HISTORY_TEXTURE_RESOLUTION := 1024
+const DEFAULT_HISTORY_WORLD_SIZE := 512.0
+const DEFAULT_HISTORY_UPDATE_HZ := 30.0
 const ANCHOR_STEP := 128.0
 const ANCHOR_FOLLOW_MARGIN := 42.0
-const UPDATE_RATE := 30.0
-const UPDATE_INTERVAL := 1.0 / UPDATE_RATE
 const MAX_DT_RATIO_PER_STEP := 0.15
+
+@export_enum("1024", "2048") var history_texture_resolution: int = DEFAULT_HISTORY_TEXTURE_RESOLUTION:
+	set(value):
+		var supported := 2048 if value >= 2048 else 1024
+		if history_texture_resolution == supported:
+			return
+		history_texture_resolution = supported
+		_reconfigure_history_storage()
+@export_range(64.0, 4096.0, 1.0, "suffix:m") var history_world_size: float = DEFAULT_HISTORY_WORLD_SIZE:
+	set(value):
+		var sanitized := maxf(value, 1.0)
+		if is_equal_approx(history_world_size, sanitized):
+			return
+		history_world_size = sanitized
+		_reconfigure_history_storage()
+@export_enum("15", "20", "30") var history_update_hz: int = int(DEFAULT_HISTORY_UPDATE_HZ):
+	set(value):
+		var supported := 30 if value >= 25 else (20 if value >= 18 else 15)
+		if history_update_hz == supported:
+			return
+		history_update_hz = supported
+		_touch_history_params()
 
 var enabled: bool = false:
 	set(value):
@@ -161,9 +182,11 @@ var _ocean: Ocean3D
 var _write_index: int = 0
 var _accumulated_time: float = 0.0
 var _pending: Array[PersistentFoamDepositCommand] = []
-var _anchor_xz := Vector2.ZERO
+var _published_anchor_xz := Vector2.ZERO
+var _target_anchor_xz := Vector2.ZERO
 var _anchor_initialized: bool = false
-var _remap_delta_uv := Vector2.ZERO
+var _last_deposit_xz := Vector2.ZERO
+var _has_last_deposit: bool = false
 var _rng := RandomNumberGenerator.new()
 var _rng_seeded: bool = false
 
@@ -179,6 +202,9 @@ var _update_serial: int = 0
 var _update_in_flight: bool = false
 var _queued_dt_ratio: float = 0.0
 var _queued_remap_delta_uv := Vector2.ZERO
+var _queued_anchor_xz := Vector2.ZERO
+var _settings_owner_source_id: int = 0
+var _settings_owner_conflict_reported: bool = false
 
 
 func _ready() -> void:
@@ -201,7 +227,11 @@ func _ready() -> void:
 	_deposit_canvas = $DepositViewport/DepositCanvas as Control
 	_deposit_clear_rect = $DepositViewport/ClearRect as ColorRect
 	if is_instance_valid(_deposit_canvas):
-		_deposit_canvas.world_size = HISTORY_WORLD_SIZE
+		_deposit_canvas.world_size = history_world_size
+	for history_viewport in _history_viewports:
+		history_viewport.size = Vector2i(history_texture_resolution, history_texture_resolution)
+	if is_instance_valid(_deposit_viewport):
+		_deposit_viewport.size = Vector2i(history_texture_resolution, history_texture_resolution)
 	_update_active()
 	if enabled:
 		_clear_all_viewports()
@@ -210,7 +240,8 @@ func _ready() -> void:
 func configure(ocean: Ocean3D, initial_world_xz: Vector2) -> void:
 	_ocean = ocean
 	if not _anchor_initialized:
-		_anchor_xz = _snap_anchor(initial_world_xz)
+		_published_anchor_xz = _snap_anchor(initial_world_xz)
+		_target_anchor_xz = _published_anchor_xz
 		_anchor_initialized = true
 		_sync_anchor()
 	_register_with_ocean()
@@ -255,12 +286,16 @@ func submit_deposit(
 	deposit.source_id = source_id
 	deposit.world_xz = randomness.get(&"position")
 	deposit.forward_xz = forward_xz
-	deposit.radius = maxf(radius, 0.05)
+	## The history texture stores the final footprint; growth in the ocean shader
+	## reveals it from size_min to this true size_max multiplier.
+	deposit.radius = maxf(radius * size_max, 0.05)
 	deposit.intensity = clampf(intensity, 0.05, 1.0)
 	deposit.rotation = randomness.get(&"rotation")
 	deposit.scale_x = randomness.get(&"scale_x")
 	deposit.scale_y = randomness.get(&"scale_y")
 	_pending.append(deposit)
+	_last_deposit_xz = deposit.world_xz
+	_has_last_deposit = true
 	deposit_count += 1
 	return deposit
 
@@ -269,7 +304,12 @@ func apply_world_rebase(shift: Vector3) -> void:
 	## WorldOriginController increases logical_origin by shift and moves local
 	## nodes by -shift. The map stores local XZ, so its anchor must move by
 	## -shift to preserve each foam sample's logical world location.
-	_anchor_xz -= Vector2(shift.x, shift.z)
+	var shift_xz := Vector2(shift.x, shift.z)
+	_published_anchor_xz -= shift_xz
+	_target_anchor_xz -= shift_xz
+	_queued_anchor_xz -= shift_xz
+	for pending_deposit: PersistentFoamDepositCommand in _pending:
+		pending_deposit.world_xz -= shift_xz
 	rebase_count += 1
 	_touch_history_params()
 	_sync_anchor()
@@ -287,20 +327,44 @@ func clear_history() -> void:
 	_touch_history_params()
 
 
+func request_settings_owner(source_id: int) -> bool:
+	if source_id == 0:
+		return false
+	if _settings_owner_source_id == 0 or _settings_owner_source_id == source_id:
+		_settings_owner_source_id = source_id
+		return true
+	if not _settings_owner_conflict_reported:
+		push_warning("Persistent Foam HISTORY_MAP already has a global settings owner; later sources remain deposit-only.")
+		_settings_owner_conflict_reported = true
+	return false
+
+
+func release_settings_owner(source_id: int) -> void:
+	if _settings_owner_source_id == source_id:
+		_settings_owner_source_id = 0
+		_settings_owner_conflict_reported = false
+
+
+func apply_owner_settings(source_id: int, settings: Dictionary) -> void:
+	if not request_settings_owner(source_id):
+		return
+	for property_name: StringName in settings:
+		set(property_name, settings[property_name])
+
+
 func _physics_process(delta: float) -> void:
 	if not enabled or Engine.is_editor_hint():
 		return
-	if _update_in_flight:
-		return
 	_track_anchor()
-	_accumulated_time += delta
-	if _accumulated_time < UPDATE_INTERVAL:
+	## Time is always accumulated, including while an asynchronous GPU pass is
+	## in flight. Work remains bounded to one pass per physics opportunity.
+	_accumulated_time += maxf(delta, 0.0)
+	if _update_in_flight or _accumulated_time < _update_interval():
 		return
-	## Single step only: no catch-up loop. A slow frame advances the state by
-	## just this one accumulated step (clamped), keeping the whole update in
-	## sync with real elapsed time without stacking work.
-	var step_time := minf(_accumulated_time, UPDATE_INTERVAL * 2.0)
-	_accumulated_time = 0.0
+	## Preserve backlog for later bounded passes; never discard elapsed time and
+	## never launch a catch-up loop.
+	var step_time := minf(_accumulated_time, lifetime * MAX_DT_RATIO_PER_STEP)
+	_accumulated_time -= step_time
 	var dt_ratio := clampf(
 		step_time / maxf(lifetime, 0.001),
 		0.0,
@@ -312,16 +376,17 @@ func _physics_process(delta: float) -> void:
 func _track_anchor() -> void:
 	if not is_instance_valid(_ocean):
 		return
-	var target := Vector2.ZERO
-	if is_instance_valid(_ocean.follow_target):
-		target = Vector2(_ocean.follow_target.global_position.x, _ocean.follow_target.global_position.z)
+	var target := _resolve_anchor_target()
+	if not target.is_finite():
+		return
 	if not _anchor_initialized:
-		_anchor_xz = _snap_anchor(target)
+		_published_anchor_xz = _snap_anchor(target)
+		_target_anchor_xz = _published_anchor_xz
 		_anchor_initialized = true
 		_sync_anchor()
 		return
-	var offset := target - _anchor_xz
-	var safe_half := HISTORY_WORLD_SIZE * 0.5 - ANCHOR_FOLLOW_MARGIN
+	var offset := target - _target_anchor_xz
+	var safe_half := history_world_size * 0.5 - ANCHOR_FOLLOW_MARGIN
 	if absf(offset.x) <= safe_half and absf(offset.y) <= safe_half:
 		return
 	var shift := Vector2(
@@ -330,11 +395,11 @@ func _track_anchor() -> void:
 	)
 	if shift.is_zero_approx():
 		return
-	_anchor_xz += shift
+	_target_anchor_xz += shift
 	anchor_count += 1
 	_touch_history_params()
-	_queue_anchor_remap(shift)
-	_deposit_canvas.anchor_xz = _anchor_xz
+	if is_instance_valid(_deposit_canvas):
+		_deposit_canvas.anchor_xz = _target_anchor_xz
 
 
 func _snap_anchor(value: Vector2) -> Vector2:
@@ -344,21 +409,44 @@ func _snap_anchor(value: Vector2) -> Vector2:
 	)
 
 
-func _sync_anchor() -> void:
-	_remap_delta_uv = Vector2.ZERO
+func _resolve_anchor_target() -> Vector2:
+	if is_instance_valid(_ocean.follow_target):
+		return Vector2(_ocean.follow_target.global_position.x, _ocean.follow_target.global_position.z)
+	if is_instance_valid(_ocean.follow_camera):
+		return Vector2(_ocean.follow_camera.global_position.x, _ocean.follow_camera.global_position.z)
+	var viewport := get_viewport()
+	var active_camera := viewport.get_camera_3d() if is_instance_valid(viewport) else null
+	if is_instance_valid(active_camera):
+		return Vector2(active_camera.global_position.x, active_camera.global_position.z)
+	if _has_last_deposit:
+		return _last_deposit_xz
+	return _target_anchor_xz if _anchor_initialized else Vector2.ZERO
+
+
+func _update_interval() -> float:
+	return 1.0 / maxf(float(history_update_hz), 1.0)
+
+
+func _reconfigure_history_storage() -> void:
 	if is_instance_valid(_deposit_canvas):
-		_deposit_canvas.anchor_xz = _anchor_xz
+		_deposit_canvas.world_size = history_world_size
+		_deposit_canvas.anchor_xz = _target_anchor_xz
+	for history_viewport in _history_viewports:
+		if is_instance_valid(history_viewport):
+			history_viewport.size = Vector2i(history_texture_resolution, history_texture_resolution)
+	if is_instance_valid(_deposit_viewport):
+		_deposit_viewport.size = Vector2i(history_texture_resolution, history_texture_resolution)
+	clear_history()
+
+
+func _sync_anchor() -> void:
+	if is_instance_valid(_deposit_canvas):
+		_deposit_canvas.anchor_xz = _target_anchor_xz
 
 
 ## Re-centers the GPU map by a discrete anchor step. The stored foam pattern is
 ## REMAPPED on the GPU in the next update pass: the update shader re-samples the
 ## old history at UV + shift, so no CPU rebuild is needed.
-func _queue_anchor_remap(shift_xz: Vector2) -> void:
-	if shift_xz.is_zero_approx():
-		return
-	_remap_delta_uv = shift_xz / HISTORY_WORLD_SIZE
-
-
 func _run_update_pass(dt_ratio: float) -> void:
 	## Rasterize deposits first. The history pass is deferred until the next
 	## frame because SubViewports update asynchronously in Godot 4.7.
@@ -368,8 +456,8 @@ func _run_update_pass(dt_ratio: float) -> void:
 	_update_serial += 1
 	var serial := _update_serial
 	_queued_dt_ratio = dt_ratio
-	_queued_remap_delta_uv = _remap_delta_uv
-	_remap_delta_uv = Vector2.ZERO
+	_queued_anchor_xz = _target_anchor_xz
+	_queued_remap_delta_uv = (_queued_anchor_xz - _published_anchor_xz) / history_world_size
 	if is_instance_valid(_deposit_canvas):
 		_deposit_canvas.stamps = _pending.duplicate()
 		_deposit_canvas.mark_dirty()
@@ -385,23 +473,25 @@ func _complete_update_pass(serial: int) -> void:
 		return
 	var read_viewport := _history_viewports[1 - _write_index]
 	var write_viewport := _history_viewports[_write_index]
-	var update_rect := _update_rects[_write_index]
-	update_rect.material.set_shader_parameter(
+	var history_update_rect := _update_rects[_write_index]
+	history_update_rect.material.set_shader_parameter(
 		&"history_texture",
 		read_viewport.get_texture()
 	)
-	update_rect.material.set_shader_parameter(
+	history_update_rect.material.set_shader_parameter(
 		&"deposit_texture",
 		_deposit_viewport.get_texture()
 	)
-	update_rect.material.set_shader_parameter(&"dt_ratio", _queued_dt_ratio)
-	update_rect.material.set_shader_parameter(&"fade_in_ratio", fade_in_ratio)
-	update_rect.material.set_shader_parameter(&"remap_delta_uv", _queued_remap_delta_uv)
+	history_update_rect.material.set_shader_parameter(&"dt_ratio", _queued_dt_ratio)
+	history_update_rect.material.set_shader_parameter(&"fade_in_ratio", fade_in_ratio)
+	history_update_rect.material.set_shader_parameter(&"remap_delta_uv", _queued_remap_delta_uv)
 	_render_viewport_now(write_viewport)
 	await get_tree().process_frame
 	if serial != _update_serial:
 		return
 	_write_index = 1 - _write_index
+	## Publish the matching anchor only after its remapped texture is current.
+	_published_anchor_xz = _queued_anchor_xz
 	update_count += 1
 	_touch_history_params()
 	## Deposit viewport is single-use: clear it for the next pass.
@@ -426,12 +516,12 @@ func _clear_all_viewports() -> void:
 		var viewport := _history_viewports[index]
 		if not is_instance_valid(viewport):
 			continue
-		var update_rect := _update_rects[index] if index < _update_rects.size() else null
-		var clear_rect := _clear_rects[index] if index < _clear_rects.size() else null
-		if is_instance_valid(update_rect):
-			update_rect.visible = false
-		if is_instance_valid(clear_rect):
-			clear_rect.visible = true
+		var history_update_rect := _update_rects[index] if index < _update_rects.size() else null
+		var history_clear_rect := _clear_rects[index] if index < _clear_rects.size() else null
+		if is_instance_valid(history_update_rect):
+			history_update_rect.visible = false
+		if is_instance_valid(history_clear_rect):
+			history_clear_rect.visible = true
 		_render_viewport_now(viewport)
 	if is_instance_valid(_deposit_viewport):
 		if is_instance_valid(_deposit_canvas):
@@ -450,12 +540,12 @@ func _finish_gpu_clear(serial: int) -> void:
 	if serial != _clear_serial:
 		return
 	for index in _history_viewports.size():
-		var update_rect := _update_rects[index] if index < _update_rects.size() else null
-		var clear_rect := _clear_rects[index] if index < _clear_rects.size() else null
-		if is_instance_valid(clear_rect):
-			clear_rect.visible = false
-		if is_instance_valid(update_rect):
-			update_rect.visible = true
+		var history_update_rect := _update_rects[index] if index < _update_rects.size() else null
+		var history_clear_rect := _clear_rects[index] if index < _clear_rects.size() else null
+		if is_instance_valid(history_clear_rect):
+			history_clear_rect.visible = false
+		if is_instance_valid(history_update_rect):
+			history_update_rect.visible = true
 	if is_instance_valid(_deposit_clear_rect):
 		_deposit_clear_rect.visible = false
 	if is_instance_valid(_deposit_canvas):
@@ -480,11 +570,11 @@ func get_history_texture() -> Texture2D:
 
 
 func get_history_anchor_xz() -> Vector2:
-	return _anchor_xz
+	return _published_anchor_xz
 
 
 func get_history_world_size() -> float:
-	return HISTORY_WORLD_SIZE
+	return history_world_size
 
 
 func get_history_strength() -> float:

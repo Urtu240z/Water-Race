@@ -46,6 +46,9 @@ func _run_validation() -> void:
 	_expect_true("HistoryB uses HDR 2D", _map._history_viewports[1].use_hdr_2d)
 
 	_test_cpu_empty_state_semantics()
+	_test_time_preservation()
+	_test_true_size_multipliers()
+	_test_pending_rebase()
 	await _test_empty_pixel_never_activates()
 	await _test_dead_foam_does_not_resurrect()
 	await _test_nearby_empty_water()
@@ -57,8 +60,10 @@ func _run_validation() -> void:
 	await _test_freshness_footprint()
 	await _test_rotation_stability()
 	await _test_strength_and_params_version()
+	await _test_anchor_world_lock_and_fallback()
+	await _test_full_runtime_path()
 	await _test_clear()
-	_test_rebase_semantics()
+	await _test_rebase_semantics()
 	_test_anchor_recenter_count()
 	_test_source_cleanup_and_backend_requests()
 	_test_shader_resources()
@@ -83,6 +88,46 @@ func _test_cpu_empty_state_semantics() -> void:
 	for _index in 12:
 		state = PersistentFoamHistoryState.advance(state, Vector4.ZERO, 0.5, _map.fade_in_ratio)
 	_expect_vector4_zero("CPU empty state remains zero", state)
+
+
+func _test_time_preservation() -> void:
+	_map._accumulated_time = 0.0
+	_map._update_in_flight = true
+	_map.call("_physics_process", 10.0)
+	_map._update_in_flight = false
+	_expect_close("HISTORY_TIME_PRESERVED", _map._accumulated_time, 10.0, 0.001)
+	## One pass consumes a bounded piece and retains the remainder for later
+	## passes, so the elapsed ten seconds cannot vanish during GPU stalls.
+	var consumed := minf(_map._accumulated_time, _map.lifetime * _map.MAX_DT_RATIO_PER_STEP)
+	_expect_true("LIFETIME_REAL_TIME", consumed > 0.0 and _map._accumulated_time - consumed > 0.0)
+	_map._accumulated_time = 0.0
+
+
+func _test_true_size_multipliers() -> void:
+	var previous_min := _map.size_min
+	var previous_max := _map.size_max
+	_map.size_min = 0.5
+	_map.size_max = 2.0
+	var deposit := _map.submit_deposit(9001, Vector2(40.0, -25.0), Vector2.UP, 10.0, 1.0)
+	_expect_close("SIZE_MAX_TRUE_MULTIPLIER", deposit.radius, 20.0, 0.001)
+	_expect_close("SIZE_MIN_TRUE_MULTIPLIER", deposit.radius * _map.size_min / _map.size_max, 5.0, 0.001)
+	_expect_true("GROWTH_CENTER_STABLE", deposit.world_xz.is_equal_approx(Vector2(40.0, -25.0)))
+	_map.clear_history()
+	_map.size_min = previous_min
+	_map.size_max = previous_max
+
+
+func _test_pending_rebase() -> void:
+	_map.clear_history()
+	var pending_position := Vector2(60.0, 90.0)
+	_map.submit_deposit(9002, pending_position, Vector2.UP, 4.0, 1.0)
+	var shift := Vector3(16.0, 0.0, 8.0)
+	_map.apply_world_rebase(shift)
+	_expect_true(
+		"PENDING_REBASE",
+		_map._pending.size() == 1 and _map._pending[0].world_xz.is_equal_approx(pending_position - Vector2(16.0, 8.0))
+	)
+	_map.clear_history()
 
 
 func _test_empty_pixel_never_activates() -> void:
@@ -221,13 +266,14 @@ func _test_freshness_footprint() -> void:
 	var center_px := (stamp_image.get_width() - 1) * 0.5
 	var old_radius := 32.0
 	var small_radius := 16.0
+	var maximum_size_multiplier := _map.size_max
 	var selected := Vector2i(-1, -1)
 	for y in stamp_image.get_height():
 		for x in stamp_image.get_width():
 			var old_pixel := stamp_image.get_pixel(x, y).r
 			var point := Vector2(
-				(float(x) - center_px) * old_radius / 64.0,
-				(float(y) - center_px) * old_radius / 64.0
+				(float(x) - center_px) * old_radius * maximum_size_multiplier / 64.0,
+				(float(y) - center_px) * old_radius * maximum_size_multiplier / 64.0
 			)
 			var mapped := Vector2i(
 				roundi(center_px + (float(x) - center_px) * old_radius / small_radius),
@@ -251,8 +297,8 @@ func _test_freshness_footprint() -> void:
 		_failures.append("could not find an outer stamp pixel for freshness test")
 		return
 	var point := Vector2(
-		(float(selected.x) - center_px) * old_radius / 64.0,
-		(float(selected.y) - center_px) * old_radius / 64.0
+		(float(selected.x) - center_px) * old_radius * maximum_size_multiplier / 64.0,
+		(float(selected.y) - center_px) * old_radius * maximum_size_multiplier / 64.0
 	)
 	_map.submit_deposit(1001, MAP_CENTER, Vector2(0.0, 1.0), old_radius, 1.0)
 	_map.call("_run_update_pass", 0.0)
@@ -327,8 +373,57 @@ func _test_clear() -> void:
 	_expect_equal("clear removes pending commands", _map.get_deposit_validation_status().pending_count, 0)
 
 
+func _test_anchor_world_lock_and_fallback() -> void:
+	_map.clear_history()
+	await _flush_gpu()
+	var visible_world := _map.get_history_anchor_xz()
+	_map.submit_deposit(1001, visible_world, Vector2.UP, 12.0, 1.0)
+	_map.call("_run_update_pass", 0.0)
+	await _flush_gpu()
+	var target := Node3D.new()
+	add_child(target)
+	var published_before := _map.get_history_anchor_xz()
+	_ocean.follow_target = target
+	target.global_position = Vector3(published_before.x + 240.0, 0.0, published_before.y)
+	_map.call("_track_anchor")
+	_expect_vector2_close("anchor remains published before remap", _map.get_history_anchor_xz(), published_before, 0.001)
+	_map.call("_run_update_pass", 0.0)
+	await _flush_gpu()
+	_expect_true("ANCHOR_PIXEL_WORLD_LOCK", _read_history(visible_world).r > 0.5)
+	_ocean.follow_target = null
+	var camera := Camera3D.new()
+	add_child(camera)
+	camera.global_position = Vector3(333.0, 0.0, -222.0)
+	_ocean.follow_camera = camera
+	_map.call("_track_anchor")
+	_expect_true("ANCHOR_FALLBACK", _map.anchor_count > 0)
+	camera.queue_free()
+	target.queue_free()
+
+
+func _test_full_runtime_path() -> void:
+	_map.clear_history()
+	await _flush_gpu()
+	_map.enabled = true
+	_map.configure(_ocean, _map.get_history_anchor_xz())
+	var deposit_world := _map.get_history_anchor_xz()
+	var accepted := _ocean.submit_persistent_foam_history_deposit(
+		7777, deposit_world, Vector2.UP, 12.0, 1.0
+	)
+	_expect_true("FULL_RUNTIME_PATH submit accepted", accepted != null)
+	_map.call("_run_update_pass", 0.0)
+	await _flush_gpu()
+	_expect_true("FULL_RUNTIME_PATH", _map.get_deposit_validation_status().pending_count == 0 and _read_history(deposit_world).r > 0.5)
+
+
 func _test_rebase_semantics() -> void:
 	_map.clear_history()
+	await _flush_gpu()
+	var visible_local := _map.get_history_anchor_xz() + Vector2(20.0, -12.0)
+	_map.submit_deposit(1001, visible_local, Vector2.UP, 12.0, 1.0)
+	_map.call("_run_update_pass", 0.0)
+	await _flush_gpu()
+	var visible_before := _read_history(visible_local)
 	var old_anchor := _map.get_history_anchor_xz()
 	var old_local := Vector2(20.0, -12.0)
 	var shift := Vector3(128.0, 0.0, 64.0)
@@ -344,6 +439,10 @@ func _test_rebase_semantics() -> void:
 	_expect_true("actual WorldOriginController semantics preserve logical position", old_logical.is_equal_approx(new_logical))
 	_map.apply_world_rebase(shift)
 	_expect_vector2_close("history anchor follows local rebase with negative sign", _map.get_history_anchor_xz(), old_anchor - Vector2(shift.x, shift.z), 0.001)
+	_expect_true(
+		"VISIBLE_REBASE_WORLD_LOCK",
+		_read_history(visible_local - Vector2(shift.x, shift.z)).r >= visible_before.r - 0.01
+	)
 
 
 func _test_anchor_recenter_count() -> void:
@@ -374,6 +473,14 @@ func _test_source_cleanup_and_backend_requests() -> void:
 	_expect_true("removing one source keeps history enabled", local_map.enabled)
 	_ocean.set_persistent_foam_history_requested(false, 2002)
 	_expect_true("removing second source disables history", not local_map.enabled)
+	local_map.call("request_settings_owner", 1001)
+	local_map.call("apply_owner_settings", 1001, {&"strength": 0.25, &"lifetime": 20.0})
+	local_map.call("request_settings_owner", 2002)
+	local_map.call("apply_owner_settings", 2002, {&"strength": 0.9, &"lifetime": 8.0})
+	_expect_true(
+		"MULTI_SOURCE_NO_LAST_WRITER_WINS",
+		is_equal_approx(local_map.strength, 0.25) and is_equal_approx(local_map.lifetime, 20.0)
+	)
 
 	var source := VehicleWaterEffects3D.new()
 	source.set("_ocean", _ocean)
