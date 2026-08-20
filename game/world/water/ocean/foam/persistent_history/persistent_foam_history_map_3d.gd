@@ -85,6 +85,27 @@ var fade_out_start_ratio: float = 0.70:
 			return
 		fade_out_start_ratio = value
 		_touch_history_params()
+var refresh_smoothing_time: float = 0.35:
+	set(value):
+		var sanitized := maxf(value, 0.001)
+		if is_equal_approx(refresh_smoothing_time, sanitized):
+			return
+		refresh_smoothing_time = sanitized
+		_touch_history_params()
+var edge_softness: float = 0.22:
+	set(value):
+		var sanitized := maxf(value, 0.001)
+		if is_equal_approx(edge_softness, sanitized):
+			return
+		edge_softness = sanitized
+		_touch_history_params()
+var breakup_softness: float = 0.08:
+	set(value):
+		var sanitized := maxf(value, 0.001)
+		if is_equal_approx(breakup_softness, sanitized):
+			return
+		breakup_softness = sanitized
+		_touch_history_params()
 
 var strength: float = 1.0:
 	set(value):
@@ -201,6 +222,7 @@ var _clear_serial: int = 0
 var _update_serial: int = 0
 var _update_in_flight: bool = false
 var _queued_dt_ratio: float = 0.0
+var _queued_refresh_blend: float = 0.0
 var _queued_remap_delta_uv := Vector2.ZERO
 var _queued_anchor_xz := Vector2.ZERO
 var _settings_owner_source_id: int = 0
@@ -458,6 +480,16 @@ func _run_update_pass(dt_ratio: float) -> void:
 	_update_serial += 1
 	var serial := _update_serial
 	_queued_dt_ratio = dt_ratio
+	## Reinforcement is an exponential approach evaluated with at most one
+	## nominal history interval. A long/stalled frame therefore cannot collapse
+	## the smoothing into a single-frame max operation.
+	var refresh_dt := minf(
+		maxf(dt_ratio, 0.0) * maxf(lifetime, 0.001),
+		_update_interval()
+	)
+	_queued_refresh_blend = 1.0 - exp(
+		-refresh_dt / maxf(refresh_smoothing_time, 0.001)
+	)
 	_queued_anchor_xz = _target_anchor_xz
 	_queued_remap_delta_uv = (_queued_anchor_xz - _published_anchor_xz) / history_world_size
 	if is_instance_valid(_deposit_canvas):
@@ -489,6 +521,7 @@ func _complete_update_pass(serial: int) -> void:
 	)
 	history_update_rect.material.set_shader_parameter(&"dt_ratio", _queued_dt_ratio)
 	history_update_rect.material.set_shader_parameter(&"fade_out_start_ratio", fade_out_start_ratio)
+	history_update_rect.material.set_shader_parameter(&"refresh_blend", _queued_refresh_blend)
 	history_update_rect.material.set_shader_parameter(&"remap_delta_uv", _queued_remap_delta_uv)
 	_render_viewport_now(write_viewport)
 	await RenderingServer.frame_post_draw
@@ -600,6 +633,14 @@ func get_history_fade_in_ratio() -> float:
 
 func get_history_fade_out_start_ratio() -> float:
 	return fade_out_start_ratio
+
+
+func get_history_edge_softness() -> float:
+	return edge_softness
+
+
+func get_history_breakup_softness() -> float:
+	return breakup_softness
 
 
 func get_history_irregularity() -> float:

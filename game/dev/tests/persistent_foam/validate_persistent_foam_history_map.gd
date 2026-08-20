@@ -53,6 +53,7 @@ func _run_validation() -> void:
 	await _test_low_intensity_birth_and_geometry()
 	await _test_growth_stops_at_fade_out()
 	_test_breakup_edge_and_death()
+	_test_edge_softness_controls()
 	await _test_gpu_lifetime_real_seconds()
 	await _test_empty_pixel_never_activates()
 	await _test_dead_foam_does_not_resurrect()
@@ -60,6 +61,7 @@ func _run_validation() -> void:
 	await _test_deposit_texture_clears()
 	await _test_birth_and_cpu_consumption()
 	await _test_fade_growth_and_death()
+	await _test_refresh_softening()
 	await _test_refresh_preserves_state()
 	await _test_saturation_and_multi_source()
 	await _test_freshness_footprint()
@@ -282,6 +284,34 @@ func _test_breakup_edge_and_death() -> void:
 	)
 
 
+func _test_edge_softness_controls() -> void:
+	var edge_state := Vector4(0.05, 1.0, 0.5, 1.0)
+	var soft_edge := PersistentFoamHistoryState.geometric_reveal(
+		edge_state,
+		0.65,
+		1.65,
+		0.22
+	)
+	var hard_edge := PersistentFoamHistoryState.geometric_reveal(
+		edge_state,
+		0.65,
+		1.65,
+		0.05
+	)
+	_expect_true(
+		"EDGE_SOFTNESS_VISIBLE soft=" + str(soft_edge) + " hard=" + str(hard_edge),
+		soft_edge > 0.05 and soft_edge < 0.35 and hard_edge > soft_edge + 0.5
+	)
+	var soft_breakup := PersistentFoamHistoryState.breakup(0.50, 1.0, 0.46, 0.08)
+	var hard_breakup := PersistentFoamHistoryState.breakup(0.50, 1.0, 0.46, 0.01)
+	_expect_true(
+		"BREAKUP_SOFTNESS_WORKS soft=" + str(soft_breakup) + " hard=" + str(hard_breakup),
+		soft_breakup > 0.1 and soft_breakup < 0.95 and hard_breakup > soft_breakup + 0.1
+	)
+	var hole := PersistentFoamHistoryState.breakup(0.0, 0.88, 0.46, 0.08)
+	_expect_true("HOLE_STAYS_ZERO value=" + str(hole), hole <= 0.00001)
+
+
 func _test_gpu_lifetime_real_seconds() -> void:
 	var previous_lifetime := _map.lifetime
 	var previous_hz := _map.history_update_hz
@@ -421,6 +451,88 @@ func _test_fade_growth_and_death() -> void:
 		await _flush_gpu()
 	var dead := _read_history(MAP_CENTER)
 	_expect_true("foam coverage reaches zero at death " + str(dead), dead.r <= 0.001)
+
+
+func _test_refresh_softening() -> void:
+	_map.clear_history()
+	await _flush_gpu()
+	_map.submit_deposit(1090, MAP_CENTER, Vector2.UP, 16.0, 0.8)
+	_map.call("_run_update_pass", 0.01)
+	await _flush_gpu()
+	_map.call("_run_update_pass", 0.84)
+	await _flush_gpu()
+	var fading := _read_history(MAP_CENTER)
+	var fading_coverage := _state_coverage(fading)
+	_map.submit_deposit(1090, MAP_CENTER, Vector2.UP, 16.0, 1.0)
+	_map.call("_run_update_pass", 0.01)
+	await _flush_gpu()
+	var refreshed := _read_history(MAP_CENTER)
+	var refreshed_coverage := _state_coverage(refreshed)
+	var hard_reset := Vector4(refreshed.r, refreshed.g, 0.0, refreshed.a)
+	var hard_reset_coverage := PersistentFoamHistoryState.coverage(
+		hard_reset,
+		_map.size_min,
+		_map.size_max,
+		_map.fade_in_ratio,
+		_map.fade_out_start_ratio,
+		_map.edge_softness
+	)
+	_expect_true(
+		"REFRESH_OVER_FADING_NO_POP before=" + str(fading_coverage) + " after=" + str(refreshed_coverage),
+		refreshed_coverage + 0.001 >= fading_coverage
+		and refreshed_coverage - fading_coverage <= 0.12
+		and refreshed_coverage + 0.10 < hard_reset_coverage
+	)
+	_expect_true(
+		"REFRESH_DOES_NOT_RESET_BIRTH_HARD age=" + str(refreshed.b) + " progress=" + str(refreshed.g),
+		refreshed.b >= 0.80
+		and refreshed.b < fading.b
+		and refreshed.g + 0.001 >= fading.g
+	)
+
+	## Model the leading contact edge: a low existing footprint receives a much
+	## stronger stamp, while a neighboring empty texel is born in the same pass.
+	## Both paths must remain partial rather than becoming an opaque patch.
+	var nominal_dt_ratio := 1.0 / (30.0 * 20.0)
+	var refresh_blend := 1.0 - exp(-(1.0 / 30.0) / 0.35)
+	var old_contact := Vector4(0.02, 1.0, 0.85, 0.5)
+	var contact_dep := Vector4(0.80, 1.0, 0.0, 1.0)
+	var contact_after := PersistentFoamHistoryState.advance(
+		old_contact,
+		contact_dep,
+		nominal_dt_ratio,
+		0.70,
+		refresh_blend
+	)
+	var contact_before_coverage := PersistentFoamHistoryState.coverage(
+		old_contact, 0.65, 1.65, 0.10, 0.70, 0.22
+	)
+	var contact_after_coverage := PersistentFoamHistoryState.coverage(
+		contact_after, 0.65, 1.65, 0.10, 0.70, 0.22
+	)
+	var contact_hard_coverage := PersistentFoamHistoryState.coverage(
+		Vector4(0.80, 1.0, 0.0, 1.0), 0.65, 1.65, 0.10, 0.70, 0.22
+	)
+	var new_contact := PersistentFoamHistoryState.advance(
+		Vector4.ZERO,
+		Vector4(1.0, 1.0, 0.0, 1.0),
+		nominal_dt_ratio,
+		0.70,
+		refresh_blend
+	)
+	var new_contact_coverage := PersistentFoamHistoryState.coverage(
+		new_contact, 0.65, 1.65, 0.10, 0.70, 0.22
+	)
+	_expect_true(
+		"CONTACT_POINT_NO_FRONT_POP refreshed=" + str(contact_after_coverage) + " birth=" + str(new_contact_coverage),
+		contact_after_coverage + 0.001 >= contact_before_coverage
+		and contact_after_coverage - contact_before_coverage <= 0.12
+		and contact_after_coverage < contact_hard_coverage * 0.25
+		and new_contact_coverage > 0.0
+		and new_contact_coverage < 0.02
+	)
+	_map.clear_history()
+	await _flush_gpu()
 
 
 func _test_refresh_preserves_state() -> void:
@@ -831,6 +943,12 @@ func _test_shader_resources() -> void:
 			and shader.get_code().contains("history_life_alpha = history_fade_in * history_fade_out")
 			and shader.get_code().contains("history_threshold + history_reveal_width")
 		)
+		_expect_true(
+			"soft edge and breakup uniforms " + shader_path.get_file(),
+			shader != null
+			and shader.get_code().contains("persistent_foam_edge_softness")
+			and shader.get_code().contains("persistent_foam_breakup_softness")
+		)
 
 
 func _flush_gpu() -> void:
@@ -861,7 +979,8 @@ func _state_coverage(state: Variant) -> float:
 		_map.size_min,
 		_map.size_max,
 		_map.fade_in_ratio,
-		_map.fade_out_start_ratio
+		_map.fade_out_start_ratio,
+		_map.edge_softness
 	)
 
 
@@ -889,7 +1008,8 @@ func _geometric_radius_along_x(center_world: Vector2) -> float:
 		var revealed := PersistentFoamHistoryState.geometric_reveal(
 			Vector4(pixel.r, pixel.g, pixel.b, pixel.a),
 			_map.size_min,
-			_map.size_max
+			_map.size_max,
+			_map.edge_softness
 		)
 		if revealed >= 0.5:
 			found_visible = true
@@ -932,7 +1052,8 @@ func _visible_radius_along_x(center_world: Vector2) -> float:
 			_map.size_min,
 			_map.size_max,
 			_map.fade_in_ratio,
-			_map.fade_out_start_ratio
+			_map.fade_out_start_ratio,
+			_map.edge_softness
 		)
 		if coverage >= 0.5:
 			found_visible = true

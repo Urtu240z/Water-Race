@@ -202,6 +202,16 @@ const HISTORY_DEPOSIT_MINIMUM_CONTACT := 0.1
 		persistent_foam_v2_fade_out_start_ratio = value
 		if is_inside_tree():
 			_configure_persistent_foam()
+@export_range(0.05, 2.0, 0.05, "suffix:s") var persistent_foam_v2_refresh_smoothing_time: float = 0.35:
+	set(value):
+		persistent_foam_v2_refresh_smoothing_time = value
+		if is_inside_tree():
+			_configure_persistent_foam()
+@export_range(0.02, 0.4, 0.01) var persistent_foam_v2_edge_softness: float = 0.22:
+	set(value):
+		persistent_foam_v2_edge_softness = value
+		if is_inside_tree():
+			_configure_persistent_foam()
 @export_range(0.1, 4.0, 0.05) var persistent_foam_v2_size_min: float = 0.65:
 	set(value):
 		persistent_foam_v2_size_min = value
@@ -257,6 +267,11 @@ const HISTORY_DEPOSIT_MINIMUM_CONTACT := 0.1
 @export_range(0.0, 1.0, 0.01) var persistent_foam_v2_noise_threshold: float = 0.48:
 	set(value):
 		persistent_foam_v2_noise_threshold = value
+		if is_inside_tree():
+			_configure_persistent_foam()
+@export_range(0.01, 0.25, 0.01) var persistent_foam_v2_breakup_softness: float = 0.08:
+	set(value):
+		persistent_foam_v2_breakup_softness = value
 		if is_inside_tree():
 			_configure_persistent_foam()
 
@@ -987,6 +1002,8 @@ func _sync_history_map_appearance() -> void:
 		&"size_max": persistent_foam_v2_size_max,
 		&"fade_in_ratio": persistent_foam_v2_fade_in_ratio,
 		&"fade_out_start_ratio": persistent_foam_v2_fade_out_start_ratio,
+		&"refresh_smoothing_time": persistent_foam_v2_refresh_smoothing_time,
+		&"edge_softness": persistent_foam_v2_edge_softness,
 		&"position_jitter": persistent_foam_v2_position_jitter,
 		&"rotation_random_deg": persistent_foam_v2_rotation_random,
 		&"scale_random_min": persistent_foam_v2_scale_random_min,
@@ -996,6 +1013,7 @@ func _sync_history_map_appearance() -> void:
 		&"irregularity": persistent_foam_v2_irregularity,
 		&"noise_scale": persistent_foam_v2_noise_scale,
 		&"noise_threshold": persistent_foam_v2_noise_threshold,
+		&"breakup_softness": persistent_foam_v2_breakup_softness,
 		&"foam_color": persistent_foam_v2_color,
 		&"emission": persistent_foam_v2_emission,
 		&"roughness": persistent_foam_v2_roughness,

@@ -137,6 +137,7 @@ uniform float persistent_foam_specular : hint_range(0.0, 1.0, 0.01) = 0.16;
 uniform float persistent_foam_irregularity : hint_range(0.0, 1.0, 0.01) = 0.80;
 uniform float persistent_foam_noise_scale : hint_range(0.01, 1.0, 0.01) = 0.12;
 uniform float persistent_foam_noise_threshold : hint_range(0.0, 1.0, 0.01) = 0.48;
+uniform float persistent_foam_breakup_softness : hint_range(0.01, 0.25, 0.01) = 0.08;
 // Persistent Foam V2 - HISTORY MAP alternate backend: a GPU-backed global foam
 // history. State RGBA: R footprint, G max growth, B age, A intensity.
 uniform sampler2D persistent_foam_history_texture : repeat_disable, filter_linear;
@@ -148,6 +149,7 @@ uniform float persistent_foam_size_min : hint_range(0.1, 4.0, 0.05) = 0.65;
 uniform float persistent_foam_size_max : hint_range(0.1, 6.0, 0.05) = 1.65;
 uniform float persistent_foam_fade_in_ratio : hint_range(0.0, 1.0, 0.01) = 0.10;
 uniform float persistent_foam_fade_out_start_ratio : hint_range(0.5, 1.0, 0.01) = 0.70;
+uniform float persistent_foam_edge_softness : hint_range(0.02, 0.4, 0.01) = 0.22;
 
 group_uniforms Clipmap;
 uniform bool ocean_surface_enabled = false;
@@ -721,7 +723,15 @@ void fragment() {
 		float persistent_noise_detail = texture(foam_noise_texture, persistent_detail_uv).r;
 		float persistent_combined_noise = persistent_noise_macro * 0.7
 			+ persistent_noise_detail * 0.3;
-		float persistent_noise_width = max(fwidth(persistent_combined_noise) * 1.5, 0.02);
+		// Keep the legacy SPLAT_MASK breakup unchanged. The new authored
+		// softness belongs only to the HISTORY_MAP state model.
+		float persistent_min_noise_width = persistent_foam_history_enabled
+			? persistent_foam_breakup_softness
+			: 0.02;
+		float persistent_noise_width = max(
+			fwidth(persistent_combined_noise) * 1.5,
+			persistent_min_noise_width
+		);
 		float persistent_effective_threshold = mix(
 			-persistent_noise_width,
 			persistent_foam_noise_threshold,
@@ -756,7 +766,10 @@ void fragment() {
 				clamp(history_state.g, 0.0, 1.0)
 			);
 			float history_threshold = 1.0 - radius_frac * radius_frac;
-			float history_reveal_width = min(0.12, max(1.0 - history_threshold, 0.00001));
+			float history_reveal_width = min(
+				persistent_foam_edge_softness,
+				max(1.0 - history_threshold, 0.00001)
+			);
 			float history_revealed = smoothstep(
 				history_threshold,
 				history_threshold + history_reveal_width,

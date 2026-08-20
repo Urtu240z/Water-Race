@@ -3282,6 +3282,14 @@ func _push_persistent_foam_history_parameters(material: ShaderMaterial) -> void:
 		provider.call("get_history_fade_out_start_ratio")
 	)
 	material.set_shader_parameter(
+		&"persistent_foam_edge_softness",
+		provider.call("get_history_edge_softness")
+	)
+	material.set_shader_parameter(
+		&"persistent_foam_breakup_softness",
+		provider.call("get_history_breakup_softness")
+	)
+	material.set_shader_parameter(
 		&"persistent_foam_irregularity",
 		provider.call("get_history_irregularity")
 	)

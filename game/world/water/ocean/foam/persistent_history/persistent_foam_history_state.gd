@@ -1,6 +1,8 @@
 class_name PersistentFoamHistoryState
 extends RefCounted
 
+const MAX_REFRESH_AGE_REWIND_PER_PASS := 0.01
+
 ## CPU-side reference for the GPU history state math.
 ##
 ## The RGBA state layout used for the history texture:
@@ -39,29 +41,50 @@ static func advance(
 	old: Vector4,
 	dep: Vector4,
 	dt_ratio: float,
-	fade_out_start_ratio: float
+	fade_out_start_ratio: float,
+	refresh_blend: float = 0.0
 ) -> Vector4:
 	const STATE_EPSILON := 0.001
 	var has_old_foam := old.x > STATE_EPSILON
 	var has_new_deposit := dep.y > STATE_EPSILON and dep.x > STATE_EPSILON
+	var is_birth := has_new_deposit and not has_old_foam
+	var is_live_refresh := has_new_deposit and has_old_foam
 	## Empty texels are not active simulation state. This must match the GPU
 	## guard exactly so a dead pixel cannot begin a new lifecycle by itself.
 	if not has_old_foam and not has_new_deposit:
 		return Vector4.ZERO
-	var age := minf(old.z + maxf(dt_ratio, 0.0), 1.0)
-	if has_new_deposit:
-		age = minf(age, 0.0)
+	var positive_dt := maxf(dt_ratio, 0.0)
+	var age := minf(old.z + positive_dt, 1.0)
+	if is_birth:
+		age = 0.0
+	elif is_live_refresh:
+		## A living refresh rewinds at most one normal temporal step rather than
+		## snapping age to zero. The hard cap protects against a stalled frame
+		## turning a refresh into a large one-pass opacity jump.
+		age = maxf(
+			old.z - minf(positive_dt, MAX_REFRESH_AGE_REWIND_PER_PASS),
+			0.0
+		)
 	if age >= 1.0:
 		return Vector4.ZERO
 	## Growth completes exactly when fade-out begins and never decreases when a
 	## later pass refreshes age back to zero.
-	var progress_age := maxf(age, maxf(dt_ratio, 0.0)) if has_new_deposit else age
+	var progress_age := maxf(age, positive_dt) if is_birth else age
 	var progress := maxf(
 		old.y,
 		clampf(progress_age / maxf(fade_out_start_ratio, 0.00001), 0.0, 1.0)
 	)
-	var footprint := maxf(old.x, dep.x)
-	var intensity := maxf(old.w, dep.w)
+	var reinforce := clampf(refresh_blend, 0.0, 1.0)
+	var target_footprint := maxf(old.x, dep.x)
+	var target_intensity := maxf(old.w, dep.w)
+	var footprint := dep.x if is_birth else old.x
+	var intensity := dep.w if is_birth else old.w
+	if is_live_refresh:
+		## Shape and intensity approach their reinforced targets over several GPU
+		## updates. This prevents the contact edge from appearing as a new hard
+		## patch over already-visible, fading foam.
+		footprint = lerpf(old.x, target_footprint, reinforce)
+		intensity = lerpf(old.w, target_intensity, reinforce)
 	return Vector4(footprint, progress, age, intensity)
 
 
@@ -71,7 +94,8 @@ static func advance(
 static func geometric_reveal(
 	state: Vector4,
 	size_min: float,
-	size_max: float
+	size_max: float,
+	edge_softness: float = 0.22
 ) -> float:
 	var radius_frac := lerpf(
 		clampf(size_min / maxf(size_max, 0.001), 0.02, 1.0),
@@ -79,7 +103,10 @@ static func geometric_reveal(
 		clampf(state.y, 0.0, 1.0)
 	)
 	var threshold := 1.0 - radius_frac * radius_frac
-	var reveal_width := minf(0.12, maxf(1.0 - threshold, 0.00001))
+	var reveal_width := minf(
+		maxf(edge_softness, 0.00001),
+		maxf(1.0 - threshold, 0.00001)
+	)
 	return smooth(threshold, threshold + reveal_width, state.x)
 
 
@@ -90,9 +117,9 @@ static func breakup(
 	combined_noise: float,
 	irregularity: float,
 	noise_threshold: float,
-	noise_width: float = 0.02
+	breakup_softness: float = 0.08
 ) -> float:
-	var width := maxf(noise_width, 0.00001)
+	var width := maxf(breakup_softness, 0.00001)
 	var effective_threshold := lerpf(
 		-width,
 		noise_threshold,
@@ -111,9 +138,10 @@ static func coverage(
 	size_min: float,
 	size_max: float,
 	fade_in_ratio: float,
-	fade_out_start_ratio: float
+	fade_out_start_ratio: float,
+	edge_softness: float = 0.22
 ) -> float:
-	var revealed := geometric_reveal(state, size_min, size_max)
+	var revealed := geometric_reveal(state, size_min, size_max, edge_softness)
 	var fade_in_progress := clampf(
 		fade_in_ratio / maxf(fade_out_start_ratio, 0.00001),
 		0.0,
