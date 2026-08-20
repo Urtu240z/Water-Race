@@ -50,6 +50,9 @@ func _run_validation() -> void:
 	_test_true_size_multipliers()
 	_test_pending_rebase()
 	await _test_gpu_true_size_multipliers()
+	await _test_low_intensity_birth_and_geometry()
+	await _test_growth_stops_at_fade_out()
+	_test_breakup_edge_and_death()
 	await _test_gpu_lifetime_real_seconds()
 	await _test_empty_pixel_never_activates()
 	await _test_dead_foam_does_not_resurrect()
@@ -88,7 +91,7 @@ func _run_validation() -> void:
 func _test_cpu_empty_state_semantics() -> void:
 	var state := Vector4.ZERO
 	for _index in 12:
-		state = PersistentFoamHistoryState.advance(state, Vector4.ZERO, 0.5, _map.fade_in_ratio)
+		state = PersistentFoamHistoryState.advance(state, Vector4.ZERO, 0.5, _map.fade_out_start_ratio)
 	_expect_vector4_zero("CPU empty state remains zero", state)
 
 
@@ -163,6 +166,120 @@ func _test_gpu_true_size_multipliers() -> void:
 	_map.fade_in_ratio = previous_fade_in
 	_map.fade_out_start_ratio = previous_fade_out
 	_map.lifetime = previous_lifetime
+
+
+func _test_low_intensity_birth_and_geometry() -> void:
+	var previous_min := _map.size_min
+	var previous_max := _map.size_max
+	var previous_fade_in := _map.fade_in_ratio
+	var previous_fade_out := _map.fade_out_start_ratio
+	_map.size_min = 0.65
+	_map.size_max = 1.65
+	_map.fade_in_ratio = 0.10
+	_map.fade_out_start_ratio = 0.70
+	_map.clear_history()
+	await _flush_gpu()
+	_map.submit_deposit(9020, MAP_CENTER, Vector2.UP, 10.0, 0.35)
+	## A real update carries nonzero elapsed time. The fresh state keeps age at
+	## zero, while G records that fade-in/growth has begun in this first pass.
+	_map.call("_run_update_pass", 0.01)
+	await _flush_gpu()
+	var low_state := _read_history(MAP_CENTER)
+	var low_coverage := _state_coverage(low_state)
+	var low_radius := _geometric_radius_along_x(MAP_CENTER)
+	_expect_true(
+		"LOW_INTENSITY_BIRTH_VISIBLE coverage=" + str(low_coverage) + " state=" + str(low_state),
+		low_coverage > 0.0 and low_state.r > 0.90 and absf(low_state.a - 0.35) <= 0.03
+	)
+
+	_map.clear_history()
+	await _flush_gpu()
+	_map.submit_deposit(9021, MAP_CENTER, Vector2.UP, 10.0, 1.0)
+	_map.call("_run_update_pass", 0.01)
+	await _flush_gpu()
+	var high_radius := _geometric_radius_along_x(MAP_CENTER)
+	var pixel_world := _map.get_history_world_size() / MAP_RESOLUTION
+	_expect_true(
+		"INTENSITY_SEPARATE_FROM_GEOMETRY low_radius=" + str(low_radius) + " high_radius=" + str(high_radius),
+		low_radius > 0.0 and absf(low_radius - high_radius) <= pixel_world * 2.0
+	)
+
+	_map.clear_history()
+	await _flush_gpu()
+	_map.size_min = previous_min
+	_map.size_max = previous_max
+	_map.fade_in_ratio = previous_fade_in
+	_map.fade_out_start_ratio = previous_fade_out
+
+
+func _test_growth_stops_at_fade_out() -> void:
+	var previous_min := _map.size_min
+	var previous_max := _map.size_max
+	var previous_fade_out := _map.fade_out_start_ratio
+	_map.size_min = 0.65
+	_map.size_max = 1.65
+	_map.fade_out_start_ratio = 0.70
+	_map.clear_history()
+	await _flush_gpu()
+	_map.submit_deposit(9022, MAP_CENTER, Vector2.UP, 10.0, 1.0)
+	_map.call("_run_update_pass", 0.01)
+	await _flush_gpu()
+	_map.call("_run_update_pass", 0.70)
+	await _flush_gpu()
+	var radius_070 := _geometric_radius_along_x(MAP_CENTER)
+	var state_070 := _read_history(MAP_CENTER)
+	_map.call("_run_update_pass", 0.15)
+	await _flush_gpu()
+	var radius_085 := _geometric_radius_along_x(MAP_CENTER)
+	var state_085 := _read_history(MAP_CENTER)
+	_map.call("_run_update_pass", 0.10)
+	await _flush_gpu()
+	var radius_095 := _geometric_radius_along_x(MAP_CENTER)
+	var state_095 := _read_history(MAP_CENTER)
+	var pixel_world := _map.get_history_world_size() / MAP_RESOLUTION
+	_expect_true(
+		"NO_GROWTH_DURING_FADE_OUT radii=" + str(Vector3(radius_070, radius_085, radius_095)),
+		state_070.g >= 0.999
+		and state_085.g >= 0.999
+		and state_095.g >= 0.999
+		and absf(radius_070 - radius_085) <= pixel_world
+		and absf(radius_070 - radius_095) <= pixel_world
+	)
+	_map.clear_history()
+	await _flush_gpu()
+	_map.size_min = previous_min
+	_map.size_max = previous_max
+	_map.fade_out_start_ratio = previous_fade_out
+
+
+func _test_breakup_edge_and_death() -> void:
+	var hole := PersistentFoamHistoryState.breakup(0.0, 0.80, 0.48, 0.02)
+	_expect_true("BREAKUP_HOLE_CAN_BE_ZERO value=" + str(hole), hole <= 0.00001)
+	var exact_outer_edge := Vector4(0.0, 1.0, 0.5, 1.0)
+	var edge_reveal := PersistentFoamHistoryState.geometric_reveal(
+		exact_outer_edge,
+		0.65,
+		1.65
+	)
+	_expect_true("NO_SOLID_WHITE_OUTLINE edge_reveal=" + str(edge_reveal), edge_reveal <= 0.00001)
+	var before_death := Vector4(1.0, 1.0, 0.999, 1.0)
+	var before_coverage := PersistentFoamHistoryState.coverage(
+		before_death,
+		0.65,
+		1.65,
+		0.10,
+		0.70
+	)
+	var dead := PersistentFoamHistoryState.advance(
+		before_death,
+		Vector4.ZERO,
+		0.001,
+		0.70
+	)
+	_expect_true(
+		"NO_DEATH_POP coverage_before_death=" + str(before_coverage),
+		before_coverage <= 0.001 and dead.is_zero_approx()
+	)
 
 
 func _test_gpu_lifetime_real_seconds() -> void:
@@ -286,9 +403,9 @@ func _test_birth_and_cpu_consumption() -> void:
 	_map.call("_run_update_pass", 0.0)
 	await _flush_gpu()
 	var birth := _read_history(MAP_CENTER)
-	_expect_true("birth writes footprint with A == 0", birth.r > 0.5 and birth.a <= 0.001)
+	_expect_true("birth writes pure footprint and intensity", birth.r > 0.5 and absf(birth.a - 0.8) <= 0.03)
 	_expect_close("birth age == 0", birth.b, 0.0, 0.01)
-	_expect_close("birth reveal == 0", birth.g, 0.0, 0.01)
+	_expect_close("zero-dt birth growth == 0", birth.g, 0.0, 0.01)
 	_expect_equal("pending commands return to zero", _map.get_deposit_validation_status().pending_count, 0)
 
 
@@ -296,8 +413,8 @@ func _test_fade_growth_and_death() -> void:
 	_map.call("_run_update_pass", 0.5)
 	await _flush_gpu()
 	var growing := _read_history(MAP_CENTER)
-	_expect_true("fade-in establishes alpha", growing.a > 0.0)
-	_expect_true("growth reveal advances", growing.g > 0.0)
+	_expect_true("intensity remains stable during growth", absf(growing.a - 0.8) <= 0.03)
+	_expect_true("growth progress advances", growing.g > 0.0)
 	_expect_true("history center remains at same world location", _read_history(MAP_CENTER).r > 0.0)
 	for _index in 8:
 		_map.call("_run_update_pass", 0.5)
@@ -319,9 +436,14 @@ func _test_refresh_preserves_state() -> void:
 	_map.call("_run_update_pass", 0.0)
 	await _flush_gpu()
 	var after := _read_history(MAP_CENTER)
-	_expect_true("refresh keeps coverage", after.r + 0.001 >= before.r)
-	_expect_true("refresh keeps established visibility", after.a + 0.001 >= before.a)
-	_expect_true("REFRESH_NO_DIP", after.a > 0.25)
+	var before_coverage := _state_coverage(before)
+	var after_coverage := _state_coverage(after)
+	_expect_true("refresh keeps footprint", after.r + 0.001 >= before.r)
+	_expect_true("refresh keeps intensity", after.a + 0.001 >= before.a)
+	_expect_true(
+		"REFRESH_NO_DIP before=" + str(before_coverage) + " after=" + str(after_coverage),
+		after_coverage + 0.001 >= before_coverage and after.g + 0.001 >= before.g
+	)
 
 
 func _test_saturation_and_multi_source() -> void:
@@ -333,7 +455,7 @@ func _test_saturation_and_multi_source() -> void:
 	await _flush_gpu()
 	var saturated := _read_history(MAP_CENTER)
 	_expect_true("overlapping deposits merge at strong coverage", saturated.r >= 0.80)
-	_expect_true("overlapping deposits stay bounded", saturated.r <= 1.001)
+	_expect_true("overlapping deposits stay bounded", saturated.r <= 1.001 and saturated.a <= 1.001)
 
 	_map.clear_history()
 	await _flush_gpu()
@@ -550,6 +672,7 @@ func _test_vehicle_to_ocean_to_gpu_path() -> void:
 		Vector4(state.r, state.g, state.b, state.a),
 		_map.size_min,
 		_map.size_max,
+		_map.fade_in_ratio,
 		_map.fade_out_start_ratio
 	)
 	var path_ok: bool = (
@@ -695,6 +818,19 @@ func _test_shader_resources() -> void:
 			and shader.get_code().contains("history_inside")
 			and shader.get_code().contains("history_value = history_inside * history_coverage")
 		)
+		_expect_true(
+			"zero-hole threshold breakup " + shader_path.get_file(),
+			shader != null
+			and shader.get_code().contains("persistent_effective_threshold")
+			and shader.get_code().contains("* persistent_foam_breakup")
+			and not shader.get_code().contains("mix(1.0, persistent_foam_breakup")
+		)
+		_expect_true(
+			"single history life alpha " + shader_path.get_file(),
+			shader != null
+			and shader.get_code().contains("history_life_alpha = history_fade_in * history_fade_out")
+			and shader.get_code().contains("history_threshold + history_reveal_width")
+		)
 
 
 func _flush_gpu() -> void:
@@ -717,6 +853,57 @@ func _read_history(world_xz: Vector2) -> Color:
 		clampi(roundi(uv.y * (MAP_RESOLUTION - 1.0)), 0, int(MAP_RESOLUTION - 1.0))
 	)
 	return image.get_pixel(pixel.x, pixel.y)
+
+
+func _state_coverage(state: Variant) -> float:
+	return PersistentFoamHistoryState.coverage(
+		Vector4(state.r, state.g, state.b, state.a),
+		_map.size_min,
+		_map.size_max,
+		_map.fade_in_ratio,
+		_map.fade_out_start_ratio
+	)
+
+
+func _geometric_radius_along_x(center_world: Vector2) -> float:
+	var texture := _map.get_history_texture()
+	if texture == null:
+		return 0.0
+	var image := texture.get_image()
+	if image == null or image.is_empty():
+		return 0.0
+	var center_uv := (
+		(center_world - _map.get_history_anchor_xz())
+		/ _map.get_history_world_size()
+		+ Vector2.ONE * 0.5
+	)
+	var center_pixel := Vector2i(
+		clampi(roundi(center_uv.x * (image.get_width() - 1)), 0, image.get_width() - 1),
+		clampi(roundi(center_uv.y * (image.get_height() - 1)), 0, image.get_height() - 1)
+	)
+	var last_visible := 0.0
+	var found_visible := false
+	var empty_run := 0
+	for x in range(center_pixel.x, image.get_width()):
+		var pixel := image.get_pixel(x, center_pixel.y)
+		var revealed := PersistentFoamHistoryState.geometric_reveal(
+			Vector4(pixel.r, pixel.g, pixel.b, pixel.a),
+			_map.size_min,
+			_map.size_max
+		)
+		if revealed >= 0.5:
+			found_visible = true
+			empty_run = 0
+			last_visible = (
+				float(x - center_pixel.x)
+				* _map.get_history_world_size()
+				/ float(image.get_width() - 1)
+			)
+		elif found_visible:
+			empty_run += 1
+			if empty_run >= 4:
+				break
+	return last_visible
 
 
 func _visible_radius_along_x(center_world: Vector2) -> float:
@@ -744,6 +931,7 @@ func _visible_radius_along_x(center_world: Vector2) -> float:
 			Vector4(pixel.r, pixel.g, pixel.b, pixel.a),
 			_map.size_min,
 			_map.size_max,
+			_map.fade_in_ratio,
 			_map.fade_out_start_ratio
 		)
 		if coverage >= 0.5:

@@ -138,7 +138,7 @@ uniform float persistent_foam_irregularity : hint_range(0.0, 1.0, 0.01) = 0.80;
 uniform float persistent_foam_noise_scale : hint_range(0.01, 1.0, 0.01) = 0.12;
 uniform float persistent_foam_noise_threshold : hint_range(0.0, 1.0, 0.01) = 0.48;
 // Persistent Foam V2 - HISTORY MAP alternate backend: a GPU-backed global foam
-// history. State per pixel (RGBA): R footprint, G reveal, B age, A established.
+// history. State RGBA: R footprint, G max growth, B age, A intensity.
 uniform sampler2D persistent_foam_history_texture : repeat_disable, filter_linear;
 uniform vec2 persistent_foam_history_anchor_xz = vec2(0.0);
 uniform float persistent_foam_history_world_size : hint_range(16.0, 2048.0, 16.0) = 512.0;
@@ -146,6 +146,7 @@ uniform float persistent_foam_history_strength : hint_range(0.0, 4.0, 0.01) = 1.
 uniform bool persistent_foam_history_enabled = false;
 uniform float persistent_foam_size_min : hint_range(0.1, 4.0, 0.05) = 0.65;
 uniform float persistent_foam_size_max : hint_range(0.1, 6.0, 0.05) = 1.65;
+uniform float persistent_foam_fade_in_ratio : hint_range(0.0, 1.0, 0.01) = 0.10;
 uniform float persistent_foam_fade_out_start_ratio : hint_range(0.5, 1.0, 0.01) = 0.70;
 
 group_uniforms Clipmap;
@@ -721,9 +722,14 @@ void fragment() {
 		float persistent_combined_noise = persistent_noise_macro * 0.7
 			+ persistent_noise_detail * 0.3;
 		float persistent_noise_width = max(fwidth(persistent_combined_noise) * 1.5, 0.02);
+		float persistent_effective_threshold = mix(
+			-persistent_noise_width,
+			persistent_foam_noise_threshold,
+			clamp(persistent_foam_irregularity, 0.0, 1.0)
+		);
 		persistent_foam_breakup = smoothstep(
-			persistent_foam_noise_threshold - persistent_noise_width,
-			persistent_foam_noise_threshold + persistent_noise_width,
+			persistent_effective_threshold - persistent_noise_width,
+			persistent_effective_threshold + persistent_noise_width,
 			persistent_combined_noise
 		);
 		float mask_value = 0.0;
@@ -750,15 +756,27 @@ void fragment() {
 				clamp(history_state.g, 0.0, 1.0)
 			);
 			float history_threshold = 1.0 - radius_frac * radius_frac;
+			float history_reveal_width = min(0.12, max(1.0 - history_threshold, 0.00001));
 			float history_revealed = smoothstep(
-				history_threshold - 0.05,
-				history_threshold + 0.05,
+				history_threshold,
+				history_threshold + history_reveal_width,
 				history_state.r
 			);
+			float history_fade_in_progress = clamp(
+				persistent_foam_fade_in_ratio / max(persistent_foam_fade_out_start_ratio, 0.00001),
+				0.0,
+				1.0
+			);
+			float history_fade_in = smoothstep(
+				0.0,
+				max(history_fade_in_progress, 0.00001),
+				history_state.g
+			);
 			float history_fade_out = 1.0 - smoothstep(persistent_foam_fade_out_start_ratio, 1.0, history_state.b);
+			float history_life_alpha = history_fade_in * history_fade_out;
 			float history_coverage = history_revealed
-				* clamp(history_state.a, 0.0, 1.0)
-				* history_fade_out;
+				* history_life_alpha
+				* clamp(history_state.a, 0.0, 1.0);
 			history_value = history_inside * history_coverage;
 		}
 		float persistent_foam_source_strength = persistent_foam_mask_strength;
@@ -767,7 +785,7 @@ void fragment() {
 		}
 		persistent_foam_coverage = max(mask_value, history_value)
 			* persistent_foam_source_strength
-			* mix(1.0, persistent_foam_breakup, persistent_foam_irregularity)
+			* persistent_foam_breakup
 			* foam_distance_gate;
 	}
 	persistent_foam_mask = foam_enabled

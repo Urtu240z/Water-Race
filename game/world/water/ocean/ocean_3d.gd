@@ -3274,6 +3274,10 @@ func _push_persistent_foam_history_parameters(material: ShaderMaterial) -> void:
 		provider.call("get_history_size_max")
 	)
 	material.set_shader_parameter(
+		&"persistent_foam_fade_in_ratio",
+		provider.call("get_history_fade_in_ratio")
+	)
+	material.set_shader_parameter(
 		&"persistent_foam_fade_out_start_ratio",
 		provider.call("get_history_fade_out_start_ratio")
 	)

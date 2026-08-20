@@ -4,23 +4,19 @@ extends RefCounted
 ## CPU-side reference for the GPU history state math.
 ##
 ## The RGBA state layout used for the history texture:
-##   R = footprint (max-future coverage gradient left by deposits, 0..1)
-##   G = growth-reveal progress (monotonic, never decreases)
+##   R = pure footprint field (monotonic geometric union, 0..1)
+##   G = maximum growth/establishment progress reached (monotonic, 0..1)
 ##   B = age ratio (0 fresh .. 1 dead)
-##   A = established life alpha (monotonic, remembers the fade-in peak so that
-##       refreshing a deposit never makes existing foam temporarily disappear)
+##   A = foam intensity (bounded reinforcement, 0..1)
 ##
 ## Deposit map layout (separate single-use viewport):
-##   R = footprint * intensity (the stamp's max footprint gradient)
+##   R = pure footprint field
 ##   G = freshness flag (1 inside the stamp)
+##   B = unused
+##   A = source intensity
 ##
 ## The GPU update shader transliterates these formulas exactly; this class lets
 ## headless tests validate the state transitions without reading GPU pixels.
-
-
-static func smoothstep01(value: float) -> float:
-	var t := clampf(value, 0.0, 1.0)
-	return t * t * (3.0 - 2.0 * t)
 
 
 static func smooth(edge0: float, edge1: float, value: float) -> float:
@@ -33,9 +29,9 @@ static func smooth(edge0: float, edge1: float, value: float) -> float:
 ## deposit canvas channel layout: G is a hard freshness flag (1 inside the
 ## stamp footprint, 0 outside).
 static func deposit_state(footprint: float, intensity: float) -> Vector4:
-	var foot := clampf(footprint * maxf(intensity, 0.0), 0.0, 1.0)
+	var foot := clampf(footprint, 0.0, 1.0)
 	var fresh := 1.0 if footprint > 0.001 else 0.0
-	return Vector4(foot, fresh, 0.0, 0.0)
+	return Vector4(foot, fresh, 0.0, clampf(intensity, 0.0, 1.0))
 
 
 ## One history update step. Matches persistent_foam_history_update.gdshader.
@@ -43,7 +39,7 @@ static func advance(
 	old: Vector4,
 	dep: Vector4,
 	dt_ratio: float,
-	fade_in_ratio: float
+	fade_out_start_ratio: float
 ) -> Vector4:
 	const STATE_EPSILON := 0.001
 	var has_old_foam := old.x > STATE_EPSILON
@@ -57,15 +53,56 @@ static func advance(
 		age = minf(age, 0.0)
 	if age >= 1.0:
 		return Vector4.ZERO
-	## Reveal progress is monotonic: refreshing never shrinks grown foam.
-	var reveal := maxf(old.y, smoothstep01(age))
-	## Established life alpha is monotonic: a refresh cannot dip visibility.
-	var established := maxf(
-		old.w,
-		smooth(0.0, maxf(fade_in_ratio, 0.00001), age)
+	## Growth completes exactly when fade-out begins and never decreases when a
+	## later pass refreshes age back to zero.
+	var progress_age := maxf(age, maxf(dt_ratio, 0.0)) if has_new_deposit else age
+	var progress := maxf(
+		old.y,
+		clampf(progress_age / maxf(fade_out_start_ratio, 0.00001), 0.0, 1.0)
 	)
 	var footprint := maxf(old.x, dep.x)
-	return Vector4(footprint, reveal, age, established)
+	var intensity := maxf(old.w, dep.w)
+	return Vector4(footprint, progress, age, intensity)
+
+
+## Geometric reveal only. The transition starts at the requested radius and
+## softens inward, so the exact outer extent is zero instead of a half-white
+## iso-contour.
+static func geometric_reveal(
+	state: Vector4,
+	size_min: float,
+	size_max: float
+) -> float:
+	var radius_frac := lerpf(
+		clampf(size_min / maxf(size_max, 0.001), 0.02, 1.0),
+		1.0,
+		clampf(state.y, 0.0, 1.0)
+	)
+	var threshold := 1.0 - radius_frac * radius_frac
+	var reveal_width := minf(0.12, maxf(1.0 - threshold, 0.00001))
+	return smooth(threshold, threshold + reveal_width, state.x)
+
+
+## World-space breakup reference shared with the ocean shader. Irregularity
+## moves the threshold instead of mixing against white, so a real noise hole
+## can reach zero for every nonzero artistic breakup setting.
+static func breakup(
+	combined_noise: float,
+	irregularity: float,
+	noise_threshold: float,
+	noise_width: float = 0.02
+) -> float:
+	var width := maxf(noise_width, 0.00001)
+	var effective_threshold := lerpf(
+		-width,
+		noise_threshold,
+		clampf(irregularity, 0.0, 1.0)
+	)
+	return smooth(
+		effective_threshold - width,
+		effective_threshold + width,
+		combined_noise
+	)
 
 
 ## Final coverage read by the ocean shader.
@@ -73,17 +110,20 @@ static func coverage(
 	state: Vector4,
 	size_min: float,
 	size_max: float,
+	fade_in_ratio: float,
 	fade_out_start_ratio: float
 ) -> float:
-	var radius_frac := lerpf(
-		clampf(size_min / maxf(size_max, 0.001), 0.02, 1.0),
-		1.0,
-		clampf(state.y, 0.0, 1.0)
+	var revealed := geometric_reveal(state, size_min, size_max)
+	var fade_in_progress := clampf(
+		fade_in_ratio / maxf(fade_out_start_ratio, 0.00001),
+		0.0,
+		1.0
 	)
-	## The stored brush is a center-high radial footprint. Reveal its inner
-	## radius with the complementary squared-radius threshold so size_min and
-	## size_max remain true geometric multipliers on the GPU.
-	var threshold := 1.0 - radius_frac * radius_frac
-	var revealed := smooth(threshold - 0.05, threshold + 0.05, state.x)
+	var fade_in := smooth(0.0, maxf(fade_in_progress, 0.00001), state.y)
 	var fade_out := 1.0 - smooth(fade_out_start_ratio, 1.0, state.z)
-	return clampf(revealed * clampf(state.w, 0.0, 1.0) * fade_out, 0.0, 1.0)
+	var life_alpha := fade_in * fade_out
+	return clampf(
+		revealed * life_alpha * clampf(state.w, 0.0, 1.0),
+		0.0,
+		1.0
+	)

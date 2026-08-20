@@ -488,7 +488,7 @@ func _complete_update_pass(serial: int) -> void:
 		_deposit_viewport.get_texture()
 	)
 	history_update_rect.material.set_shader_parameter(&"dt_ratio", _queued_dt_ratio)
-	history_update_rect.material.set_shader_parameter(&"fade_in_ratio", fade_in_ratio)
+	history_update_rect.material.set_shader_parameter(&"fade_out_start_ratio", fade_out_start_ratio)
 	history_update_rect.material.set_shader_parameter(&"remap_delta_uv", _queued_remap_delta_uv)
 	_render_viewport_now(write_viewport)
 	await RenderingServer.frame_post_draw
@@ -592,6 +592,10 @@ func get_history_size_min() -> float:
 
 func get_history_size_max() -> float:
 	return size_max
+
+
+func get_history_fade_in_ratio() -> float:
+	return fade_in_ratio
 
 
 func get_history_fade_out_start_ratio() -> float:

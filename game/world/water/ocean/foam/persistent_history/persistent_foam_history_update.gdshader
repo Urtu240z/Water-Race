@@ -10,34 +10,24 @@ render_mode blend_disabled;
 // ping-pong history viewport, so it never samples and writes the same texture.
 //
 // State RGBA:
-//   R = footprint (max future coverage gradient, 0..1)
-//   G = growth-reveal progress (monotonic, 0..1)
+//   R = pure footprint field (monotonic geometric union, 0..1)
+//   G = maximum growth/establishment progress reached (monotonic, 0..1)
 //   B = age ratio (0 fresh .. 1 dead)
-//   A = established life alpha (monotonic, remembers fade-in peak)
+//   A = foam intensity (bounded reinforcement, 0..1)
 //
 // Deposit RGBA:
-//   R = footprint * intensity
+//   R = pure footprint field
 //   G = freshness flag (1 inside a stamp)
-//   B/A unused
+//   B = unused
+//   A = source intensity
 //
 // Formulas mirror persistent_foam_history_state.gd exactly.
 
 uniform sampler2D history_texture : repeat_disable, filter_linear;
 uniform sampler2D deposit_texture : repeat_disable, filter_linear;
 uniform float dt_ratio : hint_range(0.0, 1.0, 0.001) = 0.1;
-uniform float fade_in_ratio : hint_range(0.0, 1.0, 0.001) = 0.10;
+uniform float fade_out_start_ratio : hint_range(0.0, 1.0, 0.001) = 0.70;
 uniform vec2 remap_delta_uv = vec2(0.0);
-
-
-float smooth01(float value) {
-	float t = clamp(value, 0.0, 1.0);
-	return t * t * (3.0 - 2.0 * t);
-}
-
-float smoothrange(float edge0, float edge1, float value) {
-	float t = clamp((value - edge0) / max(edge1 - edge0, 1e-6), 0.0, 1.0);
-	return t * t * (3.0 - 2.0 * t);
-}
 
 
 void fragment() {
@@ -62,22 +52,22 @@ void fragment() {
 		if (age >= 1.0) {
 			COLOR = vec4(0.0);
 		} else {
-			// Reveal progress and established alpha are monotonic so a second pass
-			// can refresh a location without making existing foam less visible.
-			float reveal = max(old_state.g, smooth01(age));
-			float established = max(
-				old_state.a,
-				smoothrange(0.0, max(fade_in_ratio, 1e-5), age)
+			// Growth is complete before fade-out and is monotonic across refreshes.
+			float progress_age = has_new_deposit ? max(age, max(dt_ratio, 0.0)) : age;
+			float progress = max(
+				old_state.g,
+				clamp(progress_age / max(fade_out_start_ratio, 1e-5), 0.0, 1.0)
 			);
-			// DepositViewport uses additive blending for overlapping new stamps.
-			// Clamp the merged coverage so it remains bounded in [0, 1].
+			// The LDR deposit viewport saturates overlaps; clamp again at the
+			// consumption boundary to keep every state channel strictly bounded.
 			float footprint = max(clamp(old_state.r, 0.0, 1.0), clamp(dep.r, 0.0, 1.0));
+			float intensity = max(clamp(old_state.a, 0.0, 1.0), clamp(dep.a, 0.0, 1.0));
 
 			COLOR = vec4(
 				clamp(footprint, 0.0, 1.0),
-				clamp(reveal, 0.0, 1.0),
+				clamp(progress, 0.0, 1.0),
 				clamp(age, 0.0, 1.0),
-				clamp(established, 0.0, 1.0)
+				clamp(intensity, 0.0, 1.0)
 			);
 		}
 	}

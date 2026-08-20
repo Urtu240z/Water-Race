@@ -9,28 +9,33 @@ extends Control
 ## texture becomes the sole authority.
 ##
 ## Deposit texture channels:
-##   R = footprint * intensity  (the stamp's full-radius coverage gradient)
+##   R = pure footprint field (the stamp's full-radius coverage gradient)
 ##   G = freshness flag (1 inside the stamp)
-##   B = 0, A = 1
+##   B = 0
+##   A = source intensity
 ##
 ## World/UV mapping must match the history viewports: world XZ is mapped with
 ## the same anchor and world size so the update shader can combine both.
 
 const SPLAT_TEXTURE_SIZE := 128
 const BRUSH_SEED := 0xB00F55ED
+const DEPOSIT_SHADER := preload("res://world/water/ocean/foam/persistent_history/persistent_foam_deposit.gdshader")
 
 var stamps: Array[PersistentFoamDepositCommand] = []
 var anchor_xz := Vector2.ZERO
 var world_size := 512.0
 
 var _stamp_texture: Texture2D
-var _deposit_material: CanvasItemMaterial
+var _deposit_material: ShaderMaterial
 
 
 func _ready() -> void:
 	mouse_filter = MOUSE_FILTER_IGNORE
-	_deposit_material = CanvasItemMaterial.new()
-	_deposit_material.blend_mode = CanvasItemMaterial.BLEND_MODE_ADD
+	_deposit_material = ShaderMaterial.new()
+	_deposit_material.shader = DEPOSIT_SHADER
+	## The deposit shader uses bounded premultiplied-alpha union semantics: its
+	## source factor keeps R/G geometric, while destination attenuation reinforces
+	## overlapping geometry and intensity without unbounded accumulation.
 	material = _deposit_material
 	_stamp_texture = _create_stamp_texture()
 
@@ -77,7 +82,9 @@ func _create_stamp_texture() -> Texture2D:
 			)
 			falloff = minf(falloff, 1.0 - radial_distance * radial_distance)
 			var freshness := 1.0 if falloff > 0.001 else 0.0
-			image.set_pixel(x, y, Color(falloff, freshness, 0.0, 1.0))
+			## B is only an internal source-texture carrier for per-draw intensity;
+			## the deposit shader writes final target B=0 and A=intensity.
+			image.set_pixel(x, y, Color(falloff, freshness, freshness, freshness))
 	var texture := ImageTexture.create_from_image(image)
 	return texture
 
@@ -127,9 +134,9 @@ func _draw() -> void:
 			texture_rect,
 			false,
 			Color(
+				1.0,
+				1.0,
 				clampf(stamp.intensity, 0.0, 1.0),
-				1.0,
-				1.0,
 				1.0
 			)
 		)
