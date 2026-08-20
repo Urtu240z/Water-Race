@@ -1004,14 +1004,6 @@ wake_ribbon_foam_enabled = false
 persistent_foam_v2_backend = 1
 persistent_foam_v2_enabled = true
 persistent_foam_v2_global_settings_owner = true
-persistent_foam_v2_sample_distance = 0.35
-persistent_foam_v2_width_multiplier = 5.0
-persistent_foam_v2_strength = 3.0
-persistent_foam_v2_roughness = 0.26
-persistent_foam_v2_specular = 0.54
-persistent_foam_v2_irregularity = 0.74
-persistent_foam_v2_noise_scale = 0.38
-persistent_foam_v2_noise_threshold = 0.46
 
 [node name="TurbineExhaust" parent="Gameplay/JetSki/Effects" parent_id_path=PackedInt32Array(328650943, 1733691099) index="1" unique_id=1478477575]
 full_core_length = 2.0
