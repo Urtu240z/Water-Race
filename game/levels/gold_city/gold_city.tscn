@@ -387,6 +387,13 @@ shader_parameter/persistent_foam_specular = 0.16
 shader_parameter/persistent_foam_irregularity = 0.8
 shader_parameter/persistent_foam_noise_scale = 0.12
 shader_parameter/persistent_foam_noise_threshold = 0.48
+shader_parameter/persistent_foam_history_anchor_xz = Vector2(0, 0)
+shader_parameter/persistent_foam_history_world_size = 512.0
+shader_parameter/persistent_foam_history_strength = 1.0
+shader_parameter/persistent_foam_history_enabled = false
+shader_parameter/persistent_foam_size_min = 0.65
+shader_parameter/persistent_foam_size_max = 1.65
+shader_parameter/persistent_foam_fade_out_start_ratio = 0.7
 shader_parameter/ocean_surface_enabled = true
 shader_parameter/ocean_logical_origin_offset_xz = Vector2(0, 0)
 shader_parameter/ocean_detail_center_xz = Vector2(0, 0)
@@ -790,6 +797,9 @@ animate_hue = true
 
 [node name="Ocean" parent="WaterIntegration" unique_id=1340264265 instance=ExtResource("40_3mclj")]
 ocean_material = SubResource("ShaderMaterial_hrvh4")
+follow_target_path = NodePath("../../Gameplay/JetSki/CameraTarget")
+follow_camera_path = NodePath("../../CameraSystem/ChaseCamera/Camera3D")
+ripple_emitter_target_path = NodePath("../../Gameplay/JetSki")
 wave_world_size_a = 153.5
 wave_world_size_b = 104.0
 wave_amplitude_a = 0.7999999821184
@@ -1003,16 +1013,18 @@ persistent_foam_v2_enabled = true
 persistent_foam_v2_lifetime = 15.0
 persistent_foam_v2_sample_distance = 0.35
 persistent_foam_v2_width_multiplier = 5.0
-persistent_foam_v2_strength = 0.25
-persistent_foam_v2_size_min = 0.55
-persistent_foam_v2_size_max = 1.55
+persistent_foam_v2_strength = 3.0
+persistent_foam_v2_emission = 4.15
+persistent_foam_v2_fade_in_ratio = 0.0
+persistent_foam_v2_size_min = 1.0
+persistent_foam_v2_size_max = 1.0
 persistent_foam_v2_scale_random_min = 0.7
 persistent_foam_v2_scale_random_max = 1.3
 persistent_foam_v2_aspect_min = 0.6
 persistent_foam_v2_aspect_max = 1.4
 persistent_foam_v2_position_jitter = 0.55
 persistent_foam_v2_rotation_random = 60.0
-persistent_foam_v2_irregularity = 0.85
+persistent_foam_v2_irregularity = 0.0
 
 [node name="TurbineExhaust" parent="Gameplay/JetSki/Effects" parent_id_path=PackedInt32Array(328650943, 1733691099) index="1" unique_id=1478477575]
 full_core_length = 2.0
