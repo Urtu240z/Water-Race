@@ -486,9 +486,7 @@ func _exit_tree() -> void:
 	## request, otherwise Ocean3D would keep the shared map enabled forever.
 	if is_instance_valid(_ocean):
 		_ocean.set_persistent_foam_history_requested(false, get_instance_id())
-		var history_map := _ocean.get_persistent_foam_history_map()
-		if is_instance_valid(history_map):
-			history_map.call(&"release_settings_owner", get_instance_id())
+	_release_history_settings_owner()
 
 
 func _initialize_effects() -> void:
@@ -961,9 +959,7 @@ func _sync_persistent_foam_backend() -> void:
 		_persistent_foam.enabled = persistent_foam_v2_enabled
 		if is_instance_valid(_ocean):
 			_ocean.set_persistent_foam_history_requested(false, get_instance_id())
-			var history_map := _ocean.get_persistent_foam_history_map()
-			if is_instance_valid(history_map):
-				history_map.call(&"release_settings_owner", get_instance_id())
+		_release_history_settings_owner()
 
 
 ## The GPU history map is ocean-owned and shared; when this vehicle selects the
@@ -973,10 +969,15 @@ func _sync_persistent_foam_backend() -> void:
 func _sync_history_map_appearance() -> void:
 	if not is_instance_valid(_ocean):
 		return
+	if (
+		not persistent_foam_v2_global_settings_owner
+		or not persistent_foam_v2_enabled
+		or persistent_foam_v2_backend != PersistentFoamHistoryBackend.HISTORY_MAP
+	):
+		_release_history_settings_owner()
+		return
 	var history_map := _ocean.get_persistent_foam_history_map()
 	if not is_instance_valid(history_map):
-		return
-	if not persistent_foam_v2_global_settings_owner:
 		return
 	history_map.call(&"request_settings_owner", get_instance_id())
 	history_map.call(&"apply_owner_settings", get_instance_id(), {
@@ -1000,6 +1001,14 @@ func _sync_history_map_appearance() -> void:
 		&"roughness": persistent_foam_v2_roughness,
 		&"specular": persistent_foam_v2_specular,
 	})
+
+
+func _release_history_settings_owner() -> void:
+	if not is_instance_valid(_ocean):
+		return
+	var history_map := _ocean.get_persistent_foam_history_map()
+	if is_instance_valid(history_map):
+		history_map.call(&"release_settings_owner", get_instance_id())
 
 
 func _update_history_deposition() -> void:
@@ -1448,6 +1457,8 @@ func _update_active_impact_metrics() -> void:
 
 
 func _on_world_rebased(shift: Vector3) -> void:
+	if _history_has_last_sample:
+		_history_last_sample_position -= Vector2(shift.x, shift.z)
 	if is_instance_valid(_wake_trail):
 		_wake_trail.apply_world_rebase(shift)
 	if is_instance_valid(_persistent_foam):

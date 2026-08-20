@@ -80,7 +80,10 @@ static func coverage(
 		1.0,
 		clampf(state.y, 0.0, 1.0)
 	)
-	var threshold := (1.0 - radius_frac) * (1.0 - radius_frac)
+	## The stored brush is a center-high radial footprint. Reveal its inner
+	## radius with the complementary squared-radius threshold so size_min and
+	## size_max remain true geometric multipliers on the GPU.
+	var threshold := 1.0 - radius_frac * radius_frac
 	var revealed := smooth(threshold - 0.05, threshold + 0.05, state.x)
 	var fade_out := 1.0 - smooth(fade_out_start_ratio, 1.0, state.z)
 	return clampf(revealed * clampf(state.w, 0.0, 1.0) * fade_out, 0.0, 1.0)

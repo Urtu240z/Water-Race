@@ -66,6 +66,16 @@ func _create_stamp_texture() -> Texture2D:
 					1.0
 				)
 				falloff = maxf(falloff, 1.0 - smoothstep(0.55, 1.0, distance))
+			## Keep the irregular lobe silhouette, but cap its intensity with a
+			## center-based squared radial field. Without this cap, offset lobe
+			## cores remain at full intensity far from the deposit center, so the
+			## shader cannot reveal a true size_min radius from the stored field.
+			var radial_distance := clampf(
+				(pixel - center).length() / maxf(radius_px, 0.001),
+				0.0,
+				1.0
+			)
+			falloff = minf(falloff, 1.0 - radial_distance * radial_distance)
 			var freshness := 1.0 if falloff > 0.001 else 0.0
 			image.set_pixel(x, y, Color(falloff, freshness, 0.0, 1.0))
 	var texture := ImageTexture.create_from_image(image)

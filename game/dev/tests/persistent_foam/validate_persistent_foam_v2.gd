@@ -211,7 +211,12 @@ func _run_validation() -> void:
 
 	## Phase C: local coordinates and anchor both move opposite the logical shift.
 	var shift := Vector3(16.0, 0.0, 8.0)
+	var last_sample_before: Vector2 = mask._last_sample_position
 	mask.apply_world_rebase(shift)
+	_expect_true(
+		"SPLAT_LAST_SAMPLE_REBASE",
+		mask._last_sample_position.is_equal_approx(last_sample_before - Vector2(shift.x, shift.z))
+	)
 	status = mask.get_position_validation_status()
 	var expected_shift_length := Vector2(shift.x, shift.z).length()
 	_expect_close(

@@ -308,6 +308,8 @@ func apply_world_rebase(shift: Vector3) -> void:
 	_published_anchor_xz -= shift_xz
 	_target_anchor_xz -= shift_xz
 	_queued_anchor_xz -= shift_xz
+	if _has_last_deposit:
+		_last_deposit_xz -= shift_xz
 	for pending_deposit: PersistentFoamDepositCommand in _pending:
 		pending_deposit.world_xz -= shift_xz
 	rebase_count += 1
@@ -467,8 +469,11 @@ func _run_update_pass(dt_ratio: float) -> void:
 
 
 func _complete_update_pass(serial: int) -> void:
-	## Wait for DepositViewport to produce its texture before sampling it.
-	await get_tree().process_frame
+	## UPDATE_ONCE is completed by the renderer, not by the next CPU process
+	## tick. Gold City can execute several process ticks while a heavy frame is
+	## still rendering, so process_frame could merge or clear a deposit texture
+	## before the requested viewport draw had happened.
+	await RenderingServer.frame_post_draw
 	if serial != _update_serial or not _update_in_flight:
 		return
 	var read_viewport := _history_viewports[1 - _write_index]
@@ -486,7 +491,7 @@ func _complete_update_pass(serial: int) -> void:
 	history_update_rect.material.set_shader_parameter(&"fade_in_ratio", fade_in_ratio)
 	history_update_rect.material.set_shader_parameter(&"remap_delta_uv", _queued_remap_delta_uv)
 	_render_viewport_now(write_viewport)
-	await get_tree().process_frame
+	await RenderingServer.frame_post_draw
 	if serial != _update_serial:
 		return
 	_write_index = 1 - _write_index
@@ -536,7 +541,7 @@ func _clear_all_viewports() -> void:
 func _finish_gpu_clear(serial: int) -> void:
 	## UPDATE_ONCE renders on the next frame. Keep the clear rects visible until
 	## that frame has completed, otherwise the old feedback texture survives.
-	await get_tree().process_frame
+	await RenderingServer.frame_post_draw
 	if serial != _clear_serial:
 		return
 	for index in _history_viewports.size():

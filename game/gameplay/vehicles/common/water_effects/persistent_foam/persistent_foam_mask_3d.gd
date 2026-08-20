@@ -198,6 +198,8 @@ func apply_world_rebase(shift: Vector3) -> void:
 	for splat: PersistentFoamSplat in _splats:
 		splat.position_xz -= shift_xz
 		splat.base_position_xz -= shift_xz
+	if _has_last_sample:
+		_last_sample_position -= shift_xz
 	_anchor_xz -= shift_xz
 	rebase_count += 1
 	_bump_mask_params()

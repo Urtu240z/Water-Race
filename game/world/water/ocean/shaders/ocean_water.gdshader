@@ -749,7 +749,7 @@ void fragment() {
 				1.0,
 				clamp(history_state.g, 0.0, 1.0)
 			);
-			float history_threshold = (1.0 - radius_frac) * (1.0 - radius_frac);
+			float history_threshold = 1.0 - radius_frac * radius_frac;
 			float history_revealed = smoothstep(
 				history_threshold - 0.05,
 				history_threshold + 0.05,
