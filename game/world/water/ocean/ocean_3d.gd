@@ -3193,6 +3193,10 @@ func _push_persistent_foam_mask_parameters(material: ShaderMaterial) -> void:
 ## fallback backend.
 
 func _initialize_persistent_foam_history() -> void:
+	## The history map is runtime-only; avoid invoking methods on its editor
+	## placeholder while Ocean3D is previewed as a tool scene.
+	if Engine.is_editor_hint():
+		return
 	var history_map := get_node_or_null("PersistentFoamHistoryMap3D") as Node3D
 	if not is_instance_valid(history_map):
 		return

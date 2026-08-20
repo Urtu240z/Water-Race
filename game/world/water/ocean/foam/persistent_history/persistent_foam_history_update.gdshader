@@ -47,31 +47,38 @@ void fragment() {
 		old_state = texture(history_texture, old_uv);
 	}
 	vec4 dep = texture(deposit_texture, UV);
-	bool has_deposit = dep.g > 0.001 && dep.r > 0.001;
-
-	float age = min(old_state.b + max(dt_ratio, 0.0), 1.0);
-	if (has_deposit) {
-		age = min(age, 0.0);
-	}
-	if (age >= 1.0) {
+	const float STATE_EPSILON = 0.001;
+	bool has_old_foam = old_state.r > STATE_EPSILON;
+	bool has_new_deposit = dep.g > STATE_EPSILON && dep.r > STATE_EPSILON;
+	if (!has_old_foam && !has_new_deposit) {
+		// Empty texels are not simulation state. Keeping all channels zero
+		// prevents an empty pixel from entering and restarting the lifecycle.
 		COLOR = vec4(0.0);
 	} else {
-		// Reveal progress and established alpha are monotonic so a second pass
-		// can refresh a location without making existing foam less visible.
-		float reveal = max(old_state.g, smooth01(age));
-		float established = max(
-			old_state.a,
-			smoothrange(0.0, max(fade_in_ratio, 1e-5), age)
-		);
-		// DepositViewport uses additive blending for overlapping new stamps.
-		// Clamp the merged coverage so it remains bounded in [0, 1].
-		float footprint = max(clamp(old_state.r, 0.0, 1.0), clamp(dep.r, 0.0, 1.0));
+		float age = min(old_state.b + max(dt_ratio, 0.0), 1.0);
+		if (has_new_deposit) {
+			age = min(age, 0.0);
+		}
+		if (age >= 1.0) {
+			COLOR = vec4(0.0);
+		} else {
+			// Reveal progress and established alpha are monotonic so a second pass
+			// can refresh a location without making existing foam less visible.
+			float reveal = max(old_state.g, smooth01(age));
+			float established = max(
+				old_state.a,
+				smoothrange(0.0, max(fade_in_ratio, 1e-5), age)
+			);
+			// DepositViewport uses additive blending for overlapping new stamps.
+			// Clamp the merged coverage so it remains bounded in [0, 1].
+			float footprint = max(clamp(old_state.r, 0.0, 1.0), clamp(dep.r, 0.0, 1.0));
 
-		COLOR = vec4(
-			clamp(footprint, 0.0, 1.0),
-			clamp(reveal, 0.0, 1.0),
-			clamp(age, 0.0, 1.0),
-			clamp(established, 0.0, 1.0)
-		);
+			COLOR = vec4(
+				clamp(footprint, 0.0, 1.0),
+				clamp(reveal, 0.0, 1.0),
+				clamp(age, 0.0, 1.0),
+				clamp(established, 0.0, 1.0)
+			);
+		}
 	}
 }

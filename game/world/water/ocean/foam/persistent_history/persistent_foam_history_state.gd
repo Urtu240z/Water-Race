@@ -45,20 +45,26 @@ static func advance(
 	dt_ratio: float,
 	fade_in_ratio: float
 ) -> Vector4:
-	var has_deposit := dep.g > 0.001
-	var age := minf(old.b + maxf(dt_ratio, 0.0), 1.0)
-	if has_deposit:
+	const STATE_EPSILON := 0.001
+	var has_old_foam := old.x > STATE_EPSILON
+	var has_new_deposit := dep.y > STATE_EPSILON and dep.x > STATE_EPSILON
+	## Empty texels are not active simulation state. This must match the GPU
+	## guard exactly so a dead pixel cannot begin a new lifecycle by itself.
+	if not has_old_foam and not has_new_deposit:
+		return Vector4.ZERO
+	var age := minf(old.z + maxf(dt_ratio, 0.0), 1.0)
+	if has_new_deposit:
 		age = minf(age, 0.0)
 	if age >= 1.0:
 		return Vector4.ZERO
 	## Reveal progress is monotonic: refreshing never shrinks grown foam.
-	var reveal := maxf(old.g, smoothstep01(age))
+	var reveal := maxf(old.y, smoothstep01(age))
 	## Established life alpha is monotonic: a refresh cannot dip visibility.
 	var established := maxf(
-		old.a,
+		old.w,
 		smooth(0.0, maxf(fade_in_ratio, 0.00001), age)
 	)
-	var footprint := maxf(old.r, dep.r)
+	var footprint := maxf(old.x, dep.x)
 	return Vector4(footprint, reveal, age, established)
 
 
@@ -72,9 +78,9 @@ static func coverage(
 	var radius_frac := lerpf(
 		clampf(size_min / maxf(size_max, 0.001), 0.02, 1.0),
 		1.0,
-		clampf(state.g, 0.0, 1.0)
+		clampf(state.y, 0.0, 1.0)
 	)
 	var threshold := (1.0 - radius_frac) * (1.0 - radius_frac)
-	var revealed := smooth(threshold - 0.05, threshold + 0.05, state.r)
-	var fade_out := 1.0 - smooth(fade_out_start_ratio, 1.0, state.b)
-	return clampf(revealed * clampf(state.a, 0.0, 1.0) * fade_out, 0.0, 1.0)
+	var revealed := smooth(threshold - 0.05, threshold + 0.05, state.x)
+	var fade_out := 1.0 - smooth(fade_out_start_ratio, 1.0, state.z)
+	return clampf(revealed * clampf(state.w, 0.0, 1.0) * fade_out, 0.0, 1.0)

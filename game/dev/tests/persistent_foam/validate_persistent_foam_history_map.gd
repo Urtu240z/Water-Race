@@ -45,6 +45,11 @@ func _run_validation() -> void:
 	_expect_true("HistoryA uses HDR 2D", _map._history_viewports[0].use_hdr_2d)
 	_expect_true("HistoryB uses HDR 2D", _map._history_viewports[1].use_hdr_2d)
 
+	_test_cpu_empty_state_semantics()
+	await _test_empty_pixel_never_activates()
+	await _test_dead_foam_does_not_resurrect()
+	await _test_nearby_empty_water()
+	await _test_deposit_texture_clears()
 	await _test_birth_and_cpu_consumption()
 	await _test_fade_growth_and_death()
 	await _test_refresh_preserves_state()
@@ -71,6 +76,70 @@ func _run_validation() -> void:
 			push_error("VALIDATION FAILURE: " + failure)
 		print("RESULT: FAIL (%d)" % _failures.size())
 		get_tree().quit(1)
+
+
+func _test_cpu_empty_state_semantics() -> void:
+	var state := Vector4.ZERO
+	for _index in 12:
+		state = PersistentFoamHistoryState.advance(state, Vector4.ZERO, 0.5, _map.fade_in_ratio)
+	_expect_vector4_zero("CPU empty state remains zero", state)
+
+
+func _test_empty_pixel_never_activates() -> void:
+	_map.clear_history()
+	await _flush_gpu()
+	var empty_position := Vector2(160.0, -160.0)
+	## Two complete lifetimes at 0.5 seconds per deterministic update.
+	for index in 12:
+		_map.call("_run_update_pass", 0.5)
+		await _flush_gpu()
+		if index == 0 or index == 5 or index == 11:
+			_expect_vector4_zero("EMPTY_STAYS_ZERO step " + str(index + 1), _read_history(empty_position))
+
+
+func _test_dead_foam_does_not_resurrect() -> void:
+	_map.clear_history()
+	await _flush_gpu()
+	_map.submit_deposit(1001, MAP_CENTER, Vector2(0.0, 1.0), 16.0, 0.8)
+	_map.call("_run_update_pass", 0.0)
+	await _flush_gpu()
+	for _index in 6:
+		_map.call("_run_update_pass", 0.5)
+		await _flush_gpu()
+	_expect_vector4_zero("DEAD_STAYS_DEAD at death", _read_history(MAP_CENTER))
+	for _index in 6:
+		_map.call("_run_update_pass", 0.5)
+		await _flush_gpu()
+	_expect_vector4_zero("DEAD_STAYS_DEAD after another lifetime", _read_history(MAP_CENTER))
+
+
+func _test_nearby_empty_water() -> void:
+	_map.clear_history()
+	await _flush_gpu()
+	var untouched_position := Vector2(160.0, 160.0)
+	_map.submit_deposit(1001, MAP_CENTER, Vector2(0.0, 1.0), 16.0, 0.8)
+	_map.call("_run_update_pass", 0.0)
+	await _flush_gpu()
+	for index in 6:
+		_expect_vector4_zero("UNTOUCHED_WATER_STAYS_EMPTY step " + str(index), _read_history(untouched_position))
+		_map.call("_run_update_pass", 0.5)
+		await _flush_gpu()
+	_expect_vector4_zero("UNTOUCHED_WATER_STAYS_EMPTY at death", _read_history(untouched_position))
+
+
+func _test_deposit_texture_clears() -> void:
+	_map.clear_history()
+	await _flush_gpu()
+	_map.submit_deposit(1001, MAP_CENTER, Vector2(0.0, 1.0), 16.0, 0.8)
+	_map._deposit_canvas.stamps = _map._pending.duplicate()
+	_map._deposit_canvas.mark_dirty()
+	_map.call("_render_viewport_now", _map._deposit_viewport)
+	await _flush_gpu()
+	_expect_true("deposit texture contains new stamp", _texture_max(_map._deposit_viewport.get_texture()) > 0.01)
+	_map.call("_run_update_pass", 0.0)
+	await _flush_gpu()
+	_expect_close("DEPOSIT_TEXTURE_CLEARS", _texture_max(_map._deposit_viewport.get_texture()), 0.0, 0.001)
+	_expect_equal("PENDING_RETURNS_ZERO", _map.get_deposit_validation_status().pending_count, 0)
 
 
 func _test_birth_and_cpu_consumption() -> void:
@@ -117,7 +186,7 @@ func _test_refresh_preserves_state() -> void:
 	var after := _read_history(MAP_CENTER)
 	_expect_true("refresh keeps coverage", after.r + 0.001 >= before.r)
 	_expect_true("refresh keeps established visibility", after.a + 0.001 >= before.a)
-	_expect_true("refresh does not create a fade-in dip", after.a > 0.25)
+	_expect_true("REFRESH_NO_DIP", after.a > 0.25)
 
 
 func _test_saturation_and_multi_source() -> void:
@@ -355,6 +424,18 @@ func _read_history(world_xz: Vector2) -> Color:
 	return image.get_pixel(pixel.x, pixel.y)
 
 
+func _texture_max(texture: Texture2D) -> float:
+	if texture == null:
+		return 0.0
+	var image := texture.get_image()
+	var max_value := 0.0
+	for y in image.get_height():
+		for x in image.get_width():
+			var pixel := image.get_pixel(x, y)
+			max_value = maxf(max_value, maxf(pixel.r, pixel.g))
+	return max_value
+
+
 func _expect_true(label: String, value: bool) -> void:
 	if value:
 		print("  OK ", label)
@@ -374,3 +455,13 @@ func _expect_close(label: String, actual: Variant, expected: float, tolerance: f
 
 func _expect_vector2_close(label: String, actual: Vector2, expected: Vector2, tolerance: float) -> void:
 	_expect_true(label + " = " + str(actual), actual.distance_to(expected) <= tolerance)
+
+
+func _expect_vector4_zero(label: String, actual: Variant) -> void:
+	var is_zero := false
+	if actual is Vector4:
+		is_zero = (actual as Vector4).length_squared() <= 0.000001
+	elif actual is Color:
+		var color := actual as Color
+		is_zero = color.r * color.r + color.g * color.g + color.b * color.b + color.a * color.a <= 0.000001
+	_expect_true(label + " = " + str(actual), is_zero)

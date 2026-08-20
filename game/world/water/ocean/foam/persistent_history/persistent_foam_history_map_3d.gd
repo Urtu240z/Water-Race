@@ -407,6 +407,9 @@ func _complete_update_pass(serial: int) -> void:
 	## Deposit viewport is single-use: clear it for the next pass.
 	if is_instance_valid(_deposit_canvas):
 		_deposit_canvas.clear_stamps()
+		## Clearing the Control queues a redraw, but this viewport otherwise
+		## remains UPDATE_ONCE with its previous stamp pixels still readable.
+		_render_viewport_now(_deposit_viewport)
 	_update_in_flight = false
 
 
